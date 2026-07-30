@@ -1,0 +1,38 @@
+{
+    "folder": "Level 20",
+    "img": "icons/magic/death/skull-humanoid-crown-white-blue.webp",
+    "name": "Beyond the Eighth",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Your consciousness has already crossed death once. Now it lingers on the far shore at will.</p><p>Your @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Eighth Sense (Arayashiki)] improves in three ways:</p><ul><li>Its duration increases from 1 minute to <strong>10 minutes</strong>, or until the encounter ends.</li><li>While Arayashiki is active you may <strong>travel to and from the edge of death as movement</strong>: once per round you may Stride through any barrier as though it were not there, stepping briefly into the space between life and death, provided you begin and end in an open space.</li><li>When Arayashiki ends and you would die, you may instead choose to <strong>return changed</strong>: you drop to dying 3 rather than dying, and your Cloth shatters, but you are not beyond restoration. You can benefit from this reprieve only <strong>once</strong>; the second time your Eighth Sense carries you past death, it keeps you there.</li></ul><hr /><p><em>This is the ability that lets a Gold Saint walk out of the underworld. Use it as the campaign's punctuation, not its grammar.</em></p>"
+        },
+        "level": {
+            "value": 20
+        },
+        "prerequisites": {
+            "value": [
+                "Eighth Sense (Arayashiki)"
+            ]
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

@@ -1,0 +1,86 @@
+{
+    "folder": "Level 12",
+    "img": "icons/equipment/chest/breastplate-collared-steel-gold.webp",
+    "name": "Cloth Resonance",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Your bond with your Cloth has deepened past armor into a second body. Its runes, its history, and your cosmo have become one thing, and it answers your intent before your mind forms it.</p><p>Choose <strong>two</strong> benefits from the list below; you gain both. You may retrain to swap one whenever you gain a level.</p><ul><li><strong>Reactive Cloth</strong> &mdash; your Cloth's AC bonus applies even in the brief instants surprise would deny it to you, and you are never off-guard during the first round of combat while wearing it.</li><li><strong>Runic Echo</strong> &mdash; the property runes on your Cloth also apply to one Technique of your choice, as <em>Cloth Bond</em> but for property runes. If you have <em>Cloth Bond</em>, it now covers a second Technique as well.</li><li><strong>Self-Mending</strong> &mdash; when your Cloth would crack, it does not; instead you gain temporary Hit Points equal to your level. Once per encounter.</li><li><strong>Cosmo Conduit</strong> &mdash; once per day, when you Refocus, you regain <strong>2 Focus Points</strong> instead of 1.</li></ul><hr /><p><strong>Special</strong> On any day your Cloth's constellation is ascendant, you gain the benefit of <strong>all four</strong> options for that day.</p>"
+        },
+        "level": {
+            "value": 12
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "adjustName": false,
+                "allowedDrops": null,
+                "choices": [
+                    {
+                        "label": "Reactive Cloth",
+                        "value": "reactive-cloth"
+                    },
+                    {
+                        "label": "Runic Echo",
+                        "value": "runic-echo"
+                    },
+                    {
+                        "label": "Self-Mending",
+                        "value": "self-mending"
+                    },
+                    {
+                        "label": "Cosmo Conduit",
+                        "value": "cosmo-conduit"
+                    }
+                ],
+                "flag": "clothResonanceFirst",
+                "key": "ChoiceSet",
+                "prompt": "First Cloth Resonance benefit"
+            },
+            {
+                "adjustName": false,
+                "choices": [
+                    {
+                        "label": "Reactive Cloth",
+                        "value": "reactive-cloth"
+                    },
+                    {
+                        "label": "Runic Echo",
+                        "value": "runic-echo"
+                    },
+                    {
+                        "label": "Self-Mending",
+                        "value": "self-mending"
+                    },
+                    {
+                        "label": "Cosmo Conduit",
+                        "value": "cosmo-conduit"
+                    }
+                ],
+                "flag": "clothResonanceSecond",
+                "key": "ChoiceSet",
+                "prompt": "Second Cloth Resonance benefit"
+            }
+        ],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

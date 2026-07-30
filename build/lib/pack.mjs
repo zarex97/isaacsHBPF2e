@@ -13,6 +13,9 @@ const ID_ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456
 /** Collection name per document type, matching foundryvtt-cli's TYPE_COLLECTION_MAP. */
 const COLLECTIONS = { Item: "items", JournalEntry: "journal", Macro: "macros", Folder: "folders" };
 
+/** Embedded collections we author, mirroring foundryvtt-cli's HIERARCHY for the types this module ships. */
+const EMBEDDED = { journal: { pages: "JournalEntryPage" } };
+
 /**
  * Derive a stable 16-character Foundry ID from a pack name and slug.
  *
@@ -114,6 +117,16 @@ export function prepare(packs, { errors }) {
             doc._id ??= deriveId(def.name, def.type, slug);
             doc._key = `!${collection}!${doc._id}`;
             if (def.type === "Item" && doc.system) doc.system.slug = slug;
+
+            // Embedded documents get their own keys in a `<collection>.<embedded>` sublevel, keyed
+            // `<parentId>.<childId>`. foundryvtt-cli walks the hierarchy and will throw on a missing key
+            // rather than skipping, so journal pages need this or the build dies.
+            for (const [embedded, sub] of Object.entries(EMBEDDED[collection] ?? {})) {
+                for (const child of doc[embedded] ?? []) {
+                    child._id ??= deriveId(def.name, sub, `${slug}:${child.name ?? ""}`);
+                    child._key = `!${collection}.${embedded}!${doc._id}.${child._id}`;
+                }
+            }
 
             nameToUuid.set(
                 `Compendium.${MODULE_ID}.${def.name}.${def.type}.${doc.name}`,

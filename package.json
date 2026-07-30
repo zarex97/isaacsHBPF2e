@@ -8,7 +8,8 @@
         "build": "node build/build-packs.mjs",
         "extract": "node build/extract-packs.mjs",
         "validate": "node build/validate.mjs",
-        "test": "node build/validate.mjs"
+        "check:roundtrip": "node build/check-roundtrip.mjs",
+        "test": "npm run validate && npm run build && npm run check:roundtrip"
     },
     "author": "Isaac",
     "license": "MIT",
@@ -16,6 +17,7 @@
         "node": ">=22.0.0"
     },
     "devDependencies": {
-        "@foundryvtt/foundryvtt-cli": "^3.0.4"
+        "@foundryvtt/foundryvtt-cli": "^3.0.4",
+        "classic-level": "^3.0.0"
     }
 }

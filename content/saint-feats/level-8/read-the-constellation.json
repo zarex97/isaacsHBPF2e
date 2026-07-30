@@ -1,0 +1,42 @@
+{
+    "folder": "Level 8",
+    "img": "icons/magic/perception/orb-crystal-ball-scrying-blue.webp",
+    "name": "Read the Constellation",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>You learn to feel your own constellation approaching over the horizon of days.</p><hr /><p><strong>Frequency</strong> once per week</p><p>During your daily preparations, you learn whether your Cloth's constellation will be ascendant on any of the <strong>next three days</strong>, and if so which day and whether it will be Exalted.</p><p>This lets you plan: to press for a confrontation on your day, or to counsel delay until the sky turns. You still learn nothing about the other twelve signs.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "P1W",
+            "value": 1
+        },
+        "level": {
+            "value": 8
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "prediction",
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

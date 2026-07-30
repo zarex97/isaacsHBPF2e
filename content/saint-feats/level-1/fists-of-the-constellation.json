@@ -1,0 +1,75 @@
+{
+    "folder": "Level 1",
+    "img": "icons/magic/light/orb-lightning-purple.webp",
+    "name": "Fists of the Constellation",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>You channel your Signature Technique through your fists, letting its essence bleed into every strike.</p><p>Choose one damage type dealt by your Cloth's Signature Technique &mdash; electricity for Leo, cold for Aquarius, force by default. Your unarmed Strikes deal that damage type instead of bludgeoning, and they count as your Signature Technique's element for your own feats and boons that reference it.</p><p>Once per round, when you critically hit with an unarmed Strike, the target also takes persistent damage of that type equal to your number of weapon damage dice.</p><hr /><p><strong>Special</strong> If your Cloth's Signature Technique deals no damage (Gemini, Virgo), choose force instead. Your unarmed Strikes then gain the effect that best fits your Cloth at the GM's discretion: for Virgo, a critical hit leaves the target dazzled 1 round; for Gemini, a critical hit leaves the target off-guard to you until the end of your next turn.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "adjustName": false,
+                "choices": [
+                    {
+                        "label": "Force",
+                        "value": "force"
+                    },
+                    {
+                        "label": "Electricity",
+                        "value": "electricity"
+                    },
+                    {
+                        "label": "Cold",
+                        "value": "cold"
+                    },
+                    {
+                        "label": "Void",
+                        "value": "void"
+                    },
+                    {
+                        "label": "Poison",
+                        "value": "poison"
+                    }
+                ],
+                "flag": "constellationElement",
+                "key": "ChoiceSet",
+                "prompt": "Which element does your cosmo take?"
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "mode": "override",
+                "predicate": [
+                    "item:category:unarmed"
+                ],
+                "property": "damage-type",
+                "value": "{item|flags.system.rulesSelections.constellationElement}"
+            }
+        ],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

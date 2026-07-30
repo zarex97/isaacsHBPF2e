@@ -1,0 +1,46 @@
+{
+    "folder": "Level 14",
+    "img": "icons/magic/movement/trail-streak-impact-blue.webp",
+    "name": "Speed of Light",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>You cross the distance between two heartbeats.</p><hr /><p><strong>Frequency</strong> once per day</p><p>You are <strong>quickened 1 for 1 minute</strong>. You can use the extra action each round only to Strike, Stride, or Step.</p><p>While quickened this way you also do not trigger reactions based on your movement &mdash; you are simply not where the reaction expected you to be.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
+        },
+        "level": {
+            "value": 14
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "selfEffect": {
+            "name": "Effect: Speed of Light",
+            "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Speed of Light"
+        },
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "concentrate",
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}
