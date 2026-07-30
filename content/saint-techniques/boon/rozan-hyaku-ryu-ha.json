@@ -1,0 +1,78 @@
+{
+    "folder": "Boon Techniques",
+    "img": "icons/magic/water/wave-water-blue.webp",
+    "name": "Rozan Hyaku Ryu Ha",
+    "system": {
+        "area": {
+            "type": "line",
+            "value": 60
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "12d10",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "bludgeoning"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p>A hundred dragons, and none of them stop.</p><p>Each creature in the line takes @Damage[(6+@item.level)d10[bludgeoning]] damage with a basic Reflex save. A creature that critically fails is knocked prone and stunned 2.</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d10.</p><hr /><p>Granted by the Libra Zenith Boon, once per round.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "1d10"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 6
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": ""
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "3"
+        },
+        "traits": {
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

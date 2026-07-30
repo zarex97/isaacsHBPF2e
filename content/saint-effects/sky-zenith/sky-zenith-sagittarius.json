@@ -1,0 +1,55 @@
+{
+    "folder": "Sky: Zenith",
+    "img": "icons/weapons/ammunition/arrow-head-war-flight.webp",
+    "name": "Sky: Zenith (Sagittarius)",
+    "system": {
+        "description": {
+            "value": "<p><strong>♐ Sagittarius rises Exalted today.</strong> This is the one day in two hundred and sixty. You have your Zenith Boon for the whole day.</p><p>As the Ascendant Boon. In addition, once per minute Golden Arrow reaches any creature you name within a mile <strong>through any barrier short of a planar boundary</strong>, and deals 8 additional damage dice.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "days",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "option": "sky:ascendant"
+            },
+            {
+                "key": "RollOption",
+                "option": "sky:sign:sagittarius"
+            },
+            {
+                "key": "RollOption",
+                "option": "sky:zenith"
+            },
+            {
+                "key": "BaseSpeed",
+                "selector": "fly",
+                "value": "@actor.attributes.speed.value"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

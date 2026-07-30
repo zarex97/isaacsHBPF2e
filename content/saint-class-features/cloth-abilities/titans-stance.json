@@ -1,0 +1,37 @@
+{
+    "folder": "Cloth Abilities",
+    "img": "icons/creatures/abilities/bull-horns-brown.webp",
+    "name": "Titan's Stance",
+    "system": {
+        "actionType": {
+            "value": "reaction"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>Trigger</strong> An adjacent ally would be hit by an attack.</p><p>You step into the blow. You become the target of the attack instead, and you take the damage reduced by 10 plus twice your level.</p>"
+        },
+        "level": {
+            "value": 11
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint",
+                "cloth"
+            ]
+        }
+    },
+    "type": "feat"
+}

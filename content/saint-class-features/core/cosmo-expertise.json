@@ -1,0 +1,44 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/light/explosion-star-glow-orange-purple.webp",
+    "name": "Cosmo Expertise",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your command of your own cosmo sharpens. Your proficiency rank for your Cosmo DC increases to expert.</p>"
+        },
+        "level": {
+            "value": 9
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "subfeatures": {
+            "proficiencies": {
+                "saint": {
+                    "attribute": null,
+                    "rank": 3
+                }
+            }
+        },
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

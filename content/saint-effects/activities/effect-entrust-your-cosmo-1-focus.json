@@ -1,0 +1,49 @@
+{
+    "folder": "Activities",
+    "img": "icons/magic/light/hand-sparks-glow-orange.webp",
+    "name": "Effect: Entrust Your Cosmo (1 Focus)",
+    "system": {
+        "description": {
+            "value": "<p>Granted by the Entrust Your Cosmo feat.</p><p>A Saint has poured 1 Focus Point of their own cosmo into you.</p><p>You gain a +1 status bonus to attack rolls, saving throws, and skill checks, and temporary Hit Points equal to the granting Saint's level.</p><hr /><p>A creature can benefit from Entrust Your Cosmo only once per hour, no matter how many Saints offer it.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Entrust Your Cosmo",
+                "selector": [
+                    "attack",
+                    "saving-throw",
+                    "skill-check"
+                ],
+                "type": "status",
+                "value": 1
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

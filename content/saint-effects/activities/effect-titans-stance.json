@@ -1,0 +1,37 @@
+{
+    "folder": "Activities",
+    "img": "icons/creatures/abilities/bull-horns-brown.webp",
+    "name": "Effect: Titan's Stance",
+    "system": {
+        "description": {
+            "value": "<p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Titan's Stance]</p><p>You took the blow meant for an ally. Reduce the damage by 10 plus twice your level.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

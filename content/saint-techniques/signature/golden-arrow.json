@@ -1,0 +1,71 @@
+{
+    "folder": "Signature Techniques",
+    "img": "icons/weapons/ammunition/arrow-head-war-flight.webp",
+    "name": "Golden Arrow",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "2d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "force"
+            }
+        },
+        "defense": null,
+        "description": {
+            "value": "<p>You draw a bow that is not there and loose an arrow that does not miss for reasons of distance.</p><p>Make a spell attack roll against the target's AC. The arrow ignores cover and concealment.</p><p><strong>Critical Success</strong> The target takes double damage.</p><p><strong>Success</strong> The target takes @Damage[(2*@item.level)d6[force]] damage.</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 2d6.</p><hr /><p>Golden Arrow has a range increment of 500 feet. Its price is the range, not the damage: it sits on the single-target attack spine at full value.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "2d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "500 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "attack",
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

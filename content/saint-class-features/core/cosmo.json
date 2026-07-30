@@ -1,0 +1,44 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/light/explosion-star-glow-orange.webp",
+    "name": "Cosmo",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your inner cosmo is a wellspring of power you can spend. You gain a focus pool of 1 Focus Point and the Refocus activity; you can Refocus by burning your cosmo for 10 minutes.</p><p>Your Techniques are focus spells with the cosmo trait. They use your Cosmo DC and your key ability, and their rank is equal to half your level rounded up.</p><p>Your focus pool increases to 2 points at 7th level and 3 points at 15th level.</p><hr /><p>To regain Focus Points, see the @UUID[Compendium.pf2e.actionspf2e.Item.Refocus] action.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "ActiveEffectLike",
+                "mode": "add",
+                "path": "system.resources.focus.max",
+                "priority": 10,
+                "value": 1
+            }
+        ],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

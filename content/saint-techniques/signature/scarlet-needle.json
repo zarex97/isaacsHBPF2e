@@ -1,0 +1,75 @@
+{
+    "folder": "Signature Techniques",
+    "img": "icons/skills/wounds/injury-triple-slash-bleed.webp",
+    "name": "Scarlet Needle",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": "persistent",
+                "formula": "1d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "bleed"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": false,
+                "statistic": "fortitude"
+            }
+        },
+        "description": {
+            "value": "<p>One needle, placed exactly. You will place fourteen more.</p><p>The target must attempt a Fortitude save. On a failure it gains one Scarlet Needle (see the Fifteen Needles passive) and takes @Damage[(@item.level)d6[persistent,bleed]] damage. On a critical failure it gains two needles instead.</p><hr /><p><strong>Heightened (+1)</strong> The persistent bleed damage increases by 1d6.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "1d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "1"
+        },
+        "traits": {
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

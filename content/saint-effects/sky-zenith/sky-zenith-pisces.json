@@ -1,0 +1,62 @@
+{
+    "folder": "Sky: Zenith",
+    "img": "icons/magic/nature/rose-thorned-red.webp",
+    "name": "Sky: Zenith (Pisces)",
+    "system": {
+        "description": {
+            "value": "<p><strong>♓ Pisces rises Exalted today.</strong> This is the one day in two hundred and sixty. You have your Zenith Boon for the whole day.</p><p>As the Ascendant Boon, but the emanation is <strong>15 feet</strong> and deals @Damage[8d6[poison]] damage each turn.</p><p>You also gain @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Bloody Rose] &mdash; usable once per minute.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "days",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "option": "sky:ascendant"
+            },
+            {
+                "key": "RollOption",
+                "option": "sky:sign:pisces"
+            },
+            {
+                "key": "RollOption",
+                "option": "sky:zenith"
+            },
+            {
+                "key": "Aura",
+                "radius": 15,
+                "slug": "royal-demon-rose-garden",
+                "traits": [
+                    "poison"
+                ]
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Bloody Rose"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

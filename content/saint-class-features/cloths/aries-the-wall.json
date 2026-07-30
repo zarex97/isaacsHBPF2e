@@ -1,0 +1,65 @@
+{
+    "folder": "Gold Cloths",
+    "img": "icons/magic/defensive/barrier-shield-crystal-glowing-blue.webp",
+    "name": "Aries — the Wall",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>♈ The Aries Cloth.</strong> <em>DEFENSE</em></p><hr /><h3>Signature Technique</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Crystal Wall]</p><h3>Cloth Passive — Cloth Mending</h3><p>You are trained in Crafting. You can Repair any Cloth, armor, or shield in 10 minutes with no check, restoring Hit Points equal to ten times your level. A Cloth you repair is <em>fully</em> restored regardless of how it was broken.</p><h3>Ascendant Boon — Starlight Extinction <em>[DEFENSE]</em></h3><p>You gain a +2 status bonus to AC and to all saving throws.</p><p><strong>Starlight Extinction</strong> &#8617; (reaction; frequency once per round; trigger a creature within 60 feet makes a ranged or spell attack, or targets an ally with a spell) &mdash; you send the effect <em>nowhere</em>. It is expended with no result.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Aries)]</p><h3>Zenith Boon — Starlight Extinction (Zenith) <em>[DEFENSE]</em></h3><p>As the Ascendant Boon, and the Starlight Extinction reaction has <strong>no frequency limit</strong>.</p><p>Additionally, once per minute you may target a <em>creature</em> with the reaction instead of an effect: 60 feet, Fortitude save against your Cosmo DC. On a critical failure it is teleported one mile away. This is an <strong>incapacitation</strong> effect.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Aries)]</p><h3>11th-Level Cloth Ability — Stardust Revolution</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Stardust Revolution]</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "ActiveEffectLike",
+                "mode": "upgrade",
+                "path": "system.skills.crafting.rank",
+                "value": 1
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Crystal Wall"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            11
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Stardust Revolution"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "saint-cloth",
+                "cloth-aries"
+            ],
+            "rarity": "common",
+            "value": [
+                "saint",
+                "cloth"
+            ]
+        }
+    },
+    "type": "feat"
+}

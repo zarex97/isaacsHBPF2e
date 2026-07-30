@@ -1,0 +1,52 @@
+{
+    "folder": "Cloth Abilities",
+    "img": "icons/weapons/swords/sword-guard-blue.webp",
+    "name": "The Twelve Arms",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p>The Cloth of Arms was never meant for one person.</p><p>You distribute your Libra weapons to any number of willing allies within 30 feet. For 1 minute, each ally wielding one of your Libra weapons uses <em>your</em> proficiency rank for it and benefits from its runes. When the duration ends, the weapons return to you.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": "1 minute"
+        },
+        "level": {
+            "value": 6
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "any number of willing allies"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

@@ -1,0 +1,46 @@
+{
+    "folder": "Activities",
+    "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+    "name": "Effect: Burn Your Cosmo",
+    "system": {
+        "description": {
+            "value": "<p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Seventh Sense]</p><p>You have forced the sky's hand. Treat today as <strong>Exalted</strong>: your Zenith Boon is active for 1 minute.</p><p>If the day was already Exalted, your Zenith Boon instead extends to all allies within 30 feet for 1 minute.</p><hr /><p>Apply your Cloth's <strong>Sky: Zenith</strong> effect alongside this one for the duration, or use the sky tracker's <em>Burn Cosmo</em> control, which does it for you and reverts when the minute ends.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "option": "sky:zenith"
+            },
+            {
+                "key": "RollOption",
+                "option": "sky:ascendant"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

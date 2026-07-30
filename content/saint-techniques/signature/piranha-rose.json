@@ -1,0 +1,86 @@
+{
+    "folder": "Signature Techniques",
+    "img": "icons/magic/nature/root-vine-thorns-red.webp",
+    "name": "Piranha Rose",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "2d8",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "piercing"
+            },
+            "1": {
+                "applyMod": false,
+                "category": "persistent",
+                "formula": "1d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "bleed"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p>Roses go where you point them, and they are hungry.</p><p>Each target takes @Damage[(1+@item.level)d8[piercing]] damage plus @Damage[(@item.level)d6[persistent,bleed]] damage, with a basic Reflex save. A successful save negates the persistent bleed damage.</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d8 and the persistent bleed damage increases by 1d6.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "1d8",
+                "1": "1d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "up to 3 creatures"
+        },
+        "time": {
+            "value": "1"
+        },
+        "traits": {
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}
