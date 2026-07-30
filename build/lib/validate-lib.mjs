@@ -45,6 +45,20 @@ function allowedTraits(itemType) {
  * The guide's §9 is explicit that incapacitation on these is load-bearing — without it they cheese bosses,
  * which is exactly the kind of thing that survives a careless edit. Keyed by slug.
  */
+/**
+ * Techniques that deliberately do not scale with rank, and why.
+ *
+ * The rank-spine check below is otherwise absolute, so anything listed here needs a reason in writing —
+ * "it didn't validate" is not one.
+ */
+const UNSCALED_BY_DESIGN = new Map([
+    [
+        "scarlet-needle",
+        "The guide says its bleed 'scales with the ramp' — i.e. with needle count, not with rank. Heightening "
+            + "it by rank as well would make a 1-action spell deal 6d6 persistent bleed at 11th level.",
+    ],
+]);
+
 const MUST_BE_INCAPACITATION = new Set([
     "another-dimension",
     "genro-mao-ken",
@@ -145,7 +159,7 @@ function validateSpell(doc, where, errors) {
     }
 
     // The rank spine: a damaging Technique must scale, or it silently falls off at high level.
-    if (damageEntries.length > 0) {
+    if (damageEntries.length > 0 && !UNSCALED_BY_DESIGN.has(system.slug)) {
         const heightening = system.heightening;
         if (!heightening) {
             errors.push(`${where}: damaging Technique has no heightening block (rank spine, guide §1.3)`);

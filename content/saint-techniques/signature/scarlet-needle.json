@@ -27,18 +27,11 @@
             }
         },
         "description": {
-            "value": "<p>One needle, placed exactly. You will place fourteen more.</p><p>The target must attempt a Fortitude save. On a failure it gains one Scarlet Needle (see the Fifteen Needles passive) and takes @Damage[(@item.level)d6[persistent,bleed]] damage. On a critical failure it gains two needles instead.</p><hr /><p><strong>Heightened (+1)</strong> The persistent bleed damage increases by 1d6.</p>"
+            "value": "<p>One needle, placed exactly. You will place fourteen more.</p><p>The target must attempt a Fortitude save. On a failure it gains one Scarlet Needle (see the Fifteen Needles passive) and takes @Damage[1d6[persistent,bleed]] damage. On a critical failure it gains two needles instead.</p><hr /><p>This Technique <strong>does not scale with rank</strong>. It scales with <em>the ramp</em>: each needle already on the target adds another 1d6 persistent bleed, so a creature you have been working on bleeds far worse than a fresh one. That is what makes a 1-action persistent applier fair &mdash; it compounds instead of growing on its own.</p>"
         },
         "duration": {
             "sustained": false,
             "value": ""
-        },
-        "heightening": {
-            "damage": {
-                "0": "1d6"
-            },
-            "interval": 1,
-            "type": "interval"
         },
         "level": {
             "value": 1
