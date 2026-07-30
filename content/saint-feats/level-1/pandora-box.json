@@ -1,0 +1,36 @@
+{
+    "folder": "Level 1",
+    "img": "icons/containers/chest/chest-reinforced-steel-gold.webp",
+    "name": "Pandora Box",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Your dismissed Cloth is not merely stored &mdash; it is <em>sent</em>, and it can find you again across any distance.</p><p>When you dismiss your Cloth, you may send it to a pocket of folded space instead of collapsing it into a box or onto your body. While there it is beyond the reach of any effect. As an activity taking <strong>10 minutes</strong>, you may summon it to your current location from anywhere on the same plane; from another plane it arrives after <strong>24 hours</strong>, travelling the dimensional roads on its own.</p><p>Your Cloth can also act as a courier. You may send it away carrying a single object of 2 Bulk or less, name a destination you have visited, and it will travel there and back over 24 hours. A Saint's Cloth cannot be intercepted, tracked, or compelled while travelling &mdash; only destroyed, and only by something that can catch it.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

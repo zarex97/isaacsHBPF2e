@@ -33,12 +33,11 @@
     },
     "esmodules": ["scripts/isaacs-hb.mjs"],
     "styles": ["styles/sky.css"],
-    "socket": true,
     "media": [
         {
             "type": "setup",
             "caption": "Isaac's Homebrew (PF2e): The Saint",
-            "thumbnail": "modules/isaacs-hb-pf2e/assets/setup.webp"
+            "thumbnail": "systems/pf2e/assets/system-banners/pf2e/02.webp"
         }
     ],
     "packs": [

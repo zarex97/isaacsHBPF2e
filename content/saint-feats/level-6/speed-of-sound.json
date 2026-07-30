@@ -1,0 +1,54 @@
+{
+    "folder": "Level 6",
+    "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
+    "name": "Speed of Sound",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>When the stars align for you, you move faster than the eye can follow.</p><p>Your Speed increases by <strong>10 feet</strong>. On any day your Cloth's constellation is ascendant or Exalted, this bonus increases to <strong>+20 feet</strong> and you ignore difficult terrain that isn't magical.</p>"
+        },
+        "level": {
+            "value": 6
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Speed of Sound",
+                "selector": "land-speed",
+                "type": "status",
+                "value": 10
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Speed of Sound (Ascendant)",
+                "predicate": [
+                    "sky:ascendant"
+                ],
+                "selector": "land-speed",
+                "type": "status",
+                "value": 20
+            }
+        ],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

@@ -1,0 +1,57 @@
+{
+    "folder": "Level 18",
+    "img": "icons/magic/defensive/shield-barrier-glowing-triangle-blue.webp",
+    "name": "Not by the Same Attack",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>No technique defeats a Gold Saint a second time. The first strike teaches you; the second finds you ready. Your cosmo reads an attack's structure the instant it lands and rebuilds you against it.</p><p>The <strong>first time</strong> each day a given creature deals damage to you with a specific attack, spell, or effect, note it. <strong>Every subsequent time that same effect from any source targets you</strong>, you gain a +2 circumstance bonus to your AC and saving throw against it, and resistance equal to your level to its damage.</p><p>You track adaptations for up to <strong>five distinct effects</strong> at once; if a sixth would be added, the oldest is forgotten. An 'effect' is a specific attack routine, not a damage type &mdash; a particular monster's claw Strike, a specific spell, a named technique. The GM adjudicates what counts as the same attack; reskinned or fundamentally altered versions do not.</p><hr /><p><strong>Adapting mid-strike.</strong> Once per round, when you would be damaged by an effect you have already adapted to, you may use a <strong>reaction</strong> to heighten your adaptation: until the start of your next turn, your resistance to that effect increases to <strong>twice your level</strong>, and if the effect required a save, you improve your degree of success by one step.</p><hr /><p><strong>Special</strong> On any day your Cloth's constellation is ascendant or Exalted, your cosmo reads faster than experience: you adapt to an effect the <strong>first</strong> time it damages you, rather than needing to have suffered it once before.</p>"
+        },
+        "level": {
+            "value": 18
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "label": "Adapted to this effect",
+                "option": "adapted",
+                "toggleable": true
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Not by the Same Attack",
+                "predicate": [
+                    "adapted"
+                ],
+                "selector": [
+                    "ac",
+                    "saving-throw"
+                ],
+                "type": "circumstance",
+                "value": 2
+            }
+        ],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "concentrate",
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

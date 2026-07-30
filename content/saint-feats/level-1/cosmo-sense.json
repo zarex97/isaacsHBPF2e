@@ -1,0 +1,38 @@
+{
+    "folder": "Level 1",
+    "img": "icons/magic/perception/eye-ringed-glow-angry-small-teal.webp",
+    "name": "Cosmo Sense",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>By reading the microcosm of a creature, you gauge the macrocosm it can call on.</p><hr /><p><strong>Cosmo Sense</strong> &#9670; (single action)</p><p>Attempt a check to Recall Knowledge about a creature within 60 feet, using your key ability modifier in place of the relevant skill.</p><p><strong>Success</strong> You learn its level relative to yours (higher, equal, or lower) and its single highest and lowest saving throws.</p><p><strong>Critical Success</strong> As success, and you also learn its current focus or spell resources, or that it has none.</p><p>This is a fortune-free, magic-based sense: it reads the cosmo beneath, so it works through disguise and illusion.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "concentrate",
+                "detection",
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

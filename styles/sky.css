@@ -1,0 +1,105 @@
+.isaacs-hb-pf2e.sky-tracker .sky-tracker-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.5rem;
+}
+
+.isaacs-hb-pf2e.sky-tracker .sky-current {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--color-border-dark, #7a7971);
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.isaacs-hb-pf2e.sky-tracker .sky-current.zenith {
+    border-color: #c8a020;
+    box-shadow: inset 0 0 12px rgba(200, 160, 32, 0.35);
+}
+
+.isaacs-hb-pf2e.sky-tracker .sky-current .glyph {
+    font-size: 2.5rem;
+    line-height: 1;
+}
+
+.isaacs-hb-pf2e.sky-tracker .sky-current h2 {
+    margin: 0;
+    border: none;
+}
+
+.isaacs-hb-pf2e.sky-tracker .sky-current .aspect {
+    margin: 0;
+    font-weight: 600;
+}
+
+.isaacs-hb-pf2e.sky-tracker .sky-current .day {
+    font-variant-numeric: tabular-nums;
+    opacity: 0.75;
+    white-space: nowrap;
+}
+
+.isaacs-hb-pf2e.sky-tracker .hint {
+    margin: 0;
+    font-size: var(--font-size-12, 0.75rem);
+    opacity: 0.75;
+}
+
+.isaacs-hb-pf2e.sky-tracker .sky-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.35rem;
+}
+
+.isaacs-hb-pf2e.sky-tracker .sky-buttons button {
+    flex: 1 1 auto;
+    white-space: nowrap;
+}
+
+.isaacs-hb-pf2e.sky-tracker section h3 {
+    margin: 0 0 0.3rem;
+    font-size: var(--font-size-14, 0.875rem);
+}
+
+.isaacs-hb-pf2e.sky-tracker ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.isaacs-hb-pf2e.sky-tracker .sky-saints li,
+.isaacs-hb-pf2e.sky-tracker .sky-forecast li {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 0.5rem;
+    align-items: baseline;
+    padding: 0.15rem 0.3rem;
+    border-radius: 3px;
+}
+
+.isaacs-hb-pf2e.sky-tracker .sky-saints li.lit {
+    background: rgba(200, 160, 32, 0.18);
+    font-weight: 600;
+}
+
+.isaacs-hb-pf2e.sky-tracker .sky-saints .tier,
+.isaacs-hb-pf2e.sky-tracker .sky-forecast .aspect {
+    opacity: 0.8;
+    white-space: nowrap;
+}
+
+.isaacs-hb-sky-message h3 {
+    margin: 0 0 0.25rem;
+}
+
+.isaacs-hb-sky-message ul {
+    margin: 0.25rem 0 0;
+    padding-left: 1.2rem;
+}

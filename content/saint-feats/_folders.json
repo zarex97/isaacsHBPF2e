@@ -1,0 +1,57 @@
+[
+    {
+        "name": "Level 1",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "Level 2",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "Level 4",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "Level 6",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "Level 8",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "Level 10",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "Level 12",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "Level 14",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "Level 16",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "Level 18",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "Level 20",
+        "sorting": "a",
+        "type": "Item"
+    }
+]
