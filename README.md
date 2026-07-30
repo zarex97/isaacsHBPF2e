@@ -99,10 +99,19 @@ Three things are rules text rather than automation, because PF2e has no hook for
 - **Gemini's Zenith duplicate.** Copy the token, give it two actions of Strike and Stride only, delete it at
   the top of the next turn.
 
-One number is also worth a decision: Leo's *Lightning Bolt* reads 6d12 at rank 6 where the class guide prints
-5d12. The spine (+1 die per rank) and that printed number can't both hold for a d12 variant, and the guide's
-own appendix makes the spine the governing rule — so the spine won. See the Handbook journal for the
-alternative.
+Two numbers are also worth a decision:
+
+- **Leo's *Lightning Bolt*** reads 6d12 at rank 6 where the class guide prints 5d12. The spine (+1 die per
+  rank) and that printed number can't both hold for a d12 variant, and the guide's own appendix makes the
+  spine the governing rule — so the spine won. See the Handbook journal for the alternative.
+- **Pisces' *Piranha Rose*** is implemented as written (2d8 base on the area spine), which lands it at 7d8
+  plus 6d6 persistent bleed against up to three creatures at rank 6 — for *one action*. That is above
+  *Great Horn*, which costs two actions for 6d8 in a cone. If Pisces plays too strong, dropping the base to
+  1d8 brings it in line.
+
+*Scarlet Needle* deliberately does **not** scale with rank: the guide says its bleed "scales with the ramp",
+meaning with needle count. Heightening it by rank as well would give a 1-action Technique 6d6 persistent bleed
+at 11th level.
 
 ## Credits
 
