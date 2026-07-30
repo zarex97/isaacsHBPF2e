@@ -1,0 +1,41 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/defensive/shield-barrier-glowing-triangle-orange.webp",
+    "name": "Unfailing Cosmo",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>You never suffer the sky's Retrograde or Malefic aspects, or any of their riders. Ever.</p><p>You still gain every Ascendant and Exalted benefit normally.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "option": "saint:unfailing-cosmo"
+            }
+        ],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

@@ -1,0 +1,42 @@
+{
+    "folder": "Activities",
+    "img": "icons/magic/light/beams-rays-orange-purple-large.webp",
+    "name": "Effect: Second Ascension",
+    "system": {
+        "description": {
+            "value": "<p>Granted by the Second Ascension feat.</p><p>For 1 minute, treat the day as though your constellation were ascendant (or Exalted, if it was already ascendant). Apply the matching <strong>Sky</strong> effect for the duration.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "option": "sky:ascendant"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

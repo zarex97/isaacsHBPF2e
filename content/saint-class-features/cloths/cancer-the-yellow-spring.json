@@ -1,0 +1,65 @@
+{
+    "folder": "Gold Cloths",
+    "img": "icons/magic/death/hand-dirt-undead-zombie.webp",
+    "name": "Cancer — the Yellow Spring",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>♋ The Cancer Cloth.</strong> <em>OFFENSE</em></p><hr /><h3>Signature Technique</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Sekishiki Meikaiha]</p><h3>Cloth Passive — The Boundary</h3><p>You are trained in Medicine. You can see and speak with spirits and the recently dead, and you automatically know the Hit Point category (unharmed, healthy, injured, badly injured, or near death) of every creature within 30 feet.</p><h3>Ascendant Boon — The Yellow Spring Opens <em>[OFFENSE]</em></h3><p>Any creature you reduce to 0 Hit Points <strong>dies</strong>, with no save.</p><p>Once per round as a free action, a creature within 30 feet that is at or below half its Hit Points must attempt a Fortitude save against your Cosmo DC; on a failure it takes 8d6 void damage and is slowed 1.</p><p>You always know the direction of the nearest planar boundary.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Cancer)]</p><h3>Zenith Boon — The Yellow Spring Is Here <em>[removal]</em></h3><p>As the Ascendant Boon, and you gain @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.The Yellow Spring Is Here], usable <strong>once per Zenith day</strong>.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Cancer)]</p><h3>11th-Level Cloth Ability — Meikai Ha</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Meikai Ha]</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "ActiveEffectLike",
+                "mode": "upgrade",
+                "path": "system.skills.medicine.rank",
+                "value": 1
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Sekishiki Meikaiha"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            11
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Meikai Ha"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "saint-cloth",
+                "cloth-cancer"
+            ],
+            "rarity": "common",
+            "value": [
+                "saint",
+                "cloth"
+            ]
+        }
+    },
+    "type": "feat"
+}

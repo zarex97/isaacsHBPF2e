@@ -1,0 +1,54 @@
+{
+    "folder": "Activities",
+    "img": "icons/magic/death/skull-humanoid-crown-white-blue.webp",
+    "name": "Effect: Arayashiki",
+    "system": {
+        "description": {
+            "value": "<p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Eighth Sense (Arayashiki)]</p><p>You keep acting for 1 minute or until the encounter ends. You cannot drop below 1 Hit Point; you are immune to death effects and to the dying, unconscious, and paralyzed conditions; and you ignore the wounded and drained conditions.</p><p>When this ends you are dying 3 and your Cloth shatters. <strong>If the trigger killed you, you die when the minute ends.</strong> You may end it early to be merely dying 1 with an intact Cloth.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "Immunity",
+                "type": "death"
+            },
+            {
+                "key": "Immunity",
+                "type": "dying"
+            },
+            {
+                "key": "Immunity",
+                "type": "unconscious"
+            },
+            {
+                "key": "Immunity",
+                "type": "paralyzed"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

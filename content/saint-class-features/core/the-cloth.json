@@ -1,0 +1,56 @@
+{
+    "folder": "Core",
+    "img": "icons/equipment/chest/breastplate-layered-steel-gold.webp",
+    "name": "The Cloth",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>You are bonded to one of the twelve Gold Cloths. It is medium armor (+4 AC, Dex cap +1, check penalty &minus;2, Strength 16) that you gain for free at 1st level and that accepts armor runes normally.</p><p>You can summon or dismiss your Cloth with a single Interact action. It cannot be removed from you by any means short of destroying it. If you are reduced to 0 Hit Points the Cloth cracks; it repairs itself after 24 hours, or instantly in the hands of a Saint of Aries.</p><p>Your Cloth determines your Signature Technique, your Cloth Passive, your 11th-level Cloth Ability, and the one constellation whose rising you can feel.</p><hr /><ul><li>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Aries — the Wall]</li><li>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Taurus — the Horn]</li><li>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Gemini — the Other Dimension]</li><li>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Cancer — the Yellow Spring]</li><li>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Leo — the Lightning]</li><li>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Virgo — Nearest to God]</li><li>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra — the Weapons]</li><li>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Scorpio — the Needle]</li><li>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Sagittarius — the Arrow]</li><li>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Capricorn — Excalibur]</li><li>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Aquarius — Absolute Zero]</li><li>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Pisces — the Roses]</li></ul>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "adjustName": false,
+                "choices": {
+                    "filter": [
+                        "item:tag:saint-cloth"
+                    ]
+                },
+                "flag": "cloth",
+                "key": "ChoiceSet",
+                "prompt": "Choose your Gold Cloth"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "{item|flags.system.rulesSelections.cloth}"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class.Item.Gold Cloth"
+            }
+        ],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

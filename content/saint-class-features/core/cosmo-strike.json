@@ -1,0 +1,71 @@
+{
+    "folder": "Core",
+    "img": "icons/skills/melee/unarmed-punch-fist-yellow-red.webp",
+    "name": "Cosmo Strike",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your cosmo burns in your hands. Your fist deals 1d6 bludgeoning damage and is in the brawling group with the agile, finesse, nonlethal, and unarmed traits.</p><p>Your unarmed Strikes are <strong>magical</strong>, and they gain a <strong>+1 circumstance bonus to damage per weapon damage die</strong>.</p><hr /><p><strong>GM note:</strong> this is the built-in <em>handwraps of mighty blows</em> fix for a class that has no weapons. Do not also require handwraps — that would tax the Saint twice.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "fist": true,
+                "img": "icons/skills/melee/unarmed-punch-fist-yellow-red.webp",
+                "key": "Strike",
+                "label": "Cosmo Strike"
+            },
+            {
+                "itemId": "xxxxxxFISTxxxxxx",
+                "key": "ItemAlteration",
+                "mode": "upgrade",
+                "property": "damage-dice-faces",
+                "value": 6
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "mode": "add",
+                "predicate": [
+                    "item:category:unarmed"
+                ],
+                "property": "traits",
+                "value": "magical"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Cosmo Strike",
+                "predicate": [
+                    "item:category:unarmed"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "cosmo-strike",
+                "type": "circumstance",
+                "value": "@weapon.system.damage.dice"
+            }
+        ],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

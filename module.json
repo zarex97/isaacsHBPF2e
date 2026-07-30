@@ -1,0 +1,177 @@
+{
+    "id": "isaacs-hb-pf2e",
+    "title": "Isaac's Homebrew (PF2e): The Saint",
+    "description": "<p>Homebrew content for the Pathfinder Second Edition system: <strong>The Saint</strong>, a martial focus-user whose power answers to the sky. Twelve Gold Cloths, Techniques that auto-heighten on a rank spine, Ascendant and Zenith boons, a full class feat list, and a sky tracker that decides whose day it is.</p>",
+    "version": "0.1.0",
+    "license": "./LICENSE",
+    "authors": [
+        {
+            "name": "Isaac",
+            "url": "https://github.com/zarex97/isaacsHBPF2e",
+            "flags": {}
+        }
+    ],
+    "url": "https://github.com/zarex97/isaacsHBPF2e",
+    "bugs": "https://github.com/zarex97/isaacsHBPF2e/issues",
+    "manifest": "https://github.com/zarex97/isaacsHBPF2e/releases/latest/download/module.json",
+    "download": "https://github.com/zarex97/isaacsHBPF2e/releases/latest/download/module.zip",
+    "compatibility": {
+        "minimum": "14.361",
+        "verified": "14.364",
+        "maximum": "14"
+    },
+    "relationships": {
+        "systems": [
+            {
+                "id": "pf2e",
+                "type": "system",
+                "compatibility": {
+                    "minimum": "8.3.0"
+                }
+            }
+        ]
+    },
+    "esmodules": ["scripts/isaacs-hb.mjs"],
+    "styles": ["styles/sky.css"],
+    "socket": true,
+    "media": [
+        {
+            "type": "setup",
+            "caption": "Isaac's Homebrew (PF2e): The Saint",
+            "thumbnail": "modules/isaacs-hb-pf2e/assets/setup.webp"
+        }
+    ],
+    "packs": [
+        {
+            "name": "saint-class",
+            "label": "The Saint: Class",
+            "path": "packs/saint-class",
+            "type": "Item",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/orange.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "saint-class-features",
+            "label": "The Saint: Class Features",
+            "path": "packs/saint-class-features",
+            "type": "Item",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/orange.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "saint-techniques",
+            "label": "The Saint: Techniques",
+            "path": "packs/saint-techniques",
+            "type": "Item",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/purple.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "saint-feats",
+            "label": "The Saint: Feats",
+            "path": "packs/saint-feats",
+            "type": "Item",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/orange.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "saint-effects",
+            "label": "The Saint: Effects",
+            "path": "packs/saint-effects",
+            "type": "Item",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/blue.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "saint-journals",
+            "label": "The Saint: Handbook",
+            "path": "packs/saint-journals",
+            "type": "JournalEntry",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/green.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "saint-macros",
+            "label": "The Saint: Macros",
+            "path": "packs/saint-macros",
+            "type": "Macro",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/green.webp",
+            "ownership": {
+                "PLAYER": "NONE",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        }
+    ],
+    "packFolders": [
+        {
+            "name": "Isaac's Homebrew: The Saint",
+            "sorting": "m",
+            "color": "#8a6d1f",
+            "packs": [
+                "saint-class",
+                "saint-class-features",
+                "saint-techniques",
+                "saint-feats",
+                "saint-effects",
+                "saint-journals",
+                "saint-macros"
+            ]
+        }
+    ],
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "pf2e-homebrew": {
+                "classTraits": {
+                    "saint": {
+                        "label": "Saint",
+                        "description": "A creature, item, or ability of the Saint class."
+                    }
+                },
+                "spellTraits": {
+                    "cosmo": {
+                        "label": "Cosmo",
+                        "description": "A Technique powered by a Saint's inner cosmo. Cosmo effects are focus spells that use the Saint's Cosmo DC and heighten to half the Saint's level rounded up."
+                    }
+                },
+                "featTraits": {
+                    "cloth": {
+                        "label": "Cloth",
+                        "description": "An ability granted by a Gold Cloth."
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,61 @@
+{
+    "folder": "Sky: Ascendant",
+    "img": "icons/weapons/swords/greatsword-crossguard-gold.webp",
+    "name": "Sky: Ascendant (Capricorn)",
+    "system": {
+        "description": {
+            "value": "<p><strong>♑ Capricorn is ascendant today.</strong> Your Cloth is awake and you have your Ascendant Boon for the whole day.</p><p>Your unarmed Strikes <strong>ignore all resistances, physical immunities, and Hardness</strong>, and gain +1 damage die.</p><p>On a critical hit you may <strong>sever</strong> a limb, a sense, or a natural attack until the target receives <em>regenerate</em>. You Strike incorporeal creatures and force effects normally, and a critical hit destroys a force effect outright.</p><hr /><p><strong>GM:</strong> seed something resistant today, or this boon is a shrug. Capricorn is a key, not a hammer.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. Applied and removed by the module's sky tracker; a GM can also drag it on by hand.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "days",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "option": "sky:ascendant"
+            },
+            {
+                "key": "RollOption",
+                "option": "sky:sign:capricorn"
+            },
+            {
+                "diceNumber": 1,
+                "key": "DamageDice",
+                "label": "Excalibur Cuts Everything",
+                "predicate": [
+                    "item:category:unarmed"
+                ],
+                "selector": "unarmed-damage"
+            },
+            {
+                "key": "Note",
+                "selector": "unarmed-damage",
+                "text": "This damage ignores all resistances, physical immunities, and Hardness.",
+                "title": "Excalibur Cuts Everything"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

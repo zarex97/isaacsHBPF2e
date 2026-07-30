@@ -1,0 +1,43 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/defensive/shield-barrier-flaming-diamond-orange.webp",
+    "name": "Shelter of the Cloth",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your cosmo spills outward far enough to shade the people standing near you. Allies within 30 feet treat the day's aspect as one step milder: Malefic becomes Retrograde, and Retrograde becomes nothing.</p><p>This is passive and always on. It stacks with a Stargazer's Forewarned — a party with both is simply immune to the sky.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "Aura",
+                "radius": 30,
+                "slug": "shelter-of-the-cloth",
+                "traits": []
+            }
+        ],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

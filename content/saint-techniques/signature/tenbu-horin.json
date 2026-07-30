@@ -1,0 +1,58 @@
+{
+    "folder": "Signature Techniques",
+    "img": "icons/magic/control/energy-stream-link-white.webp",
+    "name": "Tenbu Horin",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": {
+            "save": {
+                "basic": false,
+                "statistic": "will"
+            }
+        },
+        "description": {
+            "value": "<p>You are nearest to God, and you decide what this creature is permitted to perceive.</p><p>The target must attempt a Will save.</p><p><strong>Success</strong> The target is unaffected.</p><p><strong>Failure</strong> The target loses one sense of your choice for 1 minute: sight (blinded), hearing (deafened), smell and taste, or touch.</p><p><strong>Critical Failure</strong> As failure, but two senses.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "level": {
+            "value": 3
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "mental",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

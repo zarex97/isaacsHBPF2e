@@ -1,0 +1,56 @@
+{
+    "folder": "Sky: Zenith",
+    "img": "icons/skills/wounds/injury-triple-slash-bleed.webp",
+    "name": "Sky: Zenith (Scorpio)",
+    "system": {
+        "description": {
+            "value": "<p><strong>♏ Scorpio rises Exalted today.</strong> This is the one day in two hundred and sixty. You have your Zenith Boon for the whole day.</p><p>As the Ascendant Boon, but the death effect triggers at <strong>5 needles</strong>, and your allies' hits also apply needles.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "days",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "option": "sky:ascendant"
+            },
+            {
+                "key": "RollOption",
+                "option": "sky:sign:scorpio"
+            },
+            {
+                "key": "RollOption",
+                "option": "sky:zenith"
+            },
+            {
+                "key": "Note",
+                "selector": "unarmed-attack",
+                "text": "This attack applies a Scarlet Needle whether it hits or misses. Antares triggers at 5 needles, and your allies' hits also apply needles.",
+                "title": "Antares (Zenith)"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

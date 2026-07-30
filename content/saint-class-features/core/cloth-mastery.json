@@ -1,0 +1,44 @@
+{
+    "folder": "Core",
+    "img": "icons/skills/melee/unarmed-punch-fist.webp",
+    "name": "Cloth Mastery",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your fists have become the equal of any weapon. Your proficiency rank for unarmed attacks increases to master.</p>"
+        },
+        "level": {
+            "value": 13
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "subfeatures": {
+            "proficiencies": {
+                "unarmed": {
+                    "attribute": null,
+                    "rank": 3
+                }
+            }
+        },
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}
