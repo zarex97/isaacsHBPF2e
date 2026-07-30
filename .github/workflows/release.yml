@@ -1,0 +1,80 @@
+name: Build and Release
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - run: npm ci
+
+      - name: Validate content
+        run: npm run validate
+
+      - name: Build compendium packs
+        run: npm run build
+
+      # Compiling and then extracting must round-trip. If it does not, the LevelDB write is dropping
+      # something, and the packs would be silently lossy in a way no in-Foundry test would surface.
+      - name: Check the pack build round-trips
+        run: npm run check:roundtrip
+
+      - name: Assemble the module
+        run: |
+          mkdir -p dist/isaacs-hb-pf2e
+          cp -r module.json LICENSE README.md packs scripts styles templates dist/isaacs-hb-pf2e/
+          cd dist/isaacs-hb-pf2e && zip -r ../../module.zip . && cd ../..
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: module
+          path: |
+            module.json
+            module.zip
+
+  release:
+    needs: build
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: module
+
+      # The manifest's version must match the tag, or Foundry's update check never settles: it downloads the
+      # release, reads a lower version, and offers the same update again.
+      - name: Pin the manifest version to the tag
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          node -e "
+            const fs = require('fs');
+            const m = JSON.parse(fs.readFileSync('module.json', 'utf8'));
+            m.version = process.env.TAG;
+            fs.writeFileSync('module.json', JSON.stringify(m, null, 4) + '\n');
+          "
+        env:
+          TAG: ${{ github.ref_name }}
+
+      - name: Attach module.json and module.zip to the release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            module.json
+            module.zip

@@ -1,0 +1,43 @@
+{
+    "folder": "Cloth Abilities",
+    "img": "icons/magic/air/wind-swirl-gray.webp",
+    "name": "Aiolos's Wings",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>You gain a permanent fly Speed equal to your Speed.</p><p>Once per hour you can extend this to an ally you touch for 10 minutes.</p>"
+        },
+        "level": {
+            "value": 11
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "BaseSpeed",
+                "selector": "fly",
+                "value": "@actor.attributes.speed.value"
+            }
+        ],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint",
+                "cloth"
+            ]
+        }
+    },
+    "type": "feat"
+}

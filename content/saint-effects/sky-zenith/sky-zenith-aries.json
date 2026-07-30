@@ -1,0 +1,64 @@
+{
+    "folder": "Sky: Zenith",
+    "img": "icons/magic/defensive/barrier-shield-crystal-glowing-blue.webp",
+    "name": "Sky: Zenith (Aries)",
+    "system": {
+        "description": {
+            "value": "<p><strong>♈ Aries rises Exalted today.</strong> This is the one day in two hundred and sixty. You have your Zenith Boon for the whole day.</p><p>You gain a +2 status bonus to AC and to all saving throws.</p><p><strong>Starlight Extinction</strong> &#8617; (reaction; <strong>no frequency limit</strong>).</p><p>Once per minute you may instead target a <em>creature</em> within 60 feet: Fortitude save against your Cosmo DC, and on a critical failure it is teleported one mile away. <strong>Incapacitation.</strong></p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "days",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "option": "sky:ascendant"
+            },
+            {
+                "key": "RollOption",
+                "option": "sky:sign:aries"
+            },
+            {
+                "key": "RollOption",
+                "option": "sky:zenith"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Starlight Extinction",
+                "selector": "ac",
+                "type": "status",
+                "value": 2
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Starlight Extinction",
+                "selector": "saving-throw",
+                "type": "status",
+                "value": 2
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

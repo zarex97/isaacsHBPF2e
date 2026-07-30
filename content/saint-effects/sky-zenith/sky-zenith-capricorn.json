@@ -1,0 +1,65 @@
+{
+    "folder": "Sky: Zenith",
+    "img": "icons/weapons/swords/greatsword-crossguard-gold.webp",
+    "name": "Sky: Zenith (Capricorn)",
+    "system": {
+        "description": {
+            "value": "<p><strong>♑ Capricorn rises Exalted today.</strong> This is the one day in two hundred and sixty. You have your Zenith Boon for the whole day.</p><p>As the Ascendant Boon. In addition, once per turn per creature you may use a reaction when a creature attacks you or a spell enters your space to <strong>sever it</strong> &mdash; it has no effect.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "days",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "option": "sky:ascendant"
+            },
+            {
+                "key": "RollOption",
+                "option": "sky:sign:capricorn"
+            },
+            {
+                "key": "RollOption",
+                "option": "sky:zenith"
+            },
+            {
+                "diceNumber": 1,
+                "key": "DamageDice",
+                "label": "Excalibur Cuts Everything",
+                "predicate": [
+                    "item:category:unarmed"
+                ],
+                "selector": "unarmed-damage"
+            },
+            {
+                "key": "Note",
+                "selector": "unarmed-damage",
+                "text": "This damage ignores all resistances, physical immunities, and Hardness.",
+                "title": "Excalibur Cuts Everything"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

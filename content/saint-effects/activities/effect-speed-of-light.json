@@ -1,0 +1,37 @@
+{
+    "folder": "Activities",
+    "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
+    "name": "Effect: Speed of Light",
+    "system": {
+        "description": {
+            "value": "<p>Granted by the Speed of Light feat.</p><p>You are quickened 1 for 1 minute; the extra action can be used only to Strike, Stride, or Step. You also do not trigger reactions based on your movement &mdash; you are simply not where the reaction expected you to be.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

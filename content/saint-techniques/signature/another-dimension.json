@@ -1,0 +1,59 @@
+{
+    "folder": "Signature Techniques",
+    "img": "icons/magic/movement/portal-vortex-purple.webp",
+    "name": "Another Dimension",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": {
+            "save": {
+                "basic": false,
+                "statistic": "will"
+            }
+        },
+        "description": {
+            "value": "<p>You open a seam in space and push someone through it.</p><p>The target must attempt a Will save.</p><p><strong>Success</strong> The target is unaffected.</p><p><strong>Failure</strong> The target is banished to an empty pocket dimension for 1 minute, then returns to the space it left (or the nearest unoccupied space).</p><p><strong>Critical Failure</strong> As failure, but for 10 minutes.</p><hr /><p><strong>GM note:</strong> this Technique's rank is deliberately 5, so a Gemini Saint gains it at 9th level. Before then, a Gemini Saint's signature is @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Genro Mao Ken (Shadow)], which the Two Faces passive grants in either aspect.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "level": {
+            "value": 5
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "incapacitation",
+                "manipulate",
+                "saint",
+                "teleportation"
+            ]
+        }
+    },
+    "type": "spell"
+}

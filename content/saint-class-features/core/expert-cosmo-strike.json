@@ -1,0 +1,52 @@
+{
+    "folder": "Core",
+    "img": "icons/skills/melee/hand-grip-staff-yellow-brown.webp",
+    "name": "Expert Cosmo Strike",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your attacks with your fists become more precise and deadly. Your proficiency rank for unarmed attacks increases to expert.</p><p>You also gain access to the critical specialization effect of the brawling weapon group with your unarmed Strikes.</p>"
+        },
+        "level": {
+            "value": 5
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "CriticalSpecialization",
+                "predicate": [
+                    "item:category:unarmed",
+                    "item:group:brawling"
+                ]
+            }
+        ],
+        "subfeatures": {
+            "proficiencies": {
+                "unarmed": {
+                    "attribute": null,
+                    "rank": 2
+                }
+            }
+        },
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

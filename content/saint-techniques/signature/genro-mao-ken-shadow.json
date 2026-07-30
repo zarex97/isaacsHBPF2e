@@ -1,0 +1,59 @@
+{
+    "folder": "Signature Techniques",
+    "img": "icons/magic/control/hypnosis-mesmerism-eye-tan.webp",
+    "name": "Genro Mao Ken (Shadow)",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": {
+            "save": {
+                "basic": false,
+                "statistic": "will"
+            }
+        },
+        "description": {
+            "value": "<p>The lesser Devil King's Fist: you show one mind an illusion of its own making and let it wander there.</p><p>The target must attempt a Will save.</p><p><strong>Success</strong> The target is unaffected.</p><p><strong>Failure</strong> The target is confused for 1 round.</p><p><strong>Critical Failure</strong> The target is confused for 1 minute.</p><hr /><p>This is the Shadow aspect's signature Technique, and the Technique a Gemini Saint uses before @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Another Dimension] comes online at 9th level.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "illusion",
+                "manipulate",
+                "mental",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

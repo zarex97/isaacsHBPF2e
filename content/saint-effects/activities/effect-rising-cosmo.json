@@ -1,0 +1,74 @@
+{
+    "folder": "Activities",
+    "img": "icons/magic/light/explosion-star-glow-orange-purple.webp",
+    "name": "Effect: Rising Cosmo",
+    "system": {
+        "badge": {
+            "labels": [
+                "+1",
+                "+2",
+                "+3"
+            ],
+            "max": 3,
+            "min": 0,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p>Granted by the Rising Cosmo feat.</p><p>Increase this effect's value by 1 each time you are critically hit, are reduced to half Hit Points or lower for the first time, or are reduced to 0 Hit Points (maximum 3).</p><p>You gain the value as a status bonus to unarmed Strike damage and to your Technique DCs. At 2 or more you also gain a +1 status bonus to attack rolls and saving throws. At 3, once per round you may Step or Stride 5 feet as a free action when you take damage.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Rising Cosmo",
+                "selector": "unarmed-damage",
+                "type": "status",
+                "value": "@item.badge.value"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Rising Cosmo",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:effect:rising-cosmo:badge",
+                            2
+                        ]
+                    }
+                ],
+                "selector": [
+                    "attack",
+                    "saving-throw"
+                ],
+                "type": "status",
+                "value": 1
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

@@ -1,0 +1,80 @@
+{
+    "folder": "Gold Cloths",
+    "img": "icons/magic/lightning/bolt-strike-forked-blue.webp",
+    "name": "Leo — the Lightning",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>♌ The Leo Cloth.</strong> <em>OFFENSE</em></p><hr /><h3>Signature Technique</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Lightning Bolt]</p><h3>Cloth Passive — Pride of the Lion</h3><p>You are immune to the frightened condition and to fear effects. You are trained in Intimidation and gain a +1 circumstance bonus to Demoralize.</p><h3>Ascendant Boon — Lightning Plasma <em>[OFFENSE]</em></h3><p>Your fists gain the <strong>agile</strong> trait and deal an additional 1d6 electricity damage.</p><p>You gain an <strong>extra action</strong> at the start of each of your turns, which you can use only to Strike or Stride.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Leo)]</p><h3>Zenith Boon — Lightning Plasma (Zenith) <em>[OFFENSE]</em></h3><p>As the Ascendant Boon, but your fists deal an additional <strong>3d6</strong> electricity damage, and you are <strong>quickened 1</strong> (Strike or Stride only) <em>in addition</em> to the extra action &mdash; two extra actions each turn.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Leo)]</p><h3>11th-Level Cloth Ability — Lightning Plasma</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Lightning Plasma]</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "ActiveEffectLike",
+                "mode": "upgrade",
+                "path": "system.skills.intimidation.rank",
+                "value": 1
+            },
+            {
+                "key": "Immunity",
+                "type": "frightened"
+            },
+            {
+                "key": "Immunity",
+                "type": "fear"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Pride of the Lion",
+                "selector": "demoralize",
+                "type": "circumstance",
+                "value": 1
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Lightning Bolt"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            11
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Lightning Plasma"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "saint-cloth",
+                "cloth-leo"
+            ],
+            "rarity": "common",
+            "value": [
+                "saint",
+                "cloth"
+            ]
+        }
+    },
+    "type": "feat"
+}

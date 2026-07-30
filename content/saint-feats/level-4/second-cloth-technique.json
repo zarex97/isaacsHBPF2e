@@ -1,0 +1,36 @@
+{
+    "folder": "Level 4",
+    "img": "icons/magic/symbols/runes-star-blue.webp",
+    "name": "Second Cloth Technique",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>You have studied a sister Cloth's art.</p><p>Learn one Signature Technique from a Cloth other than your own. Its rank is <strong>one lower</strong> than your usual Technique rank (minimum rank 1), and it uses your Cosmo DC and focus pool normally.</p><p>You may retrain which Technique this is when you gain a level. You cannot select a Cloth's 11th-level Cloth Ability this way &mdash; only its Signature Technique.</p>"
+        },
+        "level": {
+            "value": 4
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

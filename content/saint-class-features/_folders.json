@@ -1,0 +1,17 @@
+[
+    {
+        "name": "Core",
+        "sorting": "m",
+        "type": "Item"
+    },
+    {
+        "name": "Gold Cloths",
+        "sorting": "m",
+        "type": "Item"
+    },
+    {
+        "name": "Cloth Abilities",
+        "sorting": "m",
+        "type": "Item"
+    }
+]

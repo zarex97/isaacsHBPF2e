@@ -1,0 +1,258 @@
+{
+    "img": "icons/equipment/chest/breastplate-layered-steel-gold.webp",
+    "name": "Saint",
+    "system": {
+        "ancestryFeatLevels": {
+            "value": [
+                1,
+                5,
+                9,
+                13,
+                17
+            ]
+        },
+        "attacks": {
+            "advanced": 0,
+            "martial": 0,
+            "other": {
+                "name": "",
+                "rank": 0
+            },
+            "simple": 0,
+            "unarmed": 1
+        },
+        "classFeatLevels": {
+            "value": [
+                1,
+                2,
+                4,
+                6,
+                8,
+                10,
+                12,
+                14,
+                16,
+                18,
+                20
+            ]
+        },
+        "defenses": {
+            "heavy": 0,
+            "light": 1,
+            "medium": 1,
+            "unarmored": 1
+        },
+        "description": {
+            "value": "<p><em>A Gold Saint stands in the attack, wearing gold, and punches a god.</em></p>\n<p>Eleven days out of thirteen you are an excellent but not dominant martial &mdash; a utility striker who\nhits hard enough and brings something no one else brings. On the thirteenth, the day your own constellation\nrises, the Cloth burns and you become something else. And on one day in two hundred and sixty, the sky\nexalts you, and for that day you are very nearly unstoppable.</p>\n<p>You are not a spellcaster. Your power is your own inner cosmo; the sky only wakes it. Your Techniques are\nfocus spells that grow with you, and your fists are the weapon you were issued.</p>\n<hr />\n<h2>Key Ability</h2>\n<p><strong>Strength or Dexterity:</strong> at 1st level, your class gives you an attribute boost to Strength\nor Dexterity. Your Cosmo DC uses whichever you chose.</p>\n<h2>Hit Points</h2>\n<p><strong>10 plus your Constitution modifier</strong></p>\n<h2>The Three-Tier Curve</h2>\n<p>Everything about this class is tuned to one table. Read it at session zero and make sure the table has\nread it too.</p>\n<table>\n<thead><tr><th>Sky state</th><th>You are</th><th>Frequency</th></tr></thead>\n<tbody>\n<tr><td>Normal day</td><td>about 15% weaker than a comparable martial</td><td>~11 days in 13</td></tr>\n<tr><td><strong>Ascendant</strong> (your sign rises)</td><td>about 30% stronger</td><td>1 day in 13</td></tr>\n<tr><td><strong>Zenith</strong> (your sign rises Exalted)</td><td>about twice as strong</td><td>1 day in 260</td></tr>\n</tbody>\n</table>\n<p>The &minus;15% floor is a feature, not a bug. A player who expects to be Aiolia every session wants a\nFighter, not a Saint.</p>\n<h2>Proficiencies</h2>\n<p>At 1st level you gain the following: Perception trained; Fortitude and Reflex expert, Will trained;\nAthletics plus three other skills trained; unarmed attacks trained (you gain no weapon proficiency);\nunarmored defense and light and medium armor trained; and your Cosmo DC trained.</p>"
+        },
+        "generalFeatLevels": {
+            "value": [
+                3,
+                11,
+                15,
+                19
+            ]
+        },
+        "hp": 10,
+        "items": {
+            "alert": {
+                "img": "icons/creatures/eyes/human-single-blue.webp",
+                "level": 7,
+                "name": "Alertness",
+                "uuid": "Compendium.pf2e.classfeatures.Item.Alertness"
+            },
+            "ascen": {
+                "img": "icons/magic/light/beams-rays-orange-purple-large.webp",
+                "level": 1,
+                "name": "Ascendant Constellation",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation"
+            },
+            "cloth": {
+                "img": "icons/equipment/chest/breastplate-collared-steel-gold.webp",
+                "level": 11,
+                "name": "Cloth Ability",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Cloth Ability"
+            },
+            "clothx": {
+                "img": "icons/skills/melee/unarmed-punch-fist.webp",
+                "level": 13,
+                "name": "Cloth Mastery",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Cloth Mastery"
+            },
+            "clothxx": {
+                "img": "icons/equipment/chest/breastplate-banded-steel-gold.webp",
+                "level": 13,
+                "name": "Cloth Expertise",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Cloth Expertise"
+            },
+            "cosmo": {
+                "img": "icons/magic/light/explosion-star-glow-orange.webp",
+                "level": 1,
+                "name": "Cosmo",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Cosmo"
+            },
+            "cosmox": {
+                "img": "icons/skills/melee/unarmed-punch-fist-yellow-red.webp",
+                "level": 1,
+                "name": "Cosmo Strike",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Cosmo Strike"
+            },
+            "cosmoxx": {
+                "img": "icons/magic/light/explosion-star-glow-orange-purple.webp",
+                "level": 9,
+                "name": "Cosmo Expertise",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Cosmo Expertise"
+            },
+            "cosmoxxx": {
+                "img": "icons/magic/light/explosion-star-glow-purple.webp",
+                "level": 17,
+                "name": "Cosmo Mastery",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Cosmo Mastery"
+            },
+            "eight": {
+                "img": "icons/magic/death/skull-humanoid-crown-white-blue.webp",
+                "level": 19,
+                "name": "Eighth Sense (Arayashiki)",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Eighth Sense (Arayashiki)"
+            },
+            "evasi": {
+                "img": "systems/pf2e/icons/features/classes/evasion.webp",
+                "level": 15,
+                "name": "Evasion",
+                "uuid": "Compendium.pf2e.classfeatures.Item.Evasion"
+            },
+            "exper": {
+                "img": "icons/skills/melee/hand-grip-staff-yellow-brown.webp",
+                "level": 5,
+                "name": "Expert Cosmo Strike",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Expert Cosmo Strike"
+            },
+            "great": {
+                "img": "icons/skills/melee/hand-grip-sword-orange.webp",
+                "level": 15,
+                "name": "Greater Weapon Specialization",
+                "uuid": "Compendium.pf2e.classfeatures.Item.Greater Weapon Specialization"
+            },
+            "ironw": {
+                "img": "systems/pf2e/icons/features/classes/iron-will.webp",
+                "level": 3,
+                "name": "Iron Will",
+                "uuid": "Compendium.pf2e.classfeatures.Item.Iron Will"
+            },
+            "jugge": {
+                "img": "icons/creatures/mammals/bull-horned-blue.webp",
+                "level": 9,
+                "name": "Juggernaut",
+                "uuid": "Compendium.pf2e.classfeatures.Item.Juggernaut"
+            },
+            "secon": {
+                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "level": 7,
+                "name": "Second Cosmo",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Second Cosmo"
+            },
+            "seven": {
+                "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+                "level": 15,
+                "name": "Seventh Sense",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Seventh Sense"
+            },
+            "shelt": {
+                "img": "icons/magic/defensive/shield-barrier-flaming-diamond-orange.webp",
+                "level": 1,
+                "name": "Shelter of the Cloth",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Shelter of the Cloth"
+            },
+            "sixth": {
+                "img": "icons/magic/perception/third-eye-blue-red.webp",
+                "level": 7,
+                "name": "Sixth Sense",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Sixth Sense"
+            },
+            "thecl": {
+                "img": "icons/equipment/chest/breastplate-layered-steel-gold.webp",
+                "level": 1,
+                "name": "The Cloth",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Cloth"
+            },
+            "third": {
+                "img": "icons/magic/light/explosion-star-glow-yellow.webp",
+                "level": 15,
+                "name": "Third Cosmo",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Third Cosmo"
+            },
+            "unfai": {
+                "img": "icons/magic/defensive/shield-barrier-glowing-triangle-orange.webp",
+                "level": 1,
+                "name": "Unfailing Cosmo",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Unfailing Cosmo"
+            },
+            "weapo": {
+                "img": "systems/pf2e/icons/features/classes/weapon-specialization.webp",
+                "level": 7,
+                "name": "Weapon Specialization",
+                "uuid": "Compendium.pf2e.classfeatures.Item.Weapon Specialization"
+            }
+        },
+        "keyAbility": {
+            "value": [
+                "str",
+                "dex"
+            ]
+        },
+        "perception": 1,
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "savingThrows": {
+            "fortitude": 2,
+            "reflex": 2,
+            "will": 1
+        },
+        "skillFeatLevels": {
+            "value": [
+                2,
+                4,
+                6,
+                8,
+                10,
+                12,
+                14,
+                16,
+                18,
+                20
+            ]
+        },
+        "skillIncreaseLevels": {
+            "value": [
+                3,
+                5,
+                7,
+                9,
+                11,
+                13,
+                15,
+                17,
+                19
+            ]
+        },
+        "slug": "saint",
+        "spellcasting": 0,
+        "trainedSkills": {
+            "additional": 3,
+            "value": [
+                "athletics"
+            ]
+        },
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "class"
+}

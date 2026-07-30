@@ -1,0 +1,41 @@
+{
+    "folder": "Level 20",
+    "img": "icons/magic/light/star-sparkles-yellow.webp",
+    "name": "Constellation of One",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>The sky is not finished. It has been added to before &mdash; every constellation was drawn by someone, and the ones with the most stars belonged to the ones who did the most. What you have done is enough that the sky has made room for it. A star kindles in your constellation where there was none, and it will still be burning long after your name is a story.</p><p>Work with your GM to identify the single deed that defines your career as a Saint &mdash; a battle survived, a person saved, a god refused, an oath kept at ruinous cost. That deed becomes a <strong>star</strong>, permanently added to your Cloth's constellation. Name it.</p><hr /><p><strong>For you, immediately:</strong></p><ul><li>Your <strong>Ascendant Boon becomes permanent</strong>. It is active every day, regardless of the sky. On days your constellation is genuinely ascendant you gain your <strong>Zenith Boon</strong> instead; on days it is Exalted, your Zenith Boon and one additional benefit of the GM's choosing drawn from your star's story.</li></ul><p><strong>For every Saint of your constellation, forever:</strong></p><ul><li>Any character who wears your Gold Cloth after you &mdash; an NPC successor, another player's character, a character in a future campaign at this table &mdash; gains the buff of your star. What it grants may vary: a special action, or a permanent passive.</li><li>Once per day, the wearer may call on your star to gain your Cloth's <strong>Ascendant Boon for 1 minute</strong>, regardless of the sky.</li><li>Your name is legible in the sky to anyone with Astronomy Lore. Stargazers reading that constellation see it. NPCs who study the heavens know what you did.</li></ul><hr /><p><strong>Special</strong> This is a <strong>legacy feat</strong>. It is designed to outlive the character who takes it, and the GM should record the star's name somewhere durable &mdash; the campaign document, the table's shared notes, a card kept in the game box. The next player to pick up the Cloth inherits it. That is the entire point: a Gold Saint's real capstone is not a technique, it is <em>being remembered by the sky</em>.</p><hr /><p><em>Balance note: the permanent Ascendant Boon is deliberately enormous &mdash; it converts a 7.7%-uptime feature into a 100%-uptime one, roughly a permanent +30% against the tuning curve. At 20th level, with the campaign ending, that is appropriate. It should never be available earlier.</em></p><hr /><p><em>Placement note: the guide's appendix lists this feat at 16th level, but its written text is a level-20 capstone and is priced as one. It is placed at 20 here.</em></p>"
+        },
+        "level": {
+            "value": 20
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "option": "sky:ascendant"
+            }
+        ],
+        "traits": {
+            "rarity": "uncommon",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

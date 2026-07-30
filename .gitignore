@@ -1,0 +1,9 @@
+node_modules/
+
+# Built LevelDB compendium packs. Source of truth is content/**.json — run `npm run build`.
+packs/
+# Intermediate staging directory used by the build.
+.staging/
+
+*.log
+.DS_Store

@@ -1,0 +1,36 @@
+{
+    "folder": "Level 2",
+    "img": "icons/equipment/chest/breastplate-scale-grey.webp",
+    "name": "Cloth Bond",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>The runes worked into your Cloth resonate with a technique you have mastered.</p><p>Choose one Technique you know. The fundamental and property runes on your Cloth also apply to that Technique's spell attack rolls and damage, treating it as though it were a weapon bearing those runes. If the Technique makes a spell attack, it now adds your Cloth's potency bonus to that attack roll, closing the usual gap between Strikes and Techniques for this one Technique.</p><hr /><p>You may retrain this feat to choose a different Technique whenever you gain a level.</p>"
+        },
+        "level": {
+            "value": 2
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

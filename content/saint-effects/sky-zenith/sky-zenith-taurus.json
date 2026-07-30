@@ -1,0 +1,69 @@
+{
+    "folder": "Sky: Zenith",
+    "img": "icons/creatures/abilities/bull-horns-brown.webp",
+    "name": "Sky: Zenith (Taurus)",
+    "system": {
+        "description": {
+            "value": "<p><strong>♉ Taurus rises Exalted today.</strong> This is the one day in two hundred and sixty. You have your Zenith Boon for the whole day.</p><p>Your unarmed Strikes gain <strong>+2 damage dice</strong>, and a creature you hit must attempt a Fortitude save against your Cosmo DC or be pushed 10 feet and knocked prone.</p><p>You count as one size larger whenever it benefits you, you gain temporary Hit Points equal to your level at the start of each of your turns, and once per round @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Great Horn] costs you no Focus Point.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "days",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "option": "sky:ascendant"
+            },
+            {
+                "key": "RollOption",
+                "option": "sky:sign:taurus"
+            },
+            {
+                "key": "RollOption",
+                "option": "sky:zenith"
+            },
+            {
+                "diceNumber": 2,
+                "key": "DamageDice",
+                "label": "The Great Horn (Zenith)",
+                "predicate": [
+                    "item:category:unarmed"
+                ],
+                "selector": "unarmed-damage"
+            },
+            {
+                "add": [
+                    "large"
+                ],
+                "key": "ActorTraits"
+            },
+            {
+                "key": "TempHP",
+                "value": "@actor.level"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

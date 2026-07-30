@@ -1,0 +1,42 @@
+{
+    "folder": "Level 2",
+    "img": "icons/magic/fire/flame-burning-embers-orange.webp",
+    "name": "Heated-Up Cosmo",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>You stoke your inner cosmo in an instant rather than through long meditation.</p><p>Once per day you may <strong>Refocus as a single action</strong> instead of over 10 minutes. You can do this in the middle of an encounter; the burst of raw cosmo is visible as a flare of light around you, and any creature with a sixth sense or equivalent immediately knows your location.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
+        },
+        "level": {
+            "value": 2
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "concentrate",
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

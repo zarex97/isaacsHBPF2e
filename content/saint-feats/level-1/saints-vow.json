@@ -1,0 +1,55 @@
+{
+    "folder": "Level 1",
+    "img": "icons/magic/holy/saint-glass-portrait-halo.webp",
+    "name": "Saint's Vow",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>You swear to protect one person, and the oath sharpens you against whatever threatens them.</p><p>Choose one ally during your daily preparations; they are the target of your Vow until your next preparations. You gain a <strong>+1 circumstance bonus to attack rolls</strong> against any creature that has damaged the target of your Vow, or attempted to inflict a condition on them, since the end of your last turn.</p><p>Additionally, once per round when the target of your Vow would be reduced to 0 Hit Points while you are within 30 feet, you may use a reaction to <strong>Stride up to your Speed toward them</strong>. If this brings them within your reach, they remain at 1 Hit Point instead. A given ally can be saved this way only once per hour.</p><hr /><p><strong>Special</strong> You may have only one Vow at a time. Deliberately breaking a Vow &mdash; abandoning the person you swore to protect &mdash; costs you the use of this feat until you complete a full day of atonement.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "label": "Saint's Vow: target was harmed",
+                "option": "saints-vow",
+                "toggleable": true
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Saint's Vow",
+                "predicate": [
+                    "saints-vow"
+                ],
+                "selector": "attack",
+                "type": "circumstance",
+                "value": 1
+            }
+        ],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "emotion",
+                "mental",
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

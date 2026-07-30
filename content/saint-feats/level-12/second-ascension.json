@@ -1,0 +1,46 @@
+{
+    "folder": "Level 12",
+    "img": "icons/magic/light/beams-rays-orange-purple-large.webp",
+    "name": "Second Ascension",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>For a moment, by sheer will, you make the sky obey.</p><hr /><p><strong>Frequency</strong> three times per week</p><p>For <strong>1 minute</strong>, treat the day as though your Cloth's constellation were ascendant, gaining your Ascendant Boon. If your sign is already ascendant but not Exalted, you may instead spend this to treat the day as Exalted for 1 minute, gaining your Zenith Boon.</p><p>You cannot use Second Ascension and Seventh Sense's <em>Burn Your Cosmo</em> on the same turn.</p>"
+        },
+        "frequency": {
+            "max": 3,
+            "per": "P1W",
+            "value": 3
+        },
+        "level": {
+            "value": 12
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "selfEffect": {
+            "name": "Effect: Second Ascension",
+            "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Second Ascension"
+        },
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "concentrate",
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}
