@@ -1,0 +1,38 @@
+{
+    "folder": "Level 16",
+    "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+    "name": "Zenith Reach",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>The awakened seventh sense answers you more than once.</p><p>You may use @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Seventh Sense]'s <strong>Burn Your Cosmo</strong> action twice per day instead of once.</p><p>Additionally, its duration increases from 1 minute to <strong>1 minute per Focus Point you currently have</strong>, up to 3 minutes.</p>"
+        },
+        "level": {
+            "value": 16
+        },
+        "prerequisites": {
+            "value": [
+                "Seventh Sense"
+            ]
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

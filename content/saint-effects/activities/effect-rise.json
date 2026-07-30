@@ -1,0 +1,37 @@
+{
+    "folder": "Activities",
+    "img": "icons/magic/life/heart-cross-strong-flame-red.webp",
+    "name": "Effect: Rise",
+    "system": {
+        "description": {
+            "value": "<p>Granted by the Rise feat.</p><p>You refused to fall. You are at 1 Hit Point and wounded 1 (or your wounded value increased by 1).</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

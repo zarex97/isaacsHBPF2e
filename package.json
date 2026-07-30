@@ -1,0 +1,23 @@
+{
+    "name": "isaacs-hb-pf2e",
+    "version": "0.1.0",
+    "description": "Isaac's homebrew content for the Pathfinder 2e system on Foundry VTT: The Saint.",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "node build/build-packs.mjs",
+        "extract": "node build/extract-packs.mjs",
+        "validate": "node build/validate.mjs",
+        "check:roundtrip": "node build/check-roundtrip.mjs",
+        "test": "npm run validate && npm run build && npm run check:roundtrip"
+    },
+    "author": "Isaac",
+    "license": "MIT",
+    "engines": {
+        "node": ">=22.0.0"
+    },
+    "devDependencies": {
+        "@foundryvtt/foundryvtt-cli": "^3.0.4",
+        "classic-level": "^3.0.0"
+    }
+}

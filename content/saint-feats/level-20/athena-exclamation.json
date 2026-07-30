@@ -1,0 +1,37 @@
+{
+    "folder": "Level 20",
+    "img": "icons/magic/light/explosion-star-large-orange-purple.webp",
+    "name": "Athena Exclamation",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 3
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>The forbidden technique. Three cosmos ignited as one tear open a hole where the world used to be.</p><hr /><p><strong>Requirements</strong> You are within 30 feet of at least <strong>two other creatures</strong> who have this feat &mdash; Saints, or beings the GM rules can channel cosmo at this tier &mdash; and all three of you spend the actions together.</p><p><strong>Athena Exclamation</strong> &#9670;&#9670;&#9670; (three actions, and requires two allies to each spend 3 actions)</p><p>Choose a point within <strong>100 feet</strong>. Every creature in a <strong>60-foot burst</strong> around that point takes @Damage[30d6[force]] damage, with a basic Reflex save against the highest Cosmo DC among the three casters. Creatures that critically fail are also knocked prone and deafened for 1 minute.</p><p>The terrain in the area is <strong>permanently obliterated</strong> &mdash; reduced to a crater of fused glass and silence. Structures without saves are destroyed. The landscape does not recover.</p><hr /><p><strong>Special</strong> Using Athena Exclamation is regarded in the Sanctuary as the gravest taboo a Saint can commit: it is the technique that killed gods and drowned continents. Every Saint NPC who learns you have used it will treat you accordingly, and the GM is encouraged to make its use a story event rather than a combat option.</p><p>Each participant is <strong>drained 2</strong> afterward, recoverable only by a full day's rest under an open sky.</p>"
+        },
+        "level": {
+            "value": 20
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "uncommon",
+            "value": [
+                "concentrate",
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

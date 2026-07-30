@@ -1,0 +1,45 @@
+{
+    "folder": "Level 18",
+    "img": "icons/magic/unholy/orb-glowing-purple.webp",
+    "name": "The Thirteenth",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>There is a thirteenth sky, and on the nights it shows there is no constellation in it at all. Every other Saint stands in the dark. You do not.</p><p>On any day the sky is <strong>Starless</strong> &mdash; no sign ascendant &mdash; your own constellation is treated as ascendant instead, and you gain your Ascendant Boon for the whole day.</p><p>You also always know when a Starless sky is coming, one day in advance.</p><hr /><p><em>Design note: this feat is listed in the class guide's feat table but was never written up. The rules here are a first pass from its one-line description and are the most likely thing in this module to want a second look.</em></p>"
+        },
+        "level": {
+            "value": 18
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "label": "The Thirteenth (starless sky)",
+                "option": "sky:ascendant",
+                "predicate": [
+                    "sky:sign:starless"
+                ]
+            }
+        ],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

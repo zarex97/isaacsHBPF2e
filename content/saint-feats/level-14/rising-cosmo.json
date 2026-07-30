@@ -1,0 +1,40 @@
+{
+    "folder": "Level 14",
+    "img": "icons/magic/light/explosion-star-glow-orange-purple.webp",
+    "name": "Rising Cosmo",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Every Saint learns the same truth on the edge of defeat: the more you are hurt, the brighter you burn. As the fight turns against you, your cosmo climbs &mdash; and the wounds that should end you become the fuel that answers back.</p><p>You gain a <strong>rising bonus</strong> that starts at 0 and increases by 1 each time you are critically hit, are reduced to half your Hit Points or lower for the first time, or are reduced to 0 Hit Points, to a maximum of +3. It resets at the end of the encounter or after a 10-minute rest.</p><p>While the rising bonus is at least +1, you gain that value as a <strong>status bonus to unarmed Strike damage and to your Technique DCs</strong>. At +2 or more you also gain a +1 status bonus to attack rolls and saving throws. At +3, once per round you may Step or Stride 5 feet as a free action when you take damage &mdash; the cosmo will not let you simply stand and fall.</p><hr /><p><strong>Special</strong> On any day your Cloth's constellation is ascendant or Exalted, your rising bonus starts each encounter at <strong>+1</strong> rather than 0. Your cosmo is already lit before the first blow lands.</p>"
+        },
+        "level": {
+            "value": 14
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "selfEffect": {
+            "name": "Effect: Rising Cosmo",
+            "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Rising Cosmo"
+        },
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

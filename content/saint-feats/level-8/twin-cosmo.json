@@ -1,0 +1,42 @@
+{
+    "folder": "Level 8",
+    "img": "icons/magic/light/explosion-star-glow-blue.webp",
+    "name": "Twin Cosmo",
+    "system": {
+        "actionType": {
+            "value": "reaction"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>You split your focus, unleashing a technique in the same breath as your defense.</p><hr /><p><strong>Frequency</strong> once per day</p><p><strong>Trigger</strong> An enemy takes an action that would trigger a reaction you could make, or an ally within 30 feet is reduced to 0 Hit Points.</p><p>You cast one Technique you know with a casting time of 2 actions or fewer as a reaction. If the Technique normally costs a Focus Point, it still does.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
+        },
+        "level": {
+            "value": 8
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "concentrate",
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

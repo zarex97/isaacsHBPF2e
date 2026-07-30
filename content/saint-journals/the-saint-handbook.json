@@ -1,0 +1,140 @@
+{
+    "flags": {},
+    "name": "The Saint — Handbook",
+    "ownership": {
+        "default": 2
+    },
+    "pages": [
+        {
+            "_id": "saintPageCurve00",
+            "category": null,
+            "image": {},
+            "name": "The Three-Tier Curve",
+            "ownership": {
+                "default": -1
+            },
+            "sort": 100,
+            "src": null,
+            "system": {},
+            "text": {
+                "content": "\n<p>Everything in this class is tuned to one table. Read it at session zero, and make sure the table reads it\ntoo, because it is the thing most likely to cause a disagreement later.</p>\n<table>\n<thead><tr><th>Sky state</th><th>The Saint is</th><th>Multiplier</th><th>Frequency</th></tr></thead>\n<tbody>\n<tr><td>Normal day</td><td>~15% weaker than a comparable martial</td><td>×0.85</td><td>~11 days in 13</td></tr>\n<tr><td><strong>Ascendant</strong> — their sign rises</td><td>~30% stronger</td><td>×1.30</td><td>1 day in 13 (7.69%)</td></tr>\n<tr><td><strong>Zenith</strong> — their sign rises Exalted</td><td>~100% stronger</td><td>×2.00</td><td>1 day in 260 (0.385%)</td></tr>\n</tbody>\n</table>\n<p>Two levers carry it. The <strong>&minus;15% floor</strong> lives in the shared Strike line: the fist is\n1d6 and there is no flurry. The <strong>+30% / +100%</strong> lives in the Techniques and the boons, and the\nsky multiplies it.</p>\n<p>For offensive Cloths the multiplier is paid in dice. For defensive, control, and utility Cloths it is paid\nin <em>scope</em> — bigger auras, more removal, longer range. That is why their flat damage line is correct\nrather than broken. Only the offensive Cloths move the damage meter, by design.</p>\n<h2>The floor is a feature</h2>\n<p>Set this expectation out loud: <em>\"You're a Gold Saint every day; the sky tells the world which day is\nyours.\"</em> A player who expects to be Aiolia every session wants a Fighter, not a Saint.</p>\n",
+                "format": 1,
+                "markdown": ""
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text",
+            "video": {
+                "controls": true,
+                "volume": 0.5
+            }
+        },
+        {
+            "_id": "saintPageSpine01",
+            "category": null,
+            "image": {},
+            "name": "The Rank Spine",
+            "ownership": {
+                "default": -1
+            },
+            "sort": 200,
+            "src": null,
+            "system": {},
+            "text": {
+                "content": "\n<p>Techniques are focus spells, so they auto-heighten to <strong>rank = half your level rounded up</strong>.\nNo Technique in this module has a level-specific number written into it; each one has a base and a per-rank\nstep, and the engine does the rest.</p>\n<ul>\n<li><strong>Single-target attack spine</strong> (benchmarked to <em>fire ray</em>): base 2d6, +2d6 per rank.</li>\n<li><strong>Area basic-save spine</strong> (benchmarked to <em>cry of destruction</em>): base 1d8, +1d8 per rank.</li>\n<li><strong>d10 and d12 variants</strong> trade die count for die size, one step down.</li>\n</ul>\n<table>\n<thead><tr><th>Level</th><th>Rank</th><th>Single-target</th><th>Area</th></tr></thead>\n<tbody>\n<tr><td>1</td><td>1</td><td>2d6</td><td>1d8</td></tr>\n<tr><td>5</td><td>3</td><td>6d6</td><td>3d8</td></tr>\n<tr><td>9</td><td>5</td><td>10d6</td><td>5d8</td></tr>\n<tr><td><strong>11</strong></td><td><strong>6</strong></td><td><strong>12d6</strong></td><td><strong>6d8</strong></td></tr>\n<tr><td>15</td><td>8</td><td>16d6</td><td>8d8</td></tr>\n<tr><td>19</td><td>10</td><td>20d6</td><td>10d8</td></tr>\n</tbody>\n</table>\n<h2>Why focus spells and not spell slots</h2>\n<p>Three reasons. Slots would cost the martial chassis roughly 650 points it cannot spare, and a Gold Saint\nwith Wizard hit points is not a Gold Saint. A spendable nova resource fights the daily-state boon curve —\nplayers would hoard slots for the Ascendant day and flatten the very thing the class is about. And \"my power\nis my own inner cosmo, the sky only wakes it\" is a focus fantasy, not a prepared-magic one.</p>\n<p>The rank spine gives slot-grade escalation without any of that.</p>\n<h2>One number to check</h2>\n<p>Leo's <em>Lightning Bolt</em> reads 6d12 at rank 6 in this module, where the guide prints 5d12. The\nspine (+1 die per rank) and that printed number cannot both hold for a d12 variant, and the guide's own\nappendix makes the spine the governing rule — so the spine won. If you would rather have 5d12, make it a\nrank-2 Technique; a Leo Saint then has no signature until 3rd level.</p>\n",
+                "format": 1,
+                "markdown": ""
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text",
+            "video": {
+                "controls": true,
+                "volume": 0.5
+            }
+        },
+        {
+            "_id": "saintPageSky0002",
+            "category": null,
+            "image": {},
+            "name": "Running the Sky",
+            "ownership": {
+                "default": -1
+            },
+            "sort": 300,
+            "src": null,
+            "system": {},
+            "text": {
+                "content": "\n<p>The sky is a world setting, and the module ships a tracker window to drive it: a scene-control button\nbeside the token tools, an entry in module settings, and a <strong>Set Today's Sky</strong> macro as a\nfallback if a Foundry update ever breaks the window.</p>\n<h2>What the tracker does</h2>\n<ul>\n<li>Holds the day's <strong>sign</strong> (twelve constellations plus Starless) and <strong>aspect</strong>\n(Quiet, Benefic, Retrograde, Malefic, Exalted).</li>\n<li>Applies the right <strong>Sky: Ascendant</strong> or <strong>Sky: Zenith</strong> effect to every Saint\nwhose Cloth matches the day, and removes it when the day turns. It only ever touches effects it applied\nitself, so anything you dragged on by hand is safe.</li>\n<li>Never applies Malefic or Retrograde riders to a Saint at all. That is\n@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Unfailing Cosmo], enforced rather than remembered.</li>\n<li>Pre-rolls the next seven days, so <em>Read the Constellation</em> has a fixed answer that cannot be\nre-rolled for a better one.</li>\n</ul>\n<h2>Schedule your Zeniths</h2>\n<p>One day in 260 means a Zenith will never happen by chance. <strong>Exalted has a roll weight of zero</strong>\n— the only way to one is the tracker's <em>Schedule Zenith</em> button. Write \"your sign, Exalted\" on the card\nbefore the arc climax. That scene is the whole class.</p>\n<h2>Everything else</h2>\n<p>Every boon lives in an effect item, and every \"on any day your constellation is ascendant\" clause keys off\nthe roll option <code>sky:ascendant</code> (with <code>sky:zenith</code> on the Zenith tier). If you build your\nown equivalent effect and set those options, all the feats still fire.</p>\n",
+                "format": 1,
+                "markdown": ""
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text",
+            "video": {
+                "controls": true,
+                "volume": 0.5
+            }
+        },
+        {
+            "_id": "saintPageCloth03",
+            "category": null,
+            "image": {},
+            "name": "The Twelve Cloths at a Glance",
+            "ownership": {
+                "default": -1
+            },
+            "sort": 400,
+            "src": null,
+            "system": {},
+            "text": {
+                "content": "\n<table>\n<thead><tr><th>Cloth</th><th>Role</th><th>Signature</th><th>What its day feels like</th></tr></thead>\n<tbody>\n<tr><td>♈ Aries</td><td>Defense</td><td>Crystal Wall</td><td>Nothing gets through. Ranged attacks and spells go nowhere.</td></tr>\n<tr><td>♉ Taurus</td><td>Offense, minor</td><td>Great Horn</td><td>Bigger dice, and everything you hit ends up on the floor.</td></tr>\n<tr><td>♊ Gemini</td><td>Control</td><td>Another Dimension</td><td>People stop being in the room. On a Zenith, there are two of you.</td></tr>\n<tr><td>♋ Cancer</td><td>Offense + removal</td><td>Sekishiki Meikaiha</td><td>Anything you drop stays down. On a Zenith, the wounded simply die.</td></tr>\n<tr><td>♌ Leo</td><td>Offense — the striker</td><td>Lightning Bolt</td><td>Extra actions, agile fists, lightning. The damage Cloth.</td></tr>\n<tr><td>♍ Virgo</td><td>Control</td><td>Tenbu Hōrin</td><td>Enemies stop being able to perceive the fight.</td></tr>\n<tr><td>♎ Libra</td><td>Offense + defense</td><td>Rozan Rising Dragon</td><td>The only Cloth with weapons, and they get better.</td></tr>\n<tr><td>♏ Scorpio</td><td>Offense, ramp</td><td>Scarlet Needle</td><td>Needles land whether you hit or not, and then they die.</td></tr>\n<tr><td>♐ Sagittarius</td><td>Offense + utility</td><td>Golden Arrow</td><td>You fly, and you can hit anything within a mile.</td></tr>\n<tr><td>♑ Capricorn</td><td>Offense, conditional</td><td>Excalibur</td><td>Nothing is immune to you. See the GM note below.</td></tr>\n<tr><td>♒ Aquarius</td><td>Offense + removal</td><td>Diamond Dust</td><td>Cold stacks into petrification.</td></tr>\n<tr><td>♓ Pisces</td><td>Offense, aura</td><td>Piranha Rose</td><td>Standing near you is a mistake that compounds.</td></tr>\n</tbody>\n</table>\n",
+                "format": 1,
+                "markdown": ""
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text",
+            "video": {
+                "controls": true,
+                "volume": 0.5
+            }
+        },
+        {
+            "_id": "saintPageGM00004",
+            "category": null,
+            "image": {},
+            "name": "GM Notes",
+            "ownership": {
+                "default": -1
+            },
+            "sort": 500,
+            "src": null,
+            "system": {},
+            "text": {
+                "content": "\n<h2>Incapacitation is load-bearing</h2>\n<p>Never drop the incapacitation trait from the Cancer, Scorpio, Virgo all-senses, Aquarius, or Pisces death\nand removal effects. Without it they cheese bosses outright. The module's build validates this: those\nTechniques fail the build if the trait goes missing.</p>\n<h2>Capricorn needs you to seed a target</h2>\n<p>Capricorn is a <em>key, not a hammer</em>. Its boon swings from +0% against a boss with no resistances to\n+170% against resistance 10. On the day Capricorn rises, put something resistant in the encounter — or tell\nthe player up front that this is the design, and that the answer to \"what's behind the wall?\" is the whole\nquestion.</p>\n<h2>Cosmo Strike replaces handwraps</h2>\n<p>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Cosmo Strike] already grants the magical trait\nand +1 damage per weapon die. Do not also hand out <em>handwraps of mighty blows</em> — that taxes an\nunarmed-only class twice.</p>\n<h2>Two Saints, one Cloth</h2>\n<p>There is one Gold Cloth per sign. A second claimant is not a character option, it is a campaign.</p>\n<h2>What this class is measured against</h2>\n<p>The benchmark is a Monk with focus spells: about 10 damage per round against a boss and 31 against a mob\nat 11th level. The Saint's job is to beat a Monk, not a Magus — a Magus still solo-clears the mob encounter\nand that is fine.</p>\n<h2>Where the automation stops</h2>\n<p>Three things are text rather than rules, because PF2e has no hook for them:</p>\n<ul>\n<li>Blanket \"ignore all resistances\" (Seventh Sense, Capricorn's boon). Material bypass and incorporeality\n<em>are</em> automated; the general clause is a roll note on the damage.</li>\n<li>Scorpio's per-creature needle counts. The sheet resource tracks the current target and the toggles flag\nthe 5 / 10 / 14 thresholds; several creatures at once need pen and paper.</li>\n<li>Gemini's Zenith duplicate. Copy the token, give it 2 actions of Strike and Stride only, and delete it at\nthe top of the next turn.</li>\n</ul>\n",
+                "format": 1,
+                "markdown": ""
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text",
+            "video": {
+                "controls": true,
+                "volume": 0.5
+            }
+        }
+    ],
+    "system": {}
+}

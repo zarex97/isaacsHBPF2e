@@ -1,0 +1,8 @@
+{
+    "author": null,
+    "command": "// Set Today's Sky — the fallback for the sky tracker window.\n//\n// Everything the tracker UI does is also on the module API, so if a Foundry update ever breaks the window\n// the class stays playable from here.\n\nconst api = game.modules.get(\"isaacs-hb-pf2e\")?.api;\nif (!api) {\n    ui.notifications.error(\"Isaac's Homebrew (PF2e) is not active.\");\n} else if (!game.user.isGM) {\n    ui.notifications.warn(\"Only the GM can change the sky.\");\n} else {\n    // Just open the tracker if it still works.\n    api.open();\n\n    // Or drive it directly — uncomment what you need:\n    //\n    //   await api.sky.set({ sign: \"leo\", aspect: \"none\" });   // Leo is ascendant today\n    //   await api.sky.set({ aspect: \"exalted\" });               // make today a Zenith for the current sign\n    //   await api.sky.advanceDay();                             // roll tomorrow from the pre-rolled queue\n    //   await api.sky.scheduleZenith(\"leo\", 3);                 // pin Leo Exalted three days out\n    //   await api.sky.applyToAll();                             // re-apply boons to every Saint\n    //   console.log(api.sky.forecast(3));                       // what Read the Constellation would learn\n}\n",
+    "img": "icons/magic/light/beams-rays-orange-purple-large.webp",
+    "name": "Set Today's Sky",
+    "scope": "global",
+    "type": "script"
+}

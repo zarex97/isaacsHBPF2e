@@ -1,0 +1,83 @@
+{
+    "folder": "Gold Cloths",
+    "img": "icons/weapons/swords/greatsword-crossguard-gold.webp",
+    "name": "Capricorn — Excalibur",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>♑ The Capricorn Cloth.</strong> <em>OFFENSE</em></p><hr /><h3>Signature Technique</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Excalibur]</p><h3>Cloth Passive — The Sword Arm</h3><p>You are trained in Athletics. Your unarmed Strikes gain the <strong>versatile S</strong> and <strong>deadly d8</strong> traits.</p><h3>Ascendant Boon — Excalibur Cuts Everything <em>[OFFENSE]</em></h3><p>Your unarmed Strikes <strong>ignore all resistances, physical immunities, and Hardness</strong>, and gain +1 damage die &mdash; so the boon is never a total no-op against a target with nothing to bypass.</p><p>On a critical hit you may <strong>sever</strong> a limb, a sense, or a natural attack, until the target receives <em>regenerate</em>. You can Strike incorporeal creatures and force effects normally, and a critical hit destroys a force effect outright.</p><hr /><p><strong>GM note, print this:</strong> Capricorn is a <em>key, not a hammer</em>. Its value swings from +0% against a boss with no resistances to +170% against resistance 10. On the day Capricorn rises, ask your GM what is behind the wall &mdash; and GMs, seed something resistant, or the boon is a shrug.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Capricorn)]</p><h3>Zenith Boon — Excalibur Cuts Everything (Zenith) <em>[OFFENSE]</em></h3><p>As the Ascendant Boon. In addition, once per turn per creature you may use a reaction when a creature attacks you or a spell enters your space to <strong>sever it</strong>: the attack or spell has no effect.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Capricorn)]</p><h3>11th-Level Cloth Ability — Jumping Stone</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Jumping Stone]</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "ActiveEffectLike",
+                "mode": "upgrade",
+                "path": "system.skills.athletics.rank",
+                "value": 1
+            },
+            {
+                "definition": [
+                    "item:category:unarmed"
+                ],
+                "key": "AdjustStrike",
+                "mode": "add",
+                "property": "weapon-traits",
+                "value": "versatile-s"
+            },
+            {
+                "definition": [
+                    "item:category:unarmed"
+                ],
+                "key": "AdjustStrike",
+                "mode": "add",
+                "property": "weapon-traits",
+                "value": "deadly-d8"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Excalibur"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            11
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Jumping Stone"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "saint-cloth",
+                "cloth-capricorn"
+            ],
+            "rarity": "common",
+            "value": [
+                "saint",
+                "cloth"
+            ]
+        }
+    },
+    "type": "feat"
+}

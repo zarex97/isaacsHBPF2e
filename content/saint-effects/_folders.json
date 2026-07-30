@@ -1,0 +1,17 @@
+[
+    {
+        "name": "Sky: Ascendant",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "Sky: Zenith",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "Activities",
+        "sorting": "a",
+        "type": "Item"
+    }
+]

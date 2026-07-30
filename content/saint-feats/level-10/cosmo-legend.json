@@ -1,0 +1,43 @@
+{
+    "folder": "Level 10",
+    "img": "icons/magic/light/explosion-star-large-orange-purple.webp",
+    "name": "Cosmo Legend",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Your techniques burn at the full furnace of your cosmo, not half.</p><p>Your Techniques' rank is equal to half your level rounded up, <strong>plus 1</strong>, to a maximum of rank 10. Your Techniques heighten one step ahead of the standard focus-rank schedule &mdash; an 11th-level Saint casts at rank 7 rather than rank 6. This applies to every Technique you know, including Cloth Abilities and boon-granted Techniques.</p><hr /><p><em>Balance note: this is deliberately a capstone-tier feat. Against the rank spine it advances every damage Technique by one heightening step, roughly +15% Technique output. It sits at 10th level alongside comparable martial power feats and should be watched in play.</em></p>"
+        },
+        "level": {
+            "value": 10
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "ActiveEffectLike",
+                "mode": "add",
+                "path": "system.resources.focus.cap",
+                "value": 0
+            }
+        ],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}
