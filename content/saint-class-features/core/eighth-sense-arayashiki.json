@@ -1,0 +1,40 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/death/skull-humanoid-crown-white-blue.webp",
+    "name": "Eighth Sense (Arayashiki)",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>You have already crossed death once, and you know the way back.</p><hr /><p><strong>Arayashiki</strong> &#9670; (free action; frequency once per day; trigger you are reduced to 0 Hit Points or killed)</p><p>You keep acting for 1 minute or until the encounter ends. You cannot drop below 1 Hit Point; you are immune to death effects and to the dying, unconscious, and paralyzed conditions; and you ignore the wounded and drained conditions.</p><p>When it ends you are dying 3 and your Cloth shatters (one week to repair, or instantly in the hands of a Saint of Aries). <strong>If the trigger killed you, you die when the minute ends</strong>, beyond the reach of anything short of <em>wish</em>-tier return.</p><p>You may end Arayashiki early. If you do, you are merely dying 1 and your Cloth is intact.</p>"
+        },
+        "level": {
+            "value": 19
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "selfEffect": {
+            "name": "Effect: Arayashiki",
+            "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Arayashiki"
+        },
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

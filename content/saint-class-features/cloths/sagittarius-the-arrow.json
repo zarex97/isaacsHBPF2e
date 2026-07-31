@@ -1,0 +1,74 @@
+{
+    "folder": "Gold Cloths",
+    "img": "icons/weapons/ammunition/arrow-head-war-flight.webp",
+    "name": "Sagittarius — the Arrow",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>♐ The Sagittarius Cloth.</strong> <em>UTILITY</em></p><hr /><h3>Signature Technique</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Golden Arrow]</p><h3>Cloth Passive — The Bow</h3><p>The Cloth carries a bow that uses your unarmed proficiency and can never be disarmed or destroyed.</p><p>You gain a +2 circumstance bonus to Perception checks to notice things more than 100 feet away, and your Speed increases by 10 feet.</p><h3>Ascendant Boon — Atomic Thunderbolt <em>[UTILITY]</em></h3><p>You gain a fly Speed equal to your Speed.</p><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Golden Arrow]'s range increment becomes <strong>one mile</strong>. It ignores all cover and concealment and the hidden and undetected conditions, and it can strike any creature whose location you can name even without line of sight. Its damage rises one step on the spine.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Sagittarius)]</p><h3>Zenith Boon — Atomic Thunderbolt (Zenith) <em>[UTILITY]</em></h3><p>As the Ascendant Boon. In addition, once per minute Golden Arrow can reach any creature you name within a mile <strong>through any barrier short of a planar boundary</strong>, and deals 8 additional damage dice.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Sagittarius)]</p><h3>11th-Level Cloth Ability — Aiolos's Wings</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Aiolos's Wings]</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "BaseSpeed",
+                "selector": "land",
+                "value": "@actor.attributes.speed.value + 10"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "The Bow",
+                "predicate": [
+                    "action:seek"
+                ],
+                "selector": "perception",
+                "type": "circumstance",
+                "value": 2
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Golden Arrow"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            11
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Aiolos's Wings"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "saint-cloth",
+                "cloth-sagittarius"
+            ],
+            "rarity": "common",
+            "value": [
+                "saint",
+                "cloth"
+            ]
+        }
+    },
+    "type": "feat"
+}

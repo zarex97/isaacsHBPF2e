@@ -1,0 +1,60 @@
+{
+    "folder": "Sky: Zenith",
+    "img": "icons/magic/water/snowflake-ice-blue-white.webp",
+    "name": "Sky: Zenith (Aquarius)",
+    "system": {
+        "description": {
+            "value": "<p><strong>♒ Aquarius rises Exalted today.</strong> This is the one day in two hundred and sixty. You have your Zenith Boon for the whole day.</p><p>As the Ascendant Boon, and you gain @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Aurora Execution] &mdash; usable once per minute.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "days",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "option": "sky:ascendant"
+            },
+            {
+                "key": "RollOption",
+                "option": "sky:sign:aquarius"
+            },
+            {
+                "key": "RollOption",
+                "option": "sky:zenith"
+            },
+            {
+                "key": "Note",
+                "selector": "spell-damage",
+                "text": "Cold damage you deal forces a Fortitude save against your Cosmo DC or slowed 1, cumulative; at slowed 4 the creature is petrified in ice. Your cold ignores cold resistance and treats cold immunity as resistance 10.",
+                "title": "Freezing Coffin"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Aurora Execution"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

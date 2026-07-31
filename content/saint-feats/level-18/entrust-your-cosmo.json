@@ -1,0 +1,43 @@
+{
+    "folder": "Level 18",
+    "img": "icons/magic/light/hand-sparks-glow-orange.webp",
+    "name": "Entrust Your Cosmo",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 2
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>This is the oldest thing a Saint knows how to do. When your own road ends, or when someone else's matters more, you give them what you have left &mdash; and they carry it further than you could.</p><hr /><p><strong>Entrust Your Cosmo</strong> &#9670;&#9670; (two actions)</p><p><strong>Frequency</strong> once per hour</p><p><strong>Target</strong> one willing ally you can touch, or within 30 feet if your Cloth's constellation is ascendant</p><p>Spend any number of Focus Points. The target gains the following for <strong>1 minute</strong>, scaling with the number spent:</p><table><thead><tr><th>Focus spent</th><th>The target gains</th></tr></thead><tbody><tr><td><strong>1</strong></td><td>A +1 status bonus to attack rolls, saving throws, and skill checks, and temporary Hit Points equal to your level.</td></tr><tr><td><strong>2</strong></td><td>As above, and their Strikes count as magical and deal an additional 1d6 damage of your Cloth's element.</td></tr><tr><td><strong>3</strong></td><td>As above, and they become quickened 1 (Strike, Stride, or Step only), and they can see and act normally through any darkness, invisibility, or concealment.</td></tr></tbody></table><p>While the duration lasts you are <strong>enfeebled 1</strong> and cannot Refocus &mdash; you gave that away, and it does not come back until the fire returns to you.</p><hr /><p><strong>The Last Gift.</strong> If you use Entrust Your Cosmo while you are dying, or as a free action triggered by being reduced to 0 Hit Points, you may spend all remaining Focus Points at once and treat the result as though you had spent <strong>3</strong>, regardless of how many you actually had. The duration becomes <strong>10 minutes</strong>, and the target also gains a +2 status bonus to all damage rolls. You immediately become <strong>dying 3</strong> &mdash; but every Saint who has done this has known exactly what it cost, and done it anyway.</p><hr /><p><strong>Special</strong> A creature can benefit from Entrust Your Cosmo only once per hour, no matter how many Saints offer it. Three Saints cannot stack their cosmo into a single champion; the receiving vessel can only hold so much.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "PT1H",
+            "value": 1
+        },
+        "level": {
+            "value": 18
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "concentrate",
+                "emotion",
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

@@ -1,0 +1,72 @@
+{
+    "folder": "Gold Cloths",
+    "img": "icons/creatures/abilities/bull-horns-brown.webp",
+    "name": "Taurus — the Horn",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>♉ The Taurus Cloth.</strong> <em>OFFENSE</em></p><hr /><h3>Signature Technique</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Great Horn]</p><h3>Cloth Passive — Bulwark</h3><p>You cannot be moved by anything your size or smaller. You gain a +2 circumstance bonus to Athletics checks and to your Difficulty Class against attempts to Shove, Trip, Grapple, or Disarm you.</p><h3>Ascendant Boon — The Great Horn <em>[OFFENSE]</em></h3><p>Your unarmed Strikes gain <strong>+1 damage die</strong>, and a creature you hit must attempt a Fortitude save against your Cosmo DC; on a failure it is pushed 10 feet and knocked prone.</p><p>You count as one size larger whenever doing so is to your benefit.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Taurus)]</p><h3>Zenith Boon — The Great Horn (Zenith) <em>[OFFENSE]</em></h3><p>As the Ascendant Boon, but your unarmed Strikes gain <strong>+2 damage dice</strong> in total.</p><p>You gain temporary Hit Points equal to your level at the start of each of your turns, and once per round you may cast @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Great Horn] without spending a Focus Point.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Taurus)]</p><h3>11th-Level Cloth Ability — Titan's Stance</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Titan's Stance]</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Bulwark",
+                "selector": "athletics",
+                "type": "circumstance",
+                "value": 2
+            },
+            {
+                "key": "Note",
+                "selector": "athletics",
+                "text": "You cannot be moved by anything your size or smaller, and your DC against Shove, Trip, Grapple, and Disarm is 2 higher.",
+                "title": "Bulwark"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Great Horn"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            11
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Titan's Stance"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "saint-cloth",
+                "cloth-taurus"
+            ],
+            "rarity": "common",
+            "value": [
+                "saint",
+                "cloth"
+            ]
+        }
+    },
+    "type": "feat"
+}

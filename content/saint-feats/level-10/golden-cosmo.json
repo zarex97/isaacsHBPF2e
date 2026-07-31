@@ -1,0 +1,43 @@
+{
+    "folder": "Level 10",
+    "img": "icons/magic/light/beams-rays-orange.webp",
+    "name": "Golden Cosmo",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Your cosmo answers not only to your own star but to the ones beside it.</p><p>On any day one of the two constellations <strong>adjacent to yours</strong> in the zodiac is ascendant, you gain your Ascendant Boon at <strong>half effect</strong>: halve any bonus, extra damage die, extra action, or emanation radius it grants (minimum 1 where the boon grants a number), and any frequency of once per round becomes once per minute.</p><p>If an adjacent sign rises <em>Exalted</em>, you gain your Ascendant Boon at full effect instead of your Zenith Boon. Your own sign rising always takes precedence.</p><hr /><p><em>Design note: this feat is listed in the class guide's feat table but was never written up. The rules here are a first pass from its one-line description and are the most likely thing in this module to want a second look.</em></p>"
+        },
+        "level": {
+            "value": 10
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "label": "Golden Cosmo (adjacent sign)",
+                "option": "sky:adjacent",
+                "toggleable": true
+            }
+        ],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

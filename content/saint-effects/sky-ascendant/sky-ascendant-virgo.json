@@ -1,0 +1,52 @@
+{
+    "folder": "Sky: Ascendant",
+    "img": "icons/magic/control/energy-stream-link-white.webp",
+    "name": "Sky: Ascendant (Virgo)",
+    "system": {
+        "description": {
+            "value": "<p><strong>♍ Virgo is ascendant today.</strong> Your Cloth is awake and you have your Ascendant Boon for the whole day.</p><p>Each time you hit with an unarmed Strike, the target must attempt a Will save against your Cosmo DC or lose a sense. Losses are cumulative: sight (blinded), hearing (deafened), smell and taste, then touch (&minus;4 to attack rolls, cannot Grapple).</p><p>Senses lost this way return only through <em>restoration</em> or a full night's rest.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. Applied and removed by the module's sky tracker; a GM can also drag it on by hand.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "days",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "option": "sky:ascendant"
+            },
+            {
+                "key": "RollOption",
+                "option": "sky:sign:virgo"
+            },
+            {
+                "key": "Note",
+                "selector": "unarmed-attack",
+                "text": "On a hit, the target must attempt a Will save against your Cosmo DC or lose a sense.",
+                "title": "Six Paths of Transmigration"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

@@ -1,0 +1,57 @@
+{
+    "folder": "Activities",
+    "img": "icons/weapons/swords/greatsword-crossguard-gold.webp",
+    "name": "Effect: Excalibur",
+    "system": {
+        "description": {
+            "value": "<p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Excalibur]</p><p>Until the end of your turn, your unarmed Strikes deal slashing damage, gain the deadly d10 trait, and ignore an object's Hardness.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "mode": "override",
+                "predicate": [
+                    "item:category:unarmed"
+                ],
+                "property": "damage-type",
+                "value": "slashing"
+            },
+            {
+                "definition": [
+                    "item:category:unarmed"
+                ],
+                "key": "AdjustStrike",
+                "mode": "add",
+                "property": "weapon-traits",
+                "value": "deadly-d10"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

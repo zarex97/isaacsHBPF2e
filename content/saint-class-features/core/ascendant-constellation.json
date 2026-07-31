@@ -1,0 +1,36 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/light/beams-rays-orange-purple-large.webp",
+    "name": "Ascendant Constellation",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>You always know when your own constellation is ascendant and what its aspect is. You know nothing of the other twelve.</p><p>When the day's sign is your Cloth's, you gain a boon for the whole day:</p><ul><li><strong>Ascendant (any aspect):</strong> you gain your Cloth's <strong>Ascendant Boon</strong>.</li><li><strong>Exalted:</strong> you gain your Cloth's <strong>Zenith Boon</strong> instead.</li></ul><p>The sky's <em>position</em> wakes the Cloth; its <em>energy</em> only decides which boon you get. A Saint stands untouched in a Malefic sky while everyone around them suffers — and @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Unfailing Cosmo] guarantees it.</p><hr /><p><strong>Odds:</strong> Ascendant 1 in 13 (7.69%); Zenith 1 in 260 (0.385%). A Zenith is scheduled by the GM, not rolled — that scene is the whole class.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

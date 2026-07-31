@@ -1,0 +1,39 @@
+{
+    "folder": "Level 6",
+    "img": "icons/magic/fire/explosion-flame-blue-orange.webp",
+    "name": "Burning Cosmo",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>You let your cosmo blaze until lesser wills buckle under the sheer weight of it. You do not threaten &mdash; you simply <em>are</em>, and it is too much.</p><p>You can <strong>Demoralize</strong> using your key ability modifier in place of Intimidation. You are trained in this use even if untrained in Intimidation, and you add your Intimidation proficiency instead if it is higher.</p><p>When you Demoralize this way you may target any creature within <strong>60 feet</strong> that can see you, ignoring the normal 30-foot range and the shared-language requirement &mdash; the pressure of an ignited cosmo needs no words.</p><p>On a critical success the target is frightened 2, and if it is a lower level than you it cannot reduce its frightened value below 1 while it remains within 60 feet of you, until it succeeds against this effect or the encounter ends.</p><hr /><p><strong>Special</strong> On any day your Cloth's constellation is ascendant, your cosmo is bright enough to <strong>Demoralize every enemy in a 30-foot emanation</strong> with a single action, rolling separately against each. A creature that critically succeeds is temporarily immune for 10 minutes as normal.</p>"
+        },
+        "level": {
+            "value": 6
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "emotion",
+                "fear",
+                "mental",
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

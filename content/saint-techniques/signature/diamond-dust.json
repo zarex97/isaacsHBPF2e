@@ -1,0 +1,79 @@
+{
+    "folder": "Signature Techniques",
+    "img": "icons/magic/water/snowflake-ice-blue-white.webp",
+    "name": "Diamond Dust",
+    "system": {
+        "area": {
+            "type": "cone",
+            "value": 30
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "1d8",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "cold"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "fortitude"
+            }
+        },
+        "description": {
+            "value": "<p>You still the air in front of you until it stops being air.</p><p>Each creature in the area takes @Damage[(@item.level)d8[cold]] damage with a basic Fortitude save. A creature that fails its save is slowed 1 for 1 round.</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d8.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "1d8"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": ""
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "cold",
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

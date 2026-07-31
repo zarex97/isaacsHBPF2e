@@ -1,0 +1,42 @@
+{
+    "folder": "Level 10",
+    "img": "icons/magic/light/explosion-star-glow-orange.webp",
+    "name": "Cosmo Overflow",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 2
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Your inner cosmo runs over its banks. On the days the sky ignores you, you compensate through sheer output; on the days it favours you, you become a furnace.</p><hr /><p><strong>Cosmo Overflow</strong> &#9670;&#9670; (two actions)</p><p><strong>Frequency</strong> once per hour</p><p>You cast a Technique you know of 2 actions or fewer <strong>without spending a Focus Point</strong>.</p><p>On any day your Cloth's constellation is ascendant or Exalted, the frequency increases to <strong>once per 10 minutes</strong>, and the Technique cast this way is treated as one rank higher, to a maximum of your normal maximum rank.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "PT1H",
+            "value": 1
+        },
+        "level": {
+            "value": 10
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "concentrate",
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}
