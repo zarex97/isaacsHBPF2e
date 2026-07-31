@@ -1,0 +1,74 @@
+<div class="sky-tracker-body">
+    <header class="sky-current {{#if isZenith}}zenith{{/if}}">
+        <div class="glyph">{{sign.glyph}}</div>
+        <div class="reading">
+            <h2>{{sign.label}}</h2>
+            <p class="aspect">{{aspect.label}}{{#if isZenith}} — <strong>ZENITH</strong>{{/if}}</p>
+            <p class="hint">{{aspect.hint}}</p>
+        </div>
+        <div class="day">Day {{day}}</div>
+    </header>
+
+    {{#if isGM}}
+    <section class="sky-controls">
+        <div class="form-group">
+            <label>Constellation</label>
+            <select data-action="setSign">
+                {{#each signs}}
+                <option value="{{this.id}}" {{#if this.selected}}selected{{/if}}>{{this.glyph}} {{this.label}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Aspect</label>
+            <select data-action="setAspect">
+                {{#each aspects}}
+                <option value="{{this.id}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="sky-buttons">
+            <button type="button" data-action="advanceDay"><i class="fa-solid fa-forward"></i> Advance Day</button>
+            <button type="button" data-action="scheduleZenith"><i class="fa-solid fa-star"></i> Schedule Zenith</button>
+            <button type="button" data-action="reapply"><i class="fa-solid fa-rotate"></i> Re-apply</button>
+        </div>
+    </section>
+    {{/if}}
+
+    <section class="sky-saints">
+        <h3>Saints</h3>
+        {{#if saints.length}}
+        <ul>
+            {{#each saints}}
+            <li class="{{#if this.lit}}lit{{/if}}">
+                <span class="who">{{this.name}}</span>
+                <span class="cloth">{{#if this.cloth}}{{this.cloth.glyph}} {{this.cloth.label}}{{else}}<em>no Cloth chosen</em>{{/if}}</span>
+                <span class="tier">{{#if this.tier}}{{this.tier}} Boon{{/if}}</span>
+            </li>
+            {{/each}}
+        </ul>
+        {{#unless anyLit}}
+        <p class="hint">No Saint's constellation is up today.</p>
+        {{/unless}}
+        {{else}}
+        <p class="hint">No Saints in this world yet.</p>
+        {{/if}}
+    </section>
+
+    {{#if isGM}}
+    <section class="sky-forecast">
+        <h3>The next three days <span class="hint">(GM only)</span></h3>
+        <ul>
+            {{#each forecast}}
+            <li>
+                <span class="when">Day {{this.day}}</span>
+                <span class="what">{{this.sign.glyph}} {{this.sign.label}}</span>
+                <span class="aspect">{{this.aspect.label}}</span>
+            </li>
+            {{/each}}
+        </ul>
+        <p class="hint">Rolled in advance and fixed, so <em>Read the Constellation</em> cannot be re-rolled for a
+        better answer.</p>
+    </section>
+    {{/if}}
+</div>

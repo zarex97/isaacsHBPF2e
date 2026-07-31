@@ -1,0 +1,48 @@
+{
+    "folder": "Level 18",
+    "img": "icons/magic/light/beams-rays-orange-purple-large.webp",
+    "name": "Two Skies",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>You have learned to read a second sky behind the first, and to stand in both at once.</p><p>Choose a second Gold Cloth constellation during your daily preparations. Until your next preparations, you are also treated as a Saint of that constellation for the purpose of <strong>which days are yours</strong> &mdash; but not for its Techniques, passive, or Cloth Ability.</p><p>On a day your chosen second constellation is ascendant, you gain <em>your own</em> Ascendant Boon. If it rises Exalted, you gain your own Ascendant Boon, not your Zenith Boon: the second sky wakes your Cloth but cannot exalt it.</p><p>This roughly doubles the frequency of your Ascendant days, from 1 in 13 to 2 in 13.</p><hr /><p><em>Design note: this feat is listed in the class guide's feat table but was never written up. The rules here are a first pass from its one-line description and are the most likely thing in this module to want a second look.</em></p>"
+        },
+        "level": {
+            "value": 18
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "adjustName": false,
+                "choices": {
+                    "filter": [
+                        "item:tag:saint-cloth"
+                    ]
+                },
+                "flag": "secondSky",
+                "key": "ChoiceSet",
+                "prompt": "Which second sky do you read today?"
+            }
+        ],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

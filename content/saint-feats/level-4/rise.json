@@ -1,0 +1,45 @@
+{
+    "folder": "Level 4",
+    "img": "icons/magic/life/heart-cross-strong-flame-red.webp",
+    "name": "Rise",
+    "system": {
+        "actionType": {
+            "value": "reaction"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>A Gold Saint does not stay down.</p><hr /><p><strong>Frequency</strong> once per day</p><p><strong>Trigger</strong> You are reduced to 0 Hit Points but not killed outright.</p><p>You remain conscious with 1 Hit Point instead of falling. You are wounded 1, or your wounded value increases by 1, and you cannot use this feat again until you have rested.</p><p>This is a raw refusal to fall, not healing. If the hit would kill you outright &mdash; reducing you below the negative of your maximum Hit Points &mdash; Rise does not save you.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
+        },
+        "level": {
+            "value": 4
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "selfEffect": {
+            "name": "Effect: Rise",
+            "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Rise"
+        },
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

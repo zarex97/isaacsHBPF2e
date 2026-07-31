@@ -1,0 +1,97 @@
+{
+    "folder": "Gold Cloths",
+    "img": "icons/magic/water/snowflake-ice-blue-white.webp",
+    "name": "Aquarius — Absolute Zero",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>♒ The Aquarius Cloth.</strong> <em>OFFENSE/removal</em></p><hr /><h3>Signature Technique</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Diamond Dust]</p><h3>Cloth Passive — Cold Blood</h3><p>You have cold resistance equal to your level and are immune to severe cold. You gain a +1 status bonus to Will saves against emotion effects, and you are trained in Occultism or Arcana (your choice).</p><h3>Ascendant Boon — Freezing Coffin <em>[OFFENSE/removal]</em></h3><p>Any cold damage you deal forces a Fortitude save against your Cosmo DC; on a failure the creature is slowed 1. This is cumulative: at <strong>slowed 4</strong> the creature is instead <strong>petrified in ice</strong>, which any critical hit shatters.</p><p>Your cold damage ignores cold resistance and treats cold immunity as resistance 10.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Aquarius)]</p><h3>Zenith Boon — Aurora Execution <em>[removal]</em></h3><p>As the Ascendant Boon, and you gain @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Aurora Execution], usable once per minute.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Aquarius)]</p><h3>11th-Level Cloth Ability — Freezing Coffin</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Freezing Coffin]</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "Resistance",
+                "type": "cold",
+                "value": "@actor.level"
+            },
+            {
+                "adjustName": false,
+                "choices": [
+                    {
+                        "label": "Occultism",
+                        "value": "occultism"
+                    },
+                    {
+                        "label": "Arcana",
+                        "value": "arcana"
+                    }
+                ],
+                "flag": "coldBloodSkill",
+                "key": "ChoiceSet",
+                "prompt": "Which tradition did your cold blood teach you?",
+                "rollOption": "cold-blood-skill"
+            },
+            {
+                "key": "ActiveEffectLike",
+                "mode": "upgrade",
+                "path": "system.skills.{item|flags.system.rulesSelections.coldBloodSkill}.rank",
+                "value": 1
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Cold Blood",
+                "predicate": [
+                    "item:trait:emotion"
+                ],
+                "selector": "will",
+                "type": "status",
+                "value": 1
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Diamond Dust"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            11
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Freezing Coffin"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "saint-cloth",
+                "cloth-aquarius"
+            ],
+            "rarity": "common",
+            "value": [
+                "saint",
+                "cloth"
+            ]
+        }
+    },
+    "type": "feat"
+}

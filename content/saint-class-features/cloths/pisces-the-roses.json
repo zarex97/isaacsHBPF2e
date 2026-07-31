@@ -1,0 +1,69 @@
+{
+    "folder": "Gold Cloths",
+    "img": "icons/magic/nature/rose-thorned-red.webp",
+    "name": "Pisces — the Roses",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>♓ The Pisces Cloth.</strong> <em>OFFENSE</em></p><hr /><h3>Signature Technique</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Piranha Rose]</p><h3>Cloth Passive — Royal Demon Rose</h3><p>You are immune to poison. Any creature that touches you, or that hits you with a melee attack, takes 1d6 poison damage.</p><h3>Ascendant Boon — The Royal Demon Rose Garden <em>[OFFENSE]</em></h3><p>You radiate a <strong>10-foot emanation</strong> of roses. At the end of each of your turns, up to four enemies in the emanation must each attempt a Fortitude save against your Cosmo DC; on a failure a creature takes 4d6 poison damage and is enfeebled 1 (cumulative to enfeebled 4).</p><p>The garden requires that you acted hostilely during that turn, and it persists even while you are unconscious.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Pisces)]</p><h3>Zenith Boon — The Royal Demon Rose Garden (Zenith) <em>[OFFENSE]</em></h3><p>As the Ascendant Boon, but the emanation is <strong>15 feet</strong> and deals <strong>8d6</strong> poison damage each turn. You also gain @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Bloody Rose], usable once per minute.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Pisces)]</p><h3>11th-Level Cloth Ability — Crimson Thorn Garden</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Crimson Thorn Garden]</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "Immunity",
+                "type": "poison"
+            },
+            {
+                "key": "Note",
+                "selector": "all",
+                "text": "Any creature that touches you or hits you with a melee attack takes @Damage[1d6[poison]] damage.",
+                "title": "Royal Demon Rose"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Piranha Rose"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            11
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Crimson Thorn Garden"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "saint-cloth",
+                "cloth-pisces"
+            ],
+            "rarity": "common",
+            "value": [
+                "saint",
+                "cloth"
+            ]
+        }
+    },
+    "type": "feat"
+}

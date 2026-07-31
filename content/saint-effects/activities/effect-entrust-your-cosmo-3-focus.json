@@ -1,0 +1,57 @@
+{
+    "folder": "Activities",
+    "img": "icons/magic/light/hand-sparks-glow-orange.webp",
+    "name": "Effect: Entrust Your Cosmo (3 Focus)",
+    "system": {
+        "description": {
+            "value": "<p>Granted by the Entrust Your Cosmo feat.</p><p>A Saint has poured 3 Focus Points of their own cosmo into you.</p><p>As 2 Focus Points, and you are quickened 1 (Strike, Stride, or Step only), and you can see and act normally through any darkness, invisibility, or concealment.</p><hr /><p>A creature can benefit from Entrust Your Cosmo only once per hour, no matter how many Saints offer it.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Entrust Your Cosmo",
+                "selector": [
+                    "attack",
+                    "saving-throw",
+                    "skill-check"
+                ],
+                "type": "status",
+                "value": 1
+            },
+            {
+                "damageType": "untyped",
+                "diceNumber": 1,
+                "dieSize": "d6",
+                "key": "DamageDice",
+                "label": "Entrust Your Cosmo",
+                "selector": "strike-damage"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

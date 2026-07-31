@@ -1,0 +1,86 @@
+{
+    "folder": "Signature Techniques",
+    "img": "icons/magic/nature/root-vine-thorns-red.webp",
+    "name": "Piranha Rose",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "2d8",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "piercing"
+            },
+            "1": {
+                "applyMod": false,
+                "category": "persistent",
+                "formula": "1d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "bleed"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p>Roses go where you point them, and they are hungry.</p><p>Each target takes @Damage[(1+@item.level)d8[piercing]] damage plus @Damage[(@item.level)d6[persistent,bleed]] damage, with a basic Reflex save. A successful save negates the persistent bleed damage.</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d8 and the persistent bleed damage increases by 1d6.</p><hr /><p><strong>Tuning note:</strong> the guide gives this a 2d8 base and says it scales on the area spine, which puts it at 7d8 plus 6d6 persistent bleed against up to three creatures at rank 6 &mdash; for <em>one action</em>. That is above <em>Great Horn</em>, which costs two actions for 6d8 in a cone. It is implemented as written, but if Pisces plays out too strong, this is the number to cut: dropping the base to 1d8 brings it in line.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "1d8",
+                "1": "1d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "up to 3 creatures"
+        },
+        "time": {
+            "value": "1"
+        },
+        "traits": {
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

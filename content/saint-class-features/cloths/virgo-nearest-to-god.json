@@ -1,0 +1,72 @@
+{
+    "folder": "Gold Cloths",
+    "img": "icons/magic/control/energy-stream-link-white.webp",
+    "name": "Virgo — Nearest to God",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>♍ The Virgo Cloth.</strong> <em>CONTROL</em></p><hr /><h3>Signature Technique</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Tenbu Horin]</p><h3>Cloth Passive — Stillness</h3><p>You can Refocus in 1 minute rather than 10. You gain a +1 status bonus to Will saves, and a +1 status bonus to AC for as long as you have not moved since the end of your last turn.</p><h3>Ascendant Boon — Six Paths of Transmigration <em>[CONTROL]</em></h3><p>Each time you hit with an unarmed Strike, the target must attempt a Will save against your Cosmo DC or <strong>lose a sense</strong>. Losses are cumulative in this order: sight (blinded), hearing (deafened), smell and taste, then touch (&minus;4 to attack rolls, and it cannot Grapple).</p><p>Senses lost this way return only through <em>restoration</em> or a full night's rest.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Virgo)]</p><h3>Zenith Boon — Rikudo Rinne <em>[CONTROL]</em></h3><p>As the Ascendant Boon, and you gain @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Rikudo Rinne], usable once per minute.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Virgo)]</p><h3>11th-Level Cloth Ability — Tenbu Horin (Greater)</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Tenbu Horin (Greater)]</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Stillness",
+                "selector": "will",
+                "type": "status",
+                "value": 1
+            },
+            {
+                "key": "Note",
+                "selector": "will",
+                "text": "You also gain a +1 status bonus to AC while you have not moved since the end of your last turn, and you can Refocus in 1 minute.",
+                "title": "Stillness"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Tenbu Horin"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            11
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Tenbu Horin (Greater)"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "saint-cloth",
+                "cloth-virgo"
+            ],
+            "rarity": "common",
+            "value": [
+                "saint",
+                "cloth"
+            ]
+        }
+    },
+    "type": "feat"
+}

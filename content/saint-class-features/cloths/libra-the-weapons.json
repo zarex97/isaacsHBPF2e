@@ -1,0 +1,68 @@
+{
+    "folder": "Gold Cloths",
+    "img": "icons/weapons/swords/sword-guard-blue.webp",
+    "name": "Libra — the Weapons",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>♎ The Libra Cloth.</strong> <em>OFFENSE/DEFENSE</em></p><hr /><h3>Signature Technique</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Rozan Rising Dragon]</p><h3>Cloth Passive — The Cloth of Arms</h3><p><em>Yours is the only Cloth with weapons.</em> You are <strong>trained in martial weapons</strong>, and your martial weapon proficiency advances with your unarmed proficiency for the rest of your career.</p><p>The Cloth carries six pairs of weapons &mdash; swords, tridents, nunchaku, shields, sanjiegun, and tonfa. You can summon or dismiss any of them as a free action. They can never be disarmed or destroyed, and they accept weapon runes normally.</p><h3>Ascendant Boon — The Balance <em>[OFFENSE/DEFENSE]</em></h3><p>You can wield any two Libra weapons regardless of how many hands they would normally require.</p><p>Your Libra weapons count as having <strong>one higher fundamental rune tier</strong> (to the game's maximum). You gain a +2 status bonus to all saving throws, and the first natural 1 you roll each hour counts as a 10 instead.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Libra)]</p><h3>Zenith Boon — The Balance (Zenith) <em>[OFFENSE/DEFENSE]</em></h3><p>As the Ascendant Boon, and you gain @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Rozan Hyaku Ryu Ha], usable once per round.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Libra)]</p><h3>11th-Level Cloth Ability — The Twelve Arms</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.The Twelve Arms]</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "definition": [
+                    "item:category:martial"
+                ],
+                "key": "MartialProficiency",
+                "label": "The Cloth of Arms",
+                "sameAs": "unarmed",
+                "slug": "cloth-of-arms"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Rozan Rising Dragon"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            11
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.The Twelve Arms"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "saint-cloth",
+                "cloth-libra"
+            ],
+            "rarity": "common",
+            "value": [
+                "saint",
+                "cloth"
+            ]
+        }
+    },
+    "type": "feat"
+}

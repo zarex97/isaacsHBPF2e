@@ -1,0 +1,58 @@
+{
+    "folder": "Cloth Abilities",
+    "img": "icons/magic/death/hand-dirt-undead-zombie-grey.webp",
+    "name": "Meikai Ha",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": {
+            "save": {
+                "basic": false,
+                "statistic": "will"
+            }
+        },
+        "description": {
+            "value": "<p>You take hold of one enemy and step off the edge of the world with it.</p><p>The target must attempt a Will save. On a failure, you and the target are both transported to the edge of the underworld for 1 minute. Nothing can follow you there and nothing can reach you from outside.</p><p>When the duration ends you both return to the spaces you left. If the target is dead when the duration ends, only you return.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": "1 minute"
+        },
+        "level": {
+            "value": 6
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "3"
+        },
+        "traits": {
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "saint",
+                "teleportation"
+            ]
+        }
+    },
+    "type": "spell"
+}

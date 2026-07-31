@@ -1,0 +1,87 @@
+{
+    "folder": "Gold Cloths",
+    "img": "icons/skills/wounds/injury-triple-slash-bleed.webp",
+    "name": "Scorpio — the Needle",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>♏ The Scorpio Cloth.</strong> <em>OFFENSE</em></p><hr /><h3>Signature Technique</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Scarlet Needle]</p><h3>Cloth Passive — Fifteen Needles</h3><p>Track Scarlet Needles separately for each creature; they reset when you rest or when the encounter ends. When you hit a creature with an unarmed Strike, you can add a needle to it as a free action, to a maximum of 15.</p><p>At <strong>5 needles</strong> the creature is enfeebled 1. At <strong>10</strong> it is blinded. At <strong>14</strong> it is stunned 2 and its Strikes lose the benefit of their runes.</p><hr /><p><strong>Tracking note:</strong> the resource on your sheet counts needles on your <em>current</em> target, and the toggles below flag which threshold is live. Needles on several creatures at once have to be tracked by hand &mdash; the system has no per-target counter.</p><h3>Ascendant Boon — Antares <em>[OFFENSE]</em></h3><p>Needles land on <strong>any</strong> attack you make against a creature, whether it hits or misses. Each needle on a creature deals 1d6 persistent bleed damage, stacking, to a maximum of 10 needles' worth.</p><p>At <strong>8 needles</strong>, the creature must attempt a Fortitude save against your Cosmo DC or <strong>die</strong>. This is an <strong>incapacitation</strong> effect.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Scorpio)]</p><h3>Zenith Boon — Antares (Zenith) <em>[OFFENSE]</em></h3><p>As the Ascendant Boon, but the death effect triggers at <strong>5 needles</strong>, and your allies' hits also apply needles &mdash; you orchestrate the swarm.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Scorpio)]</p><h3>11th-Level Cloth Ability — Antares</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Antares]</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "SpecialResource",
+                "label": "Scarlet Needles",
+                "max": 15,
+                "renew": "daily",
+                "slug": "scarlet-needles",
+                "value": 0
+            },
+            {
+                "key": "RollOption",
+                "label": "Scarlet Needle Threshold",
+                "option": "scarlet-needles",
+                "suboptions": [
+                    {
+                        "label": "5+ (enfeebled 1)",
+                        "value": "five"
+                    },
+                    {
+                        "label": "10+ (blinded)",
+                        "value": "ten"
+                    },
+                    {
+                        "label": "14+ (stunned 2)",
+                        "value": "fourteen"
+                    }
+                ],
+                "toggleable": true
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Scarlet Needle"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            11
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Antares"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "saint-cloth",
+                "cloth-scorpio"
+            ],
+            "rarity": "common",
+            "value": [
+                "saint",
+                "cloth"
+            ]
+        }
+    },
+    "type": "feat"
+}

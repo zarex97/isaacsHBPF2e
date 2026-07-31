@@ -1,0 +1,52 @@
+{
+    "folder": "Sky: Ascendant",
+    "img": "icons/magic/water/snowflake-ice-blue-white.webp",
+    "name": "Sky: Ascendant (Aquarius)",
+    "system": {
+        "description": {
+            "value": "<p><strong>♒ Aquarius is ascendant today.</strong> Your Cloth is awake and you have your Ascendant Boon for the whole day.</p><p>Any cold damage you deal forces a Fortitude save against your Cosmo DC; on a failure the creature is slowed 1. This is cumulative &mdash; at <strong>slowed 4</strong> it is instead <strong>petrified in ice</strong>, which any critical hit shatters.</p><p>Your cold damage ignores cold resistance and treats cold immunity as resistance 10.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. Applied and removed by the module's sky tracker; a GM can also drag it on by hand.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "days",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "option": "sky:ascendant"
+            },
+            {
+                "key": "RollOption",
+                "option": "sky:sign:aquarius"
+            },
+            {
+                "key": "Note",
+                "selector": "spell-damage",
+                "text": "Cold damage you deal forces a Fortitude save against your Cosmo DC or slowed 1, cumulative; at slowed 4 the creature is petrified in ice. Your cold ignores cold resistance and treats cold immunity as resistance 10.",
+                "title": "Freezing Coffin"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}
