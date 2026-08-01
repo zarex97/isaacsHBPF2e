@@ -8,14 +8,32 @@
             "value": ""
         },
         "counteraction": false,
-        "damage": {},
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "1d1",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "slashing"
+            }
+        },
         "defense": null,
         "description": {
-            "value": "<p><em>Capricorn &mdash; 3rd (Cloth Ability) Technique, gained at level 11.</em></p><p><em>Both arms as blades &mdash; the technique that cuts twice in the space of one cut.</em></p><p>Make <strong>two unarmed Strikes</strong> against a single creature within reach. Both are made at your <strong>full attack modifier with no multiple attack penalty</strong>, both gain <strong>deadly d12</strong>, and both ignore Hardness, resistance, and immunity to physical damage.</p><p><strong>If both hit</strong>, the target must attempt a Fortitude save against your Cosmo DC; on a failure it is <strong>severed</strong>, as The Sharpest Sword.</p><p>The activity counts as two attacks for your multiple attack penalty afterward.</p><hr /><p><strong>Heightening (+2 levels)</strong> Each Strike deals an additional 1d8 slashing damage.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p><hr /><p><strong>Automation note:</strong> this Technique's bonus damage starts at <em>zero</em> and is purely a heightening rider, which pf2e cannot express as a damage entry &mdash; a spell needs a base formula to scale from. Add <strong>1d8 slashing per heightening step</strong> to each Strike by hand: one step at 13th, two at 15th, and so on, plus 2 more on an Ascendant day or 4 on a Zenith.</p>"
+            "value": "<p><em>Capricorn &mdash; 3rd (Cloth Ability) Technique, gained at level 11.</em></p><p><em>Both arms as blades &mdash; the technique that cuts twice in the space of one cut.</em></p><p>Make <strong>two unarmed Strikes</strong> against a single creature within reach. Both are made at your <strong>full attack modifier with no multiple attack penalty</strong>, both gain <strong>deadly d12</strong>, and both ignore Hardness, resistance, and immunity to physical damage.</p><p><strong>If both hit</strong>, the target must attempt a Fortitude save against your Cosmo DC; on a failure it is <strong>severed</strong>, as The Sharpest Sword.</p><p>The activity counts as two attacks for your multiple attack penalty afterward.</p><hr /><p><strong>Heightening (+2 levels)</strong> Each Strike deals an additional 1d8 slashing damage.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p><hr /><p><strong>Automation note:</strong> in the guide this Technique's bonus damage starts at <em>zero</em> and is purely a heightening rider, but a pf2e spell needs a base formula to scale from. The base here is <strong>1d1</strong> &mdash; a flat 1 point, deliberately beneath notice &mdash; so that the heightening steps and the sky's bonus dice both apply automatically instead of being tracked by hand.</p>"
         },
         "duration": {
             "sustained": false,
             "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "1d8"
+            },
+            "interval": 1,
+            "type": "interval"
         },
         "level": {
             "value": 6
@@ -29,7 +47,33 @@
             "value": ""
         },
         "requirements": "",
-        "rules": [],
+        "rules": [
+            {
+                "damageType": "slashing",
+                "diceNumber": 2,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Ascendant (+2 heightening steps)",
+                "predicate": [
+                    "sky:ascendant",
+                    {
+                        "not": "sky:zenith"
+                    }
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "slashing",
+                "diceNumber": 4,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Zenith (+4 heightening steps)",
+                "predicate": [
+                    "sky:zenith"
+                ],
+                "selector": "{item|_id}-damage"
+            }
+        ],
         "target": {
             "value": "1 creature within reach"
         },
