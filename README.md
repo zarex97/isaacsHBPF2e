@@ -108,15 +108,17 @@ for them:
 - **The non-damage half of a heightening step** — extra targets, longer range, wider bursts. The sky's extra
   *dice* are automated per Technique; the rest is in each Technique's text.
 
-Two places where PF2e's model and the guide's cannot both be satisfied exactly:
+One place where PF2e's model and the guide's cannot both be satisfied exactly:
 
 - **Techniques have no rank in v4**, but pf2e spells must. Each Technique is a focus spell whose base rank is
   half its gain level rounded up (1, 3, 6, 8). This reproduces the guide exactly for the 1st and 3rd slots
   and converges correctly at 20th for all four; the **2nd and 4th slots run one heightening step ahead**
   between odd levels, because pf2e anchors focus rank to odd levels while the guide anchors to the gain
   level. The alternative was printing the wrong number at the level the Technique is gained.
-- **Double Excalibur** scales from a base of zero, which pf2e cannot express as a damage entry — a spell
-  needs a base formula to scale from. Its +1d8 per step is applied by hand; the item says so.
+
+*Double Excalibur* scales from a base of zero in the guide, and a pf2e spell needs a base formula to scale
+from — so its base is `1d1`, a flat 1 point. That is a constant +1 per Strike at every level and sky state,
+and it buys full automation of both the heightening steps and the sky's bonus dice.
 
 ## Credits
 
