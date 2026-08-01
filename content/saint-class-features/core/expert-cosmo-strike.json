@@ -11,7 +11,7 @@
         },
         "category": "classfeature",
         "description": {
-            "value": "<p>Your attacks with your fists become more precise and deadly. Your proficiency rank for unarmed attacks increases to expert.</p><p>You also gain access to the critical specialization effect of the brawling weapon group with your unarmed Strikes.</p>"
+            "value": "<p>Your attacks with your fists become more precise and deadly. Your proficiency rank for unarmed attacks increases to expert, and you gain the brawling critical specialization effect.</p><hr /><p>This is the 5th-level half of @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Cosmo Strike], granted as its own feature so the proficiency increase lands on the sheet.</p>"
         },
         "level": {
             "value": 5
@@ -24,15 +24,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Saint"
         },
-        "rules": [
-            {
-                "key": "CriticalSpecialization",
-                "predicate": [
-                    "item:category:unarmed",
-                    "item:group:brawling"
-                ]
-            }
-        ],
+        "rules": [],
         "subfeatures": {
             "proficiencies": {
                 "unarmed": {

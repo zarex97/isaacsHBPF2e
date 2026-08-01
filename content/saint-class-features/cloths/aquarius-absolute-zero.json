@@ -11,7 +11,7 @@
         },
         "category": "classfeature",
         "description": {
-            "value": "<p><strong>♒ The Aquarius Cloth.</strong> <em>OFFENSE/removal</em></p><hr /><h3>Signature Technique</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Diamond Dust]</p><h3>Cloth Passive — Cold Blood</h3><p>You have cold resistance equal to your level and are immune to severe cold. You gain a +1 status bonus to Will saves against emotion effects, and you are trained in Occultism or Arcana (your choice).</p><h3>Ascendant Boon — Freezing Coffin <em>[OFFENSE/removal]</em></h3><p>Any cold damage you deal forces a Fortitude save against your Cosmo DC; on a failure the creature is slowed 1. This is cumulative: at <strong>slowed 4</strong> the creature is instead <strong>petrified in ice</strong>, which any critical hit shatters.</p><p>Your cold damage ignores cold resistance and treats cold immunity as resistance 10.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Aquarius)]</p><h3>Zenith Boon — Aurora Execution <em>[removal]</em></h3><p>As the Ascendant Boon, and you gain @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Aurora Execution], usable once per minute.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Aquarius)]</p><h3>11th-Level Cloth Ability — Freezing Coffin</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Freezing Coffin]</p>"
+            "value": "<p><strong>♒ The Aquarius Cloth.</strong> <em>[OFFENSE/removal]</em></p><h3>Cloth Passive — Cold Blood</h3><p>You have cold resistance equal to your level and are immune to the effects of severe cold environments. You gain a +1 status bonus to Will saves against emotion effects, and you are trained in Occultism or Arcana (your choice).</p><h3>Techniques</h3><ul><li><strong>1st &mdash; Signature (L1)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Diamond Dust]</li><li><strong>2nd (L6)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Koliço]</li><li><strong>3rd &mdash; Cloth Ability (L11)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Freezing Shield]</li><li><strong>4th &mdash; Ultimate (L16)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Freezing Coffin]</li></ul><h3>Ascendant Boon — Freezing Coffin <em>[OFFENSE/removal]</em></h3><p>Cold damage from you forces a Fortitude save against your Cosmo DC or <strong>slowed 1</strong>, cumulative — at <strong>slowed 4</strong> the creature is instead <strong>petrified in ice</strong>, which any critical hit shatters permanently.</p><p>Your cold damage ignores cold resistance and treats cold immunity as cold resistance 10.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Aquarius)]</p><h3>Zenith Boon — Aurora Execution <em>[removal]</em></h3><p>As the Ascendant Boon, plus <strong><em>Aurora Execution</em></strong> once per minute &#9670;&#9670;&#9670;: 60-foot line, @Damage[16d6[cold]] damage, basic Fortitude; a critical failure leaves the creature <strong>frozen solid</strong> (petrified, shatterable). <strong>Incapacitation.</strong></p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Aquarius)]</p>"
         },
         "level": {
             "value": 1
@@ -73,7 +73,33 @@
                     {
                         "gte": [
                             "self:level",
+                            6
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Koliço"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
                             11
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Freezing Shield"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            16
                         ]
                     }
                 ],

@@ -1,0 +1,56 @@
+{
+    "folder": "3rd — Cloth Ability (L11)",
+    "img": "icons/skills/wounds/injury-body-pain-gray.webp",
+    "name": "Crimson Flurry",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p><em>Scorpio &mdash; 3rd (Cloth Ability) Technique, gained at level 11.</em></p><p><em>Fifteen needles delivered in a single burst rather than one at a time.</em></p><p>Make <strong>four unarmed Strikes</strong> against any creatures within 30 feet at <strong>no increase to your multiple attack penalty</strong>. Each Strike that hits applies <strong>one needle</strong> in addition to its normal effect.</p><p>On any day your constellation is ascendant, Strikes that <em>miss</em> apply a needle too.</p><p>The activity counts as three attacks for your multiple attack penalty afterward.</p><hr /><p><strong>Heightening (+2 levels)</strong> At 15th and 19th level, add one Strike.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "level": {
+            "value": 6
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "any creatures within 30 feet"
+        },
+        "time": {
+            "value": "3"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-11",
+                "cloth-scorpio"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

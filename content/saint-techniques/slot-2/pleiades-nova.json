@@ -1,0 +1,102 @@
+{
+    "folder": "2nd (L6)",
+    "img": "icons/magic/light/explosion-star-glow-blue.webp",
+    "name": "Pleiades Nova",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "1d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "force"
+            }
+        },
+        "defense": null,
+        "description": {
+            "value": "<p><em>Taurus &mdash; 2nd Technique, gained at level 6.</em></p><p><em>The star cluster on the Bull's shoulder, thrown as points of light.</em></p><p>Make <strong>five</strong> ranged unarmed Strikes against any creatures within 60 feet, each dealing @Damage[1d6[force]] damage plus your key ability modifier.</p><p>Your multiple attack penalty <strong>does not increase</strong> during this activity, but each Strike after the first takes a cumulative <strong>&minus;1</strong> penalty as the light scatters. The activity counts as three attacks for your multiple attack penalty afterward.</p><hr /><p><strong>Heightening (+2 levels)</strong> Each Strike's damage increases by 1d6. At 12th and 18th level, add one Strike, to a maximum of seven.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "1d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 3
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "damageType": "force",
+                "diceNumber": 2,
+                "dieSize": "d6",
+                "key": "DamageDice",
+                "label": "Sky: Ascendant (+2 heightening steps)",
+                "predicate": [
+                    "sky:ascendant",
+                    {
+                        "not": "sky:zenith"
+                    }
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "force",
+                "diceNumber": 4,
+                "dieSize": "d6",
+                "key": "DamageDice",
+                "label": "Sky: Zenith (+4 heightening steps)",
+                "predicate": [
+                    "sky:zenith"
+                ],
+                "selector": "{item|_id}-damage"
+            }
+        ],
+        "target": {
+            "value": "any creatures within 60 feet"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-6",
+                "cloth-taurus"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "attack",
+                "concentrate",
+                "cosmo",
+                "focus",
+                "light",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

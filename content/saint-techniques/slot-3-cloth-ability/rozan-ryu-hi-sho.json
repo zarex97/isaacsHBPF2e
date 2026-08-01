@@ -1,0 +1,102 @@
+{
+    "folder": "3rd — Cloth Ability (L11)",
+    "img": "icons/magic/water/wave-water-blue.webp",
+    "name": "Rozan Ryū Hi Shō",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "6d8",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "bludgeoning"
+            }
+        },
+        "defense": null,
+        "description": {
+            "value": "<p><em>Libra &mdash; 3rd (Cloth Ability) Technique, gained at level 11.</em></p><p><em>Dragon Flight &mdash; the Saint punches forward as if flying, and the dragon leaves the ground carrying the strike with it.</em></p><p><strong>Fly up to 60 feet</strong> in a straight line and make one unarmed Strike at any point during the movement, dealing an additional @Damage[6d8[bludgeoning]] damage on a hit. This movement does not trigger reactions.</p><p>On a hit you may continue to the end of your movement; on a miss you stop adjacent to the target. On a critical hit, the target is carried with you to the end of your flight and knocked prone.</p><hr /><p><strong>Heightening (+2 levels)</strong> The additional damage increases by 1d8 and the flight distance by 10 feet.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "1d8"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 6
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "damageType": "bludgeoning",
+                "diceNumber": 2,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Ascendant (+2 heightening steps)",
+                "predicate": [
+                    "sky:ascendant",
+                    {
+                        "not": "sky:zenith"
+                    }
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "bludgeoning",
+                "diceNumber": 4,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Zenith (+4 heightening steps)",
+                "predicate": [
+                    "sky:zenith"
+                ],
+                "selector": "{item|_id}-damage"
+            }
+        ],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-11",
+                "cloth-libra"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "attack",
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "move",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

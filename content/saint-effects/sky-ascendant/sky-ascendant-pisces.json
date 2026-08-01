@@ -4,7 +4,7 @@
     "name": "Sky: Ascendant (Pisces)",
     "system": {
         "description": {
-            "value": "<p><strong>♓ Pisces is ascendant today.</strong> Your Cloth is awake and you have your Ascendant Boon for the whole day.</p><p>You radiate a <strong>10-foot emanation</strong> of roses. At the end of each of your turns, up to four enemies in it must each attempt a Fortitude save against your Cosmo DC or take @Damage[4d6[poison]] damage and be enfeebled 1 (cumulative to enfeebled 4).</p><p>The garden requires that you acted hostilely that turn, and it persists even while you are unconscious.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. Applied and removed by the module's sky tracker; a GM can also drag it on by hand.</p>"
+            "value": "<p><strong>♓ Pisces is ascendant today.</strong> Your Cloth is awake. For the whole day your Techniques heighten as though you were <strong>4 levels higher</strong>, and you have your Ascendant Boon.</p><p>You radiate a <strong>10-foot emanation</strong> of roses. At the end of each of your turns, enemies inside must attempt a Fortitude save against your Cosmo DC or take @Damage[4d6[poison]] damage and become enfeebled 1 (cumulative to enfeebled 4). <strong>Cap 4 creatures.</strong></p><p>The garden requires that you acted hostilely that turn, and it persists even while you are unconscious.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. Applied and removed by the module's sky tracker; a GM can also drag it on by hand.</p>"
         },
         "duration": {
             "expiry": "turn-start",

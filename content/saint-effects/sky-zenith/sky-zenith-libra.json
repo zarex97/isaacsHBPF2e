@@ -4,7 +4,7 @@
     "name": "Sky: Zenith (Libra)",
     "system": {
         "description": {
-            "value": "<p><strong>♎ Libra rises Exalted today.</strong> This is the one day in two hundred and sixty. You have your Zenith Boon for the whole day.</p><p>As the Ascendant Boon, and you gain @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Rozan Hyaku Ryu Ha] &mdash; usable once per round.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
+            "value": "<p><strong>♎ Libra rises Exalted today.</strong> This is the one day in two hundred and sixty. For the whole day your Techniques heighten as though you were <strong>8 levels higher</strong>, and you have your Zenith Boon.</p><p>As the Ascendant Boon, plus <strong><em>Rozan Hyaku Ry&#363; Ha</em></strong> once per round &#9670;&#9670;&#9670;: 60-foot line, @Damage[12d10[bludgeoning]] damage, basic Reflex; a critical failure also knocks the target prone and stuns it 2.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
         },
         "duration": {
             "expiry": "turn-start",
@@ -59,10 +59,6 @@
                 ],
                 "property": "runes-striking",
                 "value": 1
-            },
-            {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Rozan Hyaku Ryu Ha"
             }
         ],
         "start": {

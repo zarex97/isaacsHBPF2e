@@ -1,0 +1,101 @@
+{
+    "folder": "4th — Ultimate (L16)",
+    "img": "icons/weapons/swords/swords-crossed-gold.webp",
+    "name": "Athena's Arsenal: Overdrive",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "2d8",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "slashing"
+            }
+        },
+        "defense": null,
+        "description": {
+            "value": "<p><em>Libra &mdash; 4th (Ultimate) Technique, gained at level 16.</em></p><p><em>All twelve weapons released at once &mdash; the arsenal Athena entrusted to a single Saint.</em></p><p>Every Libra weapon detaches and attacks independently. Make <strong>six</strong> Strikes distributed as you choose among creatures within 60 feet, each using a different Libra weapon and dealing that weapon's damage plus @Damage[2d8[slashing]].</p><p>Your multiple attack penalty <strong>does not apply</strong> to any of these Strikes; the activity counts as three attacks for your multiple attack penalty afterward.</p><p>For 1 minute afterward the weapons circle you: you gain a <strong>+2 circumstance bonus to AC</strong>, and any creature that ends its turn adjacent to you takes @Damage[2d8[slashing]] damage.</p><hr /><p><strong>Heightening (+2 levels)</strong> Each Strike's additional damage increases by 1d8.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": "1 minute"
+        },
+        "heightening": {
+            "damage": {
+                "0": "1d8"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 8
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "damageType": "slashing",
+                "diceNumber": 2,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Ascendant (+2 heightening steps)",
+                "predicate": [
+                    "sky:ascendant",
+                    {
+                        "not": "sky:zenith"
+                    }
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "slashing",
+                "diceNumber": 4,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Zenith (+4 heightening steps)",
+                "predicate": [
+                    "sky:zenith"
+                ],
+                "selector": "{item|_id}-damage"
+            }
+        ],
+        "target": {
+            "value": "creatures within 60 feet"
+        },
+        "time": {
+            "value": "3"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-16",
+                "cloth-libra"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "attack",
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

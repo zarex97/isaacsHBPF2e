@@ -1,0 +1,62 @@
+{
+    "folder": "4th — Ultimate (L16)",
+    "img": "icons/magic/air/wind-swirl-gray.webp",
+    "name": "Aiolos's Wings",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p><em>Sagittarius &mdash; 4th (Ultimate) Technique, gained at level 16.</em></p><p><em>You take on the aspect of the constellation itself.</em></p><p>For 10 minutes you gain a fly Speed equal to <strong>twice your Speed</strong>, you can Fly at full speed while attacking without penalty, and @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Golden Arrow] becomes a <strong>1-action</strong> Technique that costs no Focus Point.</p><p>You may also share flight with up to five allies within 30 feet, each gaining a fly Speed equal to their own Speed for the duration.</p><hr /><p><strong>Heightening (+2 levels)</strong> The duration increases by 5 minutes.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": "10 minutes"
+        },
+        "level": {
+            "value": 8
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "key": "BaseSpeed",
+                "selector": "fly",
+                "value": "@actor.attributes.speed.value * 2"
+            }
+        ],
+        "target": {
+            "value": "you and up to five allies"
+        },
+        "time": {
+            "value": "3"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-16",
+                "cloth-sagittarius"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

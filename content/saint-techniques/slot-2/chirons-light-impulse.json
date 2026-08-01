@@ -1,0 +1,101 @@
+{
+    "folder": "2nd (L6)",
+    "img": "icons/magic/light/beam-rays-yellow.webp",
+    "name": "Chiron's Light Impulse",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "1d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "force"
+            }
+        },
+        "defense": null,
+        "description": {
+            "value": "<p><em>Sagittarius &mdash; 2nd Technique, gained at level 6.</em></p><p><em>Sagittarius is the centaur Chiron &mdash; the teacher. This is his gift: the arrow that guides rather than kills.</em></p><p>The target is wreathed in golden light for 1 minute. It gains a <strong>+1 status bonus to attack rolls</strong>, its attacks deal an extra @Damage[1d6[force]] damage, and it gains a <strong>fly Speed of 20 feet</strong>.</p><p>Once during the duration, as a free action, the target may treat one attack roll or saving throw as though it had rolled a <strong>10</strong>.</p><hr /><p><strong>Heightening (+2 levels)</strong> The extra damage increases by 1d6. At 14th level the fly Speed equals the target's Speed.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": "1 minute"
+        },
+        "heightening": {
+            "damage": {
+                "0": "1d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 3
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "damageType": "force",
+                "diceNumber": 2,
+                "dieSize": "d6",
+                "key": "DamageDice",
+                "label": "Sky: Ascendant (+2 heightening steps)",
+                "predicate": [
+                    "sky:ascendant",
+                    {
+                        "not": "sky:zenith"
+                    }
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "force",
+                "diceNumber": 4,
+                "dieSize": "d6",
+                "key": "DamageDice",
+                "label": "Sky: Zenith (+4 heightening steps)",
+                "predicate": [
+                    "sky:zenith"
+                ],
+                "selector": "{item|_id}-damage"
+            }
+        ],
+        "target": {
+            "value": "one ally or yourself"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-6",
+                "cloth-sagittarius"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "light",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

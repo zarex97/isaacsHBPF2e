@@ -1,0 +1,108 @@
+{
+    "folder": "4th — Ultimate (L16)",
+    "img": "icons/magic/nature/rose-thorned-red.webp",
+    "name": "Royal Funeral",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "16d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "poison"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": false,
+                "statistic": "fortitude"
+            }
+        },
+        "description": {
+            "value": "<p><em>Pisces &mdash; 4th (Ultimate) Technique, gained at level 16.</em></p><p><em>Aphrodite's last technique. He calls it a funeral because he has already decided how it ends.</em></p><p>A single black rose crosses the distance. The target must attempt a Fortitude save.</p><p><strong>Success</strong> Half damage and enfeebled 1.</p><p><strong>Failure</strong> @Damage[16d6[poison]] damage, enfeebled 2, and <strong>drained 2</strong> &mdash; the rose is drinking.</p><p><strong>Critical Failure</strong> The rose reaches the heart and <strong>the target dies</strong>. It turns red with what it has taken.</p><hr /><p><strong>Special</strong> From the rose's colour you know the target's <strong>exact current Hit Points</strong>, from the moment you cast until the end of the encounter.</p><hr /><p><strong>Heightening (+2 levels)</strong> The damage increases by 2d6.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "2d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 8
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "damageType": "poison",
+                "diceNumber": 4,
+                "dieSize": "d6",
+                "key": "DamageDice",
+                "label": "Sky: Ascendant (+2 heightening steps)",
+                "predicate": [
+                    "sky:ascendant",
+                    {
+                        "not": "sky:zenith"
+                    }
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "poison",
+                "diceNumber": 8,
+                "dieSize": "d6",
+                "key": "DamageDice",
+                "label": "Sky: Zenith (+4 heightening steps)",
+                "predicate": [
+                    "sky:zenith"
+                ],
+                "selector": "{item|_id}-damage"
+            }
+        ],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "3"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-16",
+                "cloth-pisces"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "death",
+                "focus",
+                "incapacitation",
+                "manipulate",
+                "poison",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

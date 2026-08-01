@@ -4,7 +4,7 @@
     "name": "Sky: Zenith (Capricorn)",
     "system": {
         "description": {
-            "value": "<p><strong>♑ Capricorn rises Exalted today.</strong> This is the one day in two hundred and sixty. You have your Zenith Boon for the whole day.</p><p>As the Ascendant Boon. In addition, once per turn per creature you may use a reaction when a creature attacks you or a spell enters your space to <strong>sever it</strong> &mdash; it has no effect.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
+            "value": "<p><strong>♑ Capricorn rises Exalted today.</strong> This is the one day in two hundred and sixty. For the whole day your Techniques heighten as though you were <strong>8 levels higher</strong>, and you have your Zenith Boon.</p><p>As the Ascendant Boon. In addition, once per turn per creature you may use a reaction when a creature attacks you or a spell enters your space to <strong>sever it</strong> &mdash; it has no effect.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
         },
         "duration": {
             "expiry": "turn-start",

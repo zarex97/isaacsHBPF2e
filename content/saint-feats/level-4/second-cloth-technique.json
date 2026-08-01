@@ -11,7 +11,7 @@
         },
         "category": "class",
         "description": {
-            "value": "<p>You have studied a sister Cloth's art.</p><p>Learn one Signature Technique from a Cloth other than your own. Its rank is <strong>one lower</strong> than your usual Technique rank (minimum rank 1), and it uses your Cosmo DC and focus pool normally.</p><p>You may retrain which Technique this is when you gain a level. You cannot select a Cloth's 11th-level Cloth Ability this way &mdash; only its Signature Technique.</p>"
+            "value": "<p>You have studied a sister Cloth's art.</p><p>Learn the <strong>1st (Signature) Technique</strong> of a Cloth other than your own. It uses your Cosmo DC and focus pool normally, but it heightens <strong>one step behind</strong> your own Techniques &mdash; treat it as gained 2 levels later than you actually gained it.</p><p>You may retrain which Technique this is when you gain a level. You cannot select another Cloth's 2nd, 3rd, or 4th Technique this way &mdash; only its Signature.</p>"
         },
         "level": {
             "value": 4

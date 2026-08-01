@@ -11,7 +11,7 @@
         },
         "category": "classfeature",
         "description": {
-            "value": "<p><strong>♉ The Taurus Cloth.</strong> <em>OFFENSE</em></p><hr /><h3>Signature Technique</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Great Horn]</p><h3>Cloth Passive — Bulwark</h3><p>You cannot be moved by anything your size or smaller. You gain a +2 circumstance bonus to Athletics checks and to your Difficulty Class against attempts to Shove, Trip, Grapple, or Disarm you.</p><h3>Ascendant Boon — The Great Horn <em>[OFFENSE]</em></h3><p>Your unarmed Strikes gain <strong>+1 damage die</strong>, and a creature you hit must attempt a Fortitude save against your Cosmo DC; on a failure it is pushed 10 feet and knocked prone.</p><p>You count as one size larger whenever doing so is to your benefit.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Taurus)]</p><h3>Zenith Boon — The Great Horn (Zenith) <em>[OFFENSE]</em></h3><p>As the Ascendant Boon, but your unarmed Strikes gain <strong>+2 damage dice</strong> in total.</p><p>You gain temporary Hit Points equal to your level at the start of each of your turns, and once per round you may cast @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Great Horn] without spending a Focus Point.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Taurus)]</p><h3>11th-Level Cloth Ability — Titan's Stance</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Titan's Stance]</p>"
+            "value": "<p><strong>♉ The Taurus Cloth.</strong> <em>[OFFENSE]</em></p><h3>Cloth Passive — Bulwark</h3><p>You cannot be moved against your will by any creature or effect of your size or smaller. You gain a +2 circumstance bonus to Athletics checks and to your DC against Shove, Trip, Grapple, and Disarm.</p><h3>Techniques</h3><ul><li><strong>1st &mdash; Signature (L1)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Great Horn]</li><li><strong>2nd (L6)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Pleiades Nova]</li><li><strong>3rd &mdash; Cloth Ability (L11)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Titan's Stance]</li><li><strong>4th &mdash; Ultimate (L16)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Titan's Break: The Golden Horn]</li></ul><h3>Ascendant Boon — The Great Horn <em>[OFFENSE]</em></h3><p>Your unarmed Strikes gain <strong>+1 damage die</strong> and force a Fortitude save against your Cosmo DC; on a failure the target is pushed 10 feet and knocked prone.</p><p>You count as one size larger whenever that benefits you.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Taurus)]</p><h3>Zenith Boon — The Great Horn (Zenith) <em>[OFFENSE]</em></h3><p>As the Ascendant Boon, but with <strong>+2 damage dice</strong> in total.</p><p>You gain temporary Hit Points equal to your level at the start of each of your turns, and @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Great Horn] costs no Focus Point once per round.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Taurus)]</p>"
         },
         "level": {
             "value": 1
@@ -48,12 +48,38 @@
                     {
                         "gte": [
                             "self:level",
+                            6
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Pleiades Nova"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
                             11
                         ]
                     }
                 ],
                 "reevaluateOnUpdate": true,
-                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Titan's Stance"
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Titan's Stance"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            16
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Titan's Break: The Golden Horn"
             }
         ],
         "traits": {

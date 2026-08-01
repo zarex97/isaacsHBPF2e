@@ -4,7 +4,7 @@
     "name": "Effect: Titan's Stance",
     "system": {
         "description": {
-            "value": "<p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Titan's Stance]</p><p>You took the blow meant for an ally. Reduce the damage by 10 plus twice your level.</p>"
+            "value": "<p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Titan's Stance]</p><p>You took the blow meant for an ally. Reduce the damage by 10 plus twice your level.</p>"
         },
         "duration": {
             "expiry": "turn-start",

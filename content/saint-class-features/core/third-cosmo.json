@@ -11,10 +11,10 @@
         },
         "category": "classfeature",
         "description": {
-            "value": "<p>Your cosmo runs deeper still. Your focus pool increases by 1 Focus Point.</p>"
+            "value": "<p>Your cosmo runs deeper still. Your focus pool increases by 1 Focus Point, to a maximum of 3.</p>"
         },
         "level": {
-            "value": 15
+            "value": 13
         },
         "prerequisites": {
             "value": []

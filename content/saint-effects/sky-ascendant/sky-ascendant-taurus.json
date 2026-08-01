@@ -4,7 +4,7 @@
     "name": "Sky: Ascendant (Taurus)",
     "system": {
         "description": {
-            "value": "<p><strong>♉ Taurus is ascendant today.</strong> Your Cloth is awake and you have your Ascendant Boon for the whole day.</p><p>Your unarmed Strikes gain <strong>+1 damage die</strong>, and a creature you hit must attempt a Fortitude save against your Cosmo DC or be pushed 10 feet and knocked prone.</p><p>You count as one size larger whenever it benefits you.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. Applied and removed by the module's sky tracker; a GM can also drag it on by hand.</p>"
+            "value": "<p><strong>♉ Taurus is ascendant today.</strong> Your Cloth is awake. For the whole day your Techniques heighten as though you were <strong>4 levels higher</strong>, and you have your Ascendant Boon.</p><p>Your unarmed Strikes gain <strong>+1 damage die</strong>, and a creature you hit must attempt a Fortitude save against your Cosmo DC or be pushed 10 feet and knocked prone.</p><p>You count as one size larger whenever it benefits you.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. Applied and removed by the module's sky tracker; a GM can also drag it on by hand.</p>"
         },
         "duration": {
             "expiry": "turn-start",

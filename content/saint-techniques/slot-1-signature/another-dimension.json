@@ -1,0 +1,63 @@
+{
+    "folder": "1st — Signature (L1)",
+    "img": "icons/magic/movement/portal-vortex-purple.webp",
+    "name": "Another Dimension",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": {
+            "save": {
+                "basic": false,
+                "statistic": "will"
+            }
+        },
+        "description": {
+            "value": "<p><em>Gemini &mdash; 1st (Signature) Technique, gained at level 1.</em></p><p><em>You open a seam in space and push someone through it.</em></p><p>The target must attempt a Will save.</p><p><strong>Failure</strong> It is banished into folded space for 1 minute, then returns to the square it left.</p><p><strong>Critical Failure</strong> As failure, but for 10 minutes.</p><hr /><p><strong>Heightening (+2 levels)</strong> The range increases by 10 feet. At 12th and 16th level, you may target one additional creature.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p><hr /><p>In your <strong>Shadow</strong> aspect this Technique is instead a single-target confuse effect: Will save, confused for 1 round on a failure.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-1",
+                "cloth-gemini"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "incapacitation",
+                "manipulate",
+                "saint",
+                "teleportation"
+            ]
+        }
+    },
+    "type": "spell"
+}

@@ -1,0 +1,107 @@
+{
+    "folder": "4th — Ultimate (L16)",
+    "img": "icons/magic/water/ice-crystal-white.webp",
+    "name": "Freezing Coffin",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "16d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "cold"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": false,
+                "statistic": "fortitude"
+            }
+        },
+        "description": {
+            "value": "<p><em>Aquarius &mdash; 4th (Ultimate) Technique, gained at level 16.</em></p><p><em>Formed at &minus;273&deg;C, at the limit of absolute zero; its solidity is such that not even the strength of a Gold Saint could break it.</em></p><p>The target must attempt a Fortitude save.</p><p><strong>Failure</strong> @Damage[16d6[cold]] damage and slowed 2 for 1 minute.</p><p><strong>Critical Failure</strong> It is entombed in unmelting ice indefinitely: <strong>petrified</strong>, ageless, and needing no air. The coffin has Hardness 30 and 120 Hit Points. It ends only by being destroyed, by <em>dispel magic</em> (counteract rank 8), by a cold effect exceeding your own, or by your choice.</p><hr /><p><strong>Heightening (+2 levels)</strong> The damage increases by 2d6.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "2d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 8
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "damageType": "cold",
+                "diceNumber": 4,
+                "dieSize": "d6",
+                "key": "DamageDice",
+                "label": "Sky: Ascendant (+2 heightening steps)",
+                "predicate": [
+                    "sky:ascendant",
+                    {
+                        "not": "sky:zenith"
+                    }
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "cold",
+                "diceNumber": 8,
+                "dieSize": "d6",
+                "key": "DamageDice",
+                "label": "Sky: Zenith (+4 heightening steps)",
+                "predicate": [
+                    "sky:zenith"
+                ],
+                "selector": "{item|_id}-damage"
+            }
+        ],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "3"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-16",
+                "cloth-aquarius"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "cold",
+                "concentrate",
+                "cosmo",
+                "focus",
+                "incapacitation",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

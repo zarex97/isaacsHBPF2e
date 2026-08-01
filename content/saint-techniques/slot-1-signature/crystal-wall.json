@@ -1,0 +1,56 @@
+{
+    "folder": "1st — Signature (L1)",
+    "img": "icons/magic/defensive/barrier-shield-crystal-glowing-blue.webp",
+    "name": "Crystal Wall",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p><em>Aries &mdash; 1st (Signature) Technique, gained at level 1.</em></p><p><em>Mu raises the wall, and the thing that was coming stops coming.</em></p><p>You create a barrier of solidified cosmo 15 feet long and 10 feet high in an unoccupied space you can see. It has AC 10, Hardness equal to your level, and Hit Points equal to four times your level, and it blocks line of effect. The wall is destroyed when its Hit Points reach 0.</p><hr /><p><strong>Heightening (+2 levels)</strong> The wall's length increases by 5 feet. Its Hardness and Hit Points scale with your level automatically.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": "1 minute"
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-1",
+                "cloth-aries"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}
