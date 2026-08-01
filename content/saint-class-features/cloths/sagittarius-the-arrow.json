@@ -11,7 +11,7 @@
         },
         "category": "classfeature",
         "description": {
-            "value": "<p><strong>♐ The Sagittarius Cloth.</strong> <em>UTILITY</em></p><hr /><h3>Signature Technique</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Golden Arrow]</p><h3>Cloth Passive — The Bow</h3><p>The Cloth carries a bow that uses your unarmed proficiency and can never be disarmed or destroyed.</p><p>You gain a +2 circumstance bonus to Perception checks to notice things more than 100 feet away, and your Speed increases by 10 feet.</p><h3>Ascendant Boon — Atomic Thunderbolt <em>[UTILITY]</em></h3><p>You gain a fly Speed equal to your Speed.</p><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Golden Arrow]'s range increment becomes <strong>one mile</strong>. It ignores all cover and concealment and the hidden and undetected conditions, and it can strike any creature whose location you can name even without line of sight. Its damage rises one step on the spine.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Sagittarius)]</p><h3>Zenith Boon — Atomic Thunderbolt (Zenith) <em>[UTILITY]</em></h3><p>As the Ascendant Boon. In addition, once per minute Golden Arrow can reach any creature you name within a mile <strong>through any barrier short of a planar boundary</strong>, and deals 8 additional damage dice.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Sagittarius)]</p><h3>11th-Level Cloth Ability — Aiolos's Wings</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Aiolos's Wings]</p>"
+            "value": "<p><strong>♐ The Sagittarius Cloth.</strong> <em>[UTILITY]</em></p><h3>Cloth Passive — The Bow</h3><p>Your Cloth includes a bow that uses your <strong>unarmed</strong> proficiency and can never be disarmed or destroyed.</p><p>You gain a +2 circumstance bonus to Perception checks to notice things beyond 100 feet, and your Speed increases by 10 feet.</p><h3>Techniques</h3><ul><li><strong>1st &mdash; Signature (L1)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Golden Arrow]</li><li><strong>2nd (L6)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Chiron's Light Impulse]</li><li><strong>3rd &mdash; Cloth Ability (L11)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Infinity Break]</li><li><strong>4th &mdash; Ultimate (L16)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Aiolos's Wings]</li></ul><h3>Ascendant Boon — Atomic Thunderbolt <em>[UTILITY]</em></h3><p>You gain a <strong>fly Speed</strong> equal to your Speed.</p><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Golden Arrow]'s range increment becomes <strong>one mile</strong>. It ignores all cover, concealment, and the hidden and undetected conditions, and can hit any creature whose location you can name without line of sight.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Sagittarius)]</p><h3>Zenith Boon — Atomic Thunderbolt (Zenith) <em>[UTILITY]</em></h3><p>As the Ascendant Boon, plus once per minute <em>Golden Arrow</em> reaches <strong>any named creature within a mile through any barrier short of a planar boundary</strong> and deals <strong>+8 dice</strong>.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Sagittarius)]</p>"
         },
         "level": {
             "value": 1
@@ -50,12 +50,38 @@
                     {
                         "gte": [
                             "self:level",
+                            6
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Chiron's Light Impulse"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
                             11
                         ]
                     }
                 ],
                 "reevaluateOnUpdate": true,
-                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Aiolos's Wings"
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Infinity Break"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            16
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Aiolos's Wings"
             }
         ],
         "traits": {

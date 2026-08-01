@@ -1,0 +1,106 @@
+{
+    "folder": "2nd (L6)",
+    "img": "icons/magic/water/ice-crystal-white-blue.webp",
+    "name": "Koliço",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "3d8",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "cold"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": false,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><em>Aquarius &mdash; 2nd Technique, gained at level 6.</em></p><p><em>Ice Rings &mdash; rings of cold generated from the fingers, which surround the target and render the captive unable to move.</em></p><p>The target must attempt a Reflex save.</p><p><strong>Success</strong> Half damage and slowed 1 for 1 round.</p><p><strong>Failure</strong> @Damage[3d8[cold]] damage and <strong>immobilized</strong> for 1 minute (Escape DC equal to your Cosmo DC; the rings have Hardness 8 and 30 Hit Points, and shatter if destroyed).</p><p><strong>Critical Failure</strong> As failure, and it is also <strong>restrained</strong>.</p><hr /><p><strong>Heightening (+2 levels)</strong> The damage increases by 1d8, and the rings gain +2 Hardness and +10 Hit Points.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "1d8"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 3
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "damageType": "cold",
+                "diceNumber": 2,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Ascendant (+2 heightening steps)",
+                "predicate": [
+                    "sky:ascendant",
+                    {
+                        "not": "sky:zenith"
+                    }
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "cold",
+                "diceNumber": 4,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Zenith (+4 heightening steps)",
+                "predicate": [
+                    "sky:zenith"
+                ],
+                "selector": "{item|_id}-damage"
+            }
+        ],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-6",
+                "cloth-aquarius"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "cold",
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

@@ -1,0 +1,76 @@
+{
+    "folder": "1st — Signature (L1)",
+    "img": "icons/weapons/swords/greatsword-crossguard-gold.webp",
+    "name": "Excalibur",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p><em>Capricorn &mdash; 1st (Signature) Technique, gained at level 1.</em></p><p><em>Your arm is the sword. You have simply stopped pretending otherwise.</em></p><p>Until the end of your turn, your unarmed Strikes deal <strong>slashing</strong> damage, gain the <strong>deadly d10</strong> trait, and ignore Hardness.</p><hr /><p><strong>Heightening (+2 levels)</strong> At 10th level the deadly die becomes d12. At 14th and 18th level, your Strikes deal an additional 1d6 slashing damage.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": "until the end of your turn"
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": ""
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "mode": "override",
+                "predicate": [
+                    "item:category:unarmed"
+                ],
+                "property": "damage-type",
+                "value": "slashing"
+            },
+            {
+                "definition": [
+                    "item:category:unarmed"
+                ],
+                "key": "AdjustStrike",
+                "mode": "add",
+                "property": "weapon-traits",
+                "value": "deadly-d10"
+            }
+        ],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "1"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-1",
+                "cloth-capricorn"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

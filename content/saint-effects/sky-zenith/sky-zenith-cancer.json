@@ -4,7 +4,7 @@
     "name": "Sky: Zenith (Cancer)",
     "system": {
         "description": {
-            "value": "<p><strong>♋ Cancer rises Exalted today.</strong> This is the one day in two hundred and sixty. You have your Zenith Boon for the whole day.</p><p>As the Ascendant Boon, and you gain @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.The Yellow Spring Is Here] &mdash; usable <strong>once today</strong>.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
+            "value": "<p><strong>♋ Cancer rises Exalted today.</strong> This is the one day in two hundred and sixty. For the whole day your Techniques heighten as though you were <strong>8 levels higher</strong>, and you have your Zenith Boon.</p><p>As the Ascendant Boon, plus <strong>The Yellow Spring Is Here</strong> &mdash; usable <strong>once today</strong>. 30-foot emanation: every enemy at half Hit Points or fewer must attempt a Fortitude save against your Cosmo DC or <strong>die</strong>. <strong>Incapacitation.</strong></p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
         },
         "duration": {
             "expiry": "turn-start",
@@ -32,10 +32,6 @@
             {
                 "key": "RollOption",
                 "option": "sky:zenith"
-            },
-            {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.The Yellow Spring Is Here"
             }
         ],
         "start": {

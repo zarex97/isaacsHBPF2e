@@ -1,8 +1,8 @@
 {
     "id": "isaacs-hb-pf2e",
     "title": "Isaac's Homebrew (PF2e): The Saint",
-    "description": "<p>Homebrew content for the Pathfinder Second Edition system: <strong>The Saint</strong>, a martial focus-user whose power answers to the sky. Twelve Gold Cloths, Techniques that auto-heighten on a rank spine, Ascendant and Zenith boons, a full class feat list, and a sky tracker that decides whose day it is.</p>",
-    "version": "0.1.0",
+    "description": "<p>Homebrew content for the Pathfinder Second Edition system: <strong>The Saint</strong>, a martial focus-user whose power answers to the sky. Twelve Gold Cloths with four Techniques each, rankless Techniques that heighten every 2 levels, Ascendant and Zenith boons that heighten them further, a full class feat list, and a sky tracker that decides whose day it is.</p>",
+    "version": "0.2.0",
     "license": "./LICENSE",
     "authors": [
         {
@@ -31,8 +31,12 @@
             }
         ]
     },
-    "esmodules": ["scripts/isaacs-hb.mjs"],
-    "styles": ["styles/sky.css"],
+    "esmodules": [
+        "scripts/isaacs-hb.mjs"
+    ],
+    "styles": [
+        "styles/sky.css"
+    ],
     "media": [
         {
             "type": "setup",
@@ -161,7 +165,7 @@
                 "spellTraits": {
                     "cosmo": {
                         "label": "Cosmo",
-                        "description": "A Technique powered by a Saint's inner cosmo. Cosmo effects are focus spells that use the Saint's Cosmo DC and heighten to half the Saint's level rounded up."
+                        "description": "A Technique powered by a Saint's inner cosmo. Techniques are focus spells that use the Saint's Cosmo DC and heighten once per 2 character levels above the level they were gained."
                     }
                 },
                 "featTraits": {

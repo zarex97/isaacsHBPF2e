@@ -1,0 +1,41 @@
+{
+    "folder": "Core",
+    "img": "icons/equipment/chest/breastplate-layered-steel-gold.webp",
+    "name": "Cloth Attunement",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>You and the Cloth have stopped being two things.</p><p><strong>All your Techniques gain one additional heightening step</strong>, as though you were 2 levels higher than you are.</p><p>Once per day you may cast a Technique of 2 actions or fewer <strong>without spending a Focus Point</strong>.</p><hr /><p>The extra step is automated as bonus damage dice on every Technique; the non-damage riders of a heightening step are applied by hand from the Technique's text.</p>"
+        },
+        "level": {
+            "value": 17
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "option": "saint:cloth-attunement"
+            }
+        ],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

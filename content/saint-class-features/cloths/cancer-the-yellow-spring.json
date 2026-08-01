@@ -11,7 +11,7 @@
         },
         "category": "classfeature",
         "description": {
-            "value": "<p><strong>♋ The Cancer Cloth.</strong> <em>OFFENSE</em></p><hr /><h3>Signature Technique</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Sekishiki Meikaiha]</p><h3>Cloth Passive — The Boundary</h3><p>You are trained in Medicine. You can see and speak with spirits and the recently dead, and you automatically know the Hit Point category (unharmed, healthy, injured, badly injured, or near death) of every creature within 30 feet.</p><h3>Ascendant Boon — The Yellow Spring Opens <em>[OFFENSE]</em></h3><p>Any creature you reduce to 0 Hit Points <strong>dies</strong>, with no save.</p><p>Once per round as a free action, a creature within 30 feet that is at or below half its Hit Points must attempt a Fortitude save against your Cosmo DC; on a failure it takes 8d6 void damage and is slowed 1.</p><p>You always know the direction of the nearest planar boundary.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Cancer)]</p><h3>Zenith Boon — The Yellow Spring Is Here <em>[removal]</em></h3><p>As the Ascendant Boon, and you gain @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.The Yellow Spring Is Here], usable <strong>once per Zenith day</strong>.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Cancer)]</p><h3>11th-Level Cloth Ability — Meikai Ha</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Meikai Ha]</p>"
+            "value": "<p><strong>♋ The Cancer Cloth.</strong> <em>[OFFENSE]</em></p><h3>Cloth Passive — The Boundary</h3><p>You can see and speak with spirits, ghosts, and the recently dead. You automatically know the current Hit Point category (healthy, hurt, near death, dying) of every creature within 30 feet. You are trained in Medicine.</p><h3>Techniques</h3><ul><li><strong>1st &mdash; Signature (L1)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Sekishiki Meikai Ha]</li><li><strong>2nd (L6)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Sekishiki Kisōen]</li><li><strong>3rd &mdash; Cloth Ability (L11)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Sekishiki Konsō Ha]</li><li><strong>4th &mdash; Ultimate (L16)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Sekishiki Tenryū Ha]</li></ul><h3>Ascendant Boon — The Yellow Spring Opens <em>[OFFENSE]</em></h3><p>Any creature you reduce to 0 Hit Points <strong>dies</strong>, with no save.</p><p>Once per round as a free action, a creature within 30 feet at half Hit Points or fewer must attempt a Fortitude save against your Cosmo DC or take @Damage[8d6[void]] damage and be slowed 1.</p><p>You always know the direction of the nearest planar boundary.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Cancer)]</p><h3>Zenith Boon — The Yellow Spring Is Here <em>[removal]</em></h3><p><strong>Once per Zenith day</strong>, 30-foot emanation: every enemy at half Hit Points or fewer must attempt a Fortitude save against your Cosmo DC or <strong>die</strong>. <strong>Incapacitation.</strong></p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Cancer)]</p>"
         },
         "level": {
             "value": 1
@@ -33,7 +33,20 @@
             },
             {
                 "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Sekishiki Meikaiha"
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Sekishiki Meikai Ha"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            6
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Sekishiki Kisōen"
             },
             {
                 "key": "GrantItem",
@@ -46,7 +59,20 @@
                     }
                 ],
                 "reevaluateOnUpdate": true,
-                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Meikai Ha"
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Sekishiki Konsō Ha"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            16
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Sekishiki Tenryū Ha"
             }
         ],
         "traits": {

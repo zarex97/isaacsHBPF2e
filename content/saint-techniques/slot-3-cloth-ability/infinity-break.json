@@ -1,0 +1,108 @@
+{
+    "folder": "3rd — Cloth Ability (L11)",
+    "img": "icons/weapons/ammunition/arrow-head-glowing-yellow.webp",
+    "name": "Infinity Break",
+    "system": {
+        "area": {
+            "type": "line",
+            "value": 5280
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "12d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "force"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><em>Sagittarius &mdash; 3rd (Cloth Ability) Technique, gained at level 11.</em></p><p><em>Aiolos's shot travelled fourteen years to reach its target.</em></p><p>Choose a direction. The arrow travels in a line of any length up to <strong>one mile</strong>.</p><p>Each creature in the line takes @Damage[12d6[force]] damage with a basic Reflex save.</p><p>The arrow <strong>passes through walls, structures, cover, and any barrier with Hardness less than 20</strong>, destroying a 5-foot section of each as it goes. You do not need line of sight &mdash; only a direction, and the conviction that something is there.</p><hr /><p><strong>Heightening (+2 levels)</strong> The damage increases by 2d6.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "2d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 6
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "1 mile"
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "damageType": "force",
+                "diceNumber": 4,
+                "dieSize": "d6",
+                "key": "DamageDice",
+                "label": "Sky: Ascendant (+2 heightening steps)",
+                "predicate": [
+                    "sky:ascendant",
+                    {
+                        "not": "sky:zenith"
+                    }
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "force",
+                "diceNumber": 8,
+                "dieSize": "d6",
+                "key": "DamageDice",
+                "label": "Sky: Zenith (+4 heightening steps)",
+                "predicate": [
+                    "sky:zenith"
+                ],
+                "selector": "{item|_id}-damage"
+            }
+        ],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "3"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-11",
+                "cloth-sagittarius"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

@@ -1,0 +1,56 @@
+{
+    "folder": "3rd — Cloth Ability (L11)",
+    "img": "icons/creatures/abilities/bull-horns-glowing-red.webp",
+    "name": "Titan's Stance",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p><em>Taurus &mdash; 3rd (Cloth Ability) Technique, gained at level 11.</em></p><p><em>Aldebaran does not dodge. He stands where the blow was going.</em></p><p><strong>Trigger</strong> An ally within 15 feet would be hit by an attack or targeted by a damaging effect.</p><p>You interpose yourself and become the target instead. You take the damage reduced by <strong>10 plus twice your level</strong>, and you cannot be moved from your square by that effect.</p><hr /><p><strong>Heightening (+2 levels)</strong> The reduction scales with your level automatically. At 15th and 19th level you may use this one additional time per round.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "level": {
+            "value": 6
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "15 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "one ally"
+        },
+        "time": {
+            "value": "reaction"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-11",
+                "cloth-taurus"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

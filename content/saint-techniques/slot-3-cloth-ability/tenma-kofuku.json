@@ -1,0 +1,109 @@
+{
+    "folder": "3rd — Cloth Ability (L11)",
+    "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+    "name": "Tenma Kōfuku",
+    "system": {
+        "area": {
+            "type": "cone",
+            "value": 30
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "6d8",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "force"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "will"
+            }
+        },
+        "description": {
+            "value": "<p><em>Virgo &mdash; 3rd (Cloth Ability) Technique, gained at level 11.</em></p><p><em>Demon Pacifier &mdash; cosmo manifested physically between the palms, then released as light.</em></p><p>You compress your cosmo between your hands for the entire casting, then release it.</p><p>Each creature in the cone takes @Damage[6d8[force]] damage with a basic <strong>Will</strong> save &mdash; this strikes the spirit, not the body. A creature that fails is stunned 1; one that critically fails is stunned 3 and <strong>cannot use reactions</strong> for 1 minute.</p><hr /><p><strong>Special</strong> If you release this in the same turn that you open your eyes, spending Om stacks, the cone becomes a <strong>60-foot emanation</strong> centred on you.</p><hr /><p><strong>Heightening (+2 levels)</strong> The damage increases by 1d8.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "1d8"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 6
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": ""
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "damageType": "force",
+                "diceNumber": 2,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Ascendant (+2 heightening steps)",
+                "predicate": [
+                    "sky:ascendant",
+                    {
+                        "not": "sky:zenith"
+                    }
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "force",
+                "diceNumber": 4,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Zenith (+4 heightening steps)",
+                "predicate": [
+                    "sky:zenith"
+                ],
+                "selector": "{item|_id}-damage"
+            }
+        ],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "3"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-11",
+                "cloth-virgo"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "light",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

@@ -43,7 +43,7 @@
             "unarmored": 1
         },
         "description": {
-            "value": "<p><em>A Gold Saint stands in the attack, wearing gold, and punches a god.</em></p>\n<p>Eleven days out of thirteen you are an excellent but not dominant martial &mdash; a utility striker who\nhits hard enough and brings something no one else brings. On the thirteenth, the day your own constellation\nrises, the Cloth burns and you become something else. And on one day in two hundred and sixty, the sky\nexalts you, and for that day you are very nearly unstoppable.</p>\n<p>You are not a spellcaster. Your power is your own inner cosmo; the sky only wakes it. Your Techniques are\nfocus spells that grow with you, and your fists are the weapon you were issued.</p>\n<hr />\n<h2>Key Ability</h2>\n<p><strong>Strength or Dexterity:</strong> at 1st level, your class gives you an attribute boost to Strength\nor Dexterity. Your Cosmo DC uses whichever you chose.</p>\n<h2>Hit Points</h2>\n<p><strong>10 plus your Constitution modifier</strong></p>\n<h2>The Three-Tier Curve</h2>\n<p>Everything about this class is tuned to one table. Read it at session zero and make sure the table has\nread it too.</p>\n<table>\n<thead><tr><th>Sky state</th><th>You are</th><th>Frequency</th></tr></thead>\n<tbody>\n<tr><td>Normal day</td><td>about 15% weaker than a comparable martial</td><td>~11 days in 13</td></tr>\n<tr><td><strong>Ascendant</strong> (your sign rises)</td><td>about 30% stronger</td><td>1 day in 13</td></tr>\n<tr><td><strong>Zenith</strong> (your sign rises Exalted)</td><td>about twice as strong</td><td>1 day in 260</td></tr>\n</tbody>\n</table>\n<p>The &minus;15% floor is a feature, not a bug. A player who expects to be Aiolia every session wants a\nFighter, not a Saint.</p>\n<h2>Proficiencies</h2>\n<p>At 1st level you gain the following: Perception trained; Fortitude and Reflex expert, Will trained;\nAthletics plus three other skills trained; unarmed attacks trained (you gain no weapon proficiency);\nunarmored defense and light and medium armor trained; and your Cosmo DC trained.</p>"
+            "value": "<p><em>A Gold Saint stands in the attack, wearing gold, and punches a god.</em></p>\n<p>Eleven days out of thirteen you are an excellent but not dominant martial. On the thirteenth &mdash; the\nday your own constellation rises &mdash; the Cloth burns and you become something else. And on one day in\ntwo hundred and sixty, the sky exalts you, and for that day you are very nearly unstoppable.</p>\n<p>You are not a spellcaster. Your power is your own inner cosmo; the sky only wakes it.</p>\n<hr />\n<h2>Key Ability</h2>\n<p><strong>Strength or Dexterity.</strong> Your Cosmo DC uses whichever you chose.</p>\n<h2>Hit Points</h2>\n<p><strong>10 plus your Constitution modifier</strong></p>\n<h2>The Three-Tier Curve</h2>\n<table>\n<thead><tr><th>Sky state</th><th>You are</th><th>Effect</th><th>Frequency</th></tr></thead>\n<tbody>\n<tr><td>Normal day</td><td>~15% weaker than a comparable martial</td><td>baseline</td><td>~11 days in 13</td></tr>\n<tr><td><strong>Ascendant</strong></td><td>~30% stronger</td><td>Techniques heighten as if <strong>+4 levels</strong></td><td>1 day in 13</td></tr>\n<tr><td><strong>Zenith</strong></td><td>~100% stronger</td><td>Techniques heighten as if <strong>+8 levels</strong></td><td>1 day in 260</td></tr>\n</tbody>\n</table>\n<p>The &minus;15% floor lives in the Strike line: the fist is 1d6 and there is no flurry. The +30% / +100%\nlives in the Techniques and the boons. Defensive and control Cloths pay their multiplier in <em>scope</em>\nrather than dice &mdash; their flat damage line is correct by design.</p>\n<h2>Techniques</h2>\n<p>Techniques have <strong>no rank</strong>. You gain four, at levels <strong>1, 6, 11, and 16</strong>, and\neach heightens once per 2 character levels above the level it was gained. All four converge on 20d6 / 10d8\nby 20th level, so an early Technique never becomes dead weight &mdash; later slots buy new <em>shapes</em>,\nnot bigger numbers.</p>\n<p><strong>Spell-attack Techniques get no potency runes</strong>, so a Technique's attack bonus is 2 lower\nthan your Strike. Say this at the table.</p>\n<h2>Proficiencies</h2>\n<p>At 1st level: Perception trained; Fortitude and Reflex expert, Will trained; Athletics plus three other\nskills trained; unarmed attacks trained (no weapon proficiency); unarmored defense and light and medium\narmor trained; Cosmo DC trained.</p>"
         },
         "generalFeatLevels": {
             "value": [
@@ -61,6 +61,12 @@
                 "name": "Alertness",
                 "uuid": "Compendium.pf2e.classfeatures.Item.Alertness"
             },
+            "armor": {
+                "img": "icons/equipment/chest/breastplate-banded-steel-gold.webp",
+                "level": 13,
+                "name": "Armor Expertise",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Armor Expertise"
+            },
             "ascen": {
                 "img": "icons/magic/light/beams-rays-orange-purple-large.webp",
                 "level": 1,
@@ -68,22 +74,16 @@
                 "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation"
             },
             "cloth": {
-                "img": "icons/equipment/chest/breastplate-collared-steel-gold.webp",
-                "level": 11,
-                "name": "Cloth Ability",
-                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Cloth Ability"
-            },
-            "clothx": {
                 "img": "icons/skills/melee/unarmed-punch-fist.webp",
                 "level": 13,
                 "name": "Cloth Mastery",
                 "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Cloth Mastery"
             },
-            "clothxx": {
-                "img": "icons/equipment/chest/breastplate-banded-steel-gold.webp",
-                "level": 13,
-                "name": "Cloth Expertise",
-                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Cloth Expertise"
+            "clothx": {
+                "img": "icons/equipment/chest/breastplate-layered-steel-gold.webp",
+                "level": 17,
+                "name": "Cloth Attunement",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Cloth Attunement"
             },
             "cosmo": {
                 "img": "icons/magic/light/explosion-star-glow-orange.webp",
@@ -127,6 +127,12 @@
                 "name": "Expert Cosmo Strike",
                 "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Expert Cosmo Strike"
             },
+            "fourt": {
+                "img": "icons/magic/light/explosion-star-large-orange-purple.webp",
+                "level": 16,
+                "name": "Fourth Technique (Ultimate)",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Fourth Technique (Ultimate)"
+            },
             "great": {
                 "img": "icons/skills/melee/hand-grip-sword-orange.webp",
                 "level": 15,
@@ -146,6 +152,12 @@
                 "uuid": "Compendium.pf2e.classfeatures.Item.Juggernaut"
             },
             "secon": {
+                "img": "icons/magic/symbols/runes-star-blue.webp",
+                "level": 6,
+                "name": "Second Technique",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Second Technique"
+            },
+            "seconx": {
                 "img": "icons/magic/light/explosion-star-glow-blue.webp",
                 "level": 7,
                 "name": "Second Cosmo",
@@ -169,6 +181,12 @@
                 "name": "Sixth Sense",
                 "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Sixth Sense"
             },
+            "skyre": {
+                "img": "icons/tools/navigation/telescope-blue.webp",
+                "level": 5,
+                "name": "Sky-Reading",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Sky-Reading"
+            },
             "thecl": {
                 "img": "icons/equipment/chest/breastplate-layered-steel-gold.webp",
                 "level": 1,
@@ -176,8 +194,14 @@
                 "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Cloth"
             },
             "third": {
+                "img": "icons/equipment/chest/breastplate-collared-steel-gold.webp",
+                "level": 11,
+                "name": "Third Technique (Cloth Ability)",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Third Technique (Cloth Ability)"
+            },
+            "thirdx": {
                 "img": "icons/magic/light/explosion-star-glow-yellow.webp",
-                "level": 15,
+                "level": 13,
                 "name": "Third Cosmo",
                 "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Third Cosmo"
             },

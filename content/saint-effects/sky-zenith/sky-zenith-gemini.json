@@ -4,7 +4,7 @@
     "name": "Sky: Zenith (Gemini)",
     "system": {
         "description": {
-            "value": "<p><strong>♊ Gemini rises Exalted today.</strong> This is the one day in two hundred and sixty. You have your Zenith Boon for the whole day.</p><p>As the Ascendant Boon. In addition, a <strong>duplicate</strong> of you appears in an adjacent space at the start of each of your turns. It has your statistics, acts on your initiative with <strong>2 actions and can only Strike and Stride</strong>, and vanishes at the start of your next turn. One at a time.</p><hr /><p><strong>Running the duplicate:</strong> copy the Saint's token and delete it at the top of the next turn. It is deliberately not a second full character &mdash; no Techniques, no Focus Points, no skill actions.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
+            "value": "<p><strong>♊ Gemini rises Exalted today.</strong> This is the one day in two hundred and sixty. For the whole day your Techniques heighten as though you were <strong>8 levels higher</strong>, and you have your Zenith Boon.</p><p>As the Ascendant Boon. In addition, a <strong>duplicate</strong> of you appears in an adjacent space at the start of each of your turns. It has your statistics, acts on your initiative with <strong>2 actions and can only Strike and Stride</strong>, and vanishes at the start of your next turn. One at a time.</p><hr /><p><strong>Running the duplicate:</strong> copy the Saint's token and delete it at the top of the next turn. It is deliberately not a second full character &mdash; no Techniques, no Focus Points, no skill actions.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
         },
         "duration": {
             "expiry": "turn-start",
@@ -32,10 +32,6 @@
             {
                 "key": "RollOption",
                 "option": "sky:zenith"
-            },
-            {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Galaxian Explosion"
             }
         ],
         "start": {

@@ -11,7 +11,7 @@
         "checkPenalty": -2,
         "containerId": null,
         "description": {
-            "value": "<p>One of the twelve Gold Cloths, forged for a constellation and worn by its Saint. It answers to you and to no one else.</p><p>You can summon or dismiss the Cloth with a single Interact action. While dismissed it is not on your person and cannot be taken from you. It cannot be removed from you against your will by any means short of destroying it, and it accepts armor runes normally.</p><p>If you are reduced to 0 Hit Points, the Cloth cracks: it stops providing its item bonus to AC until repaired. It repairs itself after 24 hours, or instantly in the hands of a Saint of Aries.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Cloth]</p>"
+            "value": "<p>One of the twelve Gold Cloths, forged for a constellation and worn by its Saint. It answers to you and to no one else.</p><p>You can summon or dismiss the Cloth with a single Interact action. While dismissed it is not on your person and cannot be taken from you. It cannot be removed from you against your will by any means short of destroying it, and it accepts armor runes normally.</p><p>If you are reduced to 0 Hit Points, the Cloth cracks: it stops providing its item bonus to AC until repaired. It self-repairs after 24 hours, or instantly in the hands of a Saint of Aries.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Cloth]</p>"
         },
         "dexCap": 1,
         "grade": null,

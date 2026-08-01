@@ -1,0 +1,62 @@
+{
+    "folder": "1st — Signature (L1)",
+    "img": "icons/magic/control/energy-stream-link-white.webp",
+    "name": "Tenbu Hōrin",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": {
+            "save": {
+                "basic": false,
+                "statistic": "will"
+            }
+        },
+        "description": {
+            "value": "<p><em>Virgo &mdash; 1st (Signature) Technique, gained at level 1.</em></p><p><em>Treasure of Heaven. You decide what this creature is permitted to perceive.</em></p><p>The target must attempt a Will save.</p><p><strong>Failure</strong> It loses one sense of your choice for 1 minute: sight (blinded), hearing (deafened), or smell and taste.</p><p><strong>Critical Failure</strong> Two senses.</p><hr /><p><strong>Heightening (+2 levels)</strong> The range increases by 10 feet. At 12th and 16th level, you may target one additional creature.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-1",
+                "cloth-virgo"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "mental",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

@@ -1,0 +1,108 @@
+{
+    "folder": "1st — Signature (L1)",
+    "img": "icons/magic/water/vortex-water-whirlpool-blue.webp",
+    "name": "Rozan Shō Ryū Ha",
+    "system": {
+        "area": {
+            "type": "cylinder",
+            "value": 10
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "1d10",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "bludgeoning"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><em>Libra &mdash; 1st (Signature) Technique, gained at level 1.</em></p><p><em>Rising Dragon. You strike upward and a column of water and cosmo climbs with your fist.</em></p><p>Each creature in the cylinder takes @Damage[1d10[bludgeoning]] damage with a basic Reflex save. A creature that critically fails is launched 30 feet straight up.</p><hr /><p><strong>Heightening (+2 levels)</strong> The damage increases by 1d10.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "1d10"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": ""
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "damageType": "bludgeoning",
+                "diceNumber": 2,
+                "dieSize": "d10",
+                "key": "DamageDice",
+                "label": "Sky: Ascendant (+2 heightening steps)",
+                "predicate": [
+                    "sky:ascendant",
+                    {
+                        "not": "sky:zenith"
+                    }
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "bludgeoning",
+                "diceNumber": 4,
+                "dieSize": "d10",
+                "key": "DamageDice",
+                "label": "Sky: Zenith (+4 heightening steps)",
+                "predicate": [
+                    "sky:zenith"
+                ],
+                "selector": "{item|_id}-damage"
+            }
+        ],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-1",
+                "cloth-libra"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

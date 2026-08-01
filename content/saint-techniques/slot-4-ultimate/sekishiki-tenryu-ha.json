@@ -1,0 +1,111 @@
+{
+    "folder": "4th — Ultimate (L16)",
+    "img": "icons/magic/death/skull-poison-green.webp",
+    "name": "Sekishiki Tenryū Ha",
+    "system": {
+        "area": {
+            "type": "cone",
+            "value": 60
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "8d8",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "void"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": false,
+                "statistic": "fortitude"
+            }
+        },
+        "description": {
+            "value": "<p><em>Cancer &mdash; 4th (Ultimate) Technique, gained at level 16.</em></p><p><em>Heaven's Dragon Wave &mdash; the march of the spirits, the road to Yomotsu Hirasaka fully open.</em></p><p>Each creature in the cone must attempt a Fortitude save.</p><p><strong>Success</strong> Half damage.</p><p><strong>Failure</strong> @Damage[8d8[void]] damage, and it is dragged 30 feet toward the mouth.</p><p><strong>Critical Failure</strong> As failure, and if the creature is at half Hit Points or fewer <strong>it dies</strong>, its soul carried away.</p><hr /><p><strong>Heightening (+2 levels)</strong> The damage increases by 1d8.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "1d8"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 8
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": ""
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "damageType": "void",
+                "diceNumber": 2,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Ascendant (+2 heightening steps)",
+                "predicate": [
+                    "sky:ascendant",
+                    {
+                        "not": "sky:zenith"
+                    }
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "void",
+                "diceNumber": 4,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Zenith (+4 heightening steps)",
+                "predicate": [
+                    "sky:zenith"
+                ],
+                "selector": "{item|_id}-damage"
+            }
+        ],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "3"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-16",
+                "cloth-cancer"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "death",
+                "focus",
+                "incapacitation",
+                "manipulate",
+                "saint",
+                "void"
+            ]
+        }
+    },
+    "type": "spell"
+}

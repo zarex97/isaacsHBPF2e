@@ -1,0 +1,106 @@
+{
+    "folder": "2nd (L6)",
+    "img": "icons/magic/lightning/bolt-strike-tan.webp",
+    "name": "Lightning Crown",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "3d8",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "electricity"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><em>Leo &mdash; 2nd Technique, gained at level 6.</em></p><p><em>The Saint sends cosmo into the ground, and it erupts as pillars of electricity.</em></p><p>Choose up to <strong>three</strong> 5-foot squares within 60 feet; a pillar of lightning erupts from each.</p><p>A creature in or adjacent to a pillar takes @Damage[3d8[electricity]] damage with a basic Reflex save. A creature caught by two or more pillars rolls once and takes damage once, but suffers a <strong>&minus;2</strong> circumstance penalty to that save. A creature that critically fails is knocked prone.</p><p>The pillars persist for 1 round, shedding bright light and blocking line of sight through their squares.</p><hr /><p><strong>Heightening (+2 levels)</strong> The damage increases by 1d8. At 10th, 14th, and 18th level, add one pillar.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "1d8"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 3
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "damageType": "electricity",
+                "diceNumber": 2,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Ascendant (+2 heightening steps)",
+                "predicate": [
+                    "sky:ascendant",
+                    {
+                        "not": "sky:zenith"
+                    }
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "electricity",
+                "diceNumber": 4,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Zenith (+4 heightening steps)",
+                "predicate": [
+                    "sky:zenith"
+                ],
+                "selector": "{item|_id}-damage"
+            }
+        ],
+        "target": {
+            "value": "up to three 5-foot squares"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-6",
+                "cloth-leo"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "electricity",
+                "focus",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

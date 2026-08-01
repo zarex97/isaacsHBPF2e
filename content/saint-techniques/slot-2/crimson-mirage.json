@@ -1,0 +1,63 @@
+{
+    "folder": "2nd (L6)",
+    "img": "icons/magic/control/hypnosis-mesmerism-eye-red.webp",
+    "name": "Crimson Mirage",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": {
+            "save": {
+                "basic": false,
+                "statistic": "will"
+            }
+        },
+        "description": {
+            "value": "<p><em>Scorpio &mdash; 2nd Technique, gained at level 6.</em></p><p><em>The scarlet haze that comes before Antares.</em></p><p>The target must attempt a Will save.</p><p><strong>Failure</strong> For 1 minute it is <strong>dazzled</strong>, treats all other creatures as concealed, and takes <strong>1d6 mental damage per needle</strong> it currently has at the end of each of its turns.</p><p><strong>Critical Failure</strong> As failure, and it is confused for 1 round as the mirage overtakes it entirely.</p><hr /><p><strong>Heightening (+2 levels)</strong> At 10th, 14th, and 18th level, the per-needle damage increases by 1d6.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "level": {
+            "value": 3
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "The target has at least 1 needle.",
+        "rules": [],
+        "target": {
+            "value": "one creature with at least 1 needle"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-6",
+                "cloth-scorpio"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "illusion",
+                "manipulate",
+                "mental",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

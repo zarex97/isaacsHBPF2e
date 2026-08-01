@@ -1,0 +1,107 @@
+{
+    "folder": "4th — Ultimate (L16)",
+    "img": "icons/skills/wounds/injury-pain-body-red.webp",
+    "name": "Antares",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "16d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "piercing"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": false,
+                "statistic": "fortitude"
+            }
+        },
+        "description": {
+            "value": "<p><em>Scorpio &mdash; 4th (Ultimate) Technique, gained at level 16.</em></p><p><em>The last needle is the heart. You have been walking toward it for fourteen strikes.</em></p><p><strong>Requirements</strong> The target has at least 5 needles.</p><p>The target must attempt a Fortitude save.</p><p><strong>Failure</strong> @Damage[16d6[piercing]] damage and paralyzed for 1 round.</p><p><strong>Critical Failure</strong> It dies &mdash; the scarlet star at the Scorpion's heart has found its own.</p><hr /><p><strong>Heightening (+2 levels)</strong> The damage increases by 2d6.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "2d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 8
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "The target has at least 5 needles.",
+        "rules": [
+            {
+                "damageType": "piercing",
+                "diceNumber": 4,
+                "dieSize": "d6",
+                "key": "DamageDice",
+                "label": "Sky: Ascendant (+2 heightening steps)",
+                "predicate": [
+                    "sky:ascendant",
+                    {
+                        "not": "sky:zenith"
+                    }
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "piercing",
+                "diceNumber": 8,
+                "dieSize": "d6",
+                "key": "DamageDice",
+                "label": "Sky: Zenith (+4 heightening steps)",
+                "predicate": [
+                    "sky:zenith"
+                ],
+                "selector": "{item|_id}-damage"
+            }
+        ],
+        "target": {
+            "value": "one creature with at least 5 needles"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-16",
+                "cloth-scorpio"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "death",
+                "focus",
+                "incapacitation",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

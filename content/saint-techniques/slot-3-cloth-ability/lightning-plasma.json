@@ -1,0 +1,57 @@
+{
+    "folder": "3rd — Cloth Ability (L11)",
+    "img": "icons/magic/lightning/bolt-strike-forked-blue-white.webp",
+    "name": "Lightning Plasma",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p><em>Leo &mdash; 3rd (Cloth Ability) Technique, gained at level 11.</em></p><p><em>You are in more places than one, briefly, and each of them is punching.</em></p><p>Make <strong>three unarmed Strikes</strong> against any creatures within 30 feet at <strong>no increase to your multiple attack penalty</strong>. The activity counts as three attacks for your multiple attack penalty afterward.</p><hr /><p><strong>Heightening (+2 levels)</strong> At 17th level, add one Strike.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "level": {
+            "value": 6
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "any creatures within 30 feet"
+        },
+        "time": {
+            "value": "3"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-11",
+                "cloth-leo"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "electricity",
+                "focus",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}
