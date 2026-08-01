@@ -1,0 +1,57 @@
+{
+    "folder": "2nd (L6)",
+    "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
+    "name": "Astral Projection",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p><em>Gemini &mdash; 2nd Technique, gained at level 6.</em></p><p><em>Saga governed the Sanctuary as two people at once.</em></p><p>You project your consciousness into an astral body anywhere within 200 feet that you can see or have visited. For up to 10 minutes you perceive and speak through it.</p><p>The astral body is invisible to creatures without a sixth sense or <em>see invisibility</em>, cannot be damaged or physically interacted with, and cannot attack &mdash; but you may cast <strong>mental</strong> Techniques through it, using its position as the origin.</p><p>Your own body is unconscious and off-guard for the duration. Damage to it ends the effect and leaves you stunned 1.</p><hr /><p><strong>Heightening (+2 levels)</strong> The range increases by 200 feet and the duration by 5 minutes.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": true,
+            "value": "up to 10 minutes"
+        },
+        "level": {
+            "value": 3
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "200 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-6",
+                "cloth-gemini"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "mental",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

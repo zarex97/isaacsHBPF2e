@@ -11,7 +11,7 @@
         },
         "category": "classfeature",
         "description": {
-            "value": "<p><strong>♊ The Gemini Cloth.</strong> <em>OFFENSE</em></p><hr /><h3>Signature Technique</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Another Dimension]</p><h3>Cloth Passive — Two Faces</h3><p>You are trained in Deception. You maintain two complete identities &mdash; Light and Shadow &mdash; that cannot be linked to one another by anything short of <em>true seeing</em>. You may swap between them as a free action once per hour.</p><p>In <strong>Shadow</strong>, your Signature Technique becomes @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Genro Mao Ken (Shadow)] instead.</p><h3>Ascendant Boon — Galaxian Explosion <em>[OFFENSE]</em></h3><p>Once per round you may cast your Signature Technique without spending a Focus Point.</p><p>You gain @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Galaxian Explosion].</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Gemini)]</p><h3>Zenith Boon — Galaxian Explosion (Zenith) <em>[OFFENSE]</em></h3><p>As the Ascendant Boon. In addition, a <strong>duplicate</strong> of you appears in an adjacent space at the start of each of your turns. It uses your statistics, acts on your initiative with <strong>2 actions and can only Strike and Stride</strong> &mdash; no Techniques, no Focus Points, no skill actions &mdash; and vanishes at the start of your next turn. Only one duplicate can exist at a time.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Gemini)]</p><h3>11th-Level Cloth Ability — Genro Mao Ken</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Genro Mao Ken]</p>"
+            "value": "<p><strong>♊ The Gemini Cloth.</strong> <em>[OFFENSE]</em></p><h3>Cloth Passive — Two Faces</h3><p>You are trained in Deception. You have two aspects, <strong>Light</strong> and <strong>Shadow</strong>, and swap between them as a <strong>free action</strong> once per hour.</p><p>In Shadow, @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Another Dimension] instead becomes a single-target confuse effect (Will save, confused 1 round on a failure).</p><p>Your appearance, voice, and aura change completely. You have two identities that nothing short of <em>true seeing</em> connects.</p><h3>Techniques</h3><ul><li><strong>1st &mdash; Signature (L1)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Another Dimension]</li><li><strong>2nd (L6)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Astral Projection]</li><li><strong>3rd &mdash; Cloth Ability (L11)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Galaxian Explosion]</li><li><strong>4th &mdash; Ultimate (L16)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Mavros Eruption Clast]</li></ul><h3>Ascendant Boon — Galaxian Cosmo <em>[OFFENSE]</em></h3><p>Cast your 1st Technique without spending a Focus Point once per round, and @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Galaxian Explosion]'s burst increases by 20 feet.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Gemini)]</p><h3>Zenith Boon — Galaxian Cosmo (Zenith) <em>[OFFENSE]</em></h3><p>As the Ascendant Boon, plus a <strong>duplicate</strong> of you appears each turn in an adjacent square: your statistics, acting on your initiative with <strong>2 actions, Strike and Stride only</strong> — no Techniques, no Focus Points, no skill actions. One at a time; it vanishes at the start of your next turn.</p><hr /><p><strong>Running the duplicate:</strong> copy the token and delete it at the top of the next turn. It is deliberately not a second full character.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Gemini)]</p>"
         },
         "level": {
             "value": 1
@@ -30,10 +30,6 @@
                 "mode": "upgrade",
                 "path": "system.skills.deception.rank",
                 "value": 1
-            },
-            {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Genro Mao Ken (Shadow)"
             },
             {
                 "key": "RollOption",
@@ -61,12 +57,38 @@
                     {
                         "gte": [
                             "self:level",
+                            6
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Astral Projection"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
                             11
                         ]
                     }
                 ],
                 "reevaluateOnUpdate": true,
-                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Genro Mao Ken"
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Galaxian Explosion"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            16
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Mavros Eruption Clast"
             }
         ],
         "traits": {

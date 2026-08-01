@@ -19,15 +19,18 @@ are very nearly unstoppable.
 
 - **The Saint class** — 10 HP, unarmed-only, Class DC ("the Cosmo DC") keyed to Strength or Dexterity, no
   spell slots.
-- **Twelve Gold Cloths** as selectable subclasses, each with a Cloth Passive, a Signature Technique, an
-  Ascendant Boon, a Zenith Boon, and an 11th-level Cloth Ability.
-- **28 Techniques** as focus spells that auto-heighten on a rank spine, so damage scales from the heightening
-  interval rather than from numbers hardcoded per level.
+- **Twelve Gold Cloths** as selectable subclasses, each with a Cloth Passive, its own four-Technique ladder,
+  an Ascendant Boon, and a Zenith Boon.
+- **48 Techniques** — four per Cloth, gained at levels 1, 6, 11, and 16. Techniques have no rank; each
+  heightens once per 2 character levels above the one it was gained at, and all four converge on 20d6 / 10d8
+  by 20th level, so an early Technique never becomes dead weight.
 - **28 class feats** from 1st to 20th, including *Athena Exclamation* and the legacy capstone
   *Constellation of One*.
 - **A sky tracker** — a GM window that holds the day's constellation and aspect, applies the right boon to
-  every Saint, announces the day in chat, and lets you schedule a Zenith for the arc climax.
-- **A handbook** journal covering the tuning curve, the rank spine, and the GM notes that make the class work.
+  every Saint, announces the day in chat, and lets you schedule a Zenith for the arc climax. On an Ascendant
+  day Techniques heighten as though you were **+4 levels**; on a Zenith, **+8**.
+- **A handbook** journal covering the tuning curve, the heightening ladder, and the GM notes that make
+  the class work.
 
 ## Using the sky tracker
 
@@ -77,8 +80,9 @@ A few things the build does that are worth knowing about:
   reference fails the build rather than shipping a grant that silently does nothing.
 - **`npm run validate` checks traits and rule-element keys** against a snapshot of pf2e 8.3.0
   (`build/lib/pf2e-traits.json`), which catches typos that would otherwise only show up as a rule quietly not
-  firing. It also enforces two invariants from the class guide: every damaging Technique scales on the rank
-  spine, and the removal/death Techniques carry `incapacitation`.
+  firing. It also enforces the class guide's invariants: every Technique's base rank matches its slot, every
+  damaging Technique carries its Ascendant and Zenith heightening dice, and the removal/death Techniques
+  carry `incapacitation`.
 - **`npm run check:roundtrip`** reads the built LevelDB back and compares it to the source, so a lossy write
   fails CI instead of shipping.
 
@@ -90,28 +94,31 @@ npm run extract -- --overwrite
 
 ## Known gaps
 
-Three things are rules text rather than automation, because PF2e has no hook for them:
+Built from **class guide v4**. A few things are rules text rather than automation, because PF2e has no hook
+for them:
 
 - **Blanket "ignore all resistances"** (Seventh Sense, Capricorn's boon). Material bypass and incorporeality
   *are* automated; the general clause is a roll note on the damage.
 - **Scorpio's per-creature needle counts.** The sheet resource tracks the current target and roll-option
   toggles flag the 5 / 10 / 14 thresholds; several creatures at once need pen and paper.
+- **Virgo's Om** is a badged effect you apply and increment; the **blinded** condition is applied by hand,
+  deliberately — the guide is explicit that the cost is the mechanic.
 - **Gemini's Zenith duplicate.** Copy the token, give it two actions of Strike and Stride only, delete it at
   the top of the next turn.
+- **The non-damage half of a heightening step** — extra targets, longer range, wider bursts. The sky's extra
+  *dice* are automated per Technique; the rest is in each Technique's text.
 
-Two numbers are also worth a decision:
+One place where PF2e's model and the guide's cannot both be satisfied exactly:
 
-- **Leo's *Lightning Bolt*** reads 6d12 at rank 6 where the class guide prints 5d12. The spine (+1 die per
-  rank) and that printed number can't both hold for a d12 variant, and the guide's own appendix makes the
-  spine the governing rule — so the spine won. See the Handbook journal for the alternative.
-- **Pisces' *Piranha Rose*** is implemented as written (2d8 base on the area spine), which lands it at 7d8
-  plus 6d6 persistent bleed against up to three creatures at rank 6 — for *one action*. That is above
-  *Great Horn*, which costs two actions for 6d8 in a cone. If Pisces plays too strong, dropping the base to
-  1d8 brings it in line.
+- **Techniques have no rank in v4**, but pf2e spells must. Each Technique is a focus spell whose base rank is
+  half its gain level rounded up (1, 3, 6, 8). This reproduces the guide exactly for the 1st and 3rd slots
+  and converges correctly at 20th for all four; the **2nd and 4th slots run one heightening step ahead**
+  between odd levels, because pf2e anchors focus rank to odd levels while the guide anchors to the gain
+  level. The alternative was printing the wrong number at the level the Technique is gained.
 
-*Scarlet Needle* deliberately does **not** scale with rank: the guide says its bleed "scales with the ramp",
-meaning with needle count. Heightening it by rank as well would give a 1-action Technique 6d6 persistent bleed
-at 11th level.
+*Double Excalibur* scales from a base of zero in the guide, and a pf2e spell needs a base formula to scale
+from — so its base is `1d1`, a flat 1 point. That is a constant +1 per Strike at every level and sky state,
+and it buys full automation of both the heightening steps and the sky's bonus dice.
 
 ## Credits
 

@@ -11,7 +11,7 @@
         },
         "category": "classfeature",
         "description": {
-            "value": "<p><strong>♑ The Capricorn Cloth.</strong> <em>OFFENSE</em></p><hr /><h3>Signature Technique</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Excalibur]</p><h3>Cloth Passive — The Sword Arm</h3><p>You are trained in Athletics. Your unarmed Strikes gain the <strong>versatile S</strong> and <strong>deadly d8</strong> traits.</p><h3>Ascendant Boon — Excalibur Cuts Everything <em>[OFFENSE]</em></h3><p>Your unarmed Strikes <strong>ignore all resistances, physical immunities, and Hardness</strong>, and gain +1 damage die &mdash; so the boon is never a total no-op against a target with nothing to bypass.</p><p>On a critical hit you may <strong>sever</strong> a limb, a sense, or a natural attack, until the target receives <em>regenerate</em>. You can Strike incorporeal creatures and force effects normally, and a critical hit destroys a force effect outright.</p><hr /><p><strong>GM note, print this:</strong> Capricorn is a <em>key, not a hammer</em>. Its value swings from +0% against a boss with no resistances to +170% against resistance 10. On the day Capricorn rises, ask your GM what is behind the wall &mdash; and GMs, seed something resistant, or the boon is a shrug.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Capricorn)]</p><h3>Zenith Boon — Excalibur Cuts Everything (Zenith) <em>[OFFENSE]</em></h3><p>As the Ascendant Boon. In addition, once per turn per creature you may use a reaction when a creature attacks you or a spell enters your space to <strong>sever it</strong>: the attack or spell has no effect.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Capricorn)]</p><h3>11th-Level Cloth Ability — Jumping Stone</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Jumping Stone]</p>"
+            "value": "<p><strong>♑ The Capricorn Cloth.</strong> <em>[OFFENSE, conditional]</em></p><h3>Cloth Passive — The Sword Arm &amp; The Sharpest Sword</h3><p><strong>The Sword Arm.</strong> Your unarmed Strikes gain the <strong>versatile S</strong> and <strong>deadly d8</strong> traits. You are trained in Athletics.</p><p><strong>The Sharpest Sword.</strong> Your critical hits with unarmed Strikes <strong>sever</strong> — the target permanently loses the use of one limb, natural attack, or sense of your choice until it receives <em>regenerate</em>. You also gain the <strong>sword group critical specialization</strong> with all your Strikes.</p><h3>Techniques</h3><ul><li><strong>1st &mdash; Signature (L1)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Excalibur]</li><li><strong>2nd (L6)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Jumping Stone]</li><li><strong>3rd &mdash; Cloth Ability (L11)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Double Excalibur]</li><li><strong>4th &mdash; Ultimate (L16)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Excalibur: The Sword That Cuts Everything]</li></ul><h3>Ascendant Boon — Excalibur Cuts Everything <em>[OFFENSE, conditional]</em></h3><p>Your unarmed Strikes <strong>ignore all resistances, physical immunities, and Hardness</strong>, and gain <strong>+1 damage die</strong>.</p><p>You may Strike incorporeal creatures and force effects; a critical hit destroys a force effect.</p><hr /><p><strong>GM note, print this:</strong> Capricorn is a <em>key, not a hammer</em> — its value swings from +0% against a boss with no resistances to +170% against resistance 10. On the day Capricorn rises, ask your GM what's behind the wall; and GMs, seed something resistant, or the boon is a shrug.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Capricorn)]</p><h3>Zenith Boon — Excalibur Cuts Everything (Zenith) <em>[OFFENSE, conditional]</em></h3><p>As the Ascendant Boon, plus a <strong>reaction</strong> (once per turn per creature): a creature attacks you or a spell effect enters your space &rarr; you <strong>sever it</strong>, and it has no effect.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Capricorn)]</p>"
         },
         "level": {
             "value": 1
@@ -50,8 +50,33 @@
                 "value": "deadly-d8"
             },
             {
+                "key": "CriticalSpecialization",
+                "predicate": [
+                    "item:category:unarmed"
+                ]
+            },
+            {
+                "key": "Note",
+                "selector": "unarmed-attack",
+                "text": "On a critical hit, the target permanently loses the use of one limb, natural attack, or sense of your choice until it receives <em>regenerate</em>.",
+                "title": "The Sharpest Sword"
+            },
+            {
                 "key": "GrantItem",
                 "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Excalibur"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            6
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Jumping Stone"
             },
             {
                 "key": "GrantItem",
@@ -64,7 +89,20 @@
                     }
                 ],
                 "reevaluateOnUpdate": true,
-                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Jumping Stone"
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Double Excalibur"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            16
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Excalibur: The Sword That Cuts Everything"
             }
         ],
         "traits": {

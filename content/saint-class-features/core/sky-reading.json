@@ -1,0 +1,79 @@
+{
+    "folder": "Core",
+    "img": "icons/tools/navigation/telescope-blue.webp",
+    "name": "Sky-Reading",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Years of watching one constellation have taught you to read the rest of the sky, even though it will never answer you the way yours does.</p><p>You become trained in a skill of your choice, and in <strong>Astronomy Lore</strong>. You can use that Lore to determine the current sign and aspect of the sky, and to identify a Saint's Cloth by the way their cosmo moves.</p>"
+        },
+        "level": {
+            "value": 5
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "adjustName": false,
+                "choices": [
+                    {
+                        "label": "Arcana",
+                        "value": "arcana"
+                    },
+                    {
+                        "label": "Crafting",
+                        "value": "crafting"
+                    },
+                    {
+                        "label": "Nature",
+                        "value": "nature"
+                    },
+                    {
+                        "label": "Occultism",
+                        "value": "occultism"
+                    },
+                    {
+                        "label": "Religion",
+                        "value": "religion"
+                    },
+                    {
+                        "label": "Society",
+                        "value": "society"
+                    },
+                    {
+                        "label": "Survival",
+                        "value": "survival"
+                    }
+                ],
+                "flag": "skyReadingSkill",
+                "key": "ChoiceSet",
+                "prompt": "Which skill did watching the sky teach you?"
+            },
+            {
+                "key": "ActiveEffectLike",
+                "mode": "upgrade",
+                "path": "system.skills.{item|flags.system.rulesSelections.skyReadingSkill}.rank",
+                "value": 1
+            }
+        ],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

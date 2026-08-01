@@ -1,0 +1,122 @@
+{
+    "folder": "3rd — Cloth Ability (L11)",
+    "img": "icons/magic/defensive/barrier-shield-crystal-blue.webp",
+    "name": "Freezing Shield",
+    "system": {
+        "area": {
+            "type": "emanation",
+            "value": 20
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "6d8",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "cold"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "fortitude"
+            }
+        },
+        "description": {
+            "value": "<p><em>Aquarius &mdash; 3rd (Cloth Ability) Technique, gained at level 11.</em></p><p><em>Dégel's defensive art &mdash; a wall of absolute cold that stops what is thrown at it.</em></p><p>A dome of frozen air with a 20-foot radius forms centred on you and lasts 1 minute.</p><p>You and your allies inside gain <strong>cold resistance 15</strong> and a <strong>+2 circumstance bonus to AC against ranged attacks</strong>.</p><p>Any creature hostile to you that enters the dome or ends its turn inside takes @Damage[6d8[cold]] damage with a basic Fortitude save, and is slowed 1 on a failure.</p><p>Ranged attacks and spell attacks crossing into the dome from outside take a <strong>&minus;4 circumstance penalty</strong>.</p><hr /><p><strong>Heightening (+2 levels)</strong> The damage increases by 1d8, the resistance by 5, and the radius by 5 feet.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": "1 minute"
+        },
+        "heightening": {
+            "damage": {
+                "0": "1d8"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 6
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": ""
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "damageType": "cold",
+                "diceNumber": 2,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Ascendant (+2 heightening steps)",
+                "predicate": [
+                    "sky:ascendant",
+                    {
+                        "not": "sky:zenith"
+                    }
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "cold",
+                "diceNumber": 4,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Zenith (+4 heightening steps)",
+                "predicate": [
+                    "sky:zenith"
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "key": "Aura",
+                "radius": 20,
+                "slug": "freezing-shield",
+                "traits": [
+                    "cold"
+                ]
+            },
+            {
+                "key": "Resistance",
+                "type": "cold",
+                "value": 15
+            }
+        ],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-11",
+                "cloth-aquarius"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "cold",
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

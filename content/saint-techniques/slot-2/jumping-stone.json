@@ -1,0 +1,102 @@
+{
+    "folder": "2nd (L6)",
+    "img": "icons/skills/movement/figure-running-gray.webp",
+    "name": "Jumping Stone",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "3d8",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "slashing"
+            }
+        },
+        "defense": null,
+        "description": {
+            "value": "<p><em>Capricorn &mdash; 2nd Technique, gained at level 6.</em></p><p><em>Shura's leap &mdash; he crosses the distance and the blade arrives before he does.</em></p><p><strong>Stride up to twice your Speed</strong>, ignoring difficult terrain and crossing gaps up to 20 feet as though on solid ground. This movement does not trigger reactions.</p><p>At any point during the movement, make one unarmed Strike dealing an additional @Damage[3d8[slashing]] damage. If you moved at least 20 feet before the Strike, treat the target's AC as <strong>2 lower</strong>.</p><hr /><p><strong>Heightening (+2 levels)</strong> The additional damage increases by 1d8.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "1d8"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 3
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": ""
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "damageType": "slashing",
+                "diceNumber": 2,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Ascendant (+2 heightening steps)",
+                "predicate": [
+                    "sky:ascendant",
+                    {
+                        "not": "sky:zenith"
+                    }
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "slashing",
+                "diceNumber": 4,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Zenith (+4 heightening steps)",
+                "predicate": [
+                    "sky:zenith"
+                ],
+                "selector": "{item|_id}-damage"
+            }
+        ],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-6",
+                "cloth-capricorn"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "attack",
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "move",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

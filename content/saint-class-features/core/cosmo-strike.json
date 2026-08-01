@@ -11,7 +11,7 @@
         },
         "category": "classfeature",
         "description": {
-            "value": "<p>Your cosmo burns in your hands. Your fist deals 1d6 bludgeoning damage and is in the brawling group with the agile, finesse, nonlethal, and unarmed traits.</p><p>Your unarmed Strikes are <strong>magical</strong>, and they gain a <strong>+1 circumstance bonus to damage per weapon damage die</strong>.</p><hr /><p><strong>GM note:</strong> this is the built-in <em>handwraps of mighty blows</em> fix for a class that has no weapons. Do not also require handwraps — that would tax the Saint twice.</p>"
+            "value": "<p>Your cosmo burns in your hands. Your fist deals 1d6 bludgeoning damage and is in the brawling group with the agile, finesse, nonlethal, and unarmed traits.</p><p>Your unarmed Strikes are <strong>magical</strong> and gain a <strong>+1 circumstance bonus to damage per weapon damage die</strong>.</p><p>At <strong>5th level</strong> your proficiency rank for unarmed attacks increases to expert, and you gain the <strong>brawling critical specialization</strong> effect.</p><hr /><p><strong>GM note:</strong> this is the built-in <em>handwraps of mighty blows</em> fix for a class with no weapons. Do not also require handwraps &mdash; that taxes the Saint twice.</p>"
         },
         "level": {
             "value": 1
@@ -58,6 +58,19 @@
                 "slug": "cosmo-strike",
                 "type": "circumstance",
                 "value": "@weapon.system.damage.dice"
+            },
+            {
+                "key": "CriticalSpecialization",
+                "predicate": [
+                    "item:category:unarmed",
+                    "item:group:brawling",
+                    {
+                        "gte": [
+                            "self:level",
+                            5
+                        ]
+                    }
+                ]
             }
         ],
         "traits": {

@@ -1,0 +1,63 @@
+{
+    "folder": "4th — Ultimate (L16)",
+    "img": "icons/magic/control/energy-stream-link-large-blue.webp",
+    "name": "Rikudō Rinne",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": {
+            "save": {
+                "basic": false,
+                "statistic": "will"
+            }
+        },
+        "description": {
+            "value": "<p><em>Virgo &mdash; 4th (Ultimate) Technique, gained at level 16.</em></p><p><em>The Six Realms of Samsara &mdash; the soul sent to one of the six worlds while the body remains on the field.</em></p><p>The target must attempt a Will save.</p><p><strong>Success</strong> It is stunned 1.</p><p><strong>Failure</strong> Its soul is cast into one of the six realms for 1 minute: it is <strong>stunned</strong> for the duration, its body standing empty.</p><p><strong>Critical Failure</strong> As failure but for 10 minutes, and on its return it is enfeebled 2 and stupefied 2 for an hour. No one comes back from the six worlds unchanged.</p><hr /><p><strong>Heightening (+2 levels)</strong> At 20th level, you may target two creatures.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "level": {
+            "value": 8
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "3"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-16",
+                "cloth-virgo"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "incapacitation",
+                "manipulate",
+                "mental",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

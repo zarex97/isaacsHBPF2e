@@ -4,7 +4,7 @@
     "name": "Sky: Zenith (Taurus)",
     "system": {
         "description": {
-            "value": "<p><strong>♉ Taurus rises Exalted today.</strong> This is the one day in two hundred and sixty. You have your Zenith Boon for the whole day.</p><p>Your unarmed Strikes gain <strong>+2 damage dice</strong>, and a creature you hit must attempt a Fortitude save against your Cosmo DC or be pushed 10 feet and knocked prone.</p><p>You count as one size larger whenever it benefits you, you gain temporary Hit Points equal to your level at the start of each of your turns, and once per round @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Great Horn] costs you no Focus Point.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
+            "value": "<p><strong>♉ Taurus rises Exalted today.</strong> This is the one day in two hundred and sixty. For the whole day your Techniques heighten as though you were <strong>8 levels higher</strong>, and you have your Zenith Boon.</p><p>Your unarmed Strikes gain <strong>+2 damage dice</strong>, and a creature you hit must attempt a Fortitude save against your Cosmo DC or be pushed 10 feet and knocked prone.</p><p>You count as one size larger whenever it benefits you, you gain temporary Hit Points equal to your level at the start of each of your turns, and once per round @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Great Horn] costs you no Focus Point.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
         },
         "duration": {
             "expiry": "turn-start",

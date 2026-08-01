@@ -1,0 +1,109 @@
+{
+    "folder": "1st — Signature (L1)",
+    "img": "icons/magic/water/snowflake-ice-blue-white.webp",
+    "name": "Diamond Dust",
+    "system": {
+        "area": {
+            "type": "cone",
+            "value": 30
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "1d8",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "cold"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "fortitude"
+            }
+        },
+        "description": {
+            "value": "<p><em>Aquarius &mdash; 1st (Signature) Technique, gained at level 1.</em></p><p><em>Condensed, icy air launched from the hand; it freezes all it touches.</em></p><p>Each creature in the cone takes @Damage[1d8[cold]] damage with a basic Fortitude save. A creature that fails is slowed 1 for 1 round.</p><hr /><p><strong>Heightening (+2 levels)</strong> The damage increases by 1d8.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "1d8"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": ""
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "damageType": "cold",
+                "diceNumber": 2,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Ascendant (+2 heightening steps)",
+                "predicate": [
+                    "sky:ascendant",
+                    {
+                        "not": "sky:zenith"
+                    }
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "cold",
+                "diceNumber": 4,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Zenith (+4 heightening steps)",
+                "predicate": [
+                    "sky:zenith"
+                ],
+                "selector": "{item|_id}-damage"
+            }
+        ],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-1",
+                "cloth-aquarius"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "cold",
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

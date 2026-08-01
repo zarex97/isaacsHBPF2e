@@ -45,31 +45,20 @@ function allowedTraits(itemType) {
  * The guide's §9 is explicit that incapacitation on these is load-bearing — without it they cheese bosses,
  * which is exactly the kind of thing that survives a careless edit. Keyed by slug.
  */
-/**
- * Techniques that deliberately do not scale with rank, and why.
- *
- * The rank-spine check below is otherwise absolute, so anything listed here needs a reason in writing —
- * "it didn't validate" is not one.
- */
-const UNSCALED_BY_DESIGN = new Map([
-    [
-        "scarlet-needle",
-        "The guide says its bleed 'scales with the ramp' — i.e. with needle count, not with rank. Heightening "
-            + "it by rank as well would make a 1-action spell deal 6d6 persistent bleed at 11th level.",
-    ],
-]);
-
 const MUST_BE_INCAPACITATION = new Set([
     "another-dimension",
-    "genro-mao-ken",
-    "the-yellow-spring-is-here",
+    "sekishiki-tenryu-ha",
     "rikudo-rinne",
     "antares",
-    "aurora-execution",
     "freezing-coffin",
-    "bloody-rose",
-    "starlight-extinction-zenith",
+    "royal-funeral",
 ]);
+
+/**
+ * Guide v4 §1.3: Techniques have no rank. Each is gained at one of four levels and heightens once per two
+ * character levels above it. PF2e has no rankless spell, so a Technique's base rank is ceil(gain / 2).
+ */
+const SLOT_RANK = { 1: 1, 6: 3, 11: 6, 16: 8 };
 
 export function validate(packs, { errors }) {
     for (const { def, docs } of packs) {
@@ -158,8 +147,25 @@ function validateSpell(doc, where, errors) {
         if (!part.formula) errors.push(`${where}: damage.${key} has no formula`);
     }
 
-    // The rank spine: a damaging Technique must scale, or it silently falls off at high level.
-    if (damageEntries.length > 0 && !UNSCALED_BY_DESIGN.has(system.slug)) {
+    // Every Technique must declare which slot it occupies, because its base rank has to match: a
+    // mismatch would silently put it at the wrong power level for the whole campaign.
+    const slotTag = (system.traits?.otherTags ?? []).find((t) => t.startsWith("technique-slot-"));
+    if (!slotTag) {
+        errors.push(`${where}: Technique has no technique-slot-<level> tag (guide v4 §1.3)`);
+    } else {
+        const gained = Number(slotTag.slice("technique-slot-".length));
+        if (!(gained in SLOT_RANK)) {
+            errors.push(`${where}: Technique slot must be gained at 1, 6, 11, or 16 — got ${gained}`);
+        } else if (rank !== SLOT_RANK[gained]) {
+            errors.push(
+                `${where}: a Technique gained at level ${gained} must have base rank ${SLOT_RANK[gained]}, ` +
+                    `not ${rank}`,
+            );
+        }
+    }
+
+    // The heightening spine: a damaging Technique must scale, or it silently falls off at high level.
+    if (damageEntries.length > 0) {
         const heightening = system.heightening;
         if (!heightening) {
             errors.push(`${where}: damaging Technique has no heightening block (rank spine, guide §1.3)`);
@@ -175,6 +181,19 @@ function validateSpell(doc, where, errors) {
             }
         } else {
             errors.push(`${where}: Technique heightening type must be "interval" or "fixed"`);
+        }
+
+        // The sky's +4 / +8 levels is +2 / +4 heightening steps, automated per Technique. A damaging
+        // Technique without both rules is one the sky silently fails to boost.
+        const skyRules = (system.rules ?? []).filter(
+            (r) => r.key === "DamageDice" && String(r.label ?? "").startsWith("Sky:"),
+        );
+        const tiers = new Set(skyRules.map((r) => (String(r.label).includes("Zenith") ? "z" : "a")));
+        if (!tiers.has("a") || !tiers.has("z")) {
+            errors.push(
+                `${where}: damaging Technique is missing its Ascendant and/or Zenith heightening dice ` +
+                    `(guide v4 §1.2)`,
+            );
         }
     }
 }
@@ -219,15 +238,18 @@ function validateMacro(doc, where, errors) {
  * thing to get wrong by hand and the hardest to notice in play.
  */
 const ADVANCEMENT = {
-    1: ["The Cloth", "Cosmo", "Ascendant Constellation", "Cosmo Strike", "Unfailing Cosmo", "Shelter of the Cloth"],
+    1: ["The Cloth", "Cosmo", "Ascendant Constellation", "Cosmo Strike", "Unfailing Cosmo",
+        "Shelter of the Cloth"],
     3: ["Iron Will"],
-    5: ["Expert Cosmo Strike"],
+    5: ["Expert Cosmo Strike", "Sky-Reading"],
+    6: ["Second Technique"],
     7: ["Sixth Sense", "Second Cosmo", "Alertness", "Weapon Specialization"],
     9: ["Cosmo Expertise", "Juggernaut"],
-    11: ["Cloth Ability"],
-    13: ["Cloth Mastery", "Cloth Expertise"],
-    15: ["Seventh Sense", "Third Cosmo", "Greater Weapon Specialization", "Evasion"],
-    17: ["Cosmo Mastery"],
+    11: ["Third Technique"],
+    13: ["Cloth Mastery", "Armor Expertise", "Third Cosmo"],
+    15: ["Seventh Sense", "Greater Weapon Specialization", "Evasion"],
+    16: ["Fourth Technique"],
+    17: ["Cosmo Mastery", "Cloth Attunement"],
     19: ["Eighth Sense"],
 };
 

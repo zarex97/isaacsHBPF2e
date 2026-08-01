@@ -1,0 +1,144 @@
+{
+    "folder": "4th — Ultimate (L16)",
+    "img": "icons/creatures/abilities/bull-horns-gold.webp",
+    "name": "Titan's Break: The Golden Horn",
+    "system": {
+        "area": {
+            "type": "line",
+            "value": 60
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "8d8",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "bludgeoning"
+            },
+            "1": {
+                "applyMod": false,
+                "category": null,
+                "formula": "4d8",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "bludgeoning"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "fortitude"
+            }
+        },
+        "description": {
+            "value": "<p><em>Taurus &mdash; 4th (Ultimate) Technique, gained at level 16.</em></p><p><em>Aldebaran's charge &mdash; the one that ends the fight.</em></p><p>Each creature in the line takes @Damage[8d8[bludgeoning]] damage with a basic Fortitude save. A creature that fails is pushed to the end of the line and knocked prone; one that critically fails takes an additional @Damage[4d8[bludgeoning]] damage and is stunned 2.</p><p>Any wall, door, or structure in the line with Hardness less than 20 is destroyed. The horn does not go around things.</p><hr /><p><strong>Heightening (+2 levels)</strong> The damage increases by 1d8, and the critical-failure damage by 1d8.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "1d8",
+                "1": "1d8"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 8
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": ""
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "damageType": "bludgeoning",
+                "diceNumber": 2,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Ascendant (+2 heightening steps)",
+                "predicate": [
+                    "sky:ascendant",
+                    {
+                        "not": "sky:zenith"
+                    }
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "bludgeoning",
+                "diceNumber": 4,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Zenith (+4 heightening steps)",
+                "predicate": [
+                    "sky:zenith"
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "bludgeoning",
+                "diceNumber": 2,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Ascendant (+2 heightening steps)",
+                "predicate": [
+                    "sky:ascendant",
+                    {
+                        "not": "sky:zenith"
+                    }
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "bludgeoning",
+                "diceNumber": 4,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Zenith (+4 heightening steps)",
+                "predicate": [
+                    "sky:zenith"
+                ],
+                "selector": "{item|_id}-damage"
+            }
+        ],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "3"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-16",
+                "cloth-taurus"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

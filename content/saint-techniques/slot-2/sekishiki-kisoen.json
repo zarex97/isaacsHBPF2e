@@ -1,0 +1,110 @@
+{
+    "folder": "2nd (L6)",
+    "img": "icons/magic/fire/flame-burning-skull-blue.webp",
+    "name": "Sekishiki Kisōen",
+    "system": {
+        "area": {
+            "type": "burst",
+            "value": 15
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "3d8",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "void"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "will"
+            }
+        },
+        "description": {
+            "value": "<p><em>Cancer &mdash; 2nd Technique, gained at level 6.</em></p><p><em>Demonic Blue Flames &mdash; cold fire that burns by feeding on souls.</em></p><p>Each creature in the area takes @Damage[3d8[void]] damage with a basic Will save.</p><p>The flames feed: <strong>for each creature that fails its save, you regain 3 Hit Points</strong>, to a maximum equal to your level per casting.</p><p>A creature reduced to 0 Hit Points by this Technique has its soul consumed and cannot be raised by any effect below <em>resurrect</em>.</p><hr /><p><strong>Heightening (+2 levels)</strong> The damage increases by 1d8 and the healing per failure by 2.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "1d8"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 3
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "damageType": "void",
+                "diceNumber": 2,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Ascendant (+2 heightening steps)",
+                "predicate": [
+                    "sky:ascendant",
+                    {
+                        "not": "sky:zenith"
+                    }
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "void",
+                "diceNumber": 4,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Zenith (+4 heightening steps)",
+                "predicate": [
+                    "sky:zenith"
+                ],
+                "selector": "{item|_id}-damage"
+            }
+        ],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-6",
+                "cloth-cancer"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "healing",
+                "manipulate",
+                "saint",
+                "void"
+            ]
+        }
+    },
+    "type": "spell"
+}

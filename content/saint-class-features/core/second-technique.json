@@ -1,0 +1,36 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/symbols/runes-star-blue.webp",
+    "name": "Second Technique",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>You learn your Cloth's <strong>2nd Technique</strong>. Like all Techniques it has no rank, and it heightens once per 2 character levels above 6th.</p><p>Which Technique this is depends on your Cloth; see your Cloth's entry.</p>"
+        },
+        "level": {
+            "value": 6
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

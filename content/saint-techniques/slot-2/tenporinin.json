@@ -1,0 +1,69 @@
+{
+    "folder": "2nd (L6)",
+    "img": "icons/magic/control/energy-stream-link-white-blue.webp",
+    "name": "Tenpōrin'in",
+    "system": {
+        "area": {
+            "type": "emanation",
+            "value": 30
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p><em>Virgo &mdash; 2nd Technique, gained at level 6.</em></p><p><em>Clarity of Mind &mdash; the wheel of dharma turning, clarity offered outward.</em></p><p>You and your allies in the emanation gain a <strong>+1 status bonus to Will saves and to saves against mental effects</strong>, and are <strong>immune to the fascinated and frightened conditions</strong>.</p><p>When you cast this Technique, you may counteract one mental effect currently affecting a creature in the area, using your Cosmo DC.</p><hr /><p><strong>Heightening (+2 levels)</strong> The emanation increases by 5 feet. At 12th level the bonus becomes +2 and the immunity extends to <strong>confused</strong>; at 18th level the bonus becomes +3.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": true,
+            "value": "sustained up to 1 minute"
+        },
+        "level": {
+            "value": 3
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": ""
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "key": "Aura",
+                "radius": 30,
+                "slug": "tenporinin",
+                "traits": [
+                    "mental"
+                ]
+            }
+        ],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-6",
+                "cloth-virgo"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "mental",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

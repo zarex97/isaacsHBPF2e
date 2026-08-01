@@ -4,7 +4,7 @@
     "name": "Sky: Zenith (Aries)",
     "system": {
         "description": {
-            "value": "<p><strong>♈ Aries rises Exalted today.</strong> This is the one day in two hundred and sixty. You have your Zenith Boon for the whole day.</p><p>You gain a +2 status bonus to AC and to all saving throws.</p><p><strong>Starlight Extinction</strong> &#8617; (reaction; <strong>no frequency limit</strong>).</p><p>Once per minute you may instead target a <em>creature</em> within 60 feet: Fortitude save against your Cosmo DC, and on a critical failure it is teleported one mile away. <strong>Incapacitation.</strong></p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
+            "value": "<p><strong>♈ Aries rises Exalted today.</strong> This is the one day in two hundred and sixty. For the whole day your Techniques heighten as though you were <strong>8 levels higher</strong>, and you have your Zenith Boon.</p><p>You gain a +2 status bonus to AC and to all saving throws.</p><p><strong>Star Guard</strong> &#8617; (reaction; <strong>no frequency limit</strong>), and <strong>Dimension Step</strong> &#9670; (teleport 60 feet).</p><p>Once per minute you may instead target a <em>creature</em> within 60 feet: Fortitude save against your Cosmo DC, and on a critical failure it is teleported one mile away. <strong>Incapacitation.</strong></p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
         },
         "duration": {
             "expiry": "turn-start",
