@@ -1,0 +1,108 @@
+{
+    "folder": "4th — Ultimate (L16)",
+    "img": "icons/weapons/swords/greatsword-flamberge-gold.webp",
+    "name": "Excalibur: The Sword That Cuts Everything",
+    "system": {
+        "area": {
+            "type": "line",
+            "value": 60
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "16d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "slashing"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><em>Capricorn &mdash; 4th (Ultimate) Technique, gained at level 16.</em></p><p><em>The blade Athena gave to a mortal, used at its full extension.</em></p><p>Each creature in the line takes @Damage[16d6[slashing]] damage with a basic Reflex save. A creature that critically fails is <strong>severed</strong>, no save.</p><p>This damage <strong>ignores all Hardness, all resistances, and all immunities to physical damage</strong>, and treats force effects such as <em>wall of force</em> and <em>forcecage</em> as objects with Hardness 0.</p><p>Any structure, wall, or terrain feature in the line is cut cleanly through.</p><hr /><p><strong>Heightening (+2 levels)</strong> The damage increases by 2d6.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "2d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 8
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": ""
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "damageType": "slashing",
+                "diceNumber": 4,
+                "dieSize": "d6",
+                "key": "DamageDice",
+                "label": "Sky: Ascendant (+2 heightening steps)",
+                "predicate": [
+                    "sky:ascendant",
+                    {
+                        "not": "sky:zenith"
+                    }
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "slashing",
+                "diceNumber": 8,
+                "dieSize": "d6",
+                "key": "DamageDice",
+                "label": "Sky: Zenith (+4 heightening steps)",
+                "predicate": [
+                    "sky:zenith"
+                ],
+                "selector": "{item|_id}-damage"
+            }
+        ],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "3"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-16",
+                "cloth-capricorn"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

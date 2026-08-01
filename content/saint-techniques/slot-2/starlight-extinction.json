@@ -1,0 +1,106 @@
+{
+    "folder": "2nd (L6)",
+    "img": "icons/magic/movement/portal-vortex-blue.webp",
+    "name": "Starlight Extinction",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "3d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "force"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": false,
+                "statistic": "will"
+            }
+        },
+        "description": {
+            "value": "<p><em>Aries &mdash; 2nd Technique, gained at level 6.</em></p><p><em>Mu's art: the thing is not broken, it is sent away.</em></p><p>The target must attempt a Will save.</p><p><strong>Failure</strong> It is teleported 60 feet in a direction you choose, arriving in the nearest open space.</p><p><strong>Critical Failure</strong> It is teleported 250 feet, lands prone, and takes @Damage[3d6[force]] damage.</p><hr /><p><strong>Heightening (+2 levels)</strong> The damage increases by 1d6 and the failure distance by 30 feet.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "1d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 3
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "damageType": "force",
+                "diceNumber": 2,
+                "dieSize": "d6",
+                "key": "DamageDice",
+                "label": "Sky: Ascendant (+2 heightening steps)",
+                "predicate": [
+                    "sky:ascendant",
+                    {
+                        "not": "sky:zenith"
+                    }
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "force",
+                "diceNumber": 4,
+                "dieSize": "d6",
+                "key": "DamageDice",
+                "label": "Sky: Zenith (+4 heightening steps)",
+                "predicate": [
+                    "sky:zenith"
+                ],
+                "selector": "{item|_id}-damage"
+            }
+        ],
+        "target": {
+            "value": "one creature or unattended object of up to 20 Bulk"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-6",
+                "cloth-aries"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "saint",
+                "teleportation"
+            ]
+        }
+    },
+    "type": "spell"
+}

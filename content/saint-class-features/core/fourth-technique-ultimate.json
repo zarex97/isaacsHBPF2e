@@ -1,0 +1,36 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/light/explosion-star-large-orange-purple.webp",
+    "name": "Fourth Technique (Ultimate)",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>You learn your Cloth's <strong>4th Technique</strong> &mdash; its Ultimate, the one the stories are about.</p><p>It has no rank and heightens once per 2 character levels above 16th.</p>"
+        },
+        "level": {
+            "value": 16
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "feat"
+}

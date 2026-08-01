@@ -1,0 +1,109 @@
+{
+    "folder": "4th — Ultimate (L16)",
+    "img": "icons/magic/light/explosion-star-large-orange-purple.webp",
+    "name": "Photon Burst",
+    "system": {
+        "area": {
+            "type": "line",
+            "value": 120
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "16d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "force"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><em>Leo &mdash; 4th (Ultimate) Technique, gained at level 16.</em></p><p><em>The Lion's cosmo released as raw light, at the speed of light.</em></p><p>Choose a 120-foot line or a 30-foot burst within 120 feet as you cast.</p><p>Each creature in the area takes @Damage[16d6[force]] damage with a basic Reflex save. A creature that critically fails is <strong>blinded for 1 minute</strong> and dazzled until it receives <em>restoration</em>.</p><p>This damage is <strong>not reduced by cover</strong>, and it ignores concealment, resistance to force, and any effect that would slow or intercept it. Light does not wait.</p><hr /><p><strong>Heightening (+2 levels)</strong> The damage increases by 2d6.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "2d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 8
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "120 feet"
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "damageType": "force",
+                "diceNumber": 4,
+                "dieSize": "d6",
+                "key": "DamageDice",
+                "label": "Sky: Ascendant (+2 heightening steps)",
+                "predicate": [
+                    "sky:ascendant",
+                    {
+                        "not": "sky:zenith"
+                    }
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "force",
+                "diceNumber": 8,
+                "dieSize": "d6",
+                "key": "DamageDice",
+                "label": "Sky: Zenith (+4 heightening steps)",
+                "predicate": [
+                    "sky:zenith"
+                ],
+                "selector": "{item|_id}-damage"
+            }
+        ],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "3"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-16",
+                "cloth-leo"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "light",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

@@ -1,0 +1,108 @@
+{
+    "folder": "3rd — Cloth Ability (L11)",
+    "img": "icons/magic/defensive/barrier-shield-crystal-blue.webp",
+    "name": "Crystal Net",
+    "system": {
+        "area": {
+            "type": "burst",
+            "value": 20
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "6d8",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "force"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": false,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><em>Aries &mdash; 3rd (Cloth Ability) Technique, gained at level 11.</em></p><p><em>A net woven by psychokinetic power that traps the adversary and completely inhibits their mobility.</em></p><p>Each creature in the area must attempt a Reflex save.</p><p><strong>Success</strong> It is restrained until the end of its next turn.</p><p><strong>Failure</strong> It is immobilized for 1 minute (Escape DC equal to your Cosmo DC).</p><p><strong>Critical Failure</strong> As failure, and it takes @Damage[6d8[force]] damage.</p><p>A creature that Escapes shatters its portion of the net.</p><hr /><p><strong>Heightening (+2 levels)</strong> The damage increases by 1d8 and the burst by 5 feet.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "damage": {
+                "0": "1d8"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 6
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "damageType": "force",
+                "diceNumber": 2,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Ascendant (+2 heightening steps)",
+                "predicate": [
+                    "sky:ascendant",
+                    {
+                        "not": "sky:zenith"
+                    }
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "force",
+                "diceNumber": 4,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Zenith (+4 heightening steps)",
+                "predicate": [
+                    "sky:zenith"
+                ],
+                "selector": "{item|_id}-damage"
+            }
+        ],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "3"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-11",
+                "cloth-aries"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

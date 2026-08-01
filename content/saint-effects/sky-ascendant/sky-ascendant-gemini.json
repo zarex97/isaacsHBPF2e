@@ -4,7 +4,7 @@
     "name": "Sky: Ascendant (Gemini)",
     "system": {
         "description": {
-            "value": "<p><strong>♊ Gemini is ascendant today.</strong> Your Cloth is awake and you have your Ascendant Boon for the whole day.</p><p>Once per round you may cast your Signature Technique without spending a Focus Point.</p><p>You gain @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Galaxian Explosion].</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. Applied and removed by the module's sky tracker; a GM can also drag it on by hand.</p>"
+            "value": "<p><strong>♊ Gemini is ascendant today.</strong> Your Cloth is awake. For the whole day your Techniques heighten as though you were <strong>4 levels higher</strong>, and you have your Ascendant Boon.</p><p>Once per round you may cast your Signature Technique without spending a Focus Point.</p><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Galaxian Explosion]'s burst increases by 20 feet.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. Applied and removed by the module's sky tracker; a GM can also drag it on by hand.</p>"
         },
         "duration": {
             "expiry": "turn-start",
@@ -28,10 +28,6 @@
             {
                 "key": "RollOption",
                 "option": "sky:sign:gemini"
-            },
-            {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Galaxian Explosion"
             }
         ],
         "start": {

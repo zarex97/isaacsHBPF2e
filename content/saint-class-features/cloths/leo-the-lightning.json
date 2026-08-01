@@ -11,7 +11,7 @@
         },
         "category": "classfeature",
         "description": {
-            "value": "<p><strong>♌ The Leo Cloth.</strong> <em>OFFENSE</em></p><hr /><h3>Signature Technique</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Lightning Bolt]</p><h3>Cloth Passive — Pride of the Lion</h3><p>You are immune to the frightened condition and to fear effects. You are trained in Intimidation and gain a +1 circumstance bonus to Demoralize.</p><h3>Ascendant Boon — Lightning Plasma <em>[OFFENSE]</em></h3><p>Your fists gain the <strong>agile</strong> trait and deal an additional 1d6 electricity damage.</p><p>You gain an <strong>extra action</strong> at the start of each of your turns, which you can use only to Strike or Stride.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Leo)]</p><h3>Zenith Boon — Lightning Plasma (Zenith) <em>[OFFENSE]</em></h3><p>As the Ascendant Boon, but your fists deal an additional <strong>3d6</strong> electricity damage, and you are <strong>quickened 1</strong> (Strike or Stride only) <em>in addition</em> to the extra action &mdash; two extra actions each turn.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Leo)]</p><h3>11th-Level Cloth Ability — Lightning Plasma</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Lightning Plasma]</p>"
+            "value": "<p><strong>♌ The Leo Cloth.</strong> <em>[OFFENSE]</em></p><h3>Cloth Passive — Pride of the Lion</h3><p>You are immune to the frightened condition and to fear effects. You are trained in Intimidation, with a +1 circumstance bonus to Demoralize.</p><h3>Techniques</h3><ul><li><strong>1st &mdash; Signature (L1)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Lightning Bolt]</li><li><strong>2nd (L6)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Lightning Crown]</li><li><strong>3rd &mdash; Cloth Ability (L11)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Lightning Plasma]</li><li><strong>4th &mdash; Ultimate (L16)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Photon Burst]</li></ul><h3>Ascendant Boon — Lightning Plasma <em>[OFFENSE]</em></h3><p>Your fists gain the <strong>agile</strong> trait and deal an additional @Damage[1d6[electricity]] damage.</p><p>You gain a <strong>Haste-style extra action</strong> each turn, usable only to Strike or Stride.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Leo)]</p><h3>Zenith Boon — Lightning Plasma (Zenith) <em>[OFFENSE]</em></h3><p>As the Ascendant Boon but with an additional @Damage[3d6[electricity]] damage, and you are <strong>quickened 1</strong> in addition to the Haste action — two extra actions on a Zenith day.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Leo)]</p>"
         },
         "level": {
             "value": 1
@@ -56,12 +56,38 @@
                     {
                         "gte": [
                             "self:level",
+                            6
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Lightning Crown"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
                             11
                         ]
                     }
                 ],
                 "reevaluateOnUpdate": true,
                 "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Lightning Plasma"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            16
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Photon Burst"
             }
         ],
         "traits": {

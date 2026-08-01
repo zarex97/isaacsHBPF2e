@@ -4,7 +4,7 @@
     "name": "Sky: Zenith (Aquarius)",
     "system": {
         "description": {
-            "value": "<p><strong>♒ Aquarius rises Exalted today.</strong> This is the one day in two hundred and sixty. You have your Zenith Boon for the whole day.</p><p>As the Ascendant Boon, and you gain @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Aurora Execution] &mdash; usable once per minute.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
+            "value": "<p><strong>♒ Aquarius rises Exalted today.</strong> This is the one day in two hundred and sixty. For the whole day your Techniques heighten as though you were <strong>8 levels higher</strong>, and you have your Zenith Boon.</p><p>As the Ascendant Boon, plus <strong><em>Aurora Execution</em></strong> once per minute &#9670;&#9670;&#9670;: 60-foot line, @Damage[16d6[cold]] damage, basic Fortitude; a critical failure leaves the creature <strong>frozen solid</strong> (petrified, shatterable). <strong>Incapacitation.</strong></p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
         },
         "duration": {
             "expiry": "turn-start",
@@ -38,10 +38,6 @@
                 "selector": "spell-damage",
                 "text": "Cold damage you deal forces a Fortitude save against your Cosmo DC or slowed 1, cumulative; at slowed 4 the creature is petrified in ice. Your cold ignores cold resistance and treats cold immunity as resistance 10.",
                 "title": "Freezing Coffin"
-            },
-            {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Aurora Execution"
             }
         ],
         "start": {

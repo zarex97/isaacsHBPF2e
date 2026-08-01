@@ -11,7 +11,7 @@
         },
         "category": "classfeature",
         "description": {
-            "value": "<p>You perceive cosmo directly. You gain an imprecise sense with a range of 60 feet that detects any creature with a cosmo or a life force, whether or not you can see it.</p><p>You are never off-guard to undetected or hidden creatures, and you cannot be flanked by anything your sixth sense perceives.</p>"
+            "value": "<p>You perceive cosmo directly. You gain an imprecise sense with a range of 60 feet that detects everything with a cosmo.</p><p>You are never off-guard to undetected or hidden creatures, and you cannot be flanked by anything your sixth sense perceives.</p>"
         },
         "level": {
             "value": 7

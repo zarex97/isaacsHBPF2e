@@ -1,16 +1,21 @@
 [
     {
-        "name": "Signature Techniques",
+        "name": "1st — Signature (L1)",
         "sorting": "a",
         "type": "Item"
     },
     {
-        "name": "Cloth Abilities",
+        "name": "2nd (L6)",
         "sorting": "a",
         "type": "Item"
     },
     {
-        "name": "Boon Techniques",
+        "name": "3rd — Cloth Ability (L11)",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "4th — Ultimate (L16)",
         "sorting": "a",
         "type": "Item"
     }

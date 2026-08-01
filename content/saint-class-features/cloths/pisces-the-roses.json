@@ -11,7 +11,7 @@
         },
         "category": "classfeature",
         "description": {
-            "value": "<p><strong>♓ The Pisces Cloth.</strong> <em>OFFENSE</em></p><hr /><h3>Signature Technique</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Piranha Rose]</p><h3>Cloth Passive — Royal Demon Rose</h3><p>You are immune to poison. Any creature that touches you, or that hits you with a melee attack, takes 1d6 poison damage.</p><h3>Ascendant Boon — The Royal Demon Rose Garden <em>[OFFENSE]</em></h3><p>You radiate a <strong>10-foot emanation</strong> of roses. At the end of each of your turns, up to four enemies in the emanation must each attempt a Fortitude save against your Cosmo DC; on a failure a creature takes 4d6 poison damage and is enfeebled 1 (cumulative to enfeebled 4).</p><p>The garden requires that you acted hostilely during that turn, and it persists even while you are unconscious.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Pisces)]</p><h3>Zenith Boon — The Royal Demon Rose Garden (Zenith) <em>[OFFENSE]</em></h3><p>As the Ascendant Boon, but the emanation is <strong>15 feet</strong> and deals <strong>8d6</strong> poison damage each turn. You also gain @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Bloody Rose], usable once per minute.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Pisces)]</p><h3>11th-Level Cloth Ability — Crimson Thorn Garden</h3><p>@UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Crimson Thorn Garden]</p>"
+            "value": "<p><strong>♓ The Pisces Cloth.</strong> <em>[OFFENSE]</em></p><h3>Cloth Passive — Royal Demon Rose</h3><p>Roses grow from your Cloth. You are <strong>immune to poison</strong>. Any creature that touches you or hits you with an unarmed or non-reach melee attack takes @Damage[1d6[poison]] damage.</p><h3>Techniques</h3><ul><li><strong>1st &mdash; Signature (L1)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Piranha Rose]</li><li><strong>2nd (L6)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Royal Demon Rose]</li><li><strong>3rd &mdash; Cloth Ability (L11)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Crimson Fog]</li><li><strong>4th &mdash; Ultimate (L16)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Royal Funeral]</li></ul><h3>Ascendant Boon — The Royal Demon Rose Garden <em>[OFFENSE]</em></h3><p><strong>10-foot emanation.</strong> At the end of each of your turns, enemies inside must attempt a Fortitude save against your Cosmo DC or take @Damage[4d6[poison]] damage and become enfeebled 1 (cumulative to enfeebled 4). <strong>Cap 4 creatures.</strong></p><p>This requires that you acted hostilely that turn. The emanation persists even while you are unconscious.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Pisces)]</p><h3>Zenith Boon — The Royal Demon Rose Garden (Zenith) <em>[OFFENSE]</em></h3><p>As the Ascendant Boon with a <strong>15-foot emanation and @Damage[8d6[poison]] damage per turn</strong>.</p><p>Plus <strong><em>Bloody Rose</em></strong> once per minute &#9670;&#9670; (<strong>incapacitation</strong>, death): 60 feet, one creature, Fortitude save; on a failure @Damage[10d6[poison]] damage and enfeebled 2, on a critical failure it <strong>dies</strong>.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Pisces)]</p>"
         },
         "level": {
             "value": 1
@@ -32,7 +32,7 @@
             {
                 "key": "Note",
                 "selector": "all",
-                "text": "Any creature that touches you or hits you with a melee attack takes @Damage[1d6[poison]] damage.",
+                "text": "Any creature that touches you or hits you with an unarmed or non-reach melee attack takes @Damage[1d6[poison]] damage.",
                 "title": "Royal Demon Rose"
             },
             {
@@ -45,12 +45,38 @@
                     {
                         "gte": [
                             "self:level",
+                            6
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Royal Demon Rose"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
                             11
                         ]
                     }
                 ],
                 "reevaluateOnUpdate": true,
-                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Crimson Thorn Garden"
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Crimson Fog"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            16
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Royal Funeral"
             }
         ],
         "traits": {

@@ -1,0 +1,56 @@
+{
+    "folder": "2nd (L6)",
+    "img": "icons/weapons/swords/sword-guard-blue.webp",
+    "name": "The Twelve Arms",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p><em>Libra &mdash; 2nd Technique, gained at level 6.</em></p><p><em>The Cloth of Arms was never meant for one person.</em></p><p>You distribute your Libra weapons to allies within 30 feet. For 1 minute, each ally holding one uses <strong>your</strong> weapon proficiency with it, and the weapon counts as bearing your Cloth's runes.</p><hr /><p><strong>Heightening (+2 levels)</strong> The duration increases by 1 minute and the range by 10 feet.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": "1 minute"
+        },
+        "level": {
+            "value": 3
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "allies within 30 feet"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-6",
+                "cloth-libra"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}

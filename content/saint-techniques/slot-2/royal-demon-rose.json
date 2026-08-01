@@ -1,0 +1,110 @@
+{
+    "folder": "2nd (L6)",
+    "img": "icons/magic/nature/rose-thorned-white.webp",
+    "name": "Royal Demon Rose",
+    "system": {
+        "area": {
+            "type": "burst",
+            "value": 20
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "3d8",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "poison"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": false,
+                "statistic": "fortitude"
+            }
+        },
+        "description": {
+            "value": "<p><em>Pisces &mdash; 2nd Technique, gained at level 6.</em></p><p><em>The white roses whose scent alone kills &mdash; Aphrodite's first garden.</em></p><p>A 20-foot burst fills with drifting white petals for 1 minute.</p><p>Any creature that starts its turn in the area must attempt a Fortitude save.</p><p><strong>Failure</strong> @Damage[3d8[poison]] damage and enfeebled 1.</p><p><strong>Critical Failure</strong> As failure, and stupefied 2 for 1 minute &mdash; the scent takes the mind before the body.</p><p>Creatures with no sense of smell are unaffected.</p><hr /><p><strong>Heightening (+2 levels)</strong> The damage increases by 1d8.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": "1 minute"
+        },
+        "heightening": {
+            "damage": {
+                "0": "1d8"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 3
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "damageType": "poison",
+                "diceNumber": 2,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Ascendant (+2 heightening steps)",
+                "predicate": [
+                    "sky:ascendant",
+                    {
+                        "not": "sky:zenith"
+                    }
+                ],
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "poison",
+                "diceNumber": 4,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Sky: Zenith (+4 heightening steps)",
+                "predicate": [
+                    "sky:zenith"
+                ],
+                "selector": "{item|_id}-damage"
+            }
+        ],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "technique-slot-6",
+                "cloth-pisces"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "cosmo",
+                "focus",
+                "manipulate",
+                "olfactory",
+                "poison",
+                "saint"
+            ]
+        }
+    },
+    "type": "spell"
+}
