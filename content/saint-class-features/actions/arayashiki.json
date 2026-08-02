@@ -1,0 +1,39 @@
+{
+    "folder": "Actions",
+    "img": "systems/pf2e/icons/actions/FreeAction.webp",
+    "name": "Arayashiki",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "defensive",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per day</p><p><strong>Trigger</strong> You are reduced to 0 Hit Points or killed.</p><hr /><p>You keep acting for 1 minute or until the encounter ends. You cannot drop below 1 Hit Point; you are immune to death effects and to the dying, unconscious, and paralyzed conditions; and you ignore the wounded and drained conditions.</p><p>When it ends you are dying 3 and your Cloth shatters. <strong>If the trigger killed you, you die when the minute ends</strong>, beyond the reach of anything short of <em>wish</em>-tier return.</p><p>You may end Arayashiki early. If you do, you are merely dying 1 and your Cloth is intact.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Eighth Sense (Arayashiki)]</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "selfEffect": {
+            "name": "Effect: Arayashiki",
+            "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Arayashiki"
+        },
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "action"
+}

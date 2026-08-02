@@ -16,6 +16,7 @@ const RULE_KEYS = new Set([
 ]);
 
 const ITEM_TYPES = new Set(["class", "feat", "spell", "effect", "action", "armor", "weapon", "equipment"]);
+const ACTION_CATEGORIES = new Set(["offensive", "defensive", "interaction", "familiar", null, undefined]);
 const FEAT_CATEGORIES = new Set(["class", "classfeature", "general", "skill", "ancestry", "ancestryfeature", "bonus"]);
 const DAMAGE_TYPES = new Set(pf2e.damageTypes);
 
@@ -100,10 +101,23 @@ function validateItem(doc, where, errors) {
         else if (!RULE_KEYS.has(rule.key)) errors.push(`${where}: rules[${i}] unknown key "${rule.key}"`);
     }
 
+    // pf2e nulls selfEffect on any item whose actionType is "passive" (item/ability/data.ts). A passive
+    // item carrying one looks correct in the JSON and silently does nothing at the table, which is exactly
+    // the failure this check exists to stop.
+    if (system.selfEffect && system.actionType?.value === "passive") {
+        errors.push(
+            `${where}: selfEffect on a passive item is discarded by pf2e — give the activity its own ` +
+                `action item and GrantItem it instead`,
+        );
+    }
+
     if (doc.type === "feat") validateFeat(doc, where, errors);
     if (doc.type === "spell") validateSpell(doc, where, errors);
     if (doc.type === "effect") validateEffect(doc, where, errors);
     if (doc.type === "class") validateClass(doc, where, errors);
+    if (doc.type === "action" && !ACTION_CATEGORIES.has(system.category)) {
+        errors.push(`${where}: bad action category "${system.category}"`);
+    }
 
     if (MUST_BE_INCAPACITATION.has(system.slug) && !(traits ?? []).includes("incapacitation")) {
         errors.push(

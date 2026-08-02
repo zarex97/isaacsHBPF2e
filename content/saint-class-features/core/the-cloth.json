@@ -43,6 +43,10 @@
             {
                 "key": "GrantItem",
                 "uuid": "Compendium.isaacs-hb-pf2e.saint-class.Item.Gold Cloth"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Summon or Dismiss Cloth"
             }
         ],
         "traits": {
