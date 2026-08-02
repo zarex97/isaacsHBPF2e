@@ -30,6 +30,14 @@
                 "option": "sky:sign:aries"
             },
             {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Star Guard"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Dimension Step"
+            },
+            {
                 "key": "FlatModifier",
                 "label": "Starlight Extinction",
                 "selector": "ac",

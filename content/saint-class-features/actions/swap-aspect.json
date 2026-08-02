@@ -1,0 +1,30 @@
+{
+    "folder": "Actions",
+    "img": "systems/pf2e/icons/actions/FreeAction.webp",
+    "name": "Swap Aspect",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "interaction",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per hour</p><hr /><p>You change between your <strong>Light</strong> and <strong>Shadow</strong> aspects. Your appearance, voice, and aura change completely; nothing short of <em>true seeing</em> connects the two.</p><p>In Shadow, your 1st Technique becomes a single-target confuse effect (Will save, confused 1 round on a failure) instead of its usual effect.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Gemini — the Other Dimension]. Remember to flip the <em>Two Faces</em> toggle on the Cloth feature so predicates follow you.</p>"
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "action"
+}

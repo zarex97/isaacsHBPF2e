@@ -13,11 +13,6 @@
         "description": {
             "value": "<p>Camus taught it plainly: to freeze a thing, still its atoms; to destroy a thing, part them. Every technique you have ever thrown was this, and now you do it deliberately, with your hands, to anything at all.</p><ul><li>Your unarmed Strikes <strong>ignore an object's Hardness entirely</strong>, and you can damage and destroy objects and structures of any material with your bare hands, including those normally immune to nonmagical damage.</li><li>Your unarmed Strikes and Techniques treat any creature's resistance to your damage as <strong>5 lower</strong>. This stacks with, and applies before, Seventh Sense's resistance-ignoring.</li><li>You can affect a creature or object that is incorporeal, gaseous, liquid, or otherwise diffuse &mdash; a swarm, an air elemental, a creature in <em>gaseous form</em> &mdash; with your unarmed Strikes at no penalty, and such creatures do not gain their usual resistance to physical attacks against you.</li></ul><hr /><p><strong>Dissolve</strong> &#9670;&#9670; (two actions, concentrate)</p><p><strong>Frequency</strong> once per 10 minutes</p><p>Touch one unattended object of up to 10 Bulk, or a 10-foot cube of a structure. It is <strong>destroyed</strong>, its atoms parted and scattered as a fine glittering dust. This cannot destroy artifacts, Cloths, or objects of similar significance; against a creature's attended object, that creature may attempt a Reflex save against your Cosmo DC to pull it clear.</p><hr /><p><strong>Special</strong> On any day your Cloth's constellation is ascendant or Exalted, <em>Dissolve</em> has no frequency limit and its size limit increases to 40 Bulk or a 20-foot cube.</p>"
         },
-        "frequency": {
-            "max": 1,
-            "per": "PT10M",
-            "value": 1
-        },
         "level": {
             "value": 16
         },
@@ -29,7 +24,12 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Saint"
         },
-        "rules": [],
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Dissolve"
+            }
+        ],
         "traits": {
             "rarity": "common",
             "value": [

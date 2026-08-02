@@ -40,6 +40,10 @@
                 "traits": [
                     "poison"
                 ]
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Bloody Rose"
             }
         ],
         "start": {

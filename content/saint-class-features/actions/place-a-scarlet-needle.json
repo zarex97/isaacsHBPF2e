@@ -1,0 +1,30 @@
+{
+    "folder": "Actions",
+    "img": "systems/pf2e/icons/actions/FreeAction.webp",
+    "name": "Place a Scarlet Needle",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><strong>Trigger</strong> You hit a creature with an unarmed Strike.</p><hr /><p>You add one <strong>needle</strong> to that creature, to a maximum of 15.</p><p>At <strong>5 needles</strong> it is enfeebled 1. At <strong>10</strong> it is blinded. At <strong>14</strong> it is stunned 2 and its Strikes lose all runes.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Scorpio — the Needle]. Needles are tracked per creature and reset when it takes a full rest or the encounter ends; the resource on your sheet counts your current target.</p>"
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "action"
+}

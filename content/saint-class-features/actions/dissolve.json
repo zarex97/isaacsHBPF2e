@@ -1,0 +1,36 @@
+{
+    "folder": "Actions",
+    "img": "systems/pf2e/icons/actions/TwoActions.webp",
+    "name": "Dissolve",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 2
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per 10 minutes</p><hr /><p>You touch one unattended object of up to 10 Bulk, or a 10-foot cube of a structure. It is <strong>destroyed</strong>, its atoms parted and scattered as a fine glittering dust.</p><p>This cannot destroy artifacts, Cloths, or objects of similar significance. Against a creature's attended object, that creature may attempt a Reflex save against your Cosmo DC to pull it clear.</p><hr /><p>On any day your constellation is ascendant or Exalted, this has <strong>no frequency limit</strong> and its size limit increases to 40 Bulk or a 20-foot cube.</p><hr /><p>Granted by the Atomic Dissolution feat.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "PT10M",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "concentrate",
+                "saint"
+            ]
+        }
+    },
+    "type": "action"
+}
