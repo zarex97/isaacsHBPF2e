@@ -101,8 +101,9 @@ for them:
   *are* automated; the general clause is a roll note on the damage.
 - **Scorpio's per-creature needle counts.** The sheet resource tracks the current target and roll-option
   toggles flag the 5 / 10 / 14 thresholds; several creatures at once need pen and paper.
-- **Virgo's Om** is a badged effect you apply and increment; the **blinded** condition is applied by hand,
-  deliberately — the guide is explicit that the cost is the mechanic.
+- **Virgo's Om** is a badged effect you apply and increment. The **blinded** condition is automated — the
+  effect grants it in memory for as long as your eyes are closed — but *spending* the stacks is manual: the
+  empowerment lands on one roll and depends on a count no rule element can read once the effect is gone.
 - **Gemini's Zenith duplicate.** Copy the token, give it two actions of Strike and Stride only, delete it at
   the top of the next turn.
 - **The non-damage half of a heightening step** — extra targets, longer range, wider bursts. The sky's extra
