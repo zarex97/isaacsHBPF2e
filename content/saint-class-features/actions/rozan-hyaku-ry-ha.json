@@ -1,0 +1,30 @@
+{
+    "folder": "Actions",
+    "img": "systems/pf2e/icons/actions/ThreeActions.webp",
+    "name": "Rozan Hyaku Ryū Ha",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 3
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per round</p><hr /><p>60-foot line. Each creature takes @Damage[12d10[bludgeoning]] damage with a basic Reflex save. A creature that critically fails is knocked prone and stunned 2.</p><hr /><p>Granted by the Libra Zenith Boon.</p>"
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "action"
+}

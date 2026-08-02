@@ -47,6 +47,10 @@
                 "selector": "unarmed-damage",
                 "text": "This damage ignores all resistances, physical immunities, and Hardness.",
                 "title": "Excalibur Cuts Everything"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Sever"
             }
         ],
         "start": {

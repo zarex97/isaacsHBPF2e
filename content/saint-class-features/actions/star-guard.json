@@ -1,0 +1,30 @@
+{
+    "folder": "Actions",
+    "img": "systems/pf2e/icons/actions/Reaction.webp",
+    "name": "Star Guard",
+    "system": {
+        "actionType": {
+            "value": "reaction"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "defensive",
+        "description": {
+            "value": "<p><strong>Trigger</strong> A creature within 60 feet makes a ranged or spell attack, or targets an ally with a spell.</p><hr /><p>You send the effect <strong>nowhere</strong>. It is expended with no result.</p><p><strong>Ascendant:</strong> once per round. <strong>Zenith:</strong> no frequency limit, and once per minute you may instead target a <em>creature</em> within 60 feet &mdash; Fortitude save against your Cosmo DC, and on a critical failure it is teleported one mile away (<strong>incapacitation</strong>).</p><hr /><p>Granted by the Aries Ascendant and Zenith Boons.</p>"
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "action"
+}

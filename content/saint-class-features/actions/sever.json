@@ -1,0 +1,30 @@
+{
+    "folder": "Actions",
+    "img": "systems/pf2e/icons/actions/Reaction.webp",
+    "name": "Sever",
+    "system": {
+        "actionType": {
+            "value": "reaction"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "defensive",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per turn per creature</p><p><strong>Trigger</strong> A creature attacks you, or a spell effect enters your space.</p><hr /><p>You <strong>sever it</strong>. The attack or effect has no effect.</p><hr /><p>Granted by the Capricorn Zenith Boon.</p>"
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "action"
+}

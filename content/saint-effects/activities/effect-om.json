@@ -19,7 +19,7 @@
             "value": 1
         },
         "description": {
-            "value": "<p>Granted by the Virgo Cloth Passive, @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Virgo — Nearest to God]</p><p><strong>Your eyes are closed and you are blinded.</strong> Increase this effect's value by 1 at the end of each of your turns, to a maximum of 5 (7 on a day Virgo is ascendant).</p><p>You gain the value as a <strong>status bonus to your Technique DCs and to unarmed Strike damage</strong>.</p><p><strong>Opening your eyes</strong> is a free action: delete this effect, and the next Technique you cast or unarmed Strike you make before the end of that turn gains <strong>+2 damage dice per stack spent</strong>, and imposes a <strong>&minus;1 circumstance penalty per 2 stacks spent</strong> to any saving throw it allows.</p><p>Your eyes open automatically, spending nothing, if you are knocked unconscious.</p>"
+            "value": "<p>Granted by the Virgo Cloth Passive, @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Virgo — Nearest to God]</p><p><strong>Your eyes are closed.</strong> The <strong>blinded</strong> condition is applied for as long as this effect is on you, and lifts the moment it is removed.</p><p>Increase this effect's value by 1 at the end of each of your turns, to a maximum of 5 (7 on a day Virgo is ascendant).</p><p>You gain the value as a <strong>status bonus to your Technique DCs and to unarmed Strike damage</strong>.</p><p><strong>Opening your eyes</strong> is a free action: delete this effect, and the next Technique you cast or unarmed Strike you make before the end of that turn gains <strong>+2 damage dice per stack spent</strong>, and imposes a <strong>&minus;1 circumstance penalty per 2 stacks spent</strong> to any saving throw it allows.</p><p>Your eyes open automatically, spending nothing, if you are knocked unconscious.</p>"
         },
         "duration": {
             "expiry": "turn-start",
@@ -36,6 +36,11 @@
             "title": "Isaac's Homebrew: The Saint"
         },
         "rules": [
+            {
+                "inMemoryOnly": true,
+                "key": "GrantItem",
+                "uuid": "Compendium.pf2e.conditionitems.Item.XgEqL1kFApUbl5Z2"
+            },
             {
                 "key": "FlatModifier",
                 "label": "Om",
