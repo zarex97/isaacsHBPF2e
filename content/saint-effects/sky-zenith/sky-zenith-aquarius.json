@@ -38,6 +38,10 @@
                 "selector": "spell-damage",
                 "text": "Cold damage you deal forces a Fortitude save against your Cosmo DC or slowed 1, cumulative; at slowed 4 the creature is petrified in ice. Your cold ignores cold resistance and treats cold immunity as resistance 10.",
                 "title": "Freezing Coffin"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Aurora Execution"
             }
         ],
         "start": {

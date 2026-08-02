@@ -59,6 +59,10 @@
                 ],
                 "property": "runes-striking",
                 "value": 1
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Rozan Hyaku Ryū Ha"
             }
         ],
         "start": {

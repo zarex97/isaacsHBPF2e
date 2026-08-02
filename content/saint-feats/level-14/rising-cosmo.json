@@ -24,11 +24,12 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Saint"
         },
-        "rules": [],
-        "selfEffect": {
-            "name": "Effect: Rising Cosmo",
-            "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Rising Cosmo"
-        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Rising Cosmo"
+            }
+        ],
         "traits": {
             "rarity": "common",
             "value": [

@@ -70,6 +70,37 @@ export function validate(packs, { errors }) {
         }
     }
     validateAdvancementTable(packs, errors);
+    validateActionsAreReachable(packs, errors);
+}
+
+/**
+ * Every action item must be granted by something.
+ *
+ * An action nothing grants is invisible at the table — which is precisely the bug that had a Virgo Saint
+ * with no Om on their sheet. The data looked fine; the character just couldn't do it.
+ */
+function validateActionsAreReachable(packs, errors) {
+    // This runs after prepare(), which has already rewritten name-based UUIDs to IDs — so match on the
+    // document ID, not the name, or every action looks orphaned.
+    const actions = new Map();
+    const granted = new Set();
+    for (const { docs } of packs) {
+        for (const { file, doc } of docs) {
+            if (doc.type === "action") actions.set(doc._id, { name: doc.name, file });
+            for (const rule of doc.system?.rules ?? []) {
+                if (rule.key !== "GrantItem" || typeof rule.uuid !== "string") continue;
+                granted.add(rule.uuid.split(".").at(-1));
+            }
+        }
+    }
+    for (const [id, { name, file }] of actions) {
+        if (!granted.has(id)) {
+            errors.push(
+                `${rel(file)}: nothing grants the action "${name}", so no character will ever see it — ` +
+                    `add a GrantItem on the feature or sky effect that provides it`,
+            );
+        }
+    }
 }
 
 function validateItem(doc, where, errors) {

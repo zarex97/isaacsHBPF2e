@@ -1,0 +1,32 @@
+{
+    "folder": "Actions",
+    "img": "systems/pf2e/icons/actions/ThreeActions.webp",
+    "name": "Six Realms Unmade",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 3
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per minute</p><hr /><p>60-foot emanation. Each enemy must attempt a Will save against your Cosmo DC or lose <strong>all five senses</strong> for 1 minute. A critical failure lasts until <em>restoration</em>.</p><p><strong>Incapacitation.</strong></p><hr /><p>Granted by the Virgo Zenith Boon.</p>"
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "incapacitation",
+                "mental",
+                "saint"
+            ]
+        }
+    },
+    "type": "action"
+}

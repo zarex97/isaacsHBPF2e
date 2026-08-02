@@ -8,5 +8,10 @@
         "name": "Gold Cloths",
         "sorting": "m",
         "type": "Item"
+    },
+    {
+        "name": "Actions",
+        "sorting": "a",
+        "type": "Item"
     }
 ]

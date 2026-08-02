@@ -1,0 +1,31 @@
+{
+    "folder": "Actions",
+    "img": "systems/pf2e/icons/actions/OneAction.webp",
+    "name": "Summon or Dismiss Cloth",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "interaction",
+        "description": {
+            "value": "<p>Your Gold Cloth answers instantly.</p><p>You summon your Cloth onto your body, or dismiss it. While dismissed it is not on your person and cannot be taken from you.</p><p>The Cloth cannot be removed from you against your will by any means short of destroying it.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Cloth]</p>"
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "action"
+}
