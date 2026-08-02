@@ -32,6 +32,14 @@
             {
                 "key": "RollOption",
                 "option": "sky:zenith"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Yellow Spring Opens"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Yellow Spring Is Here"
             }
         ],
         "start": {

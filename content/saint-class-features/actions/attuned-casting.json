@@ -1,0 +1,36 @@
+{
+    "folder": "Actions",
+    "img": "systems/pf2e/icons/actions/FreeAction.webp",
+    "name": "Attuned Casting",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per day</p><hr /><p>You cast a Technique of 2 actions or fewer <strong>without spending a Focus Point</strong>.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Cloth Attunement]</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "concentrate",
+                "saint"
+            ]
+        }
+    },
+    "type": "action"
+}

@@ -1,0 +1,33 @@
+{
+    "folder": "Actions",
+    "img": "systems/pf2e/icons/actions/TwoActions.webp",
+    "name": "Bloody Rose",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 2
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per minute</p><hr /><p>60 feet, one creature. Fortitude save.</p><p><strong>Failure</strong> @Damage[10d6[poison]] damage and enfeebled 2.</p><p><strong>Critical Failure</strong> It <strong>dies</strong>.</p><p><strong>Incapacitation.</strong></p><hr /><p>Granted by the Pisces Zenith Boon.</p>"
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "death",
+                "incapacitation",
+                "poison",
+                "saint"
+            ]
+        }
+    },
+    "type": "action"
+}

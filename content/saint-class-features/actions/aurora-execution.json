@@ -1,0 +1,32 @@
+{
+    "folder": "Actions",
+    "img": "systems/pf2e/icons/actions/ThreeActions.webp",
+    "name": "Aurora Execution",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 3
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per minute</p><hr /><p>60-foot line. Each creature takes @Damage[16d6[cold]] damage with a basic Fortitude save. A creature that critically fails is <strong>frozen solid</strong> &mdash; petrified, and shatterable by any critical hit.</p><p><strong>Incapacitation.</strong></p><hr /><p>Granted by the Aquarius Zenith Boon.</p>"
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "cold",
+                "incapacitation",
+                "saint"
+            ]
+        }
+    },
+    "type": "action"
+}

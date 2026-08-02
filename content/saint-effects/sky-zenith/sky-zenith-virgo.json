@@ -34,6 +34,10 @@
                 "option": "sky:zenith"
             },
             {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Six Realms Unmade"
+            },
+            {
                 "key": "Note",
                 "selector": "unarmed-attack",
                 "text": "On a hit, the target must attempt a Will save against your Cosmo DC or lose a sense.",

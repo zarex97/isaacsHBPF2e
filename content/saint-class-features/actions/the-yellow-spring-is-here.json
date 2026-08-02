@@ -1,0 +1,33 @@
+{
+    "folder": "Actions",
+    "img": "systems/pf2e/icons/actions/ThreeActions.webp",
+    "name": "The Yellow Spring Is Here",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 3
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per Zenith day</p><hr /><p>30-foot emanation. Every enemy at half Hit Points or fewer must attempt a Fortitude save against your Cosmo DC or <strong>die</strong>.</p><p><strong>Incapacitation.</strong></p><hr /><p>Granted by the Cancer Zenith Boon.</p>"
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "death",
+                "incapacitation",
+                "saint",
+                "void"
+            ]
+        }
+    },
+    "type": "action"
+}

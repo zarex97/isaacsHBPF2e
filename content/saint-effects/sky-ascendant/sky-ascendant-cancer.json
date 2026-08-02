@@ -28,6 +28,10 @@
             {
                 "key": "RollOption",
                 "option": "sky:sign:cancer"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Yellow Spring Opens"
             }
         ],
         "start": {

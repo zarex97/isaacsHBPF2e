@@ -26,6 +26,10 @@
         },
         "rules": [
             {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Adapt"
+            },
+            {
                 "key": "RollOption",
                 "label": "Adapted to this effect",
                 "option": "adapted",
