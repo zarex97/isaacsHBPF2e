@@ -129,6 +129,20 @@ function validateItem(doc, where, errors) {
     for (const [i, rule] of (system.rules ?? []).entries()) {
         if (!rule.key) errors.push(`${where}: rules[${i}] has no key`);
         else if (!RULE_KEYS.has(rule.key)) errors.push(`${where}: rules[${i}] unknown key "${rule.key}"`);
+
+        // ActorTraits validates every added trait against pf2e's creature-trait dictionary and calls
+        // failValidation on anything unknown — so a size slug like "large" is not a quiet no-op, it is a
+        // console error at runtime that can abort the rest of the item's rules.
+        if (rule.key === "ActorTraits") {
+            for (const trait of rule.add ?? []) {
+                if (!pf2e.creatureTraits.includes(trait)) {
+                    errors.push(
+                        `${where}: rules[${i}] ActorTraits adds "${trait}", which is not a creature trait — ` +
+                            `pf2e fails validation on it at runtime`,
+                    );
+                }
+            }
+        }
     }
 
     if (doc.type === "feat") validateFeat(doc, where, errors);

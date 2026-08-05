@@ -101,11 +101,15 @@ for them:
   *are* automated; the general clause is a roll note on the damage.
 - **Scorpio's per-creature needle counts.** The sheet resource tracks the current target and roll-option
   toggles flag the 5 / 10 / 14 thresholds; several creatures at once need pen and paper.
-- **Virgo's Om** is a badged effect you apply and increment. The **blinded** condition is automated — the
-  effect grants it in memory for as long as your eyes are closed — but *spending* the stacks is manual: the
-  empowerment lands on one roll and depends on a count no rule element can read once the effect is gone.
+- **Virgo's Om** is fully automated. Closing your eyes applies **blinded**; the *Eyes Open* toggle on the
+  effect lifts it and arms the empowerment, both numbers computed off the stack counter. You delete the
+  effect after taking the empowered roll — that deletion *is* the spend.
 - **Gemini's Zenith duplicate.** Copy the token, give it two actions of Strike and Stride only, delete it at
   the top of the next turn.
+- **Anything resolved on the target's sheet** — Scorpio's needle thresholds, Virgo's sense loss, Taurus's
+  push-and-prone, Cancer's death on 0 HP. A rule element on the Saint cannot reach across to another actor.
+- **Libra's "first natural 1 each hour counts as a 10."** `SubstituteRoll` resolves before the die is known,
+  so it can't be made conditional on rolling a 1.
 - **The non-damage half of a heightening step** — extra targets, longer range, wider bursts. The sky's extra
   *dice* are automated per Technique; the rest is in each Technique's text.
 
