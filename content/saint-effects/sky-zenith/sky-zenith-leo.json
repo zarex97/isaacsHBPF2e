@@ -4,7 +4,7 @@
     "name": "Sky: Zenith (Leo)",
     "system": {
         "description": {
-            "value": "<p><strong>♌ Leo rises Exalted today.</strong> This is the one day in two hundred and sixty. For the whole day your Techniques heighten as though you were <strong>8 levels higher</strong>, and you have your Zenith Boon.</p><p>Your fists gain the <strong>agile</strong> trait and deal an additional @Damage[3d6[electricity]] damage.</p><p>You gain an <strong>extra action</strong> each turn (Strike or Stride only) <em>and</em> you are <strong>quickened 1</strong> for the same actions &mdash; two extra actions each turn.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
+            "value": "<p><strong>♌ Leo rises Exalted today.</strong> This is the one day in two hundred and sixty. For the whole day your Techniques heighten as though you were <strong>8 levels higher</strong>, and you have your Zenith Boon.</p><p>Your fists gain the <strong>agile</strong> trait and deal an additional @Damage[3d6[electricity]] damage.</p><p>You gain an <strong>extra action</strong> each turn (Strike or Stride only) <em>and</em> you are <strong>quickened 1</strong> for the same actions &mdash; <strong>two</strong> extra actions each turn.</p><p>The quickened condition is applied for you, but it only ever grants one action &mdash; track the second by hand.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
         },
         "duration": {
             "expiry": "turn-start",
@@ -32,6 +32,11 @@
             {
                 "key": "RollOption",
                 "option": "sky:zenith"
+            },
+            {
+                "inMemoryOnly": true,
+                "key": "GrantItem",
+                "uuid": "Compendium.pf2e.conditionitems.Item.nlCjDvLMf2EkV2dl"
             },
             {
                 "definition": [
