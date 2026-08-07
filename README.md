@@ -92,38 +92,106 @@ To author in Foundry's UI instead and pull changes back:
 npm run extract -- --overwrite
 ```
 
-## Known gaps
+## Automation backlog
 
-Built from **class guide v4**. A few things are rules text rather than automation, because PF2e has no hook
-for them:
+Built from **class guide v4**. Almost everything is automated; what follows is every remaining gap, grouped
+by *why* it resists automation, because the workaround for each group is likely to be the same. Treat these
+as objectives.
 
-- **Blanket "ignore all resistances"** (Seventh Sense, Capricorn's boon). Material bypass and incorporeality
-  *are* automated; the general clause is a roll note on the damage.
-- **Scorpio's per-creature needle counts.** The sheet resource tracks the current target and roll-option
-  toggles flag the 5 / 10 / 14 thresholds; several creatures at once need pen and paper.
-- **Virgo's Om** is fully automated. Closing your eyes applies **blinded**; the *Eyes Open* toggle on the
-  effect lifts it and arms the empowerment, both numbers computed off the stack counter. You delete the
-  effect after taking the empowered roll — that deletion *is* the spend.
-- **Gemini's Zenith duplicate.** Copy the token, give it two actions of Strike and Stride only, delete it at
-  the top of the next turn.
-- **Anything resolved on the target's sheet** — Scorpio's needle thresholds, Virgo's sense loss, Taurus's
-  push-and-prone, Cancer's death on 0 HP. A rule element on the Saint cannot reach across to another actor.
-- **Libra's "first natural 1 each hour counts as a 10."** `SubstituteRoll` resolves before the die is known,
-  so it can't be made conditional on rolling a 1.
-- **The non-damage half of a heightening step** — extra targets, longer range, wider bursts. The sky's extra
-  *dice* are automated per Technique; the rest is in each Technique's text.
+### 1. Cross-actor effects — a rule element can only write to its own actor
 
-One place where PF2e's model and the guide's cannot both be satisfied exactly:
+This is the largest group by far. A rule element lives on the Saint's sheet and cannot reach into a target's
+sheet to apply a condition. PF2e does not automate this for official content either — a failed save against
+*blindness* still needs someone to click the condition on.
 
-- **Techniques have no rank in v4**, but pf2e spells must. Each Technique is a focus spell whose base rank is
-  half its gain level rounded up (1, 3, 6, 8). This reproduces the guide exactly for the 1st and 3rd slots
-  and converges correctly at 20th for all four; the **2nd and 4th slots run one heightening step ahead**
-  between odd levels, because pf2e anchors focus rank to odd levels while the guide anchors to the gain
-  level. The alternative was printing the wrong number at the level the Technique is gained.
+| Where | What is manual |
+| :-- | :-- |
+| Every damaging Technique | The on-failure riders: drained, slowed, stunned, blinded, immobilized, restrained, prone, forced movement |
+| Taurus — boon and *Great Horn* | Fortitude save, then pushed 10/15 ft and knocked prone |
+| Virgo — Six Paths (Ascendant) | Will save per unarmed hit, cumulative sense loss |
+| Virgo — Zenith | Loss of all five senses in a 60-ft emanation |
+| Scorpio — needles | Enfeebled 1 at 5, blinded at 10, stunned 2 and runes suppressed at 14 |
+| Scorpio — Ascendant | 1d6 persistent bleed per needle; death at 8 needles |
+| Cancer — Ascendant | Anything you reduce to 0 HP dies |
+| Aquarius — Ascendant | Cold damage → cumulative slowed → petrified at slowed 4 |
+| Pisces — passive and aura | Reactive 1d6 poison; 4d6/8d6 and enfeebled at end of turn |
+| Capricorn — The Sharpest Sword | Severing a limb, sense, or natural attack on a critical hit |
 
-*Double Excalibur* scales from a base of zero in the guide, and a pf2e spell needs a base formula to scale
-from — so its base is `1d1`, a flat 1 point. That is a constant +1 per Strike at every level and sky state,
-and it buys full automation of both the heightening steps and the sky's bonus dice.
+**A workaround would need** a module-side hook that reads the damage/save chat message and applies
+conditions to the targeted tokens — i.e. the same territory as PF2e Workbench or Automated Animations. That
+is a scripting job in `scripts/`, not a rule-element job.
+
+### 2. Action economy the system does not model
+
+| Where | What is manual |
+| :-- | :-- |
+| Leo — Zenith | The *second* extra action. `quickened` is binary; it only ever grants one |
+| Gemini — boon, Taurus — Zenith | "Cast this Technique without spending a Focus Point once per round" |
+| Cloth Attunement, *Attuned Casting* | The once-per-day free cast — the action exists, the refund does not |
+| Gemini — Zenith | The duplicate. It is a second actor, not a modifier |
+| Libra — *The Twelve Arms* | Allies using **your** proficiency with a loaned weapon |
+
+**A workaround would need** either a chat hook that refunds a Focus Point after a flagged cast, or a
+pre-roll dialog. The duplicate probably wants a real ephemeral actor created by script.
+
+### 3. IWR bypass beyond what the damage system exposes
+
+`AdjustStrike` handles precious materials and property runes, and those *are* automated. Arbitrary bypass is
+not exposed.
+
+| Where | What is manual |
+| :-- | :-- |
+| Seventh Sense, Capricorn boon | Blanket "ignore all resistances" |
+| Aquarius — Ascendant | Cold ignores cold resistance; cold immunity counts as resistance 10 |
+| Atomic Dissolution | Treat resistance as 5 lower |
+| Capricorn — Techniques | Ignoring Hardness, and treating force effects as Hardness 0 |
+
+**A workaround would need** a damage-application hook that recomputes IWR with our overrides, since
+`DamageAlteration` has no property for "ignore the target's resistance".
+
+### 4. Things that must see the die or the outcome
+
+| Where | What is manual |
+| :-- | :-- |
+| Libra — The Balance | "The first natural 1 you roll each hour counts as a 10." `SubstituteRoll` resolves *before* the die is known, so it cannot be made conditional on rolling a 1 |
+| Virgo — Om | Which roll consumes the empowerment. The numbers are automated; nothing enforces that it applies to only one roll |
+| Everything with a per-hour or per-Zenith-day frequency | PF2e tracks per-round/turn/day cleanly; longer and bespoke periods are on the honour system |
+
+**A workaround would need** a `preCreateChatMessage` / post-roll hook that inspects the result and rewrites
+or consumes.
+
+### 5. Non-damage heightening riders
+
+Per-step **damage** and **area** growth are both automated (`heightening.damage`, `heightening.area`).
+What is left has no field in the spell schema:
+
+- Extra **targets** at specific levels (Gemini, Virgo, Aries)
+- Longer **range** per step (Gemini, Virgo, Aries, Libra)
+- Additional **Strikes** or **pillars** per step (Taurus, Leo, Scorpio, Sagittarius)
+- Wall **length** (Aries' *Crystal Wall* — a wall, not an area)
+
+**A workaround would need** an `ItemAlteration` applied per heightening step, or accepting a text note.
+
+### 6. Deliberately not automated
+
+Not gaps — these are judgement calls that should stay with the table.
+
+- **The Gold Cloth cracking** at 0 HP and its 24-hour repair
+- **Pandora Box** couriering an object across a plane
+- **Gemini's two identities**, and what *true seeing* reveals
+- **Cancer's** speaking with spirits; **Sagittarius'** naming a target he cannot see
+- **Constellation of One**, which is a legacy feat about the campaign ending
+
+## Compromises already made
+
+- **Techniques have no rank in v4**, but pf2e spells must. Each is a focus spell whose base rank is half its
+  gain level rounded up (1, 3, 6, 8). Exact for the 1st and 3rd slots, and all four converge correctly at
+  20th; the **2nd and 4th run one heightening step ahead** between odd levels, because pf2e anchors focus
+  rank to odd levels while the guide anchors to the gain level.
+- **Double Excalibur** scales from a base of zero in the guide, and a pf2e spell needs a base formula to
+  scale from — so its base is `1d1`, a flat 1 point, constant at every level and sky state.
+- **Om's save penalty** is applied as an equal bonus to your Technique DC. Same number, and the DC is the
+  side Foundry actually rolls.
 
 ## Credits
 

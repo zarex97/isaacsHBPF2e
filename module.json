@@ -2,7 +2,7 @@
     "id": "isaacs-hb-pf2e",
     "title": "Isaac's Homebrew (PF2e): The Saint",
     "description": "<p>Homebrew content for the Pathfinder Second Edition system: <strong>The Saint</strong>, a martial focus-user whose power answers to the sky. Twelve Gold Cloths with four Techniques each, rankless Techniques that heighten every 2 levels, Ascendant and Zenith boons that heighten them further, a full class feat list, and a sky tracker that decides whose day it is.</p>",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "license": "./LICENSE",
     "authors": [
         {
