@@ -3,7 +3,6 @@
         "isaacs-hb-pf2e": {
             "areaTargeting": {
                 "affects": "allies",
-                "anchor": "self",
                 "includesSelf": true
             },
             "riders": [

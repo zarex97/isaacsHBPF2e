@@ -8,69 +8,37 @@ const TOOLBELT_ID = "pf2e-toolbelt";
  *
  * Foundry v14 already does the hard part: `canvas.regions.placeRegion` shows a preview that follows the
  * cursor, rotates on the wheel, confirms on left-click and cancels on Esc, and pf2e already overrides its
- * snapping per area shape (`RegionLayerPF2e#placeRegion`). So for an ordinary placed area we call the
- * system's own `SpellPF2e#placeTemplate`, which builds the shape, the coverage highlight and the
- * `pf2e.areaShape` / `pf2e.origin` flags exactly the way the chat card's *Place a Template* button does.
- * We only add two flags of our own on the way past.
+ * snapping per area shape (`RegionLayerPF2e#placeRegion` keys off `displayMeasurements` + coverage
+ * highlighting, both of which the data below sets).
  *
- * Returns the created Region, or null if the caster backed out.
+ * It is placed with `create: false`, which returns the preview document instead of saving it. That is not
+ * an optimisation — the area is discarded a moment later either way, so nothing is lost, and it buys three
+ * things: creating a Region needs the `REGION_CREATE` permission that an ordinary player may not have,
+ * a non-GM cannot create one at all while the game is paused, and an unsaved document cannot be left
+ * behind by an error. A document that was never written also never fires `createRegion`, so the toolbelt's
+ * template popup stays out of the way without depending on it honouring a flag.
+ *
+ * Returns the aimed Region, or null if the caster backed out.
  */
 export async function placeArea(config, originToken) {
-    const { item } = config;
-
-    // `flags.pf2e-toolbelt.targetHelper.skip` is the module's own documented opt-out for third parties
-    // creating a region: without it, the toolbelt's template popup would open on top of our review dialog
-    // and ask the same question twice. `transient` marks the region ours, so cleanup never touches a
-    // region a GM placed by hand.
-    const ours = {
-        [TOOLBELT_ID]: { targetHelper: { skip: true } },
-        [MODULE_ID]: { [FLAG]: { transient: true } },
-    };
-
-    if (config.anchor === "self") {
-        return createAnchoredRegion(config, originToken, ours);
-    }
-
-    if (!config.synthetic && typeof item.placeTemplate === "function") {
-        const stamp = Hooks.on("preCreateRegion", (region) => region.updateSource({ flags: ours }));
-        try {
-            return await item.placeTemplate();
-        } finally {
-            Hooks.off("preCreateRegion", stamp);
-        }
-    }
-
     const shape = shapeFromArea(config.area, originToken, canvas.mousePosition);
-    if (!shape) return null;
-    return canvas.regions.placeRegion(regionData(config, shape, ours), {
-        create: true,
-        // Self-anchored cones and lines still rotate freely, but their origin stays in the caster's space.
-        onMove: ({ position }) => {
-            if (config.anchor !== "self" || !originToken) return;
-            position.x = originToken.center.x;
-            position.y = originToken.center.y;
-        },
-    });
-}
-
-/**
- * An area that originates from the caster has nowhere to be placed, so it is created outright rather than
- * asking for a click that can only land in one spot.
- */
-async function createAnchoredRegion(config, originToken, ours) {
-    if (!originToken) {
-        ui.notifications.warn(`${config.item.name} needs a token on the scene to originate from.`);
+    if (!shape) {
+        if (config.area.type === "emanation") {
+            ui.notifications.warn(`${config.item.name} needs a token on the scene to originate from.`);
+        }
         return null;
     }
-    const shape = shapeFromArea(config.area, originToken, originToken.center);
-    if (!shape) return null;
-    const [region] = await canvas.scene.createEmbeddedDocuments("Region", [
-        regionData(config, shape, ours),
-    ]);
-    return region ?? null;
+
+    // An emanation has nowhere to be placed: it is centred on the caster's own space, so asking for a
+    // click that can only land in one place is a click for nothing.
+    if (config.anchor === "self") {
+        return new CONFIG.Region.documentClass(regionData(config, shape), { parent: canvas.scene });
+    }
+
+    return canvas.regions.placeRegion(regionData(config, shape), { create: false });
 }
 
-function regionData(config, shape, ours) {
+function regionData(config, shape) {
     const { item } = config;
     const origin = typeof item.getOriginData === "function" ? item.getOriginData() : {};
     return {
@@ -82,7 +50,11 @@ function regionData(config, shape, ours) {
         visibility: CONST.REGION_VISIBILITY.ALWAYS,
         ownership: { [game.user.id]: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER },
         flags: {
-            ...ours,
+            // Belt and braces: nothing is created, so the toolbelt's `createRegion` hook cannot fire — but
+            // if this ever does get saved, `targetHelper.skip` is its documented third-party opt-out and
+            // stops it asking the same question a second time.
+            [TOOLBELT_ID]: { targetHelper: { skip: true } },
+            [MODULE_ID]: { [FLAG]: { transient: true } },
             pf2e: {
                 areaShape: config.area.type,
                 origin: {
@@ -137,9 +109,15 @@ export function shapeFromArea(area, originToken, point) {
     }
 }
 
-/** Remove a region this module put down. Never touches one it did not place. */
+/**
+ * Remove a region this module put down.
+ *
+ * With `create: false` there is normally nothing to remove — the aimed area was never written to the
+ * scene. This exists for the case where one somehow was, and it checks both that the document is really
+ * embedded and that the flag says it is ours, so a region a GM placed by hand is never deleted.
+ */
 export async function discardArea(region) {
-    if (!region?.parent) return;
+    if (!region?.id || !region.parent?.regions?.has(region.id)) return;
     if (region.flags?.[MODULE_ID]?.[FLAG]?.transient !== true) return;
     await region.delete();
 }
