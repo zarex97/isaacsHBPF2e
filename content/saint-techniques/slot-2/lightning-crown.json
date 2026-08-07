@@ -1,4 +1,19 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "slug": "prone",
+                        "type": "condition"
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                }
+            ]
+        }
+    },
     "folder": "2nd (L6)",
     "img": "icons/magic/lightning/bolt-strike-tan.webp",
     "name": "Lightning Crown",

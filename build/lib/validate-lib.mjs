@@ -150,11 +150,141 @@ function validateItem(doc, where, errors) {
     if (doc.type === "effect") validateEffect(doc, where, errors);
     if (doc.type === "class") validateClass(doc, where, errors);
 
+    validateAreaTargeting(doc, where, errors);
+    validateRiders(doc, where, errors);
+
     if (MUST_BE_INCAPACITATION.has(system.slug) && !(traits ?? []).includes("incapacitation")) {
         errors.push(
             `${where}: "${system.slug}" removes a creature from the fight and must carry the incapacitation trait ` +
                 `(class guide §9)`,
         );
+    }
+}
+
+/** Effect-area shapes pf2e can build a Region from (EFFECT_AREA_SHAPES in src/module/item/values.ts). */
+const AREA_SHAPES = new Set(["burst", "cone", "cube", "cylinder", "emanation", "line", "ring", "square"]);
+const AFFECTS = new Set(["all", "allies", "enemies"]);
+
+/**
+ * The area-targeting flag read by scripts/targeting.
+ *
+ * Worth validating for the same reason the trait and rule-key snapshots are: a typo here produces no error
+ * at runtime, only a Technique that quietly goes back to manual targeting — which is indistinguishable
+ * from the feature being off, and so gets diagnosed as "the module is broken".
+ */
+function validateAreaTargeting(doc, where, errors) {
+    const flag = doc.flags?.["isaacs-hb-pf2e"]?.areaTargeting;
+    if (!flag) return;
+
+    if (doc.type !== "spell") {
+        errors.push(`${where}: areaTargeting is only read on spells, not ${doc.type}`);
+        return;
+    }
+    if (flag.affects !== undefined && !AFFECTS.has(flag.affects)) {
+        errors.push(`${where}: areaTargeting.affects must be all/allies/enemies — got "${flag.affects}"`);
+    }
+    // Whether the area is aimed or centred on the caster follows from its shape, so there is nothing to
+    // author — an `anchor` in a file is someone expecting it to do something it does not do.
+    if (flag.anchor !== undefined) {
+        errors.push(`${where}: areaTargeting.anchor is derived from the area shape; remove it`);
+    }
+    if (flag.predicate !== undefined && !Array.isArray(flag.predicate)) {
+        errors.push(`${where}: areaTargeting.predicate must be an array`);
+    }
+    if (flag.maxTargets !== undefined && !(Number.isInteger(flag.maxTargets) && flag.maxTargets > 0)) {
+        errors.push(`${where}: areaTargeting.maxTargets must be a positive integer`);
+    }
+
+    // A synthetic area exists precisely because the spell has none; supplying both means one of them is
+    // being ignored, and which one is not obvious from the file.
+    const own = doc.system?.area;
+    if (flag.area && own) {
+        errors.push(`${where}: areaTargeting.area duplicates system.area — remove one`);
+    }
+    if (!flag.area && !own) {
+        errors.push(`${where}: areaTargeting needs an area — this spell has no system.area to fall back on`);
+    }
+    if (flag.area) {
+        if (!AREA_SHAPES.has(flag.area.type)) {
+            errors.push(`${where}: areaTargeting.area.type "${flag.area.type}" is not an effect-area shape`);
+        }
+        if (!(Number(flag.area.value) > 0)) {
+            errors.push(`${where}: areaTargeting.area.value must be a positive number of feet`);
+        }
+    }
+
+}
+
+const OUTCOMES = new Set(["criticalSuccess", "success", "failure", "criticalFailure"]);
+const CONDITION_SLUGS = new Set(pf2e.conditionSlugs);
+const DURATION_UNITS = new Set(["rounds", "minutes", "hours", "days", "unlimited", "encounter"]);
+const RIDER_TYPES = new Set(["condition", "effect", "prompt"]);
+
+/**
+ * The riders read by scripts/riders.
+ *
+ * A rider that never fires looks exactly like the automation being switched off, so every way of writing
+ * one wrong is checked here: an outcome that is not one of the four degrees, a condition slug pf2e does
+ * not have, a duration unit the effect schema will reject. The compendium UUID of an `effect` rider is not
+ * checked here because prepare() already fails the build on an unresolvable one.
+ */
+function validateRiders(doc, where, errors) {
+    const riders = doc.flags?.["isaacs-hb-pf2e"]?.riders;
+    if (riders === undefined) return;
+    if (!Array.isArray(riders)) {
+        errors.push(`${where}: riders must be an array`);
+        return;
+    }
+    if (doc.type !== "spell") {
+        errors.push(`${where}: riders are only read on spells, not ${doc.type}`);
+        return;
+    }
+
+    // A rider keys off a save outcome, so a Technique without a save can never fire one.
+    if (riders.length > 0 && !doc.system?.defense?.save?.statistic) {
+        errors.push(`${where}: has riders but no save for them to key off`);
+    }
+
+    for (const [i, rider] of riders.entries()) {
+        const at = `${where}: riders[${i}]`;
+        const outcomes = rider.outcomes;
+        if (!Array.isArray(outcomes) || outcomes.length === 0) {
+            errors.push(`${at} needs a non-empty outcomes array`);
+        } else {
+            for (const outcome of outcomes) {
+                if (!OUTCOMES.has(outcome)) errors.push(`${at} unknown outcome "${outcome}"`);
+            }
+        }
+
+        const apply = rider.apply;
+        if (!apply || !RIDER_TYPES.has(apply.type)) {
+            errors.push(`${at} apply.type must be condition/effect/prompt — got "${apply?.type}"`);
+            continue;
+        }
+        if (apply.type === "condition" && !CONDITION_SLUGS.has(apply.slug)) {
+            errors.push(`${at} "${apply.slug}" is not a pf2e condition slug`);
+        }
+        if (apply.type === "effect" && typeof apply.uuid !== "string") {
+            errors.push(`${at} effect riders need a uuid`);
+        }
+        if (apply.type === "prompt" && !apply.text) {
+            errors.push(`${at} prompt riders need text — it is the only thing they do`);
+        }
+        if (apply.type !== "effect" && apply.stack) {
+            errors.push(`${at} only effect riders can stack`);
+        }
+
+        if (rider.duration !== undefined) {
+            if (!DURATION_UNITS.has(rider.duration.unit)) {
+                errors.push(`${at} unknown duration unit "${rider.duration.unit}"`);
+            }
+            if (apply.type === "prompt") {
+                errors.push(`${at} a prompt has no duration; put it in the text`);
+            }
+        }
+        if (rider.predicate !== undefined && !Array.isArray(rider.predicate)) {
+            errors.push(`${at} predicate must be an array`);
+        }
     }
 }
 

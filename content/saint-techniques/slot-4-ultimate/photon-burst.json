@@ -1,4 +1,36 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "all"
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "slug": "blinded",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "slug": "dazzled",
+                        "type": "condition"
+                    },
+                    "note": "Until it receives restoration.",
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                }
+            ]
+        }
+    },
     "folder": "4th — Ultimate (L16)",
     "img": "icons/magic/light/explosion-star-large-orange-purple.webp",
     "name": "Photon Burst",

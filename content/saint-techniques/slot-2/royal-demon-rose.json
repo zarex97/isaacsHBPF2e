@@ -1,4 +1,38 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "all"
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "slug": "enfeebled",
+                        "type": "condition",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "failure",
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "slug": "stupefied",
+                        "type": "condition",
+                        "value": 2
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                }
+            ]
+        }
+    },
     "folder": "2nd (L6)",
     "img": "icons/magic/nature/rose-thorned-white.webp",
     "name": "Royal Demon Rose",

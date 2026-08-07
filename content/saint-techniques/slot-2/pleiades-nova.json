@@ -1,4 +1,15 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "area": {
+                    "type": "emanation",
+                    "value": 60
+                }
+            }
+        }
+    },
     "folder": "2nd (L6)",
     "img": "icons/magic/light/explosion-star-glow-blue.webp",
     "name": "Pleiades Nova",
