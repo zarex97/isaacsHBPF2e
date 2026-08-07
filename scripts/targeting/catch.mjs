@@ -77,9 +77,13 @@ function blocked(origin, target) {
 
 function contains(region, token) {
     if (!withinElevation(region, token)) return false;
+    const points = samplePoints(token);
     const tree = region.polygonTree;
-    if (!tree) return false;
-    return samplePoints(token).some((point) => tree.testPoint(point));
+    if (tree) return points.some((point) => tree.testPoint(point));
+    // The polygon tree is derived from the shapes and should always be there; the placeable is the
+    // fallback rather than the other way round because it depends on the region having been drawn.
+    const placeable = region.object;
+    return !!placeable && points.some((point) => placeable.testPoint(point, token.document.elevation));
 }
 
 /** Region elevation is open-ended at both ends: a null bound means "no bound", not zero. */

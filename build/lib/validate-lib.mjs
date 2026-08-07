@@ -151,6 +151,7 @@ function validateItem(doc, where, errors) {
     if (doc.type === "class") validateClass(doc, where, errors);
 
     validateAreaTargeting(doc, where, errors);
+    validateRiders(doc, where, errors);
 
     if (MUST_BE_INCAPACITATION.has(system.slug) && !(traits ?? []).includes("incapacitation")) {
         errors.push(
@@ -217,6 +218,79 @@ function validateAreaTargeting(doc, where, errors) {
     }
     if (shape === "emanation" && flag.anchor === "free") {
         errors.push(`${where}: an emanation originates from the caster; anchor cannot be "free"`);
+    }
+}
+
+const OUTCOMES = new Set(["criticalSuccess", "success", "failure", "criticalFailure"]);
+const CONDITION_SLUGS = new Set(pf2e.conditionSlugs);
+const DURATION_UNITS = new Set(["rounds", "minutes", "hours", "days", "unlimited", "encounter"]);
+const RIDER_TYPES = new Set(["condition", "effect", "prompt"]);
+
+/**
+ * The riders read by scripts/riders.
+ *
+ * A rider that never fires looks exactly like the automation being switched off, so every way of writing
+ * one wrong is checked here: an outcome that is not one of the four degrees, a condition slug pf2e does
+ * not have, a duration unit the effect schema will reject. The compendium UUID of an `effect` rider is not
+ * checked here because prepare() already fails the build on an unresolvable one.
+ */
+function validateRiders(doc, where, errors) {
+    const riders = doc.flags?.["isaacs-hb-pf2e"]?.riders;
+    if (riders === undefined) return;
+    if (!Array.isArray(riders)) {
+        errors.push(`${where}: riders must be an array`);
+        return;
+    }
+    if (doc.type !== "spell") {
+        errors.push(`${where}: riders are only read on spells, not ${doc.type}`);
+        return;
+    }
+
+    // A rider keys off a save outcome, so a Technique without a save can never fire one.
+    if (riders.length > 0 && !doc.system?.defense?.save?.statistic) {
+        errors.push(`${where}: has riders but no save for them to key off`);
+    }
+
+    for (const [i, rider] of riders.entries()) {
+        const at = `${where}: riders[${i}]`;
+        const outcomes = rider.outcomes;
+        if (!Array.isArray(outcomes) || outcomes.length === 0) {
+            errors.push(`${at} needs a non-empty outcomes array`);
+        } else {
+            for (const outcome of outcomes) {
+                if (!OUTCOMES.has(outcome)) errors.push(`${at} unknown outcome "${outcome}"`);
+            }
+        }
+
+        const apply = rider.apply;
+        if (!apply || !RIDER_TYPES.has(apply.type)) {
+            errors.push(`${at} apply.type must be condition/effect/prompt — got "${apply?.type}"`);
+            continue;
+        }
+        if (apply.type === "condition" && !CONDITION_SLUGS.has(apply.slug)) {
+            errors.push(`${at} "${apply.slug}" is not a pf2e condition slug`);
+        }
+        if (apply.type === "effect" && typeof apply.uuid !== "string") {
+            errors.push(`${at} effect riders need a uuid`);
+        }
+        if (apply.type === "prompt" && !apply.text) {
+            errors.push(`${at} prompt riders need text — it is the only thing they do`);
+        }
+        if (apply.type !== "effect" && apply.stack) {
+            errors.push(`${at} only effect riders can stack`);
+        }
+
+        if (rider.duration !== undefined) {
+            if (!DURATION_UNITS.has(rider.duration.unit)) {
+                errors.push(`${at} unknown duration unit "${rider.duration.unit}"`);
+            }
+            if (apply.type === "prompt") {
+                errors.push(`${at} a prompt has no duration; put it in the text`);
+            }
+        }
+        if (rider.predicate !== undefined && !Array.isArray(rider.predicate)) {
+            errors.push(`${at} predicate must be an array`);
+        }
     }
 }
 

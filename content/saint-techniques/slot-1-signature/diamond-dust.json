@@ -3,7 +3,24 @@
         "isaacs-hb-pf2e": {
             "areaTargeting": {
                 "affects": "all"
-            }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "slug": "slowed",
+                        "type": "condition",
+                        "value": 1
+                    },
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "failure",
+                        "criticalFailure"
+                    ]
+                }
+            ]
         }
     },
     "folder": "1st — Signature (L1)",

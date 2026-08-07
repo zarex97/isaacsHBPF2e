@@ -42,6 +42,7 @@
     "esmodules": [
         "scripts/isaacs-hb.mjs"
     ],
+    "socket": true,
     "styles": [
         "styles/sky.css",
         "styles/targeting.css"

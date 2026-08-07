@@ -13,5 +13,10 @@
         "name": "Activities",
         "sorting": "a",
         "type": "Item"
+    },
+    {
+        "name": "Riders",
+        "sorting": "a",
+        "type": "Item"
     }
 ]

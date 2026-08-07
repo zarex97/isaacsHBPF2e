@@ -4,7 +4,18 @@
             "areaTargeting": {
                 "affects": "all",
                 "requireLineOfEffect": false
-            }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "text": "Severed: a limb, a sense, or a natural attack, chosen by the Saint. No save.",
+                        "type": "prompt"
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                }
+            ]
         }
     },
     "folder": "4th — Ultimate (L16)",

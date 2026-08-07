@@ -1,4 +1,28 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "text": "Banished into folded space for 1 minute, then returns to the square it left.",
+                        "type": "prompt"
+                    },
+                    "outcomes": [
+                        "failure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "text": "Banished into folded space for 10 minutes, then returns to the square it left.",
+                        "type": "prompt"
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                }
+            ]
+        }
+    },
     "folder": "1st — Signature (L1)",
     "img": "icons/magic/movement/portal-vortex-purple.webp",
     "name": "Another Dimension",
