@@ -1,4 +1,16 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "anchor": "self",
+                "area": {
+                    "type": "emanation",
+                    "value": 60
+                }
+            }
+        }
+    },
     "folder": "4th — Ultimate (L16)",
     "img": "icons/weapons/swords/swords-crossed-gold.webp",
     "name": "Athena's Arsenal: Overdrive",

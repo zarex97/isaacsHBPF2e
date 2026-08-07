@@ -1,4 +1,16 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "allies",
+                "anchor": "self",
+                "area": {
+                    "type": "emanation",
+                    "value": 30
+                }
+            }
+        }
+    },
     "folder": "2nd (L6)",
     "img": "icons/weapons/swords/sword-guard-blue.webp",
     "name": "The Twelve Arms",

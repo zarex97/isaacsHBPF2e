@@ -1,4 +1,11 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "all"
+            }
+        }
+    },
     "folder": "1st — Signature (L1)",
     "img": "icons/magic/water/snowflake-ice-blue-white.webp",
     "name": "Diamond Dust",

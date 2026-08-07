@@ -29,13 +29,22 @@
                     "minimum": "8.3.0"
                 }
             }
+        ],
+        "recommends": [
+            {
+                "id": "pf2e-toolbelt",
+                "type": "module",
+                "manifest": "https://raw.githubusercontent.com/reonZ/pf2e-toolbelt/master/module.json",
+                "reason": "Its Target Helper turns the targets this module selects into per-target save and damage rows, which is what makes a Technique's riders reachable without clicking each sheet."
+            }
         ]
     },
     "esmodules": [
         "scripts/isaacs-hb.mjs"
     ],
     "styles": [
-        "styles/sky.css"
+        "styles/sky.css",
+        "styles/targeting.css"
     ],
     "media": [
         {

@@ -1,4 +1,11 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "all"
+            }
+        }
+    },
     "folder": "4th — Ultimate (L16)",
     "img": "icons/magic/death/skull-poison-green.webp",
     "name": "Sekishiki Tenryū Ha",

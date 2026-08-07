@@ -150,11 +150,73 @@ function validateItem(doc, where, errors) {
     if (doc.type === "effect") validateEffect(doc, where, errors);
     if (doc.type === "class") validateClass(doc, where, errors);
 
+    validateAreaTargeting(doc, where, errors);
+
     if (MUST_BE_INCAPACITATION.has(system.slug) && !(traits ?? []).includes("incapacitation")) {
         errors.push(
             `${where}: "${system.slug}" removes a creature from the fight and must carry the incapacitation trait ` +
                 `(class guide §9)`,
         );
+    }
+}
+
+/** Effect-area shapes pf2e can build a Region from (EFFECT_AREA_SHAPES in src/module/item/values.ts). */
+const AREA_SHAPES = new Set(["burst", "cone", "cube", "cylinder", "emanation", "line", "ring", "square"]);
+const AFFECTS = new Set(["all", "allies", "enemies"]);
+
+/**
+ * The area-targeting flag read by scripts/targeting.
+ *
+ * Worth validating for the same reason the trait and rule-key snapshots are: a typo here produces no error
+ * at runtime, only a Technique that quietly goes back to manual targeting — which is indistinguishable
+ * from the feature being off, and so gets diagnosed as "the module is broken".
+ */
+function validateAreaTargeting(doc, where, errors) {
+    const flag = doc.flags?.["isaacs-hb-pf2e"]?.areaTargeting;
+    if (!flag) return;
+
+    if (doc.type !== "spell") {
+        errors.push(`${where}: areaTargeting is only read on spells, not ${doc.type}`);
+        return;
+    }
+    if (flag.affects !== undefined && !AFFECTS.has(flag.affects)) {
+        errors.push(`${where}: areaTargeting.affects must be all/allies/enemies — got "${flag.affects}"`);
+    }
+    if (flag.anchor !== undefined && !["free", "self"].includes(flag.anchor)) {
+        errors.push(`${where}: areaTargeting.anchor must be "free" or "self" — got "${flag.anchor}"`);
+    }
+    if (flag.predicate !== undefined && !Array.isArray(flag.predicate)) {
+        errors.push(`${where}: areaTargeting.predicate must be an array`);
+    }
+    if (flag.maxTargets !== undefined && !(Number.isInteger(flag.maxTargets) && flag.maxTargets > 0)) {
+        errors.push(`${where}: areaTargeting.maxTargets must be a positive integer`);
+    }
+
+    // A synthetic area exists precisely because the spell has none; supplying both means one of them is
+    // being ignored, and which one is not obvious from the file.
+    const own = doc.system?.area;
+    if (flag.area && own) {
+        errors.push(`${where}: areaTargeting.area duplicates system.area — remove one`);
+    }
+    if (!flag.area && !own) {
+        errors.push(`${where}: areaTargeting needs an area — this spell has no system.area to fall back on`);
+    }
+    if (flag.area) {
+        if (!AREA_SHAPES.has(flag.area.type)) {
+            errors.push(`${where}: areaTargeting.area.type "${flag.area.type}" is not an effect-area shape`);
+        }
+        if (!(Number(flag.area.value) > 0)) {
+            errors.push(`${where}: areaTargeting.area.value must be a positive number of feet`);
+        }
+    }
+
+    // Anchoring to the caster only means anything for a shape that radiates from a point they occupy.
+    const shape = flag.area?.type ?? own?.type;
+    if (flag.anchor === "self" && !["emanation", "cone", "line", "burst", "cylinder"].includes(shape)) {
+        errors.push(`${where}: areaTargeting.anchor "self" makes no sense for a ${shape} area`);
+    }
+    if (shape === "emanation" && flag.anchor === "free") {
+        errors.push(`${where}: an emanation originates from the caster; anchor cannot be "free"`);
     }
 }
 
