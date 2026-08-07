@@ -1,4 +1,11 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "all"
+            }
+        }
+    },
     "folder": "2nd (L6)",
     "img": "icons/magic/fire/flame-burning-skull-blue.webp",
     "name": "Sekishiki Kisōen",

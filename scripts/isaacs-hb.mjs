@@ -2,9 +2,11 @@ import { Cosmo } from "./cosmo.mjs";
 import { MODULE_ID, adjacentSigns } from "./sky/signs.mjs";
 import { SkyTrackerApp } from "./sky/tracker-app.mjs";
 import { SkyTracker } from "./sky/tracker.mjs";
+import { AreaTargeting } from "./targeting/index.mjs";
 
 Hooks.once("init", () => {
     SkyTracker.registerSettings();
+    AreaTargeting.registerSettings();
     Cosmo.registerHooks();
     SkyTrackerApp.registerHooks();
 
@@ -23,9 +25,15 @@ Hooks.once("init", () => {
     module.api = {
         sky: SkyTracker,
         cosmo: Cosmo,
+        targeting: AreaTargeting,
         open: () => new SkyTrackerApp().render(true),
         adjacentSigns,
     };
+});
+
+// After `init`, so the system's document classes exist to be wrapped.
+Hooks.once("setup", () => {
+    AreaTargeting.install();
 });
 
 Hooks.once("ready", async () => {

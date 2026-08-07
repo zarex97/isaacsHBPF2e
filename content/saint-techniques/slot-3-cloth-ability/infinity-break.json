@@ -1,4 +1,12 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "all",
+                "requireLineOfEffect": false
+            }
+        }
+    },
     "folder": "3rd — Cloth Ability (L11)",
     "img": "icons/weapons/ammunition/arrow-head-glowing-yellow.webp",
     "name": "Infinity Break",

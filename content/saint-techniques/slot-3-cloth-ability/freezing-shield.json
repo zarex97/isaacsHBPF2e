@@ -1,4 +1,13 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "allies",
+                "anchor": "self",
+                "includesSelf": true
+            }
+        }
+    },
     "folder": "3rd — Cloth Ability (L11)",
     "img": "icons/magic/defensive/barrier-shield-crystal-blue.webp",
     "name": "Freezing Shield",

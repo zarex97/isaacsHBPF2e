@@ -31,6 +31,9 @@ are very nearly unstoppable.
   day Techniques heighten as though you were **+4 levels**; on a Zenith, **+8**.
 - **A handbook** journal covering the tuning curve, the heightening ladder, and the GM notes that make
   the class work.
+- **Area targeting** — a Technique with an area puts that area on the board as a Scene Region, you aim it,
+  and everything inside it that the Technique is allowed to hit becomes your target. No more clicking eight
+  tokens before a 60-foot burst.
 
 ## Using the sky tracker
 
@@ -57,6 +60,59 @@ await api.sky.set({ sign: "leo", aspect: "none" });
 await api.sky.scheduleZenith("leo", 3);
 console.log(api.sky.forecast(3));
 ```
+
+## Targeting an area
+
+Cast a Technique that has an area and the area appears on the cursor as a Foundry Region. Move it, roll the
+mouse wheel to rotate a cone or a line, left-click to set it down, or press Esc to call the whole thing off
+— **a cast you back out of costs no Focus Point**, because the placement happens before the point is spent.
+
+Once it lands, the Region catches every token whose space overlaps it, applies the Technique's own targeting
+rule, and shows you the result:
+
+- *Caught in the area* — checked and about to be targeted. Uncheck anyone you did not mean.
+- *Inside, but not targeted* — with the reason: `not an ally`, `no line of effect`, `already dead`,
+  `over the limit of 5`. A target going missing is never a mystery.
+
+Confirm and the Region disappears, those tokens are your targets, and the Technique casts normally.
+
+Areas that originate from you — *Tenpōrin'in*, *Freezing Shield*, and the Techniques whose target line reads
+"creatures within 30 feet" — skip the placement step entirely; there is only one place they can go.
+
+The rule each Technique uses is authored in its own file, in the same vocabulary as pf2e's Aura rule element:
+
+```jsonc
+"flags": { "isaacs-hb-pf2e": { "areaTargeting": {
+    "affects": "allies",       // "all" | "allies" | "enemies"
+    "includesSelf": true,      // the caster is in their own emanation
+    "anchor": "self",          // "self" pins the origin to your token; "free" is placed
+    "maxTargets": 5,           // "up to five allies"
+    "predicate": [{ "not": "target:trait:construct" }],   // any pf2e predicate
+    "area": { "type": "emanation", "value": 30 }          // only when system.area is absent
+} } }
+```
+
+`npm run validate` checks every field of it, because a typo here has no runtime symptom other than the
+Technique quietly going back to manual targeting.
+
+Two settings and one key:
+
+- **Place areas as Regions when casting** (world) — the master switch.
+- **Area targeting applies to** (world) — the Saint's Techniques only, or every spell with an area.
+- **Review targets before casting** (per player) — off targets everything caught and casts immediately.
+- Hold **Control** while casting to target by hand this once, the same key `pf2e-toolbelt` uses to skip its
+  own template popup.
+
+*Lightning Crown* is deliberately left out: "up to three 5-foot squares within 60 feet" is three areas, not
+one, and a single Region cannot express it.
+
+### With pf2e-toolbelt
+
+This pairs with [`pf2e-toolbelt`](https://github.com/reonZ/pf2e-toolbelt)'s **Target Helper**, which is
+listed as a recommended module. Targets selected here arrive on the chat card as its per-target rows, so
+each one rolls its own save from the card. The Region is flagged
+`pf2e-toolbelt.targetHelper.skip` on the way past, so the toolbelt's own template popup does not ask the
+same question a second time.
 
 ## Development
 

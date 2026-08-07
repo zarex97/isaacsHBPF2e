@@ -1,4 +1,11 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "all"
+            }
+        }
+    },
     "folder": "1st — Signature (L1)",
     "img": "icons/magic/water/vortex-water-whirlpool-blue.webp",
     "name": "Rozan Shō Ryū Ha",

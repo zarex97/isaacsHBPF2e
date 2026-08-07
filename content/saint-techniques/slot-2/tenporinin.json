@@ -1,4 +1,13 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "allies",
+                "anchor": "self",
+                "includesSelf": true
+            }
+        }
+    },
     "folder": "2nd (L6)",
     "img": "icons/magic/control/energy-stream-link-white-blue.webp",
     "name": "Tenpōrin'in",

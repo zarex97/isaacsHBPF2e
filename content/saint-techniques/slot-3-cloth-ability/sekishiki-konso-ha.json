@@ -1,4 +1,11 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "all"
+            }
+        }
+    },
     "folder": "3rd — Cloth Ability (L11)",
     "img": "icons/magic/death/skull-energy-light-purple.webp",
     "name": "Sekishiki Konsō Ha",
