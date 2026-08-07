@@ -87,12 +87,15 @@ The rule each Technique uses is authored in its own file, in the same vocabulary
 "flags": { "isaacs-hb-pf2e": { "areaTargeting": {
     "affects": "allies",       // "all" | "allies" | "enemies"
     "includesSelf": true,      // the caster is in their own emanation
-    "anchor": "self",          // "self" pins the origin to your token; "free" is placed
-    "maxTargets": 5,           // "up to five allies"
+    "maxTargets": 5,           // "up to five allies" — the extras start unchecked
+    "requireLineOfEffect": false,                         // for the ones that go through walls
     "predicate": [{ "not": "target:trait:construct" }],   // any pf2e predicate
     "area": { "type": "emanation", "value": 30 }          // only when system.area is absent
 } } }
 ```
+
+Whether the area is aimed or centred on you is not authored — it follows from the shape, because an
+emanation has only one place it can be.
 
 `npm run validate` checks every field of it, because a typo here has no runtime symptom other than the
 Technique quietly going back to manual targeting.

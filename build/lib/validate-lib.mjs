@@ -183,8 +183,10 @@ function validateAreaTargeting(doc, where, errors) {
     if (flag.affects !== undefined && !AFFECTS.has(flag.affects)) {
         errors.push(`${where}: areaTargeting.affects must be all/allies/enemies — got "${flag.affects}"`);
     }
-    if (flag.anchor !== undefined && !["free", "self"].includes(flag.anchor)) {
-        errors.push(`${where}: areaTargeting.anchor must be "free" or "self" — got "${flag.anchor}"`);
+    // Whether the area is aimed or centred on the caster follows from its shape, so there is nothing to
+    // author — an `anchor` in a file is someone expecting it to do something it does not do.
+    if (flag.anchor !== undefined) {
+        errors.push(`${where}: areaTargeting.anchor is derived from the area shape; remove it`);
     }
     if (flag.predicate !== undefined && !Array.isArray(flag.predicate)) {
         errors.push(`${where}: areaTargeting.predicate must be an array`);
@@ -211,14 +213,6 @@ function validateAreaTargeting(doc, where, errors) {
         }
     }
 
-    // Anchoring to the caster only means anything for a shape that radiates from a point they occupy.
-    const shape = flag.area?.type ?? own?.type;
-    if (flag.anchor === "self" && !["emanation", "cone", "line", "burst", "cylinder"].includes(shape)) {
-        errors.push(`${where}: areaTargeting.anchor "self" makes no sense for a ${shape} area`);
-    }
-    if (shape === "emanation" && flag.anchor === "free") {
-        errors.push(`${where}: an emanation originates from the caster; anchor cannot be "free"`);
-    }
 }
 
 const OUTCOMES = new Set(["criticalSuccess", "success", "failure", "criticalFailure"]);

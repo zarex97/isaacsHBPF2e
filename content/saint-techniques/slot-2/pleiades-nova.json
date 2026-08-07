@@ -3,7 +3,6 @@
         "isaacs-hb-pf2e": {
             "areaTargeting": {
                 "affects": "enemies",
-                "anchor": "self",
                 "area": {
                     "type": "emanation",
                     "value": 60

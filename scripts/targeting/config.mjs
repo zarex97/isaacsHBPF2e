@@ -48,8 +48,9 @@ export function configFor(item) {
         includesNeutral: flag?.includesNeutral === true,
         requireLineOfEffect: flag?.requireLineOfEffect !== false,
         predicate: Array.isArray(flag?.predicate) ? flag.predicate : [],
-        // An emanation has nowhere to go but the caster; everything else is placed unless told otherwise.
-        anchor: flag?.anchor ?? (area.type === "emanation" ? "self" : "free"),
+        // An emanation has nowhere to go but the caster and so is never placed; everything else is aimed,
+        // including a cone or a line, whose apex pf2e already snaps to the edge of a space for you.
+        anchor: area.type === "emanation" ? "self" : "free",
         maxTargets: Number(flag?.maxTargets) || 0,
     };
 }
