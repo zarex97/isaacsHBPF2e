@@ -5,7 +5,20 @@
                 "affects": "allies",
                 "anchor": "self",
                 "includesSelf": true
-            }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "slug": "slowed",
+                        "type": "condition",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "failure",
+                        "criticalFailure"
+                    ]
+                }
+            ]
         }
     },
     "folder": "3rd — Cloth Ability (L11)",

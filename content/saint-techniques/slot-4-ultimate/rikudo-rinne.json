@@ -1,4 +1,68 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "slug": "stunned",
+                        "type": "condition",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "success"
+                    ]
+                },
+                {
+                    "apply": {
+                        "text": "Its soul is cast into one of the six realms for 1 minute: stunned for the duration, its body standing empty.",
+                        "type": "prompt"
+                    },
+                    "outcomes": [
+                        "failure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "text": "Its soul is cast into one of the six realms for 10 minutes.",
+                        "type": "prompt"
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "slug": "enfeebled",
+                        "type": "condition",
+                        "value": 2
+                    },
+                    "duration": {
+                        "unit": "hours",
+                        "value": 1
+                    },
+                    "note": "On its return.",
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "slug": "stupefied",
+                        "type": "condition",
+                        "value": 2
+                    },
+                    "duration": {
+                        "unit": "hours",
+                        "value": 1
+                    },
+                    "note": "On its return.",
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                }
+            ]
+        }
+    },
     "folder": "4th — Ultimate (L16)",
     "img": "icons/magic/control/energy-stream-link-large-blue.webp",
     "name": "Rikudō Rinne",

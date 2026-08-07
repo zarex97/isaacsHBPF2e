@@ -1,4 +1,47 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "slug": "dazzled",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "failure",
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "text": "Treats all other creatures as concealed, and takes 1d6 mental damage per needle it has at the end of each of its turns, for 1 minute.",
+                        "type": "prompt"
+                    },
+                    "outcomes": [
+                        "failure",
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "slug": "confused",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                }
+            ]
+        }
+    },
     "folder": "2nd (L6)",
     "img": "icons/magic/control/hypnosis-mesmerism-eye-red.webp",
     "name": "Crimson Mirage",

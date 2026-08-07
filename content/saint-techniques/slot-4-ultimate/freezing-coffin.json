@@ -1,4 +1,42 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "slug": "slowed",
+                        "type": "condition",
+                        "value": 2
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "failure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "slug": "petrified",
+                        "type": "condition"
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "text": "Entombed in unmelting ice indefinitely: ageless and needing no air. The coffin has Hardness 30 and 120 HP, and ends only by being destroyed, by dispel magic (counteract rank 8), by a cold effect exceeding the Saint's, or by the Saint's choice.",
+                        "type": "prompt"
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                }
+            ]
+        }
+    },
     "folder": "4th — Ultimate (L16)",
     "img": "icons/magic/water/ice-crystal-white.webp",
     "name": "Freezing Coffin",

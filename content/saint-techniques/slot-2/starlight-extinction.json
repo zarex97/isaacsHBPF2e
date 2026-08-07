@@ -1,4 +1,28 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "text": "Teleported 60 feet in a direction of the Saint's choice, arriving in the nearest open space.",
+                        "type": "prompt"
+                    },
+                    "outcomes": [
+                        "failure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "text": "Teleported 250 feet in a direction of the Saint's choice, arriving in the nearest open space.",
+                        "type": "prompt"
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                }
+            ]
+        }
+    },
     "folder": "2nd (L6)",
     "img": "icons/magic/movement/portal-vortex-blue.webp",
     "name": "Starlight Extinction",

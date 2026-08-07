@@ -1,0 +1,42 @@
+{
+    "folder": "Riders",
+    "img": "icons/skills/melee/strike-dagger-blood-red.webp",
+    "name": "Effect: Scarlet Needle",
+    "system": {
+        "badge": {
+            "loop": false,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Scarlet Needle] and the other Scorpio Techniques.</p><p>The badge counts the needles currently in this creature. Scorpio's Techniques read that count: <strong>5</strong> needles is the requirement for @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Antares], and @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Crimson Mirage] deals 1d6 mental damage per needle.</p><p>At <strong>15</strong> needles the Scorpio Saint may draw them all at once. Remove this effect when the needles are removed.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

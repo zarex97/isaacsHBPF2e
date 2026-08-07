@@ -3,7 +3,28 @@
         "isaacs-hb-pf2e": {
             "areaTargeting": {
                 "affects": "all"
-            }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "text": "Dragged 30 feet toward the mouth.",
+                        "type": "prompt"
+                    },
+                    "outcomes": [
+                        "failure",
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "text": "If the creature is at half Hit Points or fewer it dies, its soul carried away.",
+                        "type": "prompt"
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                }
+            ]
         }
     },
     "folder": "4th — Ultimate (L16)",

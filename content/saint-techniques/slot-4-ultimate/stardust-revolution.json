@@ -3,7 +3,28 @@
         "isaacs-hb-pf2e": {
             "areaTargeting": {
                 "affects": "all"
-            }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "slug": "stunned",
+                        "type": "condition",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "slug": "prone",
+                        "type": "condition"
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                }
+            ]
         }
     },
     "folder": "4th — Ultimate (L16)",

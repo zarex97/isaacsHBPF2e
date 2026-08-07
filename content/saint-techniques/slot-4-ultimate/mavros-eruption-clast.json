@@ -3,7 +3,22 @@
         "isaacs-hb-pf2e": {
             "areaTargeting": {
                 "affects": "all"
-            }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "slug": "blinded",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                }
+            ]
         }
     },
     "folder": "4th — Ultimate (L16)",

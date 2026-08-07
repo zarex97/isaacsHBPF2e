@@ -1,4 +1,52 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "slug": "slowed",
+                        "type": "condition",
+                        "value": 1
+                    },
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "success"
+                    ]
+                },
+                {
+                    "apply": {
+                        "slug": "immobilized",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    },
+                    "note": "Escape DC equal to the Cosmo DC; the rings have Hardness 8 and 30 HP.",
+                    "outcomes": [
+                        "failure",
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "slug": "restrained",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                }
+            ]
+        }
+    },
     "folder": "2nd (L6)",
     "img": "icons/magic/water/ice-crystal-white-blue.webp",
     "name": "Koliço",
