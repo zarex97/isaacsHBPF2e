@@ -1,4 +1,43 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "all"
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "slug": "prone",
+                        "type": "condition"
+                    },
+                    "outcomes": [
+                        "failure",
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "text": "Pushed to the end of the line.",
+                        "type": "prompt"
+                    },
+                    "outcomes": [
+                        "failure",
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "slug": "stunned",
+                        "type": "condition",
+                        "value": 2
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                }
+            ]
+        }
+    },
     "folder": "4th — Ultimate (L16)",
     "img": "icons/creatures/abilities/bull-horns-gold.webp",
     "name": "Titan's Break: The Golden Horn",

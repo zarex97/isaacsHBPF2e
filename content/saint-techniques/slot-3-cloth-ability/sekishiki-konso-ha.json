@@ -1,4 +1,33 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "all"
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "slug": "slowed",
+                        "type": "condition",
+                        "value": 1
+                    },
+                    "note": "Undead and spirits only.",
+                    "outcomes": [
+                        "failure",
+                        "criticalFailure"
+                    ],
+                    "predicate": [
+                        {
+                            "or": [
+                                "target:trait:undead",
+                                "target:trait:spirit"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    },
     "folder": "3rd — Cloth Ability (L11)",
     "img": "icons/magic/death/skull-energy-light-purple.webp",
     "name": "Sekishiki Konsō Ha",

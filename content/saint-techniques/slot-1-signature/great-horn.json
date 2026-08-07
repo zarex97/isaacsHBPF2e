@@ -1,4 +1,33 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "all"
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "slug": "prone",
+                        "type": "condition"
+                    },
+                    "outcomes": [
+                        "failure",
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "text": "Pushed 15 feet away from the Saint.",
+                        "type": "prompt"
+                    },
+                    "outcomes": [
+                        "failure",
+                        "criticalFailure"
+                    ]
+                }
+            ]
+        }
+    },
     "folder": "1st — Signature (L1)",
     "img": "icons/creatures/abilities/bull-horns-brown.webp",
     "name": "Great Horn",

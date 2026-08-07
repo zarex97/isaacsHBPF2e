@@ -1,4 +1,42 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "all"
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "slug": "restrained",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "expiry": "turn-end",
+                        "unit": "rounds",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "success"
+                    ]
+                },
+                {
+                    "apply": {
+                        "slug": "immobilized",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    },
+                    "note": "Escape DC equal to the Cosmo DC. A creature that Escapes shatters its portion of the net.",
+                    "outcomes": [
+                        "failure",
+                        "criticalFailure"
+                    ]
+                }
+            ]
+        }
+    },
     "folder": "3rd — Cloth Ability (L11)",
     "img": "icons/magic/defensive/barrier-shield-crystal-blue.webp",
     "name": "Crystal Net",

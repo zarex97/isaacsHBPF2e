@@ -31,6 +31,11 @@ are very nearly unstoppable.
   day Techniques heighten as though you were **+4 levels**; on a Zenith, **+8**.
 - **A handbook** journal covering the tuning curve, the heightening ladder, and the GM notes that make
   the class work.
+- **Area targeting** — a Technique with an area puts that area on the board as a Scene Region, you aim it,
+  and everything inside it that the Technique is allowed to hit becomes your target. No more clicking eight
+  tokens before a 60-foot burst.
+- **Riders applied automatically** — a target that fails its save gets the slowed, stunned, blinded or
+  drained the Technique says it gets, on its own sheet, without anyone clicking a condition on.
 
 ## Using the sky tracker
 
@@ -57,6 +62,99 @@ await api.sky.set({ sign: "leo", aspect: "none" });
 await api.sky.scheduleZenith("leo", 3);
 console.log(api.sky.forecast(3));
 ```
+
+## Targeting an area
+
+Cast a Technique that has an area and the area appears on the cursor as a Foundry Region. Move it, roll the
+mouse wheel to rotate a cone or a line, left-click to set it down, or press Esc to call the whole thing off
+— **a cast you back out of costs no Focus Point**, because the placement happens before the point is spent.
+
+Once it lands, the Region catches every token whose space overlaps it, applies the Technique's own targeting
+rule, and shows you the result:
+
+- *Caught in the area* — checked and about to be targeted. Uncheck anyone you did not mean.
+- *Inside, but not targeted* — with the reason: `not an ally`, `no line of effect`, `already dead`,
+  `over the limit of 5`. A target going missing is never a mystery.
+
+Confirm and the Region disappears, those tokens are your targets, and the Technique casts normally.
+
+Areas that originate from you — *Tenpōrin'in*, *Freezing Shield*, and the Techniques whose target line reads
+"creatures within 30 feet" — skip the placement step entirely; there is only one place they can go.
+
+The rule each Technique uses is authored in its own file, in the same vocabulary as pf2e's Aura rule element:
+
+```jsonc
+"flags": { "isaacs-hb-pf2e": { "areaTargeting": {
+    "affects": "allies",       // "all" | "allies" | "enemies"
+    "includesSelf": true,      // the caster is in their own emanation
+    "maxTargets": 5,           // "up to five allies" — the extras start unchecked
+    "requireLineOfEffect": false,                         // for the ones that go through walls
+    "predicate": [{ "not": "target:trait:construct" }],   // any pf2e predicate
+    "area": { "type": "emanation", "value": 30 }          // only when system.area is absent
+} } }
+```
+
+Whether the area is aimed or centred on you is not authored — it follows from the shape, because an
+emanation has only one place it can be.
+
+`npm run validate` checks every field of it, because a typo here has no runtime symptom other than the
+Technique quietly going back to manual targeting.
+
+Two settings and one key:
+
+- **Place areas as Regions when casting** (world) — the master switch.
+- **Area targeting applies to** (world) — the Saint's Techniques only, or every spell with an area.
+- **Review targets before casting** (per player) — off targets everything caught and casts immediately.
+- Hold **Control** while casting to target by hand this once, the same key `pf2e-toolbelt` uses to skip its
+  own template popup.
+
+*Lightning Crown* is deliberately left out: "up to three 5-foot squares within 60 feet" is three areas, not
+one, and a single Region cannot express it.
+
+## Riders on a failed save
+
+Once targets exist, the other half follows: when a target rolls its save from the chat card, the conditions
+the Technique inflicts on that outcome are applied to it. *Diamond Dust* slows what fails, *Tenma Kōfuku*
+stuns 1 on a failure and 3 on a critical failure, *Scarlet Needle* adds a needle to the counter on the
+target's sheet.
+
+A rider is authored on the Technique next to its targeting rule:
+
+```jsonc
+"riders": [
+    { "outcomes": ["failure", "criticalFailure"],
+      "apply": { "type": "condition", "slug": "slowed", "value": 1 },
+      "duration": { "unit": "rounds", "value": 1 } },
+
+    { "outcomes": ["failure"],
+      "apply": { "type": "effect", "uuid": "Compendium.…Item.Effect: Scarlet Needle", "stack": true } },
+
+    { "outcomes": ["failure"],
+      "apply": { "type": "prompt", "text": "Pushed 15 feet away from the Saint." } }
+]
+```
+
+- **condition** with a `duration` becomes a generated effect granting that condition, the way pf2e ships its
+  own timed conditions — so it expires on its own instead of sitting on the sheet until someone notices.
+  Without a duration it is applied as a plain condition for the table to clear.
+- **effect** applies an authored item from the packs. `stack: true` walks a counter badge up instead of
+  adding a second icon, which is how Scorpio's needles are counted.
+- **prompt** whispers the GM. Forced movement, death and "choose a sense" live here: automating half of a
+  rider and being honest about the other half beats guessing which 15 feet.
+
+Rerolls are handled: changing the degree of success removes the riders applied for the old one and applies
+the new set, and only ever removes what this module created.
+
+This needs a **GM online**, because a player cannot write to a monster's sheet. If none is, the caster is
+told what would have been applied. Turn the whole thing off with **Apply Technique riders automatically**.
+
+### With pf2e-toolbelt
+
+Both halves pair with [`pf2e-toolbelt`](https://github.com/reonZ/pf2e-toolbelt)'s **Target Helper**, which
+is listed as a recommended module. Targets selected here arrive on the chat card as its per-target rows, so
+each one rolls its own save from the card — and each of those rolls is what the riders key off. The Region
+is flagged `pf2e-toolbelt.targetHelper.skip` on the way past, so the toolbelt's own template popup does not
+ask the same question a second time.
 
 ## Development
 
@@ -98,28 +196,34 @@ Built from **class guide v4**. Almost everything is automated; what follows is e
 by *why* it resists automation, because the workaround for each group is likely to be the same. Treat these
 as objectives.
 
-### 1. Cross-actor effects — a rule element can only write to its own actor
+### 1. Cross-actor effects — mostly solved
 
-This is the largest group by far. A rule element lives on the Saint's sheet and cannot reach into a target's
-sheet to apply a condition. PF2e does not automate this for official content either — a failed save against
-*blindness* still needs someone to click the condition on.
+**This was the largest group, and the save-driven half of it is now automated.** A rule element still
+cannot reach another actor's sheet — that has not changed and will not. What changed is that the rider no
+longer has to come from a rule element: `scripts/riders/` listens for `pf2e-toolbelt.rollSave`, works out
+which riders that degree of success earns, and has a GM apply them to the target.
 
-| Where | What is manual |
-| :-- | :-- |
-| Every damaging Technique | The on-failure riders: drained, slowed, stunned, blinded, immobilized, restrained, prone, forced movement |
-| Taurus — boon and *Great Horn* | Fortitude save, then pushed 10/15 ft and knocked prone |
-| Virgo — Six Paths (Ascendant) | Will save per unarmed hit, cumulative sense loss |
-| Virgo — Zenith | Loss of all five senses in a 60-ft emanation |
-| Scorpio — needles | Enfeebled 1 at 5, blinded at 10, stunned 2 and runes suppressed at 14 |
-| Scorpio — Ascendant | 1d6 persistent bleed per needle; death at 8 needles |
-| Cancer — Ascendant | Anything you reduce to 0 HP dies |
-| Aquarius — Ascendant | Cold damage → cumulative slowed → petrified at slowed 4 |
-| Pisces — passive and aura | Reactive 1d6 poison; 4d6/8d6 and enfeebled at end of turn |
-| Capricorn — The Sharpest Sword | Severing a limb, sense, or natural attack on a critical hit |
+Twenty-six Techniques now carry riders. A condition with a duration is wrapped in a generated effect the way
+pf2e wraps its own timed conditions, so *slowed 1 for 1 round* expires on its own. A reroll that changes the
+degree of success takes the old riders back off and applies the new ones — and only ever removes what this
+module put there.
 
-**A workaround would need** a module-side hook that reads the damage/save chat message and applies
-conditions to the targeted tokens — i.e. the same territory as PF2e Workbench or Automated Animations. That
-is a scripting job in `scripts/`, not a rule-element job.
+Requires **pf2e-toolbelt**'s Target Helper, and a GM online. With no GM, the caster is told what would have
+been applied rather than being left to assume it was.
+
+What remains manual, and why:
+
+| Where | What is manual | Why |
+| :-- | :-- | :-- |
+| Forced movement | Pushed 15 ft, dragged 30 ft, launched 30 ft up, teleported 60/250 ft | *Which* 15 feet depends on walls, allies and facing. Whispered to the GM instead of guessed |
+| Outright death | Antares, *Royal Funeral*, Cancer's Ascendant, *Sekishiki Tenryū Ha* on a crit | A campaign decision, not a condition |
+| Choice riders | *Tenbu Hōrin*'s sense loss, *The Sharpest Sword*'s severing | The Saint chooses which sense or limb |
+| Strike-based riders | Virgo's Six Paths, Scorpio's Ascendant bleed, *Rozan Ryū Hi Shō* on a crit | These key off a Strike's outcome, not a save; the engine is save-driven |
+| Passive and aura riders | Pisces' reactive poison, Aquarius' cumulative slowed → petrified | These fire on the *target's* turn, with no message to hang off |
+
+**The remaining gap** is a strike-outcome equivalent of the save hook — `pf2e.damageRoll` plus the target's
+degree of success — which would close the Strike-based row. The aura rows want a real Aura rule element with
+`affects`, which pf2e already has; they are a content job rather than a scripting one.
 
 ### 2. Action economy the system does not model
 

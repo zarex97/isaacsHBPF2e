@@ -1,4 +1,32 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "slug": "paralyzed",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "failure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "text": "It dies — the scarlet star at the Scorpion's heart has found its own.",
+                        "type": "prompt"
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                }
+            ]
+        }
+    },
     "folder": "4th — Ultimate (L16)",
     "img": "icons/skills/wounds/injury-pain-body-red.webp",
     "name": "Antares",

@@ -1,4 +1,15 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "area": {
+                    "type": "emanation",
+                    "value": 30
+                }
+            }
+        }
+    },
     "folder": "3rd — Cloth Ability (L11)",
     "img": "icons/magic/lightning/bolt-strike-forked-blue-white.webp",
     "name": "Lightning Plasma",
