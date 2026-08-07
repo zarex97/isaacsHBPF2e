@@ -43,10 +43,10 @@
                 "selector": "unarmed-damage"
             },
             {
-                "add": [
-                    "large"
-                ],
-                "key": "ActorTraits"
+                "key": "Note",
+                "selector": "athletics",
+                "text": "You count as one size larger whenever that benefits you — Athletics maneuvers, being moved, and anything else the GM judges size-dependent.",
+                "title": "The Great Horn"
             },
             {
                 "key": "TempHP",

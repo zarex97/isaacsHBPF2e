@@ -28,6 +28,16 @@
             {
                 "key": "RollOption",
                 "option": "sky:sign:gemini"
+            },
+            {
+                "itemType": "spell",
+                "key": "ItemAlteration",
+                "mode": "add",
+                "predicate": [
+                    "item:slug:galaxian-explosion"
+                ],
+                "property": "area-size",
+                "value": 20
             }
         ],
         "start": {
