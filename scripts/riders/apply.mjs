@@ -128,6 +128,8 @@ async function applyOne(rider, context) {
             return applySave(rider, context);
         case "damage":
             return applyDamageRider(rider, context);
+        case "death":
+            return applyDeath(rider, context);
         case "persistent-damage":
             return applyPersistent(rider, context);
         case "effect":
@@ -248,6 +250,7 @@ async function applyEffect(rider, context) {
         }
     }
 
+    applySubstitutions(source, rider.apply.substitutions, context);
     source._stats = foundry.utils.mergeObject(source._stats ?? {}, { compendiumSource: uuid });
     source.system.start = startData();
     if (rider.duration) source.system.duration = durationData(rider.duration);
@@ -318,6 +321,38 @@ async function applyDamageRider(rider, context) {
         { rollMode: game.settings.get("core", "rollMode") },
     );
     await context.actor.applyDamage({ damage: roll, token: context.target });
+}
+
+/**
+ * "Or die."
+ *
+ * Everything else in this module treats outright death as a prompt, because whether a boss dies is a
+ * table's call. A once-per-day Zenith capstone that says *or die* deserves better than a whisper — but
+ * ending a player character without asking is not something a module should do on its own initiative. So
+ * the setting draws the line where the stakes change: monsters die, player characters get asked.
+ *
+ * Reducing to 0 Hit Points rather than deleting anything: pf2e turns that into dying for a character, and
+ * into a corpse for an NPC, which is what the rest of the system already knows how to handle.
+ */
+async function applyDeath(rider, context) {
+    const mode = game.settings.get(MODULE_ID, "automateDeath");
+    const playerOwned = context.actor.hasPlayerOwner;
+
+    if (mode === "off" || (mode === "npcs" && playerOwned)) {
+        context.prompts.push(rider.apply.text ?? "It dies.");
+        return;
+    }
+
+    const hp = context.actor.hitPoints;
+    if (!hp || hp.value <= 0) return;
+    await context.actor.update({ "system.attributes.hp.value": 0 });
+    await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: context.originActor }),
+        flavor: context.item?.name ?? context.originActor?.name ?? "Rider",
+        content: `<p><strong>${context.actor.name}</strong> is reduced to 0 Hit Points — ${
+            rider.apply.text ?? "it dies."
+        }</p>`,
+    });
 }
 
 /**
@@ -424,6 +459,34 @@ async function resolveContext(payload) {
     const messageItem = message?.actor && message.actor === originActor ? itemFor(message) : null;
 
     return { message, item, messageItem, originActor, originToken, target };
+}
+
+/**
+ * Write numbers from the origin into the effect before it is created.
+ *
+ * *The Twelve Arms* loans a weapon to an ally and lets them use **the Saint's** proficiency with it. pf2e
+ * has exactly the rule element for that — `MartialProficiency`, with a `definition` predicate naming the
+ * weapons and a rank — but the rank has to be the Saint's, and a resolvable value on the ally's effect
+ * resolves `@actor` against the ally. So the number is baked in here, at hand-out time, which is also the
+ * only moment it is knowable.
+ */
+function applySubstitutions(source, substitutions, context) {
+    for (const [path, expression] of Object.entries(substitutions ?? {})) {
+        const value = resolveFromOrigin(expression, context);
+        if (value === null) {
+            console.warn(`Isaac's Homebrew | could not resolve "${expression}" for ${path}`);
+            continue;
+        }
+        foundry.utils.setProperty(source, path, value);
+    }
+}
+
+function resolveFromOrigin(expression, { originActor }) {
+    if (typeof expression === "number") return expression;
+    const match = /^origin\.statistic\.([\w-]+)\.rank$/.exec(String(expression));
+    if (match) return originActor?.getStatistic?.(match[1])?.rank ?? null;
+    if (expression === "origin.level") return originActor?.level ?? null;
+    return null;
 }
 
 function effectSource(label, rules, rider, context) {

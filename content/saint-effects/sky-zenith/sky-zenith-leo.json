@@ -1,4 +1,17 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "text": "Leo Zenith: two extra actions this turn — Strike or Stride only. pf2e tracks no action pool, so this is a reminder, not a counter.",
+                        "type": "prompt"
+                    },
+                    "event": "turn-start"
+                }
+            ]
+        }
+    },
     "folder": "Sky: Zenith",
     "img": "icons/magic/lightning/bolt-strike-forked-blue.webp",
     "name": "Sky: Zenith (Leo)",

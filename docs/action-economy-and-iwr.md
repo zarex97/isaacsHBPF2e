@@ -1,6 +1,7 @@
 # Automating §2, §3, and the three parked Zeniths
 
-*Design note. Nothing here is built yet.*
+*Design note. **Built** — see `scripts/riders/bypass.mjs`, `scripts/economy/`, and README §2 and §3. One
+thing was found to be different from the plan once the code met the system, marked **[changed]** below.*
 
 Backlog [§2 (action economy)](../README.md#2-action-economy-the-system-does-not-model) and
 [§3 (IWR bypass)](../README.md#3-iwr-bypass-beyond-what-the-damage-system-exposes), plus the three Zenith
@@ -11,6 +12,14 @@ Ten rows. Eight are fully automatable, and most of them are smaller than the bac
 Two are not, and both are argued out at the end rather than waved at.
 
 ## Three findings that shrink the work
+
+**[changed] pf2e's `max` on an ignored resistance is not honoured.** The plan proposed *Atomic
+Dissolution*'s "treat resistance as 5 lower" as `resistance.ignore` with `max: 5`. `IgnoredResistance`
+does carry a `max`, and its doc comment promises "ignore up to a maximum" — but `applyIWR` only ever reads
+it as a display value, and an ignored resistance is dropped whole (`iwr.ts:210` filters on the boolean).
+A partial reduction therefore lowers the target's resistances for the length of one application instead,
+next to the Hardness shadow. The test harness pins the distinction, because the two spellings look
+identical in the JSON.
 
 **1. `roll.options.bypass` already exists.** The backlog says *"`DamageAlteration` has no property for
 'ignore the target's resistance'"*. That is true of the rule element and false of the damage roll. pf2e's
@@ -26,10 +35,10 @@ interface DowngradedImmunity { type: ImmunityType; resistence: number }  // sic
 interface IgnoredResistance  { type: ResistanceType; max: number }       // max may be Infinity
 ```
 
-Every row of §3 maps onto that structure exactly — including *"cold immunity counts as resistance 10"*,
-which is `immunity.downgrade`, and *"treat resistance as 5 lower"*, which is `resistance.ignore` with
-`max: 5`. Property runes are the only thing that populates it today (`damage/weapon.ts:212`); nothing stops
-us adding to it.
+Three of the four rows map onto that structure exactly, including *"cold immunity counts as resistance
+10"*, which is `immunity.downgrade`. The fourth, *"treat resistance as 5 lower"*, does not — see the
+`[changed]` note above. Property runes are the only thing that populates it today
+(`damage/weapon.ts:212`); nothing stops us adding to it.
 
 **2. pf2e already tracks and resets frequencies.** `system.frequency = { max, per, value }` accepts
 `turn`, `round`, `PT1M`, `day` and more, the system decrements it when an action is posted
@@ -89,7 +98,7 @@ In `scripts/riders/sources.mjs`, before calling through to the original `applyDa
 | :-- | :-- |
 | Seventh Sense, Capricorn boon | `resistance: all/∞` + `immunity: physical/ignore` + `hardness: ignore` |
 | Aquarius — Ascendant | `resistance: cold/∞` + `immunity: cold → downgrade 10` |
-| *Atomic Dissolution* | `resistance: all/max 5` |
+| *Atomic Dissolution* | `resistance: all/max 5` — applied by lowering the target, not through `bypass` |
 | Capricorn — Techniques (Hardness) | `hardness: "ignore"` |
 
 ## Hardness
@@ -307,4 +316,6 @@ the proof), hardness shadowing, and token creation for the duplicate.
 ---
 
 Every API named here was read from the pf2e 8.4 source and the Foundry v14 type definitions in the
-`pf2e_fork` checkout, at the paths given. Nothing here has been built.
+`pf2e_fork` checkout, at the paths given. The bypass merge and the ladders are covered by
+`npm run test:riders`; the handshake with `applyIWR`, the Hardness shadow and token creation for the
+duplicate still need a running world.

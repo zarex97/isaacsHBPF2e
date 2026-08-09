@@ -1,4 +1,17 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "bypass": [
+                {
+                    "hardness": "ignore",
+                    "resistance": {
+                        "max": 5,
+                        "types": "all"
+                    }
+                }
+            ]
+        }
+    },
     "folder": "Level 16",
     "img": "icons/magic/water/snowflake-ice-purple-white.webp",
     "name": "Atomic Dissolution",
