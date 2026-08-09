@@ -1,3 +1,4 @@
+import { Duplicate } from "../economy/duplicate.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 import { catchTokens } from "./catch.mjs";
 import { configFor, describe, originTokenFor } from "./config.mjs";
@@ -84,6 +85,35 @@ export const AreaTargeting = {
             if (!(await AreaTargeting.run(spell, options))) return;
             return original.call(this, spell, options);
         };
+
+        AreaTargeting.installForActions();
+    },
+
+    /**
+     * The same flow for an ability that is not a spell.
+     *
+     * The Zenith activities are action items — a 60-foot emanation and a 60-foot line among them — and
+     * actions never pass through `cast`. `toMessage` is where they reach the table instead, and returning
+     * without calling through is how a cancelled placement stops one, exactly as bailing before `cast`
+     * stops a Technique.
+     */
+    installForActions() {
+        let proto = CONFIG.PF2E?.Item?.documentClasses?.action?.prototype;
+        while (proto && !Object.hasOwn(proto, "toMessage")) proto = Object.getPrototypeOf(proto);
+        if (!proto) {
+            console.warn("Isaac's Homebrew | could not find ItemPF2e#toMessage; actions will not aim.");
+            return;
+        }
+
+        const original = proto.toMessage;
+        proto.toMessage = async function (event, options = {}) {
+            // Spells reach the table through `cast`, which has already aimed them; anything without a
+            // targeting rule is none of our business. Both checks keep this off the hot path.
+            if (this.type !== "spell" && configFor(this) && !(await AreaTargeting.run(this, {}))) {
+                return undefined;
+            }
+            return original.call(this, event, options);
+        };
     },
 
     /**
@@ -94,6 +124,13 @@ export const AreaTargeting = {
      * placement or the review returns false.
      */
     async run(spell, options = {}) {
+        // Gemini's duplicate has the Saint's statistics but none of their Techniques. This is the choke
+        // point every cast passes through, so it is the honest place to say no.
+        if (Duplicate.isDuplicate(spell?.actor)) {
+            ui.notifications.warn(`${spell.actor.name} is a duplicate: no Techniques, no Focus Points.`);
+            return false;
+        }
+
         const cast = variantFor(spell, options);
         const config = configFor(cast);
         if (!config) return true;

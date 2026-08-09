@@ -1,4 +1,6 @@
 import { Cosmo } from "./cosmo.mjs";
+import { Duplicate } from "./economy/duplicate.mjs";
+import { FreeCast } from "./economy/free-cast.mjs";
 import { Riders } from "./riders/index.mjs";
 import { MODULE_ID, adjacentSigns } from "./sky/signs.mjs";
 import { SkyTrackerApp } from "./sky/tracker-app.mjs";
@@ -9,7 +11,9 @@ Hooks.once("init", () => {
     SkyTracker.registerSettings();
     AreaTargeting.registerSettings();
     Riders.registerSettings();
+    FreeCast.registerSettings();
     Cosmo.registerHooks();
+    Duplicate.registerHooks();
     SkyTrackerApp.registerHooks();
 
     game.settings.registerMenu(MODULE_ID, "skyTrackerMenu", {
@@ -29,6 +33,8 @@ Hooks.once("init", () => {
         cosmo: Cosmo,
         targeting: AreaTargeting,
         riders: Riders,
+        freeCast: FreeCast,
+        duplicate: Duplicate,
         open: () => new SkyTrackerApp().render(true),
         adjacentSigns,
     };
@@ -38,6 +44,7 @@ Hooks.once("init", () => {
 // spellcasting entry's `cast`, and the rider sources wrap `applyDamage`.
 Hooks.once("setup", () => {
     AreaTargeting.install();
+    FreeCast.install();
     Riders.registerHooks();
 });
 

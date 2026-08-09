@@ -1,4 +1,40 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "area": {
+                    "type": "emanation",
+                    "value": 30
+                }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "dc": "cosmo",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "text": "the Yellow Spring takes it.",
+                                    "type": "death"
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            }
+                        ],
+                        "statistic": "fortitude",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        "rider:target:hp-half-or-less"
+                    ]
+                }
+            ]
+        }
+    },
     "folder": "Actions",
     "img": "systems/pf2e/icons/actions/ThreeActions.webp",
     "name": "The Yellow Spring Is Here",
@@ -12,6 +48,11 @@
         "category": "offensive",
         "description": {
             "value": "<p><strong>Frequency</strong> once per Zenith day</p><hr /><p>30-foot emanation. Every enemy at half Hit Points or fewer must attempt a Fortitude save against your Cosmo DC or <strong>die</strong>.</p><p><strong>Incapacitation.</strong></p><hr /><p>Granted by the Cancer Zenith Boon.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
         },
         "publication": {
             "license": "ORC",
