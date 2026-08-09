@@ -152,6 +152,8 @@ function validateItem(doc, where, errors) {
 
     validateAreaTargeting(doc, where, errors);
     validateRiders(doc, where, errors);
+    validateBypass(doc, where, errors);
+    validateFreeCast(doc, where, errors);
 
     if (MUST_BE_INCAPACITATION.has(system.slug) && !(traits ?? []).includes("incapacitation")) {
         errors.push(
@@ -176,8 +178,9 @@ function validateAreaTargeting(doc, where, errors) {
     const flag = doc.flags?.["isaacs-hb-pf2e"]?.areaTargeting;
     if (!flag) return;
 
-    if (doc.type !== "spell") {
-        errors.push(`${where}: areaTargeting is only read on spells, not ${doc.type}`);
+    // Spells aim through `cast`; actions aim through `toMessage`. Nothing else reaches either wrapper.
+    if (!["spell", "action"].includes(doc.type)) {
+        errors.push(`${where}: areaTargeting is only read on spells and actions, not ${doc.type}`);
         return;
     }
     if (flag.affects !== undefined && !AFFECTS.has(flag.affects)) {
@@ -219,11 +222,14 @@ const OUTCOMES = new Set(["criticalSuccess", "success", "failure", "criticalFail
 const CONDITION_SLUGS = new Set(pf2e.conditionSlugs);
 const DURATION_UNITS = new Set(["rounds", "minutes", "hours", "days", "unlimited", "encounter"]);
 const RIDER_TYPES = new Set([
-    "condition", "effect", "prompt", "choice", "save", "damage", "persistent-damage",
+    "condition", "effect", "prompt", "choice", "save", "damage", "persistent-damage", "death",
 ]);
 const RIDER_EVENTS = new Set([
-    "save-rolled", "strike-resolved", "strike-received", "damage-applied", "turn-end", "turn-start",
+    "save-rolled", "strike-resolved", "strike-received", "action-used", "damage-applied",
+    "turn-end", "turn-start",
 ]);
+const RESISTANCE_TYPES = new Set([...pf2e.damageTypes, "all-damage", "physical", "precision", "critical-hits"]);
+const IMMUNITY_TYPES = RESISTANCE_TYPES;
 const SAVE_STATISTICS = new Set(["fortitude", "reflex", "will"]);
 const DICE_FORMULA = /^\d*d\d+$/;
 
@@ -235,6 +241,87 @@ const DICE_FORMULA = /^\d*d\d+$/;
  * not have, a duration unit the effect schema will reject. The compendium UUID of an `effect` rider is not
  * checked here because prepare() already fails the build on an unresolvable one.
  */
+/**
+ * The IWR-bypass flag read by scripts/riders/bypass.mjs.
+ *
+ * The split between a total ignore and a partial reduction is load-bearing and easy to get wrong: pf2e's
+ * own `max` on an ignored resistance is not honoured by `applyIWR`, so a partial reduction is applied by
+ * lowering the target's resistances instead. Writing `max` alongside a type list that says "all" is fine;
+ * writing it and expecting it to reach `bypass` is not, and the difference is invisible at the table.
+ */
+function validateBypass(doc, where, errors) {
+    const entries = doc.flags?.["isaacs-hb-pf2e"]?.bypass;
+    if (entries === undefined) return;
+    if (!Array.isArray(entries)) {
+        errors.push(`${where}: bypass must be an array`);
+        return;
+    }
+
+    for (const [i, entry] of entries.entries()) {
+        const at = `${where}: bypass[${i}]`;
+        if (entry.predicate !== undefined && !Array.isArray(entry.predicate)) {
+            errors.push(`${at} predicate must be an array`);
+        }
+        if (!entry.resistance && !entry.immunity && !entry.hardness) {
+            errors.push(`${at} does nothing — give it a resistance, an immunity or a hardness`);
+        }
+
+        for (const [key, dictionary] of [["resistance", RESISTANCE_TYPES], ["immunity", IMMUNITY_TYPES]]) {
+            const block = entry[key];
+            if (block === undefined) continue;
+            if (block.types !== "all" && !Array.isArray(block.types)) {
+                errors.push(`${at} ${key}.types must be "all" or an array of types`);
+            } else if (Array.isArray(block.types)) {
+                for (const type of block.types) {
+                    if (!dictionary.has(type)) errors.push(`${at} "${type}" is not a pf2e ${key} type`);
+                }
+            }
+        }
+
+        const resistance = entry.resistance;
+        if (resistance && resistance.max !== undefined && resistance.max !== null) {
+            if (!(Number.isInteger(resistance.max) && resistance.max > 0)) {
+                errors.push(`${at} resistance.max must be null (ignore entirely) or a positive integer`);
+            }
+        }
+
+        const immunity = entry.immunity;
+        if (immunity) {
+            if (!["ignore", "downgrade"].includes(immunity.mode)) {
+                errors.push(`${at} immunity.mode must be "ignore" or "downgrade" — got "${immunity.mode}"`);
+            }
+            if (immunity.mode === "downgrade" && !(Number(immunity.resistance) > 0)) {
+                errors.push(`${at} a downgraded immunity needs the resistance it becomes`);
+            }
+        }
+
+        if (entry.hardness !== undefined && entry.hardness !== "ignore") {
+            errors.push(`${at} hardness may only be "ignore"`);
+        }
+    }
+}
+
+/** The free-cast flag. Its allowance is the item's own frequency, so the item needs one. */
+function validateFreeCast(doc, where, errors) {
+    const flag = doc.flags?.["isaacs-hb-pf2e"]?.freeCast;
+    if (flag === undefined) return;
+
+    if (flag.predicate !== undefined && !Array.isArray(flag.predicate)) {
+        errors.push(`${where}: freeCast.predicate must be an array`);
+    }
+    const frequency = doc.system?.frequency;
+    if (!frequency || !(Number(frequency.max) > 0)) {
+        errors.push(
+            `${where}: freeCast needs system.frequency to hold the allowance — without one there is ` +
+                `nothing to spend, and the boon silently never fires`,
+        );
+    } else if (!DURATION_UNITS.has(frequency.per) && !FREQUENCY_INTERVALS.has(frequency.per)) {
+        errors.push(`${where}: freeCast frequency.per "${frequency.per}" is not a pf2e interval`);
+    }
+}
+
+const FREQUENCY_INTERVALS = new Set(["turn", "round", "PT1M", "PT10M", "PT1H", "PT24H", "day", "P1W", "P1M", "P1Y"]);
+
 function validateRiders(doc, where, errors) {
     const riders = doc.flags?.["isaacs-hb-pf2e"]?.riders;
     if (riders === undefined) return;
@@ -297,7 +384,10 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
             errors.push(`${at} area.affects must be all/allies/enemies — got "${rider.area.affects}"`);
         }
         if (!["turn-start", "turn-end"].includes(event)) {
-            errors.push(`${at} has an area, which only makes sense on a turn event — got "${event}"`);
+            errors.push(
+                `${at} has an area, which only makes sense on a turn event — got "${event}". An ` +
+                    `action-used rider lands on the targets the caster confirmed, so it needs no area.`,
+            );
         }
     }
 
@@ -311,7 +401,7 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
         if (!DURATION_UNITS.has(rider.duration.unit)) {
             errors.push(`${at} unknown duration unit "${rider.duration.unit}"`);
         }
-        if (["prompt", "save", "damage"].includes(apply.type)) {
+        if (["prompt", "save", "damage", "death"].includes(apply.type)) {
             errors.push(`${at} a ${apply.type} rider has no duration of its own`);
         }
     }

@@ -5,6 +5,21 @@
                 "affects": "all",
                 "requireLineOfEffect": false
             },
+            "bypass": [
+                {
+                    "hardness": "ignore",
+                    "immunity": {
+                        "mode": "ignore",
+                        "types": [
+                            "physical"
+                        ]
+                    },
+                    "resistance": {
+                        "max": null,
+                        "types": "all"
+                    }
+                }
+            ],
             "riders": [
                 {
                     "apply": {

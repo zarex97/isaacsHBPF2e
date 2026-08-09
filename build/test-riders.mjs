@@ -45,6 +45,9 @@ globalThis.game = { pf2e: { Predicate: StubPredicate } };
 const { riderOptions } = await import("../scripts/lib/roll-options.mjs");
 const { selectRiders } = await import("../scripts/riders/select.mjs");
 const { collectRiders } = await import("../scripts/riders/data.mjs");
+const { mergeBypass, resistanceReduction, ignoresHardness, selectEntries } = await import(
+    "../scripts/riders/bypass.mjs"
+);
 
 /* -------------------------------------------------------------------------------------------- */
 /*  A world small enough to reason about                                                         */
@@ -99,7 +102,7 @@ function load(...parts) {
 }
 
 function ridersOf(doc) {
-    return doc.flags["isaacs-hb-pf2e"].riders;
+    return doc.flags?.["isaacs-hb-pf2e"]?.riders;
 }
 
 /* -------------------------------------------------------------------------------------------- */
@@ -228,6 +231,90 @@ check(
         actor: { items: [{ id: "dd", flags: diamondDust.flags }] },
     }).length,
     1,
+);
+
+/* -------------------------------------------------------------------------------------------- */
+/*  IWR bypass — the merge, and the split between ignoring and reducing                          */
+/* -------------------------------------------------------------------------------------------- */
+
+const wrap = (entries) => entries.map((entry) => ({ entry, item: null }));
+const empty = { immunity: { ignore: [], downgrade: [], redirect: [] }, resistance: { ignore: [], redirect: [] } };
+
+const bypassOf = (doc) => doc.flags?.["isaacs-hb-pf2e"]?.bypass;
+
+// Every file the bypass checks below read must actually carry one. Asserting it here means a flag lost to
+// a stray `git checkout` fails as "Seventh Sense has no bypass" rather than as a stack trace.
+for (const parts of [
+    ["saint-class-features", "core", "seventh-sense.json"],
+    ["saint-effects", "sky-ascendant", "sky-ascendant-capricorn.json"],
+    ["saint-effects", "sky-ascendant", "sky-ascendant-aquarius.json"],
+    ["saint-feats", "level-16", "atomic-dissolution.json"],
+]) {
+    check(`${parts.at(-1)} carries a bypass`, Array.isArray(bypassOf(load(...parts))), true);
+}
+
+check(
+    "Seventh Sense ignores resistance to every type the damage actually deals",
+    mergeBypass(empty, wrap(bypassOf(load("saint-class-features", "core", "seventh-sense.json"))),
+                ["slashing", "force"]).resistance.ignore,
+    [{ type: "slashing", max: Infinity }, { type: "force", max: Infinity }],
+);
+
+const aquariusBypass = bypassOf(load("saint-effects", "sky-ascendant", "sky-ascendant-aquarius.json"));
+const coldBypass = mergeBypass(empty, wrap(aquariusBypass), ["cold"]);
+check("Aquarius ignores cold resistance", coldBypass.resistance.ignore, [{ type: "cold", max: Infinity }]);
+check(
+    "Aquarius downgrades cold immunity to resistance 10, using pf2e's spelling of the field",
+    coldBypass.immunity.downgrade,
+    [{ type: "cold", resistence: 10 }],
+);
+
+// The split that is easy to get wrong: pf2e does not honour `max` on an ignored resistance, so a partial
+// reduction must never reach `bypass` — it is applied to the target instead.
+const atomic = bypassOf(load("saint-feats", "level-16", "atomic-dissolution.json"));
+check(
+    "Atomic Dissolution's partial reduction does not reach bypass",
+    mergeBypass(empty, wrap(atomic), ["bludgeoning"]).resistance.ignore,
+    [],
+);
+check("Atomic Dissolution reduces resistance by 5 instead", resistanceReduction(wrap(atomic)), 5);
+check("Atomic Dissolution ignores Hardness", ignoresHardness(wrap(atomic)), true);
+check("A total ignore asks for no reduction", resistanceReduction(wrap(aquariusBypass)), 0);
+
+check(
+    "two entries merge without either clobbering the other",
+    mergeBypass(empty, wrap([...aquariusBypass, ...bypassOf(
+        load("saint-effects", "sky-ascendant", "sky-ascendant-capricorn.json"),
+    )]), ["cold"]),
+    {
+        // Capricorn ignores *physical* immunity, Aquarius downgrades *cold* immunity: neither overwrites
+        // the other, which is the whole point of merging rather than replacing.
+        immunity: { ignore: ["physical"], downgrade: [{ type: "cold", resistence: 10 }], redirect: [] },
+        resistance: { ignore: [{ type: "cold", max: Infinity }], redirect: [] },
+    },
+);
+check(
+    "an existing bypass from a property rune survives the merge",
+    mergeBypass(
+        { immunity: { ignore: [], downgrade: [], redirect: [] },
+          resistance: { ignore: [{ type: "physical", max: 5 }], redirect: [] } },
+        wrap(aquariusBypass), ["cold"],
+    ).resistance.ignore,
+    [{ type: "physical", max: 5 }, { type: "cold", max: Infinity }],
+);
+
+// JSON.stringify turns Infinity into null, so the comparisons above cannot tell the two apart. This one
+// can, and "ignore entirely" depends on it being Infinity rather than a falsy null.
+check(
+    "an ignored resistance is ignored without limit",
+    coldBypass.resistance.ignore[0].max === Infinity,
+    true,
+);
+
+check(
+    "a predicate that does not match contributes nothing",
+    selectEntries(wrap(aquariusBypass), new Set(["damage:type:fire"])).length,
+    0,
 );
 
 /* -------------------------------------------------------------------------------------------- */

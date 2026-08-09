@@ -1,4 +1,92 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "area": {
+                    "type": "emanation",
+                    "value": 60
+                }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "dc": "cosmo",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "slug": "blinded",
+                                    "type": "condition"
+                                },
+                                "duration": {
+                                    "unit": "minutes",
+                                    "value": 1
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            },
+                            {
+                                "apply": {
+                                    "slug": "deafened",
+                                    "type": "condition"
+                                },
+                                "duration": {
+                                    "unit": "minutes",
+                                    "value": 1
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            },
+                            {
+                                "apply": {
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Sense Lost (Smell and Taste)"
+                                },
+                                "duration": {
+                                    "unit": "minutes",
+                                    "value": 1
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            },
+                            {
+                                "apply": {
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Sense Lost (Touch)"
+                                },
+                                "duration": {
+                                    "unit": "minutes",
+                                    "value": 1
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            },
+                            {
+                                "apply": {
+                                    "text": "Critical failure: the loss lasts until restoration. Clear the 1-minute duration on the four sense effects.",
+                                    "type": "prompt"
+                                },
+                                "outcomes": [
+                                    "criticalFailure"
+                                ]
+                            }
+                        ],
+                        "statistic": "will",
+                        "type": "save"
+                    },
+                    "event": "action-used"
+                }
+            ]
+        }
+    },
     "folder": "Actions",
     "img": "systems/pf2e/icons/actions/ThreeActions.webp",
     "name": "Six Realms Unmade",
@@ -12,6 +100,11 @@
         "category": "offensive",
         "description": {
             "value": "<p><strong>Frequency</strong> once per minute</p><hr /><p>60-foot emanation. Each enemy must attempt a Will save against your Cosmo DC or lose <strong>all five senses</strong> for 1 minute. A critical failure lasts until <em>restoration</em>.</p><p><strong>Incapacitation.</strong></p><hr /><p>Granted by the Virgo Zenith Boon.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "PT1M",
+            "value": 1
         },
         "publication": {
             "license": "ORC",

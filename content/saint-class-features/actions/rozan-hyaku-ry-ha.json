@@ -1,4 +1,57 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "all",
+                "area": {
+                    "type": "line",
+                    "value": 60
+                }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "dc": "cosmo",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "bludgeoning",
+                                    "formula": "12d10",
+                                    "type": "damage"
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            },
+                            {
+                                "apply": {
+                                    "slug": "prone",
+                                    "type": "condition"
+                                },
+                                "outcomes": [
+                                    "criticalFailure"
+                                ]
+                            },
+                            {
+                                "apply": {
+                                    "slug": "stunned",
+                                    "type": "condition",
+                                    "value": 2
+                                },
+                                "outcomes": [
+                                    "criticalFailure"
+                                ]
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
+                    },
+                    "event": "action-used"
+                }
+            ]
+        }
+    },
     "folder": "Actions",
     "img": "systems/pf2e/icons/actions/ThreeActions.webp",
     "name": "Rozan Hyaku Ryū Ha",
@@ -12,6 +65,11 @@
         "category": "offensive",
         "description": {
             "value": "<p><strong>Frequency</strong> once per round</p><hr /><p>60-foot line. Each creature takes @Damage[12d10[bludgeoning]] damage with a basic Reflex save. A creature that critically fails is knocked prone and stunned 2.</p><hr /><p>Granted by the Libra Zenith Boon.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
         },
         "publication": {
             "license": "ORC",

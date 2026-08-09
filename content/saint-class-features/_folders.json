@@ -13,5 +13,10 @@
         "name": "Actions",
         "sorting": "a",
         "type": "Item"
+    },
+    {
+        "name": "Libra Weapons",
+        "sorting": "a",
+        "type": "Item"
     }
 ]

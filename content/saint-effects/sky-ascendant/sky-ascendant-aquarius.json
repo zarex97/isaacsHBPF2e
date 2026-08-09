@@ -1,6 +1,26 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
+            "bypass": [
+                {
+                    "immunity": {
+                        "mode": "downgrade",
+                        "resistance": 10,
+                        "types": [
+                            "cold"
+                        ]
+                    },
+                    "predicate": [
+                        "damage:type:cold"
+                    ],
+                    "resistance": {
+                        "max": null,
+                        "types": [
+                            "cold"
+                        ]
+                    }
+                }
+            ],
             "riders": [
                 {
                     "apply": {

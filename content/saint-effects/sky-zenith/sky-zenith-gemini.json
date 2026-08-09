@@ -1,4 +1,11 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "duplicate": {
+                "note": "Two actions, Strike and Stride only, on your initiative."
+            }
+        }
+    },
     "folder": "Sky: Zenith",
     "img": "icons/magic/movement/portal-vortex-purple.webp",
     "name": "Sky: Zenith (Gemini)",
