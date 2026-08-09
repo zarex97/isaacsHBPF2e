@@ -1,0 +1,240 @@
+/**
+ * Exercise rider selection against the real content, without Foundry.
+ *
+ * The escalation ladders are the part of this feature most likely to be silently wrong: Virgo's sense loss
+ * has to advance exactly one step per hit, and Aquarius' cold has to stack slowed until it petrifies
+ * instead. Both properties come out of predicates being tested against a snapshot taken before anything is
+ * applied, and neither is visible by reading the JSON. So the ladders are simulated here, driven by the
+ * shipped content rather than a copy of it — an edit that breaks the ordering fails the build.
+ *
+ * `game.pf2e.Predicate` is stubbed, because the real one lives in the system. The stand-in implements the
+ * subset the content actually uses (plain statements, `not`, `or`, `and`) and nothing more, so a rider
+ * written with a predicate form beyond that subset will throw here rather than quietly pass.
+ */
+import fs from "node:fs";
+import path from "node:path";
+import { ROOT } from "./lib/pack.mjs";
+
+/* -------------------------------------------------------------------------------------------- */
+/*  Stubs                                                                                        */
+/* -------------------------------------------------------------------------------------------- */
+
+class StubPredicate {
+    constructor(statements) {
+        this.statements = statements;
+    }
+
+    test(options) {
+        const set = options instanceof Set ? options : new Set(options);
+        return this.statements.every((statement) => evaluate(statement, set));
+    }
+}
+
+function evaluate(statement, options) {
+    if (typeof statement === "string") return options.has(statement);
+    if (statement && typeof statement === "object") {
+        if ("not" in statement) return !evaluate(statement.not, options);
+        if ("or" in statement) return statement.or.some((s) => evaluate(s, options));
+        if ("and" in statement) return statement.and.every((s) => evaluate(s, options));
+    }
+    throw new Error(`predicate form not supported by the test stub: ${JSON.stringify(statement)}`);
+}
+
+globalThis.game = { pf2e: { Predicate: StubPredicate } };
+
+const { riderOptions } = await import("../scripts/lib/roll-options.mjs");
+const { selectRiders } = await import("../scripts/riders/select.mjs");
+const { collectRiders } = await import("../scripts/riders/data.mjs");
+
+/* -------------------------------------------------------------------------------------------- */
+/*  A world small enough to reason about                                                         */
+/* -------------------------------------------------------------------------------------------- */
+
+function actor({ conditions = {}, effects = {}, hp = null } = {}) {
+    const self = {
+        // A getter, not a snapshot: applying a rider has to be visible to the next snapshot, or the
+        // ladder can never advance and the test passes something that would fail at the table.
+        get itemTypes() {
+            return {
+                condition: Object.entries(conditions).map(([slug, value]) => ({
+                    slug,
+                    active: true,
+                    system: { value: { value: typeof value === "number" ? value : null } },
+                })),
+                effect: Object.entries(effects).map(([slug, count]) => ({
+                    slug,
+                    system: {
+                        badge: typeof count === "number" ? { type: "counter", value: count } : undefined,
+                    },
+                })),
+            };
+        },
+        hitPoints: hp,
+        getRollOptions: () => [],
+        getSelfRollOptions: () => [],
+        // What "applying" a rider does to this stand-in world.
+        apply(rider) {
+            const a = rider.apply;
+            if (a.type === "condition") conditions[a.slug] = a.value ?? true;
+            else if (a.type === "effect") effects[slugOf(a.uuid)] = (effects[slugOf(a.uuid)] ?? 0) + 1;
+            return a.type === "condition" ? a.slug : slugOf(a.uuid);
+        },
+    };
+    return self;
+}
+
+/** The content addresses effects by name; the option set addresses them by slug. */
+function slugOf(uuid) {
+    const name = String(uuid).split(".").pop();
+    return name
+        .replace(/^Effect:\s*/, "")
+        .toLowerCase()
+        .replace(/['’]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+}
+
+function load(...parts) {
+    return JSON.parse(fs.readFileSync(path.join(ROOT, "content", ...parts), "utf8"));
+}
+
+function ridersOf(doc) {
+    return doc.flags["isaacs-hb-pf2e"].riders;
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  Harness                                                                                      */
+/* -------------------------------------------------------------------------------------------- */
+
+const failures = [];
+let checks = 0;
+
+function check(label, actual, expected) {
+    checks += 1;
+    const a = JSON.stringify(actual);
+    const e = JSON.stringify(expected);
+    if (a !== e) failures.push(`${label}\n      expected ${e}\n      got      ${a}`);
+}
+
+/** Run one rider set against a target repeatedly, returning what landed each time. */
+function ladder(riders, target, { outcome, rounds }) {
+    const applied = [];
+    for (let i = 0; i < rounds; i++) {
+        const options = riderOptions({ originActor: actor(), targetActor: target, item: null });
+        const chosen = selectRiders(
+            riders.map((rider, index) => ({ rider, index, item: null })),
+            { outcome, options },
+        );
+        // Every rider selected in one pass is applied against the same snapshot — that is the property
+        // being tested, so apply them all before taking the next snapshot.
+        applied.push(chosen.map(({ rider }) => target.apply(rider)));
+    }
+    return applied;
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  Virgo — one sense per hit, in order                                                          */
+/* -------------------------------------------------------------------------------------------- */
+
+const virgo = ridersOf(load("saint-effects", "sky-ascendant", "sky-ascendant-virgo.json"))[0];
+check(
+    "Virgo Six Paths takes exactly one sense per failed save, in order",
+    ladder(virgo.apply.riders, actor(), { outcome: "failure", rounds: 5 }),
+    [["blinded"], ["deafened"], ["sense-lost-smell-and-taste"], ["sense-lost-touch"], []],
+);
+check(
+    "Virgo takes nothing on a successful save",
+    ladder(virgo.apply.riders, actor(), { outcome: "success", rounds: 2 }),
+    [[], []],
+);
+check(
+    "Virgo skips a sense the target has already lost",
+    ladder(virgo.apply.riders, actor({ conditions: { blinded: true } }), {
+        outcome: "criticalFailure",
+        rounds: 1,
+    }),
+    [["deafened"]],
+);
+
+/* -------------------------------------------------------------------------------------------- */
+/*  Aquarius — slowed stacks, then petrifies instead                                             */
+/* -------------------------------------------------------------------------------------------- */
+
+const aquarius = ridersOf(load("saint-effects", "sky-ascendant", "sky-ascendant-aquarius.json"))[0];
+const cold = aquarius.apply.riders;
+
+for (const [slowed, expected] of [[0, "slowed"], [2, "slowed"], [3, "petrified"], [4, "petrified"]]) {
+    check(
+        `Aquarius at slowed ${slowed} applies ${expected}`,
+        ladder(cold, actor({ conditions: slowed ? { slowed } : {} }), { outcome: "failure", rounds: 1 }),
+        [[expected]],
+    );
+}
+check(
+    "Aquarius does nothing on a successful save",
+    ladder(cold, actor({ conditions: { slowed: 3 } }), { outcome: "success", rounds: 1 }),
+    [[]],
+);
+
+/* -------------------------------------------------------------------------------------------- */
+/*  Scorpio — thresholds fire once, at the right counts                                          */
+/* -------------------------------------------------------------------------------------------- */
+
+const scorpio = ridersOf(load("saint-class-features", "cloths", "scorpio-the-needle.json"));
+const at = (needles, conditions = {}) =>
+    ladder(scorpio, actor({ effects: { "effect-scarlet-needle": needles }, conditions }), {
+        outcome: "success",
+        rounds: 1,
+    })[0];
+
+check("Scorpio does nothing at 4 needles", at(4), []);
+check("Scorpio enfeebles at 5 needles", at(5), ["enfeebled"]);
+check("Scorpio does not re-enfeeble a target already enfeebled", at(6, { enfeebled: 1 }), []);
+check("Scorpio blinds at 10 needles", at(10, { enfeebled: 1 }), ["blinded"]);
+check(
+    "Scorpio stuns and suppresses runes at 14 needles",
+    at(14, { enfeebled: 1, blinded: true }).length,
+    2, // the stunned condition and the runes prompt, together
+);
+
+/* -------------------------------------------------------------------------------------------- */
+/*  Events route riders to the right source                                                      */
+/* -------------------------------------------------------------------------------------------- */
+
+const pisces = load("saint-class-features", "cloths", "pisces-the-roses.json");
+const item = { id: "pisces", flags: pisces.flags };
+check(
+    "a strike-received rider is not collected for strike-resolved",
+    collectRiders({ event: "strike-resolved", item, actor: null }).length,
+    0,
+);
+check(
+    "a strike-received rider is collected for its own event",
+    collectRiders({ event: "strike-received", item, actor: null }).length,
+    1,
+);
+
+const diamondDust = load("saint-techniques", "slot-1-signature", "diamond-dust.json");
+check(
+    "a rider with no event still means save-rolled",
+    collectRiders({ event: "save-rolled", item: { id: "dd", flags: diamondDust.flags }, actor: null }).length,
+    1,
+);
+check(
+    "an item is not searched twice when it is both the message item and on the actor",
+    collectRiders({
+        event: "save-rolled",
+        item: { id: "dd", flags: diamondDust.flags },
+        actor: { items: [{ id: "dd", flags: diamondDust.flags }] },
+    }).length,
+    1,
+);
+
+/* -------------------------------------------------------------------------------------------- */
+
+if (failures.length > 0) {
+    console.error(`Rider tests failed: ${failures.length} of ${checks}.`);
+    for (const failure of failures) console.error(`  - ${failure}`);
+    process.exit(1);
+}
+console.log(`Rider tests passed: ${checks} checks.`);

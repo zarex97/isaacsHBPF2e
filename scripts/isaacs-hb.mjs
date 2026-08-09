@@ -10,7 +10,6 @@ Hooks.once("init", () => {
     AreaTargeting.registerSettings();
     Riders.registerSettings();
     Cosmo.registerHooks();
-    Riders.registerHooks();
     SkyTrackerApp.registerHooks();
 
     game.settings.registerMenu(MODULE_ID, "skyTrackerMenu", {
@@ -35,9 +34,11 @@ Hooks.once("init", () => {
     };
 });
 
-// After `init`, so the system's document classes exist to be wrapped.
+// After `init`, so the system's document classes exist to be wrapped: area targeting wraps the
+// spellcasting entry's `cast`, and the rider sources wrap `applyDamage`.
 Hooks.once("setup", () => {
     AreaTargeting.install();
+    Riders.registerHooks();
 });
 
 Hooks.once("ready", async () => {

@@ -1,0 +1,165 @@
+import { MODULE_ID } from "../sky/signs.mjs";
+import { OUTCOMES } from "./data.mjs";
+import { Relay } from "./relay.mjs";
+
+/**
+ * Where events come from.
+ *
+ * Each of these does the same small job: notice that something happened, work out the four things a rider
+ * needs — which event, whose item, which target, what outcome — and hand it to the relay. None of them
+ * decides what to apply; that is the GM's side, reading the riders off the item itself.
+ *
+ * Every source fires on exactly one client, which is what keeps a rider from being applied five times at a
+ * five-player table. For chat messages that is the message's author; for `applyDamage` it is whoever
+ * clicked apply; for turns it is the active GM.
+ */
+export const Sources = {
+    register() {
+        // Saves, via pf2e-toolbelt's Target Helper. Fires on the client that rolled.
+        Hooks.on("pf2e-toolbelt.rollSave", (payload) => Sources.onSave(payload));
+        Hooks.on("pf2e-toolbelt.rerollSave", (payload) => Sources.onSave(payload));
+
+        Hooks.on("createChatMessage", (message, _options, userId) => Sources.onMessage(message, userId));
+        Hooks.on("pf2e.endTurn", (combatant) => Sources.onTurn("turn-end", combatant));
+        Hooks.on("pf2e.startTurn", (combatant) => Sources.onTurn("turn-start", combatant));
+
+        Sources.wrapApplyDamage();
+    },
+
+    async onSave({ message, target, data }) {
+        if (!enabled() || !message || !target || !OUTCOMES.includes(data?.success)) return;
+        await Relay.request({
+            action: "applyRiders",
+            event: "save-rolled",
+            messageId: message.id,
+            targetUuid: target.uuid,
+            outcome: data.success,
+        });
+    },
+
+    /**
+     * Strikes.
+     *
+     * The attack-roll message already carries the degree of success and the token that was attacked, so no
+     * wrapping is needed. Two events come out of one message, because "when you hit" and "when something
+     * hits you" are both things a Cloth says: Capricorn severs on its own critical hit, Pisces' roses
+     * answer somebody else's.
+     */
+    async onMessage(message, userId) {
+        if (!enabled() || game.user.id !== userId) return;
+        const context = message?.flags?.pf2e?.context;
+        if (context?.type !== "attack-roll" || !OUTCOMES.includes(context.outcome)) return;
+
+        const attackerUuid = message.actor?.uuid;
+        const targetUuid = context.target?.token;
+        if (!attackerUuid || !targetUuid) return;
+
+        await Relay.request({
+            action: "applyRiders",
+            event: "strike-resolved",
+            messageId: message.id,
+            originUuid: attackerUuid,
+            targetUuid,
+            outcome: context.outcome,
+        });
+
+        // The mirror image: the defender's own items get a look, with origin and target swapped.
+        await Relay.request({
+            action: "applyRiders",
+            event: "strike-received",
+            messageId: message.id,
+            originUuid: targetUuid,
+            targetUuid: attackerUuid,
+            outcome: context.outcome,
+        });
+    },
+
+    /**
+     * Damage landing on someone.
+     *
+     * `applyDamage` is wrapped rather than hooked because pf2e emits nothing here, and because its
+     * arguments carry the one thing a rider cannot work without: the item the damage came from, and so the
+     * actor responsible for it. Hit points are read either side of the call so "reduce a creature to 0"
+     * is a fact rather than an inference.
+     */
+    wrapApplyDamage() {
+        // `applyDamage` is declared on ActorPF2e, not on each subclass, so walk up to whichever prototype
+        // actually owns it and patch that once — patching the subclasses would patch nothing.
+        let proto = CONFIG.PF2E?.Actor?.documentClasses?.character?.prototype;
+        while (proto && !Object.hasOwn(proto, "applyDamage")) proto = Object.getPrototypeOf(proto);
+        if (!proto) {
+            console.warn("Isaac's Homebrew | could not find ActorPF2e#applyDamage; damage riders are off.");
+            return;
+        }
+
+        const original = proto.applyDamage;
+        proto.applyDamage = async function (params) {
+            const before = this.hitPoints?.value ?? 0;
+            const result = await original.call(this, params);
+            try {
+                await Sources.onDamage(this, params, before);
+            } catch (error) {
+                console.error("Isaac's Homebrew | damage rider failed", error);
+            }
+            return result;
+        };
+    },
+
+    async onDamage(actor, params, before) {
+        if (!enabled()) return;
+        const item = params?.item;
+        const origin = item?.actor;
+        if (!origin || origin === actor) return;
+
+        const after = actor.hitPoints?.value ?? 0;
+        if (after >= before) return; // healing, or nothing landed
+
+        const target = params?.token ?? actor.getActiveTokens(true, true).at(0);
+        if (!target?.uuid) return;
+
+        await Relay.request({
+            action: "applyRiders",
+            event: "damage-applied",
+            itemUuid: item.uuid,
+            originUuid: origin.uuid,
+            targetUuid: target.uuid,
+            outcome: params?.outcome ?? null,
+            damage: {
+                types: damageTypesOf(params?.damage),
+                total: before - after,
+                outcome: params?.outcome ?? null,
+            },
+        });
+    },
+
+    /**
+     * Turn boundaries, for the auras that tick on them.
+     *
+     * Only the active GM acts, because the turn hooks fire on every client and an aura that resolved once
+     * per player would be five times the poison it should be.
+     */
+    async onTurn(event, combatant) {
+        if (!enabled() || game.users.activeGM?.id !== game.user.id) return;
+        const actor = combatant?.actor;
+        const token = combatant?.token;
+        if (!actor || !token) return;
+
+        await Relay.request({
+            action: "applyRiders",
+            event,
+            originUuid: actor.uuid,
+            targetUuid: token.uuid, // the origin's own token; area riders fan out from it
+        });
+    },
+};
+
+function enabled() {
+    return game.settings.get(MODULE_ID, "riders");
+}
+
+/** Damage types present in a roll, for `rider:damage:type:cold` and friends. */
+function damageTypesOf(damage) {
+    if (!damage || typeof damage === "number") return [];
+    const instances = damage.instances ?? [];
+    return [...new Set(instances.map((instance) => instance.type).filter((type) => type))];
+}

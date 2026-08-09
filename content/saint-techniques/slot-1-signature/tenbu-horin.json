@@ -4,8 +4,35 @@
             "riders": [
                 {
                     "apply": {
-                        "text": "Loses one sense of the Saint's choice for 1 minute: sight (blinded), hearing (deafened), or smell and taste.",
-                        "type": "prompt"
+                        "options": [
+                            {
+                                "apply": {
+                                    "slug": "blinded",
+                                    "type": "condition"
+                                },
+                                "label": "Sight (blinded)"
+                            },
+                            {
+                                "apply": {
+                                    "slug": "deafened",
+                                    "type": "condition"
+                                },
+                                "label": "Hearing (deafened)"
+                            },
+                            {
+                                "apply": {
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Sense Lost (Smell and Taste)"
+                                },
+                                "label": "Smell and taste"
+                            }
+                        ],
+                        "prompt": "Tenbu Hōrin: which sense does it lose?",
+                        "type": "choice"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
                     },
                     "outcomes": [
                         "failure"
@@ -13,8 +40,71 @@
                 },
                 {
                     "apply": {
-                        "text": "Loses two senses of the Saint's choice for 1 minute.",
-                        "type": "prompt"
+                        "options": [
+                            {
+                                "apply": {
+                                    "slug": "blinded",
+                                    "type": "condition"
+                                },
+                                "label": "Sight (blinded)"
+                            },
+                            {
+                                "apply": {
+                                    "slug": "deafened",
+                                    "type": "condition"
+                                },
+                                "label": "Hearing (deafened)"
+                            },
+                            {
+                                "apply": {
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Sense Lost (Smell and Taste)"
+                                },
+                                "label": "Smell and taste"
+                            }
+                        ],
+                        "prompt": "Two senses — choose the first.",
+                        "type": "choice"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "options": [
+                            {
+                                "apply": {
+                                    "slug": "blinded",
+                                    "type": "condition"
+                                },
+                                "label": "Sight (blinded)"
+                            },
+                            {
+                                "apply": {
+                                    "slug": "deafened",
+                                    "type": "condition"
+                                },
+                                "label": "Hearing (deafened)"
+                            },
+                            {
+                                "apply": {
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Sense Lost (Smell and Taste)"
+                                },
+                                "label": "Smell and taste"
+                            }
+                        ],
+                        "prompt": "Two senses — and the second.",
+                        "type": "choice"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
                     },
                     "outcomes": [
                         "criticalFailure"

@@ -218,7 +218,14 @@ function validateAreaTargeting(doc, where, errors) {
 const OUTCOMES = new Set(["criticalSuccess", "success", "failure", "criticalFailure"]);
 const CONDITION_SLUGS = new Set(pf2e.conditionSlugs);
 const DURATION_UNITS = new Set(["rounds", "minutes", "hours", "days", "unlimited", "encounter"]);
-const RIDER_TYPES = new Set(["condition", "effect", "prompt"]);
+const RIDER_TYPES = new Set([
+    "condition", "effect", "prompt", "choice", "save", "damage", "persistent-damage",
+]);
+const RIDER_EVENTS = new Set([
+    "save-rolled", "strike-resolved", "strike-received", "damage-applied", "turn-end", "turn-start",
+]);
+const SAVE_STATISTICS = new Set(["fortitude", "reflex", "will"]);
+const DICE_FORMULA = /^\d*d\d+$/;
 
 /**
  * The riders read by scripts/riders.
@@ -235,55 +242,155 @@ function validateRiders(doc, where, errors) {
         errors.push(`${where}: riders must be an array`);
         return;
     }
-    if (doc.type !== "spell") {
-        errors.push(`${where}: riders are only read on spells, not ${doc.type}`);
+
+    for (const [i, rider] of riders.entries()) {
+        validateRider(rider, `${where}: riders[${i}]`, errors, { doc, top: true });
+    }
+}
+
+/**
+ * One rider, at any depth.
+ *
+ * Riders nest: a `save` rider carries the riders its result earns, and a `choice` rider carries one per
+ * option. Checking them with the same function is the only way a mistake three levels down still fails the
+ * build rather than turning into a Technique that silently does nothing.
+ */
+function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) {
+    if (depth > 3) {
+        errors.push(`${at} is nested too deeply — riders may not recurse more than three levels`);
         return;
     }
 
-    // A rider keys off a save outcome, so a Technique without a save can never fire one.
-    if (riders.length > 0 && !doc.system?.defense?.save?.statistic) {
-        errors.push(`${where}: has riders but no save for them to key off`);
+    const event = rider.event ?? "save-rolled";
+    if (!RIDER_EVENTS.has(event)) {
+        errors.push(`${at} unknown event "${rider.event}"`);
     }
 
-    for (const [i, rider] of riders.entries()) {
-        const at = `${where}: riders[${i}]`;
-        const outcomes = rider.outcomes;
-        if (!Array.isArray(outcomes) || outcomes.length === 0) {
-            errors.push(`${at} needs a non-empty outcomes array`);
+    // A save rider keys off a degree of success on this item's own save, so a spell without one can never
+    // fire it. The other events supply their own outcome and do not care.
+    if (top && event === "save-rolled" && doc.type === "spell" && !doc.system?.defense?.save?.statistic) {
+        errors.push(`${at} is a save rider, but this spell has no save for it to key off`);
+    }
+
+    if (rider.outcomes !== undefined) {
+        if (!Array.isArray(rider.outcomes) || rider.outcomes.length === 0) {
+            errors.push(`${at} outcomes must be a non-empty array, or absent to mean "any outcome"`);
         } else {
-            for (const outcome of outcomes) {
+            for (const outcome of rider.outcomes) {
                 if (!OUTCOMES.has(outcome)) errors.push(`${at} unknown outcome "${outcome}"`);
             }
         }
+    }
 
-        const apply = rider.apply;
-        if (!apply || !RIDER_TYPES.has(apply.type)) {
-            errors.push(`${at} apply.type must be condition/effect/prompt — got "${apply?.type}"`);
-            continue;
-        }
-        if (apply.type === "condition" && !CONDITION_SLUGS.has(apply.slug)) {
-            errors.push(`${at} "${apply.slug}" is not a pf2e condition slug`);
-        }
-        if (apply.type === "effect" && typeof apply.uuid !== "string") {
-            errors.push(`${at} effect riders need a uuid`);
-        }
-        if (apply.type === "prompt" && !apply.text) {
-            errors.push(`${at} prompt riders need text — it is the only thing they do`);
-        }
-        if (apply.type !== "effect" && apply.stack) {
-            errors.push(`${at} only effect riders can stack`);
-        }
+    if (rider.predicate !== undefined && !Array.isArray(rider.predicate)) {
+        errors.push(`${at} predicate must be an array`);
+    }
 
-        if (rider.duration !== undefined) {
-            if (!DURATION_UNITS.has(rider.duration.unit)) {
-                errors.push(`${at} unknown duration unit "${rider.duration.unit}"`);
-            }
-            if (apply.type === "prompt") {
-                errors.push(`${at} a prompt has no duration; put it in the text`);
-            }
+    if (rider.area !== undefined) {
+        if (!AREA_SHAPES.has(rider.area.type)) {
+            errors.push(`${at} area.type "${rider.area.type}" is not an effect-area shape`);
         }
-        if (rider.predicate !== undefined && !Array.isArray(rider.predicate)) {
-            errors.push(`${at} predicate must be an array`);
+        if (!(Number(rider.area.value) > 0)) {
+            errors.push(`${at} area.value must be a positive number of feet`);
+        }
+        if (rider.area.affects !== undefined && !AFFECTS.has(rider.area.affects)) {
+            errors.push(`${at} area.affects must be all/allies/enemies — got "${rider.area.affects}"`);
+        }
+        if (!["turn-start", "turn-end"].includes(event)) {
+            errors.push(`${at} has an area, which only makes sense on a turn event — got "${event}"`);
+        }
+    }
+
+    const apply = rider.apply;
+    if (!apply || !RIDER_TYPES.has(apply.type)) {
+        errors.push(`${at} apply.type must be one of ${[...RIDER_TYPES].join("/")} — got "${apply?.type}"`);
+        return;
+    }
+
+    if (rider.duration !== undefined) {
+        if (!DURATION_UNITS.has(rider.duration.unit)) {
+            errors.push(`${at} unknown duration unit "${rider.duration.unit}"`);
+        }
+        if (["prompt", "save", "damage"].includes(apply.type)) {
+            errors.push(`${at} a ${apply.type} rider has no duration of its own`);
+        }
+    }
+
+    if (apply.type !== "effect" && apply.stack) {
+        errors.push(`${at} only effect riders can stack`);
+    }
+
+    switch (apply.type) {
+        case "condition":
+            if (!CONDITION_SLUGS.has(apply.slug)) {
+                errors.push(`${at} "${apply.slug}" is not a pf2e condition slug`);
+            }
+            if (apply.max !== undefined && !(Number.isInteger(apply.max) && apply.max > 0)) {
+                errors.push(`${at} condition max must be a positive integer`);
+            }
+            break;
+        case "effect":
+            if (typeof apply.uuid !== "string") errors.push(`${at} effect riders need a uuid`);
+            break;
+        case "prompt":
+            if (!apply.text) errors.push(`${at} prompt riders need text — it is the only thing they do`);
+            break;
+        case "damage":
+        case "persistent-damage":
+            if (!DICE_FORMULA.test(String(apply.formula ?? ""))) {
+                errors.push(`${at} ${apply.type} needs a formula like "4d6" — got "${apply.formula}"`);
+            }
+            if (!DAMAGE_TYPES.has(apply.damageType)) {
+                errors.push(`${at} "${apply.damageType}" is not a pf2e damage type`);
+            }
+            if (apply.type === "persistent-damage" && apply.perCounter !== undefined
+                && typeof apply.perCounter !== "string") {
+                errors.push(`${at} perCounter must be the uuid of a counter effect`);
+            }
+            if (apply.type === "damage" && apply.perCounter !== undefined) {
+                errors.push(`${at} only persistent damage can scale with a counter`);
+            }
+            break;
+        case "save": {
+            if (!SAVE_STATISTICS.has(apply.statistic)) {
+                errors.push(`${at} save riders need fortitude/reflex/will — got "${apply.statistic}"`);
+            }
+            if (apply.dc !== "cosmo" && !Number.isInteger(apply.dc)) {
+                errors.push(`${at} save dc must be "cosmo" or a whole number — got "${apply.dc}"`);
+            }
+            const nested = apply.riders;
+            if (!Array.isArray(nested) || nested.length === 0) {
+                errors.push(`${at} a save rider with no riders of its own does nothing`);
+            } else {
+                nested.forEach((inner, j) =>
+                    validateRider(inner, `${at}.apply.riders[${j}]`, errors, { doc, depth: depth + 1 }),
+                );
+            }
+            break;
+        }
+        case "choice": {
+            const options = apply.options;
+            if (!Array.isArray(options) || options.length < 2) {
+                errors.push(`${at} a choice needs at least two options`);
+                break;
+            }
+            options.forEach((option, j) => {
+                const oat = `${at}.apply.options[${j}]`;
+                if (!option.label) errors.push(`${oat} needs a label — it is the button text`);
+                if (!option.apply) {
+                    errors.push(`${oat} needs an apply`);
+                    return;
+                }
+                if (option.apply.type === "choice") {
+                    errors.push(`${oat} a choice cannot offer another choice`);
+                    return;
+                }
+                validateRider(
+                    { apply: option.apply, duration: option.duration ?? rider.duration },
+                    oat, errors, { doc, depth: depth + 1 },
+                );
+            });
+            break;
         }
     }
 }
