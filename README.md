@@ -225,6 +225,10 @@ What remains manual, and why:
 degree of success — which would close the Strike-based row. The aura rows want a real Aura rule element with
 `affects`, which pf2e already has; they are a content job rather than a scripting one.
 
+There is a design note for the last three rows in [`docs/trigger-system.md`](docs/trigger-system.md): what
+each one needs, and the argument for generalising the rider engine into an event bus rather than adding
+three more listeners to it.
+
 ### 2. Action economy the system does not model
 
 | Where | What is manual |
