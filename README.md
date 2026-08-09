@@ -343,8 +343,11 @@ to §6.
 | Virgo — Om | Which roll consumes the empowerment. The numbers are automated; nothing enforces that it applies to only one roll |
 | Everything with a per-hour or per-Zenith-day frequency | PF2e tracks per-round/turn/day cleanly; longer and bespoke periods are on the honour system |
 
-**A workaround would need** a `preCreateChatMessage` / post-roll hook that inspects the result and rewrites
-or consumes.
+**A plan for all three** is in [`docs/heightening-and-outcomes.md`](docs/heightening-and-outcomes.md).
+*The Balance* rewrites the card after the roll, because `SubstituteRoll` picks its value before the die is
+known; Om consumes its empowerment on the first roll that benefits; and per-hour frequencies recharge off
+Foundry's core `updateWorldTime` hook, which needs no calendar module at all — pf2e's own World Clock
+already drives it.
 
 ### 5. Non-damage heightening riders
 
@@ -356,7 +359,11 @@ What is left has no field in the spell schema:
 - Additional **Strikes** or **pillars** per step (Taurus, Leo, Scorpio, Sagittarius)
 - Wall **length** (Aries' *Crystal Wall* — a wall, not an area)
 
-**A workaround would need** an `ItemAlteration` applied per heightening step, or accepting a text note.
+**No `ItemAlteration` reaches these.** Its handlers cover `area-size` and weapon ranges but not a spell's
+range or a target count, because pf2e models neither — so all four rows live in this module's own
+`areaTargeting` config, which already owns `maxTargets` and the area shape and only has to become
+rank-aware. See [`docs/heightening-and-outcomes.md`](docs/heightening-and-outcomes.md), which also brings
+*Lightning Crown* back: `canvas.regions.placeRegions` aims several areas in sequence.
 
 ### 6. Deliberately not automated
 
