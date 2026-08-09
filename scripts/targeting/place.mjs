@@ -32,10 +32,35 @@ export async function placeArea(config, originToken) {
     // An emanation has nowhere to be placed: it is centred on the caster's own space, so asking for a
     // click that can only land in one place is a click for nothing.
     if (config.anchor === "self") {
-        return new CONFIG.Region.documentClass(regionData(config, shape), { parent: canvas.scene });
+        return [new CONFIG.Region.documentClass(regionData(config, shape), { parent: canvas.scene })];
     }
 
-    return canvas.regions.placeRegion(regionData(config, shape), { create: false });
+    // Several placements, one after another. *Lightning Crown* is three 5-foot squares and gains more per
+    // heightening step, which is why it was excluded from area targeting until now: one Region cannot be
+    // three areas, but `placeRegions` aims a list of them in turn.
+    const count = Math.max(1, config.areas ?? 1);
+    if (count > 1) {
+        const data = Array.from({ length: count }, () => regionData(config, shape));
+        const placed = await canvas.regions.placeRegions(data, { create: false });
+        return placed?.length ? placed : null;
+    }
+
+    const region = await canvas.regions.placeRegion(regionData(config, shape), { create: false });
+    return region ? [region] : null;
+}
+
+/**
+ * Where an aimed area actually landed, for the range check.
+ *
+ * The same three shapes `catch.mjs` reads an origin from, and for the same reason: a polygon keeps its
+ * origin, an emanation keeps its base, and everything else is at its own coordinates.
+ */
+export function originOf(region) {
+    const shape = region?.shapes?.at?.(0);
+    if (!shape) return null;
+    if (shape.origin) return shape.origin;
+    if (shape.base) return { x: shape.base.x, y: shape.base.y };
+    return Number.isFinite(shape.x) && Number.isFinite(shape.y) ? { x: shape.x, y: shape.y } : null;
 }
 
 function regionData(config, shape) {
@@ -116,8 +141,10 @@ export function shapeFromArea(area, originToken, point) {
  * scene. This exists for the case where one somehow was, and it checks both that the document is really
  * embedded and that the flag says it is ours, so a region a GM placed by hand is never deleted.
  */
-export async function discardArea(region) {
-    if (!region?.id || !region.parent?.regions?.has(region.id)) return;
-    if (region.flags?.[MODULE_ID]?.[FLAG]?.transient !== true) return;
-    await region.delete();
+export async function discardArea(regions) {
+    for (const region of [regions].flat().filter((r) => r)) {
+        if (!region.id || !region.parent?.regions?.has(region.id)) continue;
+        if (region.flags?.[MODULE_ID]?.[FLAG]?.transient !== true) continue;
+        await region.delete();
+    }
 }

@@ -8,6 +8,9 @@
                     "value": 30
                 }
             },
+            "recharge": {
+                "per": "zenith-day"
+            },
             "riders": [
                 {
                     "apply": {
