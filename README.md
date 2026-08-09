@@ -296,8 +296,11 @@ Three caveats worth knowing before trusting it:
 | Gemini — Zenith | The duplicate. It is a second actor, not a modifier |
 | Libra — *The Twelve Arms* | Allies using **your** proficiency with a loaned weapon |
 
-**A workaround would need** either a chat hook that refunds a Focus Point after a flagged cast, or a
-pre-roll dialog. The duplicate probably wants a real ephemeral actor created by script.
+**A plan for all of this** is in [`docs/action-economy-and-iwr.md`](docs/action-economy-and-iwr.md): the
+focus refunds hang off the `cast` wrapper that area targeting already installs, the duplicate is a token
+created on a `turn-start` rider, and *The Twelve Arms* is pf2e's own `MartialProficiency` rule element
+applied to the ally. Leo's extra actions are argued there as a deliberate non-goal — pf2e models no action
+economy at all, so there is nothing to add a second action to.
 
 ### 3. IWR bypass beyond what the damage system exposes
 
@@ -311,8 +314,11 @@ not exposed.
 | Atomic Dissolution | Treat resistance as 5 lower |
 | Capricorn — Techniques | Ignoring Hardness, and treating force effects as Hardness 0 |
 
-**A workaround would need** a damage-application hook that recomputes IWR with our overrides, since
-`DamageAlteration` has no property for "ignore the target's resistance".
+**This turns out to be smaller than it looks.** `DamageAlteration` has no property for it, but the damage
+*roll* does: `roll.options.bypass` carries `resistance.ignore`, `immunity.ignore` and `immunity.downgrade`,
+and `applyIWR` reads it on every application. Every row above maps onto that structure, and the
+`applyDamage` wrapper the riders already install is the place to merge it in. See
+[`docs/action-economy-and-iwr.md`](docs/action-economy-and-iwr.md).
 
 ### 4. Things that must see the die or the outcome
 
