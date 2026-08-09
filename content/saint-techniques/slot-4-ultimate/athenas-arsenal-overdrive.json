@@ -6,7 +6,8 @@
                 "area": {
                     "type": "emanation",
                     "value": 60
-                }
+                },
+                "maxTargets": 6
             }
         }
     },

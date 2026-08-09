@@ -1,4 +1,26 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "all",
+                "area": {
+                    "type": "line",
+                    "value": 15
+                },
+                "heightening": {
+                    "length": 5
+                },
+                "length": 15,
+                "range": 30
+            },
+            "wall": {
+                "ac": 10,
+                "hardnessPerLevel": 1,
+                "height": 10,
+                "hpPerLevel": 4
+            }
+        }
+    },
     "folder": "1st — Signature (L1)",
     "img": "icons/magic/defensive/barrier-shield-crystal-glowing-blue.webp",
     "name": "Crystal Wall",

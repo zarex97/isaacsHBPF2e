@@ -48,6 +48,11 @@ const { collectRiders } = await import("../scripts/riders/data.mjs");
 const { mergeBypass, resistanceReduction, ignoresHardness, selectEntries } = await import(
     "../scripts/riders/bypass.mjs"
 );
+const { degreeOf } = await import("../scripts/lib/degree.mjs");
+const { applyHeightening, applyThresholds, stepsFor } = await import(
+    "../scripts/targeting/heightening.mjs"
+);
+const { intervalSeconds } = await import("../scripts/economy/recharge.mjs");
 
 /* -------------------------------------------------------------------------------------------- */
 /*  A world small enough to reason about                                                         */
@@ -316,6 +321,129 @@ check(
     selectEntries(wrap(aquariusBypass), new Set(["damage:type:fire"])).length,
     0,
 );
+
+/* -------------------------------------------------------------------------------------------- */
+/*  Degree of success — the one re-implementation, so the most cases                             */
+/* -------------------------------------------------------------------------------------------- */
+
+const degree = (dieValue, modifier, dc, adjustments = null) =>
+    degreeOf({ dieValue, modifier, dc, adjustments }).key;
+
+// The four bands, at their exact boundaries.
+check("ten under the DC is a critical failure", degree(10, 0, 20), "criticalFailure");
+check("nine under the DC is a failure", degree(11, 0, 20), "failure");
+check("exactly the DC is a success", degree(10, 10, 20), "success");
+check("ten over the DC is a critical success", degree(10, 20, 20), "criticalSuccess");
+check("nine over the DC is only a success", degree(10, 19, 20), "success");
+
+// The die itself moves the result one step, and cannot move it off either end.
+check("a natural 20 raises a failure to a success", degree(20, -5, 20), "success");
+check("a natural 1 lowers a success to a failure", degree(1, 25, 20), "failure");
+check("a natural 20 cannot exceed a critical success", degree(20, 20, 20), "criticalSuccess");
+check("a natural 1 cannot fall below a critical failure", degree(1, 0, 20), "criticalFailure");
+
+// This is the case The Balance creates: a 1 that is treated as a 10 keeps none of the 1's penalty.
+check("a 10 against the same DC keeps its band", degree(10, 10, 20), "success");
+
+// Adjustments, including the two exclusions pf2e applies.
+const bump = { all: { label: "test", amount: 1 } };
+check("an adjustment raises the degree", degree(10, 10, 20, bump), "criticalSuccess");
+check(
+    "an adjustment naming another outcome does not apply",
+    degree(10, 10, 20, { failure: { label: "test", amount: 1 } }),
+    "success",
+);
+check(
+    "an adjustment cannot raise a critical success further",
+    degree(10, 20, 20, bump),
+    "criticalSuccess",
+);
+check(
+    "a named adjustment jumps straight to its degree",
+    degree(10, 0, 20, { all: { label: "test", amount: "criticalSuccess" } }),
+    "criticalSuccess",
+);
+check("the unadjusted degree is reported too", degreeOf({ dieValue: 10, modifier: 10, dc: 20, adjustments: bump }).unadjustedKey, "success");
+
+/* -------------------------------------------------------------------------------------------- */
+/*  Heightening — per step, and at named levels                                                  */
+/* -------------------------------------------------------------------------------------------- */
+
+// Every Technique the heightening checks below read must actually carry a block. Asserting it here means
+// a flag lost to a stray `git checkout` fails as "Lightning Crown has no targeting" rather than a crash.
+for (const parts of [
+    ["saint-techniques", "slot-2", "lightning-crown.json"],
+    ["saint-techniques", "slot-2", "pleiades-nova.json"],
+    ["saint-techniques", "slot-2", "the-twelve-arms.json"],
+    ["saint-techniques", "slot-1-signature", "another-dimension.json"],
+    ["saint-techniques", "slot-1-signature", "crystal-wall.json"],
+]) {
+    check(
+        `${parts.at(-1)} carries a targeting rule`,
+        !!load(...parts).flags?.["isaacs-hb-pf2e"]?.areaTargeting,
+        true,
+    );
+}
+
+check("a cast at its base rank has taken no steps", stepsFor({ baseRank: 1, castRank: 1 }), 0);
+check("four ranks at interval 1 is four steps", stepsFor({ baseRank: 1, castRank: 5 }), 4);
+check("a cast below its base rank never goes negative", stepsFor({ baseRank: 6, castRank: 3 }), 0);
+
+const twelveArms = load("saint-techniques", "slot-2", "the-twelve-arms.json")
+    .flags["isaacs-hb-pf2e"].areaTargeting;
+check(
+    "The Twelve Arms gains 10 feet of range per step",
+    applyHeightening(twelveArms, twelveArms.heightening, { baseRank: 3, castRank: 6 }).range,
+    60, // 30 base + 3 steps
+);
+check(
+    "growth applies to nothing when the base is absent",
+    applyHeightening({ range: 0 }, { range: 10 }, { baseRank: 1, castRank: 5 }).range,
+    0,
+);
+
+const anotherDimension = load("saint-techniques", "slot-1-signature", "another-dimension.json")
+    .flags["isaacs-hb-pf2e"].areaTargeting;
+const atLevel = (flag, level, ranks) =>
+    applyThresholds(applyHeightening(flag, flag.heightening, ranks), flag.heightening, level);
+
+check(
+    "Another Dimension targets one creature below 12th level",
+    atLevel(anotherDimension, 11, { baseRank: 1, castRank: 6 }).maxTargets,
+    1,
+);
+check(
+    "…two from 12th",
+    atLevel(anotherDimension, 12, { baseRank: 1, castRank: 6 }).maxTargets,
+    2,
+);
+check(
+    "…and three from 16th, not one per step in between",
+    atLevel(anotherDimension, 16, { baseRank: 1, castRank: 8 }).maxTargets,
+    3,
+);
+
+const lightningCrown = load("saint-techniques", "slot-2", "lightning-crown.json")
+    .flags["isaacs-hb-pf2e"].areaTargeting;
+check("Lightning Crown places three pillars at 6th", atLevel(lightningCrown, 6, { baseRank: 3, castRank: 3 }).areas, 3);
+check("…four at 10th", atLevel(lightningCrown, 10, { baseRank: 3, castRank: 5 }).areas, 4);
+check("…six at 18th", atLevel(lightningCrown, 18, { baseRank: 3, castRank: 9 }).areas, 6);
+
+const pleiades = load("saint-techniques", "slot-2", "pleiades-nova.json")
+    .flags["isaacs-hb-pf2e"].areaTargeting;
+check("Pleiades Nova is five Strikes at 6th", atLevel(pleiades, 6, { baseRank: 3, castRank: 3 }).maxTargets, 5);
+check("…and seven at 18th, its stated maximum", atLevel(pleiades, 18, { baseRank: 3, castRank: 9 }).maxTargets, 7);
+
+/* -------------------------------------------------------------------------------------------- */
+/*  Frequency intervals                                                                          */
+/* -------------------------------------------------------------------------------------------- */
+
+check("an hour is 3600 seconds", intervalSeconds("PT1H"), 3600);
+check("ten minutes is 600", intervalSeconds("PT10M"), 600);
+check("a day is left to pf2e", intervalSeconds("day"), 0);
+check("a round is left to pf2e", intervalSeconds("round"), 0);
+check("a week is not handled here", intervalSeconds("P1W"), 0);
+check("nonsense is not an interval", intervalSeconds(undefined), 0);
 
 /* -------------------------------------------------------------------------------------------- */
 

@@ -194,9 +194,13 @@ function validateAreaTargeting(doc, where, errors) {
     if (flag.predicate !== undefined && !Array.isArray(flag.predicate)) {
         errors.push(`${where}: areaTargeting.predicate must be an array`);
     }
-    if (flag.maxTargets !== undefined && !(Number.isInteger(flag.maxTargets) && flag.maxTargets > 0)) {
-        errors.push(`${where}: areaTargeting.maxTargets must be a positive integer`);
+    for (const key of ["maxTargets", "range", "areas", "length"]) {
+        const value = flag[key];
+        if (value !== undefined && !(Number.isInteger(value) && value > 0)) {
+            errors.push(`${where}: areaTargeting.${key} must be a positive integer`);
+        }
     }
+    validateHeightening(flag, where, errors);
 
     // A synthetic area exists precisely because the spell has none; supplying both means one of them is
     // being ignored, and which one is not obvious from the file.
@@ -204,8 +208,12 @@ function validateAreaTargeting(doc, where, errors) {
     if (flag.area && own) {
         errors.push(`${where}: areaTargeting.area duplicates system.area — remove one`);
     }
-    if (!flag.area && !own) {
-        errors.push(`${where}: areaTargeting needs an area — this spell has no system.area to fall back on`);
+    // No area at all is legitimate for a Technique that names a target count and a range instead — those
+    // are checked against the targets the player picked. But a block with neither does nothing.
+    if (!flag.area && !own && !flag.maxTargets && !flag.range) {
+        errors.push(
+            `${where}: areaTargeting has no area and no maxTargets or range, so it has nothing to do`,
+        );
     }
     if (flag.area) {
         if (!AREA_SHAPES.has(flag.area.type)) {
@@ -321,6 +329,54 @@ function validateFreeCast(doc, where, errors) {
 }
 
 const FREQUENCY_INTERVALS = new Set(["turn", "round", "PT1M", "PT10M", "PT1H", "PT24H", "day", "P1W", "P1M", "P1Y"]);
+
+/**
+ * The per-step and per-level growth read by scripts/targeting/heightening.mjs.
+ *
+ * The two are not interchangeable and the difference is the easy mistake: a Technique whose text says
+ * "at 12th and 16th level" grows every *four* levels, which no per-step increment can express. Writing it
+ * as a step increment would silently hand out a target every two levels instead.
+ */
+function validateHeightening(flag, where, errors) {
+    const heightening = flag.heightening;
+    if (heightening === undefined) return;
+
+    const at = `${where}: areaTargeting.heightening`;
+    for (const key of ["maxTargets", "range", "areas", "length", "interval"]) {
+        const value = heightening[key];
+        if (value !== undefined && !(Number.isInteger(value) && value > 0)) {
+            errors.push(`${at}.${key} must be a positive integer`);
+        }
+    }
+    // Growth needs something to grow: `range: 10` per step does nothing if the Technique has no range.
+    for (const key of ["maxTargets", "range", "length"]) {
+        if (heightening[key] !== undefined && !flag[key]) {
+            errors.push(`${at}.${key} grows a ${key} the Technique does not have — set a base value`);
+        }
+    }
+
+    if (heightening.at !== undefined) {
+        if (typeof heightening.at !== "object" || Array.isArray(heightening.at)) {
+            errors.push(`${at}.at must be an object keyed by character level`);
+            return;
+        }
+        for (const [level, gains] of Object.entries(heightening.at)) {
+            const level_ = Number(level);
+            if (!(Number.isInteger(level_) && level_ >= 1 && level_ <= 20)) {
+                errors.push(`${at}.at has "${level}", which is not a character level`);
+            }
+            const keys = Object.keys(gains ?? {});
+            if (keys.length === 0) errors.push(`${at}.at["${level}"] grants nothing`);
+            for (const key of keys) {
+                if (!["maxTargets", "areas", "range", "length"].includes(key)) {
+                    errors.push(`${at}.at["${level}"] cannot grow "${key}"`);
+                } else if (!(Number.isInteger(gains[key]) && gains[key] > 0)) {
+                    errors.push(`${at}.at["${level}"].${key} must be a positive integer`);
+                }
+            }
+        }
+    }
+}
 
 function validateRiders(doc, where, errors) {
     const riders = doc.flags?.["isaacs-hb-pf2e"]?.riders;

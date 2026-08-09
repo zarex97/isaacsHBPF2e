@@ -110,8 +110,8 @@ Two settings and one key:
 - Hold **Control** while casting to target by hand this once, the same key `pf2e-toolbelt` uses to skip its
   own template popup.
 
-*Lightning Crown* is deliberately left out: "up to three 5-foot squares within 60 feet" is three areas, not
-one, and a single Region cannot express it.
+*Lightning Crown*'s three 5-foot squares are aimed one after another, and it gains a fourth at 10th level,
+a fifth at 14th and a sixth at 18th.
 
 ## Riders
 
@@ -335,35 +335,62 @@ could be set. Representing a force effect as a hazard actor works and needs no c
 bypass above then applies to it unchanged; that is written into the Cloth as how to run it. This has moved
 to §6.
 
-### 4. Things that must see the die or the outcome
+### 4. Things that must see the die — solved
 
-| Where | What is manual |
+| Where | Now |
 | :-- | :-- |
-| Libra — The Balance | "The first natural 1 you roll each hour counts as a 10." `SubstituteRoll` resolves *before* the die is known, so it cannot be made conditional on rolling a 1 |
-| Virgo — Om | Which roll consumes the empowerment. The numbers are automated; nothing enforces that it applies to only one roll |
-| Everything with a per-hour or per-Zenith-day frequency | PF2e tracks per-round/turn/day cleanly; longer and bespoke periods are on the honour system |
+| Libra — *The Balance* | A natural 1 is rewritten to a 10 after the roll, the degree of success recomputed, and the hourly allowance spent |
+| Virgo — Om | The first damage roll that benefits spends the stacks; anything unspent lapses at the end of your turn |
+| Per-hour frequencies | Recharged off Foundry's core `updateWorldTime` hook |
+| Per-Zenith-day frequencies | Recharged when the sky tracker turns the day over |
 
-**A plan for all three** is in [`docs/heightening-and-outcomes.md`](docs/heightening-and-outcomes.md).
-*The Balance* rewrites the card after the roll, because `SubstituteRoll` picks its value before the die is
-known; Om consumes its empowerment on the first roll that benefits; and per-hour frequencies recharge off
-Foundry's core `updateWorldTime` hook, which needs no calendar module at all — pf2e's own World Clock
-already drives it.
+**No calendar module is required.** `updateWorldTime` is a core Foundry hook that fires whenever world time
+moves, whoever moved it, and pf2e ships its own **World Clock** — so advancing an hour works out of the box.
+[Seasons & Stars](https://foundryvtt.com/packages/seasons-and-stars) is a much nicer way to advance time and
+worth having, but it is a convenience, never a dependency.
 
-### 5. Non-damage heightening riders
+*The Balance* is the one place this module re-implements a piece of pf2e rather than calling it:
+`DegreeOfSuccess` is not exposed to modules, so the band comparison lives in `scripts/lib/degree.mjs`,
+pinned by a table of cases in `npm run test:riders`. If a check has no DC the rewrite is skipped, because
+without one there is no degree to get wrong.
 
-Per-step **damage** and **area** growth are both automated (`heightening.damage`, `heightening.area`).
-What is left has no field in the spell schema:
+### 5. Non-damage heightening — solved
 
-- Extra **targets** at specific levels (Gemini, Virgo, Aries)
-- Longer **range** per step (Gemini, Virgo, Aries, Libra)
-- Additional **Strikes** or **pillars** per step (Taurus, Leo, Scorpio, Sagittarius)
-- Wall **length** (Aries' *Crystal Wall* — a wall, not an area)
+`system.heightening` carries damage and area and nothing else, and no `ItemAlteration` reaches a spell's
+range or a target count, because pf2e models neither. All four rows are therefore expressed in this
+module's own targeting rule, which grows two ways because the Techniques are written two ways:
 
-**No `ItemAlteration` reaches these.** Its handlers cover `area-size` and weapon ranges but not a spell's
-range or a target count, because pf2e models neither — so all four rows live in this module's own
-`areaTargeting` config, which already owns `maxTargets` and the area shape and only has to become
-rank-aware. See [`docs/heightening-and-outcomes.md`](docs/heightening-and-outcomes.md), which also brings
-*Lightning Crown* back: `canvas.regions.placeRegions` aims several areas in sequence.
+```jsonc
+"areaTargeting": {
+    "maxTargets": 3, "range": 30, "areas": 1, "length": 15,
+    "heightening": {
+        "range": 10,                                   // per heightening step
+        "at": { "12": { "maxTargets": 1 } }             // at a named character level
+    }
+}
+```
+
+"The range increases by 10 feet" is per step; "at 12th and 16th level, you may target one additional
+creature" is every *four* levels and cannot be a step increment at all. Both are checked by
+`npm run validate`, and the arithmetic is driven by the shipped content in `npm run test:riders`.
+
+| Row | Now |
+| :-- | :-- |
+| Extra targets | The cap the review dialog enforces grows with level |
+| Longer range | Enforced during placement, with a GM override and a world setting to turn it off |
+| Additional pillars | *Lightning Crown* places three areas in sequence, and more from 10th |
+| Wall length | *Crystal Wall* raises real Foundry walls at the heightened length |
+
+***Lightning Crown* is no longer excluded.** It was left out of area targeting because one Region cannot be
+three areas; `canvas.regions.placeRegions` aims a list of them in turn, so it can.
+
+***Crystal Wall* is a real barrier.** Foundry `Wall` segments block movement and sight, and a hazard actor
+at the midpoint carries the AC, Hardness and Hit Points, so attacking it is ordinary pf2e — and Capricorn's
+Hardness bypass works on it with no extra code. Both are torn down together when it drops to 0 HP.
+
+A Technique with no area can still say something: *Another Dimension* is one creature and two from 12th
+level, so its count and range are checked against the targets you picked rather than making you aim an
+emanation at your own feet.
 
 ### 6. Deliberately not automated
 
@@ -379,6 +406,10 @@ Not gaps — these are judgement calls that should stay with the table.
   character in the system
 - **Force effects as Hardness 0.** Foundry has no damageable force effect to apply it to. Place a hazard
   actor for the *wall of force* and Capricorn's Hardness bypass will work on it with no further help
+- **How many Strikes you actually make.** *Pleiades Nova* is five and seven at 18th; the card says so and
+  the target cap enforces it, but nothing counts the rolls. pf2e tracks this for no activity — Flurry of
+  Blows and Double Slice are the same — and a counter built from chat messages would miss every Strike made
+  from the sheet, which is worse than no counter at all
 
 ## Compromises already made
 
