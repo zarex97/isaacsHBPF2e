@@ -1,4 +1,32 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "damageType": "poison",
+                        "formula": "1d6",
+                        "type": "damage"
+                    },
+                    "event": "strike-received",
+                    "note": "Royal Demon Rose. Reach weapons should not trigger this; the roses cannot tell.",
+                    "outcomes": [
+                        "success",
+                        "criticalSuccess"
+                    ],
+                    "predicate": [
+                        {
+                            "or": [
+                                "item:melee",
+                                "item:category:unarmed",
+                                "item:trait:unarmed"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    },
     "folder": "Gold Cloths",
     "img": "icons/magic/nature/rose-thorned-red.webp",
     "name": "Pisces — the Roses",

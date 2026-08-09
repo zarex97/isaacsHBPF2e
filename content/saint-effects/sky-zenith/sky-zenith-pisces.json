@@ -1,4 +1,55 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "dc": "cosmo",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "poison",
+                                    "formula": "8d6",
+                                    "type": "damage"
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            },
+                            {
+                                "apply": {
+                                    "max": 4,
+                                    "slug": "enfeebled",
+                                    "type": "condition",
+                                    "value": 1
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ],
+                                "predicate": [
+                                    {
+                                        "not": "rider:target:condition:enfeebled:4+"
+                                    }
+                                ]
+                            }
+                        ],
+                        "statistic": "fortitude",
+                        "type": "save"
+                    },
+                    "area": {
+                        "affects": "enemies",
+                        "maxTargets": 4,
+                        "type": "emanation",
+                        "value": 15
+                    },
+                    "event": "turn-end",
+                    "note": "The garden requires that you acted hostilely this turn; it cannot tell whether you did."
+                }
+            ]
+        }
+    },
     "folder": "Sky: Zenith",
     "img": "icons/magic/nature/rose-thorned-red.webp",
     "name": "Sky: Zenith (Pisces)",

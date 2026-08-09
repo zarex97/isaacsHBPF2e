@@ -1,0 +1,38 @@
+{
+    "folder": "Riders",
+    "img": "icons/skills/melee/strike-slashes-orange.webp",
+    "name": "Effect: Severed (Natural Attack)",
+    "system": {
+        "description": {
+            "value": "<p>Severed by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Capricorn — Excalibur]'s <strong>The Sharpest Sword</strong>.</p><p>The creature has permanently lost one natural attack, until it receives <em>regenerate</em>.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "slug": "severed-natural-attack",
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

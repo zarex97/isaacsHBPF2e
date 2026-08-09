@@ -111,39 +111,89 @@ Two settings and one key:
 *Lightning Crown* is deliberately left out: "up to three 5-foot squares within 60 feet" is three areas, not
 one, and a single Region cannot express it.
 
-## Riders on a failed save
+## Riders
 
-Once targets exist, the other half follows: when a target rolls its save from the chat card, the conditions
-the Technique inflicts on that outcome are applied to it. *Diamond Dust* slows what fails, *Tenma Kōfuku*
-stuns 1 on a failure and 3 on a critical failure, *Scarlet Needle* adds a needle to the counter on the
-target's sheet.
+A rider is what happens to a target *besides* damage. When a save is rolled, a Strike lands, damage is
+applied, or a turn ends, the conditions the Technique or the Cloth inflicts are applied to the right
+creature, on its own sheet, without anyone clicking a condition on. *Diamond Dust* slows what fails,
+*Scarlet Needle* adds a needle to the counter, Virgo's Six Paths takes one sense per hit, and Pisces'
+garden poisons whatever is still standing next to it at the end of the turn.
 
-A rider is authored on the Technique next to its targeting rule:
+Riders are authored on whatever the rule belongs to — a Technique, a Cloth, a sky effect:
 
 ```jsonc
 "riders": [
-    { "outcomes": ["failure", "criticalFailure"],
-      "apply": { "type": "condition", "slug": "slowed", "value": 1 },
-      "duration": { "unit": "rounds", "value": 1 } },
-
-    { "outcomes": ["failure"],
-      "apply": { "type": "effect", "uuid": "Compendium.…Item.Effect: Scarlet Needle", "stack": true } },
-
-    { "outcomes": ["failure"],
-      "apply": { "type": "prompt", "text": "Pushed 15 feet away from the Saint." } }
+    { "event": "strike-resolved",
+      "outcomes": ["success", "criticalSuccess"],
+      "predicate": [{ "or": ["item:category:unarmed", "item:trait:unarmed"] }],
+      "apply": { "type": "save", "statistic": "will", "dc": "cosmo", "riders": [
+          { "outcomes": ["failure", "criticalFailure"],
+            "predicate": [{ "not": "rider:target:condition:blinded" }],
+            "apply": { "type": "condition", "slug": "blinded" } }
+      ]}}
 ]
 ```
 
-- **condition** with a `duration` becomes a generated effect granting that condition, the way pf2e ships its
-  own timed conditions — so it expires on its own instead of sitting on the sheet until someone notices.
-  Without a duration it is applied as a plain condition for the table to clear.
+### Events
+
+| `event` | Fires when | Whose riders are read |
+| :-- | :-- | :-- |
+| `save-rolled` *(default)* | A target rolls its save from a chat card | The Technique, and the caster's items |
+| `strike-resolved` | This actor's Strike resolves | The attacker's items |
+| `strike-received` | A Strike resolves against this actor | The defender's items |
+| `damage-applied` | Damage from this actor's item lands | The origin's items |
+| `turn-start`, `turn-end` | This actor's turn begins or ends | This actor's items |
+
+A rider with no `event` means `save-rolled`, so every Technique written before events existed still means
+what it meant. A rider with no `outcomes` fires on any outcome — which is what "needles land on any attack
+you make, hit or miss" needs.
+
+### What a rider can do
+
+- **condition** with a `duration` becomes a generated effect granting that condition, the way pf2e ships
+  its own timed conditions — so it expires on its own instead of sitting on the sheet until someone
+  notices. Without a duration it is a plain condition for the table to clear. `max` caps a cumulative one.
 - **effect** applies an authored item from the packs. `stack: true` walks a counter badge up instead of
   adding a second icon, which is how Scorpio's needles are counted.
-- **prompt** whispers the GM. Forced movement, death and "choose a sense" live here: automating half of a
-  rider and being honest about the other half beats guessing which 15 feet.
+- **save** makes the target roll against the Saint's Cosmo DC and carries its own riders, chosen by the
+  result. This is how "a Will save per unarmed hit" works when there is no chat card to hang buttons on.
+- **choice** whispers the caster a card of buttons and applies the one they pick. Which sense *Tenbu Hōrin*
+  takes and which limb *The Sharpest Sword* severs are decisions, and they belong to the caster — who is
+  often not whoever rolled.
+- **damage** rolls real damage, so immunities and resistances still apply, and posts it to chat.
+- **persistent-damage** applies a bleed or a burn. `perCounter` scales it by a counter the target already
+  carries, which is what makes Scorpio's "1d6 per needle" a single growing wound rather than fifteen.
+- **prompt** whispers the GM. Forced movement and outright death live here: automating half of a rider and
+  being honest about the other half beats guessing which 15 feet.
+
+### Areas
+
+A `turn-start` or `turn-end` rider can carry an `area`, and then it fans out from the Saint's own token
+instead of landing on one creature. Pisces' rose garden is a 10-foot emanation that catches up to four
+enemies; it reuses the same containment and alliance filtering as cast-time area targeting, so "enemies
+within 10 feet" means the same thing in both places.
+
+### Asking about the target
+
+Predicates can use the system's own `target:*` options, plus a `rider:*` vocabulary generated by this
+module for the questions an escalating rider needs to ask:
+
+| Option | True when |
+| :-- | :-- |
+| `rider:target:condition:<slug>` | The target has that condition |
+| `rider:target:condition:<slug>:<n>` / `:<n>+` | …at exactly, or at least, that value |
+| `rider:target:effect:<slug>` | The target carries that effect |
+| `rider:target:effect:<slug>:<n>` / `:<n>+` | …with a counter badge at exactly, or at least, that |
+| `rider:target:hp-zero`, `rider:target:hp-half-or-less` | Health, after the damage landed |
+| `rider:damage:type:<type>` | The damage that fired this rider included that type |
+
+Every predicate is tested against a snapshot taken **before** anything is applied. That is what makes an
+escalation ladder advance exactly one step: Virgo's four sense-loss riders each require the step before it,
+and only one of them can match a given hit. `npm run test:riders` drives those ladders against the shipped
+content, so an edit that breaks the ordering fails the build.
 
 Rerolls are handled: changing the degree of success removes the riders applied for the old one and applies
-the new set, and only ever removes what this module created.
+the new set, and only ever removes what this module created — including winding a counter badge back down.
 
 This needs a **GM online**, because a player cannot write to a monster's sheet. If none is, the caster is
 told what would have been applied. Turn the whole thing off with **Apply Technique riders automatically**.
@@ -196,38 +246,45 @@ Built from **class guide v4**. Almost everything is automated; what follows is e
 by *why* it resists automation, because the workaround for each group is likely to be the same. Treat these
 as objectives.
 
-### 1. Cross-actor effects — mostly solved
+### 1. Cross-actor effects — solved, except where it should not be
 
-**This was the largest group, and the save-driven half of it is now automated.** A rule element still
-cannot reach another actor's sheet — that has not changed and will not. What changed is that the rider no
-longer has to come from a rule element: `scripts/riders/` listens for `pf2e-toolbelt.rollSave`, works out
-which riders that degree of success earns, and has a GM apply them to the target.
+**This was the largest group, and it is now automated.** A rule element still cannot reach another actor's
+sheet — that has not changed and will not. What changed is that the rider no longer comes from a rule
+element: `scripts/riders/` watches saves, Strikes, damage and turn boundaries, works out what each event
+earns, and has a GM apply it to the right creature.
 
-Twenty-six Techniques now carry riders. A condition with a duration is wrapped in a generated effect the way
-pf2e wraps its own timed conditions, so *slowed 1 for 1 round* expires on its own. A reroll that changes the
-degree of success takes the old riders back off and applies the new ones — and only ever removes what this
-module put there.
+| Where | Now |
+| :-- | :-- |
+| Every damaging Technique | 26 Techniques carry riders keyed to the degree of success |
+| Taurus — boon and *Great Horn* | Prone is applied; the push is whispered |
+| Virgo — Six Paths (Ascendant) | A Will save per unarmed hit, and one sense lost per failure, in order |
+| Scorpio — needles | Needles land on any attack; enfeebled at 5, blinded at 10, stunned 2 at 14 |
+| Scorpio — Ascendant | 1d6 persistent bleed per needle, capped at 10; the death save fires at 8 |
+| Aquarius — Ascendant | Cold damage forces a Fortitude save, stacking slowed, petrified at slowed 4 |
+| Pisces — passive and aura | The roses answer melee hits; the garden ticks at the end of your turn |
+| Capricorn — *The Sharpest Sword* | A critical hit asks you which limb, sense or natural attack is severed |
+| Cancer — Ascendant | Reducing a creature to 0 HP is detected and whispered |
 
-Requires **pf2e-toolbelt**'s Target Helper, and a GM online. With no GM, the caster is told what would have
-been applied rather than being left to assume it was.
+What is still manual is manual on purpose:
 
-What remains manual, and why:
+| Where | Why |
+| :-- | :-- |
+| Forced movement — pushed, dragged, launched, teleported | *Which* 15 feet depends on walls, allies and facing. Whispered to the GM rather than guessed |
+| Outright death — Antares, *Royal Funeral*, Cancer's Ascendant | A campaign decision, not a condition. The module tells you the moment has arrived and stops there |
+| Virgo — Zenith, Cancer — Zenith, Aquarius — Zenith | These are activities you choose to use, not riders on something else. They belong in §2 |
 
-| Where | What is manual | Why |
-| :-- | :-- | :-- |
-| Forced movement | Pushed 15 ft, dragged 30 ft, launched 30 ft up, teleported 60/250 ft | *Which* 15 feet depends on walls, allies and facing. Whispered to the GM instead of guessed |
-| Outright death | Antares, *Royal Funeral*, Cancer's Ascendant, *Sekishiki Tenryū Ha* on a crit | A campaign decision, not a condition |
-| Choice riders | *Tenbu Hōrin*'s sense loss, *The Sharpest Sword*'s severing | The Saint chooses which sense or limb |
-| Strike-based riders | Virgo's Six Paths, Scorpio's Ascendant bleed, *Rozan Ryū Hi Shō* on a crit | These key off a Strike's outcome, not a save; the engine is save-driven |
-| Passive and aura riders | Pisces' reactive poison, Aquarius' cumulative slowed → petrified | These fire on the *target's* turn, with no message to hang off |
+The design behind it, and what it deliberately does not do, is in
+[`docs/trigger-system.md`](docs/trigger-system.md).
 
-**The remaining gap** is a strike-outcome equivalent of the save hook — `pf2e.damageRoll` plus the target's
-degree of success — which would close the Strike-based row. The aura rows want a real Aura rule element with
-`affects`, which pf2e already has; they are a content job rather than a scripting one.
+Three caveats worth knowing before trusting it:
 
-There is a design note for the last three rows in [`docs/trigger-system.md`](docs/trigger-system.md): what
-each one needs, and the argument for generalising the rider engine into an event bus rather than adding
-three more listeners to it.
+- **A GM must be online.** A player cannot write to a monster's sheet. With no GM, the caster is told what
+  would have been applied instead of it silently not happening.
+- **Area riders need the origin's scene to be the one the GM is viewing.** Pisces' garden is resolved on
+  the GM's client against the canvas; if they are looking at another scene, the tick is skipped with a
+  console warning rather than resolved against the wrong map.
+- **Reach is invisible to the roses.** Pisces' passive says "unarmed or non-reach melee attack"; the rider
+  fires on any melee hit. Reach is not in the attack message.
 
 ### 2. Action economy the system does not model
 

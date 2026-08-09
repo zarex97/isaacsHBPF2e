@@ -1,46 +1,118 @@
-import { targetingOptions, testPredicate } from "../lib/roll-options.mjs";
+import { describeActor, describeDamage, riderOptions } from "../lib/roll-options.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
-import { OUTCOME_LABELS, itemFor, ridersOn } from "./data.mjs";
+import { catchTokens } from "../targeting/catch.mjs";
+import { shapeFromArea } from "../targeting/place.mjs";
+import { OUTCOME_LABELS, collectRiders, itemFor } from "./data.mjs";
+import { selectRiders } from "./select.mjs";
+
+/** pf2e's DegreeOfSuccess is an index, not a word. */
+const DEGREES = ["criticalFailure", "failure", "success", "criticalSuccess"];
 
 /**
- * Apply a target's riders for an outcome. GM-side; see relay.mjs for why.
+ * Apply the riders an event earned. GM-side; see relay.mjs for why.
  *
- * Rerolls are the reason this is written as "replace what is on the sheet" rather than "add": a hero point
- * turning a critical failure into a success has to take the stunned 3 back off again. Only what this
- * module put there may be removed — a condition the GM clicked on by hand is not ours to touch — so every
- * application leaves a receipt on the message saying which items it created and which counters it moved,
- * and undoing is replaying that receipt backwards.
+ * Rerolls are the reason this replaces rather than adds: a hero point turning a critical failure into a
+ * success has to take the stunned 3 back off again. Only what this module put there may be removed — a
+ * condition the GM clicked on by hand is not ours to touch — so every application leaves a receipt on the
+ * message saying which items it created and which counters it moved, and undoing is that receipt replayed
+ * backwards.
  */
-export async function applyRiders({ messageId, targetUuid, outcome }) {
-    const message = game.messages.get(messageId);
-    const target = await fromUuid(targetUuid);
-    const actor = target?.actor;
-    const item = itemFor(message);
-    if (!message || !actor || !item) return;
+export async function applyRiders(payload) {
+    const context = await resolveContext(payload);
+    if (!context) return;
 
-    const previous = message.flags?.[MODULE_ID]?.ridersApplied?.[target.id] ?? null;
-    if (previous?.outcome === outcome) return;
+    const candidates = collectRiders({
+        event: payload.event,
+        item: context.messageItem,
+        actor: context.originActor,
+    });
+    if (candidates.length === 0) return;
+
+    // A rider with an `area` fans out from the origin's token; everything else lands on the one target the
+    // event named. Grouping by target first is what lets each target get its own snapshot and receipt.
+    const byTarget = new Map();
+    for (const candidate of candidates) {
+        for (const target of await targetsFor(candidate.rider, context)) {
+            if (!byTarget.has(target)) byTarget.set(target, []);
+            byTarget.get(target).push(candidate);
+        }
+    }
+
+    for (const [target, forTarget] of byTarget) {
+        await applyToTarget(target, forTarget, context, payload);
+    }
+}
+
+async function applyToTarget(target, candidates, context, payload) {
+    const actor = target?.actor;
+    if (!actor) return;
+
+    const receiptKey = `${payload.event}:${target.id}`;
+    const previous = context.message?.flags?.[MODULE_ID]?.ridersApplied?.[receiptKey] ?? null;
+    if (previous?.outcome === (payload.outcome ?? null)) return;
     if (previous) await undo(actor, previous);
 
-    const context = { item, actor, target, message, outcome, adjustments: [], prompts: [] };
+    // The snapshot. Every predicate for this target is tested against the world as it was before anything
+    // was applied, which is what makes an escalation ladder advance exactly one step: the rider for step
+    // two requires step one to be present, and it is not, yet.
+    const options = riderOptions({
+        originActor: context.originActor,
+        targetActor: actor,
+        item: context.item ?? context.messageItem,
+        extra: payload.damage ? describeDamage(payload.damage) : [],
+    });
+
+    const chosen = selectRiders(candidates, { outcome: payload.outcome ?? null, options });
+    if (chosen.length === 0) return;
+
+    const work = {
+        ...context,
+        actor,
+        target,
+        outcome: payload.outcome ?? null,
+        event: payload.event,
+        adjustments: [],
+        prompts: [],
+        choices: [],
+    };
     const before = new Set(actor.items.map((i) => i.id));
 
-    for (const rider of selectRiders(item, outcome, actor)) {
+    for (const { rider, item, index } of chosen) {
         try {
-            await applyOne(rider, context);
+            await applyOne(rider, { ...work, item, riderIndex: index, riderItem: item });
         } catch (error) {
             console.error(`Isaac's Homebrew | ${item.name}: rider failed on ${actor.name}`, rider, error);
         }
     }
 
-    const receipt = {
-        outcome,
-        itemIds: actor.items.map((i) => i.id).filter((id) => !before.has(id)),
-        adjustments: context.adjustments,
-    };
-    await message.update({ [`flags.${MODULE_ID}.ridersApplied.${target.id}`]: receipt });
+    if (context.message) {
+        const receipt = {
+            outcome: payload.outcome ?? null,
+            itemIds: actor.items.map((i) => i.id).filter((id) => !before.has(id)),
+            adjustments: work.adjustments,
+        };
+        await context.message.update({ [`flags.${MODULE_ID}.ridersApplied.${receiptKey}`]: receipt });
+    }
 
-    if (context.prompts.length > 0) await postPrompts(context);
+    if (work.prompts.length > 0) await postPrompts(work);
+    for (const choice of work.choices) await postChoice(choice, work, payload);
+}
+
+/** One option of one choice rider, come back from the caster's click. */
+export async function applyChoice(payload) {
+    const context = await resolveContext(payload);
+    const target = await fromUuid(payload.targetUuid);
+    const actor = target?.actor;
+    if (!context || !actor) return;
+
+    const item = await fromUuid(payload.riderItemUuid);
+    const rider = (item?.flags?.[MODULE_ID]?.riders ?? [])[payload.riderIndex];
+    const option = rider?.apply?.options?.[payload.optionIndex];
+    if (!option?.apply) return;
+
+    const work = { ...context, actor, target, item, outcome: payload.outcome ?? null, adjustments: [], prompts: [], choices: [] };
+    await applyOne({ ...rider, apply: option.apply, duration: option.duration ?? rider.duration }, work);
+    if (work.prompts.length > 0) await postPrompts(work);
 }
 
 async function applyOne(rider, context) {
@@ -49,53 +121,93 @@ async function applyOne(rider, context) {
         case "prompt":
             context.prompts.push(apply.text ?? rider.note ?? "");
             return;
+        case "choice":
+            context.choices.push({ rider, index: context.riderIndex, item: context.riderItem ?? context.item });
+            return;
+        case "save":
+            return applySave(rider, context);
+        case "damage":
+            return applyDamageRider(rider, context);
+        case "persistent-damage":
+            return applyPersistent(rider, context);
         case "effect":
             return applyEffect(rider, context);
         case "condition":
             return applyCondition(rider, context);
         default:
-            console.warn(`Isaac's Homebrew | ${context.item.name}: unknown rider type "${apply.type}"`);
+            console.warn(`Isaac's Homebrew | ${context.item?.name}: unknown rider type "${apply.type}"`);
     }
 }
 
-/** Riders this outcome earns, after the target has been tested against each one's predicate. */
-function selectRiders(item, outcome, actor) {
-    const options = targetingOptions(item.actor, actor, item);
-    return ridersOn(item).filter(
-        (rider) =>
-            Array.isArray(rider.outcomes) &&
-            rider.outcomes.includes(outcome) &&
-            testPredicate(rider.predicate, options),
+/* ------------------------------------------------------------------------------------------------ */
+/*  Targets                                                                                          */
+/* ------------------------------------------------------------------------------------------------ */
+
+/**
+ * Who a rider lands on.
+ *
+ * Without an `area` that is the token the event named. With one, the rider is an aura tick: build the
+ * shape on the origin's token and reuse the same containment and alliance filtering the cast-time area
+ * targeting uses, so "enemies within 10 feet" means the same thing in both places.
+ */
+async function targetsFor(rider, context) {
+    if (!rider.area) return context.target ? [context.target] : [];
+
+    const originToken = context.originToken;
+    if (!originToken?.object) return [];
+    if (!canvas?.ready || canvas.scene?.id !== originToken.parent?.id) {
+        console.warn(
+            `Isaac's Homebrew | ${context.originActor?.name}: an area rider needs the origin's scene to be `
+                + `the viewed one, and it is not. Skipped.`,
+        );
+        return [];
+    }
+
+    const shape = shapeFromArea(rider.area, originToken.object, originToken.object.center);
+    if (!shape) return [];
+
+    const region = new CONFIG.Region.documentClass(
+        { name: "Rider area", shapes: [shape], flags: { pf2e: { areaShape: rider.area.type } } },
+        { parent: canvas.scene },
     );
+    // `catchTokens` reads the origin actor off `config.item`, so hand it something item-shaped. The aura
+    // belongs to the Cloth, not to any one Technique, so there is no real item to give it.
+    const config = {
+        item: { actor: context.originActor, name: context.originActor?.name ?? "", system: {} },
+        affects: rider.area.affects ?? "enemies",
+        includesSelf: rider.area.includesSelf === true,
+        includesNeutral: rider.area.includesNeutral === true,
+        requireLineOfEffect: rider.area.requireLineOfEffect !== false,
+        predicate: [],
+        maxTargets: Number(rider.area.maxTargets) || 0,
+    };
+
+    const { caught } = catchTokens(region, config, originToken.object);
+    return caught.filter((entry) => entry.checked).map((entry) => entry.token.document);
 }
 
-async function undo(actor, receipt) {
-    for (const { itemId, delta } of receipt.adjustments ?? []) {
-        const item = actor.items.get(itemId);
-        const value = item?.system?.badge?.value;
-        if (typeof value !== "number") continue;
-        const reverted = value - delta;
-        if (reverted > 0) await item.update({ "system.badge.value": reverted });
-        else await item.delete();
-    }
-    const present = (receipt.itemIds ?? []).filter((id) => actor.items.has(id));
-    if (present.length > 0) await actor.deleteEmbeddedDocuments("Item", present);
-}
+/* ------------------------------------------------------------------------------------------------ */
+/*  Apply handlers                                                                                   */
+/* ------------------------------------------------------------------------------------------------ */
 
 /**
  * A condition with a duration is not a condition — it is an effect that grants one.
  *
  * PF2e conditions carry no duration of their own, which is why the system's own timed conditions ship as
  * "Effect: X" items with a GrantItem rule. Applying a bare `slowed 1` for "1 round" would leave it on the
- * sheet until somebody remembered, which is the problem this feature exists to solve, so a rider with a
- * duration is wrapped the same way the system wraps its own.
+ * sheet until somebody remembered, which is the problem this feature exists to solve.
  */
 async function applyCondition(rider, context) {
     const slug = rider.apply.slug;
     const value = Number(rider.apply.value) || null;
 
     if (!rider.duration) {
-        await context.actor.increaseCondition(slug, value ? { value } : {});
+        const params = {};
+        if (value) params.value = value;
+        // "cumulative to enfeebled 4" — the cap belongs on the increment, not on a predicate that would
+        // have to be rewritten every time the ceiling moves.
+        if (Number(rider.apply.max)) params.max = Number(rider.apply.max);
+        await context.actor.increaseCondition(slug, params);
         return;
     }
 
@@ -129,6 +241,7 @@ async function applyEffect(rider, context) {
         if (existing?.system.badge?.type === "counter") {
             const was = existing.system.badge.value;
             const value = Math.min(was + delta, existing.system.badge.max ?? Infinity);
+            if (value === was) return;
             await existing.update({ "system.badge.value": value });
             context.adjustments.push({ itemId: existing.id, delta: value - was });
             return;
@@ -143,18 +256,191 @@ async function applyEffect(rider, context) {
     await context.actor.createEmbeddedDocuments("Item", [source]);
 }
 
+/**
+ * Persistent damage, optionally scaled by a counter the target is already carrying.
+ *
+ * Scorpio's Ascendant bleed is "1d6 per needle", and the needle count is on the target as a counter badge
+ * put there by an earlier rider. Reading it back is what turns a static formula into the stacking one the
+ * Cloth actually describes.
+ */
+async function applyPersistent(rider, context) {
+    const { formula = "1d6", damageType = "bleed", perCounter, max } = rider.apply;
+    const count = perCounter ? Math.min(counterOn(context.actor, perCounter), Number(max) || Infinity) : 1;
+    const scaled = perCounter ? scaleFormula(formula, count) : formula;
+    if (!scaled) return;
+
+    // A stacking bleed is one growing wound, not a new one per needle. Whatever this module applied last
+    // time is replaced; persistent damage a GM added by hand is left alone.
+    const ours = context.actor.itemTypes.condition.filter(
+        (c) =>
+            c.slug === "persistent-damage" &&
+            c.system.persistent?.damageType === damageType &&
+            c.flags?.[MODULE_ID]?.rider,
+    );
+    if (ours.length > 0) {
+        await context.actor.deleteEmbeddedDocuments("Item", ours.map((c) => c.id));
+    }
+
+    const source = game.pf2e.ConditionManager.getCondition("persistent-damage")?.toObject();
+    if (!source) return;
+    source.system.persistent = {
+        formula: scaled,
+        damageType,
+        dc: Number(rider.apply.dc) || 15,
+    };
+    source.flags = foundry.utils.mergeObject(source.flags ?? {}, riderFlags(rider, context));
+    await context.actor.createEmbeddedDocuments("Item", [source]);
+}
+
+/**
+ * Damage a rider deals directly — Pisces' roses, and the garden's tick.
+ *
+ * Rolled as a real `DamageRoll` rather than a flat number so immunities, weaknesses and resistances are
+ * honoured on the way in, and posted to chat so the table can see where the poison came from. The roll
+ * carries no originating item on purpose: `applyDamage` is wrapped as an event source, and an item here
+ * would let a rider's own damage trigger another rider.
+ */
+async function applyDamageRider(rider, context) {
+    const { formula = "1d6", damageType = "untyped" } = rider.apply;
+    const DamageRoll = CONFIG.Dice.rolls.find((cls) => cls.name === "DamageRoll");
+    if (!DamageRoll) {
+        console.warn("Isaac's Homebrew | pf2e's DamageRoll is not registered; damage rider skipped.");
+        return;
+    }
+
+    const roll = await new DamageRoll(`(${formula})[${damageType}]`).evaluate();
+    const name = context.item?.name ?? context.originActor?.name ?? "Rider";
+    await roll.toMessage(
+        {
+            speaker: ChatMessage.getSpeaker({ actor: context.originActor }),
+            flavor: `${name} — ${context.actor.name}`,
+        },
+        { rollMode: game.settings.get("core", "rollMode") },
+    );
+    await context.actor.applyDamage({ damage: roll, token: context.target });
+}
+
+/**
+ * A rider that makes the target roll for it.
+ *
+ * Virgo's Six Paths demands a Will save per unarmed hit, and Aquarius' cold asks for a Fortitude save on
+ * every hit of cold damage. Neither has a chat card with save buttons to hang off — they happen mid-Strike
+ * — so the save is rolled here against the Saint's own DC, and the nested riders are chosen by its result
+ * exactly the way the outer ones were chosen by the event's.
+ */
+async function applySave(rider, context) {
+    const { statistic: slug, dc } = rider.apply;
+    const statistic = context.actor.getStatistic?.(slug);
+    if (!statistic) {
+        console.warn(`Isaac's Homebrew | ${context.actor.name} has no ${slug} statistic`);
+        return;
+    }
+
+    const value = resolveDC(dc, context);
+    if (!value) return;
+
+    const roll = await statistic.roll({
+        dc: { value },
+        skipDialog: true,
+        item: context.item ?? null,
+        origin: context.originActor ?? null,
+        extraRollOptions: [`${MODULE_ID}:rider-save`],
+    });
+    const outcome = DEGREES[roll?.degreeOfSuccess ?? -1];
+    if (!outcome) return;
+
+    const nested = (rider.apply.riders ?? []).map((r, index) => ({ rider: r, item: context.item, index }));
+    const options = riderOptions({
+        originActor: context.originActor,
+        targetActor: context.actor,
+        item: context.item,
+    });
+    for (const { rider: inner } of selectRiders(nested, { outcome, options })) {
+        await applyOne(inner, { ...context, outcome });
+    }
+}
+
+/** The Saint's Cosmo DC, or a flat number written in the content. */
+function resolveDC(dc, context) {
+    if (typeof dc === "number") return dc;
+    if (dc === "cosmo") {
+        return (
+            context.originActor?.getStatistic?.("saint")?.dc?.value ??
+            context.originActor?.classDCs?.saint?.dc?.value ??
+            null
+        );
+    }
+    return null;
+}
+
+function counterOn(actor, uuid) {
+    const effect = actor.itemTypes.effect.find((e) => e.sourceId === uuid);
+    const badge = effect?.system?.badge;
+    return badge?.type === "counter" ? (badge.value ?? 0) : 0;
+}
+
+/** "1d6" with a count of 3 becomes "3d6". A count of zero means there is nothing to apply. */
+function scaleFormula(formula, count) {
+    if (count <= 0) return null;
+    const match = /^(\d*)d(\d+)$/.exec(String(formula).trim());
+    if (!match) return formula;
+    return `${(Number(match[1]) || 1) * count}d${match[2]}`;
+}
+
+/* ------------------------------------------------------------------------------------------------ */
+/*  Undo, sources, chat                                                                              */
+/* ------------------------------------------------------------------------------------------------ */
+
+async function undo(actor, receipt) {
+    for (const { itemId, delta } of receipt.adjustments ?? []) {
+        const item = actor.items.get(itemId);
+        const value = item?.system?.badge?.value;
+        if (typeof value !== "number") continue;
+        const reverted = value - delta;
+        if (reverted > 0) await item.update({ "system.badge.value": reverted });
+        else await item.delete();
+    }
+    const present = (receipt.itemIds ?? []).filter((id) => actor.items.has(id));
+    if (present.length > 0) await actor.deleteEmbeddedDocuments("Item", present);
+}
+
+async function resolveContext(payload) {
+    const message = payload.messageId ? game.messages.get(payload.messageId) : null;
+    const item = payload.itemUuid ? await fromUuid(payload.itemUuid) : null;
+    const target = payload.targetUuid ? await fromUuid(payload.targetUuid) : null;
+
+    const originDoc = payload.originUuid ? await fromUuid(payload.originUuid) : null;
+    const originActor = originDoc?.actor ?? originDoc ?? item?.actor ?? message?.actor ?? null;
+    if (!originActor) return null;
+
+    const originToken =
+        originDoc?.documentName === "Token"
+            ? originDoc
+            : (originActor.getActiveTokens(true, true).at(0) ?? null);
+
+    // The message's item only counts as a rider source when the message belongs to the origin. On
+    // `strike-received` the message is the attacker's, and their weapon has nothing to say about the
+    // roses growing on the person they hit.
+    const messageItem = message?.actor && message.actor === originActor ? itemFor(message) : null;
+
+    return { message, item, messageItem, originActor, originToken, target };
+}
+
 function effectSource(label, rules, rider, context) {
-    const { item, outcome } = context;
+    const item = context.item ?? context.riderItem;
+    const name = item?.name ?? context.originActor?.name ?? "Rider";
     return {
         type: "effect",
-        name: `${item.name}: ${label}`,
-        img: item.img,
+        name: `${name}: ${label}`,
+        img: item?.img ?? "icons/svg/aura.svg",
         system: {
             description: {
-                value: `<p>Applied by @UUID[${item.uuid}]{${item.name}} on a ${OUTCOME_LABELS[outcome]}.</p>`,
+                value: item?.uuid
+                    ? `<p>Applied by @UUID[${item.uuid}]{${name}}${outcomeSuffix(context)}.</p>`
+                    : `<p>Applied by ${name}${outcomeSuffix(context)}.</p>`,
             },
             duration: durationData(rider.duration),
-            level: { value: item.level ?? item.system?.level?.value ?? 1 },
+            level: { value: item?.level ?? item?.system?.level?.value ?? 1 },
             start: startData(),
             tokenIcon: { show: true },
             traits: { value: [], rarity: "common" },
@@ -165,12 +451,16 @@ function effectSource(label, rules, rider, context) {
     };
 }
 
+function outcomeSuffix(context) {
+    return context.outcome ? ` on a ${OUTCOME_LABELS[context.outcome]}` : "";
+}
+
 function durationData(duration) {
     return {
-        expiry: duration.expiry ?? "turn-start",
+        expiry: duration?.expiry ?? "turn-start",
         sustained: false,
-        unit: duration.unit ?? "rounds",
-        value: Number(duration.value) || 1,
+        unit: duration?.unit ?? "rounds",
+        value: Number(duration?.value) || 1,
     };
 }
 
@@ -179,25 +469,31 @@ function startData() {
 }
 
 /** Lets the effect's own rules resolve against the Saint that caused it, the way an aura's would. */
-function contextData({ item, actor, target }) {
-    const originActor = item.actor;
+function contextData({ originActor, originToken, item, actor, target }) {
     if (!originActor) return null;
     return {
         origin: {
             actor: originActor.uuid,
-            token: originActor.getActiveTokens(true, true).at(0)?.uuid ?? null,
-            item: item.uuid,
+            token: originToken?.uuid ?? null,
+            item: item?.uuid ?? null,
             spellcasting: null,
             rollOptions: [],
         },
-        target: { actor: actor.uuid, token: target.uuid },
+        target: { actor: actor.uuid, token: target?.uuid ?? null },
         roll: null,
     };
 }
 
 function riderFlags(rider, { message, item, outcome }) {
     return {
-        [MODULE_ID]: { rider: { messageId: message.id, outcome, source: item.uuid, note: rider.note ?? "" } },
+        [MODULE_ID]: {
+            rider: {
+                messageId: message?.id ?? null,
+                outcome: outcome ?? null,
+                source: item?.uuid ?? null,
+                note: rider.note ?? "",
+            },
+        },
     };
 }
 
@@ -206,16 +502,64 @@ function riderFlags(rider, { message, item, outcome }) {
  *
  * Being pushed 15 feet and knocked prone is two things: prone is a condition, and the push is a decision
  * about which 15 feet — which depends on walls, allies and where the caster was standing. Automating the
- * half that is a condition and whispering the half that is not is more honest than guessing, and keeps the
- * table from wondering whether the module already moved the token.
+ * half that is a condition and whispering the half that is not is more honest than guessing.
  */
-async function postPrompts({ prompts, item, actor, outcome }) {
+async function postPrompts({ prompts, item, originActor, actor, outcome }) {
     const lines = prompts.filter((text) => text).map((text) => `<li>${text}</li>`).join("");
     if (!lines) return;
+    const name = item?.name ?? originActor?.name ?? "Rider";
     await ChatMessage.create({
-        speaker: ChatMessage.getSpeaker({ actor: item.actor }),
+        speaker: ChatMessage.getSpeaker({ actor: originActor }),
         whisper: ChatMessage.getWhisperRecipients("GM").map((user) => user.id),
-        flavor: `${item.name} — ${actor.name}, ${OUTCOME_LABELS[outcome]}`,
+        flavor: `${name} — ${actor.name}${outcome ? `, ${OUTCOME_LABELS[outcome]}` : ""}`,
         content: `<p>Left to the table:</p><ul>${lines}</ul>`,
+    });
+}
+
+/**
+ * A rider the Saint has to choose.
+ *
+ * Which sense *Tenbu Hōrin* takes, which limb *The Sharpest Sword* severs — the condition is automatable,
+ * the pick is not, and the pick belongs to the caster, who is often not whoever rolled. A chat card rather
+ * than a dialog on purpose: it survives a reload, and it cannot be missed by someone looking at their
+ * sheet at the wrong moment.
+ */
+async function postChoice({ rider, index, item }, context, payload) {
+    const options = rider.apply.options ?? [];
+    if (options.length === 0 || !item?.uuid) return;
+
+    const buttons = options
+        .map(
+            (option, optionIndex) =>
+                `<button type="button" data-action="isaacs-hb-rider-choice" data-option="${optionIndex}">`
+                + `${foundry.utils.escapeHTML(option.label ?? `Option ${optionIndex + 1}`)}</button>`,
+        )
+        .join(" ");
+
+    const recipients = new Set(ChatMessage.getWhisperRecipients("GM").map((user) => user.id));
+    for (const [userId, level] of Object.entries(context.originActor?.ownership ?? {})) {
+        if (level === CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER && userId !== "default") recipients.add(userId);
+    }
+
+    await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: context.originActor }),
+        whisper: [...recipients],
+        flavor: `${item.name} — ${context.actor.name}`,
+        content:
+            `<p>${foundry.utils.escapeHTML(rider.apply.prompt ?? "Choose one.")}</p>`
+            + `<div class="isaacs-hb-choice">${buttons}</div>`,
+        flags: {
+            [MODULE_ID]: {
+                choice: {
+                    riderItemUuid: item.uuid,
+                    riderIndex: index,
+                    targetUuid: context.target?.uuid ?? payload.targetUuid,
+                    originUuid: context.originActor?.uuid,
+                    messageId: payload.messageId ?? null,
+                    itemUuid: payload.itemUuid ?? null,
+                    outcome: context.outcome ?? null,
+                },
+            },
+        },
     });
 }
