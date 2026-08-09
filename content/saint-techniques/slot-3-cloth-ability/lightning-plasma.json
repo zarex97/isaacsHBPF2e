@@ -6,7 +6,15 @@
                 "area": {
                     "type": "emanation",
                     "value": 30
-                }
+                },
+                "heightening": {
+                    "at": {
+                        "17": {
+                            "maxTargets": 1
+                        }
+                    }
+                },
+                "maxTargets": 3
             }
         }
     },

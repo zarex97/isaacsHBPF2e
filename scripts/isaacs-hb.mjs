@@ -1,11 +1,15 @@
 import { Cosmo } from "./cosmo.mjs";
 import { Duplicate } from "./economy/duplicate.mjs";
 import { FreeCast } from "./economy/free-cast.mjs";
+import { Recharge } from "./economy/recharge.mjs";
+import { Balance } from "./outcomes/balance.mjs";
+import { Om } from "./outcomes/om.mjs";
 import { Riders } from "./riders/index.mjs";
 import { MODULE_ID, adjacentSigns } from "./sky/signs.mjs";
 import { SkyTrackerApp } from "./sky/tracker-app.mjs";
 import { SkyTracker } from "./sky/tracker.mjs";
 import { AreaTargeting } from "./targeting/index.mjs";
+import { CrystalWall } from "./targeting/wall.mjs";
 
 Hooks.once("init", () => {
     SkyTracker.registerSettings();
@@ -14,6 +18,10 @@ Hooks.once("init", () => {
     FreeCast.registerSettings();
     Cosmo.registerHooks();
     Duplicate.registerHooks();
+    Recharge.registerHooks();
+    Om.registerHooks();
+    Balance.registerHooks();
+    CrystalWall.registerHooks();
     SkyTrackerApp.registerHooks();
 
     game.settings.registerMenu(MODULE_ID, "skyTrackerMenu", {
@@ -35,6 +43,10 @@ Hooks.once("init", () => {
         riders: Riders,
         freeCast: FreeCast,
         duplicate: Duplicate,
+        recharge: Recharge,
+        om: Om,
+        balance: Balance,
+        crystalWall: CrystalWall,
         open: () => new SkyTrackerApp().render(true),
         adjacentSigns,
     };

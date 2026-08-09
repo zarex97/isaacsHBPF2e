@@ -1,4 +1,13 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "balance": {
+                "predicate": [
+                    "sky:ascendant"
+                ]
+            }
+        }
+    },
     "folder": "Gold Cloths",
     "img": "icons/weapons/swords/sword-guard-blue.webp",
     "name": "Libra — the Weapons",
@@ -12,6 +21,11 @@
         "category": "classfeature",
         "description": {
             "value": "<p><strong>♎ The Libra Cloth.</strong> <em>[OFFENSE/DEFENSE]</em></p><h3>Cloth Passive — The Cloth of Arms</h3><p><em>The only Gold Cloth that carries weapons.</em> You are <strong>trained in martial weapons</strong>, and they advance with your unarmed proficiency automatically.</p><p>Your Cloth contains six weapon pairs — twin swords, tridents, nunchaku, shields, sanjiegun, and tonfa. You summon or dismiss any of them as a <strong>free action</strong>, they can never be disarmed or destroyed, and they accept weapon runes.</p><h3>Techniques</h3><ul><li><strong>1st &mdash; Signature (L1)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Rozan Shō Ryū Ha]</li><li><strong>2nd (L6)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.The Twelve Arms]</li><li><strong>3rd &mdash; Cloth Ability (L11)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Rozan Ryū Hi Shō]</li><li><strong>4th &mdash; Ultimate (L16)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Athena's Arsenal: Overdrive]</li></ul><h3>Ascendant Boon — The Balance <em>[OFFENSE/DEFENSE]</em></h3><p>Wield any two Libra weapons regardless of the hands they normally require.</p><p>They count as <strong>+1 fundamental rune tier</strong> (to the game's cap). You gain a +2 status bonus to all saves, and the first natural 1 you roll each hour counts as a 10.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Libra)]</p><h3>Zenith Boon — The Balance (Zenith) <em>[OFFENSE/DEFENSE]</em></h3><p>As the Ascendant Boon, plus <strong><em>Rozan Hyaku Ryū Ha</em></strong> once per round &#9670;&#9670;&#9670;: 60-foot line, @Damage[12d10[bludgeoning]] damage, basic Reflex; a critical failure also knocks the target prone and stuns it 2.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Libra)]</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "PT1H",
+            "value": 1
         },
         "level": {
             "value": 1

@@ -81,6 +81,9 @@ export const SkyTracker = {
         };
         await game.settings.set(MODULE_ID, SETTING, next);
         await this.applyToAll();
+        // A Zenith day is a unit of time only this tracker can define, so it is the only thing that can
+        // say when one turns over. Anything keyed to that listens here rather than polling the setting.
+        Hooks.callAll(`${MODULE_ID}.skyChanged`, next, current);
         if (announce) await this.announce();
     },
 

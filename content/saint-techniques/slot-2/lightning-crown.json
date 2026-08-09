@@ -1,6 +1,28 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "all",
+                "area": {
+                    "type": "square",
+                    "value": 5
+                },
+                "areas": 3,
+                "heightening": {
+                    "at": {
+                        "10": {
+                            "areas": 1
+                        },
+                        "14": {
+                            "areas": 1
+                        },
+                        "18": {
+                            "areas": 1
+                        }
+                    }
+                },
+                "range": 60
+            },
             "riders": [
                 {
                     "apply": {

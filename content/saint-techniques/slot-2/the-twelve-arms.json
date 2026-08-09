@@ -6,7 +6,11 @@
                 "area": {
                     "type": "emanation",
                     "value": 30
-                }
+                },
+                "heightening": {
+                    "range": 10
+                },
+                "range": 30
             },
             "riders": [
                 {

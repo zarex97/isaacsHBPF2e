@@ -1,6 +1,8 @@
 # Automating §4 and §5
 
-*Design note. Nothing here is built yet.*
+*Design note. **Built** — see `scripts/lib/degree.mjs`, `scripts/outcomes/`, `scripts/economy/recharge.mjs`
+and `scripts/targeting/{heightening,wall}.mjs`. One thing was decided differently once the code met the
+content, marked **[changed]** below.*
 
 [§4 (things that must see the die)](../README.md#4-things-that-must-see-the-die-or-the-outcome) and
 [§5 (non-damage heightening riders)](../README.md#5-non-damage-heightening-riders) are what remain of the
@@ -81,8 +83,9 @@ The numbers are automated already; what is missing is that the empowerment appli
 Technique cast carrying `om:eyes-open` from that actor sets the Om badge to 0 and turns the toggle off.
 Both seams exist — the module wraps `cast` and watches `pf2e.damageRoll`.
 
-"Before the end of this turn" is the other half, and needs no new machinery: a `turn-end` rider on the Om
-effect clears any unspent empowerment.
+"Before the end of this turn" is the other half: `pf2e.endTurn` clears anything left unspent. The damage
+roll is the only seam that works for the spending half — taking the stacks on the cast would remove them
+before the dice they are worth are added, and empower nothing at all.
 
 ## Per-hour and per-Zenith-day frequencies
 
@@ -101,6 +104,16 @@ Only the active GM performs a refill, the rule every timed thing in this module 
 ---
 
 # §5 — Non-damage heightening
+
+**[changed] Growth comes in two kinds, not one.** The plan assumed everything grew per heightening step.
+The Techniques' own text says otherwise: "the range increases by 10 feet" is per step, but "at 12th and
+16th level, you may target one additional creature" arrives every *four* levels and cannot be a step
+increment at all. So the block carries both — per-step numbers, and an `at` map keyed by character level.
+
+**[changed] Four Techniques have no area to aim.** *Another Dimension*, *Tenbu Hōrin*, *Rikudō Rinne* and
+*Astral Projection* are single-target. Giving them a synthetic emanation to satisfy the config would have
+made targeting worse than clicking the creature, so their count and range are checked against the targets
+the caster already picked instead.
 
 `system.heightening` carries `damage` and `area` and nothing else. Everything §5 asks for is already
 expressible in our own config — it only has to become rank-aware:
@@ -217,4 +230,6 @@ World Clock an hour and confirm a per-minute activity has recharged.
 ---
 
 Every API named here was read from the pf2e 8.4 source and the Foundry v14 type definitions in the
-`pf2e_fork` checkout, at the paths given. Nothing here has been built.
+`pf2e_fork` checkout, at the paths given. The degree bands, the heightening arithmetic and the frequency
+intervals are covered by `npm run test:riders`; the message rewrite, the wall geometry and the hazard still
+need a running world.
