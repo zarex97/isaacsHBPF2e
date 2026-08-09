@@ -1,0 +1,46 @@
+{
+    "folder": "Riders",
+    "img": "icons/magic/control/hand-magic-glow-pink.webp",
+    "name": "Effect: Sense Lost (Touch)",
+    "system": {
+        "description": {
+            "value": "<p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Virgo)].</p><p>The creature has lost its sense of touch: it takes a &minus;4 penalty to attack rolls and cannot Grapple.</p><p>Senses lost this way return only through <em>restoration</em> or a full night's rest.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Sense Lost (Touch)",
+                "selector": "attack-roll",
+                "type": "untyped",
+                "value": -4
+            }
+        ],
+        "slug": "sense-lost-touch",
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

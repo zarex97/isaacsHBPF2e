@@ -1,0 +1,38 @@
+{
+    "folder": "Riders",
+    "img": "icons/magic/air/wind-vortex-swirl-purple.webp",
+    "name": "Effect: Sense Lost (Smell and Taste)",
+    "system": {
+        "description": {
+            "value": "<p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Virgo)].</p><p>The creature has lost its sense of smell and taste. It cannot detect creatures or objects by scent, and anything requiring taste automatically fails.</p><p>Senses lost this way return only through <em>restoration</em> or a full night's rest.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "slug": "sense-lost-smell-and-taste",
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

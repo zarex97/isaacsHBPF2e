@@ -1,4 +1,56 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "stack": true,
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Scarlet Needle"
+                    },
+                    "event": "strike-resolved",
+                    "note": "Needles land on any attack, hit or miss."
+                },
+                {
+                    "apply": {
+                        "damageType": "bleed",
+                        "formula": "1d6",
+                        "max": 10,
+                        "perCounter": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Scarlet Needle",
+                        "type": "persistent-damage"
+                    },
+                    "event": "strike-resolved",
+                    "note": "1d6 persistent bleed per needle, capped at 10.",
+                    "predicate": [
+                        "rider:target:effect:effect-scarlet-needle:1+"
+                    ]
+                },
+                {
+                    "apply": {
+                        "dc": "cosmo",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "text": "Eight needles, and the save failed: the creature dies.",
+                                    "type": "prompt"
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            }
+                        ],
+                        "statistic": "fortitude",
+                        "type": "save"
+                    },
+                    "event": "strike-resolved",
+                    "predicate": [
+                        "rider:target:effect:effect-scarlet-needle:8+"
+                    ]
+                }
+            ]
+        }
+    },
     "folder": "Sky: Ascendant",
     "img": "icons/skills/wounds/injury-triple-slash-bleed.webp",
     "name": "Sky: Ascendant (Scorpio)",

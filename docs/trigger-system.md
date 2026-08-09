@@ -1,10 +1,11 @@
 # Triggers: closing the last three rows of §1
 
-*Design note. Nothing here is built yet.*
+*Design note. **Built** — see `scripts/riders/` and README §"Riders". Two things were decided differently
+once the code met the system; both are marked **[changed]** below.*
 
-[Automation backlog §1](../README.md#1-cross-actor-effects--mostly-solved) has three rows still marked
-manual: **choice riders**, **strike-based riders**, and **passive and aura riders**. They do not need three
-new listeners. They need the one we already have, generalised.
+[Automation backlog §1](../README.md#1-cross-actor-effects--solved-except-where-it-should-not-be) had three
+rows marked manual: **choice riders**, **strike-based riders**, and **passive and aura riders**. They did
+not need three new listeners. They needed the one already there, generalised.
 
 ## The finding
 
@@ -108,10 +109,12 @@ The attack-roll chat message already carries `context.outcome` and `context.targ
 
 - **Direct.** *Rozan Ryū Hi Shō* knocks prone on a critical hit. Match the outcome, apply the condition —
   identical to a save rider with a different event name.
-- **Save-gated.** Virgo's Six Paths demands a Will save *per unarmed hit*. Rather than build a second save
-  engine, post a check prompt aimed at the struck token. Toolbelt upgrades a prompted save into a target
-  row, the player rolls it there, and **the existing `save-rolled` listener applies the sense loss**. The
-  new event feeds the old one.
+- **Save-gated.** Virgo's Six Paths demands a Will save *per unarmed hit*. **[changed]** The plan was to
+  post a check prompt and let toolbelt turn it into a target row, so the existing `save-rolled` listener
+  would pick it up. What shipped instead is an `apply.type: "save"` that rolls the target's save directly
+  against the Saint's Cosmo DC and carries its own nested riders. The round trip through a chat message
+  turned out to need the prompt's riders to live on the prompt's item, which nothing owns; rolling in place
+  is fewer moving parts, needs no second message, and does not depend on toolbelt for the strike path.
 - **Counter-scaled.** Scorpio's Ascendant bleed is 1d6 *per needle*. The needle count is already on the
   target as a counter badge, put there by the rider engine. Read the badge, multiply, apply persistent
   damage.
@@ -123,10 +126,11 @@ resolve, adjudicate or undo anything. It emits a save and gets out of the way.
 
 Split this row in two, because half of it needs no code at all.
 
-**Use pf2e's Aura rule element for what it covers.** Pisces' aura ("4d6/8d6 and enfeebled at end of turn")
-and *Freezing Shield*'s damage to hostile creatures inside the dome are close fits for
-`affects: "enemies"` with `events: ["turn-end"]` and a `save`. That is authoring in `content/`, checked by
-the build that already exists — a content job, not a scripting one.
+**Use pf2e's Aura rule element for what it covers.** **[changed]** It covers less than it looked like from
+the schema: an Aura rule element applies an *effect* to whoever is inside, and Pisces' garden deals 4d6
+poison, which is not an effect. So the garden shipped as a `turn-end` rider with an `area`, reusing the
+containment and alliance filtering already written for cast-time area targeting. The Aura rule element
+remains the right tool for an aura that only grants or imposes an effect, and nothing here forecloses it.
 
 **Use `damage-applied` for the cumulative tracks.** Aquarius' Ascendant — cold damage stacking slowed until
 petrified at slowed 4 — is two declarative triggers rather than one clever one:
@@ -178,7 +182,22 @@ the receipt model that makes a rerolled save undo cleanly was written for one ev
 twice, or a damage application re-run after an undo, needs the same treatment. That is much easier to build
 in now than to retrofit across five sources.
 
+## What shipped
+
+Phases 1–4 are done. The `event` field defaults to `save-rolled`, so no Technique written before this
+needed touching. Sources for `strike-resolved`, `strike-received`, `damage-applied`, `turn-start` and
+`turn-end` are in `scripts/riders/sources.mjs`; the apply types grew `choice`, `save`, `damage` and
+`persistent-damage`.
+
+Phase 5 — a custom Region Behavior for movement triggers, and `apply.type: "macro"` — was not built.
+Nothing in the Cloths needs either yet, and the argument against macros as the road rather than the escape
+hatch still stands.
+
+The escalation ladders are covered by `npm run test:riders`, which drives the shipped content through the
+real selection logic with a stubbed predicate engine. That is the part most likely to be silently wrong and
+the only part testable without Foundry.
+
 ---
 
 Every API named here was read from the pf2e 8.4 source and the Foundry v14 type definitions in the
-`pf2e_fork` checkout. None of it has been exercised in a running world.
+`pf2e_fork` checkout. The ladders are tested; nothing else has been exercised in a running world.

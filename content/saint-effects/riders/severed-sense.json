@@ -1,0 +1,38 @@
+{
+    "folder": "Riders",
+    "img": "icons/magic/perception/eye-slit-orange.webp",
+    "name": "Effect: Severed (Sense)",
+    "system": {
+        "description": {
+            "value": "<p>Severed by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Capricorn — Excalibur]'s <strong>The Sharpest Sword</strong>.</p><p>The creature has permanently lost one sense, until it receives <em>regenerate</em>.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "slug": "severed-sense",
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}
