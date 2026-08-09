@@ -1,7 +1,12 @@
 import { MODULE_ID } from "../sky/signs.mjs";
-import { applyRiders } from "./apply.mjs";
+import { applyRiders, applyChoice } from "./apply.mjs";
 
 const CHANNEL = `module.${MODULE_ID}`;
+
+const HANDLERS = {
+    applyRiders,
+    applyChoice,
+};
 
 /**
  * Getting a rider onto a target's sheet.
@@ -10,22 +15,27 @@ const CHANNEL = `module.${MODULE_ID}`;
  * failed its save — the request has to be carried out by a GM. Exactly one GM: `game.users.activeGM` is
  * Foundry's designated primary, so two GMs at the table do not both apply the same condition.
  *
- * The payload deliberately carries no rider data. It names a message, a target and an outcome, and the GM
- * reads the riders off the item themselves. A player therefore cannot ask for an effect the Technique does
- * not have, and a stale client cannot apply a rider that has since been edited out of the compendium.
+ * The payload deliberately carries no rider data. It names an event, an item or a message, a target and an
+ * outcome, and the GM reads the riders off the item themselves. A player therefore cannot ask for an
+ * effect the Technique does not have, and a stale client cannot apply a rider that has since been edited
+ * out of the compendium. That property is why every new event source added here is cheap: the trust
+ * boundary does not move.
  */
 export const Relay = {
     listen() {
         game.socket.on(CHANNEL, async (payload) => {
-            if (payload?.action !== "applyRiders") return;
+            const handler = HANDLERS[payload?.action];
+            if (!handler) return;
             if (game.users.activeGM?.id !== game.user.id) return;
-            await applyRiders(payload);
+            await handler(payload);
         });
     },
 
     async request(payload) {
+        const handler = HANDLERS[payload?.action];
+        if (!handler) return;
         if (game.user.isGM && game.users.activeGM?.id === game.user.id) {
-            return applyRiders(payload);
+            return handler(payload);
         }
         if (!game.users.activeGM) {
             return warnNoGM(payload);
@@ -38,15 +48,19 @@ export const Relay = {
  * Failing loudly rather than quietly.
  *
  * With no GM online the riders cannot be applied at all, and the worst outcome is a table that believes
- * they were. Say what would have happened so it can be done by hand — which is exactly where this feature
- * started, so nothing is lost but the convenience.
+ * they were. The notice is deliberately per-cast rather than per-target: five targets failing their saves
+ * should not produce five identical warnings.
  */
-async function warnNoGM({ messageId, targetUuid, outcome }) {
-    const message = game.messages.get(messageId);
-    const target = await fromUuid(targetUuid);
-    const name = target?.name ?? "the target";
+const warned = new Set();
+
+async function warnNoGM({ event, messageId, itemUuid }) {
+    const key = `${event}:${messageId ?? itemUuid}`;
+    if (warned.has(key)) return;
+    warned.add(key);
+    setTimeout(() => warned.delete(key), 10_000);
+
+    const name = game.messages.get(messageId ?? "")?.item?.name ?? "This Technique";
     ui.notifications.warn(
-        `${message?.item?.name ?? "This Technique"}: no GM is online, so ${name}'s ${outcome} riders were `
-            + `not applied. Apply them by hand.`,
+        `${name}: no GM is online, so its riders were not applied. Apply them by hand.`,
     );
 }
