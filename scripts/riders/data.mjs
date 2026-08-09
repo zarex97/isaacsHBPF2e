@@ -19,6 +19,7 @@ export const EVENTS = [
     "save-rolled", // a target rolled its save against a Technique
     "strike-resolved", // this actor's Strike resolved against a target
     "strike-received", // a Strike resolved against this actor
+    "action-used", // this actor posted an action or ability to chat
     "damage-applied", // damage from this actor's item landed on a target
     "turn-end", // this actor's turn ended
     "turn-start", // this actor's turn began

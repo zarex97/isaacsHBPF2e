@@ -1,4 +1,19 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "freeCast": {
+                "label": "Attuned Casting",
+                "predicate": [
+                    {
+                        "or": [
+                            "item:time:1",
+                            "item:time:2"
+                        ]
+                    }
+                ]
+            }
+        }
+    },
     "folder": "Actions",
     "img": "systems/pf2e/icons/actions/FreeAction.webp",
     "name": "Attuned Casting",

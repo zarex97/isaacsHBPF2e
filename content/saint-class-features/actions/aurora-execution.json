@@ -1,4 +1,47 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "all",
+                "area": {
+                    "type": "line",
+                    "value": 60
+                }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "dc": "cosmo",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "cold",
+                                    "formula": "16d6",
+                                    "type": "damage"
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            },
+                            {
+                                "apply": {
+                                    "slug": "petrified",
+                                    "type": "condition"
+                                },
+                                "outcomes": [
+                                    "criticalFailure"
+                                ]
+                            }
+                        ],
+                        "statistic": "fortitude",
+                        "type": "save"
+                    },
+                    "event": "action-used"
+                }
+            ]
+        }
+    },
     "folder": "Actions",
     "img": "systems/pf2e/icons/actions/ThreeActions.webp",
     "name": "Aurora Execution",
@@ -12,6 +55,11 @@
         "category": "offensive",
         "description": {
             "value": "<p><strong>Frequency</strong> once per minute</p><hr /><p>60-foot line. Each creature takes @Damage[16d6[cold]] damage with a basic Fortitude save. A creature that critically fails is <strong>frozen solid</strong> &mdash; petrified, and shatterable by any critical hit.</p><p><strong>Incapacitation.</strong></p><hr /><p>Granted by the Aquarius Zenith Boon.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "PT1M",
+            "value": 1
         },
         "publication": {
             "license": "ORC",

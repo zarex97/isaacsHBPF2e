@@ -1,5 +1,14 @@
+import { describeActor, describeDamage } from "../lib/roll-options.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
-import { OUTCOMES } from "./data.mjs";
+import {
+    bypassEntriesOn,
+    ignoresHardness,
+    mergeBypass,
+    resistanceReduction,
+    selectEntries,
+    shadowTarget,
+} from "./bypass.mjs";
+import { OUTCOMES, ridersOn } from "./data.mjs";
 import { Relay } from "./relay.mjs";
 
 /**
@@ -48,7 +57,9 @@ export const Sources = {
     async onMessage(message, userId) {
         if (!enabled() || game.user.id !== userId) return;
         const context = message?.flags?.pf2e?.context;
-        if (context?.type !== "attack-roll" || !OUTCOMES.includes(context.outcome)) return;
+        if (context?.type !== "attack-roll" || !OUTCOMES.includes(context.outcome)) {
+            return Sources.onActionUsed(message);
+        }
 
         const attackerUuid = message.actor?.uuid;
         const targetUuid = context.target?.token;
@@ -75,6 +86,34 @@ export const Sources = {
     },
 
     /**
+     * An action or ability posted to chat.
+     *
+     * This is how the Zenith activities and *The Twelve Arms* reach their targets. Area targeting has just
+     * run for them — it wraps `toMessage` as well as `cast` — so `game.user.targets` is the set the caster
+     * confirmed, and reading it here is reading their answer rather than guessing at one.
+     *
+     * Spells qualify too. A Technique's *save* riders come through `save-rolled` when the target rolls, but
+     * a Technique that simply hands something to whoever it caught has no save to wait for.
+     */
+    async onActionUsed(message) {
+        const item = message?.item;
+        if (!item) return;
+        if (!ridersOn(item).some((rider) => rider.event === "action-used")) return;
+
+        const actor = message.actor;
+        for (const target of game.user.targets) {
+            await Relay.request({
+                action: "applyRiders",
+                event: "action-used",
+                messageId: message.id,
+                itemUuid: item.uuid,
+                originUuid: actor?.uuid,
+                targetUuid: target.document.uuid,
+            });
+        }
+    },
+
+    /**
      * Damage landing on someone.
      *
      * `applyDamage` is wrapped rather than hooked because pf2e emits nothing here, and because its
@@ -95,7 +134,13 @@ export const Sources = {
         const original = proto.applyDamage;
         proto.applyDamage = async function (params) {
             const before = this.hitPoints?.value ?? 0;
-            const result = await original.call(this, params);
+            const restore = Sources.applyBypass(this, params);
+            let result;
+            try {
+                result = await original.call(this, params);
+            } finally {
+                restore();
+            }
             try {
                 await Sources.onDamage(this, params, before);
             } catch (error) {
@@ -103,6 +148,51 @@ export const Sources = {
             }
             return result;
         };
+    },
+
+    /**
+     * Merge the origin's IWR bypasses into this application, and shadow what bypass cannot reach.
+     *
+     * Returns the undo function; it is called in a `finally` so a throw inside `applyDamage` can never
+     * leave a target with its Hardness or resistances quietly lowered.
+     */
+    applyBypass(actor, params) {
+        const noop = () => {};
+        if (!enabled()) return noop;
+
+        const damage = params?.damage;
+        // A plain number means IWR is being skipped entirely; there is no roll to attach a bypass to.
+        if (!damage || typeof damage === "number" || !Array.isArray(damage.instances)) return noop;
+
+        const origin = params.item?.actor;
+        if (!origin || origin === actor) return noop;
+
+        const entries = bypassEntriesOn(origin);
+        if (entries.length === 0) return noop;
+
+        const damageTypes = damageTypesOf(damage);
+        const options = new Set([
+            ...(params.rollOptions ?? []),
+            ...damageTypes.map((type) => `damage:type:${type}`),
+            ...describeDamage({ types: damageTypes, outcome: params.outcome ?? null }),
+            ...(origin.getRollOptions?.() ?? []),
+            ...(params.item?.getRollOptions?.("item") ?? []),
+            ...describeActor(actor, "target"),
+        ]);
+
+        const matching = selectEntries(entries, options);
+        if (matching.length === 0) return noop;
+
+        try {
+            damage.options.bypass = mergeBypass(damage.options.bypass, matching, damageTypes);
+        } catch (error) {
+            console.error("Isaac's Homebrew | could not merge damage bypass", error);
+        }
+
+        return shadowTarget(actor, {
+            reduction: resistanceReduction(matching),
+            hardness: ignoresHardness(matching),
+        });
     },
 
     async onDamage(actor, params, before) {

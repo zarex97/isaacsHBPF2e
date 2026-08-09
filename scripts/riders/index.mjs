@@ -27,6 +27,21 @@ export const Riders = {
             type: Boolean,
             default: true,
         });
+
+        game.settings.register(MODULE_ID, "automateDeath", {
+            name: "Automate death effects",
+            hint: "Antares, Royal Funeral and the Cancer Zenith say \"or die\". Choose who the module is "
+                + "allowed to do that to; anyone else gets a whisper to the GM instead.",
+            scope: "world",
+            config: true,
+            type: String,
+            choices: {
+                npcs: "Creatures without a player owner",
+                all: "Anyone, including player characters",
+                off: "Nobody — always whisper",
+            },
+            default: "npcs",
+        });
     },
 
     registerHooks() {

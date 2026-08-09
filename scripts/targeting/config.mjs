@@ -33,9 +33,11 @@ export function configFor(item) {
         return null;
     }
 
-    // The module ships homebrew content; it should not quietly take over every wizard's fireball unless
-    // the GM asks it to.
-    if (game.settings.get(MODULE_ID, "areaTargetingScope") === "techniques" && !isTechnique(item)) {
+    // The module ships homebrew content; it should not quietly take over every wizard's fireball unless the
+    // GM asks it to. An item carrying the flag is ours by definition and always aims — the setting governs
+    // the items that were never written with this in mind.
+    const authored = !!flag;
+    if (!authored && game.settings.get(MODULE_ID, "areaTargetingScope") === "techniques" && !isTechnique(item)) {
         return null;
     }
 

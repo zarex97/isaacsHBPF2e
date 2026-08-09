@@ -1,4 +1,28 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "bypass": [
+                {
+                    "immunity": {
+                        "mode": "ignore",
+                        "types": "all"
+                    },
+                    "predicate": [
+                        {
+                            "or": [
+                                "item:category:unarmed",
+                                "item:trait:unarmed"
+                            ]
+                        }
+                    ],
+                    "resistance": {
+                        "max": null,
+                        "types": "all"
+                    }
+                }
+            ]
+        }
+    },
     "folder": "Core",
     "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
     "name": "Seventh Sense",

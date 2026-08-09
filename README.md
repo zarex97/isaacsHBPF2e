@@ -36,6 +36,8 @@ are very nearly unstoppable.
   tokens before a 60-foot burst.
 - **Riders applied automatically** — a target that fails its save gets the slowed, stunned, blinded or
   drained the Technique says it gets, on its own sheet, without anyone clicking a condition on.
+- **Boons that reach past the rules** — free casts spent from their own frequency, Gemini's duplicate token,
+  and resistance, immunity and Hardness bypassed through pf2e's own damage channel.
 
 ## Using the sky tracker
 
@@ -141,6 +143,7 @@ Riders are authored on whatever the rule belongs to — a Technique, a Cloth, a 
 | `save-rolled` *(default)* | A target rolls its save from a chat card | The Technique, and the caster's items |
 | `strike-resolved` | This actor's Strike resolves | The attacker's items |
 | `strike-received` | A Strike resolves against this actor | The defender's items |
+| `action-used` | An action or spell is posted to chat | The item posted, against the targets you confirmed |
 | `damage-applied` | Damage from this actor's item lands | The origin's items |
 | `turn-start`, `turn-end` | This actor's turn begins or ends | This actor's items |
 
@@ -286,39 +289,51 @@ Three caveats worth knowing before trusting it:
 - **Reach is invisible to the roses.** Pisces' passive says "unarmed or non-reach melee attack"; the rider
   fires on any melee hit. Reach is not in the attack message.
 
-### 2. Action economy the system does not model
+### 2. Action economy — solved, except the one thing pf2e does not model
 
-| Where | What is manual |
+| Where | Now |
 | :-- | :-- |
-| Leo — Zenith | The *second* extra action. `quickened` is binary; it only ever grants one |
-| Gemini — boon, Taurus — Zenith | "Cast this Technique without spending a Focus Point once per round" |
-| Cloth Attunement, *Attuned Casting* | The once-per-day free cast — the action exists, the refund does not |
-| Gemini — Zenith | The duplicate. It is a second actor, not a modifier |
-| Libra — *The Twelve Arms* | Allies using **your** proficiency with a loaned weapon |
+| Gemini — boon, Taurus — Zenith | The free cast is spent from the boon's own `system.frequency`, which pf2e recharges each round |
+| Cloth Attunement, *Attuned Casting* | Same mechanism, once per day |
+| Gemini — Zenith | A duplicate token appears adjacent at the start of your turn and is swept at the start of the next; it has no Focus Points and cannot cast |
+| Libra — *The Twelve Arms* | The six Libra weapon pairs exist as items, and an ally lent one gets pf2e's `MartialProficiency` at **your** rank |
+| Virgo, Cancer, Aquarius, Libra — Zenith activities | Real activities with a frequency, an area they aim, and riders on the result |
 
-**A plan for all of this** is in [`docs/action-economy-and-iwr.md`](docs/action-economy-and-iwr.md): the
-focus refunds hang off the `cast` wrapper that area targeting already installs, the duplicate is a token
-created on a `turn-start` rider, and *The Twelve Arms* is pf2e's own `MartialProficiency` rule element
-applied to the ally. Leo's extra actions are argued there as a deliberate non-goal — pf2e models no action
-economy at all, so there is nothing to add a second action to.
+**Leo — Zenith stays a reminder, and always will.** pf2e models no action economy at all: there is no
+per-turn pool anywhere in the system, `system.actions.value` is the cost glyph rather than a budget, and
+`quickened` is a condition with a note. The second extra action is not under-automated — *the first one is
+not tracked either, nor the base three*. A tracker built from chat messages was considered and rejected: it
+would miss every Stride, reaction and Interact, and a tracker that is wrong half the time is worse than
+none, because people believe it. What ships instead is a turn-start whisper, because the real gap is
+remembering rather than counting. This has moved to §6.
 
-### 3. IWR bypass beyond what the damage system exposes
+### 3. IWR bypass — solved
 
-`AdjustStrike` handles precious materials and property runes, and those *are* automated. Arbitrary bypass is
-not exposed.
+The backlog said this needed a hook that recomputes IWR. It did not: `DamageAlteration` has no property for
+it, but the damage **roll** does. `roll.options.bypass` carries `resistance.ignore`, `immunity.ignore` and
+`immunity.downgrade`, and `applyIWR` reads it on every application. Merging into pf2e's own channel keeps
+weaknesses, redirects and the chat breakdown working.
 
-| Where | What is manual |
+| Where | Now |
 | :-- | :-- |
-| Seventh Sense, Capricorn boon | Blanket "ignore all resistances" |
-| Aquarius — Ascendant | Cold ignores cold resistance; cold immunity counts as resistance 10 |
-| Atomic Dissolution | Treat resistance as 5 lower |
-| Capricorn — Techniques | Ignoring Hardness, and treating force effects as Hardness 0 |
+| Seventh Sense | Ignores resistance and all material immunities on unarmed Strikes |
+| Capricorn boon, Capricorn Techniques | Ignores resistance, physical immunity and Hardness |
+| Aquarius — Ascendant | Cold ignores cold resistance; cold immunity becomes resistance 10 |
+| *Atomic Dissolution* | Resistance treated as 5 lower, and an object's Hardness ignored |
 
-**This turns out to be smaller than it looks.** `DamageAlteration` has no property for it, but the damage
-*roll* does: `roll.options.bypass` carries `resistance.ignore`, `immunity.ignore` and `immunity.downgrade`,
-and `applyIWR` reads it on every application. Every row above maps onto that structure, and the
-`applyDamage` wrapper the riders already install is the place to merge it in. See
-[`docs/action-economy-and-iwr.md`](docs/action-economy-and-iwr.md).
+Two things `bypass` cannot express, handled by shadowing the target for the length of one application:
+
+- **Hardness**, which `applyDamage` reads straight off the actor.
+- **Partial reduction.** `IgnoredResistance` has a `max` whose doc comment promises "ignore up to a
+  maximum", but `applyIWR` only reads it as a display value — an ignored resistance is dropped whole. So
+  *Atomic Dissolution*'s "5 lower" lowers the target's resistances instead, and `npm run test:riders`
+  pins the distinction, because the two look identical in the JSON.
+
+**Capricorn's "force effects as Hardness 0" stays manual.** *Wall of force* and *forcecage* are not
+damageable entities in Foundry — walls have no hit points and no actor, so there is nothing whose Hardness
+could be set. Representing a force effect as a hazard actor works and needs no code at all, since the
+bypass above then applies to it unchanged; that is written into the Cloth as how to run it. This has moved
+to §6.
 
 ### 4. Things that must see the die or the outcome
 
@@ -352,6 +367,11 @@ Not gaps — these are judgement calls that should stay with the table.
 - **Gemini's two identities**, and what *true seeing* reveals
 - **Cancer's** speaking with spirits; **Sagittarius'** naming a target he cannot see
 - **Constellation of One**, which is a legacy feat about the campaign ending
+- **Leo's extra actions.** pf2e models no action economy, so there is no pool to add to. A turn-start
+  whisper says how many extra actions you have; counting them is the table's job, as it is for every other
+  character in the system
+- **Force effects as Hardness 0.** Foundry has no damageable force effect to apply it to. Place a hazard
+  actor for the *wall of force* and Capricorn's Hardness bypass will work on it with no further help
 
 ## Compromises already made
 
