@@ -1,4 +1,5 @@
 import { MODULE_ID } from "../sky/signs.mjs";
+import { applyHeightening, applyThresholds } from "./heightening.mjs";
 
 /** The effect-area shapes pf2e knows how to build a Region from (`EFFECT_AREA_SHAPES`). */
 export const AREA_SHAPES = ["burst", "cone", "cube", "cylinder", "emanation", "line", "ring", "square"];
@@ -27,11 +28,16 @@ export function configFor(item) {
 
     // A synthetic area is opt-in by definition; a real one is opt-out.
     const area = flag?.area ?? item.system?.area ?? null;
-    if (!area?.type || !Number(area.value)) return null;
-    if (!AREA_SHAPES.includes(area.type)) {
+    const hasArea = !!area?.type && !!Number(area.value);
+    if (hasArea && !AREA_SHAPES.includes(area.type)) {
         console.warn(`Isaac's Homebrew | ${item.name}: unknown area shape "${area.type}"`);
         return null;
     }
+    // A Technique with no area can still have something to say: "one creature, and two at 20th level" is a
+    // target count and a range, and both grow. Those are checked against the targets the player has already
+    // picked rather than by making them aim an emanation at themselves, which for one creature is worse
+    // than clicking it.
+    if (!hasArea && !flag?.maxTargets && !flag?.range) return null;
 
     // The module ships homebrew content; it should not quietly take over every wizard's fireball unless the
     // GM asks it to. An item carrying the flag is ours by definition and always aims — the setting governs
@@ -41,9 +47,23 @@ export function configFor(item) {
         return null;
     }
 
+    // Growth per heightening step. The item arriving here is already the heightened variant — `variantFor`
+    // loads it so the burst is the right size — so the cast rank is simply its rank.
+    const grown = applyHeightening(
+        {
+            maxTargets: flag?.maxTargets,
+            range: flag?.range,
+            areas: flag?.areas,
+            length: flag?.length,
+        },
+        flag?.heightening,
+        { baseRank: item.baseRank ?? item.system?.level?.value, castRank: item.rank },
+    );
+    applyThresholds(grown, flag?.heightening, item.actor?.level);
+
     return {
         item,
-        area: { type: area.type, value: Number(area.value) },
+        area: hasArea ? { type: area.type, value: Number(area.value) } : null,
         synthetic: !item.system?.area,
         affects: AFFECTS.includes(flag?.affects) ? flag.affects : "all",
         includesSelf: flag?.includesSelf === true,
@@ -53,7 +73,11 @@ export function configFor(item) {
         // An emanation has nowhere to go but the caster and so is never placed; everything else is aimed,
         // including a cone or a line, whose apex pf2e already snaps to the edge of a space for you.
         anchor: area.type === "emanation" ? "self" : "free",
-        maxTargets: Number(flag?.maxTargets) || 0,
+        maxTargets: grown.maxTargets,
+        range: grown.range,
+        areas: grown.areas,
+        length: grown.length,
+        steps: grown.steps,
     };
 }
 
@@ -72,11 +96,20 @@ export function originTokenFor(actor) {
 
 /** A human-readable description of the rule, for the placement notification and the review dialog. */
 export function describe(config) {
-    const shape = config.area.type;
-    const size = `${config.area.value} ft`;
     const who = { all: "every creature", allies: "allies only", enemies: "enemies only" }[config.affects];
     const extra = [];
+    if (!config.area) {
+        const bits = [];
+        if (config.maxTargets > 0) bits.push(`up to ${config.maxTargets} target${config.maxTargets === 1 ? "" : "s"}`);
+        if (config.range > 0) bits.push(`within ${config.range} ft`);
+        return bits.join(", ") || who;
+    }
+    const shape = config.area.type;
+    const size = `${config.area.value} ft`;
     if (config.includesSelf) extra.push("including you");
     if (config.predicate.length > 0) extra.push("filtered");
+    if (config.areas > 1) extra.push(`${config.areas} placements`);
+    if (config.maxTargets > 0) extra.push(`up to ${config.maxTargets}`);
+    if (config.range > 0) extra.push(`within ${config.range} ft`);
     return `${size} ${shape} — ${who}${extra.length ? ` (${extra.join(", ")})` : ""}`;
 }
