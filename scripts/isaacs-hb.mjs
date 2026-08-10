@@ -1,3 +1,4 @@
+import { CastPipeline } from "./cast-pipeline.mjs";
 import { Cosmo } from "./cosmo.mjs";
 import { Duplicate } from "./economy/duplicate.mjs";
 import { FreeCast } from "./economy/free-cast.mjs";
@@ -11,35 +12,55 @@ import { SkyTracker } from "./sky/tracker.mjs";
 import { AreaTargeting } from "./targeting/index.mjs";
 import { CrystalWall } from "./targeting/wall.mjs";
 
-Hooks.once("init", () => {
-    SkyTracker.registerSettings();
-    AreaTargeting.registerSettings();
-    Riders.registerSettings();
-    FreeCast.registerSettings();
-    Cosmo.registerHooks();
-    Duplicate.registerHooks();
-    Recharge.registerHooks();
-    Om.registerHooks();
-    Balance.registerHooks();
-    CrystalWall.registerHooks();
-    SkyTrackerApp.registerHooks();
+/**
+ * Run one feature's setup, and let the rest of them start if it fails.
+ *
+ * A wrapper conflict once threw inside `setup` and, because these calls were a bare list, took the relay,
+ * every rider source and the whole IWR bypass down with it — a crash in one feature read at the table as
+ * "half the module does nothing", with a console message that named only the part that threw. One feature
+ * failing should cost one feature.
+ */
+function start(feature, fn) {
+    try {
+        fn();
+    } catch (error) {
+        console.error(`Isaac's Homebrew | ${feature} failed to start; the rest of the module continues.`, error);
+    }
+}
 
-    game.settings.registerMenu(MODULE_ID, "skyTrackerMenu", {
-        name: "The Sky",
-        label: "Open the Sky Tracker",
-        hint: "Set the day's constellation and aspect, advance the day, and schedule a Zenith.",
-        icon: "fa-solid fa-star",
-        type: SkyTrackerApp,
-        restricted: false,
+Hooks.once("init", () => {
+    start("the sky tracker's settings", () => SkyTracker.registerSettings());
+    start("area targeting's settings", () => AreaTargeting.registerSettings());
+    start("the rider engine's settings", () => Riders.registerSettings());
+    start("free casts' settings", () => FreeCast.registerSettings());
+    start("Cosmo", () => Cosmo.registerHooks());
+    start("the Gemini duplicate", () => Duplicate.registerHooks());
+    start("recharging", () => Recharge.registerHooks());
+    start("Om", () => Om.registerHooks());
+    start("The Balance", () => Balance.registerHooks());
+    start("the Crystal Wall", () => CrystalWall.registerHooks());
+    start("the sky tracker window", () => SkyTrackerApp.registerHooks());
+
+    start("the sky tracker's settings menu", () => {
+        game.settings.registerMenu(MODULE_ID, "skyTrackerMenu", {
+            name: "The Sky",
+            label: "Open the Sky Tracker",
+            hint: "Set the day's constellation and aspect, advance the day, and schedule a Zenith.",
+            icon: "fa-solid fa-star",
+            type: SkyTrackerApp,
+            restricted: false,
+        });
     });
 
     // Everything the tracker can do is reachable from the API too, so the class stays playable from a macro
-    // if a Foundry update ever breaks the window.
+    // if a Foundry update ever breaks the window. Last, and outside the isolation above, because a module
+    // with no API is the one failure a player cannot work around.
     const module = game.modules.get(MODULE_ID);
     module.api = {
         sky: SkyTracker,
         cosmo: Cosmo,
         targeting: AreaTargeting,
+        castPipeline: CastPipeline,
         riders: Riders,
         freeCast: FreeCast,
         duplicate: Duplicate,
@@ -52,12 +73,11 @@ Hooks.once("init", () => {
     };
 });
 
-// After `init`, so the system's document classes exist to be wrapped: area targeting wraps the
-// spellcasting entry's `cast`, and the rider sources wrap `applyDamage`.
+// After `init`, so the system's document classes exist to be wrapped: the cast pipeline wraps the
+// spellcasting entry's `cast` and an activity's `toMessage`, and the rider sources wrap `applyDamage`.
 Hooks.once("setup", () => {
-    AreaTargeting.install();
-    FreeCast.install();
-    Riders.registerHooks();
+    start("the cast pipeline", () => CastPipeline.install());
+    start("the rider engine", () => Riders.registerHooks());
 });
 
 Hooks.once("ready", async () => {
