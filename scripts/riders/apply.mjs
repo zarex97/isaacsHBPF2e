@@ -23,7 +23,10 @@ export async function applyRiders(payload) {
 
     const candidates = collectRiders({
         event: payload.event,
-        item: context.messageItem,
+        // The message's item where there is one, and the item the payload named otherwise. `action-used`
+        // is collected from this item alone, so it has to be the ability that was actually used rather
+        // than null — which it is: `onActionUsed` sends its uuid.
+        item: context.messageItem ?? context.item,
         actor: context.originActor,
     });
     if (candidates.length === 0) return;

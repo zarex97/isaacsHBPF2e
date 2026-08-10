@@ -44,7 +44,7 @@ globalThis.game = { pf2e: { Predicate: StubPredicate } };
 
 const { riderOptions } = await import("../scripts/lib/roll-options.mjs");
 const { selectRiders } = await import("../scripts/riders/select.mjs");
-const { collectRiders } = await import("../scripts/riders/data.mjs");
+const { collectRiders, isAbilityUse } = await import("../scripts/riders/data.mjs");
 const { mergeBypass, resistanceReduction, ignoresHardness, selectEntries } = await import(
     "../scripts/riders/bypass.mjs"
 );
@@ -447,6 +447,98 @@ check("a day is left to pf2e", intervalSeconds("day"), 0);
 check("a round is left to pf2e", intervalSeconds("round"), 0);
 check("a week is not handled here", intervalSeconds("P1W"), 0);
 check("nonsense is not an interval", intervalSeconds(undefined), 0);
+
+/* -------------------------------------------------------------------------------------------- */
+/*  What counts as using an ability                                                              */
+/* -------------------------------------------------------------------------------------------- */
+
+/**
+ * The loop guard, and the reason it exists.
+ *
+ * pf2e stamps the originating item onto every check it rolls, and `ChatMessagePF2e#item` reads it back. So
+ * the Fortitude save Aurora Execution forces produces a message whose `item` *is* Aurora Execution. Before
+ * this guard, `action-used` fired on that message too: save, damage, save, damage, until Foundry was closed.
+ * These cases are the shapes of the real messages involved.
+ */
+const card = { rolls: [], flags: { pf2e: { origin: { uuid: "Item.aurora" } } } };
+const spellCard = { rolls: [], flags: { pf2e: { context: { type: "spell-cast" } } } };
+const selfEffect = { rolls: [], flags: { pf2e: { context: { type: "self-effect" } } } };
+// The save carries the ability's own uuid in `origin` — that is the whole trap.
+const saveRoll = {
+    rolls: [{}],
+    flags: { pf2e: { context: { type: "saving-throw" }, origin: { uuid: "Item.aurora" } } },
+};
+const damageRoll = { rolls: [{}], flags: { pf2e: { context: { type: "damage-roll" } } } };
+const attackRoll = { rolls: [{}], flags: { pf2e: { context: { type: "attack-roll" } } } };
+const unknown = { rolls: [], flags: { pf2e: { context: { type: "something-pf2e-adds-later" } } } };
+
+check("an ability card is a use", isAbilityUse(card), true);
+check("a spell card with a save is a use", isAbilityUse(spellCard), true);
+check("a self-applied effect is a use", isAbilityUse(selfEffect), true);
+check("the save the ability forced is NOT a use", isAbilityUse(saveRoll), false);
+check("neither is the damage that follows it", isAbilityUse(damageRoll), false);
+check("nor an attack roll", isAbilityUse(attackRoll), false);
+check("an unknown context fails closed, not open", isAbilityUse(unknown), false);
+check("anything with dice attached is a result, not a use", isAbilityUse({ rolls: [{}], flags: {} }), false);
+check("nothing is not a use", isAbilityUse(null), false);
+check("a message with no flags at all is a use", isAbilityUse({ rolls: [] }), true);
+
+// The ability that actually did it, so the guard stays tied to the shape of content that needs it: an
+// `action-used` rider whose own effect is to roll a save. Any ability written this way re-enters itself.
+const aurora = ridersOf(load("saint-class-features", "actions", "aurora-execution.json"));
+check("Aurora Execution fires on being used", aurora.map((rider) => rider.event), ["action-used"]);
+check("…and what it does is force a save", aurora[0].apply.type, "save");
+check(
+    "…whose own message names Aurora Execution, and must not count as using it again",
+    isAbilityUse(saveRoll),
+    false,
+);
+
+// Testing the predicate proves it is correct, not that anything calls it — and an uncalled loop guard is
+// no guard at all. Nothing offline can drive Foundry's chat pipeline, so the wiring is checked statically,
+// the same way duplicate wrap targets are below.
+const onActionUsed = fs
+    .readFileSync(path.join(ROOT, "scripts", "riders", "sources.mjs"), "utf8")
+    .split("async onActionUsed(")[1] ?? "";
+check("the guard is the first thing onActionUsed does", /^[^}]{0,200}isAbilityUse\(/.test(onActionUsed), true);
+
+/**
+ * The other half of the same mistake: one use firing every ability that answers to being used.
+ *
+ * A Saint who has stood under two Zeniths owns two of these activities, and neither carries a predicate —
+ * nothing tells them apart except which one was used. Searching the whole sheet for an `action-used` rider
+ * makes one activity roll the other's save too.
+ */
+const withRiders = (name, riders) => ({ id: name, name, flags: { "isaacs-hb-pf2e": { riders } } });
+const auroraItem = withRiders("Aurora Execution", aurora);
+const rozanItem = withRiders("Rozan Hyaku Ryū Ha", ridersOf(load("saint-class-features", "actions", "rozan-hyaku-ry-ha.json")));
+const saint = { items: [auroraItem, rozanItem] };
+
+check(
+    "using one Zenith activity fires only that one",
+    collectRiders({ event: "action-used", item: auroraItem, actor: saint }).map((c) => c.item.name),
+    ["Aurora Execution"],
+);
+check(
+    "…and the other one, only itself",
+    collectRiders({ event: "action-used", item: rozanItem, actor: saint }).map((c) => c.item.name),
+    ["Rozan Hyaku Ryū Ha"],
+);
+// A Strike rider is written on the Cloth, not on the fist that threw it — `message.item` for a Strike is
+// the weapon — so that search must stay wide or Scorpio's needles stop landing.
+const scorpioItem = withRiders(
+    "Scorpio",
+    ridersOf(load("saint-class-features", "cloths", "scorpio-the-needle.json")),
+);
+check(
+    "a strike rider on the Cloth is still found from the fist that threw it",
+    collectRiders({
+        event: "strike-resolved",
+        item: withRiders("Fist", []),
+        actor: { items: [auroraItem, scorpioItem] },
+    }).map((c) => c.item.name),
+    ["Scorpio", "Scorpio", "Scorpio", "Scorpio"],
+);
 
 /* -------------------------------------------------------------------------------------------- */
 /*  Aiming                                                                                       */
