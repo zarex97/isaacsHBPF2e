@@ -108,3 +108,11 @@
     font-style: italic;
     opacity: 0.7;
 }
+
+.isaacs-hb-pf2e.area-targets .area-controls {
+    margin: 0;
+    padding-top: 0.4rem;
+    border-top: 1px solid var(--color-border-light-tertiary, rgb(0 0 0 / 15%));
+    font-size: 0.8rem;
+    opacity: 0.75;
+}

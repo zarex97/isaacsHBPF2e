@@ -53,6 +53,9 @@ const { applyHeightening, applyThresholds, stepsFor } = await import(
     "../scripts/targeting/heightening.mjs"
 );
 const { intervalSeconds } = await import("../scripts/economy/recharge.mjs");
+const { aimAngle } = await import("../scripts/targeting/place.mjs");
+const { canRotate } = await import("../scripts/targeting/config.mjs");
+const { REAIM } = await import("../scripts/targeting/review.mjs");
 
 /* -------------------------------------------------------------------------------------------- */
 /*  A world small enough to reason about                                                         */
@@ -444,6 +447,44 @@ check("a day is left to pf2e", intervalSeconds("day"), 0);
 check("a round is left to pf2e", intervalSeconds("round"), 0);
 check("a week is not handled here", intervalSeconds("P1W"), 0);
 check("nonsense is not an interval", intervalSeconds(undefined), 0);
+
+/* -------------------------------------------------------------------------------------------- */
+/*  Aiming                                                                                       */
+/* -------------------------------------------------------------------------------------------- */
+
+/**
+ * The opening direction of a cone or a line.
+ *
+ * Screen space, where y grows *downward*, so 90° is south and 270° is north. Getting that sign wrong is the
+ * easy mistake and an invisible one: every line would simply point at its own mirror image, which reads as
+ * "the aiming is broken" rather than as an inverted axis. `wall.mjs` reads the same rotation back when it
+ * lays the Crystal Wall, so the error would show up on the scene as well as in the target list.
+ */
+const origin = { x: 100, y: 100 };
+check("east is 0°", aimAngle(origin, { x: 200, y: 100 }), 0);
+check("south is 90°, because y grows downward", aimAngle(origin, { x: 100, y: 200 }), 90);
+check("west is 180°", aimAngle(origin, { x: 0, y: 100 }), 180);
+check("north is 270°, not -90°", aimAngle(origin, { x: 100, y: 0 }), 270);
+check("south-east is 45°", aimAngle(origin, { x: 200, y: 200 }), 45);
+check("north-west is 225°", aimAngle(origin, { x: 0, y: 0 }), 225);
+check("a caster with no token aims due east", aimAngle(null, { x: 200, y: 100 }), 0);
+check("so does one with a nonsense point", aimAngle(origin, { x: NaN, y: 100 }), 0);
+
+// Only the shapes that carry a `rotation` field are worth telling the caster about.
+check("a line turns", canRotate("line"), true);
+check("a cone turns", canRotate("cone"), true);
+check("a cube turns", canRotate("cube"), true);
+check("a burst does not", canRotate("burst"), false);
+check("an emanation does not", canRotate("emanation"), false);
+check("a ring does not", canRotate("ring"), false);
+check("neither does a Technique with no area at all", canRotate(undefined), false);
+
+// The three outcomes of the review dialog have to stay distinguishable: an empty array is a confirmation
+// with nothing targetable, null is a cancellation, and re-aim is neither. Conflating the first two with the
+// third would either spend the cast or eat it.
+check("re-aim is not a cancellation", REAIM === null, false);
+check("re-aim is not an empty confirmation", Array.isArray(REAIM), false);
+check("re-aim survives the dialog's nullish coalescing", (REAIM ?? null) === REAIM, true);
 
 /* -------------------------------------------------------------------------------------------- */
 /*  Wrapped methods                                                                              */
