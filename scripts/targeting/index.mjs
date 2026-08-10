@@ -1,9 +1,9 @@
 import { Duplicate } from "../economy/duplicate.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 import { catchTokens } from "./catch.mjs";
-import { configFor, describe, originTokenFor } from "./config.mjs";
+import { canRotate, configFor, describe, originTokenFor } from "./config.mjs";
 import { discardArea, originOf, placeArea } from "./place.mjs";
-import { reviewTargets } from "./review.mjs";
+import { REAIM, reviewTargets } from "./review.mjs";
 import { CrystalWall } from "./wall.mjs";
 
 /**
@@ -92,46 +92,90 @@ export const AreaTargeting = {
         // Those are checked against the targets the player already picked.
         if (!config.area) return checkExistingTargets(config, originToken);
 
+        // Every area ever put down this cast, not just the one that survived: a caster who re-aims three
+        // times has aimed three areas, and all three are discarded together in the `finally`.
+        const placed = [];
+        // The placement currently under consideration — aimed, and in range. Only this one is ever
+        // reviewed, targeted or built into a wall.
         let regions = null;
         try {
-            ui.notifications.info(`${cast.name}: ${describe(config)}`);
-            regions = await placeArea(config, originToken);
-            if (!regions?.length) return false;
+            ui.notifications.info(aimHint(cast, config));
 
-            if (!(await withinRange(regions, config, originToken))) return false;
+            // Aim, look at who it caught, and go back to aiming if that was not what they meant. The loop
+            // is the adjustment step: re-placing is how the area is moved *and* turned, so there is no
+            // second set of controls to learn and no area left on the board while a dialog is open.
+            for (;;) {
+                const aimed = await placeArea(config, originToken);
+                if (aimed?.length) {
+                    placed.push(...aimed);
+                    // Declining an out-of-range placement now means "let me aim again" rather than calling
+                    // the cast off, which is the answer that question always wanted.
+                    if (!(await withinRange(aimed, config, originToken))) continue;
+                    regions = aimed;
+                } else if (!regions) {
+                    // Esc with nothing aimed yet is the caster calling the whole thing off. Esc while
+                    // re-aiming only means "keep what I had", so it falls through to that placement's
+                    // target list instead.
+                    return false;
+                }
 
-            // Several placements catch between them, and a token standing in two of them is still one
-            // target — the dialog would otherwise offer to hit it twice.
-            const caught = new Map();
-            const rejected = new Map();
-            for (const region of regions) {
-                const found = catchTokens(region, config, originToken);
-                for (const entry of found.caught) caught.set(entry.token.id, entry);
-                for (const entry of found.rejected) rejected.set(entry.token.id, entry);
+                // An emanation is never placed — it is centred on the caster's own space, so re-aiming it
+                // would put the identical area back in the identical spot. Offering a button that visibly
+                // does nothing is worse than not offering one.
+                const ids = await reviewTargets(collect(regions, config, originToken), config, {
+                    canReaim: config.anchor !== "self",
+                });
+                if (ids === null) return false;
+                if (ids === REAIM) continue;
+
+                canvas.tokens.setTargets(ids);
+                // A Technique that raises a barrier builds it from the line just aimed — the last one
+                // aimed, so a re-aimed wall stands where the caster finally pointed it.
+                await CrystalWall.build(config, regions[0]);
+                return true;
             }
-            for (const id of caught.keys()) rejected.delete(id);
-
-            const ids = await reviewTargets(
-                { caught: [...caught.values()], rejected: [...rejected.values()] },
-                config,
-            );
-            if (ids === null) return false;
-
-            canvas.tokens.setTargets(ids);
-            // A Technique that raises a barrier builds it from the line just aimed, while the region is
-            // still in hand — it is discarded a moment later in the `finally`.
-            await CrystalWall.build(config, regions[0]);
-            return true;
         } catch (error) {
             console.error("Isaac's Homebrew | area targeting failed", error);
             ui.notifications.error("Area targeting failed; cast normally. See the console for details.");
             return true;
         } finally {
             // Runs before the cast proceeds, so the area is gone by the time the card is posted.
-            await discardArea(regions);
+            await discardArea(placed);
         }
     },
 };
+
+/**
+ * Who the placed areas caught, across all of them.
+ *
+ * Several placements catch between them, and a token standing in two of them is still one target — the
+ * dialog would otherwise offer to hit it twice. A token caught by one area and rejected by another is
+ * caught: being out of the second area is not a reason to spare it from the first.
+ */
+function collect(regions, config, originToken) {
+    const caught = new Map();
+    const rejected = new Map();
+    for (const region of regions) {
+        const found = catchTokens(region, config, originToken);
+        for (const entry of found.caught) caught.set(entry.token.id, entry);
+        for (const entry of found.rejected) rejected.set(entry.token.id, entry);
+    }
+    for (const id of caught.keys()) rejected.delete(id);
+    return { caught: [...caught.values()], rejected: [...rejected.values()] };
+}
+
+/**
+ * What to announce before the area goes on the cursor.
+ *
+ * The rotation keys are named because a plain wheel zooms the canvas — Foundry gates rotation behind Shift
+ * or Ctrl — so a caster who scrolls and sees the map get bigger reasonably concludes the area cannot be
+ * turned at all. Only said for a shape where it is true: a burst and an emanation are the same in every
+ * direction.
+ */
+function aimHint(cast, config) {
+    const base = `${cast.name}: ${describe(config)}`;
+    return canRotate(config.area?.type) ? `${base} — Shift+scroll to rotate (Ctrl for finer).` : base;
+}
 
 /**
  * A Technique with no area still has a target count and a range.
@@ -150,8 +194,8 @@ async function checkExistingTargets(config, originToken) {
             `${targets.length} targeted, and it reaches ${config.maxTargets}`,
         );
     }
-    if (config.range > 0 && game.settings.get(MODULE_ID, "enforceRange") && originToken?.object) {
-        const far = targets.filter((t) => (originToken.object.distanceTo?.(t) ?? 0) > config.range);
+    if (config.range > 0 && game.settings.get(MODULE_ID, "enforceRange") && originToken) {
+        const far = targets.filter((t) => (originToken.distanceTo?.(t) ?? 0) > config.range);
         if (far.length > 0) {
             problems.push(
                 `${far.map((t) => t.document.name).join(", ")} beyond ${config.range} ft`,
@@ -170,19 +214,22 @@ async function checkExistingTargets(config, originToken) {
 /**
  * Was it placed within reach?
  *
- * The module never checked range until now, which is why a rejection is a question rather than a refusal:
- * a measured distance is not always the distance a table means, and holding people to a rule they were not
- * being held to yesterday should be overridable. The setting turns it off entirely.
+ * A rejection is a question rather than a refusal: a measured distance is not always the distance a table
+ * means, and holding people to a rule they were not being held to yesterday should be overridable. The
+ * setting turns it off entirely. Answering no sends the caster back to aiming, which is the thing they
+ * actually wanted when they said the placement was wrong.
+ *
+ * `originToken` is the placeable, which is what `originTokenFor` returns and what carries `distanceTo`.
  */
 async function withinRange(regions, config, originToken) {
-    if (!config.range || !originToken?.object) return true;
+    if (!config.range || !originToken) return true;
     if (!game.settings.get(MODULE_ID, "enforceRange")) return true;
 
     let furthest = 0;
     for (const region of regions) {
         const origin = originOf(region);
         if (!origin) continue;
-        const distance = originToken.object.distanceTo?.(origin) ?? 0;
+        const distance = originToken.distanceTo?.(origin) ?? 0;
         furthest = Math.max(furthest, distance);
     }
     if (furthest <= config.range) return true;

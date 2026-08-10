@@ -4,6 +4,19 @@ import { applyHeightening, applyThresholds } from "./heightening.mjs";
 /** The effect-area shapes pf2e knows how to build a Region from (`EFFECT_AREA_SHAPES`). */
 export const AREA_SHAPES = ["burst", "cone", "cube", "cylinder", "emanation", "line", "ring", "square"];
 
+/**
+ * The shapes worth turning.
+ *
+ * A circle, a ring and an emanation are the same in every direction, so `rotation` is not even a field on
+ * their data models — only `cone`, `line` and the rectangle behind `cube`/`square` carry one. Aiming asks
+ * for a direction exactly when this is true, and tells the caster how to change it.
+ */
+export const ROTATABLE_SHAPES = ["cone", "cube", "line", "square"];
+
+export function canRotate(areaType) {
+    return ROTATABLE_SHAPES.includes(areaType);
+}
+
 /** Borrowed verbatim from the Aura rule element, so the words mean the same thing they do there. */
 export const AFFECTS = ["all", "allies", "enemies"];
 
