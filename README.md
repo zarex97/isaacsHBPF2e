@@ -174,6 +174,15 @@ A rider with no `event` means `save-rolled`, so every Technique written before e
 what it meant. A rider with no `outcomes` fires on any outcome — which is what "needles land on any attack
 you make, hit or miss" needs.
 
+Two rules keep `action-used` honest, and both matter if you write one:
+
+- **Only the item that was used is read.** Every other event searches the whole sheet, because a Strike
+  rider lives on the Cloth rather than on the fist that threw it. "When this ability is used" names one
+  ability, so a Saint holding two Zenith activities does not fire both from one.
+- **A roll the rider itself causes is not another use.** pf2e stamps the originating item onto every check
+  it rolls, so the save your rider forces produces a message that looks like the ability being used again.
+  It is ignored, or an ability that forces a save would force one forever.
+
 ### What a rider can do
 
 - **condition** with a `duration` becomes a generated effect granting that condition, the way pf2e ships

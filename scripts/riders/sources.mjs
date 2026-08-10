@@ -9,7 +9,7 @@ import {
     selectEntries,
     shadowTarget,
 } from "./bypass.mjs";
-import { OUTCOMES, ridersOn } from "./data.mjs";
+import { OUTCOMES, isAbilityUse, ridersOn } from "./data.mjs";
 import { Relay } from "./relay.mjs";
 
 /**
@@ -95,8 +95,14 @@ export const Sources = {
      *
      * Spells qualify too. A Technique's *save* riders come through `save-rolled` when the target rolls, but
      * a Technique that simply hands something to whoever it caught has no save to wait for.
+     *
+     * `isAbilityUse` is what keeps this from being every message that so much as mentions the ability —
+     * including the saves and damage rolls the ability's own riders produce, which is an infinite loop. See
+     * its comment in `data.mjs`.
      */
     async onActionUsed(message) {
+        if (!isAbilityUse(message)) return;
+
         const item = message?.item;
         if (!item) return;
         if (!ridersOn(item).some((rider) => rider.event === "action-used")) return;
