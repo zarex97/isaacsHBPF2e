@@ -102,11 +102,34 @@ emanation has only one place it can be.
 `npm run validate` checks every field of it, because a typo here has no runtime symptom other than the
 Technique quietly going back to manual targeting.
 
+### Aiming it
+
+While the area is on the cursor:
+
+| | |
+| :-- | :-- |
+| Move the mouse | position it |
+| **Shift + scroll** | turn it |
+| **Ctrl + scroll** | turn it in finer steps |
+| Left-click | place it |
+| Esc | back out — nothing is spent |
+
+A plain scroll zooms the canvas, which is Foundry's own behaviour and why the rotation is easy to miss; the
+notification that announces the placement names the keys for any shape where direction means something. A
+cone or a line opens pointing from you toward wherever you were already hovering, rather than due east, so
+the wheel is usually a correction rather than the whole job.
+
+Once it is down you get the target list, and that dialog has a **Re-aim** button: it puts the area back on
+the cursor and recomputes who it caught, as many times as you like, before anything is spent. Backing out of
+a re-aim keeps the placement you had. An emanation is centred on your own space and so is never placed,
+which is why it is the one shape with no Re-aim to offer.
+
 Two settings and one key:
 
 - **Place areas as Regions when casting** (world) — the master switch.
 - **Area targeting applies to** (world) — the Saint's Techniques only, or every spell with an area.
 - **Review targets before casting** (per player) — off targets everything caught and casts immediately.
+  Re-aim needs the review, so this turns it off too.
 - Hold **Control** while casting to target by hand this once, the same key `pf2e-toolbelt` uses to skip its
   own template popup.
 

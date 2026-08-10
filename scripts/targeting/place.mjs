@@ -7,9 +7,10 @@ const TOOLBELT_ID = "pf2e-toolbelt";
  * Put the Technique's area on the board and let the caster aim it.
  *
  * Foundry v14 already does the hard part: `canvas.regions.placeRegion` shows a preview that follows the
- * cursor, rotates on the wheel, confirms on left-click and cancels on Esc, and pf2e already overrides its
- * snapping per area shape (`RegionLayerPF2e#placeRegion` keys off `displayMeasurements` + coverage
- * highlighting, both of which the data below sets).
+ * cursor, confirms on left-click, cancels on Esc, and turns on **Shift+wheel** (Ctrl for finer steps — a
+ * plain wheel zooms the canvas, which is why the rotation is easy to miss and why the notification names
+ * the keys). pf2e already overrides its snapping per area shape (`RegionLayerPF2e#placeRegion` keys off
+ * `displayMeasurements` + coverage highlighting, both of which the data below sets).
  *
  * It is placed with `create: false`, which returns the preview document instead of saving it. That is not
  * an optimisation — the area is discarded a moment later either way, so nothing is lost, and it buys three
@@ -101,12 +102,16 @@ function regionData(config, shape) {
 export function shapeFromArea(area, originToken, point) {
     const distance = (area.value / 5) * canvas.grid.size;
     const { x, y } = point ?? canvas.mousePosition;
+    // A cone and a line open pointing away from the caster, toward wherever they were already looking,
+    // rather than due east — which for a 60-foot line was the only direction it could be fired without
+    // knowing about Shift+wheel. From here the wheel is a correction rather than the sole control.
+    const rotation = aimAngle(originToken?.center, { x, y });
     switch (area.type) {
         case "burst":
         case "cylinder":
             return { type: "circle", radius: distance, x, y };
         case "cone":
-            return { type: "cone", angle: 90, radius: distance, x, y };
+            return { type: "cone", angle: 90, radius: distance, rotation, x, y };
         case "cube":
         case "square":
             return { type: "rectangle", width: distance, height: distance, x, y };
@@ -124,7 +129,7 @@ export function shapeFromArea(area, originToken, point) {
             return { type: "emanation", radius: distance, base, x: source.x, y: source.y };
         }
         case "line":
-            return { type: "line", length: distance, width: canvas.dimensions.size, x, y };
+            return { type: "line", length: distance, width: canvas.dimensions.size, rotation, x, y };
         case "ring": {
             const width = Math.floor(canvas.dimensions.size * 0.5);
             return { type: "ring", radius: distance, innerWidth: width, outerWidth: width, x, y };
@@ -132,6 +137,25 @@ export function shapeFromArea(area, originToken, point) {
         default:
             return null;
     }
+}
+
+/**
+ * The direction from one point to another, in degrees, as a Region shape means it.
+ *
+ * Screen space, so y grows *downward*: 0° is east, 90° is south, 270° is north. That is the same convention
+ * `RegionDocument` uses when it converts a MeasuredTemplate's `direction` into a shape rotation, and the
+ * same one `wall.mjs` reads back when it lays the Crystal Wall along an aimed line — get the sign wrong here
+ * and every line points at its own mirror image.
+ *
+ * Written without `Math.normalizeDegrees` so it can be tested outside Foundry.
+ */
+export function aimAngle(from, to) {
+    if (!from || !to) return 0;
+    if (!Number.isFinite(from.x) || !Number.isFinite(from.y)) return 0;
+    if (!Number.isFinite(to.x) || !Number.isFinite(to.y)) return 0;
+
+    const degrees = (Math.atan2(to.y - from.y, to.x - from.x) * 180) / Math.PI;
+    return ((degrees % 360) + 360) % 360;
 }
 
 /**
