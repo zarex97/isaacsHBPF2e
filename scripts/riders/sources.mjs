@@ -1,4 +1,5 @@
 import { describeActor, describeDamage } from "../lib/roll-options.mjs";
+import { wrap } from "../lib/wrap.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 import {
     bypassEntriesOn,
@@ -122,32 +123,30 @@ export const Sources = {
      * is a fact rather than an inference.
      */
     wrapApplyDamage() {
-        // `applyDamage` is declared on ActorPF2e, not on each subclass, so walk up to whichever prototype
-        // actually owns it and patch that once — patching the subclasses would patch nothing.
-        let proto = CONFIG.PF2E?.Actor?.documentClasses?.character?.prototype;
-        while (proto && !Object.hasOwn(proto, "applyDamage")) proto = Object.getPrototypeOf(proto);
-        if (!proto) {
-            console.warn("Isaac's Homebrew | could not find ActorPF2e#applyDamage; damage riders are off.");
-            return;
-        }
-
-        const original = proto.applyDamage;
-        proto.applyDamage = async function (params) {
-            const before = this.hitPoints?.value ?? 0;
-            const restore = Sources.applyBypass(this, params);
-            let result;
-            try {
-                result = await original.call(this, params);
-            } finally {
-                restore();
-            }
-            try {
-                await Sources.onDamage(this, params, before);
-            } catch (error) {
-                console.error("Isaac's Homebrew | damage rider failed", error);
-            }
-            return result;
-        };
+        // `applyDamage` is declared on ActorPF2e and inherited by every actor type, so this is the one wrap
+        // in the module that asks for the plain prototype patch: libWrapper would define its override on
+        // the single subclass it was handed a path to, leaving NPCs — most of what a Technique is aimed at
+        // — unwrapped. `strategy: "prototype"` walks up to the prototype that declares it and patches there.
+        wrap(
+            "CONFIG.PF2E.Actor.documentClasses.character.prototype.applyDamage",
+            async function (wrapped, params) {
+                const before = this.hitPoints?.value ?? 0;
+                const restore = Sources.applyBypass(this, params);
+                let result;
+                try {
+                    result = await wrapped(params);
+                } finally {
+                    restore();
+                }
+                try {
+                    await Sources.onDamage(this, params, before);
+                } catch (error) {
+                    console.error("Isaac's Homebrew | damage rider failed", error);
+                }
+                return result;
+            },
+            { feature: "damage riders and IWR bypass", strategy: "prototype" },
+        );
     },
 
     /**

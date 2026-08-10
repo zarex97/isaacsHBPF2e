@@ -31,35 +31,12 @@ export const FreeCast = {
         });
     },
 
-    install() {
-        const path = "CONFIG.PF2E.Item.documentClasses.spellcastingEntry.prototype.cast";
-        const proto = CONFIG.PF2E?.Item?.documentClasses?.spellcastingEntry?.prototype;
-        if (!proto?.cast) {
-            console.warn(`Isaac's Homebrew | could not find ${path}; free casts are off.`);
-            return;
-        }
-
-        if (globalThis.libWrapper?.register) {
-            libWrapper.register(
-                MODULE_ID,
-                path,
-                async function (wrapped, spell, options = {}) {
-                    await FreeCast.beforeCast(spell, options);
-                    return wrapped(spell, options);
-                },
-                "WRAPPER",
-            );
-            return;
-        }
-
-        const original = proto.cast;
-        proto.cast = async function (spell, options = {}) {
-            await FreeCast.beforeCast(spell, options);
-            return original.call(this, spell, options);
-        };
-    },
-
-    /** Mutates `options` in place — the wrapper hands the same object to the system. */
+    /**
+     * Mutates `options` in place — the wrapper hands the same object to the system.
+     *
+     * Called from `scripts/cast-pipeline.mjs`, after the area has been aimed: backing out of a placement
+     * must not spend the allowance on a cast that never happened.
+     */
     async beforeCast(spell, options) {
         if (options.consume === false) return; // already free by some other route
         const actor = spell?.actor;

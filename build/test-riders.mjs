@@ -446,6 +446,52 @@ check("a week is not handled here", intervalSeconds("P1W"), 0);
 check("nonsense is not an interval", intervalSeconds(undefined), 0);
 
 /* -------------------------------------------------------------------------------------------- */
+/*  Wrapped methods                                                                              */
+/* -------------------------------------------------------------------------------------------- */
+
+/**
+ * The one bug in this module that reached a release was two features registering a libWrapper wrapper for
+ * the same method under the same package id. libWrapper refuses that by design, the throw was inside the
+ * `setup` hook, and it took every feature registered after it down with it — a crash that read at the table
+ * as most of the module doing nothing at all.
+ *
+ * Nothing offline can load libWrapper, but the cause is visible in the source: every wrap in the module now
+ * goes through `wrap()` with the target as a string literal, so the targets can simply be counted. Two
+ * checks — no target claimed twice, and none of the expected wraps quietly missing, which is the other half
+ * of the same incident: the activity wrap sat behind a `return` and was never reached, with no error at all.
+ */
+const wrapCalls = [];
+for (const file of mjsUnder(path.join(ROOT, "scripts"))) {
+    const source = fs.readFileSync(file, "utf8");
+    for (const match of source.matchAll(/\bwrap\(\s*["']([^"']+)["']/g)) {
+        wrapCalls.push({ target: match[1], file: path.relative(ROOT, file) });
+    }
+}
+
+const claimedBy = new Map();
+const duplicates = [];
+for (const call of wrapCalls) {
+    const previous = claimedBy.get(call.target);
+    if (previous) duplicates.push(`${call.target}: ${previous} and ${call.file}`);
+    else claimedBy.set(call.target, call.file);
+}
+
+check("no method is wrapped twice", duplicates, []);
+check("every wrap the module needs is still there", [...claimedBy.keys()].sort(), [
+    "CONFIG.PF2E.Actor.documentClasses.character.prototype.applyDamage",
+    "CONFIG.PF2E.Item.documentClasses.action.prototype.toMessage",
+    "CONFIG.PF2E.Item.documentClasses.spellcastingEntry.prototype.cast",
+]);
+
+function mjsUnder(dir) {
+    return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) return mjsUnder(full);
+        return entry.name.endsWith(".mjs") ? [full] : [];
+    });
+}
+
+/* -------------------------------------------------------------------------------------------- */
 
 if (failures.length > 0) {
     console.error(`Rider tests failed: ${failures.length} of ${checks}.`);
