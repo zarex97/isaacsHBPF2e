@@ -15,8 +15,9 @@ import { CrystalWall } from "./wall.mjs";
  * there, which is exactly what pf2e-toolbelt's Target Helper reads when it builds the card's target rows
  * — so the two features meet without either one knowing about the other.
  *
- * The interception point is `SpellcastingEntryPF2e#cast`, which is where the Focus Point is spent. Bailing
- * out before calling through is therefore also what makes a cancelled placement cost nothing.
+ * The interception point is `SpellcastingEntryPF2e#cast`, which is where the Focus Point is spent — so
+ * refusing there is also what makes a cancelled placement cost nothing. `run` is called from
+ * `scripts/cast-pipeline.mjs`, which owns that wrapper and the one on an activity's `toMessage`.
  */
 export const AreaTargeting = {
     registerSettings() {
@@ -63,68 +64,6 @@ export const AreaTargeting = {
             type: Boolean,
             default: true,
         });
-    },
-
-    /**
-     * Wrap the system's cast. libWrapper when it is installed, a plain prototype wrap otherwise — the
-     * module has no other reason to require it, and pf2e-toolbelt already wraps this same method, so
-     * either way the two chain rather than collide.
-     */
-    install() {
-        const path = "CONFIG.PF2E.Item.documentClasses.spellcastingEntry.prototype.cast";
-        const proto = CONFIG.PF2E?.Item?.documentClasses?.spellcastingEntry?.prototype;
-        if (!proto?.cast) {
-            console.warn(`Isaac's Homebrew | could not find ${path}; area targeting is off.`);
-            return;
-        }
-
-        if (globalThis.libWrapper?.register) {
-            libWrapper.register(
-                MODULE_ID,
-                path,
-                async function (wrapped, spell, options = {}) {
-                    if (!(await AreaTargeting.run(spell, options))) return;
-                    return wrapped(spell, options);
-                },
-                "MIXED",
-            );
-            return;
-        }
-
-        const original = proto.cast;
-        proto.cast = async function (spell, options = {}) {
-            if (!(await AreaTargeting.run(spell, options))) return;
-            return original.call(this, spell, options);
-        };
-
-        AreaTargeting.installForActions();
-    },
-
-    /**
-     * The same flow for an ability that is not a spell.
-     *
-     * The Zenith activities are action items — a 60-foot emanation and a 60-foot line among them — and
-     * actions never pass through `cast`. `toMessage` is where they reach the table instead, and returning
-     * without calling through is how a cancelled placement stops one, exactly as bailing before `cast`
-     * stops a Technique.
-     */
-    installForActions() {
-        let proto = CONFIG.PF2E?.Item?.documentClasses?.action?.prototype;
-        while (proto && !Object.hasOwn(proto, "toMessage")) proto = Object.getPrototypeOf(proto);
-        if (!proto) {
-            console.warn("Isaac's Homebrew | could not find ItemPF2e#toMessage; actions will not aim.");
-            return;
-        }
-
-        const original = proto.toMessage;
-        proto.toMessage = async function (event, options = {}) {
-            // Spells reach the table through `cast`, which has already aimed them; anything without a
-            // targeting rule is none of our business. Both checks keep this off the hot path.
-            if (this.type !== "spell" && configFor(this) && !(await AreaTargeting.run(this, {}))) {
-                return undefined;
-            }
-            return original.call(this, event, options);
-        };
     },
 
     /**
