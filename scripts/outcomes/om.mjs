@@ -28,9 +28,44 @@ export const Om = {
         if (game.users.activeGM?.id !== game.user.id) return;
         const actor = combatant?.actor;
         const effect = Om.effectOn(actor);
-        if (effect && (effect.system?.badge?.value ?? 0) > 0 && Om.isOpen(actor)) {
-            await Om.close(effect);
+        if (!effect) return;
+
+        if (Om.isOpen(actor)) {
+            // "before the end of this turn": anything unspent lapses.
+            if ((effect.system?.badge?.value ?? 0) > 0) await Om.close(effect);
+            return;
         }
+        await Om.gain(actor, effect);
+    },
+
+    /**
+     * Eyes closed: one more stack.
+     *
+     * This is the half of Om that was never written. Spending was automated and lapsing was automated, but
+     * nothing ever moved the badge *up*, so a Virgo Saint sat at one stack forever no matter how long they
+     * kept their eyes shut — the accumulation that the blindness is the price for simply did not happen.
+     */
+    async gain(actor, effect) {
+        if (!game.settings.get(MODULE_ID, "riders")) return;
+        const badge = effect.system?.badge;
+        if (badge?.type !== "counter") return;
+
+        const value = Math.min((badge.value ?? 0) + 1, Om.ceilingFor(actor, effect));
+        if (value === badge.value) return;
+        await effect.update({ "system.badge.value": value });
+    },
+
+    /**
+     * Five stacks, or seven on a day Virgo is ascendant.
+     *
+     * The badge itself is authored with room for seven so the Ascendant boon has somewhere to go; the
+     * everyday ceiling is five, and only the sky lifts it. Whichever is lower wins, so re-authoring the
+     * badge downward is still respected.
+     */
+    ceilingFor(actor, effect) {
+        const options = actor?.getRollOptions?.() ?? [];
+        const ascendant = options.includes("sky:ascendant") && options.includes("sky:sign:virgo");
+        return Math.min(ascendant ? 7 : 5, effect?.system?.badge?.max ?? Infinity);
     },
 
     async onDamageRoll(roll) {

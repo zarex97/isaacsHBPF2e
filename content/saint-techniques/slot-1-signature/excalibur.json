@@ -1,4 +1,19 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Excalibur"
+                    },
+                    "event": "action-used",
+                    "note": "Until the end of your turn, your unarmed Strikes are slashing, deadly d10, and ignore Hardness.",
+                    "self": true
+                }
+            ]
+        }
+    },
     "folder": "1st — Signature (L1)",
     "img": "icons/weapons/swords/greatsword-crossguard-gold.webp",
     "name": "Excalibur",
@@ -29,27 +44,7 @@
             "value": ""
         },
         "requirements": "",
-        "rules": [
-            {
-                "itemType": "weapon",
-                "key": "ItemAlteration",
-                "mode": "override",
-                "predicate": [
-                    "item:category:unarmed"
-                ],
-                "property": "damage-type",
-                "value": "slashing"
-            },
-            {
-                "definition": [
-                    "item:category:unarmed"
-                ],
-                "key": "AdjustStrike",
-                "mode": "add",
-                "property": "weapon-traits",
-                "value": "deadly-d10"
-            }
-        ],
+        "rules": [],
         "target": {
             "value": ""
         },

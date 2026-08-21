@@ -7,10 +7,10 @@
             "value": "<p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Excalibur]</p><p>Until the end of your turn, your unarmed Strikes deal slashing damage, gain the deadly d10 trait, and ignore an object's Hardness.</p>"
         },
         "duration": {
-            "expiry": "turn-start",
+            "expiry": "turn-end",
             "sustained": false,
             "unit": "rounds",
-            "value": 1
+            "value": 0
         },
         "level": {
             "value": 1
@@ -21,6 +21,15 @@
             "title": "Isaac's Homebrew: The Saint"
         },
         "rules": [
+            {
+                "definition": [
+                    "item:category:unarmed"
+                ],
+                "key": "AdjustStrike",
+                "mode": "remove",
+                "property": "weapon-traits",
+                "value": "deadly-d8"
+            },
             {
                 "itemType": "weapon",
                 "key": "ItemAlteration",

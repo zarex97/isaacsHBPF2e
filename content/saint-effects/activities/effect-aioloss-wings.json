@@ -1,0 +1,43 @@
+{
+    "folder": "Activities",
+    "img": "icons/magic/air/wind-vortex-swirl-gold.webp",
+    "name": "Effect: Aiolos's Wings",
+    "system": {
+        "description": {
+            "value": "<p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Aiolos's Wings]</p><p>You have a fly Speed equal to twice your Speed, and you can Fly at full speed while attacking without penalty. @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Golden Arrow] becomes a 1-action Technique that costs no Focus Point.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 10
+        },
+        "level": {
+            "value": 16
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "BaseSpeed",
+                "selector": "fly",
+                "value": "@actor.attributes.speed.value * 2"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

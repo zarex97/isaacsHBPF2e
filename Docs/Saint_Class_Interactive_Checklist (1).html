@@ -1,0 +1,1613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Saint — PF2e Interactive Checklist (Gold Cloth Edition)</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #242836;
+    --border: #2e3345;
+    --text: #e8eaed;
+    --muted: #9aa0b0;
+    --gold: #d4a84b;
+    --gold-dim: #a07830;
+    --green: #3dd68c;
+    --red: #f07178;
+    --blue: #7aa2f7;
+    --accent: #c0caf5;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    padding: 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  header h1 {
+    font-size: 1.9rem;
+    color: var(--gold);
+    letter-spacing: 0.02em;
+    margin-bottom: 0.25rem;
+  }
+
+  header .subtitle {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  header .hint {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    background: var(--surface);
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.75rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .toolbar-left, .toolbar-right {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  button.tool {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.85rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  button.tool:hover {
+    background: #2e3348;
+    border-color: var(--gold-dim);
+  }
+
+  button.tool.danger:hover {
+    border-color: var(--red);
+    color: var(--red);
+  }
+
+  .progress-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1.1rem;
+    font-size: 0.9rem;
+    min-width: 180px;
+  }
+
+  .progress-bar-outer {
+    height: 8px;
+    background: var(--surface2);
+    border-radius: 4px;
+    margin-top: 0.4rem;
+    overflow: hidden;
+  }
+
+  .progress-bar-inner {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+    width: 0%;
+    transition: width 0.25s ease;
+  }
+
+  section {
+    margin-bottom: 1.75rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    cursor: pointer;
+    user-select: none;
+    padding: 0.65rem 0.9rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    transition: background 0.15s;
+  }
+
+  .section-header:hover { background: var(--surface2); }
+
+  .section-header h2 {
+    font-size: 1.15rem;
+    color: var(--gold);
+    flex: 1;
+  }
+
+  .section-header .chevron {
+    color: var(--muted);
+    font-size: 0.9rem;
+    transition: transform 0.2s;
+  }
+
+  .section-header.collapsed .chevron { transform: rotate(-90deg); }
+
+  .section-body {
+    padding-left: 0.25rem;
+  }
+
+  .section-body.hidden { display: none; }
+
+  .group-title {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin: 1rem 0 0.45rem 0.5rem;
+  }
+
+  .item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0.7rem;
+    padding: 0.45rem 0.6rem;
+    border-radius: 6px;
+    cursor: default;
+    transition: background 0.12s;
+  }
+
+  .item:hover { background: var(--surface); }
+
+  .item-main {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    flex: 1;
+    min-width: 0;
+    cursor: pointer;
+  }
+
+  .mark {
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+    border: 2px solid var(--border);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1;
+    transition: all 0.15s;
+    background: var(--surface2);
+  }
+
+  .mark.check {
+    background: rgba(61, 214, 140, 0.15);
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  .mark.cross {
+    background: rgba(240, 113, 120, 0.15);
+    border-color: var(--red);
+    color: var(--red);
+  }
+
+  .item-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .item-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .item-meta {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 0.1rem;
+  }
+
+  .comment-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+  }
+
+  .comment-btn:hover {
+    color: var(--gold);
+    border-color: var(--border);
+    background: var(--surface2);
+  }
+
+  .comment-btn.has-comment {
+    color: var(--blue);
+  }
+
+  .comment-area {
+    width: 100%;
+    margin-top: 0.35rem;
+    margin-left: 2.1rem;
+    display: none;
+  }
+
+  .comment-area.open {
+    display: block;
+  }
+
+  .comment-area textarea {
+    width: 100%;
+    min-height: 52px;
+    max-height: 160px;
+    resize: vertical;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.85rem;
+    padding: 0.5rem 0.65rem;
+    line-height: 1.4;
+  }
+
+  .comment-area textarea:focus {
+    outline: none;
+    border-color: var(--gold-dim);
+  }
+
+  .comment-area .comment-hint {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-top: 0.2rem;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    margin-left: 0.35rem;
+    vertical-align: middle;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+
+  .tag.lvl { background: #2a2f42; color: var(--accent); }
+  .tag.offense { background: #3a2228; color: #f0a0a8; }
+  .tag.defense { background: #22303a; color: #8ec8f0; }
+  .tag.control { background: #2a2a3a; color: #c0a8f0; }
+  .tag.utility { background: #2a332a; color: #a0d8a0; }
+  .tag.removal { background: #3a2a22; color: #f0c080; }
+
+  .cloth-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .cloth-symbol {
+    font-size: 1.5rem;
+  }
+
+  .cloth-role {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .stats-row span { color: var(--text); }
+
+  footer {
+    margin-top: 2.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 1rem; }
+    header h1 { font-size: 1.45rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>The Saint — Interactive Checklist</h1>
+  <div class="subtitle">PF2e Class Guide · Gold Cloth Edition · Version 4</div>
+  <div class="hint">Click the mark box to cycle: empty → <span style="color:var(--green)">✓ obtained</span> → <span style="color:var(--red)">✕ missing / not yet</span> → empty. Use the 💬 button to add comments. Progress is saved in your browser.</div>
+</header>
+
+<div class="toolbar">
+  <div class="toolbar-left">
+    <button class="tool" onclick="expandAll()">Expand all</button>
+    <button class="tool" onclick="collapseAll()">Collapse all</button>
+    <button class="tool" onclick="markAll('check')">Mark all ✓</button>
+    <button class="tool" onclick="markAll('')">Clear all</button>
+    <button class="tool" onclick="downloadJSON()">Download JSON</button>
+    <button class="tool" onclick="document.getElementById('import-file').click()">Load JSON</button>
+    <input type="file" id="import-file" accept=".json,application/json" style="display:none" onchange="loadJSONFile(event)">
+    <button class="tool danger" onclick="resetAll()">Reset progress</button>
+  </div>
+  <div class="toolbar-right">
+    <div class="progress-box">
+      <div id="progress-text">0 / 0 marked</div>
+      <div class="progress-bar-outer"><div class="progress-bar-inner" id="progress-bar"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CORE CLASS ===================== -->
+<section data-section="core">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="chevron">▼</span>
+    <h2>Core Class Features</h2>
+  </div>
+  <div class="section-body">
+
+    <div class="group-title">Level 1</div>
+    <div class="item" data-id="core-cloth">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">The Cloth <span class="tag lvl">L1</span></div>
+        <div class="item-meta">Subclass · Medium armor (+4 AC) · determines Techniques, Passive & boons</div>
+      </div>
+    </div>
+    <div class="item" data-id="core-cosmo">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Cosmo <span class="tag lvl">L1</span></div>
+        <div class="item-meta">Focus pool of 1 · 1st Technique · cosmo trait · heighten every 2 levels</div>
+      </div>
+    </div>
+    <div class="item" data-id="core-ascendant">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Ascendant Constellation <span class="tag lvl">L1</span></div>
+        <div class="item-meta">Know when your sign is ascendant · Ascendant/Zenith boons + heightening</div>
+      </div>
+    </div>
+    <div class="item" data-id="core-cosmo-strike">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Cosmo Strike <span class="tag lvl">L1</span></div>
+        <div class="item-meta">Unarmed Strikes are magical · +1 damage per weapon die</div>
+      </div>
+    </div>
+    <div class="item" data-id="core-unfailing">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Unfailing Cosmo <span class="tag lvl">L1</span></div>
+        <div class="item-meta">Never suffer Retrograde or Malefic aspects</div>
+      </div>
+    </div>
+    <div class="item" data-id="core-shelter">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Shelter of the Cloth <span class="tag lvl">L1</span></div>
+        <div class="item-meta">Allies within 30 ft treat the day's aspect as one step milder</div>
+      </div>
+    </div>
+    <div class="item" data-id="core-feat1">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Saint Feat <span class="tag lvl">L1</span></div>
+        <div class="item-meta">Class feat</div>
+      </div>
+    </div>
+
+    <div class="group-title">Level 2–4</div>
+    <div class="item" data-id="core-feat2">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Saint Feat + Skill Feat <span class="tag lvl">L2</span></div>
+      </div>
+    </div>
+    <div class="item" data-id="core-iron-will">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Iron Will <span class="tag lvl">L3</span></div>
+        <div class="item-meta">Will Expert · general feat · skill increase</div>
+      </div>
+    </div>
+    <div class="item" data-id="core-feat4">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Saint Feat + Skill Feat <span class="tag lvl">L4</span></div>
+      </div>
+    </div>
+
+    <div class="group-title">Level 5–7</div>
+    <div class="item" data-id="core-cosmo-strike5">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Cosmo Strike (upgrade) <span class="tag lvl">L5</span></div>
+        <div class="item-meta">Unarmed Expert + brawling critical specialization · second granted skill · ability boosts</div>
+      </div>
+    </div>
+    <div class="item" data-id="core-tech2">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">2nd Technique <span class="tag lvl">L6</span></div>
+        <div class="item-meta">Focus spell · fair value ~6d6 / 3d8</div>
+      </div>
+    </div>
+    <div class="item" data-id="core-sixth">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Sixth Sense <span class="tag lvl">L7</span></div>
+        <div class="item-meta">Imprecise sense 60 ft (Cosmo) · never off-guard to sensed · can't be flanked</div>
+      </div>
+    </div>
+    <div class="item" data-id="core-second-cosmo">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Second Cosmo <span class="tag lvl">L7</span></div>
+        <div class="item-meta">Focus pool → 2 · Alertness (Perception Expert) · Weapon Specialization</div>
+      </div>
+    </div>
+
+    <div class="group-title">Level 8–10</div>
+    <div class="item" data-id="core-feat8">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Saint Feat + Skill Feat <span class="tag lvl">L8</span></div>
+      </div>
+    </div>
+    <div class="item" data-id="core-cosmo-exp">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Cosmo Expertise <span class="tag lvl">L9</span></div>
+        <div class="item-meta">Cosmo DC Expert · Juggernaut (Fortitude Master)</div>
+      </div>
+    </div>
+    <div class="item" data-id="core-feat10">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Ability Boosts + Saint Feat + Skill Feat <span class="tag lvl">L10</span></div>
+      </div>
+    </div>
+
+    <div class="group-title">Level 11–13</div>
+    <div class="item" data-id="core-tech3">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">3rd Technique (Cloth Ability) <span class="tag lvl">L11</span></div>
+        <div class="item-meta">Focus spell · fair value ~12d6 / 6d8</div>
+      </div>
+    </div>
+    <div class="item" data-id="core-feat12">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Saint Feat + Skill Feat <span class="tag lvl">L12</span></div>
+      </div>
+    </div>
+    <div class="item" data-id="core-cloth-mastery">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Cloth Mastery <span class="tag lvl">L13</span></div>
+        <div class="item-meta">Unarmed Master · Armor Expertise (Cloth Expert) · Third Cosmo (Focus pool → 3)</div>
+      </div>
+    </div>
+
+    <div class="group-title">Level 14–16</div>
+    <div class="item" data-id="core-feat14">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Saint Feat + Skill Feat <span class="tag lvl">L14</span></div>
+      </div>
+    </div>
+    <div class="item" data-id="core-seventh">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Seventh Sense <span class="tag lvl">L15</span></div>
+        <div class="item-meta">Burn Your Cosmo (1/day) · Strikes ignore resistances / material weaknesses · auto-know location of recent damage sources · Greater Weapon Spec · Evasion</div>
+      </div>
+    </div>
+    <div class="item" data-id="core-tech4">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">4th Technique (Ultimate) <span class="tag lvl">L16</span></div>
+        <div class="item-meta">Focus spell · fair value ~16d6 / 8d8</div>
+      </div>
+    </div>
+
+    <div class="group-title">Level 17–20</div>
+    <div class="item" data-id="core-cosmo-mastery">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Cosmo Mastery + Cloth Attunement <span class="tag lvl">L17</span></div>
+        <div class="item-meta">Cosmo DC Master · all Techniques +1 heightening step · 1/day free Technique (≤2 actions)</div>
+      </div>
+    </div>
+    <div class="item" data-id="core-feat18">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Saint Feat + Skill Feat <span class="tag lvl">L18</span></div>
+      </div>
+    </div>
+    <div class="item" data-id="core-eighth">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Eighth Sense — Arayashiki <span class="tag lvl">L19</span></div>
+        <div class="item-meta">Free action 1/day when reduced to 0 HP or killed · act 1 min at ≥1 HP · immune death/dying/unconscious/paralyzed</div>
+      </div>
+    </div>
+    <div class="item" data-id="core-feat20">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Ability Boosts + Saint Feat + Skill Feat <span class="tag lvl">L20</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== CLOTHS ===================== -->
+
+<!-- ARIES -->
+<section data-section="aries">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="chevron">▼</span>
+    <h2><span class="cloth-symbol">♈</span> Aries — the Wall <span class="cloth-role">[DEFENSE]</span></h2>
+  </div>
+  <div class="section-body">
+    <div class="group-title">Cloth Passive</div>
+    <div class="item" data-id="aries-passive">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Cloth Mending</div>
+        <div class="item-meta">Trained Crafting · Repair any Cloth/armor/shield in 10 min (no check) · restore 10 × level HP · fully restore destroyed Cloths</div>
+      </div>
+    </div>
+    <div class="group-title">Techniques</div>
+    <div class="item" data-id="aries-t1">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Crystal Wall <span class="tag lvl">1st · L1</span></div>
+        <div class="item-meta">✦✦ · 15-ft barrier · AC 10, Hardness = level, HP = 4×level · blocks LoE</div>
+      </div>
+    </div>
+    <div class="item" data-id="aries-t2">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Starlight Extinction <span class="tag lvl">2nd · L6</span></div>
+        <div class="item-meta">✦✦ teleportation · 30 ft · Will · teleport target 60/250 ft + force on crit fail</div>
+      </div>
+    </div>
+    <div class="item" data-id="aries-t3">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Crystal Net <span class="tag lvl">3rd · L11</span></div>
+        <div class="item-meta">✦✦✦ · 20-ft burst · Reflex · Immobilized / force damage</div>
+      </div>
+    </div>
+    <div class="item" data-id="aries-t4">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Stardust Revolution <span class="tag lvl">4th · L16</span></div>
+        <div class="item-meta">✦✦✦ · 30-ft burst · 8d8 force · basic Reflex · stun + prone on crit fail</div>
+      </div>
+    </div>
+    <div class="group-title">Boons</div>
+    <div class="item" data-id="aries-asc">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Ascendant — Star Guard <span class="tag defense">DEFENSE</span></div>
+        <div class="item-meta">+2 status AC & all saves · reaction (1/round) nullify ranged/spell attack · Dimension Step ✦</div>
+      </div>
+    </div>
+    <div class="item" data-id="aries-zen">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Zenith — Star Guard (enhanced) <span class="tag defense">DEFENSE</span></div>
+        <div class="item-meta">As Ascendant · reaction unlimited · once/min target a creature (Fort, teleport 1 mile, incapacitation)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TAURUS -->
+<section data-section="taurus">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="chevron">▼</span>
+    <h2><span class="cloth-symbol">♉</span> Taurus — the Horn <span class="cloth-role">[OFFENSE, minor]</span></h2>
+  </div>
+  <div class="section-body">
+    <div class="group-title">Cloth Passive</div>
+    <div class="item" data-id="taurus-passive">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Bulwark</div>
+        <div class="item-meta">Can't be moved against will by ≤ your size · +2 circ Athletics & DC vs Shove/Trip/Grapple/Disarm</div>
+      </div>
+    </div>
+    <div class="group-title">Techniques</div>
+    <div class="item" data-id="taurus-t1">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Great Horn <span class="tag lvl">1st · L1</span></div>
+        <div class="item-meta">✦✦ · 30-ft cone · 1d8 bludgeoning · basic Fort · push 15 ft + prone on fail</div>
+      </div>
+    </div>
+    <div class="item" data-id="taurus-t2">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Pleiades Nova <span class="tag lvl">2nd · L6</span></div>
+        <div class="item-meta">✦✦ light · five ranged unarmed Strikes (1d6 force + key) · no MAP increase during · cumulative −1 after first</div>
+      </div>
+    </div>
+    <div class="item" data-id="taurus-t3">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Titan's Stance <span class="tag lvl">3rd · L11</span></div>
+        <div class="item-meta">⤾ reaction · interpose for ally · damage reduced by 10 + 2×level · cannot be moved</div>
+      </div>
+    </div>
+    <div class="item" data-id="taurus-t4">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Titan's Break: The Golden Horn <span class="tag lvl">4th · L16</span></div>
+        <div class="item-meta">✦✦✦ · 60-ft line · 8d8 bludgeoning · basic Fort · push + prone · destroys Hardness &lt;20</div>
+      </div>
+    </div>
+    <div class="group-title">Boons</div>
+    <div class="item" data-id="taurus-asc">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Ascendant — The Great Horn <span class="tag offense">OFFENSE</span></div>
+        <div class="item-meta">Unarmed +1 die · Fort save (push 10 + prone) · count as one size larger</div>
+      </div>
+    </div>
+    <div class="item" data-id="taurus-zen">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Zenith — The Great Horn (enhanced) <span class="tag offense">OFFENSE</span></div>
+        <div class="item-meta">As Ascendant with +2 dice total · temp HP = level each turn · Great Horn free 1/round</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GEMINI -->
+<section data-section="gemini">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="chevron">▼</span>
+    <h2><span class="cloth-symbol">♊</span> Gemini — the Other Dimension <span class="cloth-role">[CONTROL]</span></h2>
+  </div>
+  <div class="section-body">
+    <div class="group-title">Cloth Passive</div>
+    <div class="item" data-id="gemini-passive">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Two Faces</div>
+        <div class="item-meta">Trained Deception · swap Light/Shadow free action 1/hour · Shadow changes Another Dimension to confuse · two identities</div>
+      </div>
+    </div>
+    <div class="group-title">Techniques</div>
+    <div class="item" data-id="gemini-t1">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Another Dimension <span class="tag lvl">1st · L1</span></div>
+        <div class="item-meta">✦✦ incapacitation teleportation · 60 ft · Will · banished 1 min / 10 min on crit fail</div>
+      </div>
+    </div>
+    <div class="item" data-id="gemini-t2">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Astral Projection <span class="tag lvl">2nd · L6</span></div>
+        <div class="item-meta">✦✦ mental · project consciousness 200 ft · 10 min · cast mental Techniques through it</div>
+      </div>
+    </div>
+    <div class="item" data-id="gemini-t3">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Galaxian Explosion <span class="tag lvl">3rd · L11</span></div>
+        <div class="item-meta">✦✦✦ · 60-ft burst · 6d8 force · basic Reflex · difficult terrain 1 min</div>
+      </div>
+    </div>
+    <div class="item" data-id="gemini-t4">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Mavros Eruption Clast <span class="tag lvl">4th · L16</span></div>
+        <div class="item-meta">✦✦✦ fire · 30-ft burst · 8d8 fire · persistent fire · blinded on crit fail</div>
+      </div>
+    </div>
+    <div class="group-title">Boons</div>
+    <div class="item" data-id="gemini-asc">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Ascendant — Galaxian Cosmo <span class="tag offense">OFFENSE</span></div>
+        <div class="item-meta">1st Technique free 1/round · Galaxian Explosion burst +20 ft</div>
+      </div>
+    </div>
+    <div class="item" data-id="gemini-zen">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Zenith — Galaxian Cosmo (enhanced) <span class="tag offense">OFFENSE</span></div>
+        <div class="item-meta">As Ascendant · duplicate appears each turn (2 actions: Strike/Stride only)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CANCER -->
+<section data-section="cancer">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="chevron">▼</span>
+    <h2><span class="cloth-symbol">♋</span> Cancer — the Yellow Spring <span class="cloth-role">[OFFENSE + removal]</span></h2>
+  </div>
+  <div class="section-body">
+    <div class="group-title">Cloth Passive</div>
+    <div class="item" data-id="cancer-passive">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">The Boundary</div>
+        <div class="item-meta">See/speak with spirits · know HP category of creatures within 30 ft · Trained Medicine</div>
+      </div>
+    </div>
+    <div class="group-title">Techniques</div>
+    <div class="item" data-id="cancer-t1">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Sekishiki Meikai Ha <span class="tag lvl">1st · L1</span></div>
+        <div class="item-meta">✦✦ void · 30 ft · basic Will · 1d8 void · drained on fail</div>
+      </div>
+    </div>
+    <div class="item" data-id="cancer-t2">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Sekishiki Kisōen (Demonic Blue Flames) <span class="tag lvl">2nd · L6</span></div>
+        <div class="item-meta">✦✦ void · 15-ft burst · 3d8 void · heal on fails · soul consumed on 0 HP</div>
+      </div>
+    </div>
+    <div class="item" data-id="cancer-t3">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Sekishiki Konsō Ha (Soul Burial Waves) <span class="tag lvl">3rd · L11</span></div>
+        <div class="item-meta">✦✦✦ void · 30-ft burst · 6d8 + bonus from recent deaths · extra vs undead</div>
+      </div>
+    </div>
+    <div class="item" data-id="cancer-t4">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Sekishiki Tenryū Ha (Heaven's Dragon Wave) <span class="tag lvl">4th · L16</span></div>
+        <div class="item-meta">✦✦✦ void incapacitation · 60-ft cone · 8d8 · drag · death on crit fail at ≤ half HP</div>
+      </div>
+    </div>
+    <div class="group-title">Boons</div>
+    <div class="item" data-id="cancer-asc">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Ascendant — The Yellow Spring Opens <span class="tag offense">OFFENSE</span></div>
+        <div class="item-meta">Creatures you reduce to 0 die · free action 1/round vs ≤ half HP (Fort → 8d6 void + slowed)</div>
+      </div>
+    </div>
+    <div class="item" data-id="cancer-zen">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Zenith — The Yellow Spring is Here <span class="tag removal">REMOVAL</span></div>
+        <div class="item-meta">Once per Zenith day · 30-ft emanation · enemies ≤ half HP must save or die (incapacitation)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEO -->
+<section data-section="leo">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="chevron">▼</span>
+    <h2><span class="cloth-symbol">♌</span> Leo — the Lightning <span class="cloth-role">[OFFENSE, the striker]</span></h2>
+  </div>
+  <div class="section-body">
+    <div class="group-title">Cloth Passive</div>
+    <div class="item" data-id="leo-passive">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Pride of the Lion</div>
+        <div class="item-meta">Immune to frightened & fear effects · Trained Intimidation · +1 circ Demoralize</div>
+      </div>
+    </div>
+    <div class="group-title">Techniques</div>
+    <div class="item" data-id="leo-t1">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Lightning Bolt <span class="tag lvl">1st · L1</span></div>
+        <div class="item-meta">✦✦ electricity · 60-ft line · 1d12 electricity · basic Reflex</div>
+      </div>
+    </div>
+    <div class="item" data-id="leo-t2">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Lightning Crown <span class="tag lvl">2nd · L6</span></div>
+        <div class="item-meta">✦✦ electricity · up to three 5-ft pillars · 3d8 · persist 1 round</div>
+      </div>
+    </div>
+    <div class="item" data-id="leo-t3">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Lightning Plasma <span class="tag lvl">3rd · L11</span></div>
+        <div class="item-meta">✦✦✦ · three unarmed Strikes within 30 ft · no MAP increase during</div>
+      </div>
+    </div>
+    <div class="item" data-id="leo-t4">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Photon Burst <span class="tag lvl">4th · L16</span></div>
+        <div class="item-meta">✦✦✦ light · 120-ft line or 30-ft burst · 16d6 force · ignores cover/concealment/force resist</div>
+      </div>
+    </div>
+    <div class="group-title">Boons</div>
+    <div class="item" data-id="leo-asc">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Ascendant — Lightning Plasma <span class="tag offense">OFFENSE</span></div>
+        <div class="item-meta">Fists gain agile + +1d6 electricity · Haste-style extra action (Strike/Stride)</div>
+      </div>
+    </div>
+    <div class="item" data-id="leo-zen">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Zenith — Lightning Plasma (enhanced) <span class="tag offense">OFFENSE</span></div>
+        <div class="item-meta">As Ascendant with +3d6 electricity · quickened 1 in addition (two extra actions)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VIRGO -->
+<section data-section="virgo">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="chevron">▼</span>
+    <h2><span class="cloth-symbol">♍</span> Virgo — Nearest to God <span class="cloth-role">[CONTROL]</span></h2>
+  </div>
+  <div class="section-body">
+    <div class="group-title">Cloth Passive</div>
+    <div class="item" data-id="virgo-passive">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Om</div>
+        <div class="item-meta">Close eyes (action) → gain Om stacks (max 5) · +1 status to Technique DCs & Strike damage per stack · open eyes to empower next Technique/Strike</div>
+      </div>
+    </div>
+    <div class="group-title">Techniques</div>
+    <div class="item" data-id="virgo-t1">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Tenbu Hōrin (Treasure of Heaven) <span class="tag lvl">1st · L1</span></div>
+        <div class="item-meta">✦✦ mental · 30 ft · Will · lose one/two senses for 1 min</div>
+      </div>
+    </div>
+    <div class="item" data-id="virgo-t2">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Tenpōrin'in (Clarity of Mind) <span class="tag lvl">2nd · L6</span></div>
+        <div class="item-meta">✦✦ concentrate mental · 30-ft emanation · +status Will · immune fascinated/frightened · counteract mental</div>
+      </div>
+    </div>
+    <div class="item" data-id="virgo-t3">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Tenma Kōfuku (Demon Pacifier) <span class="tag lvl">3rd · L11</span></div>
+        <div class="item-meta">✦✦✦ light · 30-ft cone · 6d8 force · basic Will · stunned · special with Om → 60-ft emanation</div>
+      </div>
+    </div>
+    <div class="item" data-id="virgo-t4">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Rikudō Rinne (The Six Realms of Samsara) <span class="tag lvl">4th · L16</span></div>
+        <div class="item-meta">✦✦✦ mental incapacitation · 60 ft · Will · soul cast into six realms · stunned</div>
+      </div>
+    </div>
+    <div class="group-title">Boons</div>
+    <div class="item" data-id="virgo-asc">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Ascendant — Six Paths of Transmigration <span class="tag control">CONTROL</span></div>
+        <div class="item-meta">Unarmed hits force Will or lose a sense (cumulative) · max Om stacks → 7</div>
+      </div>
+    </div>
+    <div class="item" data-id="virgo-zen">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Zenith — Six Paths (enhanced) <span class="tag control">CONTROL</span></div>
+        <div class="item-meta">As Ascendant · once/min ✦✦✦ 60-ft emanation · lose all five senses (incapacitation)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIBRA -->
+<section data-section="libra">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="chevron">▼</span>
+    <h2><span class="cloth-symbol">♎</span> Libra — the Weapons <span class="cloth-role">[OFFENSE + DEFENSE]</span></h2>
+  </div>
+  <div class="section-body">
+    <div class="group-title">Cloth Passive</div>
+    <div class="item" data-id="libra-passive">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">The Cloth of Arms</div>
+        <div class="item-meta">Trained martial weapons (advance with unarmed) · six weapon pairs · summon/dismiss free · never disarmed/destroyed · accept runes</div>
+      </div>
+    </div>
+    <div class="group-title">Techniques</div>
+    <div class="item" data-id="libra-t1">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Rozan Shō Ryū Ha (Rising Dragon) <span class="tag lvl">1st · L1</span></div>
+        <div class="item-meta">✦✦ · 10-ft radius 30-ft tall cylinder · 1d10 bludgeoning · launch upward on crit fail</div>
+      </div>
+    </div>
+    <div class="item" data-id="libra-t2">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">The Twelve Arms <span class="tag lvl">2nd · L6</span></div>
+        <div class="item-meta">✦✦ · distribute weapons to allies · they use your proficiency + runes for 1 min</div>
+      </div>
+    </div>
+    <div class="item" data-id="libra-t3">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Rozan Ryū Hi Shō (Dragon Flight) <span class="tag lvl">3rd · L11</span></div>
+        <div class="item-meta">✦✦ · Fly 60 ft + one Strike +6d8 · no reactions · carry on crit</div>
+      </div>
+    </div>
+    <div class="item" data-id="libra-t4">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Athena's Arsenal: Overdrive <span class="tag lvl">4th · L16</span></div>
+        <div class="item-meta">✦✦✦ · six Strikes with different weapons · no MAP · +2d8 · then weapons circle (+2 AC, 2d8 adjacent)</div>
+      </div>
+    </div>
+    <div class="group-title">Boons</div>
+    <div class="item" data-id="libra-asc">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Ascendant — The Balance <span class="tag offense">OFFENSE</span><span class="tag defense">DEFENSE</span></div>
+        <div class="item-meta">Wield any two weapons · +1 fundamental rune tier · +2 status all saves · first nat 1 each hour = 10</div>
+      </div>
+    </div>
+    <div class="item" data-id="libra-zen">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Zenith — The Balance (enhanced) <span class="tag offense">OFFENSE</span><span class="tag defense">DEFENSE</span></div>
+        <div class="item-meta">As Ascendant · once/round ✦✦✦ Rozan Hyaku Ryū Ha: 60-ft line 12d10 · basic Reflex · prone + stun on crit fail</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCORPIO -->
+<section data-section="scorpio">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="chevron">▼</span>
+    <h2><span class="cloth-symbol">♏</span> Scorpio — the Needle <span class="cloth-role">[OFFENSE, ramp]</span></h2>
+  </div>
+  <div class="section-body">
+    <div class="group-title">Cloth Passive</div>
+    <div class="item" data-id="scorpio-passive">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Fifteen Needles</div>
+        <div class="item-meta">Track needles per creature (max 15) · free action on hit to add · enfeebled/blinded/stunned thresholds</div>
+      </div>
+    </div>
+    <div class="group-title">Techniques</div>
+    <div class="item" data-id="scorpio-t1">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Scarlet Needle <span class="tag lvl">1st · L1</span></div>
+        <div class="item-meta">✦ · 30 ft · Fort · +1 needle + 1d6 persistent bleed</div>
+      </div>
+    </div>
+    <div class="item" data-id="scorpio-t2">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Crimson Mirage <span class="tag lvl">2nd · L6</span></div>
+        <div class="item-meta">✦✦ illusion mental · target with ≥1 needle · dazzled + mental dmg per needle</div>
+      </div>
+    </div>
+    <div class="item" data-id="scorpio-t3">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Crimson Flurry <span class="tag lvl">3rd · L11</span></div>
+        <div class="item-meta">✦✦✦ · four unarmed Strikes · apply needles · no MAP increase</div>
+      </div>
+    </div>
+    <div class="item" data-id="scorpio-t4">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Antares <span class="tag lvl">4th · L16</span></div>
+        <div class="item-meta">✦✦ incapacitation · ≥5 needles · Fort · 16d6 + paralyzed / death on crit fail</div>
+      </div>
+    </div>
+    <div class="group-title">Boons</div>
+    <div class="item" data-id="scorpio-asc">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Ascendant — Antares <span class="tag offense">OFFENSE</span></div>
+        <div class="item-meta">Needles on hit or miss · each deals 1d6 persistent bleed · at 8 needles save or die (incapacitation)</div>
+      </div>
+    </div>
+    <div class="item" data-id="scorpio-zen">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Zenith — Antares (enhanced) <span class="tag offense">OFFENSE</span></div>
+        <div class="item-meta">As Ascendant · Antares at 5 needles · allies' hits also apply needles</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SAGITTARIUS -->
+<section data-section="sagittarius">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="chevron">▼</span>
+    <h2><span class="cloth-symbol">♐</span> Sagittarius — the Arrow <span class="cloth-role">[OFFENSE + UTILITY]</span></h2>
+  </div>
+  <div class="section-body">
+    <div class="group-title">Cloth Passive</div>
+    <div class="item" data-id="sag-passive">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">The Bow</div>
+        <div class="item-meta">Cloth includes bow (unarmed proficiency) · never disarmed · +2 circ Perception &gt;100 ft · +10 ft Speed</div>
+      </div>
+    </div>
+    <div class="group-title">Techniques</div>
+    <div class="item" data-id="sag-t1">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Golden Arrow <span class="tag lvl">1st · L1</span></div>
+        <div class="item-meta">✦✦ · spell attack · 500-ft range increment · ignore cover/concealment · 2d6 force</div>
+      </div>
+    </div>
+    <div class="item" data-id="sag-t2">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Chiron's Light Impulse <span class="tag lvl">2nd · L6</span></div>
+        <div class="item-meta">✦✦ light · ally buff · +1 status attacks · +1d6 force · fly 20 · once treat roll as 10</div>
+      </div>
+    </div>
+    <div class="item" data-id="sag-t3">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Infinity Break <span class="tag lvl">3rd · L11</span></div>
+        <div class="item-meta">✦✦✦ · line up to 1 mile · 12d6 force · passes through walls (Hardness &lt;20)</div>
+      </div>
+    </div>
+    <div class="item" data-id="sag-t4">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Aiolos's Wings <span class="tag lvl">4th · L16</span></div>
+        <div class="item-meta">✦✦✦ · 10 min · fly = 2× Speed · Golden Arrow becomes 1-action free · share flight with allies</div>
+      </div>
+    </div>
+    <div class="group-title">Boons</div>
+    <div class="item" data-id="sag-asc">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Ascendant — Atomic Thunderbolt <span class="tag utility">UTILITY</span></div>
+        <div class="item-meta">Fly Speed = Speed · Golden Arrow 1-mile increment · ignores all cover/hidden/undetected · name location</div>
+      </div>
+    </div>
+    <div class="item" data-id="sag-zen">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Zenith — Atomic Thunderbolt (enhanced) <span class="tag utility">UTILITY</span></div>
+        <div class="item-meta">As Ascendant · once/min Golden Arrow reaches any named creature within a mile through almost any barrier · +8 dice</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAPRICORN -->
+<section data-section="capricorn">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="chevron">▼</span>
+    <h2><span class="cloth-symbol">♑</span> Capricorn — Excalibur <span class="cloth-role">[OFFENSE, conditional]</span></h2>
+  </div>
+  <div class="section-body">
+    <div class="group-title">Cloth Passive</div>
+    <div class="item" data-id="cap-passive1">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">The Sword Arm</div>
+        <div class="item-meta">Unarmed gain versatile S + deadly d8 · Trained Athletics</div>
+      </div>
+    </div>
+    <div class="item" data-id="cap-passive2">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">The Sharpest Sword</div>
+        <div class="item-meta">Crits sever (lose limb/attack/sense until regenerate) · sword-group critical specialization</div>
+      </div>
+    </div>
+    <div class="group-title">Techniques</div>
+    <div class="item" data-id="cap-t1">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Excalibur <span class="tag lvl">1st · L1</span></div>
+        <div class="item-meta">✦ · until end of turn · Strikes deal slashing · deadly d10 · ignore Hardness</div>
+      </div>
+    </div>
+    <div class="item" data-id="cap-t2">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Jumping Stone <span class="tag lvl">2nd · L6</span></div>
+        <div class="item-meta">✦✦ · Stride 2× Speed · Strike +3d8 · AC −2 if moved ≥20 ft · no reactions</div>
+      </div>
+    </div>
+    <div class="item" data-id="cap-t3">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Double Excalibur <span class="tag lvl">3rd · L11</span></div>
+        <div class="item-meta">✦✦✦ · two Strikes at full bonus · deadly d12 · ignore Hardness/resist/immune · sever if both hit</div>
+      </div>
+    </div>
+    <div class="item" data-id="cap-t4">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Excalibur: The Sword That Cuts Everything <span class="tag lvl">4th · L16</span></div>
+        <div class="item-meta">✦✦✦ · 60-ft line · 16d6 slashing · ignores all Hardness/resist/immune · severs on crit fail · cuts structures</div>
+      </div>
+    </div>
+    <div class="group-title">Boons</div>
+    <div class="item" data-id="cap-asc">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Ascendant — Excalibur Cuts Everything <span class="tag offense">OFFENSE</span></div>
+        <div class="item-meta">Strikes ignore all resists/physical immunities/Hardness · +1 die · Strike incorporeal & force effects</div>
+      </div>
+    </div>
+    <div class="item" data-id="cap-zen">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Zenith — Excalibur Cuts Everything (enhanced) <span class="tag offense">OFFENSE</span></div>
+        <div class="item-meta">As Ascendant · reaction 1/turn/creature: attacker or spell entering your space → sever it (no effect)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AQUARIUS -->
+<section data-section="aquarius">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="chevron">▼</span>
+    <h2><span class="cloth-symbol">♒</span> Aquarius — Absolute Zero <span class="cloth-role">[OFFENSE + removal]</span></h2>
+  </div>
+  <div class="section-body">
+    <div class="group-title">Cloth Passive</div>
+    <div class="item" data-id="aqu-passive">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Cold Blood</div>
+        <div class="item-meta">Cold resistance = level · immune severe cold · +1 status Will vs emotion · Trained Occultism or Arcana</div>
+      </div>
+    </div>
+    <div class="group-title">Techniques</div>
+    <div class="item" data-id="aqu-t1">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Diamond Dust <span class="tag lvl">1st · L1</span></div>
+        <div class="item-meta">✦✦ cold · 30-ft cone · 1d8 cold · basic Fort · slowed 1 on fail</div>
+      </div>
+    </div>
+    <div class="item" data-id="aqu-t2">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Koliço (Ice Rings) <span class="tag lvl">2nd · L6</span></div>
+        <div class="item-meta">✦✦ cold · 60 ft · Reflex · 3d8 + immobilized/restrained · rings have Hardness/HP</div>
+      </div>
+    </div>
+    <div class="item" data-id="aqu-t3">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Freezing Shield (Grand Shield) <span class="tag lvl">3rd · L11</span></div>
+        <div class="item-meta">✦✦ cold · 20-ft dome · cold resist 15 · +2 AC vs ranged · damage + slowed to hostiles · −4 to incoming attacks</div>
+      </div>
+    </div>
+    <div class="item" data-id="aqu-t4">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Freezing Coffin <span class="tag lvl">4th · L16</span></div>
+        <div class="item-meta">✦✦✦ cold incapacitation · 30 ft · Fort · 16d6 + slowed 2 / petrified indefinitely on crit fail</div>
+      </div>
+    </div>
+    <div class="group-title">Boons</div>
+    <div class="item" data-id="aqu-asc">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Ascendant — Freezing Coffin <span class="tag offense">OFFENSE</span><span class="tag removal">REMOVAL</span></div>
+        <div class="item-meta">Cold damage forces Fort or slowed 1 (cumulative to 4 = petrified) · ignores cold resist · treats immunity as resist 10</div>
+      </div>
+    </div>
+    <div class="item" data-id="aqu-zen">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Zenith — Aurora Execution <span class="tag removal">REMOVAL</span></div>
+        <div class="item-meta">Once/min ✦✦✦ · 60-ft line · 16d6 cold · crit fail = frozen solid (petrified, shatterable) · incapacitation</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PISCES -->
+<section data-section="pisces">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="chevron">▼</span>
+    <h2><span class="cloth-symbol">♓</span> Pisces — the Roses <span class="cloth-role">[OFFENSE, aura]</span></h2>
+  </div>
+  <div class="section-body">
+    <div class="group-title">Cloth Passive</div>
+    <div class="item" data-id="pis-passive">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Royal Demon Rose</div>
+        <div class="item-meta">Immune to poison · any creature that touches you or hits with unarmed/non-reach melee takes 1d6 poison</div>
+      </div>
+    </div>
+    <div class="group-title">Techniques</div>
+    <div class="item" data-id="pis-t1">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Piranha Rose <span class="tag lvl">1st · L1</span></div>
+        <div class="item-meta">✦ · 30 ft · up to three creatures · 1d8 slashing + 1d6 persistent bleed · basic Reflex</div>
+      </div>
+    </div>
+    <div class="item" data-id="pis-t2">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Royal Demon Rose <span class="tag lvl">2nd · L6</span></div>
+        <div class="item-meta">✦✦ poison olfactory · 20-ft burst · Fort · 3d8 poison + enfeebled / stupefied</div>
+      </div>
+    </div>
+    <div class="item" data-id="pis-t3">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Crimson Fog (Bloody Rose Blizzard) <span class="tag lvl">3rd · L11</span></div>
+        <div class="item-meta">✦✦✦ poison · 40-ft burst · 6d8 piercing + persistent bleed · difficult terrain + concealment</div>
+      </div>
+    </div>
+    <div class="item" data-id="pis-t4">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Royal Funeral <span class="tag lvl">4th · L16</span></div>
+        <div class="item-meta">✦✦✦ poison incapacitation death · 60 ft · Fort · 16d6 + enfeebled/drained / death on crit fail · know exact HP</div>
+      </div>
+    </div>
+    <div class="group-title">Boons</div>
+    <div class="item" data-id="pis-asc">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Ascendant — The Royal Demon Rose Garden <span class="tag offense">OFFENSE</span></div>
+        <div class="item-meta">10-ft emanation · end of turn enemies save or 4d6 poison + enfeebled (cumul to 4) · persists while unconscious</div>
+      </div>
+    </div>
+    <div class="item" data-id="pis-zen">
+      <div class="mark"></div>
+      <div class="item-content">
+        <div class="item-name">Zenith — The Royal Demon Rose Garden (enhanced) <span class="tag offense">OFFENSE</span></div>
+        <div class="item-meta">As Ascendant with 15-ft / 8d6 · once/min ✦✦ Bloody Rose (incapacitation death): 60 ft · Fort · failure 10d6 + enf 2 / crit dies</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  The Saint · Gold Cloth Edition v4 · Interactive Checklist<br>
+  Progress is stored locally in your browser (localStorage). Use Download JSON / Load JSON to back up or transfer.
+</footer>
+
+<script>
+  const STORAGE_KEY = 'saint-checklist-v4';
+
+  /* ---------- helpers ---------- */
+  function getMarkState(item) {
+    const mark = item.querySelector('.mark');
+    if (mark.classList.contains('check')) return 'check';
+    if (mark.classList.contains('cross')) return 'cross';
+    return '';
+  }
+
+  function setMarkState(item, state) {
+    const mark = item.querySelector('.mark');
+    mark.classList.remove('check', 'cross');
+    mark.textContent = '';
+    if (state === 'check') {
+      mark.classList.add('check');
+      mark.textContent = '✓';
+    } else if (state === 'cross') {
+      mark.classList.add('cross');
+      mark.textContent = '✕';
+    }
+  }
+
+  function getComment(item) {
+    const ta = item.querySelector('.comment-area textarea');
+    return ta ? ta.value.trim() : '';
+  }
+
+  function setComment(item, text) {
+    const ta = item.querySelector('.comment-area textarea');
+    const btn = item.querySelector('.comment-btn');
+    if (ta) ta.value = text || '';
+    if (btn) {
+      if (text && text.trim()) btn.classList.add('has-comment');
+      else btn.classList.remove('has-comment');
+    }
+  }
+
+  /* ---------- UI injection ---------- */
+  function enhanceItems() {
+    document.querySelectorAll('.item[data-id]').forEach(item => {
+      // already enhanced?
+      if (item.querySelector('.item-main')) return;
+
+      // wrap existing children into .item-main
+      const mark = item.querySelector('.mark');
+      const content = item.querySelector('.item-content');
+      const main = document.createElement('div');
+      main.className = 'item-main';
+      main.appendChild(mark);
+      main.appendChild(content);
+      item.insertBefore(main, item.firstChild);
+
+      // comment button
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'comment-btn';
+      btn.title = 'Add / edit comment';
+      btn.textContent = '💬';
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleComment(item);
+      });
+      item.appendChild(btn);
+
+      // comment area
+      const area = document.createElement('div');
+      area.className = 'comment-area';
+      area.innerHTML = `
+        <textarea placeholder="Write a note about this feature…" rows="2"></textarea>
+        <div class="comment-hint">Saved automatically</div>
+      `;
+      const ta = area.querySelector('textarea');
+      ta.addEventListener('input', () => {
+        if (ta.value.trim()) btn.classList.add('has-comment');
+        else btn.classList.remove('has-comment');
+        saveState();
+      });
+      ta.addEventListener('click', (e) => e.stopPropagation());
+      item.appendChild(area);
+
+      // cycle on main click (not on comment)
+      main.addEventListener('click', () => cycle(item));
+
+      // remove old inline onclick if present
+      item.removeAttribute('onclick');
+    });
+  }
+
+  function toggleComment(item) {
+    const area = item.querySelector('.comment-area');
+    if (!area) return;
+    area.classList.toggle('open');
+    if (area.classList.contains('open')) {
+      area.querySelector('textarea').focus();
+    }
+  }
+
+  /* ---------- mark cycling ---------- */
+  function cycle(item) {
+    const current = getMarkState(item);
+    if (current === 'check') setMarkState(item, 'cross');
+    else if (current === 'cross') setMarkState(item, '');
+    else setMarkState(item, 'check');
+    saveState();
+    updateProgress();
+  }
+
+  /* ---------- sections ---------- */
+  function toggleSection(header) {
+    header.classList.toggle('collapsed');
+    const body = header.nextElementSibling;
+    body.classList.toggle('hidden');
+  }
+
+  function expandAll() {
+    document.querySelectorAll('.section-header').forEach(h => {
+      h.classList.remove('collapsed');
+      h.nextElementSibling.classList.remove('hidden');
+    });
+  }
+
+  function collapseAll() {
+    document.querySelectorAll('.section-header').forEach(h => {
+      h.classList.add('collapsed');
+      h.nextElementSibling.classList.add('hidden');
+    });
+  }
+
+  function markAll(state) {
+    document.querySelectorAll('.item[data-id]').forEach(item => {
+      setMarkState(item, state);
+    });
+    saveState();
+    updateProgress();
+  }
+
+  function resetAll() {
+    if (!confirm('Clear all marks and comments? This cannot be undone.')) return;
+    localStorage.removeItem(STORAGE_KEY);
+    document.querySelectorAll('.item[data-id]').forEach(item => {
+      setMarkState(item, '');
+      setComment(item, '');
+      const area = item.querySelector('.comment-area');
+      if (area) area.classList.remove('open');
+    });
+    updateProgress();
+  }
+
+  /* ---------- persistence ---------- */
+  function collectState() {
+    const state = {};
+    document.querySelectorAll('.item[data-id]').forEach(item => {
+      const id = item.dataset.id;
+      const mark = getMarkState(item);
+      const comment = getComment(item);
+      if (mark || comment) {
+        state[id] = { mark, comment };
+      }
+    });
+    return state;
+  }
+
+  function applyState(state) {
+    if (!state || typeof state !== 'object') return;
+    document.querySelectorAll('.item[data-id]').forEach(item => {
+      const id = item.dataset.id;
+      let entry = state[id];
+      // backward-compat: old format was just "check" | "cross"
+      if (typeof entry === 'string') {
+        entry = { mark: entry, comment: '' };
+      }
+      if (!entry) {
+        setMarkState(item, '');
+        setComment(item, '');
+        return;
+      }
+      setMarkState(item, entry.mark || '');
+      setComment(item, entry.comment || '');
+    });
+  }
+
+  function saveState() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(collectState()));
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      applyState(JSON.parse(raw));
+    } catch (e) {
+      console.warn('Could not load saved state', e);
+    }
+  }
+
+  /* ---------- JSON export / import ---------- */
+  function downloadJSON() {
+    const payload = {
+      version: 4,
+      exportedAt: new Date().toISOString(),
+      title: 'The Saint — Gold Cloth Checklist',
+      items: collectState()
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `saint-checklist-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function loadJSONFile(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(reader.result);
+        const items = data.items || data; // accept both full payload and bare map
+        if (typeof items !== 'object') throw new Error('Invalid format');
+        applyState(items);
+        saveState();
+        updateProgress();
+        alert('Checklist loaded successfully.');
+      } catch (e) {
+        alert('Could not load JSON: ' + e.message);
+      }
+      event.target.value = ''; // allow re-importing same file
+    };
+    reader.readAsText(file);
+  }
+
+  /* ---------- progress ---------- */
+  function updateProgress() {
+    const items = document.querySelectorAll('.item[data-id]');
+    let checked = 0, crossed = 0, commented = 0;
+    items.forEach(item => {
+      const m = getMarkState(item);
+      if (m === 'check') checked++;
+      else if (m === 'cross') crossed++;
+      if (getComment(item)) commented++;
+    });
+    const total = items.length;
+    const marked = checked + crossed;
+    document.getElementById('progress-text').textContent =
+      `${checked} ✓ · ${crossed} ✕ · ${commented} 💬 · ${marked}/${total}`;
+    const pct = total ? (marked / total) * 100 : 0;
+    document.getElementById('progress-bar').style.width = pct + '%';
+  }
+
+  /* ---------- init ---------- */
+  enhanceItems();
+  loadState();
+  updateProgress();
+</script>
+</body>
+</html>

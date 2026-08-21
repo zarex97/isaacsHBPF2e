@@ -8,7 +8,26 @@
                     "value": 30
                 },
                 "maxTargets": 5
-            }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Aiolos's Wings"
+                    },
+                    "event": "action-used",
+                    "note": "Fly Speed equal to twice your Speed for 10 minutes.",
+                    "self": true
+                },
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Aiolos's Wings (Shared)"
+                    },
+                    "event": "action-used",
+                    "note": "Shared flight: an ally's fly Speed equals their own Speed."
+                }
+            ]
         }
     },
     "folder": "4th — Ultimate (L16)",
@@ -41,13 +60,7 @@
             "value": "30 feet"
         },
         "requirements": "",
-        "rules": [
-            {
-                "key": "BaseSpeed",
-                "selector": "fly",
-                "value": "@actor.attributes.speed.value * 2"
-            }
-        ],
+        "rules": [],
         "target": {
             "value": "you and up to five allies"
         },

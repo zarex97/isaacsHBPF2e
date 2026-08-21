@@ -31,10 +31,16 @@
                 "value": "@actor.attributes.speed.value + 10"
             },
             {
+                "key": "RollOption",
+                "label": "The Bow: beyond 100 feet",
+                "option": "bow-distant",
+                "toggleable": true
+            },
+            {
                 "key": "FlatModifier",
                 "label": "The Bow",
                 "predicate": [
-                    "action:seek"
+                    "bow-distant"
                 ],
                 "selector": "perception",
                 "type": "circumstance",

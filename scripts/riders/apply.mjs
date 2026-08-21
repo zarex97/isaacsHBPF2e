@@ -21,7 +21,7 @@ export async function applyRiders(payload) {
     const context = await resolveContext(payload);
     if (!context) return;
 
-    const candidates = collectRiders({
+    let candidates = collectRiders({
         event: payload.event,
         // The message's item where there is one, and the item the payload named otherwise. `action-used`
         // is collected from this item alone, so it has to be the ability that was actually used rather
@@ -29,6 +29,15 @@ export async function applyRiders(payload) {
         item: context.messageItem ?? context.item,
         actor: context.originActor,
     });
+
+    // One use of an ability produces one request for the caster and one per target, and each half must see
+    // only its own riders. Letting every request see all of them means a `self` rider is applied once per
+    // target as well — and the receipt cannot be trusted to catch that, because a player's requests reach
+    // the GM as independent socket jobs with no ordering between them. See `Sources.onActionUsed`.
+    if (payload.event === "action-used") {
+        const wantSelf = payload.selfOnly === true;
+        candidates = candidates.filter(({ rider }) => (rider.self === true) === wantSelf);
+    }
     if (candidates.length === 0) return;
 
     // A rider with an `area` fans out from the origin's token; everything else lands on the one target the
@@ -61,7 +70,9 @@ async function applyToTarget(target, candidates, context, payload) {
     const options = riderOptions({
         originActor: context.originActor,
         targetActor: actor,
-        item: context.item ?? context.messageItem,
+        // `eventItem` last: it is the only one that can belong to somebody else, so it fills in only when
+        // the event named no item of the origin's own. See `resolveContext` for why the two are separate.
+        item: context.item ?? context.messageItem ?? context.eventItem,
         extra: payload.damage ? describeDamage(payload.damage) : [],
     });
 
@@ -151,11 +162,18 @@ async function applyOne(rider, context) {
 /**
  * Who a rider lands on.
  *
- * Without an `area` that is the token the event named. With one, the rider is an aura tick: build the
- * shape on the origin's token and reuse the same containment and alliance filtering the cast-time area
+ * `self` is the Technique that buffs its own caster — *Excalibur*, *Aiolos's Wings*. pf2e's own answer to
+ * those is `system.selfEffect`, but that field exists on actions and feats and not on spells, so a Technique
+ * that turns the Saint's arms into blades had its rule elements written straight onto the spell instead.
+ * Rule elements on a spell are live the moment it is on the sheet, which made a 1-action Technique a
+ * permanent passive: every Capricorn Saint had deadly d10 slashing fists from level 1, forever.
+ *
+ * Without an `area` a rider lands on the token the event named. With one, the rider is an aura tick: build
+ * the shape on the origin's token and reuse the same containment and alliance filtering the cast-time area
  * targeting uses, so "enemies within 10 feet" means the same thing in both places.
  */
 async function targetsFor(rider, context) {
+    if (rider.self) return context.originToken ? [context.originToken] : [];
     if (!rider.area) return context.target ? [context.target] : [];
 
     const originToken = context.originToken;
@@ -461,7 +479,15 @@ async function resolveContext(payload) {
     // roses growing on the person they hit.
     const messageItem = message?.actor && message.actor === originActor ? itemFor(message) : null;
 
-    return { message, item, messageItem, originActor, originToken, target };
+    // ...but it is the only thing the *predicate* can be about. "Any creature that hits you with an unarmed
+    // or non-reach melee attack takes 1d6 poison" is a question about the attacker's weapon, and answering
+    // it needs that weapon in the option set. Keeping the two apart is the whole point: `messageItem` is
+    // "may this item carry riders", `eventItem` is "what was the event about". Collapsing them either lets
+    // an attacker's weapon fire the defender's riders, or — as shipped — leaves Pisces with no `item:`
+    // option at all, so its predicate could never pass and the roses never drew blood.
+    const eventItem = itemFor(message);
+
+    return { message, item, messageItem, eventItem, originActor, originToken, target };
 }
 
 /**

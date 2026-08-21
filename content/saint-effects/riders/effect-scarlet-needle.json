@@ -5,6 +5,7 @@
     "system": {
         "badge": {
             "loop": false,
+            "max": 15,
             "type": "counter",
             "value": 1
         },
