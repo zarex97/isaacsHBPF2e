@@ -79,11 +79,18 @@ export function eventOf(rider) {
  * Saint holding two Zenith activities fires both from one — two Fortitude saves and 16d6 twice for a single
  * use — because neither rider has a predicate to tell them apart, and neither should need one.
  *
+ * `save-rolled` is the same argument, and it was left out of this set for one release. A save rider says
+ * "a creature that fails *this* Technique's save is drained 1"; it names one Technique the way `action-used`
+ * names one ability. With the wide search, every Technique on the sheet answered every save: *Scarlet
+ * Needle* handed out *Crimson Mirage*'s dazzled and *Antares*' "it dies", *Sekishiki Konsō Ha* handed out
+ * *Meikai Ha*'s drained, and *Another Dimension* handed out *Mavros Eruption Clast*'s blinded. Predicates
+ * could not save it: 56 of the 57 save riders in the content carry none, and none of them should have to.
+ *
  * The other events genuinely do need the wider search, which is why this is a list rather than a rule: a
  * Strike's `message.item` is the fist or the weapon, while "each time you hit with an unarmed Strike…" is
  * written on a Cloth's Ascendant effect, and only the predicate can narrow that back down.
  */
-const ITEM_SCOPED_EVENTS = new Set(["action-used"]);
+const ITEM_SCOPED_EVENTS = new Set(["action-used", "save-rolled"]);
 
 /**
  * Gather every rider for an event, from every item that could be carrying one.

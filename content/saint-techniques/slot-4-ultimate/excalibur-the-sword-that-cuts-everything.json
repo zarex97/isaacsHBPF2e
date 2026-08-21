@@ -23,9 +23,33 @@
             "riders": [
                 {
                     "apply": {
-                        "text": "Severed: a limb, a sense, or a natural attack, chosen by the Saint. No save.",
-                        "type": "prompt"
+                        "options": [
+                            {
+                                "apply": {
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Severed (Limb)"
+                                },
+                                "label": "A limb"
+                            },
+                            {
+                                "apply": {
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Severed (Sense)"
+                                },
+                                "label": "A sense"
+                            },
+                            {
+                                "apply": {
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Severed (Natural Attack)"
+                                },
+                                "label": "A natural attack"
+                            }
+                        ],
+                        "prompt": "Excalibur severs. What is lost?",
+                        "type": "choice"
                     },
+                    "note": "Severed by the line. Until the target receives regenerate.",
                     "outcomes": [
                         "criticalFailure"
                     ]

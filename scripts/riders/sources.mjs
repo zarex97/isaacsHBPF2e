@@ -105,18 +105,36 @@ export const Sources = {
 
         const item = message?.item;
         if (!item) return;
-        if (!ridersOn(item).some((rider) => rider.event === "action-used")) return;
+        const riders = ridersOn(item).filter((rider) => rider.event === "action-used");
+        if (riders.length === 0) return;
 
         const actor = message.actor;
-        for (const target of game.user.targets) {
-            await Relay.request({
+        const request = (targetUuid, selfOnly) =>
+            Relay.request({
                 action: "applyRiders",
                 event: "action-used",
                 messageId: message.id,
                 itemUuid: item.uuid,
                 originUuid: actor?.uuid,
-                targetUuid: target.document.uuid,
+                targetUuid,
+                selfOnly,
             });
+
+        // A Technique that buffs its own caster is cast at nobody, so waiting for `game.user.targets` to
+        // have something in it would mean *Excalibur* only worked when an enemy happened to be selected.
+        //
+        // `selfOnly` splits the work rather than letting both halves see everything. Without it, a caster
+        // with three enemies targeted sends four requests that each route the `self` rider back to their
+        // own token, and the receipt cannot be relied on to swallow the extras: for a player the relay is
+        // a socket emit, so the four requests reach the GM as four independent jobs that can all read the
+        // message's receipt before any of them writes one.
+        if (riders.some((rider) => rider.self)) {
+            const own = message.token ?? actor?.getActiveTokens(true, true).at(0);
+            if (own?.uuid) await request(own.uuid, true);
+        }
+
+        for (const target of game.user.targets) {
+            await request(target.document.uuid, false);
         }
     },
 

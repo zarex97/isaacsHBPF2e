@@ -42,7 +42,10 @@
             {
                 "key": "FlatModifier",
                 "label": "Pride of the Lion",
-                "selector": "demoralize",
+                "predicate": [
+                    "action:demoralize"
+                ],
+                "selector": "intimidation",
                 "type": "circumstance",
                 "value": 1
             },

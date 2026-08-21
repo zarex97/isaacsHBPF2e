@@ -225,11 +225,71 @@ check(
     1,
 );
 
+/*
+ * Pisces asks about the *attacker's* weapon, so that weapon has to be in the option set.
+ *
+ * The roses shipped inert: on `strike-received` the attacker's weapon is deliberately not a rider source,
+ * and nothing put it back as a predicate subject, so `item:melee` had nothing to match and the 1d6 poison
+ * never landed. Both halves are checked — without a weapon the predicate must fail, with one it must pass —
+ * because a fix that simply drops the predicate would pass the second check alone.
+ */
+const roses = ridersOf(pisces)[0];
+const weapon = (options) => ({ getRollOptions: () => options });
+
+check(
+    "the roses cannot fire when no weapon reached the predicate",
+    selectRiders([{ rider: roses, index: 0, item }], {
+        outcome: "success",
+        options: riderOptions({ originActor: actor(), targetActor: actor(), item: null }),
+    }).length,
+    0,
+);
+check(
+    "the roses fire against an unarmed Strike",
+    selectRiders([{ rider: roses, index: 0, item }], {
+        outcome: "success",
+        options: riderOptions({
+            originActor: actor(),
+            targetActor: actor(),
+            item: weapon(["item:melee", "item:category:unarmed"]),
+        }),
+    }).length,
+    1,
+);
+
 const diamondDust = load("saint-techniques", "slot-1-signature", "diamond-dust.json");
 check(
     "a rider with no event still means save-rolled",
     collectRiders({ event: "save-rolled", item: { id: "dd", flags: diamondDust.flags }, actor: null }).length,
     1,
+);
+
+/*
+ * A save rider belongs to the Technique that forced the save, and to nothing else on the sheet.
+ *
+ * Searching the whole actor for them is how one Fortitude save from *Scarlet Needle* also handed out
+ * *Crimson Mirage*'s dazzled and *Antares*' "it dies" — 56 of the 57 save riders in the content carry no
+ * predicate, so degree of success is the only thing separating them, and it separates nothing. The cast
+ * below is the one from the bug report: a 16th-level Scorpio Saint owns all four of their Techniques.
+ */
+const scorpioSheet = [
+    ["sn", load("saint-techniques", "slot-1-signature", "scarlet-needle.json")],
+    ["cm", load("saint-techniques", "slot-2", "crimson-mirage.json")],
+    ["cf", load("saint-techniques", "slot-3-cloth-ability", "crimson-flurry.json")],
+    ["an", load("saint-techniques", "slot-4-ultimate", "antares.json")],
+].map(([id, doc]) => ({ id, name: doc.name, flags: doc.flags }));
+
+const scarletNeedle = scorpioSheet[0];
+const onScarletNeedle = collectRiders({
+    event: "save-rolled",
+    item: scarletNeedle,
+    actor: { items: scorpioSheet },
+});
+
+check(
+    "a save collects riders from the Technique that forced it and no other",
+    [...new Set(onScarletNeedle.map(({ item }) => item.name))],
+    ["Scarlet Needle"],
 );
 check(
     "an item is not searched twice when it is both the message item and on the actor",
@@ -623,6 +683,33 @@ function mjsUnder(dir) {
         return entry.name.endsWith(".mjs") ? [full] : [];
     });
 }
+
+/* -------------------------------------------------------------------------------------------- */
+/*  Om — the ceiling the stacks climb toward                                                     */
+/* -------------------------------------------------------------------------------------------- */
+
+/*
+ * Om accumulated nothing for a release: spending was automated, lapsing was automated, and the end-of-turn
+ * gain was never written, so a Virgo Saint sat at one stack however long they kept their eyes shut. The
+ * ceiling is the part worth pinning down — five normally, seven only on a day Virgo is ascendant — because
+ * the badge is authored with room for seven and nothing else says which of the two applies.
+ */
+const { Om } = await import("../scripts/outcomes/om.mjs");
+const omEffect = load("saint-effects", "activities", "effect-om.json");
+const sky = (options) => ({ getRollOptions: () => options });
+
+check("Om stops at five under an ordinary sky", Om.ceilingFor(sky([]), omEffect), 5);
+check(
+    "Om reaches seven when Virgo is ascendant",
+    Om.ceilingFor(sky(["sky:ascendant", "sky:sign:virgo"]), omEffect),
+    7,
+);
+check(
+    "another sign's ascendant does not raise Virgo's ceiling",
+    Om.ceilingFor(sky(["sky:ascendant", "sky:sign:leo"]), omEffect),
+    5,
+);
+check("the authored badge still caps the ceiling", Om.ceilingFor(sky([]), { system: { badge: { max: 3 } } }), 3);
 
 /* -------------------------------------------------------------------------------------------- */
 

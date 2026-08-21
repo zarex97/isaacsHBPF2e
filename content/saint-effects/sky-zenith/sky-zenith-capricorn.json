@@ -1,4 +1,31 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "bypass": [
+                {
+                    "hardness": "ignore",
+                    "immunity": {
+                        "mode": "ignore",
+                        "types": [
+                            "physical"
+                        ]
+                    },
+                    "predicate": [
+                        {
+                            "or": [
+                                "item:category:unarmed",
+                                "item:trait:unarmed"
+                            ]
+                        }
+                    ],
+                    "resistance": {
+                        "max": null,
+                        "types": "all"
+                    }
+                }
+            ]
+        }
+    },
     "folder": "Sky: Zenith",
     "img": "icons/weapons/swords/greatsword-crossguard-gold.webp",
     "name": "Sky: Zenith (Capricorn)",

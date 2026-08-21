@@ -1,4 +1,50 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "dc": "cosmo",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "void",
+                                    "formula": "8d6",
+                                    "type": "damage"
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            },
+                            {
+                                "apply": {
+                                    "slug": "slowed",
+                                    "type": "condition",
+                                    "value": 1
+                                },
+                                "duration": {
+                                    "unit": "rounds",
+                                    "value": 1
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            }
+                        ],
+                        "statistic": "fortitude",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "note": "Only a creature at half Hit Points or fewer can be taken.",
+                    "predicate": [
+                        "rider:target:hp-half-or-less"
+                    ]
+                }
+            ]
+        }
+    },
     "folder": "Actions",
     "img": "systems/pf2e/icons/actions/FreeAction.webp",
     "name": "The Yellow Spring Opens",
@@ -12,6 +58,11 @@
         "category": "offensive",
         "description": {
             "value": "<p><strong>Frequency</strong> once per round</p><hr /><p>A creature within 30 feet at half Hit Points or fewer must attempt a Fortitude save against your Cosmo DC or take @Damage[8d6[void]] damage and be slowed 1.</p><hr /><p>Granted by the Cancer Ascendant Boon. While that boon is active, any creature you reduce to 0 Hit Points also dies with no save.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
         },
         "publication": {
             "license": "ORC",

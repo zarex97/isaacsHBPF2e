@@ -1,4 +1,99 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "dc": "cosmo",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "slug": "blinded",
+                                    "type": "condition"
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ],
+                                "predicate": [
+                                    {
+                                        "not": "rider:target:condition:blinded"
+                                    }
+                                ]
+                            },
+                            {
+                                "apply": {
+                                    "slug": "deafened",
+                                    "type": "condition"
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ],
+                                "predicate": [
+                                    "rider:target:condition:blinded",
+                                    {
+                                        "not": "rider:target:condition:deafened"
+                                    }
+                                ]
+                            },
+                            {
+                                "apply": {
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Sense Lost (Smell and Taste)"
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ],
+                                "predicate": [
+                                    "rider:target:condition:blinded",
+                                    "rider:target:condition:deafened",
+                                    {
+                                        "not": "rider:target:effect:sense-lost-smell-and-taste"
+                                    }
+                                ]
+                            },
+                            {
+                                "apply": {
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Sense Lost (Touch)"
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ],
+                                "predicate": [
+                                    "rider:target:condition:blinded",
+                                    "rider:target:condition:deafened",
+                                    "rider:target:effect:sense-lost-smell-and-taste",
+                                    {
+                                        "not": "rider:target:effect:sense-lost-touch"
+                                    }
+                                ]
+                            }
+                        ],
+                        "statistic": "will",
+                        "type": "save"
+                    },
+                    "event": "strike-resolved",
+                    "note": "Six Paths. Losses are cumulative and one step is taken per hit.",
+                    "outcomes": [
+                        "success",
+                        "criticalSuccess"
+                    ],
+                    "predicate": [
+                        {
+                            "or": [
+                                "item:category:unarmed",
+                                "item:trait:unarmed"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    },
     "folder": "Sky: Zenith",
     "img": "icons/magic/control/energy-stream-link-white.webp",
     "name": "Sky: Zenith (Virgo)",

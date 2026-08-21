@@ -25,6 +25,11 @@
                     },
                     "outcomes": [
                         "failure"
+                    ],
+                    "predicate": [
+                        {
+                            "not": "gemini-aspect:shadow"
+                        }
                     ]
                 },
                 {
@@ -34,6 +39,29 @@
                     },
                     "outcomes": [
                         "criticalFailure"
+                    ],
+                    "predicate": [
+                        {
+                            "not": "gemini-aspect:shadow"
+                        }
+                    ]
+                },
+                {
+                    "apply": {
+                        "slug": "confused",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 1
+                    },
+                    "note": "Shadow aspect: Another Dimension confuses instead of banishing.",
+                    "outcomes": [
+                        "failure",
+                        "criticalFailure"
+                    ],
+                    "predicate": [
+                        "gemini-aspect:shadow"
                     ]
                 }
             ]
