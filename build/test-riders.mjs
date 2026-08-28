@@ -748,6 +748,70 @@ check("a Zenith makes it 80", wallLength(10, 4), 80);
 check("and a 1st-level Saint's wall is still 15 feet", wallLength(1, 0), 15);
 
 /* -------------------------------------------------------------------------------------------- */
+/*  Taurus, converted away from whispers                                                         */
+/* -------------------------------------------------------------------------------------------- */
+
+/**
+ * Every forced movement the Bull inflicts now moves a token. These checks are the regression guard: a
+ * prompt reappearing anywhere in Taurus means somebody has gone back to telling the GM to do it by hand.
+ */
+const taurusFiles = [
+    ["saint-class-features", "cloths", "taurus-the-horn.json"],
+    ["saint-techniques", "slot-1-signature", "great-horn.json"],
+    ["saint-techniques", "slot-2", "pleiades-nova.json"],
+    ["saint-techniques", "slot-3-cloth-ability", "titans-stance.json"],
+    ["saint-techniques", "slot-4-ultimate", "titans-break-the-golden-horn.json"],
+    ["saint-effects", "sky-ascendant", "sky-ascendant-taurus.json"],
+    ["saint-effects", "sky-zenith", "sky-zenith-taurus.json"],
+];
+
+function everyRider(riders, out = []) {
+    for (const rider of riders ?? []) {
+        out.push(rider);
+        everyRider(rider.apply?.riders, out);
+    }
+    return out;
+}
+
+const taurusRiders = taurusFiles.flatMap((parts) => everyRider(ridersOf(load(...parts))));
+check("no Taurus rider is left as a whisper", taurusRiders.filter((r) => r.apply?.type === "prompt").length, 0);
+check(
+    "Taurus pushes are real movement",
+    taurusRiders.filter((r) => r.apply?.type === "teleport").map((r) => r.apply.distance).sort((a, b) => a - b),
+    [10, 10, 15, 60],
+);
+
+// The Ultimate's extra 4d8 fires on a critical failure only. Authored as a second `system.damage` part it
+// was rolled against everyone, which made an 8d8 Technique deal 12d8 to every creature in the line.
+const titansBreak = load("saint-techniques", "slot-4-ultimate", "titans-break-the-golden-horn.json");
+check("Titan's Break rolls one damage part", Object.keys(titansBreak.system.damage).length, 1);
+check(
+    "and the conditional damage is a critical-failure rider that heightens",
+    everyRider(ridersOf(titansBreak))
+        .filter((r) => r.apply?.type === "damage")
+        .map((r) => `${r.apply.formula}+${r.apply.perStep}/step [${(r.outcomes ?? []).join("/")}]`),
+    ["4d8+1d8/step [criticalFailure]"],
+);
+// Four DamageDice rules shared one selector, so a lit sky counted twice.
+check(
+    "the sky's dice are added once, not twice",
+    titansBreak.system.rules.filter((r) => r.key === "DamageDice").length,
+    2,
+);
+
+// That rider's growth is counted the same way the Technique's own is: rank steps plus the sky's.
+check(
+    "the extra damage is 4d8 at base rank under an unlit sky",
+    stepsFor({ baseRank: 8, castRank: 8, bonusSteps: skyStepsFromOptions([]) }),
+    0,
+);
+check(
+    "and grows to eight dice at rank 10 on an Ascendant day",
+    4 + stepsFor({ baseRank: 8, castRank: 10, bonusSteps: skyStepsFromOptions(["sky:ascendant"]) }),
+    8,
+);
+
+/* -------------------------------------------------------------------------------------------- */
 /*  Condition grants                                                                             */
 /* -------------------------------------------------------------------------------------------- */
 

@@ -1,4 +1,19 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Titan's Stance"
+                    },
+                    "event": "action-used",
+                    "note": "Damage reduced by 10 + twice your level, and you cannot be moved from your square.",
+                    "self": true
+                }
+            ]
+        }
+    },
     "folder": "3rd — Cloth Ability (L11)",
     "img": "icons/creatures/abilities/bull-horns-glowing-red.webp",
     "name": "Titan's Stance",

@@ -17,8 +17,8 @@
                 },
                 {
                     "apply": {
-                        "text": "Pushed 15 feet away from the Saint.",
-                        "type": "prompt"
+                        "distance": 15,
+                        "type": "teleport"
                     },
                     "outcomes": [
                         "failure",

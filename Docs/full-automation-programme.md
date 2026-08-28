@@ -1,7 +1,7 @@
 # The Full Automation Programme
 
 *Status document — what has been done to the Saint, what is being done, and what "done" means.*
-*Last updated 28 August 2026, against module v99.0.0 (working tree), Foundry 14.364, pf2e 8.3.0.*
+*Last updated 28 August 2026 (Taurus pass), against module v99.0.0 (working tree), Foundry 14.364, pf2e 8.3.0.*
 
 ---
 
@@ -50,7 +50,12 @@ item saying *when* (`event`), *on what result* (`outcomes`), *under what conditi
 *what happens* (`apply`). There are seven events — `save-rolled`, `strike-resolved`, `strike-received`,
 `action-used`, `damage-applied`, `turn-start`, `turn-end` — and nine apply types: a condition, a
 compendium effect, direct damage, persistent damage, a nested save, a death, a choice card, a
-**teleport** (new, §6.3), and a prompt (being eliminated, §5).
+**teleport**, and a prompt (being eliminated, §5).
+
+Two of those carry extras worth knowing. A `teleport` takes a `distance` in feet and reads it either as a
+delta or, with `measure: "from-origin"`, as a destination — which is what "pushed to the end of the line"
+means. A `damage` rider takes `perStep`, the growth it gains per heightening step, because a rider sits
+outside `system.damage` and pf2e will never scale it otherwise.
 
 Applications flow Source → Relay → Collect → Select → Apply. The relay exists because a player owns their
 Saint and nothing else, so the work is handed to the active GM. Selection tests every predicate against a
@@ -158,6 +163,26 @@ spells filed under the duplicate refiled rather than orphaned.
   a rank-2 cast, and the scene still contained walls of 3, 4 and 12 cells to prove it.
 - **The Aiolos formula** it quotes is not the one that ships.
 
+### 4.7 Bugs the checklist never caught, found while walking the Cloths
+
+None of these appear in the 55 reports, because each is invisible unless you go looking at the numbers.
+
+- **Cosmo Strike never worked.** Its `ItemAlteration` was `mode: "upgrade"` with `value: 6`; pf2e accepts
+  a value only with `override`, and threw a validation error on every actor preparation. So the class's
+  central promise — *"your fist deals 1d6"* — never applied, and **every Saint's fist was a d4**.
+- **Titan's Break dealt half as much again as it should.** Its critical-failure-only 4d8 was authored as a
+  second `system.damage` part, and pf2e rolls every part unconditionally, so all ten creatures in the line
+  took 12d8 instead of 8d8. Worse, it carried **four** `DamageDice` rules on one selector, two of them
+  duplicates, so a lit sky counted twice. The extra damage is now a `criticalFailure` rider with `perStep`.
+- **Invalid IWR types.** Leo was immune to `"fear"` and Arayashiki to `"death"` and `"dying"`. The real
+  names are `fear-effects` and `death-effects`; there is no `dying` immunity at all. Each failed silently.
+- **43 of 107 image paths did not exist.** Six were scrambled forms of real files and are fixed; 37 remain
+  and render blank.
+
+Each now has a validator that fails the build, and each validator was checked against the original broken
+value first. `build/lib/pf2e-iwr.json` holds pf2e's immunity/weakness/resistance dictionaries, snapshotted
+from a running 8.3.0, the same way the traits snapshot works.
+
 ---
 
 ## 5. The policy change: nothing stays a whisper
@@ -181,15 +206,15 @@ input, and where the map runs out the module says so rather than pretending.
 ## 6. Where the class stands now
 
 186 content documents in seven packs: 48 Techniques, 61 feats, 45 effects, 22 actions, 6 weapons, one
-class, one Cloth armor. 132 automated checks run without Foundry; validation, build and a round-trip check
+class, one Cloth armor. 139 automated checks run without Foundry; validation, build and a round-trip check
 run on every change.
 
 ### 6.1 Verified end to end in a live world
 
 Capricorn's *Excalibur* (self-rider, strike alterations, duration), Sagittarius' *Aiolos's Wings* (split
 self/ally flight, target cap), Leo's demoralize bonus, Virgo's Om counter and its two ceilings, Scorpio's
-needle counter and cap, Pisces' roses, and the whole of Aries — all four Techniques cast for real, at six
-character levels from 1 to 20, with every heightening value checked against the guide.
+needle counter and cap, Pisces' roses, and the whole of **Aries** and **Taurus** — every Technique cast
+for real, at six character levels from 1 to 20, with every heightening value checked against the guide.
 
 ### 6.2 The Aries ladder, as a worked example
 
@@ -221,17 +246,39 @@ blinks, records the previous position in the receipt so a reroll walks the creat
 distance actually travelled. *Starlight Extinction* now genuinely teleports on a failure and a critical
 failure — and applies the prone that its own card promised and no rider had ever delivered.
 
+### 6.4 Taurus, the second Cloth walked end to end
+
+The ladder is exact at all six checkpoints. *Great Horn* 1d8 → 10d8 with its cone fixed at 30; *Pleiades
+Nova* 1d6 → 8d6 off base rank 3, its target cap stepping 5 → 6 → 7 at the authored 12th and 18th levels;
+*Titan's Break* 8d8 → 10d8 with its line fixed at 60. Everything the Bull does now happens by itself:
+
+- **Great Horn** knocks prone and pushes the full 15 feet. Verified: a creature 10 feet away ended 25.
+- **Titan's Break** knocks prone, stuns 2, deals its conditional extra damage — and pushes *to the end of
+  the line*, not by a flat distance. Verified: a creature 20 feet along a 60-foot line travelled 40 and
+  stopped at 60.
+- **Both skies** turn an unarmed hit into a Fortitude save that knocks prone and pushes 10. Verified from
+  a real critical hit through the nested save to the movement.
+- **Bulwark** is now mechanical rather than a note. A creature of the Saint's size or smaller simply
+  cannot move them — the teleport refuses and says so — while a larger one still can. Verified both ways.
+  Its +2 to the DCs against Shove, Trip, Grapple and Disarm applies too: 34 plain, 36 when shoved.
+- **Titan's Stance** had no rules at all. It now applies an effect granting resistance `10 + 2 × level`
+  to all damage and marking the Saint immovable. Verified at 20th: `all-damage 50`.
+- **The Zenith's temporary Hit Points** refresh at the start of each turn, which the guide asks for and
+  a bare `TempHP` rule does not do. One field: `events: { onTurnStart: true }`.
+
+What is left of Taurus is *Pleiades Nova* alone, and that is the RC-4 decision in §7.2.
+
 ---
 
 ## 7. What remains
 
-### 7.1 Twenty-two whispers still to convert
+### 7.1 Eighteen whispers still to convert
 
-Grouped by the machinery each needs:
+Down from twenty-two: Taurus' four are done. Grouped by the machinery each needs:
 
-- **Forced movement** — Taurus' pushes on *Great Horn*, *Titan's Break* and both skies; Libra's 30-foot
-  launch; Cancer's 30-foot drag. These need only the `teleport` type built in §6.3, with a `toward`
-  direction and, for the launch, a vertical note. This is the cheapest group and should go first.
+- **Forced movement** — Libra's 30-foot launch and Cancer's 30-foot drag. Both are now one-line changes
+  using the `teleport` type: the drag is `direction: "toward"`, and the launch is vertical, which a
+  top-down grid cannot express, so it should probably become a 30-foot displacement plus prone on landing.
 - **Death** — Scorpio's *Antares* and both needle thresholds, Pisces' *Royal Funeral*, Cancer's
   conditional death and the Yellow Spring's. A `death` apply type already exists, together with an
   `automateDeath` setting whose default treats monsters and player characters differently. Mostly a matter
@@ -252,10 +299,26 @@ defence, which pf2e reads as one spell attack roll followed by one damage roll. 
 symptoms from one cause: only one attack happens, heightening scales the roll rather than each Strike, and
 there is no multiple attack penalty to manage.
 
-This is a design decision, not a defect. The recommended route is a one-turn effect that the player
-Strikes under, which is idiomatic in pf2e, makes per-Strike heightening free, and turns seven bespoke
-automations into one repeated pattern. The cost is that the player presses Strike three times instead of
-pressing the Technique once.
+This is a design decision, not a defect, and it is now **the only thing standing between Taurus and a
+finished Cloth** — so it needs deciding rather than deferring. Walking *Pleiades Nova* produced the
+concrete constraints:
+
+- pf2e's `AttackRollParams` accepts `target` and `options` but **no `modifiers`**, so the "cumulative −1
+  per Strike" cannot be passed to the roll. It has to come from predicated `FlatModifier`s on a temporary
+  effect, with the module passing a roll option (`pleiades-nova:2`, `:3`, …) per Strike.
+- Rolling from `variants[0]` every time gives "your multiple attack penalty does not increase" for free.
+- "Ranged unarmed Strike" is not expressible as an item alteration; the damage type is (*Effect:
+  Excalibur* already overrides one), but melee→ranged is not. The 60-foot reach is already enforced by
+  the Technique's own area targeting, so this is cosmetic rather than mechanical.
+- "The activity counts as three attacks for your multiple attack penalty" is **not trackable at all** —
+  pf2e does not count attacks per turn; the player chooses the variant. This stays a note whichever route
+  is taken.
+- Architecturally, a `strikes` rider must run **once for the whole cast** and iterate every target, but
+  the relay currently sends the GM one request per target. It needs the payload to carry the target list.
+
+So the two routes are: **(a)** a one-turn effect the player Strikes under — idiomatic, cheap, per-Strike
+heightening free, but the player presses Strike five times; or **(b)** the module rolls the volley — one
+click, matches the no-whispers policy, and costs the relay change plus the penalty effect above.
 
 ### 7.3 Written as prose only
 
@@ -264,12 +327,20 @@ Libra's weapon summoning (the weapons exist; the summon action does not work), *
 Kisōen*'s healing, *Golden Arrow*'s missing area block, and Sagittarius' Zenith range. Of these, Libra is
 now known to be much smaller than previously estimated.
 
-### 7.4 Eleven Cloths to re-verify
+### 7.3b Titan's Stance, honestly
 
-Aries has been walked end to end. The condition-grant defect of §4.2 reached eleven others, and none has
-been re-checked at a table since it was fixed. That is the largest remaining verification task, and the
-Aries method — build a knight from nothing, level it, cast everything, check every number — is the
-template.
+Its reduction and its immovability are automated (§6.4), but "you interpose yourself and **become the
+target instead**" is not, and cannot be: Foundry has no hook that lets a third party take over as the
+target of an attack already declared. The GM still retargets. Everything numeric that follows from that
+retarget now happens by itself. This is the one place in Taurus where the guide says something the engine
+cannot do, and it is recorded here rather than quietly dropped.
+
+### 7.4 Ten Cloths to re-verify
+
+Aries and Taurus have been walked end to end. The condition-grant defect of §4.2 reached ten others, and
+none has been re-checked at a table since it was fixed. That is the largest remaining verification task,
+and the method — build a knight from nothing, level it 1 → 4 → 8 → 12 → 16 → 20, cast everything, check
+every number against the guide — is the template.
 
 ---
 
@@ -296,6 +367,15 @@ Traps worth recording, all of which have cost time:
 - **`TokenDocument#x` follows the animation.** Read it while a token is sliding and every downstream
   number is wrong. Use `_source`.
 - **The build needs the world at Setup**, because Foundry holds a lock on every pack of the active world.
+- **Never replace `system.rules` wholesale on an owned item.** pf2e writes a `flag` onto each `GrantItem`
+  rule *at grant time*; it does not exist in the pack source. Wiping it makes pf2e recompute the flag,
+  append a number to the `itemGrants` key, and never match `grantedId` again — which spams
+  *"X already has Y, so it has not been added again"* on **every actor update, forever**. Repairing it
+  means rebuilding `flags.pf2e.itemGrants` from `flags.pf2e.grantedBy` on each child.
+- **Foundry's `update` merges objects.** Setting `system.damage` to a version with fewer parts leaves the
+  old ones behind; the stale key has to be deleted explicitly with `system.damage.-=1`.
+- **A `ChoiceSet` blocks a level-up.** *Sky-Reading* prompts at 5th, so any scripted levelling needs a
+  resolver watching for open prompts, or it hangs.
 
 ---
 
@@ -307,5 +387,9 @@ see every sentence of the guide happen at the table without the GM applying anyt
 remain in the content. Every number the guide states — damage, area, range, duration, frequency,
 threshold — matches what the sheet and the chat card produce, at every rank and under all three skies.
 
-Three Cloths' worth of that is now true. The method is proven and the two structural defects that were
-silently undermining everything else are fixed. The rest is work.
+Two Cloths are now finished to that standard end to end — **Aries** and **Taurus** — with the single
+exception of *Pleiades Nova*, which is blocked on the RC-4 decision in §7.2 rather than on effort. Pieces
+of six others are verified. Eighteen whispers remain, down from twenty-two.
+
+The method is proven, the structural defects that were silently undermining everything else are fixed,
+and each Cloth now costs a predictable pass rather than an investigation. The rest is work.

@@ -1,6 +1,6 @@
 {
     "folder": "Activities",
-    "img": "icons/creatures/abilities/bull-horns-brown.webp",
+    "img": "icons/creatures/abilities/bull-head-horns-glowing.webp",
     "name": "Effect: Titan's Stance",
     "system": {
         "description": {
@@ -20,7 +20,17 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Saint"
         },
-        "rules": [],
+        "rules": [
+            {
+                "key": "Resistance",
+                "type": "all-damage",
+                "value": "10 + 2 * @actor.level"
+            },
+            {
+                "key": "RollOption",
+                "option": "saint:immovable"
+            }
+        ],
         "start": {
             "initiative": null,
             "value": 0
