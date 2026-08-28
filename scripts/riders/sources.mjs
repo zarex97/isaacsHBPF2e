@@ -118,6 +118,13 @@ export const Sources = {
         if (riders.length === 0) return;
 
         const actor = message.actor;
+
+        // Most riders land on one creature and are sent one request per target. A `strikes` rider is the
+        // exception: a volley is one activity that visits every target in order, with a penalty that grows
+        // as it goes, so it has to see the whole list at once. The list travels with every request — the
+        // caster's client is the only one that knows what was targeted, and by the time the GM applies it
+        // their own selection is irrelevant.
+        const targetUuids = [...game.user.targets].map((token) => token.document.uuid);
         const request = (targetUuid, selfOnly) =>
             Relay.request({
                 action: "applyRiders",
@@ -126,6 +133,7 @@ export const Sources = {
                 itemUuid: item.uuid,
                 originUuid: actor?.uuid,
                 targetUuid,
+                targetUuids,
                 selfOnly,
             });
 
