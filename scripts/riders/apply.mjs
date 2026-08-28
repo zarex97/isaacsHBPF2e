@@ -155,6 +155,8 @@ async function applyOne(rider, context) {
             return applyCondition(rider, context);
         case "teleport":
             return applyTeleport(rider, context);
+        case "strikes":
+            return applyStrikes(rider, context);
         default:
             console.warn(`Isaac's Homebrew | ${context.item?.name}: unknown rider type "${apply.type}"`);
     }
@@ -314,6 +316,74 @@ async function applyTeleport(rider, context) {
             ? `Teleported ${travelled} feet away — the ${Math.round(travel)}-foot throw ran out of map.`
             : `Teleported ${travelled} feet away.`,
     );
+}
+
+/**
+ * A volley: one activity that makes several Strikes of its own accord.
+ *
+ * Seven Techniques say some variant of "make five unarmed Strikes". They were authored with a damage block
+ * and no defence, which pf2e reads as *one* spell attack followed by *one* damage roll — so only one attack
+ * happened, heightening scaled the roll rather than each Strike, and there was no multiple attack penalty
+ * to speak of. This rolls the Strikes instead.
+ *
+ * Three things make it work, and each is a constraint pf2e imposed rather than a choice:
+ *
+ *  - **No penalty may be passed to the roll.** `AttackRollParams` takes a target and roll options and
+ *    nothing else, so the cumulative −1 arrives as `FlatModifier`s on a short-lived effect, each predicated
+ *    on the option this function emits for that Strike (`…:strike:2`, `:3`, …).
+ *  - **`variants[0]` every time.** That is the un-penalised variant, which is exactly what "your multiple
+ *    attack penalty does not increase during this activity" asks for.
+ *  - **The volley needs every target at once.** A rider is normally applied once per target; this one is a
+ *    `self` rider so it fires once, and reads the confirmed list off the payload. See `Sources.onActionUsed`.
+ *
+ * The one clause that cannot be honoured is "counts as three attacks for your multiple attack penalty
+ * afterward": pf2e does not count a turn's attacks, the player picks the variant. That stays in the text.
+ */
+async function applyStrikes(rider, context) {
+    const actor = context.originActor;
+    const targets = context.targets ?? [];
+    if (!actor || targets.length === 0) return;
+
+    const wanted = rider.apply.strike ?? "unarmed";
+    const strike = (actor.system.actions ?? []).find(
+        (action) => action.slug === wanted || action.item?.system?.category === wanted,
+    ) ?? (actor.system.actions ?? [])[0];
+    if (!strike?.variants?.length) {
+        console.warn(`Isaac's Homebrew | ${context.item?.name}: no Strike to make`);
+        return;
+    }
+
+    // The volley's own buff — the damage it deals, and the ladder of penalties it walks down.
+    let effect = null;
+    if (rider.apply.uuid) {
+        const source = (await fromUuid(rider.apply.uuid))?.toObject();
+        if (source) {
+            applySubstitutions(source, rider.apply.substitutions, context);
+            source._stats = foundry.utils.mergeObject(source._stats ?? {}, { compendiumSource: rider.apply.uuid });
+            [effect] = await actor.createEmbeddedDocuments("Item", [source]);
+        } else {
+            console.warn(`Isaac's Homebrew | volley effect not found: ${rider.apply.uuid}`);
+        }
+    }
+
+    const slug = rider.apply.option ?? "volley";
+    try {
+        for (const [index, token] of targets.entries()) {
+            const options = [`${slug}:strike:${index + 1}`];
+            await strike.variants[0].roll({ target: token.object ?? null, options, createMessage: true });
+
+            // Follow through: an attack that lands should deal its damage without a second prompt.
+            const outcome = [...game.messages].reverse()
+                .find((m) => m.flags?.pf2e?.context?.type === "attack-roll")?.flags?.pf2e?.context?.outcome;
+            if (outcome === "criticalSuccess" && typeof strike.critical === "function") {
+                await strike.critical({ target: token.object ?? null, options, createMessage: true });
+            } else if (outcome === "success" && typeof strike.damage === "function") {
+                await strike.damage({ target: token.object ?? null, options, createMessage: true });
+            }
+        }
+    } finally {
+        if (effect) await effect.delete();
+    }
 }
 
 /**
@@ -636,7 +706,12 @@ async function resolveContext(payload) {
     // option at all, so its predicate could never pass and the roses never drew blood.
     const eventItem = itemFor(message);
 
-    return { message, item, messageItem, eventItem, originActor, originToken, target };
+    // The whole confirmed target list, for the one rider that needs it — see `applyStrikes`.
+    const targets = payload.targetUuids
+        ? (await Promise.all(payload.targetUuids.map((uuid) => fromUuid(uuid).catch(() => null)))).filter(Boolean)
+        : [];
+
+    return { message, item, messageItem, eventItem, originActor, originToken, target, targets };
 }
 
 /**
@@ -649,7 +724,15 @@ async function resolveContext(payload) {
  * only moment it is knowable.
  */
 function applySubstitutions(source, substitutions, context) {
-    for (const [path, expression] of Object.entries(substitutions ?? {})) {
+    // Authored as a list of `{ path, value }`, never as an object keyed by path. Foundry expands dotted
+    // *keys* into nested objects on any `update`, so `{ "system.rules.0.value": … }` silently becomes
+    // `{ system: { rules: { 0: { value: … } } } }` the first time the item is written to an actor — and the
+    // substitution then matches nothing. Keeping the path in a string value makes it survive the round trip.
+    const list = Array.isArray(substitutions)
+        ? substitutions
+        : Object.entries(substitutions ?? {}).map(([path, value]) => ({ path, value }));
+
+    for (const { path, value: expression } of list) {
         const value = resolveFromOrigin(expression, context);
         if (value === null) {
             console.warn(`Isaac's Homebrew | could not resolve "${expression}" for ${path}`);
@@ -659,11 +742,23 @@ function applySubstitutions(source, substitutions, context) {
     }
 }
 
-function resolveFromOrigin(expression, { originActor }) {
+function resolveFromOrigin(expression, context) {
+    const { originActor } = context;
     if (typeof expression === "number") return expression;
     const match = /^origin\.statistic\.([\w-]+)\.rank$/.exec(String(expression));
     if (match) return originActor?.getStatistic?.(match[1])?.rank ?? null;
     if (expression === "origin.level") return originActor?.level ?? null;
+    // How far the Technique itself has heightened, sky included — the growth a Strike inherits when the
+    // Technique says "each Strike's damage increases by 1d6".
+    if (expression === "origin.item.steps") {
+        const item = context.item ?? context.riderItem;
+        if (!item) return null;
+        return stepsFor({
+            baseRank: item.baseRank ?? item.system?.level?.value,
+            castRank: item.rank,
+            bonusSteps: skyStepsFromOptions(originActor?.getRollOptions?.() ?? []),
+        });
+    }
     return null;
 }
 

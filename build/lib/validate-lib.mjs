@@ -263,6 +263,7 @@ const CONDITION_SLUGS = new Set(pf2e.conditionSlugs);
 const DURATION_UNITS = new Set(["rounds", "minutes", "hours", "days", "unlimited", "encounter"]);
 const RIDER_TYPES = new Set([
     "condition", "effect", "prompt", "choice", "save", "damage", "persistent-damage", "death", "teleport",
+    "strikes",
 ]);
 const RIDER_EVENTS = new Set([
     "save-rolled", "strike-resolved", "strike-received", "action-used", "damage-applied",
@@ -494,6 +495,12 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
         }
     }
 
+    // Substitutions are a list, whatever the rider type. Keyed by path, Foundry expands the dots into
+    // nested objects the first time the item is written to an actor, and the substitution matches nothing.
+    if (apply.substitutions && !Array.isArray(apply.substitutions)) {
+        errors.push(`${at} substitutions must be a list of { path, value }, not an object keyed by path`);
+    }
+
     if (apply.type !== "effect" && apply.stack) {
         errors.push(`${at} only effect riders can stack`);
     }
@@ -512,6 +519,19 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
             break;
         case "prompt":
             if (!apply.text) errors.push(`${at} prompt riders need text — it is the only thing they do`);
+            break;
+        case "strikes":
+            // A volley visits every confirmed target in order, so it must be a `self` rider — a per-target
+            // rider would roll the whole volley once for each creature caught.
+            if (rider.self !== true) {
+                errors.push(`${at} a strikes rider must be \`self\`: it fires once for the whole activity`);
+            }
+            if (typeof apply.option !== "string" || !/^[a-z0-9-]+$/.test(apply.option)) {
+                errors.push(`${at} strikes riders need a slug \`option\` — it names the per-Strike roll options`);
+            }
+            if (apply.substitutions && typeof apply.uuid !== "string") {
+                errors.push(`${at} substitutions have nothing to apply to without an effect \`uuid\``);
+            }
             break;
         case "teleport":
             // A teleport with no distance moves nobody and says nothing, which is the same silent-no-op

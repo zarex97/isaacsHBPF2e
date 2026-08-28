@@ -812,6 +812,52 @@ check(
 );
 
 /* -------------------------------------------------------------------------------------------- */
+/*  The volley                                                                                   */
+/* -------------------------------------------------------------------------------------------- */
+
+/**
+ * *Pleiades Nova* is the first Technique to roll its own Strikes rather than pretend to be a spell attack.
+ * The shape is load-bearing in three ways, and each has already been got wrong once:
+ *
+ *  - a `damage` block makes pf2e roll a spell attack instead, which is the whole RC-4 defect;
+ *  - the rider must be `self`, or the volley runs once per target caught;
+ *  - `substitutions` must be a list, because Foundry expands dotted *keys* into nested objects the first
+ *    time an item is written to an actor, and the substitution then silently matches nothing.
+ */
+const novaTechnique = load("saint-techniques", "slot-2", "pleiades-nova.json");
+const novaVolley = ridersOf(novaTechnique)[0];
+
+check("Pleiades Nova no longer carries a damage block", Object.keys(novaTechnique.system.damage ?? {}).length, 0);
+check("its rider rolls Strikes", novaVolley.apply.type, "strikes");
+check("and fires once for the whole activity", novaVolley.self, true);
+check("substitutions are a list, not an object keyed by path", Array.isArray(novaVolley.apply.substitutions), true);
+check(
+    "the Strikes' damage grows with the Technique, sky included",
+    (Array.isArray(novaVolley.apply.substitutions) ? novaVolley.apply.substitutions : [])
+        .map((s) => `${s.path}=${s.value}`),
+    ["system.rules.0.diceNumber=origin.item.steps"],
+);
+
+// The penalty ladder lives on the effect, because a roll cannot be handed a modifier.
+const novaEffect = load("saint-effects", "activities", "effect-pleiades-nova.json");
+const penalties = novaEffect.system.rules
+    .filter((r) => r.key === "FlatModifier")
+    .map((r) => `${r.predicate[0]}=${r.value}`);
+check(
+    "every Strike after the first is one worse, out to the seventh",
+    penalties,
+    [
+        "pleiades-nova:strike:2=-1", "pleiades-nova:strike:3=-2", "pleiades-nova:strike:4=-3",
+        "pleiades-nova:strike:5=-4", "pleiades-nova:strike:6=-5", "pleiades-nova:strike:7=-6",
+    ],
+);
+check(
+    "and the substituted rule is the one that adds the dice",
+    `${novaEffect.system.rules[0].key}/${novaEffect.system.rules[0].dieSize}/${novaEffect.system.rules[0].damageType}`,
+    "DamageDice/d6/force",
+);
+
+/* -------------------------------------------------------------------------------------------- */
 /*  Condition grants                                                                             */
 /* -------------------------------------------------------------------------------------------- */
 

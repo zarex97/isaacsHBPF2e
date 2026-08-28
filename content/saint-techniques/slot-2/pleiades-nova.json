@@ -18,7 +18,26 @@
                     }
                 },
                 "maxTargets": 5
-            }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "option": "pleiades-nova",
+                        "strike": "unarmed",
+                        "substitutions": [
+                            {
+                                "path": "system.rules.0.diceNumber",
+                                "value": "origin.item.steps"
+                            }
+                        ],
+                        "type": "strikes",
+                        "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Pleiades Nova"
+                    },
+                    "event": "action-used",
+                    "note": "Counts as three attacks for your multiple attack penalty afterward.",
+                    "self": true
+                }
+            ]
         }
     },
     "folder": "2nd (L6)",
@@ -30,18 +49,6 @@
             "value": ""
         },
         "counteraction": false,
-        "damage": {
-            "0": {
-                "applyMod": false,
-                "category": null,
-                "formula": "1d6",
-                "kinds": [
-                    "damage"
-                ],
-                "materials": [],
-                "type": "force"
-            }
-        },
         "defense": null,
         "description": {
             "value": "<p><em>Taurus &mdash; 2nd Technique, gained at level 6.</em></p><p><em>The star cluster on the Bull's shoulder, thrown as points of light.</em></p><p>Make <strong>five</strong> ranged unarmed Strikes against any creatures within 60 feet, each dealing @Damage[1d6[force]] damage plus your key ability modifier.</p><p>Your multiple attack penalty <strong>does not increase</strong> during this activity, but each Strike after the first takes a cumulative <strong>&minus;1</strong> penalty as the light scatters. The activity counts as three attacks for your multiple attack penalty afterward.</p><hr /><p><strong>Heightening (+2 levels)</strong> Each Strike's damage increases by 1d6. At 12th and 18th level, add one Strike, to a maximum of seven.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
@@ -49,14 +56,6 @@
         "duration": {
             "sustained": false,
             "value": ""
-        },
-        "heightening": {
-            "area": 0,
-            "damage": {
-                "0": "1d6"
-            },
-            "interval": 1,
-            "type": "interval"
         },
         "level": {
             "value": 3
@@ -70,33 +69,7 @@
             "value": "60 feet"
         },
         "requirements": "",
-        "rules": [
-            {
-                "damageType": "force",
-                "diceNumber": 2,
-                "dieSize": "d6",
-                "key": "DamageDice",
-                "label": "Sky: Ascendant (+2 heightening steps)",
-                "predicate": [
-                    "sky:ascendant",
-                    {
-                        "not": "sky:zenith"
-                    }
-                ],
-                "selector": "{item|_id}-damage"
-            },
-            {
-                "damageType": "force",
-                "diceNumber": 4,
-                "dieSize": "d6",
-                "key": "DamageDice",
-                "label": "Sky: Zenith (+4 heightening steps)",
-                "predicate": [
-                    "sky:zenith"
-                ],
-                "selector": "{item|_id}-damage"
-            }
-        ],
+        "rules": [],
         "target": {
             "value": "any creatures within 60 feet"
         },

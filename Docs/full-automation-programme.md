@@ -48,9 +48,9 @@ document.
 stops. It does not apply the "on a failure, the target is slowed 1" half. A rider is a small object on an
 item saying *when* (`event`), *on what result* (`outcomes`), *under what condition* (`predicate`) and
 *what happens* (`apply`). There are seven events — `save-rolled`, `strike-resolved`, `strike-received`,
-`action-used`, `damage-applied`, `turn-start`, `turn-end` — and nine apply types: a condition, a
+`action-used`, `damage-applied`, `turn-start`, `turn-end` — and ten apply types: a condition, a
 compendium effect, direct damage, persistent damage, a nested save, a death, a choice card, a
-**teleport**, and a prompt (being eliminated, §5).
+**teleport**, a **volley of Strikes**, and a prompt (being eliminated, §5).
 
 Two of those carry extras worth knowing. A `teleport` takes a `distance` in feet and reads it either as a
 delta or, with `measure: "from-origin"`, as a destination — which is what "pushed to the end of the line"
@@ -205,8 +205,8 @@ input, and where the map runs out the module says so rather than pretending.
 
 ## 6. Where the class stands now
 
-186 content documents in seven packs: 48 Techniques, 61 feats, 45 effects, 22 actions, 6 weapons, one
-class, one Cloth armor. 139 automated checks run without Foundry; validation, build and a round-trip check
+187 content documents in seven packs: 48 Techniques, 61 feats, 46 effects, 22 actions, 6 weapons, one
+class, one Cloth armor. 146 automated checks run without Foundry; validation, build and a round-trip check
 run on every change.
 
 ### 6.1 Verified end to end in a live world
@@ -266,7 +266,8 @@ Nova* 1d6 → 8d6 off base rank 3, its target cap stepping 5 → 6 → 7 at the 
 - **The Zenith's temporary Hit Points** refresh at the start of each turn, which the guide asks for and
   a bare `TempHP` rule does not do. One field: `events: { onTurnStart: true }`.
 
-What is left of Taurus is *Pleiades Nova* alone, and that is the RC-4 decision in §7.2.
+*Pleiades Nova* completes it: the volley built for §7.2 rolls five Strikes with a growing penalty and
+no multiple attack penalty, verified live. **Taurus is finished.**
 
 ---
 
@@ -291,7 +292,7 @@ Down from twenty-two: Taurus' four are done. Grouped by the machinery each needs
 - **Item alteration** — Scorpio's fourteenth needle stripping a creature's runes.
 - **Miscellaneous** — Virgo's reaction denial, Scorpio's *Crimson Mirage* concealment.
 
-### 7.2 The seven Techniques modelled as spell damage
+### 7.2 The seven Techniques modelled as spell damage — route (b) chosen and built
 
 *Pleiades Nova*, *Lightning Plasma*, *Crimson Flurry*, *Jumping Stone*, *Double Excalibur*, *Rozan Ryū Hi
 Shō* and *Chiron's Light Impulse* say "make N unarmed Strikes" but are authored with a damage block and no
@@ -316,9 +317,37 @@ concrete constraints:
 - Architecturally, a `strikes` rider must run **once for the whole cast** and iterate every target, but
   the relay currently sends the GM one request per target. It needs the payload to carry the target list.
 
-So the two routes are: **(a)** a one-turn effect the player Strikes under — idiomatic, cheap, per-Strike
-heightening free, but the player presses Strike five times; or **(b)** the module rolls the volley — one
-click, matches the no-whispers policy, and costs the relay change plus the penalty effect above.
+**Route (b) was chosen and is built.** A `strikes` apply type now rolls the volley, and *Pleiades Nova* is
+the first Technique through it. One cast produces one Strike per confirmed target, each following through
+to its own damage or critical roll without a second click.
+
+```
+Strike 1  →  no penalty      MAP index 0
+Strike 2  →  −1              MAP index 0
+Strike 3  →  −2              MAP index 0
+Strike 4  →  −3              MAP index 0
+Strike 5  →  −4              MAP index 0
+damage    →  11d6 + 1 force  (2 × on a critical)
+```
+
+That 11d6 is the whole heightening chain agreeing at once: 1d6 from the fist, +7 for the rank steps from
+base 3 to 10, +2 for an Ascendant sky, and +1 from the Bull's own "your unarmed Strikes gain +1 damage
+die". Nothing in that sum is written in *Pleiades Nova*; it falls out of the parts.
+
+Three details were forced by pf2e rather than chosen:
+
+- The penalty ladder lives on a short-lived `Effect: Pleiades Nova` as six `FlatModifier`s, each predicated
+  on a roll option the volley emits per Strike, because `AttackRollParams` will not accept a modifier.
+- The damage growth is written into that effect by **substitution** at cast time —
+  `origin.item.steps`, a new resolvable that counts rank steps and the sky together.
+- Substitutions are now authored as a **list** of `{ path, value }`, never an object keyed by path.
+  Foundry expands dotted *keys* into nested objects the first time an item is written to an actor, so the
+  old form silently stopped matching the moment a Technique was refreshed onto a sheet. *The Twelve Arms*
+  used the same shape and was migrated with it.
+
+The remaining six Techniques in this group are now a content change each rather than a design question.
+"Counts as three attacks for your multiple attack penalty afterward" stays in the text: pf2e does not
+count a turn's attacks, so nothing can enforce it.
 
 ### 7.3 Written as prose only
 
@@ -387,9 +416,10 @@ see every sentence of the guide happen at the table without the GM applying anyt
 remain in the content. Every number the guide states — damage, area, range, duration, frequency,
 threshold — matches what the sheet and the chat card produce, at every rank and under all three skies.
 
-Two Cloths are now finished to that standard end to end — **Aries** and **Taurus** — with the single
-exception of *Pleiades Nova*, which is blocked on the RC-4 decision in §7.2 rather than on effort. Pieces
-of six others are verified. Eighteen whispers remain, down from twenty-two.
+Two Cloths are now finished to that standard end to end, with nothing outstanding: **Aries** and
+**Taurus**. Pieces of six others are verified. Eighteen whispers remain, down from twenty-two, and the
+RC-4 group is no longer a design question — six Techniques of content work follow the pattern *Pleiades
+Nova* now sets.
 
 The method is proven, the structural defects that were silently undermining everything else are fixed,
 and each Cloth now costs a predictable pass rather than an investigation. The rest is work.

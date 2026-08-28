@@ -1,0 +1,119 @@
+{
+    "folder": "Activities",
+    "img": "icons/magic/light/explosion-star-glow-blue.webp",
+    "name": "Effect: Pleiades Nova",
+    "system": {
+        "description": {
+            "value": "<p>Applied for the duration of the volley by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Pleiades Nova]</p><p>Each Strike deals force damage, and every Strike after the first takes a cumulative &minus;1 penalty as the light scatters.</p>"
+        },
+        "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 0
+        },
+        "level": {
+            "value": 3
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "damageType": "force",
+                "diceNumber": 0,
+                "dieSize": "d6",
+                "key": "DamageDice",
+                "label": "Pleiades Nova",
+                "predicate": [
+                    "item:category:unarmed"
+                ],
+                "selector": "unarmed-damage"
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "mode": "override",
+                "predicate": [
+                    "item:category:unarmed"
+                ],
+                "property": "damage-type",
+                "value": "force"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Pleiades Nova (Strike 2)",
+                "predicate": [
+                    "pleiades-nova:strike:2"
+                ],
+                "selector": "attack",
+                "type": "untyped",
+                "value": -1
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Pleiades Nova (Strike 3)",
+                "predicate": [
+                    "pleiades-nova:strike:3"
+                ],
+                "selector": "attack",
+                "type": "untyped",
+                "value": -2
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Pleiades Nova (Strike 4)",
+                "predicate": [
+                    "pleiades-nova:strike:4"
+                ],
+                "selector": "attack",
+                "type": "untyped",
+                "value": -3
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Pleiades Nova (Strike 5)",
+                "predicate": [
+                    "pleiades-nova:strike:5"
+                ],
+                "selector": "attack",
+                "type": "untyped",
+                "value": -4
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Pleiades Nova (Strike 6)",
+                "predicate": [
+                    "pleiades-nova:strike:6"
+                ],
+                "selector": "attack",
+                "type": "untyped",
+                "value": -5
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Pleiades Nova (Strike 7)",
+                "predicate": [
+                    "pleiades-nova:strike:7"
+                ],
+                "selector": "attack",
+                "type": "untyped",
+                "value": -6
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": false
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

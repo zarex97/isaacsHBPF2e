@@ -15,9 +15,12 @@
             "riders": [
                 {
                     "apply": {
-                        "substitutions": {
-                            "system.rules.0.value": "origin.statistic.saint.rank"
-                        },
+                        "substitutions": [
+                            {
+                                "path": "system.rules.0.value",
+                                "value": "origin.statistic.saint.rank"
+                            }
+                        ],
                         "type": "effect",
                         "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: The Twelve Arms"
                     },
