@@ -712,6 +712,80 @@ check(
 check("the authored badge still caps the ceiling", Om.ceilingFor(sky([]), { system: { badge: { max: 3 } } }), 3);
 
 /* -------------------------------------------------------------------------------------------- */
+/*  Free-cast predicates                                                                         */
+/* -------------------------------------------------------------------------------------------- */
+
+/**
+ * A free-cast predicate is only as good as the roll options pf2e actually emits.
+ *
+ * *Attuned Casting* shipped predicated on `item:time:1` / `item:time:2`, which reads correctly and matches
+ * nothing: pf2e emits no time-based option at all. The option that carries a spell's cost is
+ * `item:cast:actions:N`, confirmed against a running pf2e 8.3.0. A predicate naming an option nobody emits
+ * fails silently — the boon simply never pays — so the shape is pinned here against the shipped content.
+ */
+const { testPredicate } = await import("../scripts/lib/roll-options.mjs");
+
+/** Every Technique, as the option set pf2e would build for it. */
+function techniqueCosts() {
+    const dir = path.join(ROOT, "content", "saint-techniques");
+    const out = [];
+    const walk = (at) => {
+        for (const entry of fs.readdirSync(at, { withFileTypes: true })) {
+            const full = path.join(at, entry.name);
+            if (entry.isDirectory()) walk(full);
+            else if (entry.name.endsWith(".json")) {
+                const doc = JSON.parse(fs.readFileSync(full, "utf8"));
+                if (doc?.type === "spell") out.push({ name: doc.name, cost: String(doc.system?.time?.value ?? "") });
+            }
+        }
+    };
+    walk(dir);
+    return out;
+}
+
+const attuned = load("saint-class-features", "actions", "attuned-casting.json");
+const attunedPredicate = attuned.flags["isaacs-hb-pf2e"].freeCast.predicate;
+const costed = techniqueCosts();
+
+const matching = costed
+    .filter(({ cost }) => testPredicate(attunedPredicate, new Set([`item:cast:actions:${cost}`])))
+    .map(({ cost }) => cost);
+
+check(
+    "Attuned Casting pays for one- and two-action Techniques",
+    [...new Set(matching)].sort(),
+    ["1", "2"],
+);
+check(
+    "Attuned Casting pays for every Technique that costs two actions or less",
+    matching.length,
+    costed.filter(({ cost }) => cost === "1" || cost === "2").length,
+);
+check(
+    "Attuned Casting does not pay for a three-action Technique",
+    testPredicate(attunedPredicate, new Set(["item:cast:actions:3"])),
+    false,
+);
+
+// The regression guard. `item:time:N` looks plausible enough to be written again by hand.
+const retired = [];
+for (const [file, doc] of (() => {
+    const found = [];
+    const walk = (at) => {
+        for (const entry of fs.readdirSync(at, { withFileTypes: true })) {
+            const full = path.join(at, entry.name);
+            if (entry.isDirectory()) walk(full);
+            else if (entry.name.endsWith(".json")) found.push([full, fs.readFileSync(full, "utf8")]);
+        }
+    };
+    walk(path.join(ROOT, "content"));
+    return found;
+})()) {
+    if (doc.includes("item:time:")) retired.push(path.relative(ROOT, file));
+}
+check("no content predicates the roll option pf2e never emits", retired, []);
+
+/* -------------------------------------------------------------------------------------------- */
 
 if (failures.length > 0) {
     console.error(`Rider tests failed: ${failures.length} of ${checks}.`);

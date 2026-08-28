@@ -6,8 +6,8 @@
                 "predicate": [
                     {
                         "or": [
-                            "item:time:1",
-                            "item:time:2"
+                            "item:cast:actions:1",
+                            "item:cast:actions:2"
                         ]
                     }
                 ]

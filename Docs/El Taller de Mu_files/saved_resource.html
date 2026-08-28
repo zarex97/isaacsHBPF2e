@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<!-- saved from url=(0253)https://b149d3ca-b20f-4d99-a246-50c78a5bd8b6.frame.claudeusercontent.com/_f/1787866096-a572/?__frame_t=nlxuKDiQitSOw1aqDkYcHeUj.28492358-1759-4e18-8bd5-49bbc76ba47d.84c116fb-5972-4c32-b22e-2ef1f8f9099c.1787869697&__frame_v=manifest.ed279eb5d5cdc221.json -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><!-- frame-runtime --><!--<base href="/_f/1787866096-a572/">--><base href="."><script>window.__FRAME_PREAMBLE={"v":1,"capabilities":{"artifact":"artifact.Cg566fpb.js","assets":"assets.8Gk803W0.js","comments":"comments.GLuHR3zP.js","db":"db.h-3sndFg.js","downloads":"downloads.C3GSvEDP.js","embed":"embed.CxGAyc-v.js","mcp":"mcp.Bvma3qD7.js","network":"network.B5UA9Su4.js","permissions":"permissions.BNySkLV5.js","room":"room.BMMoe2BY.js","sample":"sample.BW2Uysoh.js","self":"artifact.Cg566fpb.js","user":"user.BpKav-Rf.js"},"transforms":"_transforms.CQm3TZ9K.js","comments":"_comments.DELvYLUh.js","translate":"_translate.5HCW4BJh.js"}</script><script>(function(){"use strict";var J=["light","dark","system"],Q=/^[A-Za-z0-9_-]{1,64}$/,H=/^[a-zA-Z_:][a-zA-Z0-9_:.-]{0,127}$/,ee=new Set(["class","hidden","value","checked"]);function te(e){const t=e.toLowerCase();return t.startsWith("data-")||t.startsWith("aria-")||ee.has(t)}var Me="http://www.w3.org/1999/xhtml",re="http://www.w3.org/2000/svg",ne=new Set(["script","style","iframe","noscript","noframes","noembed","xmp","plaintext","template","title","textarea","object","embed"]),oe=new Set(["script","style"]);function se(e){const t=e.localName.toLowerCase();return e.namespaceURI==="http://www.w3.org/1999/xhtml"?!ne.has(t):e.namespaceURI===re?!oe.has(t):!1}var ae=new Set(["html","head","body","frameset"]);function ie(e){return e.namespaceURI==="http://www.w3.org/1999/xhtml"&&ae.has(e.localName)}function ce(e){if(e===null||typeof e!="object")return!1;const t=e;if(typeof t.target!="string"||!Q.test(t.target)||t.text!==void 0&&typeof t.text!="string")return!1;if(t.attrsSet!==void 0){if(t.attrsSet===null||typeof t.attrsSet!="object")return!1;for(const[r,n]of Object.entries(t.attrsSet))if(!H.test(r)||typeof n!="string")return!1}if(t.attrsRemoved!==void 0){if(!Array.isArray(t.attrsRemoved))return!1;for(const r of t.attrsRemoved)if(typeof r!="string"||!H.test(r))return!1}return!0}function le(e,t){if(e===null||typeof e!="object")return!1;const{seq:r,elements:n}=e;if(typeof r!="number"||!Number.isSafeInteger(r)||!Array.isArray(n)||n.length===0||n.length>64)return!1;for(let s=0;s<n.length;s++)if(!t(n[s]))return!1;return!0}function ue(e){return e===null||typeof e!="object"?!1:le(e.__frame_patch,ce)}function fe(e){if(e===null||typeof e!="object")return!1;const t=e.__frame_init;return t!==null&&typeof t=="object"}function pe(e){return e!==null&&typeof e=="object"&&e.__frame_size_poke===!0}function de(e){if(e===null||typeof e!="object")return!1;const t=e.__frame_theme;if(t===null||typeof t!="object")return!1;const r=t.theme;return typeof r=="string"&&J.includes(r)}var A=/^[\w.-]+\.js$/;function me(e,t,r){return r?"inert":typeof t=="string"&&A.test(t)?e?[t]:"inert":e?"inert":"framed"}function he(){return{post(e,t){parent.postMessage(e,t)},on(e){const t=r=>{r.source===parent&&e(r.data,r.origin)};return addEventListener("message",t),()=>removeEventListener("message",t)}}}function _e(){return{post:()=>{},on:()=>()=>{}}}var O="__frame_scroll",ve=150,ye=310,we=160,be=3e4;function Ee(){let e=0,t=!1,r=!1,n=!1,s=0,a=null;const l=i=>{try{sessionStorage.setItem(O,JSON.stringify({y:i}))}catch{}},d=()=>{if(clearTimeout(e),a===null)return;const i=a;a=null,l(i)},v=()=>{if(t){t=!1;return}r=!0,a=scrollY,clearTimeout(e),e=setTimeout(d,ve)};try{addEventListener("scroll",v,{passive:!0}),addEventListener("pagehide",d)}catch{}const y=()=>{let i;try{i=sessionStorage.getItem(O)}catch{return null}if(i===null)return null;let m;try{m=JSON.parse(i)}catch{m=null}const u=m?.y;if(!(typeof u=="number"&&Number.isFinite(u)&&u>=0)){try{sessionStorage.removeItem(O)}catch{}return null}return u};let S=!1;const h=i=>{try{const m=scrollY;scrollTo({top:i,left:0,behavior:"instant"}),s=i,n=!0,clearTimeout(e),a=null,l(i);const u=scrollY;u!==m&&(t=!0),u!==i&&!S&&(S=!0,addEventListener("load",()=>{try{if(scrollY===u){const k=y();h(k!==null?k:s)}}catch{}},{once:!0}))}catch{}},w=()=>{try{return!!location.hash}catch{return!0}};let o=!1;const f=()=>{try{if(o||innerWidth>ye||innerHeight>we)return;o=!0;const i=Date.now(),m=()=>{try{removeEventListener("resize",m)}catch{}if(Date.now()-i>be||r||w())return;const u=y();h(u!==null?u:s)};addEventListener("resize",m)}catch{}};let _=!1,b=!1;return{restore(){if(_||(_=!0,w()))return;const i=y();i!==null&&(h(i),f())},promoted(){if(b||(b=!0,w()))return;const i=y();i!==null?(h(i),f()):n&&h(s)}}}function ge(e,t,r,n){let s=null;try{s=window.trustedTypes?.createPolicy("frame-runtime",{createScriptURL:v=>v})??null}catch{}const a=window.Worker,l=a?.prototype,d=Object.freeze({Worker:a,workerOn:l?.addEventListener,workerPost:l?.postMessage,workerTerminate:l?.terminate,fetch:window.fetch.bind(window),preventDefault:Event.prototype.preventDefault,policy:s,origins:t});r(e).then(v=>v?.bootTopLevel?v.bootTopLevel(d,n):n.settle()).catch(()=>n.settle())}var Oe="modulepreload",Ce=function(e){return"/"+e},je={},Ae=function(t,r,n){let s=Promise.resolve();function a(l){const d=new Event("vite:preloadError",{cancelable:!0});if(d.payload=l,window.dispatchEvent(d),!d.defaultPrevented)throw l}return s.then(l=>{for(const d of l||[])d.status==="rejected"&&a(d.reason);return t().catch(a)})},Re=window===top,q=Object.getOwnPropertyDescriptor(window,"claude"),T=me(Re,window.__FRAME_PREAMBLE?.topLevel,q?.writable===!1),C=typeof T=="object"&&T[0],p=C?_e():he();(function(){const e=Object.defineProperty,t=globalThis,r=["RTCPeerConnection","webkitRTCPeerConnection","RTCDataChannel","RTCIceCandidate","RTCSessionDescription","RTCRtpSender","RTCRtpReceiver"];let n=0;for(let s=0;s<r.length;s++){const a=r[s];try{e(t,a,{value:void 0,writable:!1,configurable:!1})}catch{try{delete t[a]}catch{}try{e(t,a,{value:void 0,writable:!1,configurable:!0})}catch{}}typeof t[a]=="function"&&n++}if(n&&T==="framed")try{p.post({__frame_rtc_lockdown_failed:n},"*")}catch{}})();var Se=1e4,W=Object.freeze([...window.__FRAME_PREAMBLE?.origins??["https://claude.ai","https://preview.claude.ai"]]);function $(e){for(const t of W)if(t.endsWith(":*"))try{const r=new URL(e);if(`${r.protocol}//${r.hostname}:*`===t)return!0}catch{}else if(e===t)return!0;return!1}var L=Object.freeze({...window.__FRAME_PREAMBLE?.capabilities}),j=window.__FRAME_PREAMBLE?.transforms,N=window.__FRAME_PREAMBLE?.comments,I=window.__FRAME_PREAMBLE?.translate;function R(e){return Ae(()=>import("/_runtime/"+e),void 0)}function K(e,t){return{contract:e.contract,changes:new Set(e.changes??[]),flags:new Set(e.flags??[]),capabilities:e.capabilities??{},capBudgets:e.capBudgets??{},transforms:new Map,shellOrigin:t,mount:D,pipe:()=>({wrap:(r,n)=>(...s)=>{try{return n(...s)}catch(a){return Promise.reject(a)}}})}}var P=null,E=null;function Y(e,t,r){try{Object.defineProperty(e,t,{value:r,writable:!1,configurable:!1,enumerable:!0})}catch{try{Object.defineProperty(e,t,{value:r,writable:!1,configurable:!0,enumerable:!0})}catch{}}}var B=!1;function ke(e,t){const r=[];for(const n of e.elements){const s=document.querySelector(`[data-id="${n.target}"]`);if(!s){p.post({__frame_patch_miss:{seq:e.seq}},t);return}if([...Object.keys(n.attrsSet??{}),...n.attrsRemoved??[]].some(a=>!te(a))){p.post({__frame_patch_miss:{seq:e.seq}},t);return}if(n.text!==void 0&&(!se(s)||ie(s))){p.post({__frame_patch_miss:{seq:e.seq}},t);return}for(const[a,l]of Object.entries(n.attrsSet??{}))if(!G(s,a)){try{s.setAttribute(a,l)}catch{}X(s,a,l)}for(const a of n.attrsRemoved??[])G(s,a)||(s.removeAttribute(a),X(s,a,null));typeof n.text=="string"&&(s.textContent=n.text),r.push(n.target)}try{document.dispatchEvent(new CustomEvent("claude:edit",{detail:{seq:e.seq,targets:r}}))}catch{}}function X(e,t,r){if(!(e instanceof HTMLInputElement))return;const n=t.toLowerCase();n==="checked"?e.checked=r!==null:n==="value"&&e.type!=="file"&&(e.value=r??"")}function G(e,t){const r=t.toLowerCase(),n=e;return r==="data-id"||(r==="value"||r==="checked")&&(n.__artifactSecret===!0||/^(password|hidden|file)$/.test(n.type??"")||/(^|\s)(cc-|one-time-code|current-password|new-password)/i.test(`${e.getAttribute("autocomplete")??""} ${n.autocomplete??""}`))}function V(e){const t=document.documentElement;e==="light"||e==="dark"?(t.dataset.theme=e,t.style.colorScheme=e,B=!0):B&&(delete t.dataset.theme,t.style.colorScheme="",B=!1)}var M=new Map;function Te(){let e;const t={u:new Promise(r=>{e=r}),r:r=>{t.done=!0,e(r)},done:!1,nulled:!1};return t}function U(){for(const e of M.values())e.done||(e.nulled=!0,e.r(null))}var Le=Object.freeze(Object.assign(Object.create(null),{call:Function.prototype.call,apply:Function.prototype.apply,bind:Function.prototype.bind})),D=(e,t)=>{const r=M.get(e);if(!r||r.done){r?.nulled&&E&&p.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:e}},E);return}const n=typeof t=="function"?Object.setPrototypeOf(t,Le):Object.assign(Object.create(null),t);typeof n.then=="function"&&delete n.then,r.r(Object.freeze(n))};function Z(){const e=q?.value??{};Y(window,"claude",e);for(const t of Object.keys(L)){if(e[t]!==void 0){Y(e,t,e[t]);continue}M.set(t,Te())}if(e.use===void 0){const t=r=>{if(typeof r!="string"||!Object.hasOwn(L,r))return Promise.resolve(null);const n=M.get(r);return n?n.u:Promise.resolve(e[r]??null)};try{Object.defineProperty(e,"use",{value:t,writable:!0,configurable:!0,enumerable:!1})}catch{}}}if(T==="framed"){const e=j&&A.test(j)?R(j).catch(()=>{}):Promise.resolve(void 0),t=o=>{if(o.type==="auxclick"&&o.button!==1)return;const f=o.target,_=f&&f.closest?f.closest("a[href],area[href]"):null;if(!_)return;const b=_.getAttribute("href");if(!b)return;let i;try{i=new URL(b,document.baseURI)}catch{return}if((i.protocol==="http:"||i.protocol==="https:")&&i.origin!==location.origin){o.preventDefault();const m=(_.getAttribute("target")??"").toLowerCase(),u=o.type==="auxclick"||o.metaKey||o.ctrlKey||o.shiftKey||o.altKey||!["","_self","_top","_parent"].includes(m);p.post({__frame_nav:!0,url:i.href,newTab:u},"*")}};addEventListener("click",t,!0),addEventListener("auxclick",t,!0);const r={},n=o=>{o.isTrusted&&(r.pointer=!0)},s=o=>{o.isTrusted&&(r.click=!0)};addEventListener("pointermove",n,{capture:!0,passive:!0}),addEventListener("click",s,{capture:!0,passive:!0}),e.then(o=>{o?.wireNav&&(o.wireNav(),removeEventListener("click",t,!0),removeEventListener("auxclick",t,!0),removeEventListener("pointermove",n,!0),removeEventListener("click",s,!0),o.wireEngagement?.(r))});let a=null;try{a=Ee()}catch{}Z();let l=null,d=null,v=0;const y=p.on((o,f)=>{$(f)&&fe(o)&&(l=o.__frame_init,E=f,y(),clearTimeout(v),d?.())});p.post({__frame_connect:!0},"*");const S=new Promise(o=>{d=o,v=setTimeout(()=>{y(),o()},Se)}),h=document.readyState==="loading"?new Promise(o=>document.addEventListener("DOMContentLoaded",()=>o(),{once:!0})):Promise.resolve();h.then(()=>{try{a?.restore()}catch{}});const w={cb:null};p.on((o,f)=>{if($(f)&&pe(o)){try{a?.promoted()}catch{}w.cb?.()}}),S.then(async()=>{if(!l||!E){U();return}V(l.theme);const o=E;let f=!1,_=!1;p.on((c,x)=>{if(x!==o)return;de(c)&&V(c.__frame_theme.theme),ue(c)&&ke(c.__frame_patch,o);const g=c?.__fc_mode;g&&typeof g=="object"&&!f&&N&&A.test(N)&&(f=!0,R(N).then(z=>z.install?.(o,g.on===!0)).catch(()=>{}));const F=c?.__ft_cmd;F&&typeof F=="object"&&!_&&I&&A.test(I)&&(_=!0,R(I).then(z=>z.install?.(o,F)).catch(()=>{}))});const b=Object.keys(l.capabilities??{}).filter(c=>Object.hasOwn(L,c)).map(c=>[c,L[c]]).filter(c=>typeof c[1]=="string"&&A.test(c[1])),i=await Promise.allSettled(b.map(([,c])=>R(c))),m=await e,u=E;if(m?.buildBoot||p.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:"_transforms"}},u),m?.buildBoot)try{P=m.buildBoot(l,m.TRANSFORMS??{},{shellOrigin:u,mount:D},c=>p.post({__frame_cap_telemetry:c},u))}catch{p.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:"_transforms"}},u),P=K(l,u)}else P=K(l,u);const k=c=>p.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:c}},u),Pe=P;i.forEach((c,x)=>{const g=b[x][0];if(c.status!=="fulfilled"){k(g);return}try{c.value?.install?.(Pe)}catch{k(g)}}),U(),await h,p.post({__frame_ready:!0},E),e.then(c=>c?.installSizeReporter?.(u,w))})}else C&&(Z(),ge(C,W,R,{settle:U,mount:D}))})();</script><!-- /frame-runtime --><meta name="viewport" content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<title>El Taller de Mu (Copy)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link rel="stylesheet" href="./css2">
+
+<style>
+  :root {
+    --ground:      #f6f4ef;
+    --surface:     #fffefb;
+    --surface-alt: #efece4;
+    --line:        #ddd7c9;
+    --line-soft:   #e9e4d8;
+    --text:        #211f1a;
+    --text-dim:    #5d594e;
+    --text-faint:  #8b8677;
+
+    --brass:       #96701f;
+
+    --crit:        #a8342b;
+    --crit-soft:   #f7e4e1;
+    --warn:        #8a6220;
+    --warn-soft:   #f6e9d2;
+    --ok:          #2a6b60;
+    --ok-soft:     #dcece8;
+    --ask:         #5a4d86;
+    --ask-soft:    #e8e4f2;
+
+    --shadow: 0 1px 2px rgba(33,31,26,.05), 0 8px 24px -16px rgba(33,31,26,.28);
+
+    --f-display: "Spectral", Georgia, "Times New Roman", serif;
+    --f-body: "Source Sans 3", -apple-system, "Segoe UI", system-ui, sans-serif;
+    --f-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:      #14161c;
+      --surface:     #1b1e26;
+      --surface-alt: #222630;
+      --line:        #333846;
+      --line-soft:   #282d38;
+      --text:        #e9e6dd;
+      --text-dim:    #a8a496;
+      --text-faint:  #7d7a6e;
+      --brass:       #d0a44c;
+      --crit:        #e2867c;
+      --crit-soft:   #38211f;
+      --warn:        #d9ab5e;
+      --warn-soft:   #332818;
+      --ok:          #6dbfae;
+      --ok-soft:     #172d2a;
+      --ask:         #a99ad6;
+      --ask-soft:    #262238;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:      #14161c;
+    --surface:     #1b1e26;
+    --surface-alt: #222630;
+    --line:        #333846;
+    --line-soft:   #282d38;
+    --text:        #e9e6dd;
+    --text-dim:    #a8a496;
+    --text-faint:  #7d7a6e;
+    --brass:       #d0a44c;
+    --crit:        #e2867c;
+    --crit-soft:   #38211f;
+    --warn:        #d9ab5e;
+    --warn-soft:   #332818;
+    --ok:          #6dbfae;
+    --ok-soft:     #172d2a;
+    --ask:         #a99ad6;
+    --ask-soft:    #262238;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--text);
+    font-family: var(--f-body);
+    font-size: 16.5px;
+    line-height: 1.68;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: clamp(1.75rem, 4vw, 4rem) clamp(1rem, 4vw, 2.5rem) 7rem;
+  }
+
+  /* ---------- masthead ---------- */
+
+  .masthead { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 3rem; }
+
+  .eyebrow {
+    font-family: var(--f-mono);
+    font-size: .72rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--brass);
+  }
+
+  h1 {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: clamp(2.3rem, 6.5vw, 3.6rem);
+    line-height: 1.03;
+    letter-spacing: -.022em;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .standfirst {
+    font-family: var(--f-display);
+    font-size: clamp(1.08rem, 2.3vw, 1.3rem);
+    line-height: 1.5;
+    color: var(--text-dim);
+    margin: 0;
+  }
+
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    font-family: var(--f-mono);
+    font-size: .74rem;
+    color: var(--text-faint);
+  }
+  .facts b { color: var(--text-dim); font-weight: 600; }
+
+  /* ---------- table of contents ---------- */
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 1.35rem 1.6rem;
+    margin-bottom: 3.5rem;
+    box-shadow: var(--shadow);
+  }
+  nav.toc h2 {
+    font-family: var(--f-mono);
+    font-size: .68rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin: 0 0 .85rem;
+    font-weight: 600;
+  }
+  nav.toc ol { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: .35rem; }
+  nav.toc ol ol { padding-left: 1.5rem; margin-top: .35rem; gap: .2rem; }
+  nav.toc a { color: var(--text); text-decoration: none; font-size: .93rem; }
+  nav.toc a:hover { color: var(--brass); text-decoration: underline; }
+  nav.toc .num {
+    font-family: var(--f-mono);
+    font-size: .74rem;
+    color: var(--brass);
+    margin-right: .55rem;
+  }
+  nav.toc ol ol a { color: var(--text-dim); font-size: .88rem; }
+
+  /* ---------- long-form structure ---------- */
+
+  .part { margin-bottom: 4rem; }
+
+  .part-head {
+    border-top: 2px solid var(--text);
+    padding-top: 1rem;
+    margin-bottom: 1.75rem;
+  }
+  .part-head .kicker {
+    font-family: var(--f-mono);
+    font-size: .7rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--brass);
+    display: block;
+    margin-bottom: .5rem;
+  }
+  .part-head h2 {
+    font-family: var(--f-display);
+    font-size: clamp(1.75rem, 4.2vw, 2.4rem);
+    line-height: 1.12;
+    letter-spacing: -.015em;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  h3 {
+    font-family: var(--f-display);
+    font-size: 1.42rem;
+    line-height: 1.22;
+    margin: 2.5rem 0 .85rem;
+    letter-spacing: -.008em;
+    text-wrap: balance;
+  }
+  h4 {
+    font-family: var(--f-body);
+    font-size: 1.02rem;
+    font-weight: 700;
+    margin: 1.75rem 0 .5rem;
+    letter-spacing: .005em;
+  }
+
+  p { margin: 0 0 1.05rem; }
+  p:last-child { margin-bottom: 0; }
+
+  ul, ol.body-list { margin: 0 0 1.15rem; padding-left: 1.3rem; }
+  ul li, ol.body-list li { margin-bottom: .5rem; }
+
+  strong { font-weight: 700; }
+  em { font-style: italic; }
+
+  code {
+    font-family: var(--f-mono);
+    font-size: .85em;
+    background: var(--surface-alt);
+    padding: .1em .38em;
+    border-radius: 2px;
+    word-break: break-word;
+  }
+
+  pre {
+    margin: 0 0 1.3rem;
+    background: var(--surface-alt);
+    border: 1px solid var(--line-soft);
+    border-radius: 2px;
+    padding: .9rem 1.05rem;
+    overflow-x: auto;
+    font-family: var(--f-mono);
+    font-size: .78rem;
+    line-height: 1.6;
+  }
+  pre code { background: none; padding: 0; font-size: inherit; }
+  .del { color: var(--crit); }
+  .add { color: var(--ok); }
+  .cmt { color: var(--text-faint); font-style: italic; }
+
+  figcaption {
+    font-family: var(--f-mono);
+    font-size: .7rem;
+    color: var(--text-faint);
+    margin: -.9rem 0 1.5rem;
+    letter-spacing: .02em;
+  }
+
+  blockquote {
+    margin: 0 0 1.2rem;
+    padding: .15rem 0 .15rem 1.15rem;
+    border-left: 2px solid var(--brass);
+    color: var(--text-dim);
+    font-family: var(--f-display);
+    font-size: 1.05rem;
+  }
+  blockquote p { margin-bottom: .5rem; }
+
+  .callout {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--brass);
+    border-radius: 3px;
+    padding: 1.1rem 1.3rem;
+    margin: 0 0 1.4rem;
+    box-shadow: var(--shadow);
+  }
+  .callout.crit { border-left-color: var(--crit); }
+  .callout.ok   { border-left-color: var(--ok); }
+  .callout.ask  { border-left-color: var(--ask); }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout .label {
+    font-family: var(--f-mono);
+    font-size: .66rem;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    display: block;
+    margin-bottom: .5rem;
+    font-weight: 600;
+  }
+  .callout.crit .label { color: var(--crit); }
+  .callout.ok .label   { color: var(--ok); }
+  .callout.ask .label  { color: var(--ask); }
+
+  .verdict {
+    display: inline-block;
+    font-family: var(--f-mono);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .09em;
+    padding: .2rem .5rem;
+    border-radius: 2px;
+    vertical-align: middle;
+    margin-left: .5rem;
+    white-space: nowrap;
+  }
+  .v-fix  { background: var(--ok-soft);   color: var(--ok); }
+  .v-open { background: var(--warn-soft); color: var(--warn); }
+  .v-ask  { background: var(--ask-soft);  color: var(--ask); }
+  .v-des  { background: var(--surface-alt); color: var(--text-dim); }
+
+  .chips { display: flex; flex-wrap: wrap; gap: .3rem; margin: 0 0 1.3rem; }
+  .chip {
+    font-family: var(--f-mono);
+    font-size: .69rem;
+    padding: .18rem .45rem;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    color: var(--text-dim);
+    background: var(--surface);
+    white-space: nowrap;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    margin: 0 0 1.5rem;
+  }
+  table { border-collapse: collapse; width: 100%; font-size: .86rem; min-width: 640px; }
+  thead th {
+    text-align: left;
+    font-family: var(--f-mono);
+    font-size: .64rem;
+    letter-spacing: .11em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    font-weight: 600;
+    padding: .65rem .8rem;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface-alt);
+  }
+  tbody td { padding: .55rem .8rem; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.id { font-family: var(--f-mono); font-size: .74rem; color: var(--text-faint); white-space: nowrap; }
+  td.st { font-family: var(--f-mono); font-size: .72rem; white-space: nowrap; font-weight: 600; }
+  .s-fix  { color: var(--ok); }
+  .s-open { color: var(--warn); }
+  .s-ask  { color: var(--ask); }
+  .s-des  { color: var(--text-faint); }
+  .sign-row td {
+    background: var(--surface-alt);
+    font-family: var(--f-mono);
+    font-size: .69rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--brass);
+    font-weight: 600;
+  }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding-top: 1.3rem;
+    margin-top: 3rem;
+    font-family: var(--f-mono);
+    font-size: .72rem;
+    color: var(--text-faint);
+    line-height: 1.75;
+  }
+
+  a { color: var(--brass); text-underline-offset: 2px; }
+  :focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+</style>
+
+<div class="wrap">
+
+<div class="masthead">
+  <div class="eyebrow">Isaac's Homebrew · PF2e · The Saint · Informe de reparación</div>
+  <h1>El Taller de Mu</h1>
+  <p class="standfirst">Qué se rompió, por qué se rompió, qué arreglé y con qué criterio dejé el resto sin tocar. Los 55 reportes del checklist, de principio a fin.</p>
+  <div class="facts">
+    <span><b>55</b> reportes</span>
+    <span><b>29</b> cerrados</span>
+    <span><b>7</b> esperando datos</span>
+    <span><b>19</b> deliberadamente sin tocar</span>
+    <span>base <b>aacdda2</b></span>
+  </div>
+</div>
+
+<nav class="toc">
+  <h2>Contenido</h2>
+  <ol>
+    <li><span class="num">I</span><a href="https://b149d3ca-b20f-4d99-a246-50c78a5bd8b6.frame.claudeusercontent.com/_f/1787866096-a572/#parte1">Cómo se obtuvieron los datos</a></li>
+    <li><span class="num">II</span><a href="https://b149d3ca-b20f-4d99-a246-50c78a5bd8b6.frame.claudeusercontent.com/_f/1787866096-a572/#parte2">La arquitectura, en la medida necesaria</a></li>
+    <li><span class="num">III</span><a href="https://b149d3ca-b20f-4d99-a246-50c78a5bd8b6.frame.claudeusercontent.com/_f/1787866096-a572/#parte3">Los arreglos</a>
+      <ol>
+        <li><a href="https://b149d3ca-b20f-4d99-a246-50c78a5bd8b6.frame.claudeusercontent.com/_f/1787866096-a572/#rc1">RC-1 · La fuga de riders entre Técnicas</a></li>
+        <li><a href="https://b149d3ca-b20f-4d99-a246-50c78a5bd8b6.frame.claudeusercontent.com/_f/1787866096-a572/#rc2">RC-2 · Rule elements sobre hechizos</a></li>
+        <li><a href="https://b149d3ca-b20f-4d99-a246-50c78a5bd8b6.frame.claudeusercontent.com/_f/1787866096-a572/#rc3">RC-3 · Los Zenith sin riders</a></li>
+        <li><a href="https://b149d3ca-b20f-4d99-a246-50c78a5bd8b6.frame.claudeusercontent.com/_f/1787866096-a572/#rc5">RC-5 · Selectores que no existen</a></li>
+        <li><a href="https://b149d3ca-b20f-4d99-a246-50c78a5bd8b6.frame.claudeusercontent.com/_f/1787866096-a572/#rc6">RC-6 · Las rosas de Piscis</a></li>
+        <li><a href="https://b149d3ca-b20f-4d99-a246-50c78a5bd8b6.frame.claudeusercontent.com/_f/1787866096-a572/#rc7">RC-7 · El contador sin tope</a></li>
+        <li><a href="https://b149d3ca-b20f-4d99-a246-50c78a5bd8b6.frame.claudeusercontent.com/_f/1787866096-a572/#rc8">RC-8 · Om, que nunca subía</a></li>
+        <li><a href="https://b149d3ca-b20f-4d99-a246-50c78a5bd8b6.frame.claudeusercontent.com/_f/1787866096-a572/#rc10">RC-10 · El susurro y la elección</a></li>
+        <li><a href="https://b149d3ca-b20f-4d99-a246-50c78a5bd8b6.frame.claudeusercontent.com/_f/1787866096-a572/#extras">Dos extras: Géminis y Escorpio</a></li>
+        <li><a href="https://b149d3ca-b20f-4d99-a246-50c78a5bd8b6.frame.claudeusercontent.com/_f/1787866096-a572/#autorreview">El bug que me encontré a mí mismo</a></li>
+      </ol>
+    </li>
+    <li><span class="num">IV</span><a href="https://b149d3ca-b20f-4d99-a246-50c78a5bd8b6.frame.claudeusercontent.com/_f/1787866096-a572/#parte4">Lo que no arreglé, y por qué</a>
+      <ol>
+        <li><a href="https://b149d3ca-b20f-4d99-a246-50c78a5bd8b6.frame.claudeusercontent.com/_f/1787866096-a572/#rc4">RC-4 · Strikes modelados como daño de conjuro</a></li>
+        <li><a href="https://b149d3ca-b20f-4d99-a246-50c78a5bd8b6.frame.claudeusercontent.com/_f/1787866096-a572/#rc11">RC-11 · Lo que nunca se escribió</a></li>
+        <li><a href="https://b149d3ca-b20f-4d99-a246-50c78a5bd8b6.frame.claudeusercontent.com/_f/1787866096-a572/#rc9">RC-9 · El lanzamiento gratis</a></li>
+        <li><a href="https://b149d3ca-b20f-4d99-a246-50c78a5bd8b6.frame.claudeusercontent.com/_f/1787866096-a572/#abiertos">Los siete que necesitan datos tuyos</a></li>
+        <li><a href="https://b149d3ca-b20f-4d99-a246-50c78a5bd8b6.frame.claudeusercontent.com/_f/1787866096-a572/#diseno">Lo que no es un bug</a></li>
+      </ol>
+    </li>
+    <li><span class="num">V</span><a href="https://b149d3ca-b20f-4d99-a246-50c78a5bd8b6.frame.claudeusercontent.com/_f/1787866096-a572/#parte5">Verificación</a></li>
+    <li><span class="num">VI</span><a href="https://b149d3ca-b20f-4d99-a246-50c78a5bd8b6.frame.claudeusercontent.com/_f/1787866096-a572/#parte6">Riesgos, regresiones y qué probar primero</a></li>
+    <li><span class="num">VII</span><a href="https://b149d3ca-b20f-4d99-a246-50c78a5bd8b6.frame.claudeusercontent.com/_f/1787866096-a572/#parte7">Índice de los 55</a></li>
+  </ol>
+</nav>
+
+<!-- ============================================================ -->
+
+<section class="part" id="parte1">
+  <div class="part-head">
+    <span class="kicker">Parte I</span>
+    <h2>Cómo se obtuvieron los datos</h2>
+  </div>
+
+  <p>Antes de hablar de un solo bug hay que explicar dos cosas que condicionaron todo el análisis, porque si cualquiera de las dos hubiera salido distinta, el informe entero sería distinto.</p>
+
+  <h3>El repositorio local estaba mirando otra cosa</h3>
+
+  <p>El <em>working tree</em> apuntaba a <code>be99a55</code>, del 31 de julio. Tus pruebas son del 11 al 15 de agosto. Entre una fecha y otra hay <strong>34 commits</strong> en <code>origin/main</code>, que terminan en <code>aacdda2</code> del 10 de agosto: 214 archivos tocados, 15 001 líneas añadidas y 2 110 borradas.</p>
+
+  <p>No es una diferencia cosmética. En <code>be99a55</code> el módulo tiene cinco scripts y unas seiscientas líneas: el rastreador del cielo, la entrada de lanzamiento de Cosmo, y poco más. Las Técnicas son documentos JSON con <code>rules: []</code> y una descripción en prosa. No existen <code>scripts/riders/</code>, ni <code>scripts/targeting/</code>, ni <code>scripts/economy/</code>. Tampoco existen la mitad de las Técnicas: había 28 hechizos donde el diseño pide 48.</p>
+
+  <p>Es decir: si hubiera analizado el árbol tal como estaba, habría concluido que la mitad de tus bugs son «esta Técnica no existe» y la otra mitad «esto nunca se automatizó», y ninguna de las dos conclusiones habría sido cierta. El primer indicio de que algo no cuadraba fue tu propio comentario en <code>aries-t1</code>: decías que la Técnica <em>coloca el muro</em>, pero que el documento de muro mide cuatro celdas. En <code>be99a55</code> no hay ni una línea de código que cree un <code>Wall</code>. Eso sólo puede venir de <code>scripts/targeting/wall.mjs</code>, que aparece 34 commits más tarde.</p>
+
+  <p>Hice <code>git merge --ff-only origin/main</code>. Comprobé antes que fuera avance rápido puro — <code>git merge-base --is-ancestor</code> confirmó que tu <code>main</code> local era ancestro directo del remoto, con 0 commits por delante y 34 por detrás — así que no había nada tuyo que pudiera perderse. Los archivos sin seguimiento en <code>Docs/</code> quedaron intactos.</p>
+
+  <h3>Los comentarios no estaban en el archivo que me pasaste</h3>
+
+  <p>El checklist HTML es una herramienta autónoma: al final del archivo hay un bloque <code>&lt;script&gt;</code> con <code>const STORAGE_KEY = 'saint-checklist-v4'</code> y las funciones <code>saveState</code>/<code>loadState</code> que serializan a <code>localStorage</code>. Las marcas y los comentarios viven en el navegador, no en el HTML. Abrir el archivo adjunto muestra 112 items en blanco.</p>
+
+  <p>Lo que sí existe es el botón <em>Download JSON</em>, y lo habías usado. En tu carpeta de Descargas encontré cinco exportaciones:</p>
+
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Archivo</th><th>Exportado</th><th>Items</th><th>Con comentario</th></tr></thead>
+      <tbody>
+        <tr><td class="id">saint-checklist-2026-08-12.json</td><td>12 ago 00:34</td><td>46</td><td>4</td></tr>
+        <tr><td class="id">saint-checklist-2026-08-13.json</td><td>13 ago 22:54</td><td>69</td><td>24</td></tr>
+        <tr><td class="id">saint-checklist-2026-08-14.json</td><td>14 ago 00:45</td><td>78</td><td>30</td></tr>
+        <tr><td class="id">saint-checklist-2026-08-15.json</td><td>15 ago 03:29</td><td>103</td><td>51</td></tr>
+        <tr><td class="id">saint-checklist-2026-08-15 (1).json</td><td>15 ago 15:42</td><td>108</td><td><strong>55</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Fusioné los cinco por identificador y comparé, por si alguna exportación temprana tuviera un comentario que luego editaste o borraste. No es el caso: el último archivo es superconjunto estricto de los anteriores. Los 55 comentarios que analicé son exactamente los que tenías el 15 de agosto a las 15:42.</p>
+
+  <p>Después crucé cada identificador con el HTML del checklist para recuperar el nombre del elemento y la línea de especificación que habías escrito en <code>item-meta</code> — «✦✦ · 30-ft cone · 1d8 bludgeoning · basic Fort · push 15 ft + prone on fail», por ejemplo. Eso me daba, para cada bug, tres cosas: qué debía pasar según tu diseño, qué observaste tú, y qué dice el código. Con las tres se puede decidir si algo es un fallo, una decisión deliberada, o una función que nunca se escribió.</p>
+
+  <h3>Método</h3>
+
+  <p>Trabajé con la disciplina de depuración sistemática: causa raíz antes que arreglo, siempre. En la práctica eso significó no tocar nada hasta tener las 3 906 líneas de <code>scripts/</code> leídas y los 187 documentos de contenido inventariados. El inventario más útil fue una tabla de los <strong>77 riders</strong> que hay en todo el contenido, con su evento, sus grados de éxito, su predicado y lo que aplican. De esa tabla salió la causa principal en unos segundos, y de una forma que no admite discusión.</p>
+
+  <p>Regla que me impuse: nada entra en el informe como «causa raíz» si no puedo señalar la línea. Cuando sólo tenía una sospecha razonable, lo etiqueté como sospecha y te lo pregunté.</p>
+</section>
+
+<!-- ============================================================ -->
+
+<section class="part" id="parte2">
+  <div class="part-head">
+    <span class="kicker">Parte II</span>
+    <h2>La arquitectura, en la medida necesaria</h2>
+  </div>
+
+  <p>No se puede leer ninguno de los arreglos sin entender tres piezas. Las resumo con el detalle justo.</p>
+
+  <h3>El motor de riders</h3>
+
+  <p>PF2e no automatiza los efectos secundarios de una salvación. Si un conjuro dice «en un fallo, el objetivo queda ralentizado 1», el sistema tira la salvación y ahí se detiene: aplicar la condición es cosa del GM. El módulo cierra ese hueco con un mecanismo propio llamado <em>riders</em>. Un item lleva en <code>flags["isaacs-hb-pf2e"].riders</code> una lista de objetos así:</p>
+
+<pre><code>{
+  "event": "save-rolled",
+  "outcomes": ["failure", "criticalFailure"],
+  "predicate": [{ "or": ["target:trait:undead", "target:trait:spirit"] }],
+  "apply": { "type": "condition", "slug": "slowed", "value": 1 }
+}</code></pre>
+
+  <p>Hay siete eventos posibles: <code>save-rolled</code>, <code>strike-resolved</code>, <code>strike-received</code>, <code>action-used</code>, <code>damage-applied</code>, <code>turn-end</code> y <code>turn-start</code>. Y ocho tipos de aplicación: condición, efecto de compendio, daño directo, daño persistente, una salvación anidada, una muerte, un susurro al GM (<code>prompt</code>) y una elección con botones (<code>choice</code>).</p>
+
+  <p>El flujo tiene cuatro etapas, y conviene tenerlas separadas en la cabeza porque los bugs se reparten entre ellas:</p>
+
+  <ol class="body-list">
+    <li><strong>Fuente</strong> (<code>scripts/riders/sources.mjs</code>). Algo pasa en la mesa. Un <em>hook</em> lo detecta y arma un encargo con cuatro datos: qué evento, de qué item, sobre qué objetivo, con qué resultado. Cada fuente se dispara en exactamente un cliente, para que una mesa de cinco jugadores no aplique la condición cinco veces.</li>
+    <li><strong>Relevo</strong> (<code>scripts/riders/relay.mjs</code>). Un jugador es dueño de su Santo y de nada más, así que no puede escribir una condición sobre el monstruo. El encargo viaja por socket al GM activo. El detalle importante es que el encargo <em>no lleva datos de rider</em>: nombra un item y el GM lee los riders él mismo, de modo que un cliente manipulado no puede pedir un efecto que la Técnica no tiene.</li>
+    <li><strong>Recolección</strong> (<code>scripts/riders/data.mjs</code>). Del lado del GM, <code>collectRiders</code> decide <em>qué items</em> pueden tener algo que decir sobre este evento. Aquí estaba la causa principal.</li>
+    <li><strong>Selección y aplicación</strong> (<code>select.mjs</code> y <code>apply.mjs</code>). De los riders recogidos se filtran los que coinciden en grado de éxito y cuyo predicado pasa contra una <em>instantánea</em> del mundo tomada antes de aplicar nada. Esa instantánea es lo que hace que las escaleras funcionen: la pérdida de sentidos de Virgo son cuatro riders sobre el mismo resultado, cada uno predicado sobre el anterior, y como todos se evalúan contra el mismo estado previo, sólo uno puede coincidir. Un sentido por golpe, no cuatro de golpe.</li>
+  </ol>
+
+  <p>Hay además un mecanismo de <em>recibo</em>: cada aplicación deja constancia en el mensaje de chat de qué items creó y qué contadores movió, para que un punto de héroe que convierta un fallo crítico en éxito pueda deshacer el <em>aturdido 3</em>. Sólo se deshace lo que el módulo puso; una condición que el GM añadió a mano no se toca.</p>
+
+  <h3>Los cielos</h3>
+
+  <p>Cada día una constelación está ascendente. Si es la tuya, llevas un efecto <code>Sky: Ascendant (X)</code> puesto todo el día; si además es Exaltado, un <code>Sky: Zenith (X)</code>. Esos efectos hacen tres cosas: emiten opciones de tirada (<code>sky:ascendant</code>, <code>sky:sign:leo</code>, <code>sky:zenith</code>) que otros rule elements predican, añaden dados de daño para simular el heightening extra, y — cuando el boon lo requiere — llevan sus propios riders.</p>
+
+  <p>Esa tercera parte es la que se perdió en varios Zenith, y es la causa RC-3.</p>
+
+  <h3>El apuntado de áreas</h3>
+
+  <p>PF2e no modela el número de objetivos ni el alcance de un conjuro como números manipulables, así que el módulo lleva su propia configuración en <code>flags["isaacs-hb-pf2e"].areaTargeting</code> y envuelve <code>SpellcastingEntryPF2e#cast</code> para dibujar el área, dejarte confirmarla y sólo entonces lanzar. En el mismo envoltorio se resuelve el lanzamiento gratis, y en ese orden a propósito: cancelar una colocación no debe gastarte la carga diaria.</p>
+
+  <p>Los tres envoltorios del módulo pasan por <code>scripts/lib/wrap.mjs</code>, que lleva un registro de qué función ha reclamado cada método. Existe porque una vez dos funciones registraron un envoltorio libWrapper sobre el mismo método, libWrapper rechazó el segundo, y la excepción se llevó por delante el resto del <em>hook</em> <code>setup</code> — lo que en la mesa se lee como «la mitad del módulo no hace nada».</p>
+
+  <div class="callout">
+    <span class="label">Por qué esto importa para leer los bugs</span>
+    <p>Buena parte de tus reportes describen síntomas que parecen específicos de una Técnica — «Antares se activa cuando uso Scarlet Needle», «el drained aparece donde no debería» — y que en realidad son la misma pieza de infraestructura fallando en sitios distintos. Agrupar por causa en vez de por signo redujo 55 reportes a 11 problemas, y uno solo de ellos explicaba once.</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+
+<section class="part" id="parte3">
+  <div class="part-head">
+    <span class="kicker">Parte III</span>
+    <h2>Los arreglos</h2>
+  </div>
+
+  <p>Veintinueve reportes cerrados, repartidos en ocho causas y dos extras. Los ordeno por impacto.</p>
+
+  <!-- ---------------- RC-1 ---------------- -->
+
+  <h3 id="rc1">RC-1 · La fuga de riders entre Técnicas <span class="verdict v-fix">ARREGLADO</span></h3>
+
+  <div class="chips">
+    <span class="chip">aries-t3</span><span class="chip">aries-t4</span><span class="chip">gemini-t1</span><span class="chip">gemini-t4</span><span class="chip">leo-t2</span><span class="chip">leo-t4</span><span class="chip">cancer-t3</span><span class="chip">cancer-t4</span><span class="chip">scorpio-t1</span><span class="chip">scorpio-t2</span><span class="chip">scorpio-t4</span>
+  </div>
+
+  <h4>El síntoma, en tus palabras</h4>
+
+  <p>Once reportes en cinco Armaduras que a primera vista no tienen nada que ver entre sí:</p>
+
+  <blockquote>
+    <p>«Cuando se activa Scarlet Needle, también se activan Crimson Mirage y Antares.»</p>
+    <p>«Al castear esta técnica, se castea también la técnica 4 Mavros Eruption Clast, específicamente el debuff de blinded.»</p>
+    <p>«Al ejecutarse esta técnica agrega la condición de drained al objetivo, lo cual no debería pasar. […] A los undead y espíritus les aplica Slowed 2 en vez de slowed 1.»</p>
+    <p>«Estoy viendo una parte que dice, después de un fallo crítico, "Teleported 250 feet in a direction of the Saint's choice", pero eso no coincide con la descripción del ataque.»</p>
+  </blockquote>
+
+  <h4>La causa</h4>
+
+  <p>Cuando un objetivo tira una salvación, el módulo tiene que decidir en qué items del Santo buscar riders. Esa decisión está en una línea de <code>scripts/riders/data.mjs</code>:</p>
+
+<pre><code>const candidates = ITEM_SCOPED_EVENTS.has(event)
+    ? [item]
+    : [item, ...(actor?.items ?? [])];</code></pre>
+
+  <p>Y el conjunto era:</p>
+
+<pre><code>const ITEM_SCOPED_EVENTS = new Set(["action-used"]);</code></pre>
+
+  <p><code>save-rolled</code> no estaba dentro. Por tanto, cada salvación recogía los riders de <strong>todos</strong> los items del Santo, y lo único que los separaba después era el grado de éxito y el predicado.</p>
+
+  <p>Aquí es donde el problema pasa de teórico a garantizado. Inventarié los 77 riders del contenido y los conté por evento:</p>
+
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Evento</th><th>Riders</th><th>Sin predicado</th></tr></thead>
+      <tbody>
+        <tr><td class="id">save-rolled</td><td>57</td><td><strong>56</strong></td></tr>
+        <tr><td class="id">strike-resolved</td><td>9</td><td>1</td></tr>
+        <tr><td class="id">action-used</td><td>5</td><td>4</td></tr>
+        <tr><td class="id">damage-applied</td><td>2</td><td>0</td></tr>
+        <tr><td class="id">turn-end</td><td>2</td><td>2</td></tr>
+        <tr><td class="id">strike-received</td><td>1</td><td>0</td></tr>
+        <tr><td class="id">turn-start</td><td>1</td><td>1</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><strong>Cincuenta y seis de cincuenta y siete riders de salvación no tienen predicado.</strong> El único que lo tiene es el <em>slowed</em> de <em>Sekishiki Konsō Ha</em>, y sólo porque necesita distinguir muertos vivientes. Los demás no lo tienen porque no deberían necesitarlo: «una criatura que falle la salvación <em>de esta Técnica</em> queda ralentizada» ya nombra su Técnica por el hecho de estar escrito sobre ella.</p>
+
+  <p>Lo irónico es que el comentario que hay justo encima del código ya decía lo correcto:</p>
+
+  <blockquote><p>«A save rider lives on the Technique that forced the save, so the message's item is the obvious source.»</p></blockquote>
+
+  <p>El arreglo se aplicó a <code>action-used</code> en su día — hay un commit llamado <em>«Stop an ability from triggering itself»</em> — y a <code>save-rolled</code> se le olvidó, aunque el argumento es idéntico.</p>
+
+  <h4>Por qué la suite de tests no lo detectó</h4>
+
+  <p>Existían dos comprobaciones sobre <code>collectRiders</code> con <code>save-rolled</code>. Las dos pasaban <code>actor: null</code>. Con el actor vacío, la búsqueda amplia y la búsqueda estrecha dan exactamente el mismo resultado, así que el test no distinguía entre el código correcto y el roto.</p>
+
+  <h4>La reproducción</h4>
+
+  <p>Antes de cambiar nada escribí una comprobación que falla, dirigida contra el contenido publicado y sin Foundry de por medio. Un Santo de Escorpio de nivel 16 tiene sus cuatro Técnicas en la hoja; lanza <em>Scarlet Needle</em>; el objetivo falla críticamente:</p>
+
+<pre><code>Rider tests failed: 1 of 109.
+  - a save collects riders from the Technique that forced it and no other
+      expected ["Scarlet Needle"]
+      got      ["Scarlet Needle","Crimson Mirage","Antares"]</code></pre>
+  <figcaption>build/test-riders.mjs — la comprobación nueva, antes del arreglo</figcaption>
+
+  <p>Desglosado, lo que caía sobre el objetivo era esto:</p>
+
+<pre><code>  from Scarlet Needle     -&gt; effect (una aguja)
+  from Scarlet Needle     -&gt; condition off-guard
+  from Crimson Mirage     -&gt; condition dazzled            <span class="del">&lt;- no debería</span>
+  from Crimson Mirage     -&gt; prompt "Treats all other..." <span class="del">&lt;- no debería</span>
+  from Crimson Mirage     -&gt; condition confused           <span class="del">&lt;- no debería</span>
+  from Antares            -&gt; prompt "It dies..."          <span class="del">&lt;- no debería</span></code></pre>
+
+  <p>Es tu reporte <code>scorpio-t1</code> y tu reporte <code>scorpio-t2</code>, palabra por palabra, generado desde los datos.</p>
+
+  <h4>El arreglo</h4>
+
+<pre><code><span class="cmt">// scripts/riders/data.mjs</span>
+<span class="del">- const ITEM_SCOPED_EVENTS = new Set(["action-used"]);</span>
+<span class="add">+ const ITEM_SCOPED_EVENTS = new Set(["action-used", "save-rolled"]);</span></code></pre>
+
+  <p>Verifiqué que es seguro antes de aplicarlo, en dos frentes. Primero: <code>resolveContext</code> ya resuelve <code>messageItem</code> a la Técnica que forzó la salvación — el <em>hook</em> de toolbelt manda el <code>messageId</code>, y como el mensaje pertenece al Santo, <code>messageItem</code> es el hechizo. O sea que la búsqueda estrecha encuentra lo que tiene que encontrar. Segundo: repasé la tabla de los 77 riders para confirmar que <em>ningún</em> efecto de Armadura, de cielo o de dote lleva un rider <code>save-rolled</code>. Todos viven sobre Técnicas. Si mañana alguien escribe uno sobre un efecto de cielo, dejará de dispararse, y por eso lo dejé documentado en el comentario del código.</p>
+
+  <h4>Qué cierra exactamente</h4>
+
+  <p>El caso de Cáncer merece detalle porque explica dos reportes a la vez y una aritmética que parecía absurda. <em>Sekishiki Meikai Ha</em> tiene tres riders: <em>drained 1</em> en fallo, <em>drained 2</em> en fallo crítico, <em>slowed 1</em> en fallo crítico. <em>Sekishiki Konsō Ha</em> tiene uno: <em>slowed 1</em>, predicado sobre muertos vivientes y espíritus.</p>
+
+  <p>Al lanzar Konsō Ha contra un no-muerto que falla críticamente, se aplicaban los cuatro. El objetivo recibía el <em>drained</em> que tú decías que no debería estar, y <code>increaseCondition("slowed", {value: 1})</code> corría dos veces — una por cada rider — dejándolo en <strong>slowed 2</strong>. Tu frase «a los undead y espíritus les aplica Slowed 2 en vez de slowed 1» no era una impresión: era exactamente 1 + 1.</p>
+
+  <p>Y lo mismo en <code>cancer-t4</code>: el <em>drained 2</em> y el <em>slowed 2</em> que veías sobre <em>Sekishiki Tenryū Ha</em> también venían de Meikai Ha.</p>
+
+  <p>En Aries, los susurros de <em>Starlight Extinction</em> («Teleported 60 feet», «Teleported 250 feet») aparecían sobre <em>Crystal Net</em> y <em>Stardust Revolution</em>. En Géminis, el <em>blinded</em> de <em>Mavros Eruption Clast</em> aparecía sobre <em>Another Dimension</em>, y el susurro de <em>Another Dimension</em> («Banished into folded space») aparecía sobre Mavros — la fuga era simétrica, y tú la reportaste desde los dos lados sin saber que era la misma. En Leo, el <em>prone</em> que veías sobre <em>Photon Burst</em> era de <em>Lightning Crown</em>.</p>
+
+  <p>Y una consecuencia que vale la pena señalar: tu reporte <code>scorpio-t4</code> decía que Antares «funciona al usar Scarlet Needle, pero no al usar esta habilidad por separado». No es que funcionara. Es que se filtraba.</p>
+
+  <!-- ---------------- RC-2 ---------------- -->
+
+  <h3 id="rc2">RC-2 · Rule elements sobre hechizos <span class="verdict v-fix">ARREGLADO</span></h3>
+
+  <div class="chips">
+    <span class="chip">cap-t1</span><span class="chip">cap-passive1</span><span class="chip">sag-t4</span><span class="chip">sag-asc</span>
+  </div>
+
+  <h4>El síntoma</h4>
+
+  <blockquote>
+    <p>«Todos sus ataques unarmed por defecto son slashing […] Al crear un nuevo caballero de Capricornio, se confirma que se aplica excalibur como pasiva.»</p>
+    <p>«Está por defecto activa como si se tratase de una pasiva, su velocidad normal es 35, está activa lo cual aumenta en 70.»</p>
+  </blockquote>
+
+  <h4>La causa</h4>
+
+  <p>En PF2e, los <em>rule elements</em> de un item se aplican mientras el item está en la hoja. Para una dote o un efecto eso es lo que quieres. Para un hechizo, no: un hechizo está en la hoja siempre, lo lances o no.</p>
+
+  <p>Dos Técnicas llevaban sus reglas directamente en <code>system.rules</code>. <em>Excalibur</em> llevaba un <code>ItemAlteration</code> que sobrescribe el tipo de daño a cortante y un <code>AdjustStrike</code> que añade <em>deadly d10</em>. <em>Aiolos's Wings</em> llevaba un <code>BaseSpeed</code> con <code>fly = velocidad × 2</code>. Ambas, en consecuencia, eran pasivas permanentes desde el nivel en que se conceden.</p>
+
+  <p>Tu observación de que un caballero de Capricornio recién creado ya tiene puños cortantes es la prueba limpia: no hay expiración que revisar, porque nunca se activó nada.</p>
+
+  <p>Lo llamativo es que <code>Effect: Excalibur</code> ya existía en <code>content/saint-effects/activities/</code>, <strong>con exactamente las mismas dos reglas</strong>. Alguien escribió el efecto correcto y después duplicó las reglas sobre el hechizo, probablemente porque no encontró cómo conectar el uno con el otro.</p>
+
+  <h4>Por qué no bastaba con borrar las reglas</h4>
+
+  <p>Borrarlas del hechizo elimina el bug y deja la Técnica sin hacer nada, lo cual es peor. Hacía falta una vía para que un hechizo aplique un efecto a su propio lanzador.</p>
+
+  <p>PF2e tiene exactamente ese mecanismo: <code>system.selfEffect</code>, que pinta un botón «Aplicar efecto» en la tarjeta de chat. Tu contenido ya lo usa en seis sitios — <em>Arayashiki</em>, <em>Burn Your Cosmo</em>, <em>Om</em>, <em>Second Ascension</em>, <em>Speed of Light</em>, <em>Rise</em>. Todos son items de tipo <code>action</code> o <code>feat</code>. <strong>El campo no existe en el esquema de <code>spell</code></strong>, y por eso las Técnicas no podían usarlo. Ahí está el origen del atajo.</p>
+
+  <p>El motor de riders casi servía, pero no del todo: <code>onActionUsed</code> recorre <code>game.user.targets</code>, y una Técnica que te buffea a ti no se lanza contra nadie. Sin objetivo seleccionado no se enviaba ningún encargo.</p>
+
+  <h4>El arreglo</h4>
+
+  <p>Añadí a los riders una propiedad <code>self</code>. Son tres piezas.</p>
+
+  <p><strong>Una.</strong> El enrutado de objetivos, en <code>scripts/riders/apply.mjs</code>:</p>
+
+<pre><code>async function targetsFor(rider, context) {
+<span class="add">+   if (rider.self) return context.originToken ? [context.originToken] : [];</span>
+    if (!rider.area) return context.target ? [context.target] : [];
+    ...</code></pre>
+
+  <p><strong>Dos.</strong> La fuente, en <code>scripts/riders/sources.mjs</code>, que ahora emite un encargo para el lanzador aunque no haya objetivos, y marca cada encargo con <code>selfOnly</code> para que las dos mitades no se pisen:</p>
+
+<pre><code>if (riders.some((rider) =&gt; rider.self)) {
+    const own = message.token ?? actor?.getActiveTokens(true, true).at(0);
+    if (own?.uuid) await request(own.uuid, true);
+}
+for (const target of game.user.targets) {
+    await request(target.document.uuid, false);
+}</code></pre>
+
+  <p><strong>Tres.</strong> El filtro correspondiente en <code>applyRiders</code>, que garantiza que el encargo del lanzador vea sólo los riders <code>self</code> y los de objetivo sólo los demás. Sobre por qué hizo falta esta tercera pieza, y no bastaba con el recibo, hay una sección entera más abajo — la encontré revisando mi propio trabajo.</p>
+
+  <p>Con eso, el contenido queda así. <em>Excalibur</em>:</p>
+
+<pre><code>"rules": [],
+"flags": { "isaacs-hb-pf2e": { "riders": [{
+    "event": "action-used",
+    "self": true,
+    "apply": { "type": "effect", "uuid": "…Item.Effect: Excalibur" }
+}]}}</code></pre>
+
+  <h4>Los dos daños mortales</h4>
+
+  <p>Tu reporte <code>cap-passive1</code> señalaba algo más fino:</p>
+
+  <blockquote><p>«Con diferentes condiciones de deadly no se puede deducir si se están sobrescribiendo. Por un lado esta pasiva aplica deadly d8 y por otro la técnica Excalibur, después de usarla, ahora todos los ataques están aplicando un deadly d10.»</p></blockquote>
+
+  <p>La pasiva de la Armadura añade <code>deadly-d8</code> a los puños. Excalibur añade <code>deadly-d10</code>. Los dos son <code>AdjustStrike</code> en modo <code>add</code>, así que ambos rasgos acaban en la misma lista, y dos rasgos <em>deadly</em> sobre un mismo Strike no es una acumulación: es una moneda al aire sobre cuál lee PF2e. Con Excalibur activa siempre, el estado era permanentemente ambiguo.</p>
+
+  <p>Añadí al efecto un tercer rule element, primero de la lista, que quita el d8 antes de poner el d10:</p>
+
+<pre><code>{ "key": "AdjustStrike", "mode": "remove",
+  "property": "weapon-traits", "value": "deadly-d8",
+  "definition": ["item:category:unarmed"] }</code></pre>
+
+  <p>Y corregí la duración del efecto. Estaba en <code>{ unit: "rounds", value: 1, expiry: "turn-start" }</code>, que expira al principio de tu siguiente turno. La Técnica dice «hasta el final de tu turno», que en PF2e se escribe <code>{ value: 0, expiry: "turn-end" }</code>. Mientras las reglas vivían en el hechizo esa duración no la miraba nadie; ahora es la que decide cuándo se apaga.</p>
+
+  <h4>Sagitario, y por qué esto también arregla el Ascendente</h4>
+
+  <p>Con <em>Aiolos's Wings</em> hacía falta crear el efecto, que no existía. Y hacía falta partirlo en dos, porque la Técnica concede dos cosas distintas: al Santo, vuelo igual al <em>doble</em> de su velocidad; a hasta cinco aliados, vuelo igual a <em>su propia</em> velocidad. Un solo efecto con <code>@actor.attributes.speed.value * 2</code> le habría dado a los aliados el doble de la suya. Así que hay dos archivos nuevos:</p>
+
+  <ul>
+    <li><code>effect-aioloss-wings.json</code> — <code>BaseSpeed fly = @actor.attributes.speed.value * 2</code>, 10 minutos.</li>
+    <li><code>effect-aioloss-wings-shared.json</code> — <code>BaseSpeed fly = @actor.attributes.speed.value</code>, 10 minutos.</li>
+  </ul>
+
+  <p>El hechizo aplica el primero con <code>self: true</code> y el segundo a los objetivos, apoyándose en el <code>areaTargeting</code> que ya tenía configurado (emanación de 30 pies, aliados, máximo 5).</p>
+
+  <p>Y esto cierra <code>sag-asc</code> de rebote. Tu reporte decía:</p>
+
+  <blockquote><p>«La velocidad de vuelo sigue estando en 70 por Aiolos wings, parece que domina sobre el ascendente ya que si no, bajaría a 35.»</p></blockquote>
+
+  <p>Exacto. <code>Sky: Ascendant (Sagittarius)</code> concede <code>fly = velocidad</code>, o sea 35. El hechizo concedía <code>fly = velocidad × 2</code>, o sea 70. <code>BaseSpeed</code> en PF2e se queda con el valor más alto, así que el 70 permanente aplastaba al del Ascendente. No era que el Ascendente estuviera roto: era que competía contra algo que no debía estar ahí. Con el vuelo permanente eliminado, el Ascendente es el único que habla.</p>
+
+  <div class="callout ask">
+    <span class="label">Lo que este arreglo no cubre</span>
+    <p>La otra mitad de <code>sag-asc</code> — «no incrementa el rango, no deja seleccionar a objetivos a través de paredes» — sigue sin implementar, y también <code>sag-zen</code> («tampoco aumenta el tamaño a 1 milla»). El efecto del cielo no tiene ninguna regla que altere el alcance de <em>Golden Arrow</em>; sólo texto. Está en RC-11.</p>
+  </div>
+
+  <!-- ---------------- RC-3 ---------------- -->
+
+  <h3 id="rc3">RC-3 · Los Zenith sin riders <span class="verdict v-fix">ARREGLADO</span></h3>
+
+  <div class="chips">
+    <span class="chip">scorpio-zen</span><span class="chip">virgo-zen</span><span class="chip">cap-zen</span><span class="chip">taurus-asc</span><span class="chip">taurus-zen</span><span class="chip">cancer-asc</span>
+  </div>
+
+  <h4>El síntoma</h4>
+
+  <blockquote>
+    <p>«No se aplica el death effect al llegar a las 5 agujas, incluso estando en más de 5, tampoco se aplica.»</p>
+    <p>«No ejecuta lo que tiene que hacer. No funciona directamente.»</p>
+    <p>«Al objetivo no se le aplica prone.»</p>
+    <p>«No automatizado, no hace nada.»</p>
+  </blockquote>
+
+  <h4>La causa</h4>
+
+  <p>Todos los boons Zenith están escritos como «igual que el Ascendente, pero más». Al crear los efectos se copiaron los <code>RollOption</code> y los <code>DamageDice</code>, y <strong>se dejaron fuera los riders</strong>, que es donde vive el comportamiento. El resultado es que un día Zenith — el día de uno entre doscientos sesenta — hace <em>menos</em> que un día Ascendente.</p>
+
+  <p>El caso más grave es Escorpio. <code>Sky: Ascendant (Scorpio)</code> tiene tres riders: colocar una aguja en cualquier ataque (acierte o falle), sangrado persistente de 1d6 por aguja hasta un tope de diez, y una salvación de Fortaleza contra muerte al llegar a ocho agujas. <code>Sky: Zenith (Scorpio)</code> tenía <code>flags: {}</code>. Vacío. En un día Zenith no sólo faltaba el efecto de muerte a cinco agujas que tú buscabas: <em>se perdían las agujas por completo</em>, porque el Zenith sustituye al Ascendente en la hoja.</p>
+
+  <p>Capricornio tenía una variante del mismo problema pero en otra propiedad. El Ascendente lleva un bloque <code>bypass</code> que hace que los puños ignoren toda resistencia, toda inmunidad física y la Dureza. El Zenith no lo tenía. El boon Zenith dice «como el Ascendente, más una reacción», así que el día más poderoso de Capricornio era el día en que sus golpes dejaban de atravesar resistencias.</p>
+
+  <p>Tauro es distinto: ahí <em>ninguno</em> de los dos cielos tenía riders. El boon Ascendente dice que cada golpe desarmado fuerza una salvación de Fortaleza y que un fallo empuja 10 pies y derriba. Sólo estaban el dado de daño extra y una <code>Note</code> recordándote que cuentas como una talla mayor. La salvación nunca se escribió — de ahí que ni <code>taurus-asc</code> ni <code>taurus-zen</code> derribaran nada.</p>
+
+  <p>Y Cáncer: el Ascendente concede la acción libre <em>The Yellow Spring Opens</em>, cuyo archivo tenía <code>rules: []</code> y ningún rider. Tu «no automatizado, no hace nada» era literal.</p>
+
+  <h4>El arreglo</h4>
+
+  <p><strong>Escorpio.</strong> Copié los tres riders del Ascendente al Zenith y les cambié el umbral, que es la única diferencia que el boon declara: el predicado <code>rider:target:effect:effect-scarlet-needle:8+</code> pasa a <code>:5+</code>, y el texto del susurro pasa de «Eight needles» a «Five needles». La otra mitad del boon Zenith — «los golpes de tus aliados también aplican agujas» — la dejé sin automatizar y sigue como <code>Note</code>: los Strikes de un aliado no son eventos del Santo, y engancharlos exigiría que el motor observase a todo el grupo, que es un cambio de alcance mucho mayor que un arreglo.</p>
+
+  <p><strong>Virgo.</strong> La escalera de pérdida de sentidos es idéntica en Zenith, así que la copié tal cual. La emanación de una vez por minuto que quita los cinco sentidos vive en su propio item, <em>Six Realms Unmade</em>, que el Zenith ya concede con un <code>GrantItem</code> y que sí tenía su rider.</p>
+
+  <p><strong>Capricornio.</strong> Copié el bloque <code>bypass</code> del Ascendente.</p>
+
+  <p><strong>Tauro.</strong> Escribí el rider que faltaba, en los dos cielos:</p>
+
+<pre><code>{
+  "event": "strike-resolved",
+  "outcomes": ["success", "criticalSuccess"],
+  "predicate": [{ "or": ["item:category:unarmed", "item:trait:unarmed"] }],
+  "apply": {
+    "type": "save", "statistic": "fortitude", "dc": "cosmo",
+    "riders": [
+      { "apply": { "type": "condition", "slug": "prone" },
+        "outcomes": ["failure", "criticalFailure"] },
+      { "apply": { "type": "prompt", "text": "Pushed 10 feet away from the Saint." },
+        "outcomes": ["failure", "criticalFailure"] }
+    ]
+  }
+}</code></pre>
+
+  <p>Sigue el patrón exacto del Ascendente de Virgo: un rider sobre el golpe, que anida una salvación contra tu Cosmo DC, que a su vez anida lo que la salvación decide. El empujón queda como susurro por la razón que explico en la sección de diseño; el derribo se aplica solo.</p>
+
+  <p><strong>Cáncer.</strong> Le di a <em>The Yellow Spring Opens</em> la misma forma que ya tenía su primo Zenith <em>The Yellow Spring Is Here</em>: un rider <code>action-used</code> con una salvación de Fortaleza anidada, predicado sobre <code>rider:target:hp-half-or-less</code>, que es la única parte que PF2e no puede leer de la descripción. Dentro, 8d6 de vacío y <em>slowed 1</em>. Añadí además el bloque <code>frequency</code> que le faltaba, porque PF2e recarga esos contadores por su cuenta al cambiar de turno, de ronda y al descansar — declararlo es lo que hace real el «una vez por ronda».</p>
+
+  <!-- ---------------- RC-5 ---------------- -->
+
+  <h3 id="rc5">RC-5 · Selectores que no existen <span class="verdict v-fix">ARREGLADO</span></h3>
+
+  <div class="chips"><span class="chip">leo-passive</span><span class="chip">sag-passive</span></div>
+
+  <h4>Leo</h4>
+
+  <blockquote><p>«No se aplica el +1 circunstancial a demoralize pero sí es inmune a frightened y sí está entrenado en intimidation.»</p></blockquote>
+
+  <p>Tu reporte es una descripción perfecta de una regla mal enganchada: dos de tres funcionan, la tercera no hace nada. Las dos que funcionan (<code>Immunity</code> y <code>ActiveEffectLike</code> sobre el rango de Intimidación) apuntan a cosas que existen. La tercera era:</p>
+
+<pre><code>{ "key": "FlatModifier", "selector": "demoralize", "type": "circumstance", "value": 1 }</code></pre>
+
+  <p>En PF2e el <code>selector</code> de un <code>FlatModifier</code> nombra una estadística o un dominio de tirada. No hay ninguno llamado <code>demoralize</code>. Desmoralizar es una tirada de Intimidación, y el sistema la marca con la opción de tirada <code>action:demoralize</code>. El modificador no estaba «desactivado»: estaba colgado de un gancho inexistente, sumándose a un dominio que nadie consulta jamás.</p>
+
+<pre><code><span class="del">- "selector": "demoralize"</span>
+<span class="add">+ "selector": "intimidation",</span>
+<span class="add">+ "predicate": ["action:demoralize"]</span></code></pre>
+
+  <h4>Sagitario</h4>
+
+  <blockquote><p>«El bono circunstancial del arco está pero aparece en gris (no está siendo aplicado en las tiradas pero manualmente lo puedes activar). Considerar automatización para que esté activo siempre.»</p></blockquote>
+
+  <p>Este es distinto, y es el único arreglo donde tomé una decisión de diseño en vez de corregir un error. El rule element era:</p>
+
+<pre><code>{ "key": "FlatModifier", "selector": "perception",
+  "predicate": ["action:seek"], "type": "circumstance", "value": 2 }</code></pre>
+
+  <p>La Armadura dice: «+2 circunstancial a Percepción <em>para notar cosas más allá de 100 pies</em>». El predicado <code>action:seek</code> es incorrecto en las dos direcciones a la vez. Es demasiado estrecho, porque deja fuera las tiradas de Percepción que no son Buscar — iniciativa, por ejemplo. Y es demasiado ancho, porque un Buscar a diez pies se lo lleva igual.</p>
+
+  <p>Lo que la Armadura pide de verdad es una condición de <em>distancia</em>, y PF2e no puede predicar sobre distancia: en el momento de construir los modificadores no existe todavía un objetivo del que medir. No hay forma correcta de automatizarlo, y tu petición de «que esté activo siempre» tampoco lo es, porque entonces se aplicaría a todo.</p>
+
+  <p>Así que puse el juicio donde el sistema no puede hacerlo: en el jugador. Añadí un <code>RollOption</code> conmutable y colgué el modificador de él.</p>
+
+<pre><code>{ "key": "RollOption", "label": "The Bow: beyond 100 feet",
+  "option": "bow-distant", "toggleable": true },
+{ "key": "FlatModifier", "label": "The Bow",
+  "predicate": ["bow-distant"], "selector": "perception",
+  "type": "circumstance", "value": 2 }</code></pre>
+
+  <p>Ahora aparece una casilla en la hoja con una etiqueta que dice qué significa. Sigue habiendo un clic, pero el clic ya está informado, y el bono se aplica a cualquier tirada de Percepción, no sólo a Buscar. Si prefieres que sea siempre activo aceptando que a veces esté de más, es un cambio de una línea.</p>
+
+  <!-- ---------------- RC-6 ---------------- -->
+
+  <h3 id="rc6">RC-6 · Las rosas de Piscis <span class="verdict v-fix">ARREGLADO</span></h3>
+
+  <div class="chips"><span class="chip">pis-passive</span></div>
+
+  <blockquote><p>«No aplica el 1d6 de poison.»</p></blockquote>
+
+  <p>Cuatro palabras, y detrás una de las causas más interesantes del lote, porque el rider estaba perfectamente escrito y era <em>imposible</em> que se disparase.</p>
+
+  <p>El rider de Piscis usa el evento <code>strike-received</code> y este predicado:</p>
+
+<pre><code>"predicate": [{ "or": ["item:melee", "item:category:unarmed", "item:trait:unarmed"] }]</code></pre>
+
+  <p>Es decir: pregunta por el arma <em>del atacante</em>. Es la pregunta correcta — la Armadura dice «cualquier criatura que te toque o te golpee con un ataque cuerpo a cuerpo desarmado o sin alcance» — y no hay otra manera de expresarla.</p>
+
+  <p>Ahora bien, en <code>resolveContext</code> hay esta línea, con su comentario:</p>
+
+<pre><code><span class="cmt">// The message's item only counts as a rider source when the message belongs to the</span>
+<span class="cmt">// origin. On `strike-received` the message is the attacker's, and their weapon has</span>
+<span class="cmt">// nothing to say about the roses growing on the person they hit.</span>
+const messageItem = message?.actor &amp;&amp; message.actor === originActor
+    ? itemFor(message) : null;</code></pre>
+
+  <p>El razonamiento es correcto y hay que conservarlo: en <code>strike-received</code>, el «origen» es el defensor (el Santo de Piscis) y el mensaje es del atacante. Si el arma del atacante pudiera <em>llevar</em> riders, un enemigo con una espada mágica podría disparar efectos sobre la persona a la que golpea. Así que <code>messageItem</code> se pone a <code>null</code> deliberadamente.</p>
+
+  <p>El problema es que ese <code>null</code> viajaba después hasta aquí:</p>
+
+<pre><code>const options = riderOptions({
+    originActor: context.originActor,
+    targetActor: actor,
+    item: context.item ?? context.messageItem,   <span class="del">// ambos null</span>
+});</code></pre>
+
+  <p>Y <code>riderOptions</code> construye el conjunto de opciones contra el que se evalúan los predicados, incluyendo <code>item?.getRollOptions?.("item")</code>. Sin item, <strong>no existe ninguna opción <code>item:</code> en absoluto</strong>. El predicado de Piscis no fallaba por no coincidir: fallaba porque no había nada contra qué coincidir. Con cualquier arma, en cualquier circunstancia, siempre.</p>
+
+  <p>Se habían confundido dos preguntas distintas que casualmente se responden con el mismo objeto:</p>
+
+  <ul>
+    <li>¿Puede este item <em>llevar</em> riders? — No, si es de otra persona.</li>
+    <li>¿De qué item <em>trataba</em> el evento? — Del arma del atacante, precisamente.</li>
+  </ul>
+
+  <p>El arreglo separa las dos. <code>resolveContext</code> devuelve ahora también <code>eventItem</code>, que es el item del mensaje sin filtrar por propiedad, y que se usa <em>sólo</em> para construir opciones de predicado:</p>
+
+<pre><code>const eventItem = itemFor(message);
+return { message, item, messageItem, eventItem, originActor, originToken, target };</code></pre>
+
+<pre><code>item: context.item ?? context.messageItem ?? context.eventItem,</code></pre>
+
+  <p>El orden importa. <code>eventItem</code> va al final porque es el único que puede pertenecer a otra persona, así que sólo entra en juego cuando el evento no nombró ningún item del propio origen. En <code>strike-resolved</code>, donde el atacante <em>es</em> el origen, <code>messageItem</code> ya trae el arma y nada cambia.</p>
+
+  <p>Deliberadamente no metí el arma en <code>context.item</code>, que habría sido un cambio de una palabra. <code>context.item</code> se usa para bautizar el efecto creado y para el nombre en la tarjeta de daño; el veneno de Piscis habría salido a chat rotulado con el arma del enemigo.</p>
+
+  <h4>El test</h4>
+
+  <p>Añadí dos comprobaciones, no una, y las dos son necesarias:</p>
+
+<pre><code>check("the roses cannot fire when no weapon reached the predicate", …, 0);
+check("the roses fire against an unarmed Strike", …, 1);</code></pre>
+
+  <p>La segunda sola pasaría también si alguien «arreglase» el problema borrando el predicado. La primera impide ese atajo.</p>
+
+  <div class="callout ask">
+    <span class="label">Una reserva honesta</span>
+    <p>He arreglado la plomería, que era el defecto cierto. Queda una pregunta que no puedo resolver leyendo el código: si un ataque de NPC en PF2e (items de tipo <code>melee</code>, no <code>weapon</code>) emite realmente la opción <code>item:melee</code>. Si no la emitiera, el predicado seguiría sin coincidir contra monstruos aunque la plomería ya esté bien. Es de comprobación inmediata en mesa y de arreglo trivial si falla — ampliar el <code>or</code>.</p>
+  </div>
+
+  <!-- ---------------- RC-7 ---------------- -->
+
+  <h3 id="rc7">RC-7 · El contador sin tope <span class="verdict v-fix">ARREGLADO</span></h3>
+
+  <div class="chips"><span class="chip">scorpio-asc</span></div>
+
+  <blockquote><p>«El cap máximo de agujas que un objetivo puede tener sobrepasa el número 10.»</p></blockquote>
+
+  <p>El código que acumula agujas está en <code>applyEffect</code> y es correcto:</p>
+
+<pre><code>const value = Math.min(was + delta, existing.system.badge.max ?? Infinity);</code></pre>
+
+  <p>El dato no lo era. <code>content/saint-effects/riders/effect-scarlet-needle.json</code> definía el <em>badge</em> como <code>{ loop: false, type: "counter", value: 1 }</code>, sin <code>max</code>. Con <code>?? Infinity</code>, las agujas subían sin final.</p>
+
+  <p>Puse <code>"max": 15</code>, que es el número que la Armadura declara: «hasta un máximo de 15», con umbrales en 5 (debilitado 1), 10 (cegado) y 14 (aturdido 2). Tu comentario mencionaba 10, que es el tope del <em>sangrado</em> en el boon Ascendente («capped at 10 needles of bleed»), no el de las agujas. Son dos topes distintos, y el del sangrado ya estaba bien puesto en el rider correspondiente. Si el 15 no es el número que quieres, es un campo.</p>
+
+  <!-- ---------------- RC-8 ---------------- -->
+
+  <h3 id="rc8">RC-8 · Om, que nunca subía <span class="verdict v-fix">ARREGLADO</span></h3>
+
+  <div class="chips"><span class="chip">virgo-passive</span></div>
+
+  <blockquote><p>«No gana los Om stacks después de su turno. Siempre permanece en 1.»</p></blockquote>
+
+  <p>Este es mi favorito, porque el archivo <code>scripts/outcomes/om.mjs</code> existe, tiene noventa líneas, está bien escrito y comentado con cuidado, y le falta el verbo principal.</p>
+
+  <p>Lo que hacía: gastar las cargas en la tirada de daño correcta (con una explicación excelente de por qué la tirada de daño es la única costura posible — gastarlas al lanzar se las llevaría antes de que los rule elements que las leen hayan añadido sus dados), y hacer caducar lo no gastado al final del turno.</p>
+
+  <p>Lo que no hacía: <strong>subirlas</strong>. No hay, en todo el módulo, una sola línea que incremente el <em>badge</em>. La Armadura dice «ganas una carga de Om al final de cada uno de tus turnos, hasta un máximo de 5», y ese final de turno estaba conectado únicamente a la caducidad.</p>
+
+  <p>Peor: el <code>onTurnEnd</code> original sólo hacía algo si los ojos estaban <em>abiertos</em>. Con los ojos cerrados — el estado normal mientras acumulas — no pasaba absolutamente nada. De ahí el «siempre permanece en 1»: el 1 es el valor inicial del badge, y nunca se movía en ninguna dirección.</p>
+
+  <h4>El arreglo</h4>
+
+<pre><code>async onTurnEnd(combatant) {
+    if (game.users.activeGM?.id !== game.user.id) return;
+    const actor = combatant?.actor;
+    const effect = Om.effectOn(actor);
+    if (!effect) return;
+
+    if (Om.isOpen(actor)) {
+        if ((effect.system?.badge?.value ?? 0) &gt; 0) await Om.close(effect);
+        return;
+    }
+    await Om.gain(actor, effect);
+}</code></pre>
+
+  <p>Los ojos abiertos y los ojos cerrados son ahora ramas explícitas: abiertos, lo no gastado caduca; cerrados, se gana una carga.</p>
+
+  <h4>El techo, que es 5 o 7</h4>
+
+  <p>Aquí hubo que resolver una contradicción en tus propios datos. El badge de <code>effect-om.json</code> está autorizado con <code>max: 7</code> y etiquetas del 1 al 7. La guía de diseño dice 5. La descripción de la acción <em>Om</em> dice: «hasta un máximo de 5 (7 en un día en que Virgo esté ascendente)».</p>
+
+  <p>Los tres son correctos: el badge lleva sitio para siete porque el boon Ascendente sube el techo, y el techo de diario son cinco. Lo que faltaba era el código que distingue un caso del otro:</p>
+
+<pre><code>ceilingFor(actor, effect) {
+    const options = actor?.getRollOptions?.() ?? [];
+    const ascendant = options.includes("sky:ascendant")
+                   &amp;&amp; options.includes("sky:sign:virgo");
+    return Math.min(ascendant ? 7 : 5, effect?.system?.badge?.max ?? Infinity);
+}</code></pre>
+
+  <p>Exijo las dos opciones de tirada, no sólo <code>sky:ascendant</code>, porque un Santo de Virgo cuyo compañero de Leo esté ascendente no debe llegar a siete. Y el <code>Math.min</code> contra el <code>max</code> del badge conserva el dato como autoridad: si mañana bajas el badge a 3, el código lo respeta.</p>
+
+  <p>Puse cuatro comprobaciones sobre esta función, que era barata de aislar:</p>
+
+<pre><code>check("Om stops at five under an ordinary sky", …, 5);
+check("Om reaches seven when Virgo is ascendant", …, 7);
+check("another sign's ascendant does not raise Virgo's ceiling", …, 5);
+check("the authored badge still caps the ceiling", …, 3);</code></pre>
+
+  <p>La tercera es la que me importaba: es el error que habría cometido si hubiera comprobado sólo <code>sky:ascendant</code>.</p>
+
+  <p>Una última decisión: puse <code>gain</code> detrás del mismo ajuste <code>riders</code> que ya protege a <code>spend</code>. Si desactivas la automatización, no quiero que las cargas se acumulen y no se gasten nunca — es peor que no hacer nada.</p>
+
+  <div class="callout ask">
+    <span class="label">Lo que sigue sin estar</span>
+    <p>La Armadura de Virgo, como item, sigue teniendo sólo una <code>Note</code>. La acción de cerrar los ojos, la ceguera que eso implica y la acción libre de abrirlos existen como items sueltos, pero nadie los cose. He arreglado la acumulación, que era tu reporte; la coreografía completa de Om es trabajo de diseño y está en RC-11.</p>
+  </div>
+
+  <!-- ---------------- RC-10 ---------------- -->
+
+  <h3 id="rc10">RC-10 · El susurro y la elección <span class="verdict v-fix">ARREGLADO</span></h3>
+
+  <div class="chips"><span class="chip">cap-t4</span></div>
+
+  <blockquote><p>«La criatura que falla la tirada de salvación de reflex con un crítico no se le aplica severed.»</p></blockquote>
+
+  <p>Este reporte lo clasifiqué primero como «por diseño» y me corregí al mirarlo de cerca. Es una inconsistencia real, y se ve comparando dos items de la misma Armadura.</p>
+
+  <p>La pasiva de Capricornio, <em>The Sharpest Sword</em>, sierra en un golpe crítico usando un rider de tipo <code>choice</code>: manda una tarjeta al chat con tres botones — un miembro, un sentido, un ataque natural — y al pulsar uno aplica el <code>Effect: Severed (…)</code> correspondiente, que son items reales que ya existen en <code>content/saint-effects/riders/</code>.</p>
+
+  <p>El Ultimate, <em>Excalibur: The Sword That Cuts Everything</em>, dice lo mismo para un fallo crítico en la salvación de Reflejos, y lo resolvía con un <code>prompt</code>: un susurro al GM con el texto «Severed: a limb, a sense, or a natural attack». Nada se aplicaba.</p>
+
+  <p>O sea que un golpe crítico serraba automáticamente y un fallo crítico contra el Ultimate — que es una Técnica de nivel 16 y tres acciones — dejaba al GM aplicándolo a mano. No hay razón de diseño para esa asimetría; la elección es la misma elección.</p>
+
+  <p>Copié el rider <code>choice</code> de la pasiva al Ultimate, conservando sus <code>outcomes</code> (<code>criticalFailure</code>) y ajustando la nota.</p>
+
+  <!-- ---------------- extras ---------------- -->
+
+  <h3 id="extras">Dos extras: Géminis y Escorpio <span class="verdict v-fix">ARREGLADO</span></h3>
+
+  <div class="chips"><span class="chip">gemini-passive</span><span class="chip">scorpio-passive</span></div>
+
+  <p>Dos casos que estaban en la lista de «sin escribir» pero que resultaron ser de una línea, así que los hice.</p>
+
+  <h4>El interruptor que nadie leía</h4>
+
+  <blockquote><p>«¿Automatización? No aplica confuse al usar esta técnica en modo Shadow.»</p></blockquote>
+
+  <p>La Armadura de Géminis tiene un <code>RollOption</code> conmutable con dos subopciones, Luz y Sombra. Funciona: puedes cambiarlo y emite <code>gemini-aspect:shadow</code>. El problema es que <strong>nada en todo el módulo consulta esa opción</strong>. Era un interruptor conectado a nada.</p>
+
+  <p>Lo conecté en <em>Another Dimension</em>, que es la Técnica que el aspecto modifica. Los dos susurros de destierro que ya tenía llevan ahora <code>predicate: [{ "not": "gemini-aspect:shadow" }]</code>, y añadí un rider nuevo con el predicado contrario:</p>
+
+<pre><code>{ "predicate": ["gemini-aspect:shadow"],
+  "outcomes": ["failure", "criticalFailure"],
+  "duration": { "unit": "rounds", "value": 1 },
+  "apply": { "type": "condition", "slug": "confused" } }</code></pre>
+
+  <p>En Luz destierra; en Sombra confunde; nunca las dos cosas.</p>
+
+  <h4>La acción libre que no ponía la aguja</h4>
+
+  <blockquote><p>«Considerar automatizarlo para agregar las agujas automáticamente al usar este free action después del unarmed attack.»</p></blockquote>
+
+  <p>El item <em>Place a Scarlet Needle</em> tenía <code>rules: []</code> y ningún rider: era una tarjeta de recordatorio. Le puse el mismo rider que ya usa el boon Ascendente, con <code>stack: true</code> para que suba el contador en vez de acumular iconos:</p>
+
+<pre><code>{ "event": "action-used",
+  "apply": { "type": "effect", "stack": true,
+             "uuid": "…Item.Effect: Scarlet Needle" } }</code></pre>
+
+  <p>Ahora seleccionas al objetivo, usas la acción libre, y la aguja se pone — respetando el tope de 15 que acabo de añadir en RC-7. Los umbrales de 5, 10 y 14 ya estaban implementados como riders <code>strike-resolved</code> sobre la Armadura, y leen ese mismo contador, así que empiezan a dispararse solos en cuanto el contador es real.</p>
+
+  <div class="callout ask">
+    <span class="label">Lo que queda de <code>scorpio-passive</code></span>
+    <p>Tu reporte tenía cuatro partes. Dos quedan cerradas (la acción libre ahora hace algo; el tope de agujas existe). Una era la fuga de RC-1. La cuarta — «al hacer un unarmed attack el objetivo queda enfeebled 1 y se le aplica dados de daño bleed por alguna razón» — no es un bug: es el boon Ascendente de Escorpio funcionando. Estabas probando con el cielo puesto. El sangrado por aguja y las agujas en cualquier ataque son exactamente lo que ese boon promete.</p>
+  </div>
+
+  <!-- ---------------- self review ---------------- -->
+
+  <h3 id="autorreview">El bug que me encontré a mí mismo</h3>
+
+  <p>Al releer mi propio <code>git diff</code> para escribir este documento encontré dos defectos en el arreglo de RC-2. Los cuento porque forman parte honesta del registro, y porque el segundo es sutil.</p>
+
+  <h4>Uno: un <code>.document</code> de más</h4>
+
+  <p>Había escrito:</p>
+
+<pre><code>const own = message.token ?? actor?.getActiveTokens(true, true).at(0)<span class="del">?.document</span>;</code></pre>
+
+  <p>En Foundry, <code>Actor#getActiveTokens(linked, document)</code> con el segundo argumento en <code>true</code> ya devuelve <code>TokenDocument</code>, no <code>Token</code>. Encadenar <code>.document</code> daba <code>undefined</code>, y la comprobación <code>if (own?.uuid)</code> lo tragaba en silencio: el rider <code>self</code> no se habría aplicado nunca salvo que el mensaje trajera un token.</p>
+
+  <p>Lo confirmé mirando cómo usa el propio módulo esa llamada en otros dos sitios — <code>apply.mjs:466</code> y <code>sources.mjs:226</code> — donde no hay <code>.document</code>. Lo quité.</p>
+
+  <h4>Dos: una carrera en el relevo</h4>
+
+  <p>El comentario que yo mismo había escrito decía que el recibo del mensaje evitaría aplicar el efecto propio dos veces si además había objetivos seleccionados. Fui a verificarlo en <code>relay.mjs</code> y no se sostiene:</p>
+
+<pre><code>async request(payload) {
+    if (game.user.isGM &amp;&amp; game.users.activeGM?.id === game.user.id) {
+        return handler(payload);          <span class="cmt">// GM: awaitable, secuencial</span>
+    }
+    game.socket.emit(CHANNEL, payload);   <span class="cmt">// jugador: dispara y olvida</span>
+}</code></pre>
+
+  <p>Cuando quien lanza es un jugador, <code>request</code> es un <code>emit</code> que vuelve inmediatamente. Mis <code>await</code> secuenciales no serializan nada: los cuatro encargos (uno propio, tres de objetivo) llegan al GM como cuatro trabajos independientes sin orden entre ellos, y los cuatro pueden leer el recibo del mensaje antes de que ninguno lo escriba. Un Santo de Capricornio con tres enemigos marcados podría haber recibido cuatro <em>Effect: Excalibur</em>.</p>
+
+  <p>El arreglo no depende del tiempo. Cada encargo declara ahora qué mitad del trabajo le toca, y <code>applyRiders</code> filtra en consecuencia:</p>
+
+<pre><code>if (payload.event === "action-used") {
+    const wantSelf = payload.selfOnly === true;
+    candidates = candidates.filter(({ rider }) =&gt; (rider.self === true) === wantSelf);
+}</code></pre>
+
+  <p>El encargo del lanzador ve sólo los riders <code>self</code>; los de objetivo ven sólo los demás. No hay solapamiento que deduplicar, así que da igual en qué orden lleguen.</p>
+
+  <p>Limité el filtro al evento <code>action-used</code> a propósito. En <code>turn-start</code> o <code>turn-end</code>, la fuente ya manda el token del propio origen como objetivo, así que un rider <code>self</code> ahí funciona sin la marca; filtrarlo globalmente lo habría roto.</p>
+
+  <div class="callout ok">
+    <span class="label">Nota de método</span>
+    <p>Los dos defectos eran míos, de esta misma sesión, y los dos salieron de releer el diff en vez de fiarme de que los tests en verde significaran «correcto». La suite no los habría cogido: uno depende de la API de Foundry y el otro de la concurrencia entre clientes, y el banco de pruebas corre sin Foundry y con un solo proceso.</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+
+<section class="part" id="parte4">
+  <div class="part-head">
+    <span class="kicker">Parte IV</span>
+    <h2>Lo que no arreglé, y por qué</h2>
+  </div>
+
+  <p>Veintiséis reportes siguen abiertos. Se reparten en cuatro categorías, y la distinción entre ellas es la parte más importante de este documento, porque «no arreglado» significa cosas muy distintas en cada una.</p>
+
+  <!-- ---------------- RC-4 ---------------- -->
+
+  <h3 id="rc4">RC-4 · Strikes modelados como daño de conjuro <span class="verdict v-open">DISEÑO PENDIENTE</span></h3>
+
+  <div class="chips">
+    <span class="chip">taurus-t2</span><span class="chip">leo-t3</span><span class="chip">scorpio-t3</span><span class="chip">cap-t2</span><span class="chip">cap-t3</span><span class="chip">libra-t3</span><span class="chip">sag-t2</span>
+  </div>
+
+  <p>Siete reportes, una sola causa estructural, y la razón por la que no la toqué es que arreglarla no es corregir un error sino decidir un modelo.</p>
+
+  <h4>El patrón</h4>
+
+  <p>Siete Técnicas dicen, en prosa, alguna variante de «haz N Strikes desarmados». Y las siete están escritas en el JSON con un bloque <code>system.damage</code> y sin bloque <code>system.defense</code>. PF2e interpreta esa combinación de una manera muy concreta: <strong>una tirada de ataque de conjuro, seguida de una tirada de daño</strong>.</p>
+
+  <p>De ahí salen, a la vez, los tres síntomas distintos que reportaste:</p>
+
+  <ul>
+    <li><strong>No hace los N ataques.</strong> Hace uno. Tu <code>leo-t3</code> («no hace los 3 ataques que se supone que tiene que hacer») y tu <code>cap-t3</code> («parece que solo hace un strike») son el mismo hecho.</li>
+    <li><strong>El heightening escala mal.</strong> El bloque <code>heightening.damage</code> añade dados a <em>la tirada</em>, no a cada Strike. Tu <code>taurus-t2</code> lo describe con precisión quirúrgica: «el heightening no agrega 1d6 adicional por cada strike sino por toda la técnica completa».</li>
+    <li><strong>No hay penalización múltiple de ataque.</strong> Varias de estas Técnicas dicen «sin aumentar el MAP» o «con una penalización acumulativa de −1»; con una sola tirada de conjuro no hay MAP que gestionar en absoluto.</li>
+  </ul>
+
+  <p>El caso más visible es <em>Chiron's Light Impulse</em>, tu <code>sag-t2</code>: «hace una tirada de ataque cuando se trata de un buff». Es literalmente un potenciador a un aliado — +1 de estado a los ataques, +1d6 de fuerza, vuelo 20, y una vez tratar una tirada como un 10 — pero como tiene un bloque <code>damage</code> con el 1d6 (que es el daño <em>del aliado</em>, no de la Técnica) y <code>defense: null</code>, PF2e lo lanza como ataque de conjuro contra el aliado.</p>
+
+  <h4>Por qué no lo arreglé</h4>
+
+  <p>Podría haber borrado los bloques <code>damage</code>. Eso quita el síntoma más feo — la tirada de ataque espuria — y deja siete Técnicas que no hacen absolutamente nada. Sería un cambio destructivo disfrazado de arreglo.</p>
+
+  <p>Hacer que funcionen exige responder preguntas que son tuyas, no mías:</p>
+
+  <ol class="body-list">
+    <li><strong>¿Cómo se lanzan N Strikes desde una Técnica?</strong> PF2e no tiene un rule element que haga tiradas de ataque. Las opciones reales son: (a) que la Técnica aplique un efecto de un turno y el jugador pulse su propio Strike N veces, con el efecto encargándose de los dados y del MAP; (b) que el módulo automatice las tiradas, lo que significa código nuevo que construya y lance <code>Strike</code>s. La primera es idiomática en PF2e y mucho menos frágil; la segunda es más vistosa y mucho más cara de mantener.</li>
+    <li><strong>¿Cómo se suprime el MAP?</strong> Con un efecto se puede, mediante un <code>FlatModifier</code> negativo predicado sobre el número de ataque, o alterando el <code>multipleAttackPenalty</code>. Pero «sin aumentar el MAP durante la Técnica» y «penalización acumulativa de −1 después del primero» son reglas distintas, y las Técnicas usan las dos.</li>
+    <li><strong>¿Cómo escala el heightening por Strike?</strong> Si el daño extra va en un efecto como <code>DamageDice</code> sobre <code>unarmed-damage</code>, escala por golpe automáticamente. Es la vía limpia, pero cambia dónde vive el número respecto a como está escrito hoy.</li>
+    <li><strong>¿Qué hacer con el apuntado de área?</strong> Varias de estas Técnicas ya tienen <code>areaTargeting</code> configurado para elegir hasta N objetivos — <em>Crimson Flurry</em> con 4, <em>Lightning Plasma</em> con 3, <em>Pleiades Nova</em> con 5. Ese apuntado tiene sentido si el módulo hace las tiradas, y sobra si las hace el jugador. Es la misma decisión del punto 1 vista desde el otro lado.</li>
+  </ol>
+
+  <p>Son cuatro decisiones de diseño con consecuencias en la mesa, en el equilibrio y en el coste de mantenimiento. Elegir yo por ti y reescribir siete Técnicas habría sido ir bastante más allá de «arregla lo que puedas sin preguntarme».</p>
+
+  <p>Lo que sí puedo decir es cuál recomiendo: la opción (a), el efecto de un turno. Es idiomática en PF2e, sobrevive a las actualizaciones del sistema, hace que el heightening por golpe salga gratis, y reduce las siete Técnicas a un patrón repetido en lugar de siete piezas de automatización a medida. El precio es que el jugador pulsa su Strike tres veces en lugar de una sola vez la Técnica.</p>
+
+  <h4>Detalles concretos que quedan pendientes en cada una</h4>
+
+  <ul>
+    <li><em>Double Excalibur</em> (<code>cap-t3</code>): además de los dos Strikes, le faltan el <code>deadly d12</code> y el rider de la salvación de Fortaleza para el serrado si ambos aciertan. Sólo tiene los <code>DamageDice</code> del cielo.</li>
+    <li><em>Jumping Stone</em> (<code>cap-t2</code>): el −2 a la CA propia si te moviste 20 pies o más no está. Nota: tu comentario dice «el DC del enemigo no bajó» — la Técnica no baja nada del enemigo, es la CA <em>de Capricornio</em> la que baja, como precio del salto.</li>
+    <li><em>Rozan Ryū Hi Shō</em> (<code>libra-t3</code>): «wtf con lo del movimiento» — el Volar 60 pies no está automatizado de ninguna forma; el Strike es daño de conjuro.</li>
+    <li><em>Crimson Flurry</em> (<code>scorpio-t3</code>): además, tu comentario sobre la selección de objetivos («no permite seleccionar al objetivo en el área, marcándolo con un contorno grisáceo») describe un problema de interfaz de apuntado que sigue en la lista de preguntas.</li>
+    <li><em>Chiron's Light Impulse</em> (<code>sag-t2</code>): necesita un <code>Effect: Chiron's Light Impulse</code> que no existe, con el +1 de estado, el <code>DamageDice</code>, el <code>BaseSpeed</code> de vuelo (20, o igual a la velocidad desde nivel 14) y una <code>Note</code> para la acción libre del 10. Es la más fácil de las siete y la habría hecho, salvo que quitarle el bloque <code>damage</code> es exactamente la decisión del punto 3.</li>
+  </ul>
+
+  <!-- ---------------- RC-11 ---------------- -->
+
+  <h3 id="rc11">RC-11 · Lo que nunca se escribió <span class="verdict v-open">SIN IMPLEMENTAR</span></h3>
+
+  <div class="chips">
+    <span class="chip">libra-passive</span><span class="chip">gemini-t2</span><span class="chip">gemini-t3</span><span class="chip">taurus-t3</span><span class="chip">virgo-t2</span><span class="chip">cancer-t2</span><span class="chip">sag-t1</span><span class="chip">sag-zen</span>
+  </div>
+
+  <p>Ocho elementos que existen como prosa y nada más: ni rule elements, ni riders, ni configuración. No hay bug que arreglar; hay funcionalidad que escribir. Los separo de RC-4 porque aquí no hay dilema de diseño — sólo trabajo — y de los «abiertos» porque aquí sí sé exactamente qué pasa.</p>
+
+  <h4>Libra, que es el más grande</h4>
+
+  <blockquote><p>«No especifica en ningún momento del character sheet dónde tiene proficiencia nivel trained en armas marciales. Tampoco te deja invocar ningún arma al inicio ni posee ninguno de los 6 pares de armas especificados.»</p></blockquote>
+
+  <p>Inventarié los tipos de documento de los 187 archivos de contenido. Hay <code>feat</code>, <code>spell</code>, <code>effect</code>, <code>action</code>, <code>class</code>, <code>armor</code>, <code>journal</code> y <code>macro</code>. <strong>No hay un solo documento de tipo <code>weapon</code>.</strong> Las seis parejas de la Armadura de Libra — espadas gemelas, tridentes, nunchaku, escudos, sanjiegun y tonfa — no existen. Hay una acción <em>Summon Libra Weapon</em>, pero no tiene nada que invocar.</p>
+
+  <p>Escribirlas es doce documentos de arma nuevos, con sus rasgos, sus grupos, su categoría marcial y la propiedad de aceptar runas, más la lógica de invocación y descarte como acción libre. Es una tarde de trabajo y varias decisiones sobre estadísticas concretas que no están en la guía. La regla <code>MartialProficiency</code> que ya existe está bien escrita, pero crea una entrada de competencia que no tiene armas que gobernar, lo cual explica que no la vieras.</p>
+
+  <h4>Los otros siete</h4>
+
+  <ul>
+    <li><em>Astral Projection</em> (<code>gemini-t2</code>): sin reglas ni riders. Proyectar la conciencia 200 pies durante 10 minutos y lanzar Técnicas mentales a través de ella no tiene ninguna representación mecánica.</li>
+    <li><em>Galaxian Explosion</em> (<code>gemini-t3</code>): el terreno difícil de un minuto tras la explosión no está. Requiere colocar una región de escena, que el módulo ya sabe hacer para el apuntado pero no para efectos persistentes.</li>
+    <li><em>Titan's Stance</em> (<code>taurus-t3</code>): reacción, cero reglas. Interponerse por un aliado y reducir el daño en 10 + 2 × nivel exige interceptar el daño dirigido a otra criatura, que el motor de riders hoy no hace.</li>
+    <li><em>Tenpōrin'in</em> (<code>virgo-t2</code>): tiene un rule element <code>Aura</code>, pero la inmunidad a <em>fascinated</em> y <em>frightened</em> no está en ninguna parte. El aura necesita conceder un efecto que las lleve.</li>
+    <li><em>Sekishiki Kisōen</em> (<code>cancer-t2</code>): la curación de 3 PV por cada criatura que falle su salvación no está. Es automatizable con un rider que sane al origen, pero no existe hoy un tipo de aplicación <code>heal</code>. Tu comentario sobre el alcance ilimitado es aparte: el rango está declarado en 60 pies, pero nada impide apuntar más lejos, porque PF2e no valida el alcance de un conjuro contra el objetivo.</li>
+    <li><em>Golden Arrow</em> (<code>sag-t1</code>): funciona, pero no dibuja los 500 pies porque no tiene bloque <code>areaTargeting</code>. Es de los más baratos de la lista.</li>
+    <li><code>sag-zen</code> y la mitad de <code>sag-asc</code>: el alcance de una milla y el ignorar coberturas necesitan un <code>ItemAlteration</code> sobre el alcance del hechizo desde el efecto del cielo. La parte de «alcanzar a cualquier criatura cuya posición puedas nombrar aunque no la veas» no es automatizable en PF2e de ninguna manera razonable: el sistema no permite apuntar lo que no se ve, y forzarlo requeriría manipular el apuntado de Foundry.</li>
+  </ul>
+
+  <!-- ---------------- RC-9 ---------------- -->
+
+  <h3 id="rc9">RC-9 · El lanzamiento gratis <span class="verdict v-ask">FALTA EVIDENCIA</span></h3>
+
+  <div class="chips"><span class="chip">gemini-asc</span><span class="chip">taurus-zen</span><span class="chip">core-cosmo-mastery</span></div>
+
+  <p>Tres reportes, tres sitios distintos, el mismo mecanismo: <code>scripts/economy/free-cast.mjs</code>. El boon Ascendente de Géminis («la 1ª Técnica gratis una vez por ronda»), el Zenith de Tauro («Great Horn no cuesta Punto de Foco») y <em>Attuned Casting</em> del nivel 17 («una vez al día, una Técnica de 2 acciones o menos sin gastar»). Los tres te cobran el punto.</p>
+
+  <p>Que fallen los tres apunta al mecanismo, no a los tres predicados por separado. Y verifiqué que los datos están bien, uno por uno, para poder descartarlos:</p>
+
+  <ul>
+    <li>Géminis y Tauro tienen <code>frequency: { max: 1, per: "round", value: 1 }</code> en el item de la Armadura, que es de donde <code>FreeCast.find</code> lee las cargas restantes. <em>Attuned Casting</em> tiene la suya por día.</li>
+    <li>Los hechizos llevan <code>otherTags: ["technique-slot-1", "cloth-gemini"]</code>, y PF2e emite esas etiquetas como <code>item:tag:technique-slot-1</code>, que es exactamente lo que el predicado de Géminis pide.</li>
+    <li>Los efectos del cielo emiten <code>sky:ascendant</code> y <code>sky:zenith</code> como <code>RollOption</code>, que es lo que piden los predicados de Géminis y Tauro.</li>
+  </ul>
+
+  <p>Nada de eso es el problema. Me quedan dos sospechas, y no puedo elegir entre ellas leyendo código:</p>
+
+  <p><strong>La primera</strong> es que el mecanismo entero descanse sobre una suposición que ya no se cumple. <code>FreeCast.beforeCast</code> pone <code>options.consume = false</code> y confía en que <code>SpellcastingEntryPF2e#cast</code> pase ese <code>consume</code> a la función que gasta el punto. El comentario del archivo lo dice explícitamente. Si tu versión de PF2e ya no gasta el Punto de Foco por esa vía — y el sistema ha reorganizado el lanzamiento varias veces — la refutación no llega a ninguna parte y los tres fallan a la vez, que es justo lo que observas.</p>
+
+  <p><strong>La segunda</strong> afecta sólo a <em>Attuned Casting</em>, cuyo predicado es <code>{ "or": ["item:time:1", "item:time:2"] }</code>. No me consta que PF2e emita <code>item:time:N</code> como opción de tirada. Si no la emite, ese predicado nunca coincide y la causa de ese reporte concreto es distinta de las otras dos.</p>
+
+  <p>Arreglar esto a ciegas significaría reescribir el mecanismo de pago sobre una hipótesis. Prefiero un dato: basta con lanzar una Técnica con la consola abierta y un <code>console.log</code> en <code>beforeCast</code> para ver si se entra, si se encuentra la asignación, y si el punto se gasta igualmente. Con eso, el arreglo es pequeño en cualquiera de los dos escenarios.</p>
+
+  <!-- ---------------- abiertos ---------------- -->
+
+  <h3 id="abiertos">Los siete que necesitan datos tuyos <span class="verdict v-ask">PREGUNTA ABIERTA</span></h3>
+
+  <p>Aquí el código dice una cosa y tu observación dice otra, y adivinar sería peor que preguntar.</p>
+
+  <h4>1 · <code>taurus-t1</code> y <code>cancer-t1</code> — condiciones que sí existen</h4>
+
+  <p><em>Great Horn</em> tiene su rider de <em>prone</em> con los grados correctos. <em>Sekishiki Meikai Ha</em> tiene sus tres riders de <em>drained</em> y <em>slowed</em>. Deberían dispararse. Y sabemos que el motor de salvaciones funciona en tu mesa, porque los riders de <em>estas mismas Técnicas</em> se filtraban a otras: el <em>drained</em> de Meikai Ha aparecía sobre Konsō Ha y sobre Tenryū Ha.</p>
+
+  <p>Ahí está la paradoja, y también la pista. Con RC-1 arreglado, estas dos Técnicas ya no compiten con riders ajenos ni con los ciclos de deshacer y rehacer del recibo que esa competencia provocaba. <strong>Conviene reprobarlas antes de investigar nada más</strong>: hay una probabilidad real de que RC-1 fuera también su causa, por una vía indirecta que no puedo demostrar sin verlo.</p>
+
+  <p>Si siguen fallando, el siguiente paso es instrumentar: registrar en <code>onSave</code> qué llega desde <code>pf2e-toolbelt.rollSave</code> — sobre todo si <code>data.success</code> es la cadena que el código espera — y en <code>applyToTarget</code> si el recibo está provocando un retorno temprano.</p>
+
+  <h4>2 · <code>aries-t1</code> — el muro, que ahora cuadra menos</h4>
+
+  <p>Dijiste que el muro mide 4 celdas (20 pies) cuando debería medir 3 (15). Mi primera hipótesis era que el heightening lo estuviera alargando correctamente y que la sorpresa fuera tuya. <strong>Tu respuesta de que probabas a nivel 16-20 descarta esa hipótesis y abre otra peor.</strong></p>
+
+  <p>La configuración dice base 15 pies, +5 por escalón. Las Técnicas del Santo se elevan a la mitad del nivel redondeando hacia arriba, así que a nivel 16 el rango de lanzamiento es 8; con base 1, eso son 7 escalones y un muro de 50 pies, o sea 10 celdas. Viste 4. O sea que el muro <em>ni</em> mide sus 15 pies base <em>ni</em> está creciendo como está configurado, y una celda de más sobre la base huele a error de redondeo o de origen en <code>endpointsOf</code>, donde la línea se traza desde <code>shape.x</code> con <code>(feet / 5) * canvas.grid.size</code>.</p>
+
+  <p>Para acotarlo me sirve un dato muy concreto: el nivel exacto del Santo de Aries y cuántas celdas salieron. Si a nivel 16 salen 4, el problema es el conteo de escalones; si salen 11, es el trazado.</p>
+
+  <h4>3 · <code>virgo-t4</code> — «incasteable»</h4>
+
+  <p><em>Rikudō Rinne</em> tiene sus cinco riders, su salvación de Voluntad no básica, su <code>areaTargeting</code> con un objetivo a 60 pies, y tres acciones. No veo qué le impide lanzarse. Necesito saber cómo falla: ¿el botón no responde, sale un error en la consola F12, o se abre el selector de área y no deja confirmar?</p>
+
+  <h4>4 · <code>gemini-zen</code> — «bugged as fuck»</h4>
+
+  <p>El único reporte sin síntoma concreto, y no puedo trabajar con él. El duplicado del Zenith de Géminis se maneja en <code>scripts/economy/duplicate.mjs</code>, que son 126 líneas que podría auditar entero, pero sin saber qué hace de más o de menos sería adivinar. ¿Aparece el duplicado? ¿Aparece más de uno? ¿No desaparece?</p>
+
+  <h4>5 · <code>libra-t2</code> — la etiqueta de competencia</h4>
+
+  <p>Dices que el aliado sí ve la competencia y Libra no. Encaja con que llegan por vías distintas: Libra la recibe del <code>MartialProficiency</code> de su Armadura, que crea una entrada propia llamada «The Cloth of Arms» en la pestaña de Competencias; el aliado la recibe del efecto prestado por la Técnica, que la escribe donde se ve. Necesito que mires esa pestaña en la hoja de Libra. Sospecho que está y en otro sitio del que esperabas — y también sospecho que es difícil de ver precisamente porque no hay armas marciales que mostrar, que es <code>libra-passive</code>.</p>
+
+  <h4>6 · <code>scorpio-t3</code> — la selección de objetivos</h4>
+
+  <p>«No permite seleccionar al objetivo en el área, marcándolo con un contorno grisáceo.» Necesito saber si el contorno gris aparece y no puedes hacer clic, o si directamente no aparece la interfaz de selección. Son dos bugs distintos en <code>scripts/targeting/review.mjs</code>.</p>
+
+  <h4>7 · <code>leo-zen</code> — el <em>quickened</em> invisible</h4>
+
+  <p>El Zenith de Leo concede la condición con <code>GrantItem</code> y <code>inMemoryOnly: true</code>. Esa bandera hace que el item exista sólo en memoria, y es la explicación más probable de que no lo veas — pero «no lo veo» y «no me da la acción» son cosas distintas y llevan a arreglos distintos. ¿Aparece el icono en el token?</p>
+
+  <!-- ---------------- por diseño ---------------- -->
+
+  <h3 id="diseno">Lo que no es un bug <span class="verdict v-des">POR DISEÑO</span></h3>
+
+  <div class="chips"><span class="chip">aries-t2</span><span class="chip">libra-t1</span></div>
+
+  <p>Dos reportes describen comportamiento intencional, y creo que merece defenderse en vez de cambiarse.</p>
+
+  <p>El módulo automatiza la condición y susurra al GM la parte que es una decisión de mesa. El comentario en <code>apply.mjs</code> lo argumenta mejor de lo que yo lo haría:</p>
+
+  <blockquote><p>«Being pushed 15 feet and knocked prone is two things: prone is a condition, and the push is a decision about which 15 feet — which depends on walls, allies and where the caster was standing. Automating the half that is a condition and whispering the half that is not is more honest than guessing.»</p></blockquote>
+
+  <p>Bajo esa regla caen: el teletransporte de <em>Starlight Extinction</em> (<code>aries-t2</code>, donde tú mismo escribiste «works as intended»), el lanzamiento de 30 pies hacia arriba de <em>Rozan Shō Ryū Ha</em> (<code>libra-t1</code>), el empujón de <em>Great Horn</em> y el arrastre y la muerte condicional de <em>Sekishiki Tenryū Ha</em>.</p>
+
+  <p>Sobre la muerte hay además un matiz de política: existe un ajuste <code>automateDeath</code> con tres estados, y su valor por defecto trata a los monstruos y a los personajes jugadores de forma distinta. Un módulo que mate al personaje de alguien por iniciativa propia es un módulo que se desinstala. Si quieres que <em>Sekishiki Tenryū Ha</em> mate automáticamente a los NPC, ese ajuste ya lo permite sin tocar contenido.</p>
+
+  <p>Dicho esto: si prefieres que el empujón se automatice — moviendo el token en línea recta desde el lanzador y parando en el primer obstáculo — es implementable. Sólo quiero que sea una decisión y no un descuido.</p>
+</section>
+
+<!-- ============================================================ -->
+
+<section class="part" id="parte5">
+  <div class="part-head">
+    <span class="kicker">Parte V</span>
+    <h2>Verificación</h2>
+  </div>
+
+  <p>Todo lo descrito está en el árbol de trabajo, sin commit, para que lo revises. El estado de las comprobaciones automáticas:</p>
+
+<pre><code>Validated 185 document(s) in 7 pack(s): no errors.
+Rider tests passed: 115 checks.
+Built 7 pack(s) with 185 documents.
+Round-trip check passed: 190 document(s) survive compilation unchanged.</code></pre>
+  <figcaption>npm test — las cuatro etapas</figcaption>
+
+  <p>Las cuatro etapas comprueban cosas distintas y conviene saber cuál cubre qué:</p>
+
+  <ul>
+    <li><strong>validate</strong> — que cada documento tenga la forma que PF2e espera. Es lo que garantiza que los dos efectos nuevos de Sagitario no rompan al importarse.</li>
+    <li><strong>test:riders</strong> — la lógica de selección de riders contra el contenido real, sin Foundry. De 108 comprobaciones pasó a 115: siete nuevas, de las cuales la de RC-1 y las dos de Piscis fueron escritas para fallar antes del arreglo.</li>
+    <li><strong>build</strong> — compilación a los packs LevelDB. Confirma que los 185 documentos (183 antes, más los dos efectos de Aiolos) entran.</li>
+    <li><strong>check:roundtrip</strong> — que compilar y volver a extraer devuelva exactamente el mismo JSON. Es lo que protege el formato de los archivos que edité por script.</li>
+  </ul>
+
+  <p>Una advertencia sobre el alcance de esto: <strong>ninguna de las cuatro etapas ejecuta Foundry.</strong> El banco de pruebas sustituye <code>game.pf2e.Predicate</code> por una implementación mínima y no hay documentos, ni hooks, ni sockets. Sirve para la lógica pura — selección de riders, escaleras de predicados, aritmética de heightening, el techo de Om — y no dice nada sobre si un <code>AdjustStrike</code> en modo <code>remove</code> hace lo que espero, ni sobre si el rider <code>self</code> llega a la mesa. Esa mitad hay que probarla jugando, y por eso la parte VI existe.</p>
+
+  <p>Sobre los archivos que edité por script: todos pasaron por <code>json.dumps(…, indent=4, sort_keys=True)</code> más salto de línea final, que es la convención del repositorio. Lo verifiqué mirando los diffs uno a uno — el de <em>Excalibur</em>, por ejemplo, muestra sólo la eliminación de las reglas y la adición del bloque <code>flags</code>, sin ruido de reformateo — y el round-trip lo confirma de forma independiente.</p>
+
+  <p>Un cambio incidental que conviene que sepas: <code>npm install</code> actualizó <code>package-lock.json</code>, cambiando la versión declarada de <code>0.1.0</code> a <code>0.4.1</code> para que coincida con <code>package.json</code>. El lockfile estaba desincronizado; es una corrección legítima y no toca ninguna dependencia.</p>
+</section>
+
+<!-- ============================================================ -->
+
+<section class="part" id="parte6">
+  <div class="part-head">
+    <span class="kicker">Parte VI</span>
+    <h2>Riesgos, regresiones y qué probar primero</h2>
+  </div>
+
+  <p>Un informe que sólo cuenta lo que salió bien no sirve para nada. Estos son los sitios donde mis cambios podrían morder.</p>
+
+  <h3>Riesgos que asumí conscientemente</h3>
+
+  <h4>RC-1 estrecha una búsqueda</h4>
+
+  <p>Hoy ningún rider <code>save-rolled</code> vive fuera de una Técnica, así que estrechar no pierde nada. Pero es una restricción sobre el contenido futuro: si escribes un rider de salvación sobre un efecto de cielo o sobre una Armadura, dejará de dispararse y no habrá ningún error que lo avise. Lo dejé documentado en el comentario del código, que es donde alguien lo leerá. Si en algún momento hace falta un rider de salvación de alcance amplio, la solución correcta sería una bandera explícita en el rider, no volver a abrir la búsqueda para todos.</p>
+
+  <h4>El <code>AdjustStrike</code> en modo <code>remove</code> depende del orden</h4>
+
+  <p>Que <em>Effect: Excalibur</em> quite el <code>deadly-d8</code> funciona si PF2e procesa los rule elements del efecto <em>después</em> de los de la Armadura. Es lo normal — los items se procesan en orden y el efecto se crea mucho más tarde que la dote — pero no es algo que pueda probar sin Foundry. <strong>Es la comprobación número uno de tu lista</strong>: crea un Capricornio, mira que los puños sean contundentes y <em>deadly d8</em>, lanza Excalibur, y comprueba que pasen a cortantes y <em>deadly d10</em> sin rastro del d8.</p>
+
+  <h4>La duración de Excalibur cambió de significado</h4>
+
+  <p>Pasó de «1 ronda, expira al inicio del turno» a «0 rondas, expira al final del turno». Ahora coincide con el texto de la Técnica, pero es <em>menos</em> generosa que antes: ya no cubre los turnos de los enemigos. Es correcto según el diseño; sólo quiero que no te sorprenda.</p>
+
+  <h4>El rider <code>self</code> es un mecanismo nuevo</h4>
+
+  <p>Es el cambio más grande que hice en el motor, y el que menos cobertura automática tiene. La lógica de partición por <code>selfOnly</code> la razoné con cuidado — y de hecho la reescribí al encontrar la carrera — pero no la he visto correr. Prueba especialmente el caso incómodo: lanzar Excalibur <em>con enemigos seleccionados</em>, y confirmar que aparece un solo <em>Effect: Excalibur</em> y ninguno sobre los enemigos.</p>
+
+  <h4>Los cielos de Tauro tienen riders nuevos</h4>
+
+  <p>El rider de Fortaleza que escribí dispara una salvación <em>por cada golpe desarmado que acierte</em>. Eso es lo que dice el boon, pero es mucha tirada: un Tauro con tres ataques por turno pide tres salvaciones. Si en la mesa resulta pesado, la conversación es sobre el diseño del boon, no sobre la implementación.</p>
+
+  <h3>Orden de pruebas que sugiero</h3>
+
+  <ol class="body-list">
+    <li><strong>Capricornio, nivel 1.</strong> Puños contundentes, <em>deadly d8</em>, sin rastro de cortante. Es la prueba de que RC-2 cerró.</li>
+    <li><strong>Capricornio, lanzar Excalibur.</strong> Con y sin enemigos seleccionados. Un solo efecto, cortante, d10, y que caduque al final del turno.</li>
+    <li><strong>Escorpio, nivel 16, lanzar Scarlet Needle.</strong> Debe caer una aguja y, en fallo crítico, <em>off-guard</em>. Nada de <em>dazzled</em>, nada de <em>confused</em>, ningún susurro de muerte. Es la prueba de RC-1.</li>
+    <li><strong>Tauro, lanzar Great Horn.</strong> Es <code>taurus-t1</code>, el que sigue abierto. Si ahora derriba, RC-1 era también su causa.</li>
+    <li><strong>Cáncer, lanzar Sekishiki Konsō Ha contra un no-muerto.</strong> Debe quedar <em>slowed 1</em>, no 2, y sin <em>drained</em>.</li>
+    <li><strong>Virgo, cerrar los ojos y pasar tres turnos.</strong> El contador debe ir 1, 2, 3. Y con Virgo ascendente, llegar a 7 en vez de pararse en 5.</li>
+    <li><strong>Piscis, dejar que un enemigo le pegue cuerpo a cuerpo.</strong> Debe salir 1d6 de veneno a chat. Si no sale contra un NPC, es la reserva sobre <code>item:melee</code> que anoté.</li>
+    <li><strong>Sagitario, nivel 16.</strong> Velocidad de vuelo en 0 sin lanzar nada; 70 tras lanzar Aiolos's Wings; y en un día ascendente sin la Técnica, 35.</li>
+    <li><strong>Leo, desmoralizar.</strong> El +1 circunstancial debe aparecer activo en la tirada.</li>
+    <li><strong>Escorpio, usar la acción libre tras un golpe.</strong> El contador debe subir, y pararse en 15.</li>
+  </ol>
+
+  <p>Con esas diez confirmas los 29 cerrados y descartas o confirmas dos de las preguntas abiertas.</p>
+</section>
+
+<!-- ============================================================ -->
+
+<section class="part" id="parte7">
+  <div class="part-head">
+    <span class="kicker">Parte VII</span>
+    <h2>Índice de los 55</h2>
+  </div>
+
+  <p>Cada reporte, su estado y dónde se explica.</p>
+
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>ID</th><th>Elemento</th><th>Estado</th><th>Dónde</th></tr></thead>
+      <tbody>
+        <tr class="sign-row"><td colspan="4">Núcleo</td></tr>
+        <tr><td class="id">core-cosmo-mastery</td><td>Attuned Casting</td><td class="st s-ask">FALTA EVIDENCIA</td><td>RC-9</td></tr>
+
+        <tr class="sign-row"><td colspan="4">♈ Aries</td></tr>
+        <tr><td class="id">aries-t1</td><td>Crystal Wall</td><td class="st s-ask">PREGUNTA</td><td>Abierto 2</td></tr>
+        <tr><td class="id">aries-t2</td><td>Starlight Extinction</td><td class="st s-des">POR DISEÑO</td><td>Diseño</td></tr>
+        <tr><td class="id">aries-t3</td><td>Crystal Net</td><td class="st s-fix">ARREGLADO</td><td>RC-1</td></tr>
+        <tr><td class="id">aries-t4</td><td>Stardust Revolution</td><td class="st s-fix">ARREGLADO</td><td>RC-1</td></tr>
+
+        <tr class="sign-row"><td colspan="4">♉ Tauro</td></tr>
+        <tr><td class="id">taurus-t1</td><td>Great Horn</td><td class="st s-ask">PREGUNTA</td><td>Abierto 1</td></tr>
+        <tr><td class="id">taurus-t2</td><td>Pleiades Nova</td><td class="st s-open">DISEÑO</td><td>RC-4</td></tr>
+        <tr><td class="id">taurus-t3</td><td>Titan's Stance</td><td class="st s-open">SIN ESCRIBIR</td><td>RC-11</td></tr>
+        <tr><td class="id">taurus-asc</td><td>Ascendente — Great Horn</td><td class="st s-fix">ARREGLADO</td><td>RC-3</td></tr>
+        <tr><td class="id">taurus-zen</td><td>Zenith — Great Horn</td><td class="st s-fix">PARCIAL</td><td>RC-3 · RC-9</td></tr>
+
+        <tr class="sign-row"><td colspan="4">♊ Géminis</td></tr>
+        <tr><td class="id">gemini-passive</td><td>Two Faces</td><td class="st s-fix">ARREGLADO</td><td>Extras</td></tr>
+        <tr><td class="id">gemini-t1</td><td>Another Dimension</td><td class="st s-fix">ARREGLADO</td><td>RC-1</td></tr>
+        <tr><td class="id">gemini-t2</td><td>Astral Projection</td><td class="st s-open">SIN ESCRIBIR</td><td>RC-11</td></tr>
+        <tr><td class="id">gemini-t3</td><td>Galaxian Explosion</td><td class="st s-open">SIN ESCRIBIR</td><td>RC-11</td></tr>
+        <tr><td class="id">gemini-t4</td><td>Mavros Eruption Clast</td><td class="st s-fix">ARREGLADO</td><td>RC-1</td></tr>
+        <tr><td class="id">gemini-asc</td><td>Ascendente — Galaxian Cosmo</td><td class="st s-ask">FALTA EVIDENCIA</td><td>RC-9</td></tr>
+        <tr><td class="id">gemini-zen</td><td>Zenith — Galaxian Cosmo</td><td class="st s-ask">PREGUNTA</td><td>Abierto 4</td></tr>
+
+        <tr class="sign-row"><td colspan="4">♋ Cáncer</td></tr>
+        <tr><td class="id">cancer-t1</td><td>Sekishiki Meikai Ha</td><td class="st s-ask">PREGUNTA</td><td>Abierto 1</td></tr>
+        <tr><td class="id">cancer-t2</td><td>Sekishiki Kisōen</td><td class="st s-open">SIN ESCRIBIR</td><td>RC-11</td></tr>
+        <tr><td class="id">cancer-t3</td><td>Sekishiki Konsō Ha</td><td class="st s-fix">PARCIAL</td><td>RC-1 · RC-11</td></tr>
+        <tr><td class="id">cancer-t4</td><td>Sekishiki Tenryū Ha</td><td class="st s-fix">ARREGLADO</td><td>RC-1 · Diseño</td></tr>
+        <tr><td class="id">cancer-asc</td><td>Ascendente — Yellow Spring</td><td class="st s-fix">ARREGLADO</td><td>RC-3</td></tr>
+
+        <tr class="sign-row"><td colspan="4">♌ Leo</td></tr>
+        <tr><td class="id">leo-passive</td><td>Pride of the Lion</td><td class="st s-fix">ARREGLADO</td><td>RC-5</td></tr>
+        <tr><td class="id">leo-t2</td><td>Lightning Crown</td><td class="st s-fix">ARREGLADO</td><td>RC-1</td></tr>
+        <tr><td class="id">leo-t3</td><td>Lightning Plasma</td><td class="st s-open">DISEÑO</td><td>RC-4</td></tr>
+        <tr><td class="id">leo-t4</td><td>Photon Burst</td><td class="st s-fix">ARREGLADO</td><td>RC-1</td></tr>
+        <tr><td class="id">leo-zen</td><td>Zenith — Lightning Plasma</td><td class="st s-ask">PREGUNTA</td><td>Abierto 7</td></tr>
+
+        <tr class="sign-row"><td colspan="4">♍ Virgo</td></tr>
+        <tr><td class="id">virgo-passive</td><td>Om</td><td class="st s-fix">ARREGLADO</td><td>RC-8</td></tr>
+        <tr><td class="id">virgo-t2</td><td>Tenpōrin'in</td><td class="st s-open">SIN ESCRIBIR</td><td>RC-11</td></tr>
+        <tr><td class="id">virgo-t4</td><td>Rikudō Rinne</td><td class="st s-ask">PREGUNTA</td><td>Abierto 3</td></tr>
+        <tr><td class="id">virgo-zen</td><td>Zenith — Six Paths</td><td class="st s-fix">ARREGLADO</td><td>RC-3</td></tr>
+
+        <tr class="sign-row"><td colspan="4">♎ Libra</td></tr>
+        <tr><td class="id">libra-passive</td><td>The Cloth of Arms</td><td class="st s-open">SIN ESCRIBIR</td><td>RC-11</td></tr>
+        <tr><td class="id">libra-t1</td><td>Rozan Shō Ryū Ha</td><td class="st s-des">POR DISEÑO</td><td>Diseño</td></tr>
+        <tr><td class="id">libra-t2</td><td>The Twelve Arms</td><td class="st s-ask">PREGUNTA</td><td>Abierto 5</td></tr>
+        <tr><td class="id">libra-t3</td><td>Rozan Ryū Hi Shō</td><td class="st s-open">DISEÑO</td><td>RC-4</td></tr>
+
+        <tr class="sign-row"><td colspan="4">♏ Escorpio</td></tr>
+        <tr><td class="id">scorpio-passive</td><td>Fifteen Needles</td><td class="st s-fix">PARCIAL</td><td>Extras · RC-7</td></tr>
+        <tr><td class="id">scorpio-t1</td><td>Scarlet Needle</td><td class="st s-fix">ARREGLADO</td><td>RC-1</td></tr>
+        <tr><td class="id">scorpio-t2</td><td>Crimson Mirage</td><td class="st s-fix">ARREGLADO</td><td>RC-1</td></tr>
+        <tr><td class="id">scorpio-t3</td><td>Crimson Flurry</td><td class="st s-open">DISEÑO</td><td>RC-4 · Abierto 6</td></tr>
+        <tr><td class="id">scorpio-t4</td><td>Antares</td><td class="st s-fix">ARREGLADO</td><td>RC-1</td></tr>
+        <tr><td class="id">scorpio-asc</td><td>Ascendente — Antares</td><td class="st s-fix">ARREGLADO</td><td>RC-7</td></tr>
+        <tr><td class="id">scorpio-zen</td><td>Zenith — Antares</td><td class="st s-fix">ARREGLADO</td><td>RC-3</td></tr>
+
+        <tr class="sign-row"><td colspan="4">♐ Sagitario</td></tr>
+        <tr><td class="id">sag-passive</td><td>The Bow</td><td class="st s-fix">ARREGLADO</td><td>RC-5</td></tr>
+        <tr><td class="id">sag-t1</td><td>Golden Arrow</td><td class="st s-open">SIN ESCRIBIR</td><td>RC-11</td></tr>
+        <tr><td class="id">sag-t2</td><td>Chiron's Light Impulse</td><td class="st s-open">DISEÑO</td><td>RC-4</td></tr>
+        <tr><td class="id">sag-t4</td><td>Aiolos's Wings</td><td class="st s-fix">ARREGLADO</td><td>RC-2</td></tr>
+        <tr><td class="id">sag-asc</td><td>Ascendente — Atomic Thunderbolt</td><td class="st s-fix">PARCIAL</td><td>RC-2 · RC-11</td></tr>
+        <tr><td class="id">sag-zen</td><td>Zenith — Atomic Thunderbolt</td><td class="st s-open">SIN ESCRIBIR</td><td>RC-11</td></tr>
+
+        <tr class="sign-row"><td colspan="4">♑ Capricornio</td></tr>
+        <tr><td class="id">cap-passive1</td><td>The Sword Arm</td><td class="st s-fix">ARREGLADO</td><td>RC-2</td></tr>
+        <tr><td class="id">cap-t1</td><td>Excalibur</td><td class="st s-fix">ARREGLADO</td><td>RC-2</td></tr>
+        <tr><td class="id">cap-t2</td><td>Jumping Stone</td><td class="st s-open">DISEÑO</td><td>RC-4</td></tr>
+        <tr><td class="id">cap-t3</td><td>Double Excalibur</td><td class="st s-open">DISEÑO</td><td>RC-4</td></tr>
+        <tr><td class="id">cap-t4</td><td>Excalibur: Cuts Everything</td><td class="st s-fix">ARREGLADO</td><td>RC-10</td></tr>
+        <tr><td class="id">cap-zen</td><td>Zenith — Cuts Everything</td><td class="st s-fix">PARCIAL</td><td>RC-3</td></tr>
+
+        <tr class="sign-row"><td colspan="4">♓ Piscis</td></tr>
+        <tr><td class="id">pis-passive</td><td>Royal Demon Rose</td><td class="st s-fix">ARREGLADO</td><td>RC-6</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Los marcados <strong>PARCIAL</strong> tienen una parte cerrada y otra en RC-4, RC-9 o RC-11: <code>taurus-zen</code> conserva el problema del lanzamiento gratis; <code>cancer-t3</code> conserva los dados extra por muertes recientes y contra no-muertos; <code>sag-asc</code> conserva el alcance; <code>cap-zen</code> recuperó el bypass pero su reacción sigue siendo un aviso; <code>scorpio-passive</code> conserva la fuga ya resuelta pero también un detalle que resultó no ser un bug.</p>
+</section>
+
+<footer>
+  Base <b>aacdda2</b> · módulo v0.4.1 · 21 archivos modificados, 2 creados · 185 documentos de contenido · 3 906 líneas de scripts.<br>
+  Comentarios recuperados de <code>saint-checklist-2026-08-15 (1).json</code>, exportado el 15 de agosto a las 15:42 con 55 de 108 items comentados.<br>
+  Nada está commiteado: el árbol de trabajo queda limpio para tu revisión.
+</footer>
+
+</div>
+
+</body></html>
