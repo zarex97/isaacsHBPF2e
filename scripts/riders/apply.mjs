@@ -2,6 +2,7 @@ import { describeActor, describeDamage, riderOptions } from "../lib/roll-options
 import { MODULE_ID } from "../sky/signs.mjs";
 import { catchTokens } from "../targeting/catch.mjs";
 import { shapeFromArea } from "../targeting/place.mjs";
+import { skyStepsFromOptions, stepsFor } from "../targeting/heightening.mjs";
 import { OUTCOME_LABELS, collectRiders, itemFor } from "./data.mjs";
 import { selectRiders } from "./select.mjs";
 
@@ -238,6 +239,23 @@ async function applyTeleport(rider, context) {
     const feet = Number(rider.apply.distance) || 0;
     if (feet <= 0) return;
 
+    // Some creatures do not move. Taurus' Bulwark refuses anything its own size or smaller, and a Saint in
+    // Titan's Stance cannot be shifted at all — both are written as a promise the guide makes, so a forced
+    // movement has to honour them rather than shove the token anyway and leave the table to argue.
+    const targetOptions = token.actor?.getRollOptions?.() ?? [];
+    const refusal = (() => {
+        if (targetOptions.includes("saint:immovable")) return "does not move";
+        if (!targetOptions.includes("saint:bulwark")) return null;
+        const order = { tiny: 0, sm: 1, med: 2, lg: 3, huge: 4, grg: 5 };
+        const mover = order[context.originActor?.size ?? "med"] ?? 2;
+        const held = order[token.actor?.size ?? "med"] ?? 2;
+        return mover <= held ? "is not moved by anything its own size or smaller" : null;
+    })();
+    if (refusal) {
+        context.prompts.push(`${token.name} ${refusal} — the push is refused.`);
+        return;
+    }
+
     const gridSize = scene.grid.size;
     const perFoot = gridSize / (scene.grid.distance || 5);
     const from = context.originToken ?? token;
@@ -264,7 +282,16 @@ async function applyTeleport(rider, context) {
     const maxX = rect.x + rect.width - token.width * gridSize;
     const maxY = rect.y + rect.height - token.height * gridSize;
 
-    const wanted = { x: here.x + ux * feet * perFoot, y: here.y + uy * feet * perFoot };
+    // "Pushed 15 feet" is a delta; "pushed to the end of the line" is a destination. The second is what a
+    // line-shaped Technique means — a creature standing 20 feet along a 60-foot line travels 40, not 60 —
+    // so `measure: "from-origin"` reads the distance as where the creature ends up rather than how far it
+    // goes, and a creature already past that point is not dragged back.
+    const travel = rider.apply.measure === "from-origin"
+        ? Math.max(0, feet - Math.hypot(here.x - origin.x, here.y - origin.y) / perFoot)
+        : feet;
+    if (travel <= 0) return;
+
+    const wanted = { x: here.x + ux * travel * perFoot, y: here.y + uy * travel * perFoot };
     const landed = {
         x: Math.clamp(wanted.x, rect.x, Math.max(rect.x, maxX)),
         y: Math.clamp(wanted.y, rect.y, Math.max(rect.y, maxY)),
@@ -281,10 +308,10 @@ async function applyTeleport(rider, context) {
     context.moves.push({ tokenUuid: token.uuid, x: here.x, y: here.y });
 
     // Say what happened, including when the map was the limiting factor.
-    const short = travelled < feet - (scene.grid.distance || 5);
+    const short = travelled < travel - (scene.grid.distance || 5);
     context.prompts.push(
         short
-            ? `Teleported ${travelled} feet away — the ${feet}-foot throw ran out of map.`
+            ? `Teleported ${travelled} feet away — the ${Math.round(travel)}-foot throw ran out of map.`
             : `Teleported ${travelled} feet away.`,
     );
 }
@@ -425,14 +452,29 @@ async function applyPersistent(rider, context) {
  * would let a rider's own damage trigger another rider.
  */
 async function applyDamageRider(rider, context) {
-    const { formula = "1d6", damageType = "untyped" } = rider.apply;
+    const { formula = "1d6", damageType = "untyped", perStep = null } = rider.apply;
     const DamageRoll = CONFIG.Dice.rolls.find((cls) => cls.name === "DamageRoll");
     if (!DamageRoll) {
         console.warn("Isaac's Homebrew | pf2e's DamageRoll is not registered; damage rider skipped.");
         return;
     }
 
-    const roll = await new DamageRoll(`(${formula})[${damageType}]`).evaluate();
+    // Damage that only happens on one outcome still has to heighten. *Titan's Break* deals its extra 4d8
+    // on a critical failure alone, and that 4d8 grows a die per step like everything else — but a rider
+    // sits outside `system.damage`, so pf2e never scales it. `perStep` is that growth, counted the same
+    // way the Technique's own is: steps earned by rank, plus whatever the sky is worth today.
+    const source = context.item;
+    const steps = perStep
+        ? stepsFor({
+              baseRank: source?.baseRank ?? source?.system?.level?.value,
+              castRank: source?.rank,
+              bonusSteps: skyStepsFromOptions(context.originActor?.getRollOptions?.() ?? []),
+          })
+        : 0;
+    const growth = perStep ? scaleFormula(perStep, steps) : null;
+    const scaled = growth ? `${formula} + ${growth}` : formula;
+
+    const roll = await new DamageRoll(`(${scaled})[${damageType}]`).evaluate();
     const name = context.item?.name ?? context.originActor?.name ?? "Rider";
     await roll.toMessage(
         {

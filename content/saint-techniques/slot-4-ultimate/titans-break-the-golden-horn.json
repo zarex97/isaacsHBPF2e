@@ -17,8 +17,9 @@
                 },
                 {
                     "apply": {
-                        "text": "Pushed to the end of the line.",
-                        "type": "prompt"
+                        "distance": 60,
+                        "measure": "from-origin",
+                        "type": "teleport"
                     },
                     "outcomes": [
                         "failure",
@@ -30,6 +31,17 @@
                         "slug": "stunned",
                         "type": "condition",
                         "value": 2
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "damageType": "bludgeoning",
+                        "formula": "4d8",
+                        "perStep": "1d8",
+                        "type": "damage"
                     },
                     "outcomes": [
                         "criticalFailure"
@@ -60,16 +72,6 @@
                 ],
                 "materials": [],
                 "type": "bludgeoning"
-            },
-            "1": {
-                "applyMod": false,
-                "category": null,
-                "formula": "4d8",
-                "kinds": [
-                    "damage"
-                ],
-                "materials": [],
-                "type": "bludgeoning"
             }
         },
         "defense": {
@@ -88,8 +90,7 @@
         "heightening": {
             "area": 0,
             "damage": {
-                "0": "1d8",
-                "1": "1d8"
+                "0": "1d8"
             },
             "interval": 1,
             "type": "interval"
@@ -107,31 +108,6 @@
         },
         "requirements": "",
         "rules": [
-            {
-                "damageType": "bludgeoning",
-                "diceNumber": 2,
-                "dieSize": "d8",
-                "key": "DamageDice",
-                "label": "Sky: Ascendant (+2 heightening steps)",
-                "predicate": [
-                    "sky:ascendant",
-                    {
-                        "not": "sky:zenith"
-                    }
-                ],
-                "selector": "{item|_id}-damage"
-            },
-            {
-                "damageType": "bludgeoning",
-                "diceNumber": 4,
-                "dieSize": "d8",
-                "key": "DamageDice",
-                "label": "Sky: Zenith (+4 heightening steps)",
-                "predicate": [
-                    "sky:zenith"
-                ],
-                "selector": "{item|_id}-damage"
-            },
             {
                 "damageType": "bludgeoning",
                 "diceNumber": 2,

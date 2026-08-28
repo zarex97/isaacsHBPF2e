@@ -95,6 +95,44 @@
                 ],
                 "reevaluateOnUpdate": true,
                 "uuid": "Compendium.isaacs-hb-pf2e.saint-techniques.Item.Titan's Break: The Golden Horn"
+            },
+            {
+                "key": "RollOption",
+                "option": "saint:bulwark"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Bulwark",
+                "predicate": [
+                    {
+                        "or": [
+                            "action:shove",
+                            "action:trip",
+                            "action:grapple",
+                            "action:disarm"
+                        ]
+                    }
+                ],
+                "selector": "fortitude-dc",
+                "type": "circumstance",
+                "value": 2
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Bulwark",
+                "predicate": [
+                    {
+                        "or": [
+                            "action:shove",
+                            "action:trip",
+                            "action:grapple",
+                            "action:disarm"
+                        ]
+                    }
+                ],
+                "selector": "reflex-dc",
+                "type": "circumstance",
+                "value": 2
             }
         ],
         "traits": {
