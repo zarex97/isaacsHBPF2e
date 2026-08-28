@@ -62,7 +62,16 @@ export const Sources = {
             return Sources.onActionUsed(message);
         }
 
-        const attackerUuid = message.actor?.uuid;
+        // The attacker's *token*, not their actor. Both events put this uuid in a slot that has to resolve
+        // to a token: `strike-received` swaps the two, so the attacker becomes the target, and `applyToTarget`
+        // reads `target.actor` off it. An Actor uuid resolves to an Actor, whose `.actor` is undefined, and
+        // the whole application returns silently — no error, no warning, nothing in chat. That is why Pisces'
+        // roses never drew blood even after the predicate was fixed: theirs is the only `strike-received`
+        // rider in the content, so it was the only one the swap could reach.
+        //
+        // It also makes `strike-resolved`'s origin survive an unlinked token, which `getActiveTokens(true, …)`
+        // in `resolveContext` does not: that asks for linked tokens only, and an NPC's are not.
+        const attackerUuid = message.token?.uuid ?? message.actor?.uuid;
         const targetUuid = context.target?.token;
         if (!attackerUuid || !targetUuid) return;
 

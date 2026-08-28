@@ -251,8 +251,43 @@ npm test           # validate + build + round-trip check
 ```
 
 `content/**.json` is the source of truth — one document per file, readable and diffable. `packs/` holds the
-built LevelDB and is gitignored. Symlink the repo root into your Foundry `Data/modules/` directory and it
-works as a module in place.
+built LevelDB and is gitignored.
+
+### Running the working tree in Foundry
+
+The repo root is already the module layout, so Foundry can serve it directly and a change is live on the
+next reload rather than on the next release. With Foundry closed:
+
+```bash
+npm run build
+npm run link:foundry -- --force
+```
+
+That links the repo into your Foundry `Data/modules/` — a junction on Windows, which needs neither an
+elevated shell nor Developer Mode. It finds the data directory itself; override with `FOUNDRY_DATA` or
+`-- --data <dir>`. `--force` is only needed the first time, to replace an installed copy of the module.
+
+What each kind of change then costs:
+
+| Changed | To see it |
+|---|---|
+| `scripts/**`, `styles/**`, `templates/**` | **F5** in the world (`Ctrl+Shift+R` if a file looks stale) |
+| `content/**.json` | Return to Setup, rebuild, relaunch the world |
+| `module.json` | Restart the Foundry server |
+
+`npm run watch` rebuilds the packs on every save under `content/`, which turns the middle row into just
+"return to Setup, relaunch". It has to be that way round: Foundry holds a LOCK on each pack of the active
+world and the build deletes `packs/` before recompiling, so a rebuild fails while a world is open. Going
+back to Setup releases the locks without quitting.
+
+Two things about that loop that are easy to lose an evening to:
+
+- **Rebuilding updates the compendium, not the actors.** An item already dragged onto a sheet is an
+  independent copy. Re-drag it to pick up the change.
+- **`module.json` carries `"version": "99.0.0"` on purpose.** A linked repo whose version is below the
+  latest release makes Foundry offer an update, and taking it would write the release *through the link,
+  over your working tree*. The release workflow pins the real version from the git tag, so the committed
+  value never reaches anyone.
 
 A few things the build does that are worth knowing about:
 

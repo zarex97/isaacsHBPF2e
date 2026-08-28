@@ -6,6 +6,8 @@
     "type": "module",
     "scripts": {
         "build": "node build/build-packs.mjs",
+        "watch": "node build/watch.mjs",
+        "link:foundry": "node build/link-foundry.mjs",
         "extract": "node build/extract-packs.mjs",
         "validate": "node build/validate.mjs",
         "check:roundtrip": "node build/check-roundtrip.mjs",
