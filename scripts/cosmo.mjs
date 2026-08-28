@@ -2,6 +2,31 @@ import { MODULE_ID } from "./sky/signs.mjs";
 
 const ENTRY_NAME = "Cosmo";
 
+/** Entry creations already under way, keyed by actor id. See `ensureEntry`. */
+const pendingEntries = new Map();
+
+/** The write half of `ensureEntry`, kept separate so the guard above reads as one decision. */
+async function createEntry(actor) {
+    const tradition = game.settings.get(MODULE_ID, "cosmoTradition");
+    const [created] = await actor.createEmbeddedDocuments("Item", [
+        {
+            name: ENTRY_NAME,
+            type: "spellcastingEntry",
+            img: "icons/magic/light/explosion-star-glow-orange.webp",
+            system: {
+                ability: { value: Cosmo.attributeFor(actor) },
+                prepared: { value: "focus" },
+                proficiency: { slug: "saint", value: 1 },
+                showSlotlessLevels: { value: false },
+                spelldc: { dc: 0, value: 0 },
+                tradition: { value: tradition },
+            },
+            flags: { [MODULE_ID]: { cosmoEntry: true } },
+        },
+    ]);
+    return created ?? null;
+}
+
 /**
  * Focus spellcasting for the Saint.
  *
@@ -34,29 +59,31 @@ export const Cosmo = {
         return actor.classDCs?.saint?.attribute ?? actor.class?.system?.keyAbility?.selected ?? "str";
     },
 
+    /**
+     * One entry per Saint, even when several callers ask at once.
+     *
+     * `createItem` fires for the class *and* for every Technique granted alongside it, in the same batch.
+     * Each of those calls `ensureEntry`, each finds no entry because none has been written yet, and each
+     * creates one — so every Saint ever made came out of character creation with two identical "Cosmo"
+     * entries, the second one empty. The check and the create have to be one indivisible step from the
+     * caller's point of view, which is what parking the in-flight promise here achieves: the second caller
+     * awaits the first one's entry instead of racing it.
+     */
     async ensureEntry(actor) {
         if (!this.isSaint(actor)) return null;
         const existing = this.entryFor(actor);
         if (existing) return existing;
 
-        const tradition = game.settings.get(MODULE_ID, "cosmoTradition");
-        const [created] = await actor.createEmbeddedDocuments("Item", [
-            {
-                name: ENTRY_NAME,
-                type: "spellcastingEntry",
-                img: "icons/magic/light/explosion-star-glow-orange.webp",
-                system: {
-                    ability: { value: this.attributeFor(actor) },
-                    prepared: { value: "focus" },
-                    proficiency: { slug: "saint", value: 1 },
-                    showSlotlessLevels: { value: false },
-                    spelldc: { dc: 0, value: 0 },
-                    tradition: { value: tradition },
-                },
-                flags: { [MODULE_ID]: { cosmoEntry: true } },
-            },
-        ]);
-        return created ?? null;
+        const inFlight = pendingEntries.get(actor.id);
+        if (inFlight) return inFlight;
+
+        const creation = createEntry(actor);
+        pendingEntries.set(actor.id, creation);
+        try {
+            return await creation;
+        } finally {
+            pendingEntries.delete(actor.id);
+        }
     },
 
     /** File a Technique into the Cosmo entry if it arrived without one. */

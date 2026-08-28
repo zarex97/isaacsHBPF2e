@@ -88,6 +88,7 @@ async function applyToTarget(target, candidates, context, payload) {
         adjustments: [],
         prompts: [],
         choices: [],
+        moves: [],
     };
     const before = new Set(actor.items.map((i) => i.id));
 
@@ -104,6 +105,7 @@ async function applyToTarget(target, candidates, context, payload) {
             outcome: payload.outcome ?? null,
             itemIds: actor.items.map((i) => i.id).filter((id) => !before.has(id)),
             adjustments: work.adjustments,
+            moves: work.moves,
         };
         await context.message.update({ [`flags.${MODULE_ID}.ridersApplied.${receiptKey}`]: receipt });
     }
@@ -124,7 +126,7 @@ export async function applyChoice(payload) {
     const option = rider?.apply?.options?.[payload.optionIndex];
     if (!option?.apply) return;
 
-    const work = { ...context, actor, target, item, outcome: payload.outcome ?? null, adjustments: [], prompts: [], choices: [] };
+    const work = { ...context, actor, target, item, outcome: payload.outcome ?? null, adjustments: [], prompts: [], choices: [], moves: [] };
     await applyOne({ ...rider, apply: option.apply, duration: option.duration ?? rider.duration }, work);
     if (work.prompts.length > 0) await postPrompts(work);
 }
@@ -150,6 +152,8 @@ async function applyOne(rider, context) {
             return applyEffect(rider, context);
         case "condition":
             return applyCondition(rider, context);
+        case "teleport":
+            return applyTeleport(rider, context);
         default:
             console.warn(`Isaac's Homebrew | ${context.item?.name}: unknown rider type "${apply.type}"`);
     }
@@ -214,6 +218,95 @@ async function targetsFor(rider, context) {
 /* ------------------------------------------------------------------------------------------------ */
 
 /**
+ * Move a creature, rather than telling the GM to.
+ *
+ * The module used to whisper every forced movement — "Teleported 250 feet in a direction of the Saint's
+ * choice" — on the grounds that *which* 250 feet is a table decision. In practice it made a Technique's
+ * headline effect the one thing that did not happen, and the whisper was read once and forgotten. The
+ * direction is now taken from the geometry that is already on the table: a creature sent away goes along
+ * the line from the caster to itself, which is the reading nobody argues with.
+ *
+ * The scene is a hard boundary. "One mile" is longer than any battle map, so the token stops at the last
+ * legal square along that ray and the chat card says how far it actually travelled — an honest number
+ * beats a silent no-op, and a creature pinned to the far edge of the map is out of the fight either way.
+ */
+async function applyTeleport(rider, context) {
+    const token = context.target;
+    const scene = token?.parent;
+    if (!token || !scene) return;
+
+    const feet = Number(rider.apply.distance) || 0;
+    if (feet <= 0) return;
+
+    const gridSize = scene.grid.size;
+    const perFoot = gridSize / (scene.grid.distance || 5);
+    const from = context.originToken ?? token;
+
+    // `TokenDocument#x` follows the *animation*, not the stored value: read it while a token is still
+    // sliding — which it always is, a rider fires within a frame of the move that caused it — and every
+    // number downstream is wrong by however far the tween has got. `_source` is the position the document
+    // actually holds. This cost a wall of fractional coordinates before it was spotted.
+    const at = (doc) => ({ x: doc._source?.x ?? doc.x, y: doc._source?.y ?? doc.y });
+    const here = at(token);
+    const origin = at(from);
+
+    // Direction: away from the caster by default, back towards them when a Technique pulls.
+    const sign = rider.apply.direction === "toward" ? -1 : 1;
+    let dx = (here.x - origin.x) * sign;
+    let dy = (here.y - origin.y) * sign;
+    if (!dx && !dy) dx = 1; // Standing in the same square: pick an axis rather than divide by zero.
+    const length = Math.hypot(dx, dy);
+    const ux = dx / length;
+    const uy = dy / length;
+
+    // The scene's playable rectangle, minus the token's own footprint.
+    const rect = scene.dimensions?.sceneRect ?? { x: 0, y: 0, width: scene.width, height: scene.height };
+    const maxX = rect.x + rect.width - token.width * gridSize;
+    const maxY = rect.y + rect.height - token.height * gridSize;
+
+    const wanted = { x: here.x + ux * feet * perFoot, y: here.y + uy * feet * perFoot };
+    const landed = {
+        x: Math.clamp(wanted.x, rect.x, Math.max(rect.x, maxX)),
+        y: Math.clamp(wanted.y, rect.y, Math.max(rect.y, maxY)),
+    };
+    const snapped = canvas?.grid?.getSnappedPoint
+        ? canvas.grid.getSnappedPoint(landed, { mode: CONST.GRID_SNAPPING_MODES.TOP_LEFT_CORNER ?? 1, resolution: 1 })
+        : { x: Math.round(landed.x / gridSize) * gridSize, y: Math.round(landed.y / gridSize) * gridSize };
+
+    const travelled = Math.round(Math.hypot(snapped.x - here.x, snapped.y - here.y) / perFoot);
+    if (travelled === 0) return;
+
+    // A teleport blinks; it does not slide across the map past everything in between.
+    await token.update(snapped, { animate: false });
+    context.moves.push({ tokenUuid: token.uuid, x: here.x, y: here.y });
+
+    // Say what happened, including when the map was the limiting factor.
+    const short = travelled < feet - (scene.grid.distance || 5);
+    context.prompts.push(
+        short
+            ? `Teleported ${travelled} feet away — the ${feet}-foot throw ran out of map.`
+            : `Teleported ${travelled} feet away.`,
+    );
+}
+
+/**
+ * The compendium address of a condition, for a `GrantItem` to point at.
+ *
+ * `ConditionManager.getCondition` hands back a *temporary* instance built from the compendium rather than
+ * the stored document, so `condition.uuid` is null and only `sourceId` carries the address. Reading `uuid`
+ * here produced `{ key: "GrantItem", uuid: null }` — a rule element that validates, creates the effect with
+ * the right name and duration, and grants nothing. Every durationed condition in the content was therefore
+ * inert while looking correct on the sheet: a creature wore "Crystal Net: Immobilized" and was not
+ * immobilized. Riders without a duration were unaffected, because they take `increaseCondition` and never
+ * build a grant at all — which is why this hid for so long, with 36 working riders around 20 broken ones.
+ *
+ * `uuid` is kept last rather than dropped: a future pf2e may well return a real document here.
+ */
+export function conditionUuidOf(condition) {
+    return condition?.sourceId ?? condition?._stats?.compendiumSource ?? condition?.uuid ?? null;
+}
+
+/**
  * A condition with a duration is not a condition — it is an effect that grants one.
  *
  * PF2e conditions carry no duration of their own, which is why the system's own timed conditions ship as
@@ -239,8 +332,15 @@ async function applyCondition(rider, context) {
         console.warn(`Isaac's Homebrew | unknown condition slug "${slug}"`);
         return;
     }
+
+    const conditionUuid = conditionUuidOf(condition);
+    if (!conditionUuid) {
+        console.warn(`Isaac's Homebrew | condition "${slug}" has no resolvable uuid to grant`);
+        return;
+    }
+
     const label = value ? `${condition.name} ${value}` : condition.name;
-    const grant = { key: "GrantItem", uuid: condition.uuid, allowDuplicate: false };
+    const grant = { key: "GrantItem", uuid: conditionUuid, allowDuplicate: false };
     if (value) grant.alterations = [{ mode: "override", property: "badge-value", value }];
 
     await context.actor.createEmbeddedDocuments("Item", [effectSource(label, [grant], rider, context)]);
@@ -458,6 +558,13 @@ async function undo(actor, receipt) {
     }
     const present = (receipt.itemIds ?? []).filter((id) => actor.items.has(id));
     if (present.length > 0) await actor.deleteEmbeddedDocuments("Item", present);
+
+    // A forced movement is as much a consequence as a condition is, so a hero point that turns the critical
+    // failure into a success has to walk the creature back to where it was standing.
+    for (const move of receipt.moves ?? []) {
+        const token = await fromUuid(move.tokenUuid).catch(() => null);
+        if (token?.documentName === "Token") await token.update({ x: move.x, y: move.y }, { animate: false });
+    }
 }
 
 async function resolveContext(payload) {

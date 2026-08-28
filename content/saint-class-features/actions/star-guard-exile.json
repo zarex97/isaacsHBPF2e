@@ -1,0 +1,67 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "all",
+                "maxTargets": 1,
+                "range": 60
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "dc": "cosmo",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "distance": 5280,
+                                    "type": "teleport"
+                                },
+                                "outcomes": [
+                                    "criticalFailure"
+                                ]
+                            }
+                        ],
+                        "statistic": "fortitude",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "note": "Incapacitation. Only a Zenith sky grants this."
+                }
+            ]
+        }
+    },
+    "folder": "Actions",
+    "img": "systems/pf2e/icons/actions/Reaction.webp",
+    "name": "Star Guard: Exile",
+    "system": {
+        "actionType": {
+            "value": "reaction"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><strong>Trigger</strong> A creature within 60 feet makes a ranged or spell attack, or targets an ally with a spell.</p><hr /><p>Instead of sending the effect nowhere, you send the <em>creature</em>. It attempts a Fortitude save against your Cosmo DC; on a critical failure it is teleported one mile away.</p><p>The module moves the token along the line from you to it, as far as the scene allows, and reports the distance actually travelled.</p><hr /><p>Granted by the Aries Zenith Boon only. Once per minute.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "PT1M",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "incapacitation",
+                "saint"
+            ]
+        }
+    },
+    "type": "action"
+}

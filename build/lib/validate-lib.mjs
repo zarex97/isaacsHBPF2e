@@ -230,7 +230,7 @@ const OUTCOMES = new Set(["criticalSuccess", "success", "failure", "criticalFail
 const CONDITION_SLUGS = new Set(pf2e.conditionSlugs);
 const DURATION_UNITS = new Set(["rounds", "minutes", "hours", "days", "unlimited", "encounter"]);
 const RIDER_TYPES = new Set([
-    "condition", "effect", "prompt", "choice", "save", "damage", "persistent-damage", "death",
+    "condition", "effect", "prompt", "choice", "save", "damage", "persistent-damage", "death", "teleport",
 ]);
 const RIDER_EVENTS = new Set([
     "save-rolled", "strike-resolved", "strike-received", "action-used", "damage-applied",
@@ -480,6 +480,16 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
             break;
         case "prompt":
             if (!apply.text) errors.push(`${at} prompt riders need text — it is the only thing they do`);
+            break;
+        case "teleport":
+            // A teleport with no distance moves nobody and says nothing, which is the same silent-no-op
+            // shape that hid the null condition grant for so long. It fails the build instead.
+            if (!(Number(apply.distance) > 0)) {
+                errors.push(`${at} teleport riders need a positive distance in feet — got "${apply.distance}"`);
+            }
+            if (apply.direction !== undefined && !["away", "toward"].includes(apply.direction)) {
+                errors.push(`${at} teleport direction must be "away" or "toward" — got "${apply.direction}"`);
+            }
             break;
         case "damage":
         case "persistent-damage":

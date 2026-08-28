@@ -712,6 +712,74 @@ check(
 check("the authored badge still caps the ceiling", Om.ceilingFor(sky([]), { system: { badge: { max: 3 } } }), 3);
 
 /* -------------------------------------------------------------------------------------------- */
+/*  A lit sky heightens everything, not just dice                                                */
+/* -------------------------------------------------------------------------------------------- */
+
+/**
+ * "Your Techniques heighten as though you were 4 levels higher" is 2 steps, and a Zenith's 8 levels are 4.
+ * That growth used to reach only the `DamageDice` rules, so a wall stayed its ordinary length on the one
+ * day of the year it should have been longest. A Zenith emits `sky:ascendant` too, so the order matters.
+ */
+const { skyStepsFromOptions } = await import("../scripts/targeting/heightening.mjs");
+
+check("an unlit sky is worth no steps", skyStepsFromOptions([]), 0);
+check("an Ascendant day is worth two steps", skyStepsFromOptions(["sky:ascendant", "sky:sign:aries"]), 2);
+check(
+    "a Zenith is worth four, and outranks the ascendant option it also emits",
+    skyStepsFromOptions(["sky:ascendant", "sky:zenith", "sky:sign:aries"]),
+    4,
+);
+check("bonus steps are added to the steps the rank earned", stepsFor({ baseRank: 1, castRank: 10, bonusSteps: 2 }), 11);
+check("bonus steps alone still count at base rank", stepsFor({ baseRank: 6, castRank: 6, bonusSteps: 4 }), 4);
+
+// Crystal Wall is the clearest case: 15 ft base, +5 per step, and nothing else touches its length.
+const crystalWall = load("saint-techniques", "slot-1-signature", "crystal-wall.json");
+const wallFlag = crystalWall.flags["isaacs-hb-pf2e"].areaTargeting;
+const wallLength = (castRank, bonusSteps) =>
+    applyHeightening(
+        { maxTargets: wallFlag.maxTargets, range: wallFlag.range, areas: wallFlag.areas, length: wallFlag.length },
+        wallFlag.heightening,
+        { baseRank: crystalWall.system.level.value, castRank, bonusSteps },
+    ).length;
+
+check("Crystal Wall is 60 feet at rank 10 under an ordinary sky", wallLength(10, 0), 60);
+check("an Ascendant day makes it 70", wallLength(10, 2), 70);
+check("a Zenith makes it 80", wallLength(10, 4), 80);
+check("and a 1st-level Saint's wall is still 15 feet", wallLength(1, 0), 15);
+
+/* -------------------------------------------------------------------------------------------- */
+/*  Condition grants                                                                             */
+/* -------------------------------------------------------------------------------------------- */
+
+/**
+ * A durationed condition rider is a `GrantItem` pointing at pf2e's condition item, and it is only as good
+ * as the uuid it points at. `ConditionManager.getCondition` returns a temporary instance whose `uuid` is
+ * null — only `sourceId` carries the compendium address — so reading `uuid` produced a grant of `null`:
+ * the effect appeared with the right name and duration and granted nothing at all. Verified against a
+ * running pf2e 8.3.0, where `getCondition("immobilized")` gives
+ * `sourceId: "Compendium.pf2e.conditionitems.Item.eIcWbB5o3pP6OIMe"` and `uuid: null`.
+ */
+const { conditionUuidOf } = await import("../scripts/riders/apply.mjs");
+const CONDITION_UUID = "Compendium.pf2e.conditionitems.Item.eIcWbB5o3pP6OIMe";
+
+check(
+    "a condition grant resolves through sourceId when uuid is null",
+    conditionUuidOf({ name: "Immobilized", uuid: null, sourceId: CONDITION_UUID }),
+    CONDITION_UUID,
+);
+check(
+    "a condition grant still resolves if a future pf2e returns a real uuid",
+    conditionUuidOf({ name: "Immobilized", uuid: CONDITION_UUID }),
+    CONDITION_UUID,
+);
+check(
+    "compendiumSource is accepted as well",
+    conditionUuidOf({ name: "Immobilized", _stats: { compendiumSource: CONDITION_UUID } }),
+    CONDITION_UUID,
+);
+check("a condition with no address at all resolves to null", conditionUuidOf({ name: "Immobilized" }), null);
+
+/* -------------------------------------------------------------------------------------------- */
 /*  Free-cast predicates                                                                         */
 /* -------------------------------------------------------------------------------------------- */
 
