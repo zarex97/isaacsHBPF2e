@@ -3,6 +3,8 @@ import path from "node:path";
 import { ROOT, rel } from "./pack.mjs";
 
 const pf2e = JSON.parse(fs.readFileSync(path.join(ROOT, "build", "lib", "pf2e-traits.json"), "utf8"));
+/** pf2e's immunity/weakness/resistance dictionaries, snapshotted from a running 8.3.0. */
+const iwr = JSON.parse(fs.readFileSync(path.join(ROOT, "build", "lib", "pf2e-iwr.json"), "utf8"));
 const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, "module.json"), "utf8"));
 
 /** Rule element keys registered by pf2e 8.3.0 (src/module/rules/index.ts, RuleElements.builtin). */
@@ -129,6 +131,36 @@ function validateItem(doc, where, errors) {
     for (const [i, rule] of (system.rules ?? []).entries()) {
         if (!rule.key) errors.push(`${where}: rules[${i}] has no key`);
         else if (!RULE_KEYS.has(rule.key)) errors.push(`${where}: rules[${i}] unknown key "${rule.key}"`);
+
+        // pf2e's numeric ItemAlteration handlers reject a value alongside `upgrade` or `downgrade`: those
+        // modes mean "one step better/worse", and only `override` names a number. Getting it wrong throws a
+        // DataModelValidationError during actor preparation, which kills the rest of that item's rules —
+        // *Cosmo Strike* shipped with `mode: "upgrade", value: 6` and so never made the Saint's fist a d6.
+        if (rule.key === "ItemAlteration" && ["upgrade", "downgrade"].includes(rule.mode)
+            && rule.value !== undefined && rule.value !== null) {
+            errors.push(
+                `${where}: rules[${i}] ItemAlteration "${rule.property}" has mode "${rule.mode}" with a ` +
+                    `value — pf2e requires the value be omitted unless the mode is "override"`,
+            );
+        }
+
+        // Immunity, Weakness and Resistance validate their type against pf2e's own dictionaries and
+        // fail the whole rule element on an unknown one. Leo shipped immune to "fear" and Arayashiki to
+        // "death" and "dying"; the real names are "fear-effects" and "death-effects", and there is no
+        // `dying` immunity at all. Each was a silent no-op plus a console warning on every prepare.
+        if (["Immunity", "Weakness", "Resistance"].includes(rule.key)) {
+            const known = rule.key === "Immunity" ? iwr.immunity
+                : rule.key === "Weakness" ? iwr.weakness : iwr.resistance;
+            const types = Array.isArray(rule.type) ? rule.type : [rule.type];
+            for (const type of types.filter(Boolean)) {
+                if (!known.includes(type)) {
+                    errors.push(
+                        `${where}: rules[${i}] ${rule.key} type "${type}" is not a pf2e ` +
+                            `${rule.key.toLowerCase()} type — the rule element fails at runtime`,
+                    );
+                }
+            }
+        }
 
         // ActorTraits validates every added trait against pf2e's creature-trait dictionary and calls
         // failValidation on anything unknown — so a size slug like "large" is not a quiet no-op, it is a
