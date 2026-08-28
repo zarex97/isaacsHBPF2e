@@ -11,11 +11,35 @@
  * is easy to get subtly wrong, and it is invisible in the JSON.
  */
 
-/** How many heightening steps a cast has taken. Never negative — a Technique cast at its base rank is 0. */
-export function stepsFor({ baseRank, castRank, interval = 1 }) {
+/**
+ * What a lit sky is worth, in heightening steps.
+ *
+ * Every Ascendant Boon says "your Techniques heighten as though you were 4 levels higher", and every
+ * Zenith says 8. A Technique heightens once per 2 character levels, so those are 2 and 4 steps — the same
+ * numbers the `DamageDice` rules on each Technique are already labelled with. A Zenith emits
+ * `sky:ascendant` as well as `sky:zenith`, so the richer sky has to be tested first or it reads as 2.
+ */
+export const SKY_STEPS = { ascendant: 2, zenith: 4 };
+
+export function skyStepsFromOptions(options) {
+    const set = options instanceof Set ? options : new Set(options ?? []);
+    if (set.has("sky:zenith")) return SKY_STEPS.zenith;
+    if (set.has("sky:ascendant")) return SKY_STEPS.ascendant;
+    return 0;
+}
+
+/**
+ * How many heightening steps a cast has taken. Never negative — a Technique cast at its base rank is 0.
+ *
+ * `bonusSteps` is growth the cast rank cannot express. The sky is the only source today: a Saint at 20th
+ * is already casting at rank 10, the ceiling, so "as though you were 4 levels higher" has nowhere to go in
+ * the rank and has to be added on this side instead.
+ */
+export function stepsFor({ baseRank, castRank, interval = 1, bonusSteps = 0 }) {
     const step = Number(interval) || 1;
     const taken = (Number(castRank) || 0) - (Number(baseRank) || 0);
-    return Math.max(0, Math.floor(taken / step));
+    const earned = Math.max(0, Math.floor(taken / step));
+    return earned + Math.max(0, Number(bonusSteps) || 0);
 }
 
 /**

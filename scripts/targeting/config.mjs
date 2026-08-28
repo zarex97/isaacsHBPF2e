@@ -1,5 +1,5 @@
 import { MODULE_ID } from "../sky/signs.mjs";
-import { applyHeightening, applyThresholds } from "./heightening.mjs";
+import { applyHeightening, applyThresholds, skyStepsFromOptions } from "./heightening.mjs";
 
 /** The effect-area shapes pf2e knows how to build a Region from (`EFFECT_AREA_SHAPES`). */
 export const AREA_SHAPES = ["burst", "cone", "cube", "cylinder", "emanation", "line", "ring", "square"];
@@ -60,6 +60,15 @@ export function configFor(item) {
         return null;
     }
 
+    // A lit sky heightens the whole Technique, not just its dice.
+    //
+    // The Boons say "your Techniques heighten as though you were 4 levels higher" (8 on a Zenith), and that
+    // was implemented only as `DamageDice` rules on each Technique — so on an Ascendant day the damage grew
+    // and the wall, the burst and the range did not. pf2e cannot help here: it has already finished
+    // heightening by the time this runs, and at 20th the cast rank is pinned at 10 anyway, so there is no
+    // rank left to raise. The steps are therefore added on this side, to every number that grows.
+    const bonusSteps = skyStepsFromOptions(item.actor?.getRollOptions?.() ?? []);
+
     // Growth per heightening step. The item arriving here is already the heightened variant — `variantFor`
     // loads it so the burst is the right size — so the cast rank is simply its rank.
     const grown = applyHeightening(
@@ -70,13 +79,19 @@ export function configFor(item) {
             length: flag?.length,
         },
         flag?.heightening,
-        { baseRank: item.baseRank ?? item.system?.level?.value, castRank: item.rank },
+        { baseRank: item.baseRank ?? item.system?.level?.value, castRank: item.rank, bonusSteps },
     );
     applyThresholds(grown, flag?.heightening, item.actor?.level);
 
+    // The area itself. pf2e folded the ordinary steps into `system.area.value` during preparation, so only
+    // the sky's share is owed here; a synthetic area was never touched by the system and carries its growth
+    // on the flag instead.
+    const areaPerStep = Number((flag?.area ? flag?.heightening?.area : item.system?.heightening?.area) ?? 0);
+    const areaValue = hasArea ? Number(area.value) + areaPerStep * bonusSteps : 0;
+
     return {
         item,
-        area: hasArea ? { type: area.type, value: Number(area.value) } : null,
+        area: hasArea ? { type: area.type, value: areaValue } : null,
         synthetic: !item.system?.area,
         affects: AFFECTS.includes(flag?.affects) ? flag.affects : "all",
         includesSelf: flag?.includesSelf === true,

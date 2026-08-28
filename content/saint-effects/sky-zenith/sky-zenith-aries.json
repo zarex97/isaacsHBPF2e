@@ -34,12 +34,23 @@
                 "option": "sky:zenith"
             },
             {
+                "alterations": [
+                    {
+                        "mode": "override",
+                        "property": "frequency-max",
+                        "value": 99
+                    }
+                ],
                 "key": "GrantItem",
                 "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Star Guard"
             },
             {
                 "key": "GrantItem",
                 "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Dimension Step"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Star Guard: Exile"
             },
             {
                 "key": "FlatModifier",

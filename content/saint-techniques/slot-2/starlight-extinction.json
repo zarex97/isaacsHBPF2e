@@ -4,8 +4,8 @@
             "riders": [
                 {
                     "apply": {
-                        "text": "Teleported 60 feet in a direction of the Saint's choice, arriving in the nearest open space.",
-                        "type": "prompt"
+                        "distance": 60,
+                        "type": "teleport"
                     },
                     "outcomes": [
                         "failure"
@@ -13,8 +13,17 @@
                 },
                 {
                     "apply": {
-                        "text": "Teleported 250 feet in a direction of the Saint's choice, arriving in the nearest open space.",
-                        "type": "prompt"
+                        "distance": 250,
+                        "type": "teleport"
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "slug": "prone",
+                        "type": "condition"
                     },
                     "outcomes": [
                         "criticalFailure"
