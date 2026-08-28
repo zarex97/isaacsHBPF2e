@@ -23,11 +23,7 @@
         "rules": [
             {
                 "key": "Immunity",
-                "type": "death"
-            },
-            {
-                "key": "Immunity",
-                "type": "dying"
+                "type": "death-effects"
             },
             {
                 "key": "Immunity",

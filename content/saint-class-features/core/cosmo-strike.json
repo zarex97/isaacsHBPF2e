@@ -34,7 +34,7 @@
             {
                 "itemId": "xxxxxxFISTxxxxxx",
                 "key": "ItemAlteration",
-                "mode": "upgrade",
+                "mode": "override",
                 "property": "damage-dice-faces",
                 "value": 6
             },
