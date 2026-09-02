@@ -1,0 +1,51 @@
+{
+    "folder": "Activities",
+    "img": "icons/magic/nature/rose-thorned-red.webp",
+    "name": "Effect: Rose-Marked",
+    "system": {
+        "description": {
+            "value": "<p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Royal Funeral]. From the rose's colour you know the marked creature's exact current Hit Points, reported at the start of each of your turns. Ends when the encounter does.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "encounter",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "trackedTarget": true,
+                        "type": "readout"
+                    },
+                    "event": "turn-start",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "type": "effect"
+}

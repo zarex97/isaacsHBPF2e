@@ -1,7 +1,7 @@
 # The Full Automation Programme
 
 *Status document — what has been done to the Saint, what is being done, and what "done" means.*
-*Last updated 1 September 2026 (Sagittarius, Capricorn and Aquarius pass), against module v99.0.0 (working tree), Foundry 14.364, pf2e 8.4.1.*
+*Last updated 1 September 2026 (Pisces pass), against module v99.0.0 (working tree), Foundry 14.364, pf2e 8.4.1.*
 
 ---
 
@@ -261,14 +261,14 @@ input, and where the map runs out the module says so rather than pretending.
 
 ## 6. Where the class stands now
 
-201 content documents in seven packs: 48 Techniques, 62 feats, 59 effects, 22 actions, 6 weapons, one
-class, one Cloth armor. 289 automated rider checks run without Foundry; validation, build and a round-trip
+202 content documents in seven packs: 48 Techniques, 62 feats, 60 effects, 22 actions, 6 weapons, one
+class, one Cloth armor. 310 automated rider checks run without Foundry; validation, build and a round-trip
 check run on every change.
 
 ### 6.1 Verified end to end in a live world
 
-Pisces' roses, and the whole of **Aries**, **Taurus**, **Gemini**, **Cancer**, **Leo**, **Virgo**,
-**Scorpio**, **Sagittarius**, **Capricorn** and **Aquarius** — every Technique cast for real, at six
+The whole of **Aries**, **Taurus**, **Gemini**, **Cancer**, **Leo**, **Virgo**, **Scorpio**,
+**Sagittarius**, **Capricorn**, **Aquarius** and **Pisces** — every Technique cast for real, at six
 character levels from 1 to 20, with every heightening value checked against the guide.
 
 ### 6.2 The Aries ladder, as a worked example
@@ -595,6 +595,123 @@ radius growing 20 → 40 feet and its resistance 15 → 35. Everything each Clot
   rather than a line to remember; the difficult-terrain and 20-foot-gap clauses of the same sentence remain
   the table's to adjudicate, for the same reason.
 
+### 6.9 Pisces, the eleventh
+
+The ladder is exact at every checkpoint: *Piranha Rose* 1d8 → 10d8 slashing, its persistent bleed on a
+separate named-level ladder of its own, 1d6 → 4d6 at 9th/13th/17th; *Royal Demon Rose* 3d8 growing 1d8 a
+step, its own ground tick now paying that growth once at cast time; *Crimson Fog* 6d8 → 10d8 alongside its
+own persistent bleed 3d6 → 5d6; *Royal Funeral* 16d6 → 24d6 under Ascendant.
+Pisces turned out to be the smallest Cloth by Technique count and the largest by how much of it was never
+actually running — three of its four Techniques had a load-bearing clause that either fired once instead of
+every turn, or never fired at all. Everything below is now built and verified live, not synthetically:
+
+- **Piranha Rose's persistent bleed used pf2e's basic-save halving, which is not what "negates" means.**
+  The guide reads "A successful save negates the persistent damage" — a special case, called out because it
+  is *not* what a basic save ordinarily does. A basic save halves every damage instance in `system.damage`
+  on a success, including a persistent one, and halving a persistent condition does not remove it — it
+  leaves a smaller bleed still ticking every round. The persistent part is off the spell entirely now and
+  lives as a `persistent-damage` rider on `failure`/`criticalFailure` alone, so a success genuinely negates
+  it rather than merely shrinking it. Its "+1d6 at 9th, 13th and 17th level" ladder is a named-level
+  threshold, not a per-heightening-step one — the same distinction Virgo's caster-level ladders already
+  needed — so `persistent-damage` (and `damage`) riders gained the ability to take the same `{ base, at }`
+  object a substitution already could, resolved through the same `resolveFromOrigin`. Verified live: a
+  success left the dummy with no persistent-damage condition at all; a failure at 20th applied exactly
+  `4d6` bleed.
+- **Royal Demon Rose's own tick had never once fired.** "Any creature that starts its turn in the area must
+  attempt a Fortitude save" is the entire Technique — there is no separate cast-time effect — and nothing in
+  the content asked pf2e to re-roll a save every turn for a burst that persists a full minute, because
+  pf2e does not do that on its own. The two condition riders that existed sat on `save-rolled`, an event a
+  Technique with no cast-time save can never earn; the 3d8 damage the guide states had no rider applying it
+  at all, on any outcome, ever. This needed a real capability the lingering-area machinery did not have:
+  Gemini's difficult terrain and Cancer's burning ground both apply a flat, unconditional effect on entry or
+  turn-end, and Pisces needed a *save* with its own outcome ladder run from a patch of ground instead of an
+  actor's sheet. `applySave`'s body is now the exported `runSave(spec, context)`, and `Lingering`'s Region
+  behavior gained a second branch: when the ground's payload carries a `save` instead of a flat `damage`, it
+  rolls that save directly against the creature standing on it and dispatches nested `damage`/`condition`
+  riders exactly as a Technique's own save rider would, including the level ladder above scaled once at cast
+  time via a new `scaledSave` (the same `growByStep` arithmetic `scaledDamage` already used for Mavros'
+  burning ground, generalised to reach into a save's own nested formula). The event is `tokenTurnStart`
+  alone, matching "starts its turn," not the enter-or-end pairing the burning-ground Techniques use. A guard
+  — flat enfeebled 1 rather than a stack per failed turn — keeps the condition from climbing indefinitely
+  over the full minute, the same shape the Ascendant Boon already needed for its own identical wording, on
+  the reading that "enfeebled 1" repeated is the same fact restated, not fifteen new facts. Verified live
+  through four repeated turn-starts against a real actor: independent `3d8` poison rolls landed each time,
+  enfeebled held at 1 across every one of them rather than climbing, and stupefied 2 arrived on the run that
+  rolled a critical failure and stayed at 2 on the next rather than refreshing to a second copy. Grown
+  separately: a `steps: 2` construction of the same Region produced `5d8` — the formula's own heightening
+  ladder, paid once at the moment the ground was set down, exactly like the ground it stands beside.
+- **A real bug found only by calling the new code, not by reading it.** The first draft of the save-tick
+  branch built a name-and-uuid stand-in for `context.item`, on the reasoning that a patch of ground has no
+  real item on anyone's sheet the way an aura-tick's marker does. `statistic.roll()` disagreed: somewhere in
+  its own pipeline pf2e calls `.isOfType` on whatever `item` it was handed, which a plain object does not
+  have, and the save died before it ever rolled — silently, since nothing awaited the region-event handler
+  that called it. `payload.itemUuid` is already the *owned* Technique's own uuid — written into the ground
+  at the moment it is aimed, in `Lingering.createOne` — so the fix is to resolve the real item with
+  `fromUuid` rather than describe it. See §8.
+- **Crimson Fog's difficult terrain is real now; its mutual concealment is a recorded limitation, not a
+  silent one.** "The area fills with crimson petals for 1 minute: it is difficult terrain" is the same
+  `lingering.difficultTerrain` flag Galaxian Explosion already proved, and nothing new was needed to build
+  it — verified by constructing the Region directly and reading back a real `modifyMovementCost` behavior
+  at cost 2. "Creatures inside are concealed from anyone outside and vice versa, you and your allies ignore
+  both" is a different shape of problem: pf2e's concealed condition is a fact about one creature, not a fact
+  about a *pair* of creatures on opposite sides of a boundary, and nothing in the engine — Region events,
+  roll options, or otherwise — currently expresses "concealed from X but not from Y, depending on where X
+  and Y each stand." Building it honestly would mean hooking the attack-roll pipeline itself to test both
+  combatants' positions against the region and against the caster's alliance list on every roll, which is a
+  new subsystem rather than a rider. It stays manual, called out here rather than assumed fixed alongside
+  the terrain it shares a sentence with.
+- **Royal Funeral's critical failure was a whisper for a class capstone that says "the target dies."** The
+  same conversion three other Cloths already proved — `type: "death"` in place of a `prompt` — closes it the
+  same way Scorpio's *Antares* and Cancer's *Sekishiki Tenryū Ha* did.
+- **Royal Funeral's damage was never scaled by degree of success at all**, on either outcome — a defect
+  §7.5 already named and left for this pass. `defense.save.basic: false` means pf2e rolls the damage and
+  stops; nothing was applying it on a failure, and nothing was halving it on a success, so every casting
+  either did the full 16d6-plus-heightening to everyone regardless of their save or, since no rider existed
+  before this pass at all, nothing whatsoever. Fixed the way *Sekishiki Tenryū Ha* already was: the damage
+  comes off the spell (`system.damage: {}`), the sky's own `DamageDice` rules come off with it, and two
+  `damage` riders carry the ladder — half on a success (`multiplier: 0.5`), full on a failure or a critical
+  failure — each growing `2d6` a heightening step through the same `perStep` a bare `system.damage` will
+  never scale on its own. Verified live: the exact roll formulas pf2e produced were
+  `(16d6 + 8d6) * 0.5 poison` on a success and `16d6 + 8d6 poison` on a failure, the `+8d6` being four
+  heightening steps — two from the character's own rank, two more from the Ascendant sky lit at the time —
+  landing once, not twice.
+- **Royal Funeral's "Special" — knowing the target's exact Hit Points until the encounter ends — did not
+  exist.** Cancer's *readout* apply type already solved "tell the Saint something true," but only as a
+  range scan naming everyone nearby; this is one named creature, watched continuously, which needed the
+  readout to be told *who* rather than *how far*. The save rider that fires on every outcome (unconditional,
+  since the guide's Special does not depend on the roll) now grants a new **Effect: Rose-Marked** onto the
+  caster, `duration: { unit: "encounter" }` so it clears itself the moment the fight does, carrying the
+  marked creature's own token uuid in its flags. That uuid has to survive the same `self`-rider context
+  swap Cancer's healing needed watching for once already (§6.6) — the token a `self` rider lands on becomes
+  the caster's own the moment `targetsFor` resolves it, which is correct for where the effect is granted and
+  wrong for who it is about, so `applyToTarget` now carries the event's original target forward as
+  `eventTarget` alongside the swapped one, read once at grant time and never again. The marker's own
+  `turn-start` rider re-reads the same creature at the start of every one of the Saint's turns for the rest
+  of the encounter. Verified live: the grant posted "D1 is at 120 / 120 Hit Points" the instant Royal Funeral
+  was cast; after damaging the dummy to 77 outside the rider entirely, the very next simulated turn-start
+  correctly reported "D1 is at 77 / 120 Hit Points" — the same creature, read fresh, not a stale snapshot.
+- ***Bloody Rose* did not exist as an ability — it was eight sentences of description and an empty
+  `rules: []`, granted by the Zenith Boon and doing nothing when used.** Built on the exact pattern *Aurora
+  Execution* already proved for a granted action with a save: `frequency: { max: 1, per: "PT1M" }`, an
+  `action-used` rider rolling Fortitude against the Cosmo DC, a `failure` branch for the 10d6 poison and
+  enfeebled 2, and a `criticalFailure` branch that is a real `death` rider, matching the same three-Cloth
+  precedent Royal Funeral's own critical failure just joined. Verified live under a Zenith sky: granted only
+  then, not under an Ascendant one; a failed save dealt 31 poison damage and enfeebled 2; a critical failure
+  killed outright.
+- **The Cloth passive's touch/melee poison predicate still does not exclude reach weapons.** The guide says
+  "an unarmed or non-reach melee attack"; the predicate catches every melee attack, reach included, with an
+  in-line note from an earlier pass already owning the gap — "Reach weapons should not trigger this; the
+  roses cannot tell." A rider predicate has no roll option distinguishing a reach weapon from an ordinary
+  one to test against, the same category of limit Crimson Fog's concealment hit above. Left as recorded
+  rather than re-litigated, since nothing changed to make it answerable this pass.
+- **The Ascendant and Zenith Boons themselves needed no fix** — their own per-turn emanation (10 feet,
+  4d6 poison and enfeebled 1 to a cap of 4, on the Zenith 15 feet and 8d6) was already built as a
+  `turn-end` rider carrying its own `area`, the same shape Freezing Shield's dome proved in the
+  Sagittarius/Capricorn/Aquarius pass. Re-verified live here for completeness rather than found broken:
+  a real `turn-end` firing dealt poison damage and enfeebled 1 to a dummy standing in the emanation.
+
+**Pisces is finished.**
+
 ---
 
 ## 7. What remains
@@ -614,12 +731,10 @@ movement, not walked yet:
   which a top-down grid cannot express, so it should probably become a 30-foot displacement plus prone on
   landing.
 
-Pisces' *Royal Funeral* — the other entry this section used to carry — turned out to be Pisces' own Cloth
-pass to walk, not a piece of missing machinery: the `death` type it needs is proven on three Cloths now,
-including the awkward case of a creature already at 0 hit points, and gating on what the damage leaves
-behind rather than a snapshot taken before it. The banishment register itself — built for *Another
+Pisces' *Royal Funeral* — the other entry this section used to carry — is now converted; see §6.9. The
+`death` type is proven on four Cloths as of this pass. The banishment register itself — built for *Another
 Dimension*, meant to take a token off the board and put an identical one back — has found no second user in
-three Cloths since. It stays built, on the chance a later Cloth needs exactly that and not an encasement.
+four Cloths since. It stays built, on the chance a later Cloth needs exactly that and not an encasement.
 
 ### 7.2 The seven Techniques modelled as spell damage — route (b) chosen and built
 
@@ -699,30 +814,31 @@ target of an attack already declared. The GM still retargets. Everything numeric
 retarget now happens by itself. This is the one place in Taurus where the guide says something the engine
 cannot do, and it is recorded here rather than quietly dropped.
 
-### 7.4 Two Cloths to re-verify
+### 7.4 One Cloth to re-verify
 
-Aries, Taurus, Gemini, Cancer, Leo, Virgo, Scorpio, Sagittarius, Capricorn and Aquarius have been walked end
-to end. Libra and Pisces have not, and the method — build a knight from nothing, level it 1 → 4 → 8 → 12 →
+Aries, Taurus, Gemini, Cancer, Leo, Virgo, Scorpio, Sagittarius, Capricorn, Aquarius and Pisces have been
+walked end to end. Libra has not, and the method — build a knight from nothing, level it 1 → 4 → 8 → 12 →
 16 → 20, cast everything, check every number against the guide — is still the template. It is also, on the
-evidence of §4.8, §4.9, §6.7 and §6.8, the only thing that finds this class of defect: three abilities that
-could not be cast at all, a Zenith Boon that had never once fired, a volley making one Strike per confirmed
-target instead of its own count, a receipt-key collision that ate the caster's own buff, a choice card whose
-address only a top-level rider could answer, and a token method that hands back a document rather than a
-placeable all survived earlier passes because no Cloth walked before them had a Technique of the right
+evidence of §4.8, §4.9, §6.7, §6.8 and §6.9, the only thing that finds this class of defect: three abilities
+that could not be cast at all, a Zenith Boon that had never once fired, a volley making one Strike per
+confirmed target instead of its own count, a receipt-key collision that ate the caster's own buff, a choice
+card whose address only a top-level rider could answer, a token method that hands back a document rather
+than a placeable, and — in Pisces — an entire Technique whose defining clause had no mechanism able to fire
+it at all, all survived earlier passes because no Cloth walked before them had a Technique of the right
 shape.
 
-### 7.5 Nine Techniques whose save ladder pf2e will not apply
+### 7.5 Eight Techniques whose save ladder pf2e will not apply
 
 pf2e scales damage by degree of success only for a **basic** save, and pf2e-toolbelt gates its automatic
-per-target application on the same flag. Nine Techniques in the content pair a *non-basic* save with a
-damage block, which means the roll is made and the applying is left to somebody's judgement.
+per-target application on the same flag. Eight Techniques remaining in the content pair a *non-basic* save
+with a damage block, which means the roll is made and the applying is left to somebody's judgement.
 
-Three of them state "Success: half damage", so half of every casting was manual: *Koliço* (Aquarius),
-*Royal Funeral* (Pisces) and *Sekishiki Tenryū Ha* (Cancer). Cancer's is fixed and is the pattern for the
-other two: the damage block comes off the spell, and the ladder is written as riders — half on a success,
-full on a failure, full again on a critical failure, because the guide says "as failure" and a basic save
-would double it. The halving is expressed as a multiplier on the total (`(10d8) * 0.5`) rather than as half
-the dice, which would be a different distribution.
+One states "Success: half damage" and is still open: *Koliço* (Aquarius). *Sekishiki Tenryū Ha* (Cancer)
+and *Royal Funeral* (Pisces, §6.9) are both fixed now and are the pattern for it: the damage block comes off
+the spell, and the ladder is written as riders — half on a success, full on a failure, full again on a
+critical failure, because the guide says "as failure" (or, for Royal Funeral, states the same total for
+both) and a basic save would double it. The halving is expressed as a multiplier on the total
+(`(10d8) * 0.5`) rather than as half the dice, which would be a different distribution.
 
 The trade is one shared roll for a roll per target. That is worth it here: it is the only way to get a
 ladder pf2e does not model, and the module already rolls per target for conditional damage elsewhere.
@@ -812,6 +928,19 @@ Traps worth recording, all of which have cost time:
   A choice nested inside a `strikes` rider's `onAllHit` posted correctly, because posting is handed the
   rider directly, and clicking it silently re-found the *outer* rider instead, because the address had
   nowhere to say "and then two steps further in."
+- **A basic save halves *every* damage instance, including a persistent one, and halving a persistent
+  condition is not the same as negating it.** "Success negates the persistent damage" reads like ordinary
+  basic-save prose and is not: an ordinary basic save would leave a smaller bleed still ticking, not none at
+  all. The persistent part has to come off `system.damage` and become a rider gated to failure and worse,
+  the same move already made for a *non-basic* save's damage (§7.5) but for a different reason — here pf2e's
+  own scaling is the thing being avoided, not its absence.
+- **A stand-in `item` for a function that ends in `statistic.roll()` is not safe, even when nothing in the
+  module's own code reads more than its name and uuid.** pf2e's own roll pipeline calls `.isOfType` on
+  whatever `item` it is handed, and a plain object does not have one — the call throws before the save is
+  ever rolled, silently, because nothing awaits the region-event handler that made it. The fix is always to
+  resolve the real Item Foundry already knows about (`fromUuid` on an owned item's own uuid) rather than
+  describe a shape that merely looks like one; a name and a uuid are enough for *this* module's own code and
+  not enough for the system's.
 
 ---
 
@@ -823,17 +952,20 @@ see every sentence of the guide happen at the table without the GM applying anyt
 remain in the content. Every number the guide states — damage, area, range, duration, frequency,
 threshold — matches what the sheet and the chat card produce, at every rank and under all three skies.
 
-Ten Cloths are now finished to that standard end to end, with nothing outstanding: **Aries**, **Taurus**,
-**Gemini**, **Cancer**, **Leo**, **Virgo**, **Scorpio**, **Sagittarius**, **Capricorn** and **Aquarius**.
-Pieces of the remaining two are verified. One whisper remains, down from twenty-two, and it is a rider away
-— the machinery it needs (forced movement) is the one piece already built and proven that has not yet found
-a second user.
+Eleven Cloths are now finished to that standard end to end, with nothing outstanding: **Aries**, **Taurus**,
+**Gemini**, **Cancer**, **Leo**, **Virgo**, **Scorpio**, **Sagittarius**, **Capricorn**, **Aquarius** and
+**Pisces**. One is left, Libra, verified in pieces rather than end to end. One whisper remains, down from
+twenty-two, and it is a rider away — the machinery it needs (forced movement) is the one piece already built
+and proven that has not yet found a second user.
 
 Five things this pass changed about how the work is understood. The first is that a Cloth pass is still
 finding defects that stop an ability working *at all* — four abilities that threw on every cast, a Zenith
 Boon that had never once fired, a volley making the wrong number of Strikes, a Cloth passive that had never
-once fired despite sitting on the sheet since level 1 — and finding them only because a Cloth of a new shape
-was walked. The second is that the honest unit of automation is not the Technique but the sentence: *Astral
+once fired despite sitting on the sheet since level 1, a granted action that was eight sentences of
+description and nothing else, a Technique whose entire defining clause ("any creature that starts its turn
+in the area") had no mechanism in the engine able to fire it at all — and finding them only because a Cloth
+of a new shape was walked. The second is that the honest unit of automation is not the Technique but the
+sentence: *Astral
 Projection* was one item with eight sentences in it, and closing it took a token, an effect, a conditional
 origin and a hit-point watcher. The third is that pf2e's own automation has edges the guide walks straight
 over, and a non-basic save is one of them; where it stops, the module now carries the ladder itself. The

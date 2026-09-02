@@ -387,10 +387,10 @@ function validateLingering(doc, where, errors) {
     } else if (!DURATION_UNITS.has(flag.duration.unit)) {
         errors.push(`${at}.duration.unit "${flag.duration.unit}" is not a duration unit`);
     }
-    // Four things a patch of ground can be. Two are Region behaviors, two are scenery placed beside the
-    // Region — but all four are swept away by the same expiry, so all four count as doing something.
-    if (!flag.difficultTerrain && !flag.damage && !flag.light && !flag.blocksSight) {
-        errors.push(`${at} does nothing: give it difficultTerrain, damage, light or blocksSight`);
+    // Five things a patch of ground can be. Three are Region behaviors, two are scenery placed beside the
+    // Region — but all five are swept away by the same expiry, so all five count as doing something.
+    if (!flag.difficultTerrain && !flag.damage && !flag.save && !flag.light && !flag.blocksSight) {
+        errors.push(`${at} does nothing: give it difficultTerrain, damage, save, light or blocksSight`);
     }
     if (flag.blocksSight !== undefined && typeof flag.blocksSight !== "boolean") {
         errors.push(`${at}.blocksSight must be true or false`);
@@ -430,6 +430,25 @@ function validateLingering(doc, where, errors) {
     }
     if (flag.events !== undefined && (!Array.isArray(flag.events) || flag.events.length === 0)) {
         errors.push(`${at}.events must be a non-empty array of region event names`);
+    }
+    // *Royal Demon Rose* — "any creature that starts its turn in the area must attempt a Fortitude save" —
+    // is a save with its own outcome ladder, not a flat tick, so it earns the same shape a `save` rider's
+    // `apply` does and the same recursive check every one of its nested riders gets anywhere else.
+    if (flag.save) {
+        const sat = `${at}.save`;
+        if (!SAVE_STATISTICS.has(flag.save.statistic)) {
+            errors.push(`${sat} needs fortitude/reflex/will — got "${flag.save.statistic}"`);
+        }
+        if (flag.save.dc !== "cosmo" && !Number.isInteger(flag.save.dc)) {
+            errors.push(`${sat} dc must be "cosmo" or a whole number — got "${flag.save.dc}"`);
+        }
+        if (!Array.isArray(flag.save.riders) || flag.save.riders.length === 0) {
+            errors.push(`${sat} needs at least one rider of its own, or the save decides nothing`);
+        } else {
+            flag.save.riders.forEach((inner, j) =>
+                validateRider(inner, `${sat}.riders[${j}]`, errors, { doc, depth: 1 }),
+            );
+        }
     }
 }
 
@@ -818,7 +837,9 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
             }
             break;
         case "readout":
-            if (!(Number(apply.range) > 0)) {
+            // A tracked readout asks about one creature named at grant time, not a range scan of the board —
+            // *Royal Funeral*'s "you know the target's exact Hit Points" has nobody else to report on.
+            if (!apply.trackedTarget && !(Number(apply.range) > 0)) {
                 errors.push(`${at} readout riders need a range in feet — got "${apply.range}"`);
             }
             if (rider.self !== true) errors.push(`${at} a readout rider must be \`self\`: it reports to the Saint`);
@@ -880,15 +901,41 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
             break;
         case "damage":
         case "persistent-damage": {
-            // Almost always a literal formula. The one exception is a *granted action* reaching for
-            // another Technique's own current damage — `Golden Arrow: Named Shot` is the only one — which
-            // has no rank of its own for `perStep` to scale from and has to name what it means instead.
-            const isResolvable = typeof apply.formula === "string" && apply.formula.startsWith("origin.");
-            if (!isResolvable && !DICE_FORMULA.test(String(apply.formula ?? ""))) {
-                errors.push(`${at} ${apply.type} needs a formula like "4d6" — got "${apply.formula}"`);
-            }
-            if (isResolvable && !/^origin\.technique\..+\.damage(\+\d+d\d+)?$/.test(apply.formula)) {
-                errors.push(`${at} unrecognised resolvable formula "${apply.formula}"`);
+            // Almost always a literal formula. One exception is a *granted action* reaching for another
+            // Technique's own current damage — `Golden Arrow: Named Shot` — which has no rank of its own
+            // for `perStep` to scale from and has to name what it means instead. The other is *Piranha
+            // Rose*'s persistent bleed and *Royal Demon Rose*'s ground-tick damage: a named-level ladder or
+            // a per-step growth that has to be baked in before the rider ever fires, the same `{ base, … }`
+            // shape a substitution's value already accepts.
+            if (apply.formula && typeof apply.formula === "object" && !Array.isArray(apply.formula)) {
+                if (!DICE_FORMULA.test(String(apply.formula.base ?? ""))) {
+                    errors.push(`${at} ${apply.type} formula.base needs a formula like "1d6" — got "${apply.formula.base}"`);
+                }
+                if (apply.formula.perStep !== undefined && !DICE_FORMULA.test(String(apply.formula.perStep))) {
+                    errors.push(`${at} ${apply.type} formula.perStep needs a formula like "1d8" — got "${apply.formula.perStep}"`);
+                }
+                if (apply.formula.at !== undefined) {
+                    if (typeof apply.formula.at !== "object" || Array.isArray(apply.formula.at)) {
+                        errors.push(`${at} ${apply.type} formula.at must be an object keyed by character level`);
+                    } else {
+                        for (const [level, value] of Object.entries(apply.formula.at)) {
+                            if (!(Number(level) > 0)) {
+                                errors.push(`${at} ${apply.type} formula.at has "${level}", which is not a character level`);
+                            }
+                            if (!DICE_FORMULA.test(String(value))) {
+                                errors.push(`${at} ${apply.type} formula.at["${level}"] needs a formula like "2d6" — got "${value}"`);
+                            }
+                        }
+                    }
+                }
+            } else {
+                const isResolvable = typeof apply.formula === "string" && apply.formula.startsWith("origin.");
+                if (!isResolvable && !DICE_FORMULA.test(String(apply.formula ?? ""))) {
+                    errors.push(`${at} ${apply.type} needs a formula like "4d6" — got "${apply.formula}"`);
+                }
+                if (isResolvable && !/^origin\.technique\..+\.damage(\+\d+d\d+)?$/.test(apply.formula)) {
+                    errors.push(`${at} unrecognised resolvable formula "${apply.formula}"`);
+                }
             }
             if (!DAMAGE_TYPES.has(apply.damageType)) {
                 errors.push(`${at} "${apply.damageType}" is not a pf2e damage type`);

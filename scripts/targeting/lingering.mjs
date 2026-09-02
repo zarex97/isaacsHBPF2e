@@ -1,4 +1,4 @@
-import { inflictPersistent } from "../riders/apply.mjs";
+import { growByStep, inflictPersistent, runSave } from "../riders/apply.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 
 export const FLAG = "lingering";
@@ -89,7 +89,7 @@ export const Lingering = {
             }
         }
 
-        if (spec.damage) {
+        if (spec.damage || spec.save) {
             behaviors.push({
                 type: BEHAVIOR_TYPE,
                 name: spec.name ?? config.item.name,
@@ -118,6 +118,7 @@ export const Lingering = {
                             itemUuid: config.item.uuid ?? null,
                             originUuid: config.item.actor?.uuid ?? null,
                             damage: spec.damage ? scaledDamage(spec.damage, config.steps ?? 0) : null,
+                            save: spec.save ? scaledSave(spec.save, config.steps ?? 0) : null,
                             ...scenery,
                         },
                     },
@@ -247,6 +248,24 @@ function scaledDamage(damage, steps) {
 }
 
 /**
+ * "+1d8 per heightening step" has to be paid here too, for the one nested rider that names it that way.
+ *
+ * A save's nested `damage` rider almost always carries a literal formula — the two condition riders next to
+ * it in *Royal Demon Rose* never grow at all. Only the damage does, so this walks the list once at cast
+ * time and grows only what asks to, the same way `scaledDamage` does for a flat persistent tick.
+ */
+function scaledSave(save, steps) {
+    const grown = foundry.utils.deepClone(save);
+    for (const rider of grown.riders ?? []) {
+        const formula = rider.apply?.formula;
+        if (rider.apply?.type === "damage" && formula && typeof formula === "object") {
+            rider.apply.formula = formula.perStep ? growByStep(formula.base, formula.perStep, steps) : formula.base;
+        }
+    }
+    return grown;
+}
+
+/**
  * The behavior itself: burn whoever is standing here.
  *
  * `_handleRegionEvent` runs on every client that can see the event, so the guard is not optional — without
@@ -280,7 +299,35 @@ class LingeringRegionBehaviorType extends foundry.data.regionBehaviors.RegionBeh
         const payload = region?.flags?.[MODULE_ID]?.[FLAG];
         const damage = payload?.damage;
         const actor = event.data?.token?.actor;
-        if (!damage?.formula || !actor) return;
+        if (!actor || (!damage?.formula && !payload?.save)) return;
+
+        // *Royal Demon Rose* is "any creature that starts its turn in the area must attempt a Fortitude
+        // save" — a save with its own outcome ladder, not a flat tick, so it goes through the same
+        // `runSave` a `save` rider would use rather than the flat persistent-damage path below.
+        if (payload?.save) {
+            // `originUuid` is the caster's *actor* — see `createOne` — not a token, so no `.actor` step here.
+            const originActor = payload.originUuid ? await fromUuid(payload.originUuid) : null;
+            if (!originActor) return;
+            // The Technique that cast this ground, still on the caster's own sheet — `statistic.roll` wants
+            // a real Item or nothing at all here, and a name-and-uuid stand-in tripped over the first pf2e
+            // internal that expected `item.isOfType` to exist. `payload.itemUuid` is the owned item's own
+            // uuid (`config.item.uuid` in `createOne`), so this is the genuine article, not a lookalike.
+            const item = payload.itemUuid ? await fromUuid(payload.itemUuid) : null;
+            await runSave(payload.save, {
+                actor,
+                originActor,
+                originToken: originActor.getActiveTokens(true, true).at(0) ?? null,
+                item,
+                target: event.data.token,
+                eventTarget: event.data.token,
+                adjustments: [],
+                notes: [],
+                prompts: [],
+                choices: [],
+                moves: [],
+            });
+            return;
+        }
 
         const flags = {
             [MODULE_ID]: {

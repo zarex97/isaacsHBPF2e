@@ -8,7 +8,28 @@
                     "value": 30
                 },
                 "maxTargets": 3
-            }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "damageType": "bleed",
+                        "formula": {
+                            "at": {
+                                "13": "3d6",
+                                "17": "4d6",
+                                "9": "2d6"
+                            },
+                            "base": "1d6"
+                        },
+                        "type": "persistent-damage"
+                    },
+                    "note": "A successful Reflex save negates this; only the basic-save slashing lands on a success.",
+                    "outcomes": [
+                        "failure",
+                        "criticalFailure"
+                    ]
+                }
+            ]
         }
     },
     "folder": "1st — Signature (L1)",
@@ -30,16 +51,6 @@
                 ],
                 "materials": [],
                 "type": "slashing"
-            },
-            "1": {
-                "applyMod": false,
-                "category": "persistent",
-                "formula": "1d6",
-                "kinds": [
-                    "damage"
-                ],
-                "materials": [],
-                "type": "bleed"
             }
         },
         "defense": {

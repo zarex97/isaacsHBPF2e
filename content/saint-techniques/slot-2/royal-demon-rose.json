@@ -4,33 +4,67 @@
             "areaTargeting": {
                 "affects": "all"
             },
-            "riders": [
-                {
-                    "apply": {
-                        "slug": "enfeebled",
-                        "type": "condition",
-                        "value": 1
-                    },
-                    "outcomes": [
-                        "failure",
-                        "criticalFailure"
-                    ]
+            "lingering": {
+                "duration": {
+                    "unit": "minutes",
+                    "value": 1
                 },
-                {
-                    "apply": {
-                        "slug": "stupefied",
-                        "type": "condition",
-                        "value": 2
-                    },
-                    "duration": {
-                        "unit": "minutes",
-                        "value": 1
-                    },
-                    "outcomes": [
-                        "criticalFailure"
-                    ]
+                "events": [
+                    "tokenTurnStart"
+                ],
+                "name": "Royal Demon Rose — white petals",
+                "save": {
+                    "dc": "cosmo",
+                    "riders": [
+                        {
+                            "apply": {
+                                "damageType": "poison",
+                                "formula": {
+                                    "base": "3d8",
+                                    "perStep": "1d8"
+                                },
+                                "type": "damage"
+                            },
+                            "outcomes": [
+                                "failure",
+                                "criticalFailure"
+                            ]
+                        },
+                        {
+                            "apply": {
+                                "slug": "enfeebled",
+                                "type": "condition",
+                                "value": 1
+                            },
+                            "note": "Flat enfeebled 1, not cumulative — the guide caps that escalation to the Ascendant/Zenith Boon alone.",
+                            "outcomes": [
+                                "failure",
+                                "criticalFailure"
+                            ],
+                            "predicate": [
+                                {
+                                    "not": "rider:target:condition:enfeebled:1+"
+                                }
+                            ]
+                        },
+                        {
+                            "apply": {
+                                "slug": "stupefied",
+                                "type": "condition",
+                                "value": 2
+                            },
+                            "duration": {
+                                "unit": "minutes",
+                                "value": 1
+                            },
+                            "outcomes": [
+                                "criticalFailure"
+                            ]
+                        }
+                    ],
+                    "statistic": "fortitude"
                 }
-            ]
+            }
         }
     },
     "folder": "2nd (L6)",

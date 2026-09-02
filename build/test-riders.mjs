@@ -1198,7 +1198,7 @@ const unscaled = [];
         }
     }
 })(path.join(ROOT, "content"));
-check("the unscaled success clauses are the two already known", unscaled.sort(), ["Koliço", "Royal Funeral"]);
+check("the unscaled success clauses are the one still known — Royal Funeral joined Sekishiki Tenryū Ha's fix in the Pisces pass", unscaled.sort(), ["Koliço"]);
 
 // The standing policy, checked the way Taurus' was: neither Cloth may ship a whisper.
 const geminiCancerFiles = [
@@ -1924,6 +1924,109 @@ for (const [dir, at] of [["sky-ascendant", 8], ["sky-zenith", 5]]) {
         "choice",
     );
     check("and is the same rider a bare number and a one-element path both name", riderAt(tenbu, 1), riderAt(tenbu, [1]));
+}
+
+/**
+ * Pisces — the Roses.
+ *
+ * *Piranha Rose*'s persistent bleed used to be a second `system.damage` part under a basic save, which
+ * pf2e halves on a success rather than negating — the guide's "a successful save negates the persistent
+ * damage" needs a rider that skips it outright on success instead. *Royal Demon Rose* was worse: two
+ * condition riders sat on `save-rolled`, an event nothing ever fires for a Technique whose entire effect is
+ * "any creature that starts its turn in the area" — the ground tick now lives in `lingering.save` instead,
+ * with the damage folded in as a third rider that never existed before. *Crimson Fog*'s difficult terrain
+ * had no `lingering` flag at all. *Royal Funeral*'s critical failure was a `prompt`, and its "know the
+ * target's exact Hit Points" special had nothing behind it. *Bloody Rose* had no `system.rules`, no
+ * `flags.isaacs-hb-pf2e.riders` and no frequency — a granted action that did nothing but describe itself.
+ */
+{
+    const piranha = load("saint-techniques", "slot-1-signature", "piranha-rose.json");
+    check("the persistent bleed is no longer a second system.damage part", piranha.system.damage["1"], undefined);
+    const bleed = ridersOf(piranha)[0];
+    check(
+        "a success negates it instead: the rider only fires on failure or worse",
+        bleed.outcomes,
+        ["failure", "criticalFailure"],
+    );
+    check(
+        "and the level ladder is the named-level kind, not a per-step one",
+        bleed.apply.formula,
+        { at: { "13": "3d6", "17": "4d6", "9": "2d6" }, base: "1d6" },
+    );
+
+    const rose = load("saint-techniques", "slot-2", "royal-demon-rose.json");
+    check("Royal Demon Rose carries no top-level riders any more — the ground tick replaced them", ridersOf(rose), undefined);
+    const tick = rose.flags["isaacs-hb-pf2e"].lingering;
+    check("the petal cloud ticks on turn start only, matching \"starts its turn in the area\"", tick.events, ["tokenTurnStart"]);
+    check("for the Technique's own 1-minute duration", tick.duration, { unit: "minutes", value: 1 });
+    check("against the Saint's Cosmo DC", [tick.save.dc, tick.save.statistic], ["cosmo", "fortitude"]);
+    check(
+        "three riders: the damage the guide names but never used to apply, flat enfeebled 1, and stupefied 2 on a crit",
+        tick.save.riders.map((r) => [r.apply.type, r.apply.slug ?? r.apply.damageType, r.outcomes]),
+        [
+            ["damage", "poison", ["failure", "criticalFailure"]],
+            ["condition", "enfeebled", ["failure", "criticalFailure"]],
+            ["condition", "stupefied", ["criticalFailure"]],
+        ],
+    );
+    check(
+        "enfeebled is guarded against re-stacking every turn the creature fails again",
+        tick.save.riders[1].predicate,
+        [{ not: "rider:target:condition:enfeebled:1+" }],
+    );
+    check("the damage grows 1d8 a heightening step off a 3d8 base, same as the guide's own ladder", tick.save.riders[0].apply.formula, { base: "3d8", perStep: "1d8" });
+
+    const fog = load("saint-techniques", "slot-3-cloth-ability", "crimson-fog.json");
+    check("Crimson Fog's petals are difficult terrain for 1 minute", fog.flags["isaacs-hb-pf2e"].lingering.difficultTerrain, 2);
+
+    const funeral = load("saint-techniques", "slot-4-ultimate", "royal-funeral.json");
+    check("the damage came off the spell — this is not a basic save, so pf2e would never scale it", funeral.system.damage, {});
+    const funeralRiders = ridersOf(funeral);
+    check("no bare prompt describes the critical-failure death any more", funeralRiders.some((r) => r.apply.type === "prompt"), false);
+    const funeralDamage = funeralRiders.filter((r) => r.apply.type === "damage");
+    check(
+        "the ladder is riders now: half on a success, full on failure and critical failure",
+        funeralDamage.map((r) => [r.apply.multiplier ?? 1, r.outcomes]),
+        [
+            [0.5, ["success"]],
+            [1, ["failure", "criticalFailure"]],
+        ],
+    );
+    const death = funeralRiders.find((r) => r.apply.type === "death");
+    check("critical failure is a real death rider, on criticalFailure alone", [!!death, death.outcomes], [true, ["criticalFailure"]]);
+    const tracker = funeralRiders.find((r) => r.apply.trackedTarget);
+    check(
+        "the Special is a self effect grant, on every outcome — knowing the target's Hit Points does not depend on the save",
+        [tracker.self, tracker.outcomes.length],
+        [true, 4],
+    );
+    check("carried for the rest of the encounter", tracker.duration, { unit: "encounter", value: 1 });
+
+    const marker = load("saint-effects", "activities", "effect-rose-marked.json");
+    const markerRider = ridersOf(marker)[0];
+    check(
+        "the marker re-reads the one creature it was told to watch at the start of every one of the Saint's turns",
+        [markerRider.event, markerRider.self, markerRider.apply.type, markerRider.apply.trackedTarget],
+        ["turn-start", true, "readout", true],
+    );
+
+    const bloodyRose = load("saint-class-features", "actions", "bloody-rose.json");
+    check("Bloody Rose is limited once per minute now, matching its own description", bloodyRose.system.frequency, { max: 1, per: "PT1M", value: 1 });
+    const bloodySave = ridersOf(bloodyRose)[0];
+    check(
+        "and rolls its own Fortitude save on Cosmo, exactly like Aurora Execution",
+        [bloodySave.event, bloodySave.apply.type, bloodySave.apply.statistic, bloodySave.apply.dc],
+        ["action-used", "save", "fortitude", "cosmo"],
+    );
+    check(
+        "failure deals the damage and enfeebled 2; critical failure kills instead of dealing more damage",
+        bloodySave.apply.riders.map((r) => [r.apply.type, r.outcomes]),
+        [
+            ["damage", ["failure"]],
+            ["condition", ["failure"]],
+            ["death", ["criticalFailure"]],
+        ],
+    );
 }
 
 /** `growByStep`, the arithmetic behind every per-step substitution above, exercised directly. */
