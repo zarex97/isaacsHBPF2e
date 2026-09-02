@@ -41,6 +41,17 @@
                     "predicate": [
                         "rider:target:hp-half-or-less"
                     ]
+                },
+                {
+                    "apply": {
+                        "text": "the Yellow Spring takes it — it dies, with no save.",
+                        "type": "death"
+                    },
+                    "event": "damage-applied",
+                    "note": "Any creature the Saint reduces to 0 Hit Points while this boon is active.",
+                    "predicate": [
+                        "rider:target:hp-zero"
+                    ]
                 }
             ]
         }

@@ -1,0 +1,50 @@
+{
+    "folder": "Activities",
+    "img": "icons/magic/lightning/bolt-strike-forked-blue.webp",
+    "name": "Effect: Lightning Plasma (Second Action)",
+    "system": {
+        "badge": {
+            "loop": false,
+            "max": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Leo)].</p><p>On a Zenith day the Lion gives you <strong>two</strong> extra actions each turn, usable only to Strike or Stride. The first is the quickened condition, which pf2e understands. This counter is the second.</p><p>pf2e keeps no pool of actions — the sheet has no number to decrement — so the count is here, on the token, and it goes back to 1 at the start of each of your turns. Click it down when you spend it.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "Note",
+                "selector": "all",
+                "text": "A second extra action this turn, Strike or Stride only, on top of quickened.",
+                "title": "Lightning Plasma (Zenith)"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

@@ -4,6 +4,24 @@
             "areaTargeting": {
                 "affects": "all"
             },
+            "lingering": {
+                "damage": {
+                    "dc": 15,
+                    "formula": "4d6",
+                    "perStep": "1d6",
+                    "persistent": true,
+                    "type": "fire"
+                },
+                "duration": {
+                    "unit": "minutes",
+                    "value": 1
+                },
+                "events": [
+                    "tokenMoveIn",
+                    "tokenTurnEnd"
+                ],
+                "name": "Mavros Eruption Clast — black flame"
+            },
             "riders": [
                 {
                     "apply": {
@@ -22,7 +40,7 @@
         }
     },
     "folder": "4th — Ultimate (L16)",
-    "img": "icons/magic/fire/explosion-fireball-large-black.webp",
+    "img": "icons/magic/fire/explosion-embers-evade-silhouette.webp",
     "name": "Mavros Eruption Clast",
     "system": {
         "area": {
@@ -38,16 +56,6 @@
                 "applyMod": false,
                 "category": null,
                 "formula": "8d8",
-                "kinds": [
-                    "damage"
-                ],
-                "materials": [],
-                "type": "fire"
-            },
-            "1": {
-                "applyMod": false,
-                "category": "persistent",
-                "formula": "4d6",
                 "kinds": [
                     "damage"
                 ],
@@ -71,8 +79,7 @@
         "heightening": {
             "area": 0,
             "damage": {
-                "0": "1d8",
-                "1": "1d6"
+                "0": "1d8"
             },
             "interval": 1,
             "type": "interval"
@@ -108,33 +115,6 @@
                 "damageType": "fire",
                 "diceNumber": 4,
                 "dieSize": "d8",
-                "key": "DamageDice",
-                "label": "Sky: Zenith (+4 heightening steps)",
-                "predicate": [
-                    "sky:zenith"
-                ],
-                "selector": "{item|_id}-damage"
-            },
-            {
-                "category": "persistent",
-                "damageType": "fire",
-                "diceNumber": 2,
-                "dieSize": "d6",
-                "key": "DamageDice",
-                "label": "Sky: Ascendant (+2 heightening steps)",
-                "predicate": [
-                    "sky:ascendant",
-                    {
-                        "not": "sky:zenith"
-                    }
-                ],
-                "selector": "{item|_id}-damage"
-            },
-            {
-                "category": "persistent",
-                "damageType": "fire",
-                "diceNumber": 4,
-                "dieSize": "d6",
                 "key": "DamageDice",
                 "label": "Sky: Zenith (+4 heightening steps)",
                 "predicate": [

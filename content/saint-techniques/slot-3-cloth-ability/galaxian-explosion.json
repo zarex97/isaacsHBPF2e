@@ -3,11 +3,19 @@
         "isaacs-hb-pf2e": {
             "areaTargeting": {
                 "affects": "all"
+            },
+            "lingering": {
+                "difficultTerrain": 2,
+                "duration": {
+                    "unit": "minutes",
+                    "value": 1
+                },
+                "name": "Galaxian Explosion — folded space"
             }
         }
     },
     "folder": "3rd — Cloth Ability (L11)",
-    "img": "icons/magic/unholy/orb-swirling-purple.webp",
+    "img": "icons/magic/light/explosion-star-glow-purple.webp",
     "name": "Galaxian Explosion",
     "system": {
         "area": {

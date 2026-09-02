@@ -18,7 +18,44 @@
                     }
                 },
                 "maxTargets": 4
-            }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "count": "maxTargets",
+                        "onHit": [
+                            {
+                                "apply": {
+                                    "stack": true,
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Scarlet Needle"
+                                },
+                                "note": "The Strike lands, and so does a needle."
+                            }
+                        ],
+                        "onMiss": [
+                            {
+                                "apply": {
+                                    "stack": true,
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Scarlet Needle"
+                                },
+                                "note": "Ascendant: even the miss leaves a needle.",
+                                "predicate": [
+                                    "sky:ascendant",
+                                    "sky:sign:scorpio"
+                                ]
+                            }
+                        ],
+                        "option": "crimson-flurry",
+                        "strike": "unarmed",
+                        "type": "strikes"
+                    },
+                    "event": "action-used",
+                    "note": "The activity counts as three attacks for your multiple attack penalty afterward.",
+                    "self": true
+                }
+            ]
         }
     },
     "folder": "3rd — Cloth Ability (L11)",
@@ -33,7 +70,7 @@
         "damage": {},
         "defense": null,
         "description": {
-            "value": "<p><em>Scorpio &mdash; 3rd (Cloth Ability) Technique, gained at level 11.</em></p><p><em>Fifteen needles delivered in a single burst rather than one at a time.</em></p><p>Make <strong>four unarmed Strikes</strong> against any creatures within 30 feet at <strong>no increase to your multiple attack penalty</strong>. Each Strike that hits applies <strong>one needle</strong> in addition to its normal effect.</p><p>On any day your constellation is ascendant, Strikes that <em>miss</em> apply a needle too.</p><p>The activity counts as three attacks for your multiple attack penalty afterward.</p><hr /><p><strong>Heightening (+2 levels)</strong> At 15th and 19th level, add one Strike.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+            "value": "<p><em>Scorpio — 3rd (Cloth Ability) Technique, gained at level 11.</em></p><p>Fifteen needles delivered in a single burst rather than one at a time.</p><p>Make four unarmed Strikes against any creatures within 30 feet at no increase to your multiple attack penalty. Target whoever you mean to hit before you cast; the Strikes are dealt out among them in turn, so one enemy takes all four.</p><p>Each Strike that hits applies one needle in addition to its normal effect. On any day your constellation is ascendant, Strikes that miss apply a needle too.</p><p>The activity counts as three attacks for your multiple attack penalty afterward — pf2e does not count a turn's attacks, so that last clause is yours to honour.</p><p><strong>Heightening (+2 levels)</strong> At 15th and 19th level, add one Strike.</p><p><em>On a day your constellation is Ascendant this Technique heightens as though you were 4 levels higher; on a Zenith, 8 levels higher.</em></p>"
         },
         "duration": {
             "sustained": false,

@@ -5,7 +5,7 @@
                 "affects": "all",
                 "area": {
                     "type": "square",
-                    "value": 5
+                    "value": 15
                 },
                 "areas": 3,
                 "heightening": {
@@ -23,6 +23,28 @@
                 },
                 "range": 60
             },
+            "lingering": {
+                "blocksSight": true,
+                "duration": {
+                    "unit": "rounds",
+                    "value": 1
+                },
+                "light": {
+                    "animation": "pulse",
+                    "bright": 20,
+                    "color": "#8ecbff",
+                    "dim": 40
+                },
+                "name": "Lightning Crown — pillar"
+            },
+            "overlap": {
+                "from": 2,
+                "predicate": [
+                    "item:slug:lightning-crown"
+                ],
+                "selector": "reflex",
+                "value": -2
+            },
             "riders": [
                 {
                     "apply": {
@@ -37,7 +59,7 @@
         }
     },
     "folder": "2nd (L6)",
-    "img": "icons/magic/lightning/bolt-strike-tan.webp",
+    "img": "icons/magic/lightning/bolt-strike-sparks-blue.webp",
     "name": "Lightning Crown",
     "system": {
         "area": null,
@@ -64,7 +86,7 @@
             }
         },
         "description": {
-            "value": "<p><em>Leo &mdash; 2nd Technique, gained at level 6.</em></p><p><em>The Saint sends cosmo into the ground, and it erupts as pillars of electricity.</em></p><p>Choose up to <strong>three</strong> 5-foot squares within 60 feet; a pillar of lightning erupts from each.</p><p>A creature in or adjacent to a pillar takes @Damage[3d8[electricity]] damage with a basic Reflex save. A creature caught by two or more pillars rolls once and takes damage once, but suffers a <strong>&minus;2</strong> circumstance penalty to that save. A creature that critically fails is knocked prone.</p><p>The pillars persist for 1 round, shedding bright light and blocking line of sight through their squares.</p><hr /><p><strong>Heightening (+2 levels)</strong> The damage increases by 1d8. At 10th, 14th, and 18th level, add one pillar.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+            "value": "<p><em>Leo — 2nd Technique, gained at level 6.</em></p><p>The Saint sends cosmo into the ground, and it erupts as pillars of electricity.</p><p>Choose up to three 5-foot squares within 60 feet; a pillar of lightning erupts from each. You aim the 15-foot square each pillar fills — the square it stands in and everything adjacent to it.</p><p>A creature in or adjacent to a pillar takes @Damage[3d8[electricity]] damage with a basic Reflex save. A creature caught by two or more pillars rolls once and takes damage once, but suffers a &minus;2 circumstance penalty to that save. A creature that critically fails is knocked prone.</p><p>The pillars persist for 1 round, shedding bright light and blocking line of sight through their squares. They do not block movement.</p><p><strong>Heightening (+2 levels)</strong> The damage increases by 1d8. At 10th, 14th, and 18th level, add one pillar.</p><p><em>On a day your constellation is Ascendant this Technique heightens as though you were 4 levels higher; on a Zenith, 8 levels higher.</em></p>"
         },
         "duration": {
             "sustained": false,

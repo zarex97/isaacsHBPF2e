@@ -20,8 +20,12 @@
             "riders": [
                 {
                     "apply": {
-                        "text": "Banished into folded space for 1 minute, then returns to the square it left.",
-                        "type": "prompt"
+                        "label": "folded into the space between dimensions",
+                        "type": "banish"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
                     },
                     "outcomes": [
                         "failure"
@@ -34,8 +38,12 @@
                 },
                 {
                     "apply": {
-                        "text": "Banished into folded space for 10 minutes, then returns to the square it left.",
-                        "type": "prompt"
+                        "label": "folded into the space between dimensions",
+                        "type": "banish"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 10
                     },
                     "outcomes": [
                         "criticalFailure"
@@ -68,7 +76,7 @@
         }
     },
     "folder": "1st — Signature (L1)",
-    "img": "icons/magic/movement/portal-vortex-purple.webp",
+    "img": "icons/magic/control/energy-stream-link-spiral-teal.webp",
     "name": "Another Dimension",
     "system": {
         "area": null,

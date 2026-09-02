@@ -1,4 +1,40 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "substitutions": [
+                            {
+                                "path": "system.rules.1.diceNumber",
+                                "value": {
+                                    "base": 1,
+                                    "perStep": 1
+                                }
+                            },
+                            {
+                                "path": "system.rules.2.value",
+                                "value": {
+                                    "at": {
+                                        "14": "@actor.attributes.speed.value"
+                                    },
+                                    "base": 20
+                                }
+                            }
+                        ],
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Chiron's Light Impulse"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    },
+                    "event": "action-used",
+                    "note": "Wreathed in golden light: +1 to attack rolls, +1d6 force on hits, a fly Speed of 20 feet."
+                }
+            ]
+        }
+    },
     "folder": "2nd (L6)",
     "img": "icons/magic/light/beam-rays-yellow.webp",
     "name": "Chiron's Light Impulse",
@@ -8,33 +44,14 @@
             "value": ""
         },
         "counteraction": false,
-        "damage": {
-            "0": {
-                "applyMod": false,
-                "category": null,
-                "formula": "1d6",
-                "kinds": [
-                    "damage"
-                ],
-                "materials": [],
-                "type": "force"
-            }
-        },
+        "damage": {},
         "defense": null,
         "description": {
-            "value": "<p><em>Sagittarius &mdash; 2nd Technique, gained at level 6.</em></p><p><em>Sagittarius is the centaur Chiron &mdash; the teacher. This is his gift: the arrow that guides rather than kills.</em></p><p>The target is wreathed in golden light for 1 minute. It gains a <strong>+1 status bonus to attack rolls</strong>, its attacks deal an extra @Damage[1d6[force]] damage, and it gains a <strong>fly Speed of 20 feet</strong>.</p><p>Once during the duration, as a free action, the target may treat one attack roll or saving throw as though it had rolled a <strong>10</strong>.</p><hr /><p><strong>Heightening (+2 levels)</strong> The extra damage increases by 1d6. At 14th level the fly Speed equals the target's Speed.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+            "value": "<p><em>Sagittarius — 2nd Technique, gained at level 6.</em></p><p>Sagittarius is the centaur Chiron — the teacher. This is his gift: the arrow that guides rather than kills.</p><p>The target is wreathed in golden light for 1 minute. It gains a +1 status bonus to attack rolls, its attacks deal an extra @Damage[1d6[force]] damage, and it gains a fly Speed of 20 feet.</p><p>Once during the duration, as a free action, the target may treat one attack roll or saving throw as though it had rolled a 10.</p><p><strong>Heightening (+2 levels)</strong> The extra damage increases by 1d6. At 14th level the fly Speed equals the target's Speed.</p><p><em>On a day your constellation is Ascendant this Technique heightens as though you were 4 levels higher; on a Zenith, 8 levels higher.</em></p>"
         },
         "duration": {
             "sustained": false,
             "value": "1 minute"
-        },
-        "heightening": {
-            "area": 0,
-            "damage": {
-                "0": "1d6"
-            },
-            "interval": 1,
-            "type": "interval"
         },
         "level": {
             "value": 3
@@ -48,33 +65,7 @@
             "value": "30 feet"
         },
         "requirements": "",
-        "rules": [
-            {
-                "damageType": "force",
-                "diceNumber": 2,
-                "dieSize": "d6",
-                "key": "DamageDice",
-                "label": "Sky: Ascendant (+2 heightening steps)",
-                "predicate": [
-                    "sky:ascendant",
-                    {
-                        "not": "sky:zenith"
-                    }
-                ],
-                "selector": "{item|_id}-damage"
-            },
-            {
-                "damageType": "force",
-                "diceNumber": 4,
-                "dieSize": "d6",
-                "key": "DamageDice",
-                "label": "Sky: Zenith (+4 heightening steps)",
-                "predicate": [
-                    "sky:zenith"
-                ],
-                "selector": "{item|_id}-damage"
-            }
-        ],
+        "rules": [],
         "target": {
             "value": "one ally or yourself"
         },

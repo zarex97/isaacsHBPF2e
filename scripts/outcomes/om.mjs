@@ -19,9 +19,53 @@ export const Om = {
         // The damage roll is the *only* seam that works. Spending on the cast would take the stacks before
         // the damage is rolled, and the dice the stacks are worth are added by rule elements that read the
         // toggle — so an early spend would empower nothing at all.
-        Hooks.on("pf2e.damageRoll", (roll) => Om.onDamageRoll(roll));
+        //
+        // This used to hook `pf2e.damageRoll` and read `roll.options.rollerRollOptions`. That field does not
+        // exist on the `DamageRoll` this pf2e version hands the hook — its own `.options` is just
+        // `{rollerId, damage, degreeOfSuccess, bypass, showBreakdown}` — so `om:eyes-open` was never seen and
+        // nothing ever spent: the empowerment sat armed all turn, silently, with no error anywhere. The same
+        // option is on the *message* the roll produces, at `flags.pf2e.context.options`, which is where every
+        // other event source in this module already reads its facts from.
+        Hooks.on("createChatMessage", (message, _options, userId) => Om.onDamageMessage(message, userId));
         // "before the end of this turn": anything unspent lapses.
         Hooks.on("pf2e.endTurn", (combatant) => Om.onTurnEnd(combatant));
+        // "Your eyes open automatically, spending nothing, if you are knocked unconscious."
+        Hooks.on("createItem", (item) => Om.onCondition(item));
+        Hooks.on("updateActor", (actor, changes) => Om.onActorUpdate(actor, changes));
+    },
+
+    /**
+     * The one way out of Om that costs nothing.
+     *
+     * The guide is explicit that being knocked out opens the eyes *without* spending the stacks, which is
+     * the opposite of every other way they leave: no empowerment is armed, the toggle is never flipped, the
+     * effect simply goes. Without this a Virgo Saint woke up still blinded by an effect they could no longer
+     * act to remove — the blindness outliving the choice that bought it.
+     */
+    async onCondition(item) {
+        if (game.users.activeGM?.id !== game.user.id) return;
+        if (item?.type !== "condition" || item.slug !== "unconscious") return;
+        await Om.wake(item.actor);
+    },
+
+    async onActorUpdate(actor, changes) {
+        if (game.users.activeGM?.id !== game.user.id) return;
+        if (foundry.utils.getProperty(changes ?? {}, "system.attributes.hp.value") === undefined) return;
+        if ((actor?.hitPoints?.value ?? 1) > 0) return;
+        await Om.wake(actor);
+    },
+
+    /** Remove the effect without toggling: no spend, no empowerment, no chat card claiming otherwise. */
+    async wake(actor) {
+        const effect = Om.effectOn(actor);
+        if (!effect) return;
+        await effect.delete();
+        await ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            flavor: "Om",
+            content: `<p><strong>${actor.name}</strong> is knocked out and their eyes open — the stacks are `
+                + `lost, not spent.</p>`,
+        });
     },
 
     async onTurnEnd(combatant) {
@@ -68,10 +112,14 @@ export const Om = {
         return Math.min(ascendant ? 7 : 5, effect?.system?.badge?.max ?? Infinity);
     },
 
-    async onDamageRoll(roll) {
-        const options = roll?.options?.rollerRollOptions ?? roll?.options?.rollOptions ?? [];
-        if (!setHas(options, OPTION)) return;
-        const actor = actorFor(roll);
+    async onDamageMessage(message, userId) {
+        // Only the client whose roll produced the message acts, the same guard `Sources.onMessage` uses —
+        // otherwise a five-player table spends the stacks five times over.
+        if (game.user.id !== userId) return;
+        if (message?.flags?.pf2e?.context?.type !== "damage-roll") return;
+        const options = message.flags.pf2e.context.options ?? [];
+        if (!options.includes(OPTION)) return;
+        const actor = message.actor;
         if (actor) await Om.spend(actor);
     },
 
@@ -91,15 +139,16 @@ export const Om = {
         }
     },
 
-    /** Zero the stacks and put the toggle back, which together is "the empowerment is spent". */
+    /**
+     * "All stacks are spent and reset to 0."
+     *
+     * Deleting rather than zeroing, because zero is not a state Om has: the counter's own minimum is 1, so
+     * an update to 0 was clamped straight back to 1 and the toggle went off underneath it — which put the
+     * Saint back to blinded, with a stack, the instant they spent everything they had. Every way out of Om
+     * ends the same way: the eyes are open, the effect is gone, and closing them again is a fresh action.
+     */
     async close(effect) {
-        const toggle = (effect.rules ?? []).find((rule) => rule.key === "RollOption" && rule.option === OPTION);
-        if (typeof toggle?.toggle === "function") {
-            await toggle.toggle(false);
-        }
-        if ((effect.system?.badge?.value ?? 0) > 0) {
-            await effect.update({ "system.badge.value": 0 });
-        }
+        await effect.delete();
     },
 
     isOpen(actor) {
@@ -113,13 +162,3 @@ export const Om = {
         return actor?.itemTypes?.effect?.find((item) => item.slug === EFFECT_SLUG) ?? null;
     },
 };
-
-function setHas(options, option) {
-    return options instanceof Set ? options.has(option) : Array.isArray(options) && options.includes(option);
-}
-
-function actorFor(roll) {
-    const uuid = roll?.options?.origin?.actor ?? roll?.data?.actor?.uuid;
-    if (uuid) return fromUuidSync(uuid) ?? null;
-    return null;
-}

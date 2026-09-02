@@ -1,0 +1,82 @@
+{
+    "folder": "Activities",
+    "img": "icons/magic/light/beam-explosion-blue.webp",
+    "name": "Effect: Chiron's Light Impulse",
+    "system": {
+        "description": {
+            "value": "<p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Chiron's Light Impulse].</p><p>You are wreathed in golden light for 1 minute. You gain a +1 status bonus to attack rolls, your attacks deal an extra @Damage[1d6[force]] damage, and you gain a fly Speed of 20 feet — equal to your own Speed once the Saint reaches 14th level.</p><p>Once during the duration, you may treat one attack roll or saving throw as though you had rolled a 10. The game offers it as a fortune option on the roll itself; taking it spends this effect's one use.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 3
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Chiron's Light Impulse",
+                "selector": "attack-roll",
+                "type": "status",
+                "value": 1
+            },
+            {
+                "damageType": "force",
+                "diceNumber": 1,
+                "dieSize": "d6",
+                "key": "DamageDice",
+                "label": "Chiron's Light Impulse",
+                "predicate": [
+                    "item:damage"
+                ],
+                "selector": [
+                    "strike-damage",
+                    "spell-damage"
+                ]
+            },
+            {
+                "key": "BaseSpeed",
+                "selector": "fly",
+                "value": 20
+            },
+            {
+                "effectType": "fortune",
+                "key": "SubstituteRoll",
+                "label": "Chiron's guidance",
+                "removeAfterRoll": "if-enabled",
+                "selector": "attack-roll",
+                "value": 10
+            },
+            {
+                "effectType": "fortune",
+                "key": "SubstituteRoll",
+                "label": "Chiron's guidance",
+                "removeAfterRoll": "if-enabled",
+                "selector": "saving-throw",
+                "value": 10
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "light"
+            ]
+        }
+    },
+    "type": "effect"
+}

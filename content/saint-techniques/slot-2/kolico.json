@@ -18,14 +18,19 @@
                 },
                 {
                     "apply": {
-                        "slug": "immobilized",
-                        "type": "condition"
+                        "conditions": [
+                            "immobilized"
+                        ],
+                        "escapeDc": "cosmo",
+                        "hardness": 8,
+                        "hardnessPerStep": 2,
+                        "hp": 30,
+                        "hpPerStep": 10,
+                        "img": "icons/magic/water/orb-ice-web.webp",
+                        "name": "Ice Rings",
+                        "type": "encasement"
                     },
-                    "duration": {
-                        "unit": "minutes",
-                        "value": 1
-                    },
-                    "note": "Escape DC equal to the Cosmo DC; the rings have Hardness 8 and 30 HP.",
+                    "note": "Escape DC equal to the Cosmo DC; the rings have Hardness 8 and 30 HP, and shatter if destroyed.",
                     "outcomes": [
                         "failure",
                         "criticalFailure"

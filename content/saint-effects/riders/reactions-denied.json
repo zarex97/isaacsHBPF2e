@@ -1,0 +1,44 @@
+{
+    "folder": "Riders",
+    "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+    "name": "Effect: Reactions Denied",
+    "system": {
+        "description": {
+            "value": "<p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Tenma Kōfuku] on a critical failure.</p><p><strong>You cannot use reactions.</strong></p><p>pf2e has no condition for this and no gate on a reaction being taken, so the effect is the enforcement: it sits on the token with its own timer, and it says so on every roll the creature makes. Nothing else in the system can refuse the reaction, which is recorded here rather than quietly dropped.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 6
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "Note",
+                "selector": "all",
+                "text": "This creature cannot use reactions while Tenma Kōfuku's light holds it.",
+                "title": "Reactions Denied"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

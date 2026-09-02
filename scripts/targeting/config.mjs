@@ -1,5 +1,7 @@
+import { Astral } from "../astral.mjs";
+import { testPredicate } from "../lib/roll-options.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
-import { applyHeightening, applyThresholds, skyStepsFromOptions } from "./heightening.mjs";
+import { applyHeightening, applyThresholds, effectiveLevel, skyStepsFromOptions } from "./heightening.mjs";
 
 /** The effect-area shapes pf2e knows how to build a Region from (`EFFECT_AREA_SHAPES`). */
 export const AREA_SHAPES = ["burst", "cone", "cube", "cylinder", "emanation", "line", "ring", "square"];
@@ -32,7 +34,7 @@ export const FLAG = "areaTargeting";
  *
  * Returns null when this item should cast the ordinary way.
  */
-export function configFor(item) {
+export function configFor(item, override = {}) {
     if (!item?.actor || !canvas?.ready) return null;
     if (!game.settings.get(MODULE_ID, "areaTargeting")) return null;
 
@@ -40,7 +42,16 @@ export function configFor(item) {
     if (flag?.enabled === false) return null;
 
     // A synthetic area is opt-in by definition; a real one is opt-out.
-    const area = flag?.area ?? item.system?.area ?? null;
+    //
+    // A Technique may also change shape depending on how it was released. *Tenma Kōfuku* is a 30-foot cone
+    // — "unless you release it in the same turn that you open your eyes, in which case it becomes a 60-foot
+    // emanation centred on you". That is one Technique with two areas, chosen by a roll option the Cloth is
+    // already emitting, so it is decided here rather than authored as a second spell.
+    // `override.area` is a shape the caster picked at cast time. *Photon Burst* is "a 120-foot line, or
+    // a 30-foot burst within 120 feet (choose as you cast)" — one Technique with two shapes and no rule
+    // deciding between them, so the only thing that can decide is the person casting it.
+    const alternate = override.area ?? alternateArea(flag, item);
+    const area = alternate ?? flag?.area ?? item.system?.area ?? null;
     const hasArea = !!area?.type && !!Number(area.value);
     if (hasArea && !AREA_SHAPES.includes(area.type)) {
         console.warn(`Isaac's Homebrew | ${item.name}: unknown area shape "${area.type}"`);
@@ -81,18 +92,19 @@ export function configFor(item) {
         flag?.heightening,
         { baseRank: item.baseRank ?? item.system?.level?.value, castRank: item.rank, bonusSteps },
     );
-    applyThresholds(grown, flag?.heightening, item.actor?.level);
+    applyThresholds(grown, flag?.heightening, effectiveLevel(item.actor));
 
     // The area itself. pf2e folded the ordinary steps into `system.area.value` during preparation, so only
     // the sky's share is owed here; a synthetic area was never touched by the system and carries its growth
     // on the flag instead.
-    const areaPerStep = Number((flag?.area ? flag?.heightening?.area : item.system?.heightening?.area) ?? 0);
+    const authoredArea = !!(alternate ?? flag?.area);
+    const areaPerStep = Number((authoredArea ? flag?.heightening?.area : item.system?.heightening?.area) ?? 0);
     const areaValue = hasArea ? Number(area.value) + areaPerStep * bonusSteps : 0;
 
     return {
         item,
         area: hasArea ? { type: area.type, value: areaValue } : null,
-        synthetic: !item.system?.area,
+        synthetic: authoredArea || !item.system?.area,
         affects: AFFECTS.includes(flag?.affects) ? flag.affects : "all",
         includesSelf: flag?.includesSelf === true,
         includesNeutral: flag?.includesNeutral === true,
@@ -100,13 +112,45 @@ export function configFor(item) {
         predicate: Array.isArray(flag?.predicate) ? flag.predicate : [],
         // An emanation has nowhere to go but the caster and so is never placed; everything else is aimed,
         // including a cone or a line, whose apex pf2e already snaps to the edge of a space for you.
-        anchor: area.type === "emanation" ? "self" : "free",
+        //
+        // Optional chaining, because a Technique reaching here may legitimately have no area at all: "one
+        // creature within 60 feet" is a target count and a range, which is the shape `checkExistingTargets`
+        // exists to handle. Reading `.type` off that null threw straight out of the `cast` wrapper — so
+        // *Another Dimension*, *Tenbu Hōrin* and *Rikudō Rinne* could not be cast, at all, ever.
+        anchor: area?.type === "emanation" ? "self" : "free",
         maxTargets: grown.maxTargets,
-        range: grown.range,
+        // The flag's range when it has one — *Another Dimension* declares 60 feet and grows it ten a step —
+        // and the spell's own otherwise. Every area Technique in the module states its reach in
+        // `system.range` and none of them repeats it on the flag, so "a 60-foot burst **within 120 feet**"
+        // was half a rule: the burst was placed and the 120 feet was never checked, for any Cloth.
+        range: grown.range || feetOf(item.system?.range?.value),
         areas: grown.areas,
         length: grown.length,
         steps: grown.steps,
     };
+}
+
+/**
+ * The first alternate area whose predicate the caster satisfies, or null.
+ *
+ * Tested against the caster's own roll options, because every condition of this kind is a fact about the
+ * Saint rather than about the target: which aspect they are wearing, whether their eyes are open, what the
+ * sky is doing today. The area that wins is treated exactly like an authored `flag.area` from here on —
+ * including being self-anchored when it is an emanation, which is what makes "centred on you" true.
+ */
+function alternateArea(flag, item) {
+    const alternates = flag?.alternateArea ? [flag.alternateArea].flat() : [];
+    if (alternates.length === 0) return null;
+
+    const options = new Set(item.actor?.getRollOptions?.() ?? []);
+    for (const option of item.getRollOptions?.("item") ?? []) options.add(option);
+    return alternates.find((alternate) => testPredicate(alternate.predicate, options))?.area ?? null;
+}
+
+/** "120 feet" as a number. Anything without a number in it — "touch", "planetary" — is no limit at all. */
+export function feetOf(range) {
+    const match = /(\d+)/.exec(String(range ?? ""));
+    return match ? Number(match[1]) : 0;
 }
 
 export function isTechnique(item) {
@@ -116,8 +160,14 @@ export function isTechnique(item) {
 /**
  * The caster's token, which a self-anchored area is built on and which every line of effect is drawn from.
  * Prefers the controlled token so a GM moving two copies of the same actor gets the one they are holding.
+ *
+ * A Saint who is projecting casts their *mental* Techniques from the astral body instead — "using its
+ * position as the origin" is a range and a line of effect measured from somewhere else, and this is the one
+ * function that decides where both are measured from.
  */
-export function originTokenFor(actor) {
+export function originTokenFor(actor, item = null) {
+    const projected = item ? Astral.originFor(actor, item) : null;
+    if (projected) return projected;
     const tokens = actor?.getActiveTokens?.(true, false) ?? [];
     return tokens.find((token) => token.controlled) ?? tokens[0] ?? null;
 }

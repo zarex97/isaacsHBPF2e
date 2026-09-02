@@ -1,0 +1,37 @@
+{
+    "folder": "Activities",
+    "img": "icons/magic/death/undead-ghost-strike-white.webp",
+    "name": "Effect: Soul Consumed",
+    "system": {
+        "description": {
+            "value": "<p>Reduced to 0 Hit Points by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Sekishiki Kisōen]. The demonic blue flames fed on this creature's soul as they burned.</p><p>It <strong>cannot be raised by any effect below <em>resurrect</em></strong>.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 3
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

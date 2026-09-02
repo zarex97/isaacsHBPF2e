@@ -1,0 +1,37 @@
+{
+    "folder": "Riders",
+    "img": "icons/svg/aura.svg",
+    "name": "Effect: Aura Tick",
+    "system": {
+        "description": {
+            "value": "<p>Content-free by design. This is the item a Saint's <code>Aura</code> rule element points at so pf2e's own aura check has something to grant and take back as a creature crosses the line or ends its turn inside — the mechanism, not the message.</p><p>The module reads its creation, works out which of the Saint's own effects is carrying the actual tick — the damage, the save, the condition — applies that, and deletes this one so pf2e is free to grant it again next turn. It should never be seen sitting on a sheet for more than an instant.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": false
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

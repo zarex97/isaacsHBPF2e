@@ -1,0 +1,123 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "bypass": [
+                {
+                    "hardness": "ignore",
+                    "immunity": {
+                        "mode": "ignore",
+                        "types": [
+                            "physical"
+                        ]
+                    },
+                    "predicate": [
+                        {
+                            "or": [
+                                "item:category:unarmed",
+                                "item:trait:unarmed"
+                            ]
+                        }
+                    ],
+                    "resistance": {
+                        "max": null,
+                        "types": "all"
+                    }
+                }
+            ]
+        }
+    },
+    "folder": "Activities",
+    "img": "icons/weapons/simple/gladius.webp",
+    "name": "Effect: Double Excalibur",
+    "system": {
+        "description": {
+            "value": "<p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Double Excalibur] for the length of the activity.</p><p>Both Strikes gain the deadly d12 trait and ignore Hardness, resistance, and immunity to physical damage.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 6
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "definition": [
+                    {
+                        "or": [
+                            "item:category:unarmed",
+                            "item:trait:unarmed"
+                        ]
+                    }
+                ],
+                "key": "AdjustStrike",
+                "mode": "remove",
+                "property": "weapon-traits",
+                "value": "deadly-d8"
+            },
+            {
+                "definition": [
+                    {
+                        "or": [
+                            "item:category:unarmed",
+                            "item:trait:unarmed"
+                        ]
+                    }
+                ],
+                "key": "AdjustStrike",
+                "mode": "remove",
+                "property": "weapon-traits",
+                "value": "deadly-d10"
+            },
+            {
+                "definition": [
+                    {
+                        "or": [
+                            "item:category:unarmed",
+                            "item:trait:unarmed"
+                        ]
+                    }
+                ],
+                "key": "AdjustStrike",
+                "mode": "add",
+                "property": "weapon-traits",
+                "value": "deadly-d12"
+            },
+            {
+                "damageType": "slashing",
+                "diceNumber": 0,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Double Excalibur",
+                "predicate": [
+                    {
+                        "or": [
+                            "item:category:unarmed",
+                            "item:trait:unarmed"
+                        ]
+                    }
+                ],
+                "selector": "unarmed-damage"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": false
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

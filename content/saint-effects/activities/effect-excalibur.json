@@ -4,7 +4,7 @@
     "name": "Effect: Excalibur",
     "system": {
         "description": {
-            "value": "<p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Excalibur]</p><p>Until the end of your turn, your unarmed Strikes deal slashing damage, gain the deadly d10 trait, and ignore an object's Hardness.</p>"
+            "value": "<p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Excalibur]</p><p>Until the end of your turn, your unarmed Strikes deal slashing damage, gain the deadly d10 trait (d12 from 10th level), and ignore an object's Hardness. From 14th level they deal an additional 1d6 slashing damage, and 2d6 from 18th.</p>"
         },
         "duration": {
             "expiry": "turn-end",
@@ -48,6 +48,22 @@
                 "mode": "add",
                 "property": "weapon-traits",
                 "value": "deadly-d10"
+            },
+            {
+                "damageType": "slashing",
+                "diceNumber": 0,
+                "dieSize": "d6",
+                "key": "DamageDice",
+                "label": "Excalibur",
+                "predicate": [
+                    {
+                        "or": [
+                            "item:category:unarmed",
+                            "item:trait:unarmed"
+                        ]
+                    }
+                ],
+                "selector": "unarmed-damage"
             }
         ],
         "start": {

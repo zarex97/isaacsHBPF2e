@@ -18,18 +18,16 @@
                 },
                 {
                     "apply": {
-                        "slug": "petrified",
-                        "type": "condition"
+                        "conditions": [
+                            "petrified"
+                        ],
+                        "hardness": 30,
+                        "hp": 120,
+                        "img": "icons/magic/water/orb-ice-web.webp",
+                        "name": "the Coffin",
+                        "type": "encasement"
                     },
-                    "outcomes": [
-                        "criticalFailure"
-                    ]
-                },
-                {
-                    "apply": {
-                        "text": "Entombed in unmelting ice indefinitely: ageless and needing no air. The coffin has Hardness 30 and 120 HP, and ends only by being destroyed, by dispel magic (counteract rank 8), by a cold effect exceeding the Saint's, or by the Saint's choice.",
-                        "type": "prompt"
-                    },
+                    "note": "Entombed indefinitely: ageless and needing no air. Ends by being destroyed, by dispel magic (counteract rank 8), by a cold effect exceeding the Saint's own, or by the Saint's choice.",
                     "outcomes": [
                         "criticalFailure"
                     ]

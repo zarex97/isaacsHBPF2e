@@ -1,0 +1,70 @@
+{
+    "folder": "Activities",
+    "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+    "name": "Effect: Tenpōrin'in",
+    "system": {
+        "description": {
+            "value": "<p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Tenpōrin'in] to the Saint and every ally in the emanation.</p><p>You gain a status bonus to Will saves and to saves against mental effects, and you are immune to the <strong>fascinated</strong> and <strong>frightened</strong> conditions.</p><p>The bonus is +1, +2 from the Saint's 12th level, and +3 from their 18th — and the immunity extends to <strong>confused</strong> from 12th. All four numbers are the <em>caster's</em>, not yours, so they are written in when the wheel turns rather than read off your own sheet. Below 12th level the confused immunity carries a predicate nothing satisfies, which is how it stays switched off.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 3
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Tenpōrin'in",
+                "selector": "will",
+                "type": "status",
+                "value": 1
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Tenpōrin'in",
+                "predicate": [
+                    "mental"
+                ],
+                "selector": "saving-throw",
+                "type": "status",
+                "value": 1
+            },
+            {
+                "key": "Immunity",
+                "type": "fascinated"
+            },
+            {
+                "key": "Immunity",
+                "type": "frightened"
+            },
+            {
+                "key": "Immunity",
+                "predicate": [
+                    "tenporinin:refined"
+                ],
+                "type": "confused"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

@@ -1,4 +1,65 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "maxTargets": 1,
+                "range": 5
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "count": 2,
+                        "onAllHit": [
+                            {
+                                "apply": {
+                                    "options": [
+                                        {
+                                            "apply": {
+                                                "type": "effect",
+                                                "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Severed (Limb)"
+                                            },
+                                            "label": "A limb"
+                                        },
+                                        {
+                                            "apply": {
+                                                "type": "effect",
+                                                "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Severed (Sense)"
+                                            },
+                                            "label": "A sense"
+                                        },
+                                        {
+                                            "apply": {
+                                                "type": "effect",
+                                                "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Severed (Natural Attack)"
+                                            },
+                                            "label": "A natural attack"
+                                        }
+                                    ],
+                                    "prompt": "Double Excalibur. What is lost?",
+                                    "type": "choice"
+                                },
+                                "note": "Both Strikes hit — until the target receives regenerate."
+                            }
+                        ],
+                        "option": "double-excalibur",
+                        "strike": "unarmed",
+                        "substitutions": [
+                            {
+                                "path": "system.rules.3.diceNumber",
+                                "value": "origin.item.steps"
+                            }
+                        ],
+                        "type": "strikes",
+                        "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Double Excalibur"
+                    },
+                    "event": "action-used",
+                    "note": "Both Strikes at full attack modifier, no multiple attack penalty. Counts as two attacks for your multiple attack penalty afterward.",
+                    "self": true
+                }
+            ]
+        }
+    },
     "folder": "3rd — Cloth Ability (L11)",
     "img": "icons/weapons/swords/swords-crossed-yellow.webp",
     "name": "Double Excalibur",
@@ -22,7 +83,7 @@
         },
         "defense": null,
         "description": {
-            "value": "<p><em>Capricorn &mdash; 3rd (Cloth Ability) Technique, gained at level 11.</em></p><p><em>Both arms as blades &mdash; the technique that cuts twice in the space of one cut.</em></p><p>Make <strong>two unarmed Strikes</strong> against a single creature within reach. Both are made at your <strong>full attack modifier with no multiple attack penalty</strong>, both gain <strong>deadly d12</strong>, and both ignore Hardness, resistance, and immunity to physical damage.</p><p><strong>If both hit</strong>, the target must attempt a Fortitude save against your Cosmo DC; on a failure it is <strong>severed</strong>, as The Sharpest Sword.</p><p>The activity counts as two attacks for your multiple attack penalty afterward.</p><hr /><p><strong>Heightening (+2 levels)</strong> Each Strike deals an additional 1d8 slashing damage.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p><hr /><p><strong>Automation note:</strong> in the guide this Technique's bonus damage starts at <em>zero</em> and is purely a heightening rider, but a pf2e spell needs a base formula to scale from. The base here is <strong>1d1</strong> &mdash; a flat 1 point, deliberately beneath notice &mdash; so that the heightening steps and the sky's bonus dice both apply automatically instead of being tracked by hand.</p>"
+            "value": "<p><em>Capricorn — 3rd (Cloth Ability) Technique, gained at level 11.</em></p><p>Both arms as blades — the technique that cuts twice in the space of one cut.</p><p>Make two unarmed Strikes against a single creature within reach. Both are made at your full attack modifier with no multiple attack penalty, both gain deadly d12, and both ignore Hardness, resistance, and immunity to physical damage.</p><p>If both hit, the target must attempt a Fortitude save against your Cosmo DC; on a failure it is severed, as The Sharpest Sword.</p><p>The activity counts as two attacks for your multiple attack penalty afterward — pf2e does not count a turn's attacks, so that last clause is yours to honour.</p><p><strong>Heightening (+2 levels)</strong> Each Strike deals an additional 1d8 slashing damage.</p><p><em>On a day your constellation is Ascendant this Technique heightens as though you were 4 levels higher; on a Zenith, 8 levels higher.</em></p><p><em>Automation note: in the guide this Technique's bonus damage starts at zero and is purely a heightening rider, but a pf2e spell needs a base formula to scale from. The base here is 1d1 — a flat 1 point, deliberately beneath notice — so that the heightening steps and the sky's bonus dice both apply automatically instead of being tracked by hand.</em></p>"
         },
         "duration": {
             "sustained": false,

@@ -1,0 +1,69 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "damageType": "mental",
+                        "formula": "1d6",
+                        "perCounter": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Scarlet Needle",
+                        "type": "damage"
+                    },
+                    "event": "turn-end",
+                    "note": "The mirage takes its due: 1d6 mental per needle.",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "folder": "Riders",
+    "img": "icons/magic/control/hypnosis-mesmerism-eye-tan.webp",
+    "name": "Effect: Crimson Mirage",
+    "system": {
+        "description": {
+            "value": "<p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Crimson Mirage].</p><p>For 1 minute this creature is <strong>dazzled</strong>, <strong>treats all other creatures as concealed</strong>, and takes mental damage at the end of each of its turns — one die per needle currently in it.</p><p>The dazzled and the damage are applied for you. The concealment is a note: pf2e resolves concealment from the attacker's side, as a DC 5 flat check the attacker rolls, and there is no rule element that makes every other creature concealed to one particular pair of eyes. Roll the flat check for this creature's attacks.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 3
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "inMemoryOnly": true,
+                "key": "GrantItem",
+                "uuid": "Compendium.pf2e.conditionitems.Item.TkIyaNPgTZFBCCuh"
+            },
+            {
+                "key": "Note",
+                "selector": "attack",
+                "text": "Every other creature is concealed to you: roll a DC 5 flat check before each attack.",
+                "title": "Crimson Mirage"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "illusion",
+                "mental"
+            ]
+        }
+    },
+    "type": "effect"
+}

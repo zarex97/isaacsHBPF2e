@@ -98,8 +98,11 @@ function adjacentFreeSquare(token) {
 
     const width = Math.max(1, Math.round(token.width));
     const height = Math.max(1, Math.round(token.height));
+    // `.contents` first: a Scene's `tokens` is an EmbeddedCollection, which is a Map with `map`, `filter`
+    // and `find` bolted on — and no `flatMap`. Calling it threw on every turn start of a Gemini Saint on a
+    // Zenith day, which is the one day the duplicate is supposed to appear, so it never once did.
     const occupied = new Set(
-        token.parent.tokens.flatMap((other) => {
+        token.parent.tokens.contents.flatMap((other) => {
             const w = Math.max(1, Math.round(other.width));
             const h = Math.max(1, Math.round(other.height));
             const squares = [];

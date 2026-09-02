@@ -1,0 +1,47 @@
+{
+    "folder": "Activities",
+    "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
+    "name": "Effect: Astral Body",
+    "system": {
+        "description": {
+            "value": "<p>A projected consciousness, not a creature. It is <strong>invisible</strong> to anything without a sixth sense or <em>see invisibility</em>, cannot be damaged or physically interacted with, and cannot attack.</p><p>Created and removed by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Astral Projection].</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 3
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "Resistance",
+                "type": "all-damage",
+                "value": 9999
+            },
+            {
+                "key": "RollOption",
+                "option": "saint:immovable"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

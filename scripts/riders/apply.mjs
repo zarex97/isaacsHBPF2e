@@ -1,9 +1,19 @@
-import { describeActor, describeDamage, riderOptions } from "../lib/roll-options.mjs";
+import { describeActor, describeDamage, riderOptions, testPredicate } from "../lib/roll-options.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 import { catchTokens } from "../targeting/catch.mjs";
 import { shapeFromArea } from "../targeting/place.mjs";
-import { skyStepsFromOptions, stepsFor } from "../targeting/heightening.mjs";
-import { OUTCOME_LABELS, collectRiders, itemFor } from "./data.mjs";
+import {
+    applyHeightening,
+    applyThresholds,
+    effectiveLevel,
+    skyStepsFromOptions,
+    stepsFor,
+    thresholdsCrossed,
+    valueAtLevel,
+} from "../targeting/heightening.mjs";
+import { Banish, durationSeconds } from "./banish.mjs";
+import { OUTCOME_LABELS, collectRiders, itemFor, riderAt } from "./data.mjs";
+import { Encasement } from "./encasement.mjs";
 import { selectRiders } from "./select.mjs";
 
 /** pf2e's DegreeOfSuccess is an index, not a word. */
@@ -60,7 +70,21 @@ async function applyToTarget(target, candidates, context, payload) {
     const actor = target?.actor;
     if (!actor) return;
 
-    const receiptKey = `${payload.event}:${target.id}`;
+    // Keyed on *both* targets: the one the event was about, and the one this rider lands on. They are the
+    // same token for an ordinary rider, and different for a `self` rider on a per-target event — which is
+    // what *Sekishiki Kisōen* is, healing the caster once for each creature that fails its save. With the
+    // event's target left out, the second failure wrote the same key as the first, matched its outcome,
+    // and was dropped as a re-application: the Saint healed once no matter how many souls the flames took.
+    //
+    // A third thing has to be in the key, and Virgo is the Cloth that proves it. `Sources.onActionUsed`
+    // sends one relay request for the self riders and a separate one per confirmed target — and when a
+    // Technique's area `includesSelf`, the caster is *also* one of those confirmed targets, so their own
+    // token is `payload.targetUuid` twice, under two different rider sets. Both requests then produced the
+    // identical key above, so *Tenpōrin'in*'s self-only counteract offer wrote a receipt that the very next
+    // request — the ordinary buff landing on the caster as an ally — matched and silently declined to
+    // re-apply. The Saint got the counteract card and never their own aura. `selfOnly` is therefore folded
+    // in: it is undefined for every event that never splits this way, so nothing else moves.
+    const receiptKey = receiptKeyFor(payload, target.id);
     const previous = context.message?.flags?.[MODULE_ID]?.ridersApplied?.[receiptKey] ?? null;
     if (previous?.outcome === (payload.outcome ?? null)) return;
     if (previous) await undo(actor, previous);
@@ -77,8 +101,12 @@ async function applyToTarget(target, candidates, context, payload) {
         extra: payload.damage ? describeDamage(payload.damage) : [],
     });
 
-    const chosen = selectRiders(candidates, { outcome: payload.outcome ?? null, options });
-    if (chosen.length === 0) return;
+    // Most riders are chosen against the snapshot. A `live` rider is chosen against the world as this pass
+    // leaves it — see below for why Scorpio needs that and why an escalation ladder must never have it.
+    const snapshot = candidates.filter(({ rider }) => rider.live !== true);
+    const live = candidates.filter(({ rider }) => rider.live === true);
+    const chosen = selectRiders(snapshot, { outcome: payload.outcome ?? null, options });
+    if (chosen.length === 0 && live.length === 0) return;
 
     const work = {
         ...context,
@@ -88,6 +116,7 @@ async function applyToTarget(target, candidates, context, payload) {
         event: payload.event,
         adjustments: [],
         prompts: [],
+        notes: [],
         choices: [],
         moves: [],
     };
@@ -101,6 +130,33 @@ async function applyToTarget(target, candidates, context, payload) {
         }
     }
 
+    // The riders that ask about the state this pass just produced.
+    //
+    // Scorpio is the reason, and it is the one Cloth where the snapshot is the wrong question. The Ascendant
+    // Boon reads *"each needle deals 1d6 persistent bleed"* and *"at 8 needles the target must attempt a
+    // Fortitude save or die"*, and the needle it is counting is placed by another rider in the same pass. So
+    // against the snapshot every one of those numbers is one behind: the first needle drew no blood at all,
+    // and the Scorpion asked its question on the ninth needle rather than the eighth.
+    //
+    // This is not the escalation ladder's problem in disguise. A ladder — Virgo's four senses — must see the
+    // world as it was, or every step of it fires at once. These riders are not steps of a ladder; they are
+    // consequences of where the ladder now stands, and they say so.
+    if (live.length > 0) {
+        const now = riderOptions({
+            originActor: context.originActor,
+            targetActor: actor,
+            item: context.item ?? context.messageItem ?? context.eventItem,
+            extra: payload.damage ? describeDamage(payload.damage) : [],
+        });
+        for (const { rider, item, index } of selectRiders(live, { outcome: payload.outcome ?? null, options: now })) {
+            try {
+                await applyOne(rider, { ...work, item, riderIndex: index, riderItem: item });
+            } catch (error) {
+                console.error(`Isaac's Homebrew | ${item.name}: live rider failed on ${actor.name}`, rider, error);
+            }
+        }
+    }
+
     if (context.message) {
         const receipt = {
             outcome: payload.outcome ?? null,
@@ -111,6 +167,7 @@ async function applyToTarget(target, candidates, context, payload) {
         await context.message.update({ [`flags.${MODULE_ID}.ridersApplied.${receiptKey}`]: receipt });
     }
 
+    if (work.notes.length > 0) await postNotes(work);
     if (work.prompts.length > 0) await postPrompts(work);
     for (const choice of work.choices) await postChoice(choice, work, payload);
 }
@@ -123,12 +180,13 @@ export async function applyChoice(payload) {
     if (!context || !actor) return;
 
     const item = await fromUuid(payload.riderItemUuid);
-    const rider = (item?.flags?.[MODULE_ID]?.riders ?? [])[payload.riderIndex];
+    const rider = riderAt(item, payload.riderIndex);
     const option = rider?.apply?.options?.[payload.optionIndex];
     if (!option?.apply) return;
 
-    const work = { ...context, actor, target, item, outcome: payload.outcome ?? null, adjustments: [], prompts: [], choices: [], moves: [] };
+    const work = { ...context, actor, target, item, outcome: payload.outcome ?? null, adjustments: [], prompts: [], notes: [], choices: [], moves: [] };
     await applyOne({ ...rider, apply: option.apply, duration: option.duration ?? rider.duration }, work);
+    if (work.notes.length > 0) await postNotes(work);
     if (work.prompts.length > 0) await postPrompts(work);
 }
 
@@ -139,7 +197,18 @@ async function applyOne(rider, context) {
             context.prompts.push(apply.text ?? rider.note ?? "");
             return;
         case "choice":
-            context.choices.push({ rider, index: context.riderIndex, item: context.riderItem ?? context.item });
+            // `target`/`actor` travel with the entry rather than being re-read from the outer context later:
+            // a choice nested inside a volley's `onAllHit` is applied against the creature the volley hit,
+            // while the *outer* pass belongs to the `self` rider that ran the volley in the first place —
+            // Double Excalibur's own caster. Reading the outer context at post time named the Saint as the
+            // target of their own sever, and the choice never reached the creature it was about.
+            context.choices.push({
+                rider,
+                index: context.riderIndex,
+                item: context.riderItem ?? context.item,
+                target: context.target,
+                actor: context.actor,
+            });
             return;
         case "save":
             return applySave(rider, context);
@@ -157,6 +226,20 @@ async function applyOne(rider, context) {
             return applyTeleport(rider, context);
         case "strikes":
             return applyStrikes(rider, context);
+        case "banish":
+            return applyBanish(rider, context);
+        case "heal":
+            return applyHeal(rider, context);
+        case "readout":
+            return applyReadout(rider, context);
+        case "toggle":
+            return applyToggle(rider, context);
+        case "counteract":
+            return applyCounteract(rider, context);
+        case "encasement":
+            return Encasement.apply(rider, context);
+        case "escape":
+            return applyEscape(rider, context);
         default:
             console.warn(`Isaac's Homebrew | ${context.item?.name}: unknown rider type "${apply.type}"`);
     }
@@ -254,7 +337,7 @@ async function applyTeleport(rider, context) {
         return mover <= held ? "is not moved by anything its own size or smaller" : null;
     })();
     if (refusal) {
-        context.prompts.push(`${token.name} ${refusal} — the push is refused.`);
+        context.notes.push(`${token.name} ${refusal} — the movement is refused.`);
         return;
     }
 
@@ -309,12 +392,16 @@ async function applyTeleport(rider, context) {
     await token.update(snapped, { animate: false });
     context.moves.push({ tokenUuid: token.uuid, x: here.x, y: here.y });
 
-    // Say what happened, including when the map was the limiting factor.
+    // Say what happened, including when the map was the limiting factor. A note rather than a prompt: the
+    // creature has already been moved, so this is the Technique reporting itself, not a job for the GM —
+    // and "away" would be a lie for the half of them that drag.
+    const towards = rider.apply.direction === "toward";
     const short = travelled < travel - (scene.grid.distance || 5);
-    context.prompts.push(
+    context.notes.push(
         short
-            ? `Teleported ${travelled} feet away — the ${Math.round(travel)}-foot throw ran out of map.`
-            : `Teleported ${travelled} feet away.`,
+            ? `${token.name} is pulled ${travelled} feet ${towards ? "closer" : "away"} — the `
+                + `${Math.round(travel)}-foot ${towards ? "drag" : "throw"} ran out of map.`
+            : `${token.name} is ${towards ? `dragged ${travelled} feet closer` : `thrown ${travelled} feet away`}.`,
     );
 }
 
@@ -367,8 +454,16 @@ async function applyStrikes(rider, context) {
     }
 
     const slug = rider.apply.option ?? "volley";
+    const count = strikeCount(rider, context, targets.length);
+    let allHit = count > 0;
+    let lastToken = null;
     try {
-        for (const [index, token] of targets.entries()) {
+        for (let index = 0; index < count; index++) {
+            // More Strikes than creatures is the normal case, not an error: "make four unarmed Strikes
+            // against any creatures within 30 feet" is four Strikes whether one creature is in reach or
+            // four. They are dealt round-robin so a single target takes all of them.
+            const token = targets[index % targets.length];
+            lastToken = token;
             const options = [`${slug}:strike:${index + 1}`];
             await strike.variants[0].roll({ target: token.object ?? null, options, createMessage: true });
 
@@ -380,10 +475,438 @@ async function applyStrikes(rider, context) {
             } else if (outcome === "success" && typeof strike.damage === "function") {
                 await strike.damage({ target: token.object ?? null, options, createMessage: true });
             }
+            if (outcome !== "success" && outcome !== "criticalSuccess") allHit = false;
+
+            await followUp(rider, context, { token, outcome });
+        }
+
+        // "If both hit" — *Double Excalibur*'s whole reason for existing over a plain Strike twice. Fired
+        // once, against whichever token the volley was aimed at, only when every Strike in it landed.
+        if (allHit && rider.apply.onAllHit?.length > 0 && lastToken?.actor) {
+            const options = riderOptions({
+                originActor: context.originActor,
+                targetActor: lastToken.actor,
+                item: context.item ?? context.riderItem,
+            });
+            for (const [innerIndex, inner] of rider.apply.onAllHit.entries()) {
+                if (!testPredicate(inner.predicate, options)) continue;
+                try {
+                    await applyOne(inner, {
+                        ...context,
+                        actor: lastToken.actor,
+                        target: lastToken,
+                        outcome: null,
+                        riderIndex: [context.riderIndex, "onAllHit", innerIndex].flat(),
+                    });
+                } catch (error) {
+                    console.error(`Isaac's Homebrew | ${context.item?.name}: an all-hit follow-up failed`, inner, error);
+                }
+            }
         }
     } finally {
         if (effect) await effect.delete();
     }
+}
+
+/**
+ * How many Strikes the volley makes.
+ *
+ * One per confirmed target was the first reading, and it is wrong for every Technique in this family
+ * except by coincidence. *Crimson Flurry* is "four unarmed Strikes against any creatures within 30 feet":
+ * the four is the Technique's, and the creatures are wherever the Saint chooses to send them. A Saint
+ * facing one enemy makes four Strikes at it, not one.
+ *
+ * `count: "maxTargets"` reads the number off the same targeting flag the placement used, so the growth —
+ * "at 15th and 19th level, add one Strike" — is stated once and counted once.
+ */
+function strikeCount(rider, context, available) {
+    const asked = rider.apply.count;
+    if (Number(asked) > 0) return Number(asked);
+    if (asked !== "maxTargets") return available;
+
+    const item = context.item ?? context.riderItem;
+    const flag = item?.flags?.[MODULE_ID]?.areaTargeting;
+    if (!flag?.maxTargets) return available;
+
+    const bonusSteps = skyStepsFromOptions(context.originActor?.getRollOptions?.() ?? []);
+    const grown = applyHeightening(
+        { maxTargets: flag.maxTargets },
+        flag.heightening,
+        { baseRank: item.baseRank ?? item.system?.level?.value, castRank: item.rank, bonusSteps },
+    );
+    applyThresholds(grown, flag.heightening, effectiveLevel(context.originActor));
+    return Math.max(1, grown.maxTargets);
+}
+
+/**
+ * What one Strike of a volley earns beyond its damage.
+ *
+ * *Crimson Flurry* is the reason: "each Strike that hits applies one needle in addition to its normal
+ * effect, and on any day your constellation is ascendant, Strikes that miss apply a needle too." Neither
+ * half is a rider on the Technique — the Technique fires once and the Strikes fire four times — so the
+ * follow-ups are authored inside the volley and applied here, per Strike, against the creature that Strike
+ * was aimed at.
+ */
+async function followUp(rider, context, { token, outcome }) {
+    const hit = outcome === "success" || outcome === "criticalSuccess";
+    const key = hit ? "onHit" : "onMiss";
+    const followUps = rider.apply[key] ?? [];
+    if (followUps.length === 0 || !token?.actor) return;
+
+    const options = riderOptions({
+        originActor: context.originActor,
+        targetActor: token.actor,
+        item: context.item ?? context.riderItem,
+    });
+    for (const [innerIndex, inner] of followUps.entries()) {
+        if (!testPredicate(inner.predicate, options)) continue;
+        try {
+            await applyOne(inner, {
+                ...context,
+                actor: token.actor,
+                target: token,
+                outcome: outcome ?? null,
+                riderIndex: [context.riderIndex, key, innerIndex].flat(),
+            });
+        } catch (error) {
+            console.error(`Isaac's Homebrew | ${context.item?.name}: a Strike's follow-up failed`, inner, error);
+        }
+    }
+}
+
+/**
+ * Folding a creature out of the world for a while.
+ *
+ * *"Banished into folded space for 1 minute, then returns to the square it left."* This was a whisper, and
+ * the whisper was the whole Technique: *Another Dimension* has no damage and no condition, so a GM who did
+ * not act on the card watched a two-action Technique with an incapacitation trait do literally nothing.
+ *
+ * The mechanism is in `banish.mjs`, because taking a token off the board and putting an identical one back
+ * is more bookkeeping than an apply handler should hold — and because Virgo's *Rikudō Rinne* and Aquarius'
+ * *Freezing Coffin* are the same operation with different flavour and different clocks.
+ */
+async function applyBanish(rider, context) {
+    const seconds = durationSeconds(rider.duration ?? rider.apply.duration);
+    if (seconds <= 0) return;
+
+    const record = await Banish.take(context.target, {
+        seconds,
+        label: rider.apply.label ?? `${context.item?.name ?? "Banished"}`,
+        originActor: context.originActor,
+        returnsToSquare: rider.apply.returnsToSquare !== false,
+    });
+    if (!record) {
+        context.notes.push(`${context.target?.name ?? "The target"} is already folded away.`);
+    }
+}
+
+/**
+ * The Saint healing from what their Technique did.
+ *
+ * *Sekishiki Kisōen*'s blue flames feed: *"for each creature that fails its save, you regain 3 Hit Points,
+ * to a maximum equal to your level per casting."* Both halves of that are unusual enough to need saying:
+ *
+ *  - **Per failure, not per cast.** It is a `self` rider on `save-rolled`, so it fires once for each
+ *    creature that fails, and lands on the caster rather than on the creature. That combination is what
+ *    forced the receipt key above to name both targets.
+ *  - **A ceiling per casting**, which no single application can enforce on its own. The running total is
+ *    kept on the chat message the cast produced, which is the only thing the separate applications share —
+ *    and which is discarded with the message rather than accumulating on the actor forever.
+ */
+async function applyHeal(rider, context) {
+    const actor = context.actor;
+    const hp = actor?.hitPoints;
+    if (!hp) return;
+
+    const source = context.item;
+    const steps = stepsFor({
+        baseRank: source?.baseRank ?? source?.system?.level?.value,
+        castRank: source?.rank,
+        bonusSteps: skyStepsFromOptions(context.originActor?.getRollOptions?.() ?? []),
+    });
+    const each = (Number(rider.apply.value) || 0) + (Number(rider.apply.perStep) || 0) * steps;
+    if (each <= 0) return;
+
+    const cap = rider.apply.maxPerCast === "origin.level"
+        ? (context.originActor?.level ?? Infinity)
+        : (Number(rider.apply.maxPerCast) || Infinity);
+
+    const message = context.message;
+    const pool = Number(message?.flags?.[MODULE_ID]?.healPool) || 0;
+    const allowed = Math.max(0, Math.min(each, cap - pool));
+    if (allowed <= 0) {
+        // Said out loud rather than whispered. It is the Technique reporting its own ceiling, not a job for
+        // the GM, and a GM-only whisper is exactly the shape this programme exists to remove.
+        await ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            flavor: context.item?.name ?? "Rider",
+            content: `<p>The flames find nothing more to give — <strong>${actor.name}</strong> has drawn all `
+                + `${cap} Hit Points this casting allows.</p>`,
+        });
+        return;
+    }
+
+    const healed = Math.min(allowed, hp.max - hp.value);
+    if (healed > 0) await actor.update({ "system.attributes.hp.value": hp.value + healed });
+    if (message) await message.update({ [`flags.${MODULE_ID}.healPool`]: pool + allowed });
+
+    await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        flavor: context.item?.name ?? "Rider",
+        content: healed > 0
+            ? `<p>The flames feed — <strong>${actor.name}</strong> regains ${healed} Hit Points `
+                + `(${pool + allowed} of ${cap} this casting).</p>`
+            : `<p><strong>${actor.name}</strong> is already at full Hit Points; the flames feed on nothing.</p>`,
+    });
+}
+
+/**
+ * Flipping a toggle the Saint would otherwise have to remember to flip.
+ *
+ * Gemini's *Swap Aspect* is a free action that changes which of two faces the Saint is wearing, and the
+ * content reads that state through a toggleable `RollOption` with `light` and `shadow` suboptions — which
+ * *Another Dimension* predicates on, because in Shadow it confuses instead of banishing. The action's own
+ * text used to end with "remember to flip the Two Faces toggle on the Cloth feature so predicates follow
+ * you", which is a whisper wearing a different hat: an action that does nothing but ask you to do the thing
+ * yourself. Using the action now does it.
+ *
+ * `Actor#toggleRollOption` finds the rule element by domain and option and sets its selection, so nothing
+ * here needs to know which item the toggle lives on — which matters, because it lives on the Cloth and the
+ * action is granted by it.
+ */
+async function applyToggle(rider, context) {
+    const actor = context.actor;
+    const { domain = "all", option, cycle = [] } = rider.apply;
+    if (!actor || !option) return;
+
+    // A toggle with no suboptions is simply on or off, which is what Virgo's *Open Your Eyes* is: one
+    // `RollOption` on **Effect: Om** that the whole Cloth predicates on, and an action whose entire content
+    // used to be a request that the player go and flip it themselves.
+    if (cycle.length === 0) {
+        const wanted = rider.apply.value !== false;
+        const result = await actor.toggleRollOption(domain, option, null, wanted);
+        if (result === null) {
+            context.prompts.push(`No "${option}" toggle to flip — set it by hand.`);
+            return;
+        }
+        if (rider.apply.announce !== false) {
+            await ChatMessage.create({
+                speaker: ChatMessage.getSpeaker({ actor }),
+                flavor: context.item?.name ?? "Toggle",
+                content: `<p>${foundry.utils.escapeHTML(rider.apply.text ?? `${option} is now ${wanted ? "on" : "off"}.`)}</p>`,
+            });
+        }
+        return;
+    }
+
+    const current = cycle.find((value) => actor.rollOptions?.[domain]?.[`${option}:${value}`]);
+    const next = cycle[(cycle.indexOf(current) + 1) % cycle.length];
+    const result = await actor.toggleRollOption(domain, option, null, true, next);
+    if (result === null) {
+        context.prompts.push(`No "${option}" toggle to flip — set it on the Cloth by hand.`);
+        return;
+    }
+
+    const label = rider.apply.labels?.[next] ?? next;
+    await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        flavor: context.item?.name ?? "Toggle",
+        content: `<p><strong>${actor.name}</strong> is now in their <strong>${label}</strong> aspect.</p>`,
+    });
+}
+
+/**
+ * A check against a shell rather than against a grip.
+ *
+ * `Encasement.apply` grants the captive their own "Escape …" action carrying exactly this rider, so using
+ * it rolls the named statistic against the DC written on it at the moment the shell was raised — not a
+ * fresh Cosmo DC read now, which would let the check track a Saint's level past the casting that trapped
+ * them.
+ */
+async function applyEscape(rider, context) {
+    const { statistic: slug = "athletics", dc, hazardUuid } = rider.apply;
+    const statistic = context.actor.getStatistic?.(slug);
+    const hazard = hazardUuid ? await fromUuid(hazardUuid) : null;
+    if (!statistic || !hazard) return;
+
+    const roll = await statistic.roll({ dc: { value: Number(dc) || 0 }, skipDialog: true, label: "Escape" });
+    const outcome = DEGREES[roll?.degreeOfSuccess ?? -1];
+    if (outcome === "success" || outcome === "criticalSuccess") {
+        await Encasement.destroy(hazard, { freed: true });
+    } else {
+        await ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor: context.actor }),
+            content: `<p><strong>${context.actor.name}</strong> struggles against ${hazard.name} and does `
+                + `not break free.</p>`,
+        });
+    }
+}
+
+/**
+ * Offering to take a mental effect off somebody.
+ *
+ * *Tenpōrin'in* ends with "when you cast this Technique, you may counteract one mental effect currently
+ * affecting a creature in the area, using your Cosmo DC". Three words in that sentence make it awkward:
+ * *may* (it is an option, not a consequence), *one* (across the whole area, not one each), and *currently*
+ * (the list cannot be authored, it has to be read off the board at cast time).
+ *
+ * So this posts the list rather than a static choice card: every effect and condition carrying one of the
+ * named traits, on every creature the emanation caught, one button each. Clicking rolls the check — see
+ * `resolveCounteract`, which is where the counteract rules themselves live.
+ */
+async function applyCounteract(rider, context) {
+    const traits = rider.apply.traits ?? ["mental"];
+    const tokens = [...(context.targets ?? [])];
+    if (rider.apply.includesSelf !== false && context.originToken) tokens.unshift(context.originToken);
+
+    const buttons = [];
+    const seen = new Set();
+    for (const token of tokens) {
+        const actor = token?.actor;
+        if (!actor || seen.has(actor.uuid)) continue;
+        seen.add(actor.uuid);
+        for (const item of [...(actor.itemTypes.effect ?? []), ...(actor.itemTypes.condition ?? [])]) {
+            const itemTraits = item.system?.traits?.value ?? [];
+            if (!traits.some((trait) => itemTraits.includes(trait))) continue;
+            buttons.push(
+                `<button type="button" data-action="isaacs-hb-counteract" data-effect="${item.uuid}">`
+                + `${foundry.utils.escapeHTML(`${actor.name}: ${item.name}`)}</button>`,
+            );
+        }
+    }
+
+    if (buttons.length === 0) {
+        context.notes.push(`Nothing ${traits.join(" or ")} to counteract in the area.`);
+        return;
+    }
+
+    await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: context.originActor }),
+        whisper: [...ownersAndGMs(context.originActor)],
+        flavor: context.item?.name ?? "Counteract",
+        content: `<p>${foundry.utils.escapeHTML(rider.apply.prompt ?? "Counteract one, if you wish.")}</p>`
+            + `<div class="isaacs-hb-choice">${buttons.join(" ")}</div>`,
+        flags: {
+            [MODULE_ID]: {
+                counteract: {
+                    originUuid: context.originActor?.uuid ?? null,
+                    itemUuid: (context.item ?? context.riderItem)?.uuid ?? null,
+                    statistic: rider.apply.statistic ?? "saint",
+                },
+            },
+        },
+    });
+}
+
+/**
+ * The counteract check itself, come back from a click on that card.
+ *
+ * pf2e models counteracting inside its own spell code and offers a module nothing to call, so the rules
+ * are repeated here: roll the named statistic against a DC set by the effect's level, then compare ranks —
+ * a critical success reaches three ranks above your own, a success one, a failure only below, and a
+ * critical failure nothing. The effect's rank is read from its own level, which is what a pf2e effect
+ * carries when it came from a spell, and the Technique's rank is the rank it was cast at.
+ */
+export async function resolveCounteract(payload) {
+    const origin = await fromUuid(payload.originUuid);
+    const effect = await fromUuid(payload.effectUuid);
+    const item = payload.itemUuid ? await fromUuid(payload.itemUuid) : null;
+    const actor = origin?.actor ?? origin;
+    if (!actor || !effect) return;
+
+    const statistic = actor.getStatistic?.(payload.statistic ?? "saint");
+    if (!statistic) {
+        ui.notifications.warn(`${actor.name} has no ${payload.statistic ?? "saint"} statistic to counteract with.`);
+        return;
+    }
+
+    const targetRank = Math.max(1, Number(effect.system?.level?.value) || 1);
+    const roll = await statistic.roll({
+        dc: { value: dcByLevel(effect.system?.level?.value ?? actor.level) },
+        skipDialog: true,
+        label: `Counteract — ${effect.name}`,
+        extraRollOptions: [`${MODULE_ID}:counteract`],
+    });
+    const outcome = DEGREES[roll?.degreeOfSuccess ?? -1];
+    const ourRank = Math.max(1, Number(item?.rank) || Math.ceil((actor.level ?? 1) / 2));
+    const reach = { criticalSuccess: 3, success: 1, failure: -1, criticalFailure: -Infinity }[outcome] ?? -Infinity;
+    const counteracted = targetRank <= ourRank + reach;
+
+    if (counteracted) await effect.delete();
+    await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        flavor: item?.name ?? "Counteract",
+        content: counteracted
+            ? `<p><strong>${effect.name}</strong> is counteracted and gone.</p>`
+            : `<p><strong>${effect.name}</strong> holds — rank ${targetRank} against a counteract rank of `
+                + `${ourRank} on a ${OUTCOME_LABELS[outcome] ?? "failed check"}.</p>`,
+    });
+}
+
+/** pf2e's level-based DC table, which a module cannot import and which has not moved in four editions. */
+function dcByLevel(level) {
+    const table = [14, 15, 16, 18, 19, 20, 22, 23, 24, 26, 27, 28, 30, 31, 32, 34, 35, 36, 38, 39, 40, 42, 44, 46, 48, 50];
+    const index = Math.clamp(Math.floor(Number(level) || 0) + 1, 0, table.length - 1);
+    return table[index];
+}
+
+/** The Saint's own players and the GMs — the people a decision like this belongs to. */
+function ownersAndGMs(actor) {
+    const recipients = new Set(ChatMessage.getWhisperRecipients("GM").map((user) => user.id));
+    for (const [userId, level] of Object.entries(actor?.ownership ?? {})) {
+        if (level === CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER && userId !== "default") recipients.add(userId);
+    }
+    return recipients;
+}
+
+/**
+ * A sense that reports rather than modifies.
+ *
+ * Cancer's Cloth passive — *"you automatically know the current Hit Point category of every creature within
+ * 30 feet"* — is knowledge, not a bonus, and there is no rule element for knowledge. Under the old design
+ * this would have been a note on the sheet. It is now a card at the top of the Saint's turn listing what
+ * they know, addressed to the Saint's own players and the GM: the information is theirs, and putting it in
+ * public chat would hand the table an NPC's hit points.
+ */
+async function applyReadout(rider, context) {
+    const originToken = context.originToken;
+    if (!originToken?.object || !canvas?.ready) return;
+
+    const range = Number(rider.apply.range) || 30;
+    const rows = [];
+    for (const token of canvas.tokens.placeables) {
+        if (token.document.id === originToken.id) continue;
+        if (token.document.hidden) continue;
+        const actor = token.actor;
+        if (!actor?.isOfType?.("creature")) continue;
+        const distance = originToken.object.distanceTo?.(token);
+        if (!Number.isFinite(distance) || distance > range) continue;
+        rows.push(`<li><strong>${token.document.name}</strong> — ${hpCategory(actor)}</li>`);
+    }
+
+    const recipients = new Set(ChatMessage.getWhisperRecipients("GM").map((user) => user.id));
+    for (const [userId, level] of Object.entries(context.originActor?.ownership ?? {})) {
+        if (level === CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER && userId !== "default") recipients.add(userId);
+    }
+
+    await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: context.originActor }),
+        whisper: [...recipients],
+        flavor: rider.apply.title ?? context.item?.name ?? "The Boundary",
+        content: rows.length > 0
+            ? `<p>Within ${range} feet:</p><ul>${rows.join("")}</ul>`
+            : `<p>Nothing living or dead within ${range} feet.</p>`,
+    });
+}
+
+/** The four words the guide uses, and nothing finer: healthy, hurt, near death, dying. */
+function hpCategory(actor) {
+    if (actor.itemTypes?.condition?.some((c) => c.slug === "dying")) return "dying";
+    const hp = actor.hitPoints;
+    if (!hp?.max) return "unknown";
+    if (hp.value <= 0) return "dying";
+    if (hp.value >= hp.max) return "healthy";
+    return hp.value <= hp.max / 4 ? "near death" : "hurt";
 }
 
 /**
@@ -401,6 +924,30 @@ async function applyStrikes(rider, context) {
  */
 export function conditionUuidOf(condition) {
     return condition?.sourceId ?? condition?._stats?.compendiumSource ?? condition?.uuid ?? null;
+}
+
+/**
+ * The receipt key one application of a rider set is remembered under.
+ *
+ * Keyed on both targets — the one the event was about, and the one this rider lands on — because they are
+ * the same token for an ordinary rider and different for a `self` rider on a per-target event, which is
+ * what *Sekishiki Kisōen* is: healing the caster once for each creature that fails its save. With the
+ * event's target left out, the second failure wrote the same key as the first, matched its outcome, and was
+ * dropped as a re-application — the Saint healed once no matter how many souls the flames took.
+ *
+ * A third thing has to be in the key, and Virgo is the Cloth that proved it. `Sources.onActionUsed` sends
+ * one relay request for the self riders and a separate one per confirmed target — and when a Technique's
+ * area `includesSelf`, the caster is *also* one of those confirmed targets, so their own token is
+ * `payload.targetUuid` twice, under two different rider sets. Both requests produced the identical key
+ * without this, so *Tenpōrin'in*'s self-only counteract offer wrote a receipt that the very next request —
+ * the ordinary buff landing on the caster as an ally — matched and silently declined to re-apply. The Saint
+ * got the counteract card and never their own aura. `selfOnly` is folded in to tell the two waves apart; it
+ * is undefined for every event that never splits this way, so nothing else moves.
+ */
+export function receiptKeyFor(payload, targetId) {
+    const eventTargetId = payload.targetUuid ? payload.targetUuid.split(".").pop() : "none";
+    const wave = payload.selfOnly === true ? "self" : payload.selfOnly === false ? "targeted" : "any";
+    return `${payload.event}:${wave}:${eventTargetId}:${targetId}`;
 }
 
 /**
@@ -437,6 +984,25 @@ async function applyCondition(rider, context) {
     }
 
     const label = value ? `${condition.name} ${value}` : condition.name;
+
+    // A repeatable event with nothing to leave a receipt on. `damage-applied`, `strike-resolved` and the
+    // rest are one-shot enough that a fresh grant each time was never wrong — but `aura-tick` fires again
+    // every turn a creature stands in a lit dome, and a fresh "Freezing Shield: Slowed 1" each time left a
+    // sheet wearing a dozen copies of the same one-round condition by the middle of a fight. Refreshing an
+    // existing grant from the same item rather than creating a second one is the same call `refresh` on an
+    // effect rider already makes, applied here because a plain condition grant has no such flag of its own.
+    const source = context.item?.uuid ?? context.riderItem?.uuid ?? null;
+    const standing = source
+        ? context.actor.itemTypes.effect.find(
+              (e) => e.name === `${context.item?.name ?? context.riderItem?.name ?? ""}: ${label}`
+                  && e.flags?.[MODULE_ID]?.rider?.source === source,
+          )
+        : null;
+    if (standing) {
+        await standing.update({ "system.start.value": game.time.worldTime });
+        return;
+    }
+
     const grant = { key: "GrantItem", uuid: conditionUuid, allowDuplicate: false };
     if (value) grant.alterations = [{ mode: "override", property: "badge-value", value }];
 
@@ -464,8 +1030,27 @@ async function applyEffect(rider, context) {
             if (value === was) return;
             await existing.update({ "system.badge.value": value });
             context.adjustments.push({ itemId: existing.id, delta: value - was });
+            await crossThresholds(source, was, value, context);
             return;
         }
+    }
+
+    // A rider that should grant its effect once and then stop asking. The Scorpio Zenith hands every ally
+    // the needle-placing rider at the start of each of the Saint's turns, and without this each turn would
+    // hand it to them again — six identical effects by the end of a fight.
+    const standing = context.actor.itemTypes.effect.find((e) => e.sourceId === uuid);
+    if (rider.apply.once && standing) return;
+
+    // An allowance that comes back rather than accumulating. Leo's Zenith grants extra actions "each turn",
+    // which is a counter set back to its full value at the start of every turn — not a second copy of the
+    // effect, and not one that runs out and stays out.
+    if (rider.apply.refresh && standing) {
+        const value = Number(source.system?.badge?.value);
+        await standing.update({
+            "system.start.value": game.time.worldTime,
+            ...(Number.isFinite(value) ? { "system.badge.value": value } : {}),
+        });
+        return;
     }
 
     applySubstitutions(source, rider.apply.substitutions, context);
@@ -475,6 +1060,34 @@ async function applyEffect(rider, context) {
     source.system.context = contextData(context);
     source.flags = foundry.utils.mergeObject(source.flags ?? {}, riderFlags(rider, context));
     await context.actor.createEmbeddedDocuments("Item", [source]);
+    if (rider.apply.stack) {
+        await crossThresholds(source, 0, Number(source.system?.badge?.value) || 0, context);
+    }
+}
+
+/**
+ * What a counter does when it passes a number.
+ *
+ * Scorpio's Cloth is "at 5 needles the creature is enfeebled 1; at 10, blinded; at 14, stunned 2 and its
+ * Strikes lose all runes", and needles arrive from five different places — the Signature Technique, the
+ * free action, *Crimson Flurry*'s volley, and both skies. Writing the three thresholds into all five would
+ * be five chances to write them differently, so they live on **Effect: Scarlet Needle** itself, next to the
+ * badge they read, and every source that walks that badge up gets them for free.
+ *
+ * Only the crossing fires. `was < at <= now` means the fifth needle inflicts the enfeebled and the sixth
+ * does not inflict it again — which matters, because `increaseCondition` would otherwise take a creature
+ * to enfeebled 10 by the end of a fight. It also means a threshold is never applied retroactively when a
+ * counter starts above it.
+ */
+async function crossThresholds(source, was, now, context) {
+    const thresholds = source?.flags?.[MODULE_ID]?.counterThresholds;
+    for (const threshold of thresholdsCrossed(thresholds, was, now)) {
+        try {
+            await applyOne(threshold, context);
+        } catch (error) {
+            console.error(`Isaac's Homebrew | ${source.name}: threshold ${threshold.at} failed`, threshold, error);
+        }
+    }
 }
 
 /**
@@ -490,27 +1103,43 @@ async function applyPersistent(rider, context) {
     const scaled = perCounter ? scaleFormula(formula, count) : formula;
     if (!scaled) return;
 
-    // A stacking bleed is one growing wound, not a new one per needle. Whatever this module applied last
-    // time is replaced; persistent damage a GM added by hand is left alone.
-    const ours = context.actor.itemTypes.condition.filter(
+    await inflictPersistent(context.actor, {
+        formula: scaled,
+        damageType,
+        dc: Number(rider.apply.dc) || 15,
+        flags: riderFlags(rider, context),
+    });
+}
+
+/**
+ * Put persistent damage on a creature, replacing whatever this module put there last.
+ *
+ * A stacking bleed is one growing wound, not a new one per needle — and a burning region that sets the same
+ * creature alight on entry and again at the end of its turn should refresh the fire rather than light a
+ * second one. Persistent damage a GM added by hand is never touched.
+ *
+ * Exported because the lingering areas of `targeting/lingering.mjs` need exactly this and nothing else
+ * around it: they have no rider, no outcome and no message, only a patch of burning ground and whoever is
+ * standing on it.
+ */
+export async function inflictPersistent(actor, { formula, damageType = "bleed", dc = 15, flags = {} }) {
+    if (!formula || !actor) return;
+
+    const ours = actor.itemTypes.condition.filter(
         (c) =>
             c.slug === "persistent-damage" &&
             c.system.persistent?.damageType === damageType &&
             c.flags?.[MODULE_ID]?.rider,
     );
     if (ours.length > 0) {
-        await context.actor.deleteEmbeddedDocuments("Item", ours.map((c) => c.id));
+        await actor.deleteEmbeddedDocuments("Item", ours.map((c) => c.id));
     }
 
     const source = game.pf2e.ConditionManager.getCondition("persistent-damage")?.toObject();
     if (!source) return;
-    source.system.persistent = {
-        formula: scaled,
-        damageType,
-        dc: Number(rider.apply.dc) || 15,
-    };
-    source.flags = foundry.utils.mergeObject(source.flags ?? {}, riderFlags(rider, context));
-    await context.actor.createEmbeddedDocuments("Item", [source]);
+    source.system.persistent = { formula, damageType, dc };
+    source.flags = foundry.utils.mergeObject(source.flags ?? {}, flags);
+    await actor.createEmbeddedDocuments("Item", [source]);
 }
 
 /**
@@ -522,12 +1151,28 @@ async function applyPersistent(rider, context) {
  * would let a rider's own damage trigger another rider.
  */
 async function applyDamageRider(rider, context) {
-    const { formula = "1d6", damageType = "untyped", perStep = null } = rider.apply;
+    const { damageType = "untyped", perStep = null, perCounter = null } = rider.apply;
     const DamageRoll = CONFIG.Dice.rolls.find((cls) => cls.name === "DamageRoll");
     if (!DamageRoll) {
         console.warn("Isaac's Homebrew | pf2e's DamageRoll is not registered; damage rider skipped.");
         return;
     }
+
+    // The formula is usually a literal — "1d6" — but may itself be a resolvable, for the one shape none
+    // of the others cover: a *granted action*'s damage that has to track a different Technique's own
+    // heightening, because the action carries no rank of its own for `perStep` to scale from.
+    const formula = typeof rider.apply.formula === "string" && rider.apply.formula.startsWith("origin.")
+        ? (resolveFromOrigin(rider.apply.formula, context) ?? "1d6")
+        : (rider.apply.formula ?? "1d6");
+
+    // Damage measured in something the target is already carrying. *Crimson Mirage* deals "1d6 mental per
+    // needle it currently has at the end of each of its turns", so the die count is read off the needle
+    // counter at the moment the turn ends rather than fixed when the mirage was cast — which is the whole
+    // point of a Cloth that ramps. No needles is no damage, not one die.
+    const counted = perCounter
+        ? scaleFormula(formula, Math.min(counterOn(context.actor, perCounter), Number(rider.apply.max) || Infinity))
+        : formula;
+    if (!counted) return;
 
     // Damage that only happens on one outcome still has to heighten. *Titan's Break* deals its extra 4d8
     // on a critical failure alone, and that 4d8 grows a die per step like everything else — but a rider
@@ -542,9 +1187,17 @@ async function applyDamageRider(rider, context) {
           })
         : 0;
     const growth = perStep ? scaleFormula(perStep, steps) : null;
-    const scaled = growth ? `${formula} + ${growth}` : formula;
+    const scaled = growth ? `${counted} + ${growth}` : counted;
 
-    const roll = await new DamageRoll(`(${scaled})[${damageType}]`).evaluate();
+    // "Success: half damage" on a Technique whose save is not a basic one. pf2e halves automatically only
+    // for a basic save, and pf2e-toolbelt gates its per-outcome application on the same flag — so a
+    // Technique with its own success/failure ladder had the roll made and the applying left to the GM.
+    // Halving the total rather than the dice, which is what the rule means: `(10d8) * 0.5` reads as 10d8
+    // then halved, where `5d8` would be a different distribution altogether.
+    const multiplier = Number(rider.apply.multiplier);
+    const expression = Number.isFinite(multiplier) && multiplier !== 1 ? `(${scaled}) * ${multiplier}` : scaled;
+
+    const roll = await new DamageRoll(`(${expression})[${damageType}]`).evaluate();
     const name = context.item?.name ?? context.originActor?.name ?? "Rider";
     await roll.toMessage(
         {
@@ -568,6 +1221,18 @@ async function applyDamageRider(rider, context) {
  * into a corpse for an NPC, which is what the rest of the system already knows how to handle.
  */
 async function applyDeath(rider, context) {
+    // Some deaths are checked *after* the damage rather than before it. *Sekishiki Tenryū Ha* reads
+    // "As failure, and if the creature is at half Hit Points or fewer it dies" — the damage is the failure,
+    // so the threshold is what it leaves behind. A `predicate` cannot express that: predicates are tested
+    // against a snapshot taken before anything is applied, which is exactly what makes an escalation ladder
+    // advance one step at a time. This reads the hit points as they are now, with the riders of one pass
+    // applied in the order they are authored.
+    const fraction = Number(rider.apply.hpFraction);
+    if (Number.isFinite(fraction)) {
+        const now = context.actor.hitPoints;
+        if (!now?.max || now.value > now.max * fraction) return;
+    }
+
     const mode = game.settings.get(MODULE_ID, "automateDeath");
     const playerOwned = context.actor.hasPlayerOwner;
 
@@ -577,8 +1242,25 @@ async function applyDeath(rider, context) {
     }
 
     const hp = context.actor.hitPoints;
-    if (!hp || hp.value <= 0) return;
-    await context.actor.update({ "system.attributes.hp.value": 0 });
+    if (!hp) return;
+
+    // Reaching zero is not the same as dying, and Cancer is the Cloth that proves it. The Ascendant Boon —
+    // *"any creature you reduce to 0 Hit Points dies, with no save"* — fires on `damage-applied` at the
+    // exact moment hit points hit zero, so an early return on `hp.value <= 0` made the whole boon a no-op:
+    // the one condition under which it is supposed to fire was the one condition it refused. Dying is
+    // therefore marked as well as inflicted, which is what pf2e's own defeated flag means and what stops a
+    // character bleeding out over three rounds the guide says it does not get.
+    if (hp.value > 0) await context.actor.update({ "system.attributes.hp.value": 0 });
+
+    const combatant = context.target?.combatant;
+    if (combatant && !combatant.isDefeated) await combatant.update({ defeated: true });
+    // `toggleStatusEffect` is an Actor method in Foundry 14, not a TokenDocument one. Asking the token for
+    // it found nothing and skipped in silence, so a creature the Yellow Spring took stood there at 0 hit
+    // points with no mark on it at all.
+    if (typeof context.actor.toggleStatusEffect === "function") {
+        await context.actor.toggleStatusEffect("dead", { overlay: true, active: true });
+    }
+
     await ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor: context.originActor }),
         flavor: context.item?.name ?? context.originActor?.name ?? "Rider",
@@ -623,8 +1305,8 @@ async function applySave(rider, context) {
         targetActor: context.actor,
         item: context.item,
     });
-    for (const { rider: inner } of selectRiders(nested, { outcome, options })) {
-        await applyOne(inner, { ...context, outcome });
+    for (const { rider: inner, index: innerIndex } of selectRiders(nested, { outcome, options })) {
+        await applyOne(inner, { ...context, outcome, riderIndex: [context.riderIndex, "riders", innerIndex].flat() });
     }
 }
 
@@ -653,6 +1335,17 @@ function scaleFormula(formula, count) {
     const match = /^(\d*)d(\d+)$/.exec(String(formula).trim());
     if (!match) return formula;
     return `${(Number(match[1]) || 1) * count}d${match[2]}`;
+}
+
+/** `base + perStep * steps`, for a number or for two dice formulas sharing the same die size. */
+export function growByStep(base, perStep, steps) {
+    if (typeof base === "number" && typeof perStep === "number") return base + perStep * steps;
+    const baseDice = /^(\d*)d(\d+)$/.exec(String(base).trim());
+    const perDice = /^(\d*)d(\d+)$/.exec(String(perStep).trim());
+    if (baseDice && perDice && baseDice[2] === perDice[2]) {
+        return `${(Number(baseDice[1]) || 1) + (Number(perDice[1]) || 1) * steps}d${baseDice[2]}`;
+    }
+    return base;
 }
 
 /* ------------------------------------------------------------------------------------------------ */
@@ -745,6 +1438,25 @@ function applySubstitutions(source, substitutions, context) {
 function resolveFromOrigin(expression, context) {
     const { originActor } = context;
     if (typeof expression === "number") return expression;
+
+    // A value that changes at named character levels rather than per heightening step. *Tenpōrin'in* is
+    // "+1 status bonus… at 12th level the bonus becomes +2 and the immunity extends to confused; at 18th,
+    // +3" — three numbers and one immunity keyed to the *caster's* level, on an effect that will be worn by
+    // somebody else, so `@actor` on the recipient's sheet is the wrong actor to ask. It is baked in here,
+    // at hand-out time, against the level a lit sky says the Saint is casting at.
+    if (expression && typeof expression === "object" && expression.at) {
+        const value = valueAtLevel(expression, effectiveLevel(originActor));
+        return value === undefined ? null : value;
+    }
+    // A value that grows smoothly with the Technique's own heightening — "the damage increases by 1d8,
+    // the resistance by 5, and the radius by 5 feet" is three numbers on the same per-step ladder
+    // `origin.item.steps` already answers, not three named-level thresholds. Reuses the growth
+    // `scaledDamage` in `targeting/lingering.mjs` does for a burning patch of ground, generalised to any
+    // substitution path rather than one hand-written for `damage.perStep`.
+    if (expression && typeof expression === "object" && "perStep" in expression) {
+        const steps = resolveFromOrigin("origin.item.steps", context) ?? 0;
+        return growByStep(expression.base, expression.perStep, steps);
+    }
     const match = /^origin\.statistic\.([\w-]+)\.rank$/.exec(String(expression));
     if (match) return originActor?.getStatistic?.(match[1])?.rank ?? null;
     if (expression === "origin.level") return originActor?.level ?? null;
@@ -758,6 +1470,26 @@ function resolveFromOrigin(expression, context) {
             castRank: item.rank,
             bonusSteps: skyStepsFromOptions(originActor?.getRollOptions?.() ?? []),
         });
+    }
+    // Another Technique's own current damage — what it would roll for itself right now, rank and sky
+    // both included, with an optional flat bonus added on top that does *not* itself scale.
+    // `Golden Arrow: Named Shot` is why this exists: it is a *granted action*, not the spell it quotes, so
+    // it carries no rank or base rank of its own for `origin.item.steps` to read — "Golden Arrow's damage,
+    // plus an additional 8 dice" needs Golden Arrow's own ladder looked up by name, and the 8 dice are the
+    // Zenith's, not Golden Arrow's, so they must not grow again with Golden Arrow's own heightening.
+    const namedMatch = /^origin\.technique\.(.+)\.damage(?:\+(\d+d\d+))?$/.exec(String(expression));
+    if (namedMatch) {
+        const [, name, bonus] = namedMatch;
+        const named = originActor?.itemTypes?.spell?.find((s) => s.name === name);
+        const base = Object.values(named?.system?.damage ?? {})[0];
+        if (!named || !base) return null;
+        const steps = stepsFor({
+            baseRank: named.baseRank ?? named.system?.level?.value,
+            castRank: named.rank,
+            bonusSteps: skyStepsFromOptions(originActor?.getRollOptions?.() ?? []),
+        });
+        const scaled = scaleFormula(base.formula, 1 + steps);
+        return bonus ? `${scaled} + ${bonus}` : scaled;
     }
     return null;
 }
@@ -834,6 +1566,25 @@ function riderFlags(rider, { message, item, outcome }) {
 }
 
 /**
+ * What a rider did, said out loud.
+ *
+ * The distinction from `postPrompts` is the whole no-whispers policy in one place: a prompt is something
+ * the table still has to do, and a note is something that has already happened. Forced movement used to be
+ * a prompt — "Teleported 250 feet in a direction of the Saint's choice" — and is now an event, so it is
+ * announced to everyone rather than murmured to the GM, who no longer has anything to act on.
+ */
+async function postNotes({ notes, item, originActor, actor, outcome }) {
+    const lines = notes.filter((text) => text).map((text) => `<li>${text}</li>`).join("");
+    if (!lines) return;
+    const name = item?.name ?? originActor?.name ?? "Rider";
+    await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: originActor }),
+        flavor: `${name} — ${actor.name}${outcome ? `, ${OUTCOME_LABELS[outcome]}` : ""}`,
+        content: `<ul>${lines}</ul>`,
+    });
+}
+
+/**
  * Riders nobody should pretend to automate.
  *
  * Being pushed 15 feet and knocked prone is two things: prone is a condition, and the push is a decision
@@ -860,7 +1611,7 @@ async function postPrompts({ prompts, item, originActor, actor, outcome }) {
  * than a dialog on purpose: it survives a reload, and it cannot be missed by someone looking at their
  * sheet at the wrong moment.
  */
-async function postChoice({ rider, index, item }, context, payload) {
+async function postChoice({ rider, index, item, target, actor }, context, payload) {
     const options = rider.apply.options ?? [];
     if (options.length === 0 || !item?.uuid) return;
 
@@ -880,7 +1631,7 @@ async function postChoice({ rider, index, item }, context, payload) {
     await ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor: context.originActor }),
         whisper: [...recipients],
-        flavor: `${item.name} — ${context.actor.name}`,
+        flavor: `${item.name} — ${(actor ?? context.actor)?.name}`,
         content:
             `<p>${foundry.utils.escapeHTML(rider.apply.prompt ?? "Choose one.")}</p>`
             + `<div class="isaacs-hb-choice">${buttons}</div>`,
@@ -889,7 +1640,9 @@ async function postChoice({ rider, index, item }, context, payload) {
                 choice: {
                     riderItemUuid: item.uuid,
                     riderIndex: index,
-                    targetUuid: context.target?.uuid ?? payload.targetUuid,
+                    // The entry's own target first — where the choice actually happened — and only the
+                    // outer context's as a fallback, for the ordinary shape where they were always the same.
+                    targetUuid: target?.uuid ?? context.target?.uuid ?? payload.targetUuid,
                     originUuid: context.originActor?.uuid,
                     messageId: payload.messageId ?? null,
                     itemUuid: payload.itemUuid ?? null,

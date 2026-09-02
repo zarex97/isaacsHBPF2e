@@ -23,6 +23,7 @@ export const EVENTS = [
     "damage-applied", // damage from this actor's item landed on a target
     "turn-end", // this actor's turn ended
     "turn-start", // this actor's turn began
+    "aura-tick", // a creature entered this actor's aura, or ended its turn inside it
 ];
 
 export const DEFAULT_EVENT = "save-rolled";
@@ -68,6 +69,28 @@ export function ridersOn(item) {
     return Array.isArray(riders) ? riders : [];
 }
 
+/**
+ * A rider by its address, wherever it is nested.
+ *
+ * Most riders are top-level, so an address is just their index and `applyChoice` — the only thing that
+ * ever needs to *re-find* a rider rather than being handed one directly — used a bare number for as long as
+ * that held. *Double Excalibur*'s sever is the first choice authored inside a `strikes` rider's `onAllHit`,
+ * and a bare index could only ever re-find the outer `strikes` rider, not the choice nested inside it — the
+ * button posted correctly and clicking it silently did nothing. An address is now a path: `[0]` for an
+ * ordinary top-level rider, `[0, "riders", 1]` for the second rider a `save` earns, `[0, "onAllHit", 0]` for
+ * the first of a volley's all-hit follow-ups. Whoever descends into a rider's own nested lists is what
+ * builds the longer address; nothing else needs to know the shape changed.
+ */
+export function riderAt(item, address) {
+    const top = ridersOn(item);
+    const path = Array.isArray(address) ? address : [address];
+    let node = top[path[0]];
+    for (let i = 1; i < path.length; i += 2) {
+        node = node?.apply?.[path[i]]?.[path[i + 1]];
+    }
+    return node;
+}
+
 export function eventOf(rider) {
     return rider?.event ?? DEFAULT_EVENT;
 }
@@ -89,8 +112,13 @@ export function eventOf(rider) {
  * The other events genuinely do need the wider search, which is why this is a list rather than a rule: a
  * Strike's `message.item` is the fist or the weapon, while "each time you hit with an unarmed Strike…" is
  * written on a Cloth's Ascendant effect, and only the predicate can narrow that back down.
+ *
+ * `aura-tick` joins them for the same reason `action-used` does: the item named is not a guess, it is
+ * `Sources.onAuraTick` reading `flags.pf2e.aura.origin` straight off the marker pf2e's own Aura rule element
+ * granted, and resolving one specific effect on that actor by hand — see `sources.mjs`. Searching the whole
+ * actor would let a Saint who somehow carries two auras answer each other's ticks.
  */
-const ITEM_SCOPED_EVENTS = new Set(["action-used", "save-rolled"]);
+const ITEM_SCOPED_EVENTS = new Set(["action-used", "save-rolled", "aura-tick"]);
 
 /**
  * Gather every rider for an event, from every item that could be carrying one.

@@ -26,18 +26,32 @@
                 },
                 {
                     "apply": {
-                        "text": "Its soul is cast into one of the six realms for 1 minute: stunned for the duration, its body standing empty.",
-                        "type": "prompt"
+                        "max": 3,
+                        "slug": "stunned",
+                        "type": "condition",
+                        "value": 3
                     },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    },
+                    "note": "Its soul is in the six realms; the body stands empty.",
                     "outcomes": [
                         "failure"
                     ]
                 },
                 {
                     "apply": {
-                        "text": "Its soul is cast into one of the six realms for 10 minutes.",
-                        "type": "prompt"
+                        "max": 3,
+                        "slug": "stunned",
+                        "type": "condition",
+                        "value": 3
                     },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 10
+                    },
+                    "note": "Ten minutes in the six realms; the body stands empty.",
                     "outcomes": [
                         "criticalFailure"
                     ]
@@ -52,7 +66,7 @@
                         "unit": "hours",
                         "value": 1
                     },
-                    "note": "On its return.",
+                    "note": "On its return — no one comes back from the six worlds unchanged.",
                     "outcomes": [
                         "criticalFailure"
                     ]
@@ -92,7 +106,7 @@
             }
         },
         "description": {
-            "value": "<p><em>Virgo &mdash; 4th (Ultimate) Technique, gained at level 16.</em></p><p><em>The Six Realms of Samsara &mdash; the soul sent to one of the six worlds while the body remains on the field.</em></p><p>The target must attempt a Will save.</p><p><strong>Success</strong> It is stunned 1.</p><p><strong>Failure</strong> Its soul is cast into one of the six realms for 1 minute: it is <strong>stunned</strong> for the duration, its body standing empty.</p><p><strong>Critical Failure</strong> As failure but for 10 minutes, and on its return it is enfeebled 2 and stupefied 2 for an hour. No one comes back from the six worlds unchanged.</p><hr /><p><strong>Heightening (+2 levels)</strong> At 20th level, you may target two creatures.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+            "value": "<p><em>Virgo — 4th (Ultimate) Technique, gained at level 16.</em></p><p>The Six Realms of Samsara — the soul sent to one of the six worlds while the body remains on the field.</p><p>The target must attempt a Will save.</p><p><strong>Success</strong> It is stunned 1.</p><p><strong>Failure</strong> Its soul is cast into one of the six realms for 1 minute: it is stunned for the duration, its body standing empty on the battlefield.</p><p><strong>Critical Failure</strong> As failure but for 10 minutes, and on its return it is enfeebled 2 and stupefied 2 for an hour. No one comes back from the six worlds unchanged.</p><p><strong>Heightening (+2 levels)</strong> At 20th level, you may target two creatures.</p><p><em>On a day your constellation is Ascendant this Technique heightens as though you were 4 levels higher; on a Zenith, 8 levels higher.</em></p>"
         },
         "duration": {
             "sustained": false,

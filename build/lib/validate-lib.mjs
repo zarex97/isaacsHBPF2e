@@ -184,8 +184,13 @@ function validateItem(doc, where, errors) {
 
     validateAreaTargeting(doc, where, errors);
     validateRiders(doc, where, errors);
+    validateCounterThresholds(doc, where, errors);
     validateBypass(doc, where, errors);
     validateFreeCast(doc, where, errors);
+    validateFrequency(doc, where, errors);
+    validateLingering(doc, where, errors);
+    validateAstral(doc, where, errors);
+    validateSouls(doc, where, errors);
 
     if (MUST_BE_INCAPACITATION.has(system.slug) && !(traits ?? []).includes("incapacitation")) {
         errors.push(
@@ -263,11 +268,11 @@ const CONDITION_SLUGS = new Set(pf2e.conditionSlugs);
 const DURATION_UNITS = new Set(["rounds", "minutes", "hours", "days", "unlimited", "encounter"]);
 const RIDER_TYPES = new Set([
     "condition", "effect", "prompt", "choice", "save", "damage", "persistent-damage", "death", "teleport",
-    "strikes",
+    "strikes", "banish", "heal", "readout", "toggle", "counteract", "encasement", "escape",
 ]);
 const RIDER_EVENTS = new Set([
     "save-rolled", "strike-resolved", "strike-received", "action-used", "damage-applied",
-    "turn-end", "turn-start",
+    "turn-end", "turn-start", "aura-tick",
 ]);
 const RESISTANCE_TYPES = new Set([...pf2e.damageTypes, "all-damage", "physical", "precision", "critical-hits"]);
 const IMMUNITY_TYPES = RESISTANCE_TYPES;
@@ -339,6 +344,140 @@ function validateBypass(doc, where, errors) {
         if (entry.hardness !== undefined && entry.hardness !== "ignore") {
             errors.push(`${at} hardness may only be "ignore"`);
         }
+    }
+}
+
+/**
+ * Any item's frequency, not only a free cast's.
+ *
+ * pf2e's intervals are ISO-ish codes — `PT1H` is "once per hour", and there is no `hour`. An unrecognised
+ * one is not rejected by the system: it is stored, displayed as an empty label, and never recharged, so the
+ * ability works once and then quietly never again. This was checked only for items carrying the free-cast
+ * flag, which meant *Swap Aspect*'s "once per hour" could ship with an interval that does not exist.
+ */
+function validateFrequency(doc, where, errors) {
+    const frequency = doc.system?.frequency;
+    if (!frequency) return;
+    if (!(Number(frequency.max) > 0)) {
+        errors.push(`${where}: system.frequency.max must be a positive number — got "${frequency.max}"`);
+    }
+    if (!FREQUENCY_INTERVALS.has(frequency.per)) {
+        errors.push(
+            `${where}: system.frequency.per "${frequency.per}" is not a pf2e interval `
+                + `(${[...FREQUENCY_INTERVALS].join("/")}) — it would never recharge`,
+        );
+    }
+}
+
+/**
+ * The lingering-area spec: what a Technique leaves on the ground behind it.
+ *
+ * The check that earns its place is the last one. *Mavros Eruption Clast* shipped with its area's persistent
+ * fire written as a second `system.damage` part, which pf2e rolls unconditionally against everyone caught
+ * in the blast — the same shape as *Titan's Break*'s critical-failure-only 4d8. Now that the burning ground
+ * deals it, having it in both places would deal it twice.
+ */
+function validateLingering(doc, where, errors) {
+    const flag = doc.flags?.["isaacs-hb-pf2e"]?.lingering;
+    if (flag === undefined) return;
+    const at = `${where}: lingering`;
+
+    if (!(Number(flag.duration?.value) > 0)) {
+        errors.push(`${at} needs a duration — an area with no expiry is never swept off the map`);
+    } else if (!DURATION_UNITS.has(flag.duration.unit)) {
+        errors.push(`${at}.duration.unit "${flag.duration.unit}" is not a duration unit`);
+    }
+    // Four things a patch of ground can be. Two are Region behaviors, two are scenery placed beside the
+    // Region — but all four are swept away by the same expiry, so all four count as doing something.
+    if (!flag.difficultTerrain && !flag.damage && !flag.light && !flag.blocksSight) {
+        errors.push(`${at} does nothing: give it difficultTerrain, damage, light or blocksSight`);
+    }
+    if (flag.blocksSight !== undefined && typeof flag.blocksSight !== "boolean") {
+        errors.push(`${at}.blocksSight must be true or false`);
+    }
+    if (flag.light !== undefined) {
+        for (const key of ["bright", "dim"]) {
+            if (flag.light[key] !== undefined && !(Number(flag.light[key]) >= 0)) {
+                errors.push(`${at}.light.${key} must be a distance in feet — got "${flag.light[key]}"`);
+            }
+        }
+        if (flag.light.color !== undefined && !/^#[0-9a-f]{6}$/i.test(String(flag.light.color))) {
+            errors.push(`${at}.light.color must be a hex colour like "#8ecbff" — got "${flag.light.color}"`);
+        }
+    }
+    if (flag.difficultTerrain !== undefined && !(Number(flag.difficultTerrain) > 1)) {
+        errors.push(`${at}.difficultTerrain is a movement multiplier and must be above 1`);
+    }
+    if (flag.damage) {
+        if (!DICE_FORMULA.test(String(flag.damage.formula ?? ""))) {
+            errors.push(`${at}.damage needs a formula like "4d6" — got "${flag.damage.formula}"`);
+        }
+        if (!DAMAGE_TYPES.has(flag.damage.type)) {
+            errors.push(`${at}.damage "${flag.damage.type}" is not a pf2e damage type`);
+        }
+        if (flag.damage.perStep !== undefined && !DICE_FORMULA.test(String(flag.damage.perStep))) {
+            errors.push(`${at}.damage.perStep needs a formula like "1d6" — got "${flag.damage.perStep}"`);
+        }
+        const duplicated = Object.values(doc.system?.damage ?? {}).some(
+            (part) => part?.category === "persistent" && part?.type === flag.damage.type,
+        );
+        if (duplicated) {
+            errors.push(
+                `${at}.damage is also a persistent part of system.damage — pf2e rolls that against `
+                    + `everyone the blast catches, so the area would burn them twice`,
+            );
+        }
+    }
+    if (flag.events !== undefined && (!Array.isArray(flag.events) || flag.events.length === 0)) {
+        errors.push(`${at}.events must be a non-empty array of region event names`);
+    }
+}
+
+/** The astral-projection spec, and the aiming it needs. */
+function validateAstral(doc, where, errors) {
+    const flag = doc.flags?.["isaacs-hb-pf2e"]?.astral;
+    if (flag === undefined) return;
+    const at = `${where}: astral`;
+
+    if (!(Number(flag.minutes) > 0)) errors.push(`${at}.minutes must be a positive number`);
+    if (flag.minutesPerStep !== undefined && !(Number(flag.minutesPerStep) >= 0)) {
+        errors.push(`${at}.minutesPerStep must be zero or more`);
+    }
+    // The body is placed by the area-targeting flow, which needs something to aim and a reach to check it
+    // against. Without both, the Technique would project to wherever the cursor happened to be.
+    const targeting = doc.flags?.["isaacs-hb-pf2e"]?.areaTargeting;
+    if (!targeting?.area?.value) {
+        errors.push(`${at} needs an areaTargeting.area to aim the body with`);
+    }
+    if (!(Number(targeting?.range) > 0)) {
+        errors.push(`${at} needs an areaTargeting.range — the body may only appear within reach`);
+    }
+}
+
+/** The soul-count spec behind *Sekishiki Konsō Ha*'s "+1d8 for every creature that has died here". */
+function validateSouls(doc, where, errors) {
+    const flag = doc.flags?.["isaacs-hb-pf2e"]?.souls;
+    if (flag === undefined) return;
+    const at = `${where}: souls`;
+
+    if (!(Number(flag.max) > 0)) errors.push(`${at}.max must be a positive number of dice`);
+    if (!(Number(flag.withinSeconds) > 0)) errors.push(`${at}.withinSeconds must be a positive number`);
+
+    const path = `flags.isaacs-hb-pf2e.${flag.flag ?? "soulDice"}`;
+    const rules = doc.system?.rules ?? [];
+    const reads = rules.some((rule) => String(rule.diceNumber ?? "").includes(flag.flag ?? "soulDice"));
+    if (!reads) errors.push(`${at} is counted but nothing reads it — no rule element uses ${path}`);
+
+    // Without an initialiser the path does not exist until the first cast, and pf2e's injected-property
+    // resolution fails validation loudly on every roll until it does.
+    const initialised = rules.some(
+        (rule) => rule.key === "ActiveEffectLike" && rule.path === path && rule.mode === "add" && rule.value === 0,
+    );
+    if (!initialised) {
+        errors.push(
+            `${at} needs an ActiveEffectLike add-0 on ${path} to initialise it, or the rule that reads `
+                + `it fails until the first cast`,
+        );
     }
 }
 
@@ -425,6 +564,35 @@ function validateRiders(doc, where, errors) {
 }
 
 /**
+ * What a counter effect does when its badge passes a number.
+ *
+ * Scorpio's three needle thresholds live on **Effect: Scarlet Needle** rather than on each of the five
+ * things that place a needle, so they are stated once. The badge is what makes that possible and what makes
+ * it fail silently if it is missing: a threshold on an effect with no counter can never be crossed.
+ */
+function validateCounterThresholds(doc, where, errors) {
+    const thresholds = doc.flags?.["isaacs-hb-pf2e"]?.counterThresholds;
+    if (thresholds === undefined) return;
+    if (!Array.isArray(thresholds) || thresholds.length === 0) {
+        errors.push(`${where}: counterThresholds must be a non-empty array`);
+        return;
+    }
+    if (doc.system?.badge?.type !== "counter") {
+        errors.push(`${where}: counterThresholds need a counter badge to read — this document has none`);
+    }
+    const max = Number(doc.system?.badge?.max);
+    for (const [i, threshold] of thresholds.entries()) {
+        const at = `${where}: counterThresholds[${i}]`;
+        if (!(Number.isInteger(threshold.at) && threshold.at > 0)) {
+            errors.push(`${at} needs a positive whole \`at\` — got "${threshold.at}"`);
+        } else if (max > 0 && threshold.at > max) {
+            errors.push(`${at} at ${threshold.at} is above the badge maximum of ${max}, so it never fires`);
+        }
+        validateRider(threshold, at, errors, { doc, depth: 1 });
+    }
+}
+
+/**
  * One rider, at any depth.
  *
  * Riders nest: a `save` rider carries the riders its result earns, and a `choice` rider carries one per
@@ -480,6 +648,13 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
         }
     }
 
+    // A rider chosen against the world as the pass leaves it rather than as it found it. Scorpio's bleed
+    // and its death both count needles another rider in the same pass has just placed; an escalation ladder
+    // must never be marked this way, or every step of it fires on the first hit.
+    if (rider.live !== undefined && typeof rider.live !== "boolean") {
+        errors.push(`${at} live must be true or false`);
+    }
+
     const apply = rider.apply;
     if (!apply || !RIDER_TYPES.has(apply.type)) {
         errors.push(`${at} apply.type must be one of ${[...RIDER_TYPES].join("/")} — got "${apply?.type}"`);
@@ -499,6 +674,39 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
     // nested objects the first time the item is written to an actor, and the substitution matches nothing.
     if (apply.substitutions && !Array.isArray(apply.substitutions)) {
         errors.push(`${at} substitutions must be a list of { path, value }, not an object keyed by path`);
+    } else {
+        for (const [j, substitution] of (apply.substitutions ?? []).entries()) {
+            const sat = `${at}.substitutions[${j}]`;
+            // Into the effect's rules, or into a rider it carries of its own: *Crimson Mirage* writes the
+            // die count for its end-of-turn damage into the effect's own turn-end rider, because that
+            // number is the caster's and the effect is about to belong to somebody else.
+            const path = substitution?.path;
+            if (typeof path !== "string" || !(path.startsWith("system.") || path.startsWith("flags."))) {
+                errors.push(`${sat} needs a path into the effect, like "system.rules.0.value"`);
+            }
+            const value = substitution?.value;
+            if (value && typeof value === "object" && !Array.isArray(value) && "at" in value) {
+                // A value keyed to character levels. Every key has to be a level, or the threshold is
+                // silently never met and the effect hands out its base value forever.
+                if (typeof value.at !== "object") {
+                    errors.push(`${sat} an object value must be { base, at: { "12": … } }`);
+                } else if (Object.keys(value.at).some((level) => !(Number(level) > 0))) {
+                    errors.push(`${sat} every key of \`at\` must be a character level`);
+                }
+            } else if (value && typeof value === "object" && !Array.isArray(value) && "perStep" in value) {
+                // A value that grows smoothly with heightening rather than at named levels — "the damage
+                // increases by 1d8, the resistance by 5, and the radius by 5 feet" is this shape, not that
+                // one, and the two are easy to reach for interchangeably since both are `{ base, … }`.
+                if (value.base === undefined) errors.push(`${sat} a perStep value needs a \`base\` to grow from`);
+                const sameKind = typeof value.base === typeof value.perStep
+                    || (DICE_FORMULA.test(String(value.base)) && DICE_FORMULA.test(String(value.perStep)));
+                if (!sameKind) {
+                    errors.push(`${sat} base and perStep must both be numbers or both be dice of the same size`);
+                }
+            } else if (typeof value !== "string" && typeof value !== "number") {
+                errors.push(`${sat} value must be a resolvable name, a number, a level ladder, or a per-step growth`);
+            }
+        }
     }
 
     if (apply.type !== "effect" && apply.stack) {
@@ -516,6 +724,28 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
             break;
         case "effect":
             if (typeof apply.uuid !== "string") errors.push(`${at} effect riders need a uuid`);
+            if (apply.once !== undefined && typeof apply.once !== "boolean") {
+                errors.push(`${at} once must be true or false`);
+            }
+            if (apply.once && apply.stack) {
+                errors.push(`${at} an effect cannot both stack and be granted only once`);
+            }
+            if (apply.refresh !== undefined && typeof apply.refresh !== "boolean") {
+                errors.push(`${at} refresh must be true or false`);
+            }
+            if (apply.refresh && apply.once) {
+                errors.push(`${at} refresh and once contradict each other — one renews, the other declines to`);
+            }
+            break;
+        case "counteract":
+            // The list is read off the board at cast time, so the one thing that can be wrong here is the
+            // trait it looks for — and a trait nothing carries is a card with no buttons on it.
+            if (apply.traits !== undefined && (!Array.isArray(apply.traits) || apply.traits.length === 0)) {
+                errors.push(`${at} counteract traits must be a non-empty list`);
+            }
+            if (rider.self !== true) {
+                errors.push(`${at} a counteract rider must be \`self\`: it offers one choice for the whole cast`);
+            }
             break;
         case "prompt":
             if (!apply.text) errors.push(`${at} prompt riders need text — it is the only thing they do`);
@@ -532,6 +762,82 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
             if (apply.substitutions && typeof apply.uuid !== "string") {
                 errors.push(`${at} substitutions have nothing to apply to without an effect \`uuid\``);
             }
+            // "Make four unarmed Strikes against any creatures within 30 feet" is four Strikes however many
+            // creatures are in reach. Without a count the volley makes one per confirmed target, which is
+            // the old behaviour and right only by coincidence.
+            if (apply.count !== undefined && apply.count !== "maxTargets" && !(Number(apply.count) > 0)) {
+                errors.push(`${at} strikes count must be a positive number or "maxTargets" — got "${apply.count}"`);
+            }
+            if (apply.count === "maxTargets" && !(Number(doc.flags?.["isaacs-hb-pf2e"]?.areaTargeting?.maxTargets) > 0)) {
+                errors.push(`${at} count "maxTargets" needs an areaTargeting.maxTargets to read`);
+            }
+            for (const half of ["onHit", "onMiss", "onAllHit"]) {
+                const list = apply[half];
+                if (list === undefined) continue;
+                if (!Array.isArray(list)) {
+                    errors.push(`${at} ${half} must be a list of riders`);
+                    continue;
+                }
+                list.forEach((inner, j) =>
+                    validateRider(inner, `${at}.apply.${half}[${j}]`, errors, { doc, depth: depth + 1 }),
+                );
+            }
+            break;
+        case "death":
+            // A threshold read after the damage lands, for "if the creature is at half Hit Points or fewer
+            // it dies". A predicate cannot express it: predicates see the world as it was before the pass.
+            if (apply.hpFraction !== undefined
+                && !(Number(apply.hpFraction) > 0 && Number(apply.hpFraction) <= 1)) {
+                errors.push(`${at} hpFraction is a share of maximum hit points and must be above 0 and at `
+                    + `most 1 — got "${apply.hpFraction}"`);
+            }
+            break;
+        case "banish": {
+            // A banishment with no duration takes a creature off the board and never brings it back. That
+            // is not a weak rider, it is a deleted token — so the build refuses it outright.
+            const duration = rider.duration ?? apply.duration;
+            if (!(Number(duration?.value) > 0)) {
+                errors.push(`${at} banish riders need a duration — without one the creature never returns`);
+            }
+            if (duration?.unit && !["rounds", "minutes", "hours", "days"].includes(duration.unit)) {
+                errors.push(`${at} banish duration unit must be rounds/minutes/hours/days — got "${duration.unit}"`);
+            }
+            break;
+        }
+        case "heal":
+            if (!(Number(apply.value) > 0)) {
+                errors.push(`${at} heal riders need a positive value — got "${apply.value}"`);
+            }
+            // The Saint is the one who heals, not the creature that failed its save. Landing this on the
+            // target would hand an enemy hit points for surviving the Technique.
+            if (rider.self !== true) errors.push(`${at} a heal rider must be \`self\``);
+            if (apply.maxPerCast !== undefined
+                && apply.maxPerCast !== "origin.level"
+                && !(Number(apply.maxPerCast) > 0)) {
+                errors.push(`${at} maxPerCast must be a positive number or "origin.level"`);
+            }
+            break;
+        case "readout":
+            if (!(Number(apply.range) > 0)) {
+                errors.push(`${at} readout riders need a range in feet — got "${apply.range}"`);
+            }
+            if (rider.self !== true) errors.push(`${at} a readout rider must be \`self\`: it reports to the Saint`);
+            break;
+        case "toggle":
+            // A namespaced option is still a slug: `om:eyes-open` is one RollOption, not two.
+            if (typeof apply.option !== "string" || !/^[a-z0-9-]+(:[a-z0-9-]+)*$/.test(apply.option)) {
+                errors.push(`${at} toggle riders need a slug \`option\` naming the RollOption to flip`);
+            }
+            // A cycle of one has nowhere to go: the action would report a change and change nothing. No
+            // cycle at all is the other legitimate shape — a plain on/off toggle, which is what Virgo's
+            // `om:eyes-open` is — and that one needs to say which way it is being set.
+            if (apply.cycle !== undefined && (!Array.isArray(apply.cycle) || apply.cycle.length < 2)) {
+                errors.push(`${at} toggle riders need a \`cycle\` of at least two suboptions, or none at all`);
+            }
+            if (apply.cycle === undefined && apply.value !== undefined && typeof apply.value !== "boolean") {
+                errors.push(`${at} a toggle with no cycle sets the option true or false — got "${apply.value}"`);
+            }
+            if (rider.self !== true) errors.push(`${at} a toggle rider must be \`self\``);
             break;
         case "teleport":
             // A teleport with no distance moves nobody and says nothing, which is the same silent-no-op
@@ -543,22 +849,69 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
                 errors.push(`${at} teleport direction must be "away" or "toward" — got "${apply.direction}"`);
             }
             break;
+        case "encasement": {
+            if (!(Number(apply.hardness) >= 0)) {
+                errors.push(`${at} encasement needs a Hardness — got "${apply.hardness}"`);
+            }
+            if (!(Number(apply.hp) > 0)) {
+                errors.push(`${at} encasement needs positive Hit Points — got "${apply.hp}"`);
+            }
+            const conditions = [apply.conditions].flat().filter(Boolean);
+            if (conditions.length === 0) {
+                errors.push(`${at} encasement needs at least one condition it applies and clears`);
+            } else {
+                for (const slug of conditions) {
+                    if (!CONDITION_SLUGS.has(slug)) errors.push(`${at} "${slug}" is not a pf2e condition slug`);
+                }
+            }
+            if (apply.escapeDc !== undefined && apply.escapeDc !== "cosmo" && !Number.isInteger(apply.escapeDc)) {
+                errors.push(`${at} escapeDc must be "cosmo" or a whole number — got "${apply.escapeDc}"`);
+            }
+            break;
+        }
+        case "escape":
+            if (apply.dc !== undefined && !(Number(apply.dc) > 0)) {
+                errors.push(`${at} escape riders need a positive dc — got "${apply.dc}"`);
+            }
+            if (typeof apply.hazardUuid !== "string") {
+                errors.push(`${at} escape riders need a \`hazardUuid\` naming the shell they break`);
+            }
+            if (rider.self !== true) errors.push(`${at} an escape rider must be \`self\`: it is the captive's own action`);
+            break;
         case "damage":
-        case "persistent-damage":
-            if (!DICE_FORMULA.test(String(apply.formula ?? ""))) {
+        case "persistent-damage": {
+            // Almost always a literal formula. The one exception is a *granted action* reaching for
+            // another Technique's own current damage — `Golden Arrow: Named Shot` is the only one — which
+            // has no rank of its own for `perStep` to scale from and has to name what it means instead.
+            const isResolvable = typeof apply.formula === "string" && apply.formula.startsWith("origin.");
+            if (!isResolvable && !DICE_FORMULA.test(String(apply.formula ?? ""))) {
                 errors.push(`${at} ${apply.type} needs a formula like "4d6" — got "${apply.formula}"`);
+            }
+            if (isResolvable && !/^origin\.technique\..+\.damage(\+\d+d\d+)?$/.test(apply.formula)) {
+                errors.push(`${at} unrecognised resolvable formula "${apply.formula}"`);
             }
             if (!DAMAGE_TYPES.has(apply.damageType)) {
                 errors.push(`${at} "${apply.damageType}" is not a pf2e damage type`);
             }
-            if (apply.type === "persistent-damage" && apply.perCounter !== undefined
-                && typeof apply.perCounter !== "string") {
+            // "1d6 per needle" reads the die count off a counter the target is already wearing. Both
+            // damage kinds do it now: Scorpio's Ascendant bleed is persistent, and *Crimson Mirage*'s
+            // end-of-turn mental damage is not.
+            if (apply.perCounter !== undefined && typeof apply.perCounter !== "string") {
                 errors.push(`${at} perCounter must be the uuid of a counter effect`);
             }
-            if (apply.type === "damage" && apply.perCounter !== undefined) {
-                errors.push(`${at} only persistent damage can scale with a counter`);
+            if (apply.max !== undefined && !(Number(apply.max) > 0)) {
+                errors.push(`${at} max must be a positive number of counters — got "${apply.max}"`);
+            }
+            // The outcome multiplier behind "Success: half damage". Anything outside this range is a
+            // degree of success pf2e does not have.
+            if (apply.multiplier !== undefined && !(Number(apply.multiplier) > 0 && Number(apply.multiplier) <= 2)) {
+                errors.push(`${at} multiplier must be between 0 and 2 — got "${apply.multiplier}"`);
+            }
+            if (apply.type === "persistent-damage" && apply.multiplier !== undefined) {
+                errors.push(`${at} persistent damage has no degree of success to scale by`);
             }
             break;
+        }
         case "save": {
             if (!SAVE_STATISTICS.has(apply.statistic)) {
                 errors.push(`${at} save riders need fortitude/reflex/will — got "${apply.statistic}"`);
