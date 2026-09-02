@@ -1,4 +1,50 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "dc": "cosmo",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "poison",
+                                    "formula": "10d6",
+                                    "type": "damage"
+                                },
+                                "outcomes": [
+                                    "failure"
+                                ]
+                            },
+                            {
+                                "apply": {
+                                    "slug": "enfeebled",
+                                    "type": "condition",
+                                    "value": 2
+                                },
+                                "outcomes": [
+                                    "failure"
+                                ]
+                            },
+                            {
+                                "apply": {
+                                    "text": "It dies.",
+                                    "type": "death"
+                                },
+                                "outcomes": [
+                                    "criticalFailure"
+                                ]
+                            }
+                        ],
+                        "statistic": "fortitude",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "note": "Incapacitation. Only a Zenith sky grants this."
+                }
+            ]
+        }
+    },
     "folder": "Actions",
     "img": "systems/pf2e/icons/actions/TwoActions.webp",
     "name": "Bloody Rose",
@@ -12,6 +58,11 @@
         "category": "offensive",
         "description": {
             "value": "<p><strong>Frequency</strong> once per minute</p><hr /><p>60 feet, one creature. Fortitude save.</p><p><strong>Failure</strong> @Damage[10d6[poison]] damage and enfeebled 2.</p><p><strong>Critical Failure</strong> It <strong>dies</strong>.</p><p><strong>Incapacitation.</strong></p><hr /><p>Granted by the Pisces Zenith Boon.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "PT1M",
+            "value": 1
         },
         "publication": {
             "license": "ORC",

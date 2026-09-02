@@ -112,6 +112,13 @@ async function applyToTarget(target, candidates, context, payload) {
         ...context,
         actor,
         target,
+        // The creature the *event* was about, kept apart from `target` above. For an ordinary rider the
+        // two are the same token; for a `self` rider `target` becomes the caster's own — but *Royal
+        // Funeral*'s "you know the target's exact Hit Points" is a `self` grant that still needs to know
+        // which creature the rose was thrown at, and by the time `target` is overwritten that fact is gone
+        // unless something keeps a copy. `context.target` here is still the pre-overwrite value from
+        // `resolveContext` — the enemy the event named — for exactly that.
+        eventTarget: context.target,
         outcome: payload.outcome ?? null,
         event: payload.event,
         adjustments: [],
@@ -869,6 +876,11 @@ function ownersAndGMs(actor) {
  * public chat would hand the table an NPC's hit points.
  */
 async function applyReadout(rider, context) {
+    // *Royal Funeral*'s "Special" is not a range scan — it is one creature, named at cast time and carried
+    // on the marker effect this rider lives on (`context.item`, here, is that effect). Every other readout
+    // below asks "who is nearby"; this one only ever asks "how is the one creature I was told to watch".
+    if (rider.apply.trackedTarget) return reportTrackedHp(context.item, context);
+
     const originToken = context.originToken;
     if (!originToken?.object || !canvas?.ready) return;
 
@@ -896,6 +908,27 @@ async function applyReadout(rider, context) {
         content: rows.length > 0
             ? `<p>Within ${range} feet:</p><ul>${rows.join("")}</ul>`
             : `<p>Nothing living or dead within ${range} feet.</p>`,
+    });
+}
+
+/**
+ * The exact Hit Points of one marked creature, whispered to the Saint's players and the GM.
+ *
+ * Shared by *Royal Funeral*'s cast-time reveal and its marker effect's own `turn-start` rider — "from the
+ * moment you cast until the end of the encounter" is one fact told twice, not two different mechanics.
+ */
+async function reportTrackedHp(item, context) {
+    const uuid = item?.flags?.[MODULE_ID]?.trackedTarget;
+    const token = uuid ? await fromUuid(uuid) : null;
+    const actor = token?.actor;
+
+    await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: context.originActor }),
+        whisper: [...ownersAndGMs(context.originActor)],
+        flavor: item?.name ?? "Royal Funeral",
+        content: actor?.hitPoints
+            ? `<p><strong>${token.name}</strong> is at ${actor.hitPoints.value} / ${actor.hitPoints.max} Hit Points.</p>`
+            : `<p>The rose's colour has faded &mdash; there is nothing left to read.</p>`,
     });
 }
 
@@ -1059,10 +1092,22 @@ async function applyEffect(rider, context) {
     if (rider.duration) source.system.duration = durationData(rider.duration);
     source.system.context = contextData(context);
     source.flags = foundry.utils.mergeObject(source.flags ?? {}, riderFlags(rider, context));
-    await context.actor.createEmbeddedDocuments("Item", [source]);
+
+    // "You know the target's exact Hit Points until the end of the encounter" is knowledge tied to *one*
+    // creature, not a range — the marker effect this grants onto the caster carries that creature's uuid so
+    // its own `turn-start` rider knows who to keep reading. `eventTarget` is what still remembers, since by
+    // this point `context.target` is the caster's own token — see the note where it is set.
+    if (rider.apply.trackedTarget) {
+        source.flags = foundry.utils.mergeObject(source.flags, {
+            [MODULE_ID]: { trackedTarget: context.eventTarget?.uuid ?? null },
+        });
+    }
+
+    const [created] = await context.actor.createEmbeddedDocuments("Item", [source]);
     if (rider.apply.stack) {
         await crossThresholds(source, 0, Number(source.system?.badge?.value) || 0, context);
     }
+    if (rider.apply.trackedTarget) await reportTrackedHp(created, context);
 }
 
 /**
@@ -1098,7 +1143,13 @@ async function crossThresholds(source, was, now, context) {
  * Cloth actually describes.
  */
 async function applyPersistent(rider, context) {
-    const { formula = "1d6", damageType = "bleed", perCounter, max } = rider.apply;
+    const { damageType = "bleed", perCounter, max } = rider.apply;
+    // Almost always a literal. *Piranha Rose*'s persistent bleed is the exception — "+1d6 at 9th, 13th and
+    // 17th level" is a named-level ladder, not a per-heightening-step one, and it lives on the module's own
+    // rider rather than `system.damage` precisely so a save's *success* can skip it outright instead of
+    // pf2e's basic-save halving turning "negates" into "half a d6 of bleed".
+    const rawFormula = rider.apply.formula ?? "1d6";
+    const formula = typeof rawFormula === "object" ? (resolveFromOrigin(rawFormula, context) ?? "1d6") : rawFormula;
     const count = perCounter ? Math.min(counterOn(context.actor, perCounter), Number(max) || Infinity) : 1;
     const scaled = perCounter ? scaleFormula(formula, count) : formula;
     if (!scaled) return;
@@ -1279,7 +1330,20 @@ async function applyDeath(rider, context) {
  * exactly the way the outer ones were chosen by the event's.
  */
 async function applySave(rider, context) {
-    const { statistic: slug, dc } = rider.apply;
+    return runSave(rider.apply, context);
+}
+
+/**
+ * The save itself, apart from the rider that usually asks for it.
+ *
+ * *Royal Demon Rose*'s ground tick needs exactly this — roll a save, dispatch nested riders by its outcome —
+ * with no rider or message anywhere: the region behavior in `targeting/lingering.mjs` has a patch of ground
+ * and a token standing on it, not an item on an actor's sheet. Exported so it can build its own `context`
+ * (real actor, a name-only stand-in for `item`) and call straight in, rather than fabricating a fake rider
+ * just to hand back to `applySave`.
+ */
+export async function runSave(spec, context) {
+    const { statistic: slug, dc } = spec;
     const statistic = context.actor.getStatistic?.(slug);
     if (!statistic) {
         console.warn(`Isaac's Homebrew | ${context.actor.name} has no ${slug} statistic`);
@@ -1299,7 +1363,7 @@ async function applySave(rider, context) {
     const outcome = DEGREES[roll?.degreeOfSuccess ?? -1];
     if (!outcome) return;
 
-    const nested = (rider.apply.riders ?? []).map((r, index) => ({ rider: r, item: context.item, index }));
+    const nested = (spec.riders ?? []).map((r, index) => ({ rider: r, item: context.item, index }));
     const options = riderOptions({
         originActor: context.originActor,
         targetActor: context.actor,

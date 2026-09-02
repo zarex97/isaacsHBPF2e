@@ -3,6 +3,14 @@
         "isaacs-hb-pf2e": {
             "areaTargeting": {
                 "affects": "all"
+            },
+            "lingering": {
+                "difficultTerrain": 2,
+                "duration": {
+                    "unit": "minutes",
+                    "value": 1
+                },
+                "name": "Crimson Fog — petals"
             }
         }
     },
