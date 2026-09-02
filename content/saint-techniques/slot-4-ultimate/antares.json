@@ -1,6 +1,14 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "maxTargets": 1,
+                "predicate": [
+                    "rider:target:effect:effect-scarlet-needle:5+"
+                ],
+                "range": 30
+            },
             "riders": [
                 {
                     "apply": {
@@ -18,7 +26,7 @@
                 {
                     "apply": {
                         "text": "It dies — the scarlet star at the Scorpion's heart has found its own.",
-                        "type": "prompt"
+                        "type": "death"
                     },
                     "outcomes": [
                         "criticalFailure"
@@ -28,7 +36,7 @@
         }
     },
     "folder": "4th — Ultimate (L16)",
-    "img": "icons/skills/wounds/injury-pain-body-red.webp",
+    "img": "icons/skills/wounds/injury-body-pain-gray.webp",
     "name": "Antares",
     "system": {
         "area": null,

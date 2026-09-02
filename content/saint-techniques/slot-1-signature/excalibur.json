@@ -4,6 +4,27 @@
             "riders": [
                 {
                     "apply": {
+                        "substitutions": [
+                            {
+                                "path": "system.rules.2.value",
+                                "value": {
+                                    "at": {
+                                        "10": "deadly-d12"
+                                    },
+                                    "base": "deadly-d10"
+                                }
+                            },
+                            {
+                                "path": "system.rules.3.diceNumber",
+                                "value": {
+                                    "at": {
+                                        "14": 1,
+                                        "18": 2
+                                    },
+                                    "base": 0
+                                }
+                            }
+                        ],
                         "type": "effect",
                         "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Excalibur"
                     },
@@ -26,7 +47,7 @@
         "damage": {},
         "defense": null,
         "description": {
-            "value": "<p><em>Capricorn &mdash; 1st (Signature) Technique, gained at level 1.</em></p><p><em>Your arm is the sword. You have simply stopped pretending otherwise.</em></p><p>Until the end of your turn, your unarmed Strikes deal <strong>slashing</strong> damage, gain the <strong>deadly d10</strong> trait, and ignore Hardness.</p><hr /><p><strong>Heightening (+2 levels)</strong> At 10th level the deadly die becomes d12. At 14th and 18th level, your Strikes deal an additional 1d6 slashing damage.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+            "value": "<p><em>Capricorn — 1st (Signature) Technique, gained at level 1.</em></p><p>Your arm is the sword. You have simply stopped pretending otherwise.</p><p>Until the end of your turn, your unarmed Strikes deal slashing damage, gain the deadly d10 trait, and ignore Hardness.</p><p><strong>Heightening (+2 levels)</strong> At 10th level the deadly die becomes d12. At 14th and 18th level, your Strikes deal an additional 1d6 slashing damage.</p><p><em>On a day your constellation is Ascendant this Technique heightens as though you were 4 levels higher; on a Zenith, 8 levels higher.</em></p>"
         },
         "duration": {
             "sustained": false,

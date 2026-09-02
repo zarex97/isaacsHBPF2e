@@ -4,11 +4,70 @@
             "areaTargeting": {
                 "affects": "allies",
                 "includesSelf": true
-            }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "substitutions": [
+                            {
+                                "path": "system.rules.0.value",
+                                "value": {
+                                    "at": {
+                                        "12": 2,
+                                        "18": 3
+                                    },
+                                    "base": 1
+                                }
+                            },
+                            {
+                                "path": "system.rules.1.value",
+                                "value": {
+                                    "at": {
+                                        "12": 2,
+                                        "18": 3
+                                    },
+                                    "base": 1
+                                }
+                            },
+                            {
+                                "path": "system.rules.4.predicate",
+                                "value": {
+                                    "at": {
+                                        "12": []
+                                    },
+                                    "base": [
+                                        "tenporinin:refined"
+                                    ]
+                                }
+                            }
+                        ],
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Tenpōrin'in"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    },
+                    "event": "action-used",
+                    "note": "Clarity offered outward."
+                },
+                {
+                    "apply": {
+                        "prompt": "Tenpōrin'in: counteract one mental effect in the area, if you wish.",
+                        "traits": [
+                            "mental"
+                        ],
+                        "type": "counteract"
+                    },
+                    "event": "action-used",
+                    "note": "One mental effect, counteracted with your Cosmo statistic.",
+                    "self": true
+                }
+            ]
         }
     },
     "folder": "2nd (L6)",
-    "img": "icons/magic/control/energy-stream-link-white-blue.webp",
+    "img": "icons/magic/control/energy-stream-link-white.webp",
     "name": "Tenpōrin'in",
     "system": {
         "area": {
@@ -22,7 +81,7 @@
         "damage": {},
         "defense": null,
         "description": {
-            "value": "<p><em>Virgo &mdash; 2nd Technique, gained at level 6.</em></p><p><em>Clarity of Mind &mdash; the wheel of dharma turning, clarity offered outward.</em></p><p>You and your allies in the emanation gain a <strong>+1 status bonus to Will saves and to saves against mental effects</strong>, and are <strong>immune to the fascinated and frightened conditions</strong>.</p><p>When you cast this Technique, you may counteract one mental effect currently affecting a creature in the area, using your Cosmo DC.</p><hr /><p><strong>Heightening (+2 levels)</strong> The emanation increases by 5 feet. At 12th level the bonus becomes +2 and the immunity extends to <strong>confused</strong>; at 18th level the bonus becomes +3.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+            "value": "<p><em>Virgo — 2nd Technique, gained at level 6.</em></p><p>Clarity of Mind — the wheel of dharma turning, clarity offered outward.</p><p>You and your allies in the emanation gain a +1 status bonus to Will saves and to saves against mental effects, and are immune to the fascinated and frightened conditions, for 1 minute.</p><p>When you cast this Technique, a card offers every mental effect on a creature in the area; choosing one counteracts it with your Cosmo statistic.</p><p><strong>Heightening (+2 levels)</strong> The emanation increases by 5 feet. At 12th level the bonus becomes +2 and the immunity extends to confused; at 18th level the bonus becomes +3.</p><p><em>On a day your constellation is Ascendant this Technique heightens as though you were 4 levels higher; on a Zenith, 8 levels higher.</em></p>"
         },
         "duration": {
             "sustained": true,
@@ -46,16 +105,7 @@
             "value": ""
         },
         "requirements": "",
-        "rules": [
-            {
-                "key": "Aura",
-                "radius": 30,
-                "slug": "tenporinin",
-                "traits": [
-                    "mental"
-                ]
-            }
-        ],
+        "rules": [],
         "target": {
             "value": ""
         },

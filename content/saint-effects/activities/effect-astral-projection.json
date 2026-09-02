@@ -1,0 +1,37 @@
+{
+    "folder": "Activities",
+    "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
+    "name": "Effect: Astral Projection",
+    "system": {
+        "description": {
+            "value": "<p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Astral Projection]</p><p>Your consciousness is elsewhere. Your own body is <strong>unconscious</strong> and <strong>off-guard</strong> for the duration, and you perceive and speak through the astral body instead.</p><p>You may cast <strong>mental</strong> Techniques through it, using its position as the origin &mdash; the module measures range and line of effect from the astral body for those, and from your own body for everything else.</p><p>Damage to your body ends this effect and leaves you <strong>stunned 1</strong>.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": true,
+            "unit": "minutes",
+            "value": 10
+        },
+        "level": {
+            "value": 3
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

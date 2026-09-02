@@ -22,7 +22,7 @@
         },
         "defense": null,
         "description": {
-            "value": "<p><em>Capricorn &mdash; 2nd Technique, gained at level 6.</em></p><p><em>Shura's leap &mdash; he crosses the distance and the blade arrives before he does.</em></p><p><strong>Stride up to twice your Speed</strong>, ignoring difficult terrain and crossing gaps up to 20 feet as though on solid ground. This movement does not trigger reactions.</p><p>At any point during the movement, make one unarmed Strike dealing an additional @Damage[3d8[slashing]] damage. If you moved at least 20 feet before the Strike, treat the target's AC as <strong>2 lower</strong>.</p><hr /><p><strong>Heightening (+2 levels)</strong> The additional damage increases by 1d8.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+            "value": "<p><em>Capricorn &mdash; 2nd Technique, gained at level 6.</em></p><p><em>Shura's leap &mdash; he crosses the distance and the blade arrives before he does.</em></p><p><strong>Stride up to twice your Speed</strong>, ignoring difficult terrain and crossing gaps up to 20 feet as though on solid ground. This movement does not trigger reactions.</p><p>At any point during the movement, make one unarmed Strike dealing an additional @Damage[3d8[slashing]] damage. If you moved at least 20 feet before the Strike, treat the target's AC as <strong>2 lower</strong>.</p><hr /><p><strong>Heightening (+2 levels)</strong> The additional damage increases by 1d8.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p><p><em>Automation note: whether you moved 20 feet before the Strike is a fact about the movement, which Foundry cannot read back from a Stride already taken. Toggle it on the Technique before you attack and the +2 circumstance bonus applies to this roll; the difficult-terrain and 20-foot-gap clauses remain the table's to adjudicate.</em></p>"
         },
         "duration": {
             "sustained": false,
@@ -73,6 +73,22 @@
                     "sky:zenith"
                 ],
                 "selector": "{item|_id}-damage"
+            },
+            {
+                "key": "RollOption",
+                "label": "Jumping Stone: moved 20+ feet before the Strike",
+                "option": "jumping-stone:moved-20",
+                "toggleable": true
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Jumping Stone",
+                "predicate": [
+                    "jumping-stone:moved-20"
+                ],
+                "selector": "attack",
+                "type": "circumstance",
+                "value": 2
             }
         ],
         "target": {

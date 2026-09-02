@@ -1,15 +1,20 @@
+import { Astral } from "./astral.mjs";
 import { CastPipeline } from "./cast-pipeline.mjs";
 import { Cosmo } from "./cosmo.mjs";
+import { Deaths } from "./deaths.mjs";
 import { Duplicate } from "./economy/duplicate.mjs";
 import { FreeCast } from "./economy/free-cast.mjs";
 import { Recharge } from "./economy/recharge.mjs";
 import { Balance } from "./outcomes/balance.mjs";
 import { Om } from "./outcomes/om.mjs";
+import { Banish } from "./riders/banish.mjs";
+import { Encasement } from "./riders/encasement.mjs";
 import { Riders } from "./riders/index.mjs";
 import { MODULE_ID, adjacentSigns } from "./sky/signs.mjs";
 import { SkyTrackerApp } from "./sky/tracker-app.mjs";
 import { SkyTracker } from "./sky/tracker.mjs";
 import { AreaTargeting } from "./targeting/index.mjs";
+import { Lingering } from "./targeting/lingering.mjs";
 import { CrystalWall } from "./targeting/wall.mjs";
 
 /**
@@ -32,6 +37,19 @@ Hooks.once("init", () => {
     start("the sky tracker's settings", () => SkyTracker.registerSettings());
     start("area targeting's settings", () => AreaTargeting.registerSettings());
     start("the rider engine's settings", () => Riders.registerSettings());
+    start("the banishment register", () => {
+        Banish.registerSettings();
+        Banish.registerHooks();
+    });
+    start("the death register", () => {
+        Deaths.registerSettings();
+        Deaths.registerHooks();
+    });
+    start("lingering areas", () => {
+        Lingering.register();
+        Lingering.registerHooks();
+    });
+    start("astral projection", () => Astral.registerHooks());
     start("free casts' settings", () => FreeCast.registerSettings());
     start("Cosmo", () => Cosmo.registerHooks());
     start("the Gemini duplicate", () => Duplicate.registerHooks());
@@ -39,6 +57,7 @@ Hooks.once("init", () => {
     start("Om", () => Om.registerHooks());
     start("The Balance", () => Balance.registerHooks());
     start("the Crystal Wall", () => CrystalWall.registerHooks());
+    start("encasements", () => Encasement.registerHooks());
     start("the sky tracker window", () => SkyTrackerApp.registerHooks());
 
     start("the sky tracker's settings menu", () => {
@@ -64,10 +83,15 @@ Hooks.once("init", () => {
         riders: Riders,
         freeCast: FreeCast,
         duplicate: Duplicate,
+        astral: Astral,
+        banish: Banish,
+        deaths: Deaths,
+        lingering: Lingering,
         recharge: Recharge,
         om: Om,
         balance: Balance,
         crystalWall: CrystalWall,
+        encasement: Encasement,
         open: () => new SkyTrackerApp().render(true),
         adjacentSigns,
     };

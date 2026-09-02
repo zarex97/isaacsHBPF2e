@@ -2,7 +2,18 @@
     "flags": {
         "isaacs-hb-pf2e": {
             "areaTargeting": {
-                "affects": "all"
+                "affects": "all",
+                "alternateArea": [
+                    {
+                        "area": {
+                            "type": "emanation",
+                            "value": 60
+                        },
+                        "predicate": [
+                            "om:eyes-open"
+                        ]
+                    }
+                ]
             },
             "riders": [
                 {
@@ -27,8 +38,12 @@
                 },
                 {
                     "apply": {
-                        "text": "Cannot use reactions for 1 minute.",
-                        "type": "prompt"
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Reactions Denied"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
                     },
                     "outcomes": [
                         "criticalFailure"
@@ -68,7 +83,7 @@
             }
         },
         "description": {
-            "value": "<p><em>Virgo &mdash; 3rd (Cloth Ability) Technique, gained at level 11.</em></p><p><em>Demon Pacifier &mdash; cosmo manifested physically between the palms, then released as light.</em></p><p>You compress your cosmo between your hands for the entire casting, then release it.</p><p>Each creature in the cone takes @Damage[6d8[force]] damage with a basic <strong>Will</strong> save &mdash; this strikes the spirit, not the body. A creature that fails is stunned 1; one that critically fails is stunned 3 and <strong>cannot use reactions</strong> for 1 minute.</p><hr /><p><strong>Special</strong> If you release this in the same turn that you open your eyes, spending Om stacks, the cone becomes a <strong>60-foot emanation</strong> centred on you.</p><hr /><p><strong>Heightening (+2 levels)</strong> The damage increases by 1d8.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+            "value": "<p><em>Virgo — 3rd (Cloth Ability) Technique, gained at level 11.</em></p><p>Demon Pacifier — cosmo manifested physically between the palms, then released as light.</p><p>You compress your cosmo between your hands for the entire casting, then release it.</p><p>Each creature in the cone takes @Damage[6d8[force]] damage with a basic Will save — this strikes the spirit, not the body. A creature that fails is stunned 1; one that critically fails is stunned 3 and cannot use reactions for 1 minute.</p><p><strong>Special</strong> If you release this while your eyes are open — the same turn you spent your Om stacks — the cone becomes a 60-foot emanation centred on you. The Technique reads the toggle on @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Om] and changes shape by itself.</p><p><strong>Heightening (+2 levels)</strong> The damage increases by 1d8.</p><p><em>On a day your constellation is Ascendant this Technique heightens as though you were 4 levels higher; on a Zenith, 8 levels higher.</em></p>"
         },
         "duration": {
             "sustained": false,

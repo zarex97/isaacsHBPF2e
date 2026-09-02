@@ -1,7 +1,12 @@
+import { Astral } from "../astral.mjs";
+import { targetingOptions, testPredicate } from "../lib/roll-options.mjs";
+import { Deaths } from "../deaths.mjs";
 import { Duplicate } from "../economy/duplicate.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 import { catchTokens } from "./catch.mjs";
 import { canRotate, configFor, describe, originTokenFor } from "./config.mjs";
+import { Lingering } from "./lingering.mjs";
+import { Overlap } from "./overlap.mjs";
 import { discardArea, originOf, placeArea } from "./place.mjs";
 import { REAIM, reviewTargets } from "./review.mjs";
 import { CrystalWall } from "./wall.mjs";
@@ -80,13 +85,24 @@ export const AreaTargeting = {
             ui.notifications.warn(`${spell.actor.name} is a duplicate: no Techniques, no Focus Points.`);
             return false;
         }
+        // An astral body "cannot attack"; it is a projected consciousness, not a second Saint. Same choke
+        // point, same argument as the duplicate above.
+        if (Astral.isAstralBody(spell?.actor?.token)) {
+            ui.notifications.warn(`${spell.actor.name} is an astral body: it can only carry mental Techniques.`);
+            return false;
+        }
 
         const cast = variantFor(spell, options);
-        const config = configFor(cast);
+        // A Technique that offers two shapes asks before anything else happens, because the answer decides
+        // what is put on the cursor. Backing out of the question is backing out of the cast, and costs
+        // nothing — the Focus Point is spent after this returns.
+        const shape = await chooseShape(cast);
+        if (shape === false) return false;
+        const config = configFor(cast, shape ? { area: shape } : {});
         if (!config) return true;
         if (bypassHeld()) return true;
 
-        const originToken = originTokenFor(spell.actor);
+        const originToken = originTokenFor(spell.actor, cast);
 
         // No area to aim: the Technique names a number of creatures and a range instead, and both grow.
         // Those are checked against the targets the player already picked.
@@ -122,6 +138,14 @@ export const AreaTargeting = {
                 // An emanation is never placed — it is centred on the caster's own space, so re-aiming it
                 // would put the identical area back in the identical spot. Offering a button that visibly
                 // does nothing is worse than not offering one.
+                // *Astral Projection* aims at a place, not at people. Reviewing a target list it will
+                // never have is a dialog that can only say "nothing caught", so it is skipped and the
+                // placement goes straight to the body being made.
+                if (config.item.flags?.[MODULE_ID]?.astral) {
+                    canvas.tokens.setTargets([]);
+                    return !!(await Astral.project(config, regions[0], originToken));
+                }
+
                 const ids = await reviewTargets(collect(regions, config, originToken), config, {
                     canReaim: config.anchor !== "self",
                 });
@@ -132,6 +156,14 @@ export const AreaTargeting = {
                 // A Technique that raises a barrier builds it from the line just aimed — the last one
                 // aimed, so a re-aimed wall stands where the caster finally pointed it.
                 await CrystalWall.build(config, regions[0]);
+                // Two Techniques leave the area behind them — Gemini folds space into difficult terrain,
+                // and Mavros sets the ground alight — and one asks the ground a question about the past.
+                // All three need the placement that was just confirmed, which is why they live here rather
+                // than in a rider: by the time a rider runs, the area has been discarded.
+                await Lingering.create(config, regions, originToken);
+                // Three pillars catching the same creature is one save at a penalty, not three saves.
+                await Overlap.apply(config, regions, originToken);
+                await Deaths.tally(config, regions[0]);
                 return true;
             }
         } catch (error) {
@@ -165,6 +197,32 @@ function collect(regions, config, originToken) {
 }
 
 /**
+ * "A 120-foot line, or a 30-foot burst within 120 feet — choose as you cast."
+ *
+ * Returns the chosen shape, null when the Technique offers no choice, and false when the caster closed the
+ * question. pf2e can express this as spell variants (`system.overlays`), but a variant is a whole second
+ * spell to keep in step for what is one number and one word, and the choice has to reach the placement
+ * rather than the chat card.
+ */
+async function chooseShape(item) {
+    const choices = item.flags?.[MODULE_ID]?.areaTargetingShapes;
+    if (!Array.isArray(choices) || choices.length < 2) return null;
+
+    const picked = await foundry.applications.api.DialogV2.wait({
+        window: { title: item.name },
+        content: `<p>${item.name} can be released as either shape. Which is it?</p>`,
+        buttons: choices.map((choice, index) => ({
+            action: String(index),
+            label: choice.label ?? `${choice.value}-foot ${choice.type}`,
+        })),
+        rejectClose: false,
+    });
+    if (picked === null || picked === undefined) return false;
+    const choice = choices[Number(picked)];
+    return choice ? { type: choice.type, value: choice.value } : false;
+}
+
+/**
  * What to announce before the area goes on the cursor.
  *
  * The rotation keys are named because a plain wheel zooms the canvas — Foundry gates rotation behind Shift
@@ -192,6 +250,19 @@ async function checkExistingTargets(config, originToken) {
     if (config.maxTargets > 0 && targets.length > config.maxTargets) {
         problems.push(
             `${targets.length} targeted, and it reaches ${config.maxTargets}`,
+        );
+    }
+    // A requirement on the target itself: "one creature with at least 5 needles", "one creature with at
+    // least 1 needle". An area Technique gets this from `catchTokens`, which simply does not offer a
+    // creature that fails it; a Technique that names a number of creatures has no area to filter, so it is
+    // checked here against the ones the caster picked.
+    const failing = targets.filter(
+        (t) => !testPredicate(config.predicate, targetingOptions(config.item.actor, t.actor, config.item)),
+    );
+    if (config.predicate.length > 0 && failing.length > 0) {
+        problems.push(
+            `${failing.map((t) => t.document.name).join(", ")} ${failing.length === 1 ? "does" : "do"} not `
+            + `meet this Technique's requirement`,
         );
     }
     if (config.range > 0 && game.settings.get(MODULE_ID, "enforceRange") && originToken) {

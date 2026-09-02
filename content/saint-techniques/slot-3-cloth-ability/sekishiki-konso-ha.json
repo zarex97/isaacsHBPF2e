@@ -24,8 +24,70 @@
                             ]
                         }
                     ]
+                },
+                {
+                    "apply": {
+                        "damageType": "void",
+                        "formula": "1d8",
+                        "type": "damage"
+                    },
+                    "note": "Undead and spirits: half the additional damage on a success.",
+                    "outcomes": [
+                        "success"
+                    ],
+                    "predicate": [
+                        {
+                            "or": [
+                                "target:trait:undead",
+                                "target:trait:spirit"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "apply": {
+                        "damageType": "void",
+                        "formula": "2d8",
+                        "type": "damage"
+                    },
+                    "note": "Undead and spirits: the additional damage.",
+                    "outcomes": [
+                        "failure"
+                    ],
+                    "predicate": [
+                        {
+                            "or": [
+                                "target:trait:undead",
+                                "target:trait:spirit"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "apply": {
+                        "damageType": "void",
+                        "formula": "4d8",
+                        "type": "damage"
+                    },
+                    "note": "Undead and spirits: double the additional damage on a critical failure.",
+                    "outcomes": [
+                        "criticalFailure"
+                    ],
+                    "predicate": [
+                        {
+                            "or": [
+                                "target:trait:undead",
+                                "target:trait:spirit"
+                            ]
+                        }
+                    ]
                 }
-            ]
+            ],
+            "souls": {
+                "flag": "soulDice",
+                "max": 5,
+                "withinSeconds": 3600
+            }
         }
     },
     "folder": "3rd — Cloth Ability (L11)",
@@ -110,6 +172,21 @@
                     "sky:zenith"
                 ],
                 "selector": "{item|_id}-damage"
+            },
+            {
+                "damageType": "void",
+                "diceNumber": "{actor|flags.isaacs-hb-pf2e.soulDice}",
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Souls taken as gunpowder",
+                "selector": "{item|_id}-damage"
+            },
+            {
+                "key": "ActiveEffectLike",
+                "mode": "add",
+                "path": "flags.isaacs-hb-pf2e.soulDice",
+                "priority": 10,
+                "value": 0
             }
         ],
         "target": {

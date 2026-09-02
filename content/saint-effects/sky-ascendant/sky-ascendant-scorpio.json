@@ -20,6 +20,7 @@
                         "type": "persistent-damage"
                     },
                     "event": "strike-resolved",
+                    "live": true,
                     "note": "1d6 persistent bleed per needle, capped at 10.",
                     "predicate": [
                         "rider:target:effect:effect-scarlet-needle:1+"
@@ -31,8 +32,8 @@
                         "riders": [
                             {
                                 "apply": {
-                                    "text": "Eight needles, and the save failed: the creature dies.",
-                                    "type": "prompt"
+                                    "text": "Eight needles, and the save failed: the scarlet star has found its own.",
+                                    "type": "death"
                                 },
                                 "outcomes": [
                                     "failure",
@@ -44,6 +45,8 @@
                         "type": "save"
                     },
                     "event": "strike-resolved",
+                    "live": true,
+                    "note": "8 needles: the Scorpion asks whether this one lives.",
                     "predicate": [
                         "rider:target:effect:effect-scarlet-needle:8+"
                     ]

@@ -1,6 +1,11 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "maxTargets": 1,
+                "range": 30
+            },
             "riders": [
                 {
                     "apply": {

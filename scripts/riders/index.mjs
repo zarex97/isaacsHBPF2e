@@ -47,11 +47,16 @@ export const Riders = {
     registerHooks() {
         Relay.listen();
         Sources.register();
-        Hooks.on("renderChatMessageHTML", (message, html) => bindChoiceButtons(message, html));
+        Hooks.on("renderChatMessageHTML", (message, html) => bindCards(message, html));
         // Foundry <13 and any client still emitting the jQuery flavour of the hook.
-        Hooks.on("renderChatMessage", (message, html) => bindChoiceButtons(message, html?.[0] ?? html));
+        Hooks.on("renderChatMessage", (message, html) => bindCards(message, html?.[0] ?? html));
     },
 };
+
+function bindCards(message, html) {
+    bindChoiceButtons(message, html);
+    bindCounteractButtons(message, html);
+}
 
 /** The buttons on a "choose a sense" card. Clicking relays the pick; the GM applies it. */
 function bindChoiceButtons(message, html) {
@@ -68,6 +73,32 @@ function bindChoiceButtons(message, html) {
                 event: "choice",
                 optionIndex: Number(button.dataset.option),
                 ...choice,
+            });
+        });
+    }
+}
+
+/**
+ * The buttons on a "counteract one of these" card.
+ *
+ * Same shape as the choice card and for the same reasons — it survives a reload and cannot be missed — but
+ * the options are read off the board at cast time rather than authored, so the effect to counteract travels
+ * on the button rather than as an index into a rider.
+ */
+function bindCounteractButtons(message, html) {
+    const counteract = message?.flags?.[MODULE_ID]?.counteract;
+    if (!counteract || !html?.querySelectorAll) return;
+
+    for (const button of html.querySelectorAll(`[data-action="isaacs-hb-counteract"]`)) {
+        button.addEventListener("click", async () => {
+            for (const sibling of html.querySelectorAll(`[data-action="isaacs-hb-counteract"]`)) {
+                sibling.disabled = true;
+            }
+            await Relay.request({
+                action: "applyCounteract",
+                event: "counteract",
+                effectUuid: button.dataset.effect,
+                ...counteract,
             });
         });
     }

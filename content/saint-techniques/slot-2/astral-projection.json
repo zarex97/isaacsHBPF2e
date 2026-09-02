@@ -3,11 +3,18 @@
         "isaacs-hb-pf2e": {
             "areaTargeting": {
                 "affects": "all",
+                "area": {
+                    "type": "burst",
+                    "value": 5
+                },
                 "heightening": {
                     "range": 200
                 },
-                "maxTargets": 1,
                 "range": 200
+            },
+            "astral": {
+                "minutes": 10,
+                "minutesPerStep": 5
             }
         }
     },

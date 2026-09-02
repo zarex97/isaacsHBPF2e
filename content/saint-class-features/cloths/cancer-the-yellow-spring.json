@@ -1,4 +1,20 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "range": 30,
+                        "title": "The Boundary",
+                        "type": "readout"
+                    },
+                    "event": "turn-start",
+                    "note": "You know the Hit Point category of every creature within 30 feet.",
+                    "self": true
+                }
+            ]
+        }
+    },
     "folder": "Gold Cloths",
     "img": "icons/magic/death/hand-dirt-undead-zombie.webp",
     "name": "Cancer — the Yellow Spring",

@@ -1,4 +1,21 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "option": "om:eyes-open",
+                        "text": "Your eyes are open. The next Technique or unarmed Strike this turn carries everything you held.",
+                        "type": "toggle",
+                        "value": true
+                    },
+                    "event": "action-used",
+                    "note": "The blindness lifts and the empowerment is armed.",
+                    "self": true
+                }
+            ]
+        }
+    },
     "folder": "Actions",
     "img": "systems/pf2e/icons/actions/FreeAction.webp",
     "name": "Open Your Eyes",
@@ -11,7 +28,7 @@
         },
         "category": "offensive",
         "description": {
-            "value": "<p>You open your eyes, and whatever you have been holding goes out all at once.</p><p>Toggle <strong>Eyes Open</strong> on @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Om]. Your blindness lifts immediately, and the next Technique you cast or unarmed Strike you make before the end of this turn is <strong>empowered</strong>:</p><ul><li><strong>+2 damage dice per stack spent</strong>, and</li><li>a <strong>&minus;1 circumstance penalty per 2 stacks spent</strong> to any saving throw it allows.</li></ul><p>Then <strong>delete @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Om]</strong>. That is the spend, and the stacks reset to 0.</p><p>Your eyes open automatically, spending nothing, if you are knocked unconscious &mdash; delete the effect without toggling.</p><hr /><p>Both numbers are automated off the effect's counter, which is why the effect stays on you until you have taken the empowered roll rather than vanishing the moment your eyes open. The save penalty is applied as an equal bonus to your Technique DC &mdash; the same number from the side Foundry can actually roll.</p>"
+            "value": "<p>You open your eyes, and whatever you have been holding goes out all at once.</p><p>Using this action flips <strong>Eyes Open</strong> on @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Om]. Your blindness lifts immediately, and the next Technique you cast or unarmed Strike you make before the end of this turn is empowered:</p><ul><li>+2 damage dice per stack spent, and</li><li>a &minus;1 circumstance penalty per 2 stacks spent to any saving throw it allows.</li></ul><p>The effect stays on you until you have taken that roll, because the dice the stacks are worth are added by rule elements that read the toggle — spending earlier would empower nothing. Once the roll is taken the effect is deleted for you; anything unspent lapses at the end of your turn.</p><p>Your eyes also open automatically, spending nothing, if you are knocked unconscious.</p><p>The save penalty is applied as an equal bonus to your Technique DC — the same number from the side Foundry can actually roll.</p>"
         },
         "publication": {
             "license": "ORC",

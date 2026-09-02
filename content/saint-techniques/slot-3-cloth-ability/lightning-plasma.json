@@ -15,11 +15,24 @@
                     }
                 },
                 "maxTargets": 3
-            }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "count": "maxTargets",
+                        "option": "lightning-plasma",
+                        "strike": "unarmed",
+                        "type": "strikes"
+                    },
+                    "event": "action-used",
+                    "note": "The activity counts as three attacks for your multiple attack penalty afterward.",
+                    "self": true
+                }
+            ]
         }
     },
     "folder": "3rd — Cloth Ability (L11)",
-    "img": "icons/magic/lightning/bolt-strike-forked-blue-white.webp",
+    "img": "icons/magic/lightning/bolt-strike-forked-blue.webp",
     "name": "Lightning Plasma",
     "system": {
         "area": null,
@@ -30,7 +43,7 @@
         "damage": {},
         "defense": null,
         "description": {
-            "value": "<p><em>Leo &mdash; 3rd (Cloth Ability) Technique, gained at level 11.</em></p><p><em>You are in more places than one, briefly, and each of them is punching.</em></p><p>Make <strong>three unarmed Strikes</strong> against any creatures within 30 feet at <strong>no increase to your multiple attack penalty</strong>. The activity counts as three attacks for your multiple attack penalty afterward.</p><hr /><p><strong>Heightening (+2 levels)</strong> At 17th level, add one Strike.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+            "value": "<p><em>Leo — 3rd (Cloth Ability) Technique, gained at level 11.</em></p><p>You are in more places than one, briefly, and each of them is punching.</p><p>Make three unarmed Strikes against any creatures within 30 feet at no increase to your multiple attack penalty. Target whoever you mean to hit before you cast; the Strikes are dealt out among them in turn, so one enemy takes all three.</p><p>The activity counts as three attacks for your multiple attack penalty afterward — pf2e does not count a turn's attacks, so that last clause is yours to honour.</p><p><strong>Heightening (+2 levels)</strong> At 17th level, add one Strike.</p><p><em>On a day your constellation is Ascendant this Technique heightens as though you were 4 levels higher; on a Zenith, 8 levels higher.</em></p>"
         },
         "duration": {
             "sustained": false,

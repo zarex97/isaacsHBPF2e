@@ -32,8 +32,59 @@ export const Sources = {
         Hooks.on("createChatMessage", (message, _options, userId) => Sources.onMessage(message, userId));
         Hooks.on("pf2e.endTurn", (combatant) => Sources.onTurn("turn-end", combatant));
         Hooks.on("pf2e.startTurn", (combatant) => Sources.onTurn("turn-start", combatant));
+        Hooks.on("createItem", (item, _options, userId) => Sources.onAuraTick(item, userId));
 
         Sources.wrapApplyDamage();
+    },
+
+    /**
+     * A creature entering — or ending its turn inside — an aura the Saint is carrying.
+     *
+     * pf2e's own `Aura` rule element already does the geometry: it watches the board every time a token
+     * moves and grants a named effect to whoever the aura's `effects` entry says to catch, on `enter` and
+     * `turn-end`. What it will not do is roll a save or deal damage — the schema even has a `save` field for
+     * exactly that, and pf2e discards it the moment the aura is built, so a Technique that wants "6d8 cold,
+     * basic Fortitude" out of an aura tick has to bring its own dice.
+     *
+     * The marker this reaches for is `Effect: Aura Tick` — content-free by design, so it can be reused by
+     * any Cloth with a persistent aura rather than authored once per Technique. Its only job is to be the
+     * item pf2e's own aura check creates and destroys as tokens cross the line; `flags.pf2e.aura` is stamped
+     * onto it natively by `applyAreaEffects`, which is how this is told the marker belongs to an aura at
+     * all, and `flags.pf2e.aura.origin` is how it is told whose. The riders that say what the tick is worth
+     * live on the *origin's own* granted effect — the same one an aura Technique's `action-used` rider hands
+     * out at cast time, carrying that cast's heightened numbers — found by asking that actor for the one
+     * item still carrying an `aura-tick` rider, which is why only one aura of this shape may be live on a
+     * Saint at once.
+     *
+     * The marker is deleted the moment it is read, win or lose: pf2e's own re-grant check
+     * (`this.itemTypes.effect.some(e => e.sourceId === uuid)`) skips granting it again while a copy is still
+     * present, so a marker left standing would mean "ends its turn inside" fires exactly once, ever.
+     */
+    async onAuraTick(item, userId) {
+        if (!enabled() || game.user.id !== userId) return;
+        const aura = item?.flags?.pf2e?.aura;
+        if (!aura || item.slug !== "effect-aura-tick") return;
+
+        // `getActiveTokens` hands back the `TokenDocument` itself, not a canvas placeable — there is no
+        // `.document` to go one step further through, and doing so anyway threw an error nothing here
+        // caught: the marker was granted, read, and deleted, and the tick it was supposed to carry never
+        // reached the relay at all.
+        const target = item.actor;
+        const targetToken = target?.getActiveTokens(true, true).at(0);
+        await item.delete();
+        if (!target || !targetToken) return;
+
+        const originActor = aura.origin ? (await fromUuid(aura.origin))?.actor ?? (await fromUuid(aura.origin)) : null;
+        const originEffect = originActor?.items?.find((candidate) => ridersOn(candidate).some((r) => r.event === "aura-tick"));
+        if (!originActor || !originEffect) return;
+
+        await Relay.request({
+            action: "applyRiders",
+            event: "aura-tick",
+            itemUuid: originEffect.uuid,
+            originUuid: originActor.uuid,
+            targetUuid: targetToken.uuid,
+        });
     },
 
     async onSave({ message, target, data }) {

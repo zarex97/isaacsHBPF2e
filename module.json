@@ -43,6 +43,11 @@
         "scripts/isaacs-hb.mjs"
     ],
     "socket": true,
+    "documentTypes": {
+        "RegionBehavior": {
+            "lingering": {}
+        }
+    },
     "styles": [
         "styles/sky.css",
         "styles/targeting.css"

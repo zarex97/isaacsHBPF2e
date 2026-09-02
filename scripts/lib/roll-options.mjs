@@ -19,6 +19,10 @@ export function targetingOptions(originActor, targetActor, item) {
     for (const option of originActor?.getRollOptions?.() ?? []) options.add(option);
     for (const option of targetActor?.getSelfRollOptions?.("target") ?? []) options.add(option);
     for (const option of item?.getRollOptions?.("item") ?? []) options.add(option);
+    // The module's own exact statements about the target, so a Technique can be aimed by the same facts a
+    // rider is chosen by. Scorpio needs it: "one creature with at least 5 needles" is a requirement on the
+    // target's counter, and pf2e's own option set says nothing about an effect's badge.
+    for (const option of describeActor(targetActor, "target")) options.add(option);
     return options;
 }
 

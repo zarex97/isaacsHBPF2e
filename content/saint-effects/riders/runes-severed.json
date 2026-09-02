@@ -1,0 +1,58 @@
+{
+    "folder": "Riders",
+    "img": "icons/skills/melee/strike-dagger-blood-red.webp",
+    "name": "Effect: Runes Severed",
+    "system": {
+        "description": {
+            "value": "<p>Applied by the fourteenth Scarlet Needle.</p><p><strong>This creature's Strikes lose all runes.</strong> The fundamental runes are taken here — potency and striking both drop to nothing — which is where a weapon's numbers actually live.</p><p>pf2e has no alteration that clears property runes in one move, only ones that remove a named rune, so a flaming or a ghost touch rune stays until the GM takes it off. An NPC's Strikes have no runes at all: their attack and damage are flat numbers, and nothing in the system can find a rune to strip.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "mode": "override",
+                "property": "runes-potency",
+                "value": 0
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "mode": "override",
+                "property": "runes-striking",
+                "value": 0
+            },
+            {
+                "key": "Note",
+                "selector": "all",
+                "text": "The needles have taken this creature's runes. Property runes must be removed by hand.",
+                "title": "Runes Severed"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

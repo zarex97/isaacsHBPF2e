@@ -11,7 +11,7 @@
         },
         "category": "classfeature",
         "description": {
-            "value": "<p>You perceive cosmo directly. You gain an imprecise sense with a range of 60 feet that detects everything with a cosmo.</p><p>You are never off-guard to undetected or hidden creatures, and you cannot be flanked by anything your sixth sense perceives.</p>"
+            "value": "<p>You perceive cosmo directly. You gain an <strong>imprecise</strong> sense with a range of 60 feet that detects everything with a cosmo.</p><p>You are never off-guard to undetected or hidden creatures, and you cannot be flanked by anything your sixth sense perceives.</p><p>The sense and the immunity to flanking are on the sheet. \"Never off-guard to undetected or hidden creatures\" is a note: pf2e applies that off-guard from the attacker's side, and there is no rule element that refuses it.</p>"
         },
         "level": {
             "value": 7
@@ -24,7 +24,26 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Saint"
         },
-        "rules": [],
+        "rules": [
+            {
+                "acuity": "imprecise",
+                "key": "Sense",
+                "range": 60,
+                "selector": "lifesense"
+            },
+            {
+                "key": "ActiveEffectLike",
+                "mode": "override",
+                "path": "system.attributes.flanking.flankable",
+                "value": false
+            },
+            {
+                "key": "Note",
+                "selector": "all",
+                "text": "You are never off-guard to undetected or hidden creatures your sixth sense perceives.",
+                "title": "Sixth Sense"
+            }
+        ],
         "subfeatures": {
             "senses": {
                 "lifesense": {

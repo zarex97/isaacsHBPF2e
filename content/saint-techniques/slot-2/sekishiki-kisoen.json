@@ -3,11 +3,38 @@
         "isaacs-hb-pf2e": {
             "areaTargeting": {
                 "affects": "all"
-            }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "maxPerCast": "origin.level",
+                        "perStep": 2,
+                        "type": "heal",
+                        "value": 3
+                    },
+                    "note": "The flames feed: 3 Hit Points per creature that fails, +2 per heightening step.",
+                    "outcomes": [
+                        "failure",
+                        "criticalFailure"
+                    ],
+                    "self": true
+                },
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Soul Consumed"
+                    },
+                    "event": "damage-applied",
+                    "note": "Reduced to 0 Hit Points by the blue flames.",
+                    "predicate": [
+                        "rider:target:hp-zero"
+                    ]
+                }
+            ]
         }
     },
     "folder": "2nd (L6)",
-    "img": "icons/magic/fire/flame-burning-skull-blue.webp",
+    "img": "icons/magic/fire/projectile-fireball-smoke-blue.webp",
     "name": "Sekishiki Kisōen",
     "system": {
         "area": {

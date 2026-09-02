@@ -4,6 +4,31 @@
             "areaTargeting": {
                 "affects": "all"
             },
+            "areaTargetingShapes": [
+                {
+                    "label": "120-foot line",
+                    "type": "line",
+                    "value": 120
+                },
+                {
+                    "label": "30-foot burst within 120 feet",
+                    "type": "burst",
+                    "value": 30
+                }
+            ],
+            "bypass": [
+                {
+                    "note": "Light does not wait: resistance to force does not reduce it.",
+                    "predicate": [
+                        "item:slug:photon-burst"
+                    ],
+                    "resistance": {
+                        "types": [
+                            "force"
+                        ]
+                    }
+                }
+            ],
             "riders": [
                 {
                     "apply": {

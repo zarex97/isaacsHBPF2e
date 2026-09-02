@@ -4,7 +4,7 @@
     "name": "Sky: Zenith (Sagittarius)",
     "system": {
         "description": {
-            "value": "<p><strong>♐ Sagittarius rises Exalted today.</strong> This is the one day in two hundred and sixty. For the whole day your Techniques heighten as though you were <strong>8 levels higher</strong>, and you have your Zenith Boon.</p><p>As the Ascendant Boon. In addition, once per minute Golden Arrow reaches any creature you name within a mile <strong>through any barrier short of a planar boundary</strong>, and deals 8 additional damage dice.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
+            "value": "<p>&#9808; <strong>Sagittarius rises Exalted today.</strong> This is the one day in two hundred and sixty. For the whole day your Techniques heighten as though you were 8 levels higher, and you have your Zenith Boon.</p><p>You gain a fly Speed equal to your Speed.</p><p>As the Ascendant Boon, plus once per minute @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Golden Arrow: Named Shot]: any creature you can name within a mile, through any barrier short of a planar boundary, takes Golden Arrow's damage plus an additional 8 dice.</p><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
         },
         "duration": {
             "expiry": "turn-start",
@@ -37,6 +37,10 @@
                 "key": "BaseSpeed",
                 "selector": "fly",
                 "value": "@actor.attributes.speed.value"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Golden Arrow: Named Shot"
             }
         ],
         "start": {

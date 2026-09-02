@@ -1,4 +1,27 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "cycle": [
+                            "light",
+                            "shadow"
+                        ],
+                        "domain": "all",
+                        "labels": {
+                            "light": "Light",
+                            "shadow": "Shadow"
+                        },
+                        "option": "gemini-aspect",
+                        "type": "toggle"
+                    },
+                    "event": "action-used",
+                    "self": true
+                }
+            ]
+        }
+    },
     "folder": "Actions",
     "img": "systems/pf2e/icons/actions/FreeAction.webp",
     "name": "Swap Aspect",
@@ -11,7 +34,12 @@
         },
         "category": "interaction",
         "description": {
-            "value": "<p><strong>Frequency</strong> once per hour</p><hr /><p>You change between your <strong>Light</strong> and <strong>Shadow</strong> aspects. Your appearance, voice, and aura change completely; nothing short of <em>true seeing</em> connects the two.</p><p>In Shadow, your 1st Technique becomes a single-target confuse effect (Will save, confused 1 round on a failure) instead of its usual effect.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Gemini — the Other Dimension]. Remember to flip the <em>Two Faces</em> toggle on the Cloth feature so predicates follow you.</p>"
+            "value": "<p><strong>Frequency</strong> once per hour</p><hr /><p>You change between your <strong>Light</strong> and <strong>Shadow</strong> aspects. Your appearance, voice, and aura change completely; nothing short of <em>true seeing</em> connects the two.</p><p>In Shadow, your 1st Technique becomes a single-target confuse effect (Will save, confused 1 round on a failure) instead of its usual effect.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Gemini — the Other Dimension]. Using this action flips the <em>Two Faces</em> toggle for you, so every predicate that reads your aspect follows without anything further to remember.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "PT1H",
+            "value": 1
         },
         "publication": {
             "license": "ORC",

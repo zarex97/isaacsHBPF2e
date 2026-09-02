@@ -11,7 +11,12 @@
         },
         "category": "defensive",
         "description": {
-            "value": "<p><strong>Frequency</strong> once per turn per creature</p><p><strong>Trigger</strong> A creature attacks you, or a spell effect enters your space.</p><hr /><p>You <strong>sever it</strong>. The attack or effect has no effect.</p><hr /><p>Granted by the Capricorn Zenith Boon.</p>"
+            "value": "<p><strong>Frequency</strong> once per turn</p><p><strong>Trigger</strong> A creature attacks you, or a spell effect enters your space.</p><p>You sever it. The attack or effect has no effect.</p><p>Automation note: Foundry has no hook that lets a third party void an attack or a spell already in motion — the same limit that keeps Taurus' Titan's Stance from retargeting an incoming attack. This action exists so the frequency is real and a click records that it happened; what \"no effect\" undoes is the table's call. The guide's \"once per turn per creature\" is a per-creature limit pf2e's own frequency tracking cannot express, so this enforces once per turn, flat.</p><p>Granted by the Capricorn Zenith Boon.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "turn",
+            "value": 1
         },
         "publication": {
             "license": "ORC",

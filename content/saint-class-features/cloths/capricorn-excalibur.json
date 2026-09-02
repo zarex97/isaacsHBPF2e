@@ -27,11 +27,11 @@
                                 "label": "A natural attack"
                             }
                         ],
-                        "prompt": "Excalibur severs. What is lost?",
+                        "prompt": "The Sharpest Sword. What is lost?",
                         "type": "choice"
                     },
                     "event": "strike-resolved",
-                    "note": "The Sharpest Sword. Until the target receives regenerate.",
+                    "note": "A critical hit with an unarmed Strike — until the target receives regenerate.",
                     "outcomes": [
                         "criticalSuccess"
                     ],

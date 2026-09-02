@@ -1,26 +1,38 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "maxTargets": 1,
+                "predicate": [
+                    "rider:target:effect:effect-scarlet-needle:1+"
+                ],
+                "range": 30
+            },
             "riders": [
                 {
                     "apply": {
-                        "slug": "dazzled",
-                        "type": "condition"
+                        "substitutions": [
+                            {
+                                "path": "flags.isaacs-hb-pf2e.riders.0.apply.formula",
+                                "value": {
+                                    "at": {
+                                        "10": "2d6",
+                                        "14": "3d6",
+                                        "18": "4d6"
+                                    },
+                                    "base": "1d6"
+                                }
+                            }
+                        ],
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Crimson Mirage"
                     },
                     "duration": {
                         "unit": "minutes",
                         "value": 1
                     },
-                    "outcomes": [
-                        "failure",
-                        "criticalFailure"
-                    ]
-                },
-                {
-                    "apply": {
-                        "text": "Treats all other creatures as concealed, and takes 1d6 mental damage per needle it has at the end of each of its turns, for 1 minute.",
-                        "type": "prompt"
-                    },
+                    "note": "The scarlet haze: dazzled, everything concealed, and a die per needle each turn.",
                     "outcomes": [
                         "failure",
                         "criticalFailure"
@@ -35,6 +47,7 @@
                         "unit": "rounds",
                         "value": 1
                     },
+                    "note": "The mirage overtakes it entirely.",
                     "outcomes": [
                         "criticalFailure"
                     ]
@@ -43,7 +56,7 @@
         }
     },
     "folder": "2nd (L6)",
-    "img": "icons/magic/control/hypnosis-mesmerism-eye-red.webp",
+    "img": "icons/magic/control/hypnosis-mesmerism-eye-tan.webp",
     "name": "Crimson Mirage",
     "system": {
         "area": null,
@@ -59,7 +72,7 @@
             }
         },
         "description": {
-            "value": "<p><em>Scorpio &mdash; 2nd Technique, gained at level 6.</em></p><p><em>The scarlet haze that comes before Antares.</em></p><p>The target must attempt a Will save.</p><p><strong>Failure</strong> For 1 minute it is <strong>dazzled</strong>, treats all other creatures as concealed, and takes <strong>1d6 mental damage per needle</strong> it currently has at the end of each of its turns.</p><p><strong>Critical Failure</strong> As failure, and it is confused for 1 round as the mirage overtakes it entirely.</p><hr /><p><strong>Heightening (+2 levels)</strong> At 10th, 14th, and 18th level, the per-needle damage increases by 1d6.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+            "value": "<p><em>Scorpio — 2nd Technique, gained at level 6.</em></p><p>The scarlet haze that comes before Antares.</p><p><strong>Requirements</strong> The target has at least 1 needle.</p><p>The target must attempt a Will save.</p><p><strong>Failure</strong> For 1 minute it is dazzled, treats all other creatures as concealed, and takes @Damage[1d6[mental]] damage per needle it currently has at the end of each of its turns.</p><p><strong>Critical Failure</strong> As failure, and it is confused for 1 round as the mirage overtakes it entirely.</p><p><strong>Heightening (+2 levels)</strong> At 10th, 14th, and 18th level, the per-needle damage increases by 1d6.</p><p><em>On a day your constellation is Ascendant this Technique heightens as though you were 4 levels higher; on a Zenith, 8 levels higher.</em></p>"
         },
         "duration": {
             "sustained": false,

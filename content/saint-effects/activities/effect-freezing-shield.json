@@ -1,0 +1,117 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "dc": "cosmo",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "cold",
+                                    "formula": "6d8",
+                                    "type": "damage"
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            },
+                            {
+                                "apply": {
+                                    "slug": "slowed",
+                                    "type": "condition",
+                                    "value": 1
+                                },
+                                "duration": {
+                                    "unit": "rounds",
+                                    "value": 1
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            }
+                        ],
+                        "statistic": "fortitude",
+                        "type": "save"
+                    },
+                    "event": "aura-tick",
+                    "note": "Any hostile creature that enters the dome or ends its turn inside it."
+                }
+            ]
+        }
+    },
+    "folder": "Activities",
+    "img": "icons/magic/water/orb-ice-water.webp",
+    "name": "Effect: Freezing Shield",
+    "system": {
+        "description": {
+            "value": "<p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Freezing Shield].</p><p>A dome of frozen air surrounds you for 1 minute. You and your allies inside gain cold resistance and a +2 circumstance bonus to AC against ranged attacks. Ranged and spell attacks crossing into the dome from outside take a &minus;4 circumstance penalty.</p><p>Any creature hostile to you that enters the dome or ends its turn inside it takes cold damage with a basic Fortitude save, and is slowed 1 on a failure.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 6
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "effects": [
+                    {
+                        "affects": "enemies",
+                        "events": [
+                            "enter",
+                            "turn-end"
+                        ],
+                        "removeOnExit": false,
+                        "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Aura Tick"
+                    }
+                ],
+                "key": "Aura",
+                "radius": 20,
+                "slug": "freezing-shield",
+                "traits": [
+                    "cold"
+                ]
+            },
+            {
+                "key": "Resistance",
+                "type": "cold",
+                "value": 15
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Freezing Shield",
+                "predicate": [
+                    "item:trait:ranged"
+                ],
+                "selector": "ac",
+                "type": "circumstance",
+                "value": 2
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "cold"
+            ]
+        }
+    },
+    "type": "effect"
+}

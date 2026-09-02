@@ -1,0 +1,57 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "maxTargets": 1,
+                "range": 5280,
+                "requireLineOfEffect": false
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "damageType": "force",
+                        "formula": "origin.technique.Golden Arrow.damage+8d6",
+                        "type": "damage"
+                    },
+                    "event": "action-used",
+                    "note": "The arrow finds whoever the Saint has named, through any barrier short of a planar boundary."
+                }
+            ]
+        }
+    },
+    "folder": "Actions",
+    "img": "icons/magic/light/arrow-glowing-yellow.webp",
+    "name": "Golden Arrow: Named Shot",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 2
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per minute</p><p>Any creature you can name within a mile, through any barrier short of a planar boundary. It takes @Golden Arrow's damage, plus an additional 8 dice.</p><p>Automation note: Foundry has no way to target a creature purely by name, off the current scene or otherwise undetected — this reaches anyone on the viewed scene within range, ignoring line of effect, which is the mechanical half of the Boon. Naming a creature elsewhere on the map is the GM's call.</p><p>Granted by the Sagittarius Zenith Boon.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "PT1M",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "cosmo",
+                "force",
+                "saint"
+            ]
+        }
+    },
+    "type": "action"
+}

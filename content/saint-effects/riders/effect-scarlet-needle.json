@@ -1,4 +1,45 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "counterThresholds": [
+                {
+                    "apply": {
+                        "slug": "enfeebled",
+                        "type": "condition",
+                        "value": 1
+                    },
+                    "at": 5,
+                    "note": "Five needles: enfeebled 1."
+                },
+                {
+                    "apply": {
+                        "slug": "blinded",
+                        "type": "condition"
+                    },
+                    "at": 10,
+                    "note": "Ten needles: blinded."
+                },
+                {
+                    "apply": {
+                        "max": 2,
+                        "slug": "stunned",
+                        "type": "condition",
+                        "value": 2
+                    },
+                    "at": 14,
+                    "note": "Fourteen needles: stunned 2."
+                },
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Runes Severed"
+                    },
+                    "at": 14,
+                    "note": "Fourteen needles: its Strikes lose all runes."
+                }
+            ]
+        }
+    },
     "folder": "Riders",
     "img": "icons/skills/melee/strike-dagger-blood-red.webp",
     "name": "Effect: Scarlet Needle",
@@ -10,12 +51,12 @@
             "value": 1
         },
         "description": {
-            "value": "<p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Scarlet Needle] and the other Scorpio Techniques.</p><p>The badge counts the needles currently in this creature. Scorpio's Techniques read that count: <strong>5</strong> needles is the requirement for @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Antares], and @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Crimson Mirage] deals 1d6 mental damage per needle.</p><p>At <strong>15</strong> needles the Scorpio Saint may draw them all at once. Remove this effect when the needles are removed.</p>"
+            "value": "<p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Scarlet Needle], by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Place a Scarlet Needle], by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Crimson Flurry], and by both Scorpio skies.</p><p>The badge counts the needles currently in <em>this creature</em>. That is the whole tracker: needles are per-creature by definition, and every creature carries its own.</p><p>The count crosses three thresholds by itself, once each: at <strong>5</strong> the creature is enfeebled 1, at <strong>10</strong> it is blinded, and at <strong>14</strong> it is stunned 2 and its Strikes lose all runes.</p><p>Scorpio's Techniques read the count too: <strong>5</strong> needles is the requirement for @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Antares], @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Crimson Mirage] deals its mental damage per needle, and the Ascendant bleed is 1d6 a needle to a maximum of ten.</p><p>The needles last until the encounter ends, which is what the Cloth says; a full rest clears them too, and outside an encounter the effect can be removed by hand.</p>"
         },
         "duration": {
             "expiry": null,
             "sustained": false,
-            "unit": "unlimited",
+            "unit": "encounter",
             "value": -1
         },
         "level": {
