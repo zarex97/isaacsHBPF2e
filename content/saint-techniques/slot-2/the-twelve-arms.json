@@ -10,28 +10,275 @@
                 "heightening": {
                     "range": 10
                 },
+                "includesSelf": false,
+                "maxTargets": 5,
                 "range": 30
             },
             "riders": [
                 {
                     "apply": {
-                        "substitutions": [
+                        "options": [
                             {
-                                "path": "system.rules.0.value",
-                                "value": "origin.statistic.saint.rank"
+                                "apply": {
+                                    "arm": "twin-swords",
+                                    "substitutions": [
+                                        {
+                                            "path": "system.rules.0.value",
+                                            "value": "origin.proficiency.unarmed"
+                                        },
+                                        {
+                                            "path": "system.rules.1.value",
+                                            "value": "origin.libra.potency"
+                                        },
+                                        {
+                                            "path": "system.rules.2.value",
+                                            "value": "origin.libra.dice"
+                                        },
+                                        {
+                                            "path": "system.duration.value",
+                                            "value": {
+                                                "base": 3,
+                                                "max": 15,
+                                                "perStep": 1
+                                            }
+                                        },
+                                        {
+                                            "path": "system.rules.6.option",
+                                            "value": {
+                                                "base": "libra:lent-tier:lesser",
+                                                "at": {
+                                                    "8": "libra:lent-tier:greater",
+                                                    "14": "libra:lent-tier:perfect"
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: The Twelve Arms (Twin Swords)"
+                                },
+                                "label": "Twin Swords — 1d8 S, agile finesse twin versatile P · The Crossing"
+                            },
+                            {
+                                "apply": {
+                                    "arm": "tridents",
+                                    "substitutions": [
+                                        {
+                                            "path": "system.rules.0.value",
+                                            "value": "origin.proficiency.unarmed"
+                                        },
+                                        {
+                                            "path": "system.rules.1.value",
+                                            "value": "origin.libra.potency"
+                                        },
+                                        {
+                                            "path": "system.rules.2.value",
+                                            "value": "origin.libra.dice"
+                                        },
+                                        {
+                                            "path": "system.duration.value",
+                                            "value": {
+                                                "base": 3,
+                                                "max": 15,
+                                                "perStep": 1
+                                            }
+                                        },
+                                        {
+                                            "path": "system.rules.6.option",
+                                            "value": {
+                                                "base": "libra:lent-tier:lesser",
+                                                "at": {
+                                                    "8": "libra:lent-tier:greater",
+                                                    "14": "libra:lent-tier:perfect"
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: The Twelve Arms (Tridents)"
+                                },
+                                "label": "Tridents — 1d10 P, reach thrown 30 twin versatile S · Setting the Tide"
+                            },
+                            {
+                                "apply": {
+                                    "arm": "nunchaku",
+                                    "substitutions": [
+                                        {
+                                            "path": "system.rules.0.value",
+                                            "value": "origin.proficiency.unarmed"
+                                        },
+                                        {
+                                            "path": "system.rules.1.value",
+                                            "value": "origin.libra.potency"
+                                        },
+                                        {
+                                            "path": "system.rules.2.value",
+                                            "value": "origin.libra.dice"
+                                        },
+                                        {
+                                            "path": "system.duration.value",
+                                            "value": {
+                                                "base": 3,
+                                                "max": 15,
+                                                "perStep": 1
+                                            }
+                                        },
+                                        {
+                                            "path": "system.rules.6.option",
+                                            "value": {
+                                                "base": "libra:lent-tier:lesser",
+                                                "at": {
+                                                    "8": "libra:lent-tier:greater",
+                                                    "14": "libra:lent-tier:perfect"
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: The Twelve Arms (Nunchaku)"
+                                },
+                                "label": "Nunchaku — 1d6 B, agile backswing finesse trip twin · Rebound Rhythm"
+                            },
+                            {
+                                "apply": {
+                                    "arm": "shields",
+                                    "substitutions": [
+                                        {
+                                            "path": "system.rules.0.value",
+                                            "value": "origin.proficiency.unarmed"
+                                        },
+                                        {
+                                            "path": "system.rules.1.value",
+                                            "value": "origin.libra.potency"
+                                        },
+                                        {
+                                            "path": "system.rules.2.value",
+                                            "value": "origin.libra.dice"
+                                        },
+                                        {
+                                            "path": "system.duration.value",
+                                            "value": {
+                                                "base": 3,
+                                                "max": 15,
+                                                "perStep": 1
+                                            }
+                                        },
+                                        {
+                                            "path": "system.rules.6.option",
+                                            "value": {
+                                                "base": "libra:lent-tier:lesser",
+                                                "at": {
+                                                    "8": "libra:lent-tier:greater",
+                                                    "14": "libra:lent-tier:perfect"
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: The Twelve Arms (Shields)"
+                                },
+                                "label": "Shields — 1d6 B, shove twin versatile S · The Twin Bulwark"
+                            },
+                            {
+                                "apply": {
+                                    "arm": "sanjiegun",
+                                    "substitutions": [
+                                        {
+                                            "path": "system.rules.0.value",
+                                            "value": "origin.proficiency.unarmed"
+                                        },
+                                        {
+                                            "path": "system.rules.1.value",
+                                            "value": "origin.libra.potency"
+                                        },
+                                        {
+                                            "path": "system.rules.2.value",
+                                            "value": "origin.libra.dice"
+                                        },
+                                        {
+                                            "path": "system.duration.value",
+                                            "value": {
+                                                "base": 3,
+                                                "max": 15,
+                                                "perStep": 1
+                                            }
+                                        },
+                                        {
+                                            "path": "system.rules.6.option",
+                                            "value": {
+                                                "base": "libra:lent-tier:lesser",
+                                                "at": {
+                                                    "8": "libra:lent-tier:greater",
+                                                    "14": "libra:lent-tier:perfect"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "path": "system.rules.9.uuid",
+                                            "value": {
+                                                "base": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Whirling Circle",
+                                                "at": {
+                                                    "8": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Whirling Circle (Greater)"
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: The Twelve Arms (Sanjiegun)"
+                                },
+                                "label": "Sanjiegun — 1d8 B, disarm reach sweep trip twin · The Whirling Circle"
+                            },
+                            {
+                                "apply": {
+                                    "arm": "tonfa",
+                                    "substitutions": [
+                                        {
+                                            "path": "system.rules.0.value",
+                                            "value": "origin.proficiency.unarmed"
+                                        },
+                                        {
+                                            "path": "system.rules.1.value",
+                                            "value": "origin.libra.potency"
+                                        },
+                                        {
+                                            "path": "system.rules.2.value",
+                                            "value": "origin.libra.dice"
+                                        },
+                                        {
+                                            "path": "system.duration.value",
+                                            "value": {
+                                                "base": 3,
+                                                "max": 15,
+                                                "perStep": 1
+                                            }
+                                        },
+                                        {
+                                            "path": "system.rules.6.option",
+                                            "value": {
+                                                "base": "libra:lent-tier:lesser",
+                                                "at": {
+                                                    "8": "libra:lent-tier:greater",
+                                                    "14": "libra:lent-tier:perfect"
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: The Twelve Arms (Tonfa)"
+                                },
+                                "label": "Tonfa — 1d6 B, agile finesse parry twin · The Turning Guard"
                             }
                         ],
-                        "type": "effect",
-                        "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: The Twelve Arms"
+                        "prompt": "The Twelve Arms: which Arm does this ally receive?",
+                        "type": "choice"
                     },
                     "event": "action-used",
-                    "note": "Each ally holding a Libra weapon uses the Saint's proficiency with it."
+                    "note": "One card per ally. The pair is created in their hands and returns to the Cloth when the duration ends."
                 }
             ]
         }
     },
     "folder": "2nd (L6)",
-    "img": "icons/weapons/swords/sword-guard-blue.webp",
+    "img": "icons/weapons/swords/sword-gold-holy.webp",
     "name": "The Twelve Arms",
     "system": {
         "area": null,
@@ -42,11 +289,11 @@
         "damage": {},
         "defense": null,
         "description": {
-            "value": "<p><em>Libra &mdash; 2nd Technique, gained at level 6.</em></p><p><em>The Cloth of Arms was never meant for one person.</em></p><p>You distribute your Libra weapons to allies within 30 feet. For 1 minute, each ally holding one uses <strong>your</strong> weapon proficiency with it, and the weapon counts as bearing your Cloth's runes.</p><hr /><p><strong>Heightening (+2 levels)</strong> The duration increases by 1 minute and the range by 10 feet.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+            "value": "<p><em>Libra &mdash; 2nd Technique, gained at level 6.</em></p><p><em>Twelve weapons, six pairs of hands that are not yours.</em></p><p>Distribute up to <strong>five Arms</strong> (matched pairs) to allies within 30 feet; you keep at least one. For <strong>3 rounds</strong>, each ally wielding an Arm uses <strong>your</strong> weapon proficiency with it, receives its full <strong>Arms Advance</strong> for your level, and gains that Arm's <strong>Art</strong> (including its Greater and Perfect upgrades). The weapons cannot be dropped involuntarily and return to your Cloth when the duration ends.</p><hr /><p><strong>Heightening (+2 levels)</strong> The duration increases by 1 round and the range by 10 feet.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p><p><strong>Duration ceiling.</strong> 3 rounds at 6th, 10 rounds at 20th. A 20th-level Saint on an <strong>Exalted</strong> day with Cloth Attunement reaches 12 heightening steps &mdash; <strong>15 rounds, the hard maximum</strong>. The Arms are a burst of largesse, not a party-wide loadout swap.</p><hr /><p>Each ally you target is whispered a card of the six Arms; picking one creates that matched pair in their hands, already equipped, with your proficiency and your Advance written into it.</p>"
         },
         "duration": {
             "sustained": false,
-            "value": "1 minute"
+            "value": "3 rounds"
         },
         "level": {
             "value": 3
@@ -62,7 +309,7 @@
         "requirements": "",
         "rules": [],
         "target": {
-            "value": "allies within 30 feet"
+            "value": "up to five allies within 30 feet"
         },
         "time": {
             "value": "2"

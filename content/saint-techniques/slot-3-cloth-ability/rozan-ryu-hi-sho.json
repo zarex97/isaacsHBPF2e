@@ -1,4 +1,75 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "heightening": {
+                    "range": 10
+                },
+                "maxTargets": 1,
+                "range": 60
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "count": 1,
+                        "onHit": [
+                            {
+                                "apply": {
+                                    "text": "Rozan Ryū Hi Shō: the dragon carries you on — you may continue to the end of your flight.",
+                                    "type": "prompt"
+                                }
+                            },
+                            {
+                                "apply": {
+                                    "direction": "toward",
+                                    "distance": 5,
+                                    "measure": "from-origin",
+                                    "type": "teleport"
+                                },
+                                "outcomes": [
+                                    "criticalSuccess"
+                                ]
+                            },
+                            {
+                                "apply": {
+                                    "slug": "prone",
+                                    "type": "condition"
+                                },
+                                "outcomes": [
+                                    "criticalSuccess"
+                                ]
+                            }
+                        ],
+                        "onMiss": [
+                            {
+                                "apply": {
+                                    "text": "Rozan Ryū Hi Shō: you stop adjacent to the target.",
+                                    "type": "prompt"
+                                }
+                            }
+                        ],
+                        "option": "rozan-ryu-hi-sho",
+                        "strike": "libra",
+                        "substitutions": [
+                            {
+                                "path": "system.rules.0.diceNumber",
+                                "value": {
+                                    "base": 6,
+                                    "perStep": 1
+                                }
+                            }
+                        ],
+                        "type": "strikes",
+                        "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Rozan Ryū Hi Shō"
+                    },
+                    "event": "action-used",
+                    "note": "The flight is your own movement and doesn't trigger reactions; the Strike is rolled for you.",
+                    "self": true
+                }
+            ]
+        }
+    },
     "folder": "3rd — Cloth Ability (L11)",
     "img": "icons/magic/water/wave-water-blue.webp",
     "name": "Rozan Ryū Hi Shō",
@@ -8,33 +79,14 @@
             "value": ""
         },
         "counteraction": false,
-        "damage": {
-            "0": {
-                "applyMod": false,
-                "category": null,
-                "formula": "6d8",
-                "kinds": [
-                    "damage"
-                ],
-                "materials": [],
-                "type": "bludgeoning"
-            }
-        },
+        "damage": {},
         "defense": null,
         "description": {
-            "value": "<p><em>Libra &mdash; 3rd (Cloth Ability) Technique, gained at level 11.</em></p><p><em>Dragon Flight &mdash; the Saint punches forward as if flying, and the dragon leaves the ground carrying the strike with it.</em></p><p><strong>Fly up to 60 feet</strong> in a straight line and make one unarmed Strike at any point during the movement, dealing an additional @Damage[6d8[bludgeoning]] damage on a hit. This movement does not trigger reactions.</p><p>On a hit you may continue to the end of your movement; on a miss you stop adjacent to the target. On a critical hit, the target is carried with you to the end of your flight and knocked prone.</p><hr /><p><strong>Heightening (+2 levels)</strong> The additional damage increases by 1d8 and the flight distance by 10 feet.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+            "value": "<p><em>Libra &mdash; 3rd (Cloth Ability) Technique, gained at level 11.</em></p><p><em>Dragon Flight &mdash; the Saint punches forward as if flying, and the dragon leaves the ground carrying the strike with it.</em></p><p><strong>Fly up to 60 feet</strong> in a straight line and make one <strong>unarmed Strike or Libra weapon Strike</strong> at any point during the movement, dealing <strong>+6d8 damage</strong> on a hit. This movement doesn't trigger reactions.</p><p>On a hit you may continue to the end of your movement; on a miss you stop adjacent to the target. On a critical hit, the target is carried with you to the end of your flight and knocked prone.</p><hr /><p><strong>Heightening (+2 levels)</strong> The additional damage increases by 1d8 and the flight by 10 feet.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p><hr /><p>Target the creature and cast: the Strike is rolled with whichever Libra weapon is in your hands &mdash; or your fist, if none is &mdash; and followed through to its damage. The flight itself is your own movement, and the range you may target is the distance you may cover.</p>"
         },
         "duration": {
             "sustained": false,
             "value": ""
-        },
-        "heightening": {
-            "area": 0,
-            "damage": {
-                "0": "1d8"
-            },
-            "interval": 1,
-            "type": "interval"
         },
         "level": {
             "value": 6
@@ -48,33 +100,7 @@
             "value": "60 feet"
         },
         "requirements": "",
-        "rules": [
-            {
-                "damageType": "bludgeoning",
-                "diceNumber": 2,
-                "dieSize": "d8",
-                "key": "DamageDice",
-                "label": "Sky: Ascendant (+2 heightening steps)",
-                "predicate": [
-                    "sky:ascendant",
-                    {
-                        "not": "sky:zenith"
-                    }
-                ],
-                "selector": "{item|_id}-damage"
-            },
-            {
-                "damageType": "bludgeoning",
-                "diceNumber": 4,
-                "dieSize": "d8",
-                "key": "DamageDice",
-                "label": "Sky: Zenith (+4 heightening steps)",
-                "predicate": [
-                    "sky:zenith"
-                ],
-                "selector": "{item|_id}-damage"
-            }
-        ],
+        "rules": [],
         "target": {
             "value": "1 creature"
         },

@@ -1,0 +1,48 @@
+{
+    "folder": "Activities",
+    "img": "icons/weapons/swords/sword-gold-holy.webp",
+    "name": "Effect: Athena's Temper",
+    "system": {
+        "description": {
+            "value": "<p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Athena's Temper].</p><p>Every Libra weapon carries the property rune you chose this morning, until you choose again tomorrow.</p><hr /><p><em>Automation note: the rune is added as a strike adjustment rather than etched onto the twelve items. pf2e trims a weapon's property runes to the number of potency slots it has <strong>in its own source data</strong>, and the Arms Advance grants their potency as an alteration rather than an etched rune &mdash; so a rune written onto the item is trimmed straight back off before anyone sees it. A strike adjustment is applied where the Strike is built, after the Advance has been counted, and it reaches the Shields' generated weapon too.</em></p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "days",
+            "value": 1
+        },
+        "level": {
+            "value": 19
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "definition": [
+                    "item:tag:libra-weapon"
+                ],
+                "key": "AdjustStrike",
+                "mode": "add",
+                "property": "property-runes",
+                "value": "flaming"
+            }
+        ],
+        "slug": "athenas-temper",
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

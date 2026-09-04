@@ -17,7 +17,15 @@ const RULE_KEYS = new Set([
     "SubstituteRoll", "TempHP", "TokenEffectIcon", "TokenImage", "TokenLight", "TokenMark", "TokenName", "Weakness",
 ]);
 
-const ITEM_TYPES = new Set(["class", "feat", "spell", "effect", "action", "armor", "weapon", "equipment"]);
+const ITEM_TYPES = new Set(["class", "feat", "spell", "effect", "action", "armor", "weapon", "shield", "equipment"]);
+
+/** The six Arms of the Libra Cloth, as an `equip` rider names them. */
+const LIBRA_ARMS = new Set(["twin-swords", "tridents", "nunchaku", "shields", "sanjiegun", "tonfa"]);
+
+/** ItemAlteration properties whose pf2e handler declares `value` as required, so `upgrade` needs one. */
+const UPGRADE_TAKES_A_VALUE = new Set([
+    "runes-potency", "runes-striking", "runes-resilient", "damage-dice-number", "hardness", "hp-max",
+]);
 const FEAT_CATEGORIES = new Set(["class", "classfeature", "general", "skill", "ancestry", "ancestryfeature", "bonus"]);
 const DAMAGE_TYPES = new Set(pf2e.damageTypes);
 
@@ -36,6 +44,11 @@ function allowedTraits(itemType) {
     const base =
         itemType === "spell" ? pf2e.spellTraits
         : itemType === "effect" ? pf2e.effectTraits
+        // A shield's traits are filtered against `CONFIG.PF2E.shieldTraits` in `prepareBaseData` and
+        // anything else is dropped before the item is ever read — silently, which is how Libra's Shields
+        // would have lost `twin` and `versatile S` without a word. Those live on the *generated* weapon
+        // instead, added by the Cloth; the shield itself may only carry what pf2e will keep.
+        : itemType === "shield" ? pf2e.shieldTraits
         : itemType === "armor" || itemType === "weapon" ? pf2e.weaponTraits
         : pf2e.featTraits;
     return new Set([...base, ...pf2e.actionTraits, ...homebrew]);
@@ -136,7 +149,15 @@ function validateItem(doc, where, errors) {
         // modes mean "one step better/worse", and only `override` names a number. Getting it wrong throws a
         // DataModelValidationError during actor preparation, which kills the rest of that item's rules —
         // *Cosmo Strike* shipped with `mode: "upgrade", value: 6` and so never made the Saint's fist a d6.
+        //
+        // Four handlers are the exception, and they are the exception in the other direction: their `value`
+        // is a *required* field, so `upgrade` there means "raise it to at least this" and omitting the
+        // number is what fails. That is exactly what the Arms Advance needs — the guide says to use the
+        // better of a granted tier and an etched rune, which is `upgrade` and nothing else. Each pair below
+        // was checked against a running pf2e 8.4.1 rather than read off the schema, because the schema is
+        // built inside a closure the module cannot reach.
         if (rule.key === "ItemAlteration" && ["upgrade", "downgrade"].includes(rule.mode)
+            && !UPGRADE_TAKES_A_VALUE.has(rule.property)
             && rule.value !== undefined && rule.value !== null) {
             errors.push(
                 `${where}: rules[${i}] ItemAlteration "${rule.property}" has mode "${rule.mode}" with a ` +
@@ -223,10 +244,16 @@ function validateAreaTargeting(doc, where, errors) {
     if (flag.affects !== undefined && !AFFECTS.has(flag.affects)) {
         errors.push(`${where}: areaTargeting.affects must be all/allies/enemies — got "${flag.affects}"`);
     }
-    // Whether the area is aimed or centred on the caster follows from its shape, so there is nothing to
-    // author — an `anchor` in a file is someone expecting it to do something it does not do.
-    if (flag.anchor !== undefined) {
-        errors.push(`${where}: areaTargeting.anchor is derived from the area shape; remove it`);
+    // Whether the area is aimed or centred on the caster usually follows from its shape — an emanation
+    // has one place to be and everything else is pointed somewhere. `anchor` is the exception, and exists
+    // for the one Technique whose shape and whose origin disagree: *Rozan Shō Ryū Ha* is a cylinder that
+    // climbs out of the Saint's own square, and putting it on the cursor asks the player to aim something
+    // that can only go in one place.
+    if (flag.anchor !== undefined && !["self", "free"].includes(flag.anchor)) {
+        errors.push(
+            `${where}: areaTargeting.anchor must be "self" (centred on the caster) or "free" (aimed) — `
+                + `got "${flag.anchor}"`,
+        );
     }
     if (flag.predicate !== undefined && !Array.isArray(flag.predicate)) {
         errors.push(`${where}: areaTargeting.predicate must be an array`);
@@ -269,6 +296,7 @@ const DURATION_UNITS = new Set(["rounds", "minutes", "hours", "days", "unlimited
 const RIDER_TYPES = new Set([
     "condition", "effect", "prompt", "choice", "save", "damage", "persistent-damage", "death", "teleport",
     "strikes", "banish", "heal", "readout", "toggle", "counteract", "encasement", "escape",
+    "equip",
 ]);
 const RIDER_EVENTS = new Set([
     "save-rolled", "strike-resolved", "strike-received", "action-used", "damage-applied",
@@ -278,6 +306,8 @@ const RESISTANCE_TYPES = new Set([...pf2e.damageTypes, "all-damage", "physical",
 const IMMUNITY_TYPES = RESISTANCE_TYPES;
 const SAVE_STATISTICS = new Set(["fortitude", "reflex", "will"]);
 const DICE_FORMULA = /^\d*d\d+$/;
+/** A rider's damage may also be a flat number: a 30-foot fall is 15 bludgeoning, not 15 of anything. */
+const FLAT_OR_DICE = /^(\d*d\d+|\d+)$/;
 
 /**
  * The riders read by scripts/riders.
@@ -722,6 +752,9 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
                 if (!sameKind) {
                     errors.push(`${sat} base and perStep must both be numbers or both be dice of the same size`);
                 }
+            } else if (value && typeof value === "object" && !Array.isArray(value) && "literal" in value) {
+                // A value that is written rather than derived. Nothing to check but that it is there.
+                if (value.literal === undefined) errors.push(`${sat} a literal substitution needs a value`);
             } else if (typeof value !== "string" && typeof value !== "number") {
                 errors.push(`${sat} value must be a resolvable name, a number, a level ladder, or a per-step growth`);
             }
@@ -860,6 +893,18 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
             }
             if (rider.self !== true) errors.push(`${at} a toggle rider must be \`self\``);
             break;
+        case "equip":
+            // `arm: null` is the dismissal, and is deliberately legal. An unknown Arm is not: the summon
+            // would find nothing to put in the Saint's hands and report that nothing changed, which reads
+            // at the table as the free action doing nothing at all.
+            if (apply.arm !== null && !LIBRA_ARMS.has(apply.arm)) {
+                errors.push(
+                    `${at} equip riders name one of the six Arms — ${[...LIBRA_ARMS].join("/")} — or null to `
+                        + `dismiss them all; got "${apply.arm}"`,
+                );
+            }
+            if (rider.self !== true) errors.push(`${at} an equip rider must be \`self\`: it arms the Saint`);
+            break;
         case "teleport":
             // A teleport with no distance moves nobody and says nothing, which is the same silent-no-op
             // shape that hid the null condition grant for so long. It fails the build instead.
@@ -930,10 +975,13 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
                 }
             } else {
                 const isResolvable = typeof apply.formula === "string" && apply.formula.startsWith("origin.");
-                if (!isResolvable && !DICE_FORMULA.test(String(apply.formula ?? ""))) {
+                if (!isResolvable && !FLAT_OR_DICE.test(String(apply.formula ?? ""))) {
                     errors.push(`${at} ${apply.type} needs a formula like "4d6" — got "${apply.formula}"`);
                 }
-                if (isResolvable && !/^origin\.technique\..+\.damage(\+\d+d\d+)?$/.test(apply.formula)) {
+                const known = /^origin\.technique\..+\.damage(\+\d+d\d+)?$/.test(apply.formula)
+                    || apply.formula === "origin.libra.bleed"
+                    || /^origin\.libra\.dice\.d\d+$/.test(apply.formula);
+                if (isResolvable && !known) {
                     errors.push(`${at} unrecognised resolvable formula "${apply.formula}"`);
                 }
             }
@@ -993,8 +1041,11 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
                     errors.push(`${oat} a choice cannot offer another choice`);
                     return;
                 }
+                // A choice option is one branch of the rider that offered it, so it inherits that
+                // rider's addressing: an option that arms the Saint is `self` because the card that
+                // whispered it was.
                 validateRider(
-                    { apply: option.apply, duration: option.duration ?? rider.duration },
+                    { apply: option.apply, duration: option.duration ?? rider.duration, self: rider.self },
                     oat, errors, { doc, depth: depth + 1 },
                 );
             });

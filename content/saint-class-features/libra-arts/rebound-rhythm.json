@@ -1,0 +1,67 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "maxTargets": 1,
+                "range": 10
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "count": 1,
+                        "mapIndex": {
+                            "at": {
+                                "8": 0
+                            },
+                            "base": 1
+                        },
+                        "option": "rebound-rhythm",
+                        "strike": "libra-nunchaku-left",
+                        "type": "strikes"
+                    },
+                    "event": "action-used",
+                    "note": "The chain whips back, and the other Nunchaku comes round with it.",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "folder": "Libra Arts",
+    "img": "icons/weapons/misc/nunchaku.webp",
+    "name": "Rebound Rhythm",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><em>The Art of the Libra Nunchaku.</em></p><p><strong>Frequency</strong> once per turn</p><p><strong>Requirements</strong> You are wielding both @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Nunchaku (Right)] and @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Nunchaku (Left)]</p><p><strong>Trigger</strong> You hit a creature with a Nunchaku Strike</p><hr /><p>The chain whips back. Make a Strike with the other Nunchaku against that creature or one adjacent to it. This Strike is made at your <strong>current multiple attack penalty</strong> and increases it normally, and it always receives the <strong>twin</strong> bonus.</p><p><strong>Greater (8th level)</strong> The free Strike <strong>no longer increases your multiple attack penalty</strong> (it still counts toward it afterward).</p><p><strong>Perfect (14th level)</strong> The Art also triggers on a <strong>miss</strong>.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra — the Weapons]. Target the creature and use this; the rebound Strike is rolled and followed through to its damage for you.</p><p><em>Automation note: below 8th level the rebound is rolled at the second-attack penalty, because the Strike that triggered it was an attack. From 8th it is rolled outside the penalty entirely. The <strong>twin</strong> bonus is pf2e's own opt-in toggle on the damage dialog &mdash; switch it on, since this Strike always qualifies.</em></p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "libra-art",
+                "cloth-libra"
+            ],
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "action"
+}

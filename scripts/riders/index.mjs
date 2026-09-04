@@ -54,6 +54,16 @@ export const Riders = {
 };
 
 function bindCards(message, html) {
+    // Bind each rendered card once.
+    //
+    // Foundry v14 emits `renderChatMessageHTML` *and* the deprecated `renderChatMessage` for the same
+    // element, so both listeners above ran on the same node and every button ended up with two click
+    // handlers. One click then sent two requests: two identical conditions, two copies of an effect, two
+    // property runes from one *Athena's Temper*. Nothing about that looked like a double-fire at the table
+    // — it looked like the rider being written wrong — and it only became visible on a card whose result
+    // was an item rather than a condition, because applying the same condition twice is idempotent.
+    if (html?.dataset?.isaacsHbBound) return;
+    if (html?.dataset) html.dataset.isaacsHbBound = "1";
     bindChoiceButtons(message, html);
     bindCounteractButtons(message, html);
 }

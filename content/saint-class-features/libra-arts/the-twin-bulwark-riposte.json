@@ -1,0 +1,54 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "maxTargets": 1,
+                "range": 60
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "damageType": "bludgeoning",
+                        "formula": "origin.libra.dice.d6",
+                        "type": "damage"
+                    },
+                    "event": "action-used",
+                    "note": "The Block stopped everything, and the Shield gave it back."
+                }
+            ]
+        }
+    },
+    "folder": "Libra Arts",
+    "img": "icons/equipment/shield/heater-steel-gold.webp",
+    "name": "The Twin Bulwark: Riposte",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><em>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Twin Bulwark], Perfect &mdash; gained at 14th level.</em></p><p><strong>Trigger</strong> A Shield Block with a Libra Shield reduces the damage to 0</p><hr /><p>The attacker takes your Shield's <strong>damage dice in bludgeoning</strong> &mdash; 4d6 with <em>major striking</em>, 5d6 at <em>Athena's Temper</em>.</p><hr /><p>Target the attacker and use this. Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Twin Bulwark] at 14th level.</p>"
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "libra-art",
+                "cloth-libra"
+            ],
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "action"
+}

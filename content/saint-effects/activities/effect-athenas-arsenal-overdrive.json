@@ -1,0 +1,61 @@
+{
+    "folder": "Activities",
+    "img": "icons/weapons/swords/sword-gold-holy.webp",
+    "name": "Effect: Athena's Arsenal (Overdrive)",
+    "system": {
+        "description": {
+            "value": "<p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Athena's Arsenal: Overdrive] for the length of the activity.</p><p>Each of the six Strikes deals its weapon's damage plus 2d8, growing a die per heightening step, and each counts as the second weapon of its pair &mdash; so the <strong>twin</strong> bonus always applies.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 16
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "damageType": "slashing",
+                "diceNumber": 2,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Athena's Arsenal: Overdrive",
+                "predicate": [
+                    "item:tag:libra-weapon"
+                ],
+                "selector": "strike-damage"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Twin (second weapon of the pair)",
+                "predicate": [
+                    "item:tag:libra-weapon"
+                ],
+                "selector": "strike-damage",
+                "slug": "athenas-arsenal-twin",
+                "type": "circumstance",
+                "value": "@weapon.system.damage.dice"
+            }
+        ],
+        "slug": "athenas-arsenal-overdrive",
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": false
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

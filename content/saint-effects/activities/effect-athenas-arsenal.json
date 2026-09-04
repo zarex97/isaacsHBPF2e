@@ -1,0 +1,77 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "damageType": "slashing",
+                        "formula": "2d8",
+                        "type": "damage"
+                    },
+                    "event": "aura-tick",
+                    "note": "The twelve weapons are still circling, and it ended its turn inside them."
+                }
+            ]
+        }
+    },
+    "folder": "Activities",
+    "img": "icons/weapons/swords/sword-gold-holy.webp",
+    "name": "Effect: Athena's Arsenal",
+    "system": {
+        "description": {
+            "value": "<p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Athena's Arsenal: Overdrive].</p><p>For 1 minute the twelve weapons circle you: you gain a <strong>+2 circumstance bonus to AC</strong>, and any creature that ends its turn adjacent to you takes @Damage[2d8[slashing]] damage.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 16
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "effects": [
+                    {
+                        "affects": "enemies",
+                        "events": [
+                            "turn-end"
+                        ],
+                        "removeOnExit": false,
+                        "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Aura Tick"
+                    }
+                ],
+                "key": "Aura",
+                "radius": 5,
+                "slug": "athenas-arsenal",
+                "traits": []
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Athena's Arsenal",
+                "selector": "ac",
+                "type": "circumstance",
+                "value": 2
+            }
+        ],
+        "slug": "athenas-arsenal",
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

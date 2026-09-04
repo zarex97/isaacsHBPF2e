@@ -1,0 +1,147 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "maxTargets": 1,
+                "range": 10
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "count": 1,
+                        "option": "turning-guard",
+                        "strike": "libra-tonfa-right",
+                        "type": "strikes"
+                    },
+                    "event": "action-used",
+                    "note": "The guard turns, and the tonfa comes back along the same line.",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "folder": "Libra Arts",
+    "img": "icons/weapons/clubs/baton-night-stick-truncheon.webp",
+    "name": "The Turning Guard",
+    "system": {
+        "actionType": {
+            "value": "reaction"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><em>The Art of the Libra Tonfa.</em></p><p><strong>Frequency</strong> once per round</p><p><strong>Requirements</strong> You are wielding both @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Tonfa (Right)] and @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Tonfa (Left)]</p><p><strong>Trigger</strong> A melee attack against you critically fails</p><hr /><p>While wielding both Tonfa you gain the <strong>parry</strong> bonus (+1 circumstance to AC) with <strong>no action spent</strong>.</p><p>When the trigger is met, Strike the attacker with a Tonfa; this Strike does not increase your multiple attack penalty.</p><p><strong>Greater (8th level)</strong> The reaction triggers on any <strong>miss</strong>, and the parry bonus becomes <strong>+2</strong> and also applies to <strong>Reflex saves</strong>.</p><p><strong>Perfect (14th level)</strong> You gain <strong>one additional reaction each round</strong>, usable only for The Turning Guard &mdash; which is the second use per round below.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra — the Weapons]. Target the attacker and use this; the counter-Strike is rolled outside your multiple attack penalty and followed through to its damage.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "The Turning Guard",
+                "predicate": [
+                    "libra:arm:tonfa",
+                    {
+                        "lt": [
+                            "self:level",
+                            8
+                        ]
+                    }
+                ],
+                "selector": "ac",
+                "slug": "turning-guard",
+                "type": "circumstance",
+                "value": 1
+            },
+            {
+                "key": "FlatModifier",
+                "label": "The Turning Guard (Greater)",
+                "predicate": [
+                    "libra:arm:tonfa",
+                    {
+                        "or": [
+                            {
+                                "gte": [
+                                    "self:level",
+                                    8
+                                ]
+                            },
+                            "libra:lent-tier:greater",
+                            "libra:lent-tier:perfect"
+                        ]
+                    }
+                ],
+                "selector": "ac",
+                "slug": "turning-guard",
+                "type": "circumstance",
+                "value": 2
+            },
+            {
+                "key": "FlatModifier",
+                "label": "The Turning Guard (Greater)",
+                "predicate": [
+                    "libra:arm:tonfa",
+                    {
+                        "or": [
+                            {
+                                "gte": [
+                                    "self:level",
+                                    8
+                                ]
+                            },
+                            "libra:lent-tier:greater",
+                            "libra:lent-tier:perfect"
+                        ]
+                    }
+                ],
+                "selector": "reflex",
+                "slug": "turning-guard-reflex",
+                "type": "circumstance",
+                "value": 2
+            },
+            {
+                "itemType": "action",
+                "key": "ItemAlteration",
+                "label": "The Turning Guard (Perfect)",
+                "mode": "override",
+                "predicate": [
+                    "item:slug:the-turning-guard",
+                    {
+                        "or": [
+                            {
+                                "gte": [
+                                    "self:level",
+                                    14
+                                ]
+                            },
+                            "libra:lent-tier:perfect"
+                        ]
+                    }
+                ],
+                "property": "frequency-max",
+                "value": 2
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "libra-art",
+                "cloth-libra"
+            ],
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "action"
+}

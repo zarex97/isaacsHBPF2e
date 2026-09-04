@@ -1,0 +1,47 @@
+{
+    "folder": "Activities",
+    "img": "icons/magic/water/wave-water-blue.webp",
+    "name": "Effect: Rozan Ryū Hi Shō",
+    "system": {
+        "description": {
+            "value": "<p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Rozan Ryū Hi Shō] for the length of the activity.</p><p>The Strike made during the flight deals additional damage &mdash; 6d8 at 11th level, and one die more per heightening step, a lit sky included.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 11
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "damageType": "bludgeoning",
+                "diceNumber": 6,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Rozan Ryū Hi Shō",
+                "selector": "strike-damage"
+            }
+        ],
+        "slug": "rozan-ryu-hi-sho",
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": false
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

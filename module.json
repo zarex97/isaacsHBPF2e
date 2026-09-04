@@ -188,6 +188,12 @@
                         "label": "Cloth",
                         "description": "An ability granted by a Gold Cloth."
                     }
+                },
+                "weaponTraits": {
+                    "reach-15": {
+                        "label": "Reach 15 ft.",
+                        "description": "This weapon is used to attack targets up to 15 feet away. Libra's Tridents gain it from Setting the Tide at 8th level; pf2e's own `reach` trait is a flat +5 feet and cannot say 15."
+                    }
                 }
             }
         }

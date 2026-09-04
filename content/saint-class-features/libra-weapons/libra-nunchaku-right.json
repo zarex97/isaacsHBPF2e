@@ -1,0 +1,85 @@
+{
+    "folder": "Libra Weapons",
+    "img": "icons/weapons/misc/nunchaku.webp",
+    "name": "Libra Nunchaku (Right)",
+    "system": {
+        "baseItem": null,
+        "bonus": {
+            "value": 0
+        },
+        "bonusDamage": {
+            "value": 0
+        },
+        "bulk": {
+            "value": 1
+        },
+        "category": "martial",
+        "damage": {
+            "damageType": "bludgeoning",
+            "dice": 1,
+            "die": "d6"
+        },
+        "description": {
+            "value": "<p><em>One half of the Libra Cloth's Nunchaku (Sōsetsukon) &mdash; the right hand.</em></p><p><strong>1d6 bludgeoning, one hand each, flail group; agile, backswing, finesse, magical, trip, twin.</strong></p><p>An Arm always arrives as <em>both</em> weapons at once, one in each hand: summon or dismiss it with @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Summon an Arm]. It can never be disarmed, sundered, or destroyed, and it accepts weapon runes normally.</p><p>A Libra Saint uses their <strong>unarmed proficiency</strong> with it, and it grows on its own along <strong>the Arms Advance</strong> &mdash; potency, striking, and a fifth damage die at 19th level &mdash; without ever being bought or etched. @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Cosmo Strike] applies to it exactly as it does to the Saint's fists.</p><p>While you wield the matched pair you gain its Art, @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Rebound Rhythm].</p><hr /><p>An ally lent an Arm by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.The Twelve Arms] uses the Saint's proficiency, receives the Saint's Arms Advance, and gains the Art.</p>"
+        },
+        "equipped": {
+            "carryType": "worn",
+            "handsHeld": 0
+        },
+        "group": "flail",
+        "hardness": 0,
+        "hp": {
+            "max": 0,
+            "value": 0
+        },
+        "level": {
+            "value": 0
+        },
+        "material": {
+            "grade": null,
+            "type": null
+        },
+        "price": {
+            "value": {}
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "quantity": 1,
+        "range": null,
+        "reload": {
+            "value": ""
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "label": "Wielding the Nunchaku",
+                "option": "libra:arm:nunchaku"
+            }
+        ],
+        "size": "med",
+        "slug": "libra-nunchaku-right",
+        "traits": {
+            "otherTags": [
+                "cloth-libra",
+                "libra-weapon",
+                "libra-arm-nunchaku"
+            ],
+            "rarity": "common",
+            "value": [
+                "agile",
+                "backswing",
+                "finesse",
+                "magical",
+                "trip",
+                "twin"
+            ]
+        },
+        "usage": {
+            "value": "held-in-one-hand"
+        }
+    },
+    "type": "weapon"
+}

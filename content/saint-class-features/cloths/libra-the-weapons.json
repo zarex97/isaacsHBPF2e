@@ -20,7 +20,7 @@
         },
         "category": "classfeature",
         "description": {
-            "value": "<p><strong>♎ The Libra Cloth.</strong> <em>[OFFENSE/DEFENSE]</em></p><h3>Cloth Passive — The Cloth of Arms</h3><p><em>The only Gold Cloth that carries weapons.</em> You are <strong>trained in martial weapons</strong>, and they advance with your unarmed proficiency automatically.</p><p>Your Cloth contains six weapon pairs — twin swords, tridents, nunchaku, shields, sanjiegun, and tonfa. You summon or dismiss any of them as a <strong>free action</strong>, they can never be disarmed or destroyed, and they accept weapon runes.</p><h3>Techniques</h3><ul><li><strong>1st &mdash; Signature (L1)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Rozan Shō Ryū Ha]</li><li><strong>2nd (L6)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.The Twelve Arms]</li><li><strong>3rd &mdash; Cloth Ability (L11)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Rozan Ryū Hi Shō]</li><li><strong>4th &mdash; Ultimate (L16)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Athena's Arsenal: Overdrive]</li></ul><h3>Ascendant Boon — The Balance <em>[OFFENSE/DEFENSE]</em></h3><p>Wield any two Libra weapons regardless of the hands they normally require.</p><p>They count as <strong>+1 fundamental rune tier</strong> (to the game's cap). You gain a +2 status bonus to all saves, and the first natural 1 you roll each hour counts as a 10.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Libra)]</p><h3>Zenith Boon — The Balance (Zenith) <em>[OFFENSE/DEFENSE]</em></h3><p>As the Ascendant Boon, plus <strong><em>Rozan Hyaku Ryū Ha</em></strong> once per round &#9670;&#9670;&#9670;: 60-foot line, @Damage[12d10[bludgeoning]] damage, basic Reflex; a critical failure also knocks the target prone and stuns it 2.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Libra)]</p>"
+            "value": "<p><strong>♎ The Libra Cloth.</strong> <em>[OFFENSE/DEFENSE]</em></p><h3>Cloth Passive — The Cloth of Arms</h3><p><em>The only Gold Cloth that carries weapons.</em> You are <strong>trained in martial weapons</strong>, and they advance with your unarmed proficiency automatically. @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Cosmo Strike] applies to Libra weapons &mdash; they are magical and gain +1 damage per weapon damage die, exactly as your fists do.</p><p>Your Cloth holds <strong>six Arms</strong>, and every Arm is a <strong>matched pair</strong> &mdash; twelve weapons in total, the arsenal Athena entrusted to one Saint. Summoning or dismissing an Arm is a free action (@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Summon an Arm]), and it always arrives as <em>both</em> weapons at once, one in each hand. You therefore fight two-weapon by default: every Libra weapon has the <strong>twin</strong> trait, so the second Strike you make each turn with the other half of a matched pair adds a circumstance bonus to damage equal to its number of damage dice.</p><p>Libra weapons can never be disarmed, sundered, or destroyed, and they accept weapon runes normally &mdash; use the better of a granted tier and an etched rune; property runes always apply.</p><p><strong>While you are wielding a matched pair, you gain that Arm's Art</strong> &mdash; the technique the weapon itself teaches the hand that holds it. You gain the benefit of only one Arm's Art at a time; the Ascendant Boon lifts this.</p><h3>The Six Arms</h3><table><thead><tr><th>Arm</th><th>Damage</th><th>Traits</th><th>Art</th></tr></thead><tbody><tr><td><strong>Twin Swords</strong> <em>(Sōken)</em></td><td>1d8 S &middot; sword</td><td>agile, finesse, magical, twin, versatile P</td><td>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Crossing]</td></tr><tr><td><strong>Tridents</strong> <em>(Sansōgeki)</em></td><td>1d10 P &middot; spear</td><td>magical, reach, thrown 30 ft, twin, versatile S</td><td>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Setting the Tide]</td></tr><tr><td><strong>Nunchaku</strong> <em>(Sōsetsukon)</em></td><td>1d6 B &middot; flail</td><td>agile, backswing, finesse, magical, trip, twin</td><td>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Rebound Rhythm]</td></tr><tr><td><strong>Shields</strong> <em>(Sōtate)</em></td><td>1d6 B &middot; shield</td><td>magical, shove, twin, versatile S</td><td>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Twin Bulwark]</td></tr><tr><td><strong>Sanjiegun</strong> <em>(Sansetsukon)</em></td><td>1d8 B &middot; flail</td><td>disarm, magical, reach, sweep, trip, twin</td><td>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Whirling Circle]</td></tr><tr><td><strong>Tonfa</strong> <em>(Tonfā)</em></td><td>1d6 B &middot; club</td><td>agile, finesse, magical, parry, twin</td><td>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Turning Guard]</td></tr></tbody></table><p><em>Every Arm is deliberately one step better than its printed cousin: the real tonfa is 1d4, the real nunchaku has no twin, the real sansetsukon is two-handed for its 1d8, and no printed one-handed weapon combines 1d10 with reach. That is the point of the Cloth &mdash; an ally handed one of these by </em>The Twelve Arms<em> is straightforwardly upgrading. Libra pays for it by being the one Saint whose damage lives in items the GM can rule on, rather than in the fist, and by having the plainest four Techniques of the twelve.</em></p><h3>The Arms Advance</h3><p>Libra weapons grow with the Saint. They never need to be bought, found, or etched with fundamental runes.</p><table><thead><tr><th>Your level</th><th>Every Libra weapon gains</th><th>Normal PF2e</th></tr></thead><tbody><tr><td><strong>1</strong></td><td>magical, +1 weapon potency, Cosmo Strike's +1 per die, each Arm's <strong>Lesser Art</strong></td><td>+1 at 2nd</td></tr><tr><td><strong>4</strong></td><td><strong>striking</strong> (2 damage dice)</td><td>4th</td></tr><tr><td><strong>6</strong></td><td><strong>+2 weapon potency</strong></td><td>10th</td></tr><tr><td><strong>8</strong></td><td>each Arm's <strong>Greater Art</strong></td><td>—</td></tr><tr><td><strong>10</strong></td><td><strong>greater striking</strong> (3 damage dice)</td><td>12th</td></tr><tr><td><strong>12</strong></td><td><strong>+3 weapon potency</strong></td><td>16th</td></tr><tr><td><strong>14</strong></td><td>each Arm's <strong>Perfect Art</strong></td><td>—</td></tr><tr><td><strong>16</strong></td><td><strong>major striking</strong> (4 damage dice)</td><td>19th</td></tr><tr><td><strong>19</strong></td><td>@UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Athena's Temper] &mdash; a <strong>fifth damage die</strong>, past the game's cap, and one <strong>property rune</strong> of your choice on each Arm, re-chosen each morning</td><td>—</td></tr></tbody></table><h3>Techniques</h3><ul><li><strong>1st &mdash; Signature (L1)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Rozan Shō Ryū Ha]</li><li><strong>2nd (L6)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.The Twelve Arms]</li><li><strong>3rd &mdash; Cloth Ability (L11)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Rozan Ryū Hi Shō]</li><li><strong>4th &mdash; Ultimate (L16)</strong> — @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.Athena's Arsenal: Overdrive]</li></ul><h3>Ascendant Boon — The Balance <em>[OFFENSE/DEFENSE]</em></h3><p>You may wield <strong>one weapon from each of two different Arms</strong> at once and gain <strong>both</strong> their Arts; the two count as a matched pair for the <strong>twin</strong> trait. Your Arms Advance counts as <strong>one tier higher</strong> in both potency and striking (maximum +4 and five damage dice). +2 status bonus to all saves; the first natural 1 you roll each hour counts as a 10.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Ascendant (Libra)]</p><h3>Zenith Boon — The Balance (Zenith) <em>[OFFENSE/DEFENSE]</em></h3><p>As the Ascendant Boon, except you wield <strong>all six Arms</strong> at once &mdash; the Cloth holds what your hands cannot &mdash; gaining <strong>every Art</strong> simultaneously. In addition, <strong><em>Rozan Hyaku Ryū Ha</em></strong> once per round &#9670;&#9670;&#9670;: 60-foot line, @Damage[12d10[bludgeoning]] damage, basic Reflex; a critical failure also knocks the target prone and stuns it 2.</p><p>Applied by @UUID[Compendium.isaacs-hb-pf2e.saint-effects.Item.Sky: Zenith (Libra)]</p>"
         },
         "frequency": {
             "max": 1,
@@ -40,10 +40,6 @@
         },
         "rules": [
             {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Summon Libra Weapon"
-            },
-            {
                 "definition": [
                     "item:category:martial"
                 ],
@@ -51,6 +47,274 @@
                 "label": "The Cloth of Arms",
                 "sameAs": "unarmed",
                 "slug": "cloth-of-arms"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Summon an Arm"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Twin Sword (Right)"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Twin Sword (Left)"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Trident (Right)"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Trident (Left)"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Nunchaku (Right)"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Nunchaku (Left)"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Shield (Right)"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Shield (Left)"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Sanjiegun (Right)"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Sanjiegun (Left)"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Tonfa (Right)"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Tonfa (Left)"
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "label": "The Cloth of Arms (Shields)",
+                "mode": "add",
+                "predicate": [
+                    {
+                        "or": [
+                            "item:slug:libra-shield-right",
+                            "item:slug:libra-shield-left"
+                        ]
+                    }
+                ],
+                "property": "other-tags",
+                "value": "libra-weapon"
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "label": "The Cloth of Arms (Shields)",
+                "mode": "add",
+                "predicate": [
+                    {
+                        "or": [
+                            "item:slug:libra-shield-right",
+                            "item:slug:libra-shield-left"
+                        ]
+                    }
+                ],
+                "property": "other-tags",
+                "value": "libra-arm-shields"
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "label": "The Cloth of Arms (Shields)",
+                "mode": "add",
+                "predicate": [
+                    "item:tag:libra-arm-shields"
+                ],
+                "property": "traits",
+                "value": "twin"
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "label": "The Cloth of Arms (Shields)",
+                "mode": "add",
+                "predicate": [
+                    "item:tag:libra-arm-shields"
+                ],
+                "property": "traits",
+                "value": "shove"
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "label": "The Cloth of Arms (Shields)",
+                "mode": "add",
+                "predicate": [
+                    "item:tag:libra-arm-shields"
+                ],
+                "property": "traits",
+                "value": "versatile-s"
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "label": "The Arms Advance (potency)",
+                "mode": "upgrade",
+                "predicate": [
+                    "item:tag:libra-weapon"
+                ],
+                "property": "runes-potency",
+                "value": {
+                    "brackets": [
+                        {
+                            "end": 5,
+                            "start": 1,
+                            "value": 1
+                        },
+                        {
+                            "end": 11,
+                            "start": 6,
+                            "value": 2
+                        },
+                        {
+                            "start": 12,
+                            "value": 3
+                        }
+                    ],
+                    "field": "actor|level"
+                }
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "label": "The Arms Advance (striking)",
+                "mode": "upgrade",
+                "predicate": [
+                    "item:tag:libra-weapon",
+                    {
+                        "gte": [
+                            "self:level",
+                            4
+                        ]
+                    }
+                ],
+                "property": "runes-striking",
+                "value": {
+                    "brackets": [
+                        {
+                            "end": 9,
+                            "start": 4,
+                            "value": 1
+                        },
+                        {
+                            "end": 15,
+                            "start": 10,
+                            "value": 2
+                        },
+                        {
+                            "start": 16,
+                            "value": 3
+                        }
+                    ],
+                    "field": "actor|level"
+                }
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "label": "Athena's Temper (a fifth die)",
+                "mode": "upgrade",
+                "predicate": [
+                    "item:tag:libra-weapon",
+                    {
+                        "gte": [
+                            "self:level",
+                            19
+                        ]
+                    }
+                ],
+                "property": "damage-dice-number",
+                "value": 5
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Cosmo Strike",
+                "predicate": [
+                    "item:tag:libra-weapon"
+                ],
+                "selector": "strike-damage",
+                "slug": "cosmo-strike-libra",
+                "type": "untyped",
+                "value": "@weapon.system.damage.dice"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Crossing"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Setting the Tide"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Rebound Rhythm"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Twin Bulwark"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Turning Guard"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "lt": [
+                            "self:level",
+                            8
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Whirling Circle"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            8
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Whirling Circle (Greater)"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            19
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Athena's Temper"
             },
             {
                 "key": "GrantItem",

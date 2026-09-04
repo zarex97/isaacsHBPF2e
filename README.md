@@ -38,6 +38,10 @@ are very nearly unstoppable.
   drained the Technique says it gets, on its own sheet, without anyone clicking a condition on.
 - **Boons that reach past the rules** — free casts spent from their own frequency, Gemini's duplicate token,
   and resistance, immunity and Hardness bypassed through pf2e's own damage channel.
+- **Libra's twelve Arms** — six matched pairs of weapons the Cloth carries, each with its own three-tier
+  **Art**, growing along an **Arms Advance** that runs two to four levels ahead of the rune curve and ends
+  with a fifth damage die. Summoning a pair is a free action; the sky decides how many pairs the hands can
+  hold.
 
 ## Using the sky tracker
 
@@ -363,7 +367,8 @@ Three caveats worth knowing before trusting it:
 | Gemini — boon, Taurus — Zenith | The free cast is spent from the boon's own `system.frequency`, which pf2e recharges each round |
 | Cloth Attunement, *Attuned Casting* | Same mechanism, once per day |
 | Gemini — Zenith | A duplicate token appears adjacent at the start of your turn and is swept at the start of the next; it has no Focus Points and cannot cast |
-| Libra — *The Twelve Arms* | The six Libra weapon pairs exist as items, and an ally lent one gets pf2e's `MartialProficiency` at **your** rank |
+| Libra — *The Twelve Arms* | Each ally is whispered a card of the six Arms; picking one puts that matched pair in their hands with the Saint's proficiency, the Saint's Arms Advance and the Arm's Art, and takes it back when the rounds run out |
+| Libra — the Arms | Twelve weapons, six matched pairs, summoned as a pair by a free action that reads the sky — one Arm normally, one weapon from each of two under *The Balance*, all six on a Zenith |
 | Virgo, Cancer, Aquarius, Libra — Zenith activities | Real activities with a frequency, an area they aim, and riders on the result |
 
 **Leo — Zenith stays a reminder, and always will.** pf2e models no action economy at all: there is no
@@ -473,6 +478,8 @@ Not gaps — these are judgement calls that should stay with the table.
   character in the system
 - **Force effects as Hardness 0.** Foundry has no damageable force effect to apply it to. Place a hazard
   actor for the *wall of force* and Capricorn's Hardness bypass will work on it with no further help
+- **Libra's second Shield Block each round, and blocking for somebody else.** Same argument as Leo's extra
+  actions: pf2e models no reaction budget, for *The Twin Bulwark* or for any Bastion feat
 - **How many Strikes you actually make.** *Pleiades Nova* is five and seven at 18th; the card says so and
   the target cap enforces it, but nothing counts the rolls. pf2e tracks this for no activity — Flurry of
   Blows and Double Slice are the same — and a counter built from chat messages would miss every Strike made

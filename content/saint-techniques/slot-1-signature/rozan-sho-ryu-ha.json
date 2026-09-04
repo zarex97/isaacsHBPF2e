@@ -2,17 +2,30 @@
     "flags": {
         "isaacs-hb-pf2e": {
             "areaTargeting": {
-                "affects": "all"
+                "affects": "all",
+                "anchor": "self"
             },
             "riders": [
                 {
                     "apply": {
-                        "text": "Launched 30 feet straight up.",
-                        "type": "prompt"
+                        "slug": "prone",
+                        "type": "condition"
                     },
                     "outcomes": [
                         "criticalFailure"
-                    ]
+                    ],
+                    "note": "Launched 30 feet straight up by the column, and down again."
+                },
+                {
+                    "apply": {
+                        "damageType": "bludgeoning",
+                        "formula": "15",
+                        "type": "damage"
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ],
+                    "note": "The 30-foot fall back down — pf2e's own falling damage, half the distance in bludgeoning."
                 }
             ]
         }
@@ -48,7 +61,7 @@
             }
         },
         "description": {
-            "value": "<p><em>Libra &mdash; 1st (Signature) Technique, gained at level 1.</em></p><p><em>Rising Dragon. You strike upward and a column of water and cosmo climbs with your fist.</em></p><p>Each creature in the cylinder takes @Damage[1d10[bludgeoning]] damage with a basic Reflex save. A creature that critically fails is launched 30 feet straight up.</p><hr /><p><strong>Heightening (+2 levels)</strong> The damage increases by 1d10.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+            "value": "<p><em>Libra &mdash; 1st (Signature) Technique, gained at level 1.</em></p><p><em>Rising Dragon. You strike upward and a column of water and cosmo climbs with your fist.</em></p><p>Each creature in the cylinder takes @Damage[1d10[bludgeoning]] damage with a basic Reflex save. A creature that critically fails is launched 30 feet straight up &mdash; and comes down, taking 15 bludgeoning damage from the fall and landing prone.</p><hr /><p><strong>Heightening (+2 levels)</strong> The damage increases by 1d10.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
         },
         "duration": {
             "sustained": false,
