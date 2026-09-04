@@ -8,11 +8,49 @@
                     "value": 60
                 },
                 "maxTargets": 6
-            }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "option": "athenas-arsenal",
+                        "strikes": [
+                            "libra-twin-sword-left",
+                            "libra-trident-left",
+                            "libra-nunchaku-left",
+                            "libra-shield-left",
+                            "libra-sanjiegun-left",
+                            "libra-tonfa-left"
+                        ],
+                        "substitutions": [
+                            {
+                                "path": "system.rules.0.diceNumber",
+                                "value": {
+                                    "base": 2,
+                                    "perStep": 1
+                                }
+                            }
+                        ],
+                        "type": "strikes",
+                        "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Athena's Arsenal (Overdrive)"
+                    },
+                    "event": "action-used",
+                    "note": "Six Strikes, one from each Arm, outside your multiple attack penalty. The activity counts as three attacks for it afterward.",
+                    "self": true
+                },
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Athena's Arsenal"
+                    },
+                    "event": "action-used",
+                    "note": "The twelve weapons stay in the air for a minute afterward.",
+                    "self": true
+                }
+            ]
         }
     },
     "folder": "4th — Ultimate (L16)",
-    "img": "icons/weapons/swords/swords-crossed-gold.webp",
+    "img": "icons/weapons/swords/sword-gold-holy.webp",
     "name": "Athena's Arsenal: Overdrive",
     "system": {
         "area": null,
@@ -20,33 +58,14 @@
             "value": ""
         },
         "counteraction": false,
-        "damage": {
-            "0": {
-                "applyMod": false,
-                "category": null,
-                "formula": "2d8",
-                "kinds": [
-                    "damage"
-                ],
-                "materials": [],
-                "type": "slashing"
-            }
-        },
+        "damage": {},
         "defense": null,
         "description": {
-            "value": "<p><em>Libra &mdash; 4th (Ultimate) Technique, gained at level 16.</em></p><p><em>All twelve weapons released at once &mdash; the arsenal Athena entrusted to a single Saint.</em></p><p>Every Libra weapon detaches and attacks independently. Make <strong>six</strong> Strikes distributed as you choose among creatures within 60 feet, each using a different Libra weapon and dealing that weapon's damage plus @Damage[2d8[slashing]].</p><p>Your multiple attack penalty <strong>does not apply</strong> to any of these Strikes; the activity counts as three attacks for your multiple attack penalty afterward.</p><p>For 1 minute afterward the weapons circle you: you gain a <strong>+2 circumstance bonus to AC</strong>, and any creature that ends its turn adjacent to you takes @Damage[2d8[slashing]] damage.</p><hr /><p><strong>Heightening (+2 levels)</strong> Each Strike's additional damage increases by 1d8.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p>"
+            "value": "<p><em>Libra &mdash; 4th (Ultimate) Technique, gained at level 16.</em></p><p><em>All twelve weapons released at once &mdash; the arsenal Athena entrusted to a single Saint.</em></p><p>Every Arm detaches and attacks independently. Make <strong>six</strong> Strikes distributed as you choose among creatures within 60 feet, <strong>one with a weapon from each of the six Arms</strong>, each dealing that weapon's damage <strong>+2d8</strong>.</p><p>Each Strike counts as the second weapon of its pair, so the <strong>twin</strong> bonus always applies, and each applies its Arm's <strong>Art</strong> wherever that Art's trigger is met. The multiple attack penalty <strong>does not apply</strong> to any of these Strikes; the activity counts as three attacks for your multiple attack penalty afterward.</p><p>For 1 minute afterward the twelve weapons circle you: <strong>+2 circumstance bonus to AC</strong>, and any creature that ends its turn adjacent to you takes @Damage[2d8[slashing]] damage.</p><hr /><p><strong>Heightening (+2 levels)</strong> Each Strike's additional damage increases by 1d8.</p><p>On a day your constellation is <strong>Ascendant</strong> this Technique heightens as though you were 4 levels higher; on a <strong>Zenith</strong>, 8 levels higher.</p><hr /><p>Target up to six creatures within 60 feet and cast: the six Strikes are rolled in Arm order and followed through to their damage, the twin bonus already in the number. Each Art's own trigger is still yours to use &mdash; the free actions and reactions are on your sheet.</p>"
         },
         "duration": {
             "sustained": false,
             "value": "1 minute"
-        },
-        "heightening": {
-            "area": 0,
-            "damage": {
-                "0": "1d8"
-            },
-            "interval": 1,
-            "type": "interval"
         },
         "level": {
             "value": 8
@@ -60,35 +79,9 @@
             "value": "60 feet"
         },
         "requirements": "",
-        "rules": [
-            {
-                "damageType": "slashing",
-                "diceNumber": 2,
-                "dieSize": "d8",
-                "key": "DamageDice",
-                "label": "Sky: Ascendant (+2 heightening steps)",
-                "predicate": [
-                    "sky:ascendant",
-                    {
-                        "not": "sky:zenith"
-                    }
-                ],
-                "selector": "{item|_id}-damage"
-            },
-            {
-                "damageType": "slashing",
-                "diceNumber": 4,
-                "dieSize": "d8",
-                "key": "DamageDice",
-                "label": "Sky: Zenith (+4 heightening steps)",
-                "predicate": [
-                    "sky:zenith"
-                ],
-                "selector": "{item|_id}-damage"
-            }
-        ],
+        "rules": [],
         "target": {
-            "value": "creatures within 60 feet"
+            "value": "up to 6 creatures within 60 feet"
         },
         "time": {
             "value": "3"

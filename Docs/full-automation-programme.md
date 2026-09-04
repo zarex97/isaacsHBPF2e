@@ -1,7 +1,7 @@
 # The Full Automation Programme
 
 *Status document — what has been done to the Saint, what is being done, and what "done" means.*
-*Last updated 1 September 2026 (Pisces pass), against module v99.0.0 (working tree), Foundry 14.364, pf2e 8.4.1.*
+*Last updated 4 September 2026 (Libra pass — the twelfth and last Cloth), against module v99.0.0 (working tree), Foundry 14.364, pf2e 8.4.1.*
 
 ---
 
@@ -712,11 +712,109 @@ every turn, or never fired at all. Everything below is now built and verified li
 
 **Pisces is finished.**
 
+### 6.10 Libra, the twelfth — rebuilt from the ground up
+
+Libra is the only Cloth the guide **changed** rather than merely described, so this was not a verification
+pass: v4 replaced six single weapons with six *matched pairs*, gave each pair an **Art** with three tiers,
+added an **Arms Advance** that runs two to four levels ahead of the rune curve, and cut *The Twelve Arms*
+from minutes to rounds. Almost none of the old content survived.
+
+**What the Cloth is now.** Twelve weapon documents, two per Arm, granted at 1st level and summoned as a
+pair by a free action that reads the sky: one Arm normally, one weapon from each of two Arms under *The
+Balance*, and all twelve under a Zenith, where "the Cloth holds what your hands cannot". Each half puts
+`libra:arm:<arm>` on its wielder while it is held, and that option — nothing else — is what turns that
+Arm's Art on. Only the pair in the hands is ever armed, which is exactly the sentence "you gain the benefit
+of only one Arm's Art at a time".
+
+**The Shields are `shield` documents, not weapons.** *The Twin Bulwark* says you may Raise a Shield and
+Shield Block, and pf2e reaches both through `actor.heldShield`, which only a shield-type item fills. The
+Strike comes from pf2e's own `integrated-1d6-b` trait; the three weapon traits pf2e refuses to keep on a
+shield — `twin`, `shove`, `versatile S` — are added to the *generated* weapon by the Cloth, along with the
+`libra-weapon` tag the rest of the Advance predicates on. Hardness, Hit Points and Broken Threshold all
+follow the Saint's level, and pf2e's Shield Block dialog then does the rest.
+
+**The ladder, checked at ten levels.** Built from nothing and levelled 1 to 4 to 6 to 8 to 10 to 12 to 14
+to 16 to 19 to 20: potency 1/2/3 at 1/6/12, striking 1/2/3 at 4/10/16 (two, three and four dice), deadly
+d8 at 8 and d10 at 14, the two-action *Whirling Circle* replacing the three-action one at 8, the Riposte at
+14, a fifth damage die and *Athena's Temper* at 19, Shield Hardness = level and Hit Points = 8 x level at
+every rung. Under an Ascendant sky every tier rises by one — potency 4 and five dice — and under a Zenith
+the same, plus *Rozan Hyaku Ryu Ha*.
+
+Seven defects were found in the building, five of them the silent kind:
+
+- **The Shields vanished from the sheet the moment the Saint reached 2nd level.** `ItemAlteration` can
+  raise a shield's *maximum* Hit Points and cannot touch its current ones, so a shield authored at 8 Hit
+  Points sat below a Broken Threshold that had just doubled — and a broken shield is dropped from
+  `prepareStrikes` entirely. The symptom was not "my shield is broken"; it was *Athena's Arsenal* striking
+  twice with the same sword and never with the Shield. A Cloth shield re-forms rather than being repaired,
+  so it is topped up whenever the Saint's level changes and whenever an Arm is summoned.
+- **A named Strike that could not be found silently became a different one.** `findStrike` falls back to
+  the actor's first Strike, which is right for "unarmed" and wrong for a volley that names one weapon per
+  Arm. It is now matched exactly or skipped, and the skip is said out loud.
+- **Every choice card in the module applied twice.** Foundry v14 emits `renderChatMessageHTML` *and* the
+  deprecated `renderChatMessage` for the same element, and the module listened to both — so every button
+  carried two click handlers. Six Cloths' worth of choice cards were affected and none of it showed,
+  because applying the same *condition* twice is idempotent; it took a card whose result was an *item* —
+  *Athena's Temper*, granting two property runes from one choice — to make it visible.
+- **Cosmo Strike and the twin trait were both circumstance bonuses**, so on a Libra weapon only the larger
+  applied and *Athena's Arsenal*'s "the twin bonus always applies" was worth nothing. Cosmo Strike's Libra
+  half is untyped now, which is what a Handwraps substitute should always have been.
+- **A lent Arm carried the Saint's Cosmo DC rank rather than their weapon proficiency.** The guide says an
+  ally "uses **your** weapon proficiency"; the substitution asked for `origin.statistic.saint.rank`, which
+  at 20th is legendary — a rank the Saint does not have with any weapon. It reads the unarmed proficiency
+  now, through a new `origin.proficiency.<slug>` resolvable.
+- ***Rozan Sho Ryu Ha*'s cylinder was put on the cursor.** The guide says "centred on you", and only an
+  emanation was ever self-anchored — so a 10-foot cylinder asked to be aimed, and when it was not, was
+  built at wherever the mouse happened to rest. Areas may now be authored `anchor: "self"`, and a
+  self-anchored shape is built at the caster rather than at the pointer.
+- **`upgrade` with a value is legal after all, for six alteration properties.** The build refused it
+  outright since the *Cosmo Strike* d6 bug, and that rule is right for `damage-dice-faces` — verified
+  again here, where `upgrade` genuinely does nothing — and wrong for `runes-potency`, `runes-striking` and
+  four others whose handlers declare `value` as required. The Arms Advance needs exactly that, because
+  "use the better of a granted tier and an etched rune" *is* `upgrade`.
+
+Four things the guide asks for needed machinery pf2e does not have, and each got the smallest piece that
+would carry it:
+
+- **"Your reach with the Tridents becomes 15 feet."** pf2e's `reach` trait is a flat +5 and cannot say
+  fifteen, and an `ActiveEffectLike` on `system.attributes.reach.base` is overwritten every prepare. But
+  `getReach` already reads a `reach-NNN` trait off the weapon — so the module registers `reach-15` as a
+  homebrew weapon trait, and the Greater tier swaps `reach` for it on the Tridents alone.
+- **"One property rune of your choice, re-chosen each morning."** There is no `runes-property` alteration,
+  and a rune written onto the item is trimmed straight back off, because pf2e counts property-rune slots
+  from the potency in the item's own *source* data and the Advance grants potency as an alteration.
+  `AdjustStrike`'s `property-runes` mode applies it where the Strike is built instead, after the Advance
+  has been counted, and it reaches the Shields' generated weapon too.
+- **"Half the Hit Points from any healing."** Healing runs through `applyDamage` as negative damage and
+  does collect modifiers for a `healing-received` selector — but every rule that reaches it adds or
+  subtracts, and none multiplies. The halving is applied to the Hit Points that actually landed, in the
+  wrap that already shadows Hardness for the IWR bypass, and said out loud each time.
+- **"Including its Greater and Perfect upgrades"** — a lent Arm carries the *Saint's* tier, not the ally's
+  level. The lent effect emits `libra:lent-tier:greater` or `:perfect`, chosen from the Saint's own level
+  at hand-out time, and every tier gate in the six Arts accepts either.
+
+Everything above was exercised live at 6th and at 20th, on a Saint built from nothing each time. The one
+whisper the class had left — Libra's 30-foot launch — is converted: a critical failure on *Rozan Sho Ryu
+Ha* now lands prone and takes 15 bludgeoning, which is pf2e's own falling damage for a 30-foot drop rather
+than a number invented for the occasion.
+
+Three sentences remain the table's, and all three are sentences pf2e models nothing for: the second Shield
+Block each round and blocking for an ally (there is no reaction budget in the system, as there is none for
+any Bastion feat), whether a creature's movement actually ends when *Setting the Tide* hits it, and the
+Saint's own flight during *Rozan Ryu Hi Sho*, which is a distance the player chooses and the Technique's
+range enforces.
+
+**Libra is finished.**
+
 ---
 
 ## 7. What remains
 
-### 7.1 One whisper still to convert
+### 7.1 No whispers left
+
+**This section is closed.** The last one — Libra's 30-foot launch — went in the Libra pass (§6.10): a
+critical failure lands the creature prone and deals 15 bludgeoning, pf2e's own falling damage for a
+30-foot drop. What follows is the history of how the count came down.
 
 Down from twelve: Scorpio's death (both thresholds), Leo's action economy, Scorpio's rune-stripping, and
 Virgo's reaction denial and *Crimson Mirage* concealment are done — see §6.7. Two more closed in the
@@ -727,9 +825,9 @@ the new `encasement` machinery is for (§6.8). Both original categorisations wer
 direction, and both are corrected here rather than left standing. What is left is one Cloth's forced
 movement, not walked yet:
 
-- **Forced movement** — Libra's 30-foot launch. The `teleport` type handles it; the launch is *vertical*,
-  which a top-down grid cannot express, so it should probably become a 30-foot displacement plus prone on
-  landing.
+- ~~**Forced movement** — Libra's 30-foot launch.~~ Closed in §6.10, and not with a displacement: what
+  goes thirty feet up comes thirty feet down, so it is prone plus falling damage, which the general rules
+  already price.
 
 Pisces' *Royal Funeral* — the other entry this section used to carry — is now converted; see §6.9. The
 `death` type is proven on four Cloths as of this pass. The banishment register itself — built for *Another
@@ -789,22 +887,26 @@ Three details were forced by pf2e rather than chosen:
   old form silently stopped matching the moment a Technique was refreshed onto a sheet. *The Twelve Arms*
   used the same shape and was migrated with it.
 
-Three of the remaining six are now built: *Lightning Plasma* and *Crimson Flurry* went through the same
+Five of the remaining six are now built: *Lightning Plasma* and *Crimson Flurry* went through the same
 route in the Leo and Scorpio passes (§6.7), and both needed the same correction *Pleiades Nova* did — a
 `count` naming the Technique's own number of Strikes, since the volley otherwise makes one per confirmed
-target rather than the number the Technique states. *Jumping Stone*, *Double Excalibur* and *Rozan Ryū Hi
-Shō* are a content change each rather than a design question. "Counts as three attacks for your multiple
+target rather than the number the Technique states. *Double Excalibur* followed in the Capricorn pass, and
+*Rozan Ryū Hi Shō* in the Libra one (§6.10) — the latter needing one addition of its own, a `strike` that
+names a *kind* rather than a slug, because the guide says "one unarmed Strike **or Libra weapon Strike**"
+and the answer is whatever is in the Saint's hands. **Only *Jumping Stone* is left**, and it is a content
+change rather than a design question. "Counts as three attacks for your multiple
 attack penalty afterward" stays in the text: pf2e does not count a turn's attacks, so nothing can enforce
 it.
 
 ### 7.3 Written as prose only
 
-Libra's weapon summoning (the weapons exist; the summon action does not work), *Tenpōrin'in*'s immunities,
-*Golden Arrow*'s missing area block, and Sagittarius' Zenith range. Of these, Libra is now known to be much
-smaller than previously estimated.
+*Tenpōrin'in*'s immunities, *Golden Arrow*'s missing area block, and Sagittarius' Zenith range.
 
-Five have come off this list. *Titan's Stance* went in the Taurus pass; *Astral Projection*, *Galaxian
-Explosion*'s difficult terrain, *Mavros*' burning ground and *Sekishiki Kisōen*'s healing went in this one.
+Six have come off this list. *Titan's Stance* went in the Taurus pass; *Astral Projection*, *Galaxian
+Explosion*'s difficult terrain, *Mavros*' burning ground and *Sekishiki Kisōen*'s healing went in the Pisces
+one; and **Libra's weapon summoning** went in the Libra pass (§6.10) — it is a free action that whispers a
+card of the six Arms, puts the chosen matched pair in the Saint's hands, sets down whatever the sky says
+must be set down, and grants that Arm's Art with it.
 
 ### 7.3b Titan's Stance, honestly
 
@@ -814,11 +916,12 @@ target of an attack already declared. The GM still retargets. Everything numeric
 retarget now happens by itself. This is the one place in Taurus where the guide says something the engine
 cannot do, and it is recorded here rather than quietly dropped.
 
-### 7.4 One Cloth to re-verify
+### 7.4 All twelve Cloths are walked
 
-Aries, Taurus, Gemini, Cancer, Leo, Virgo, Scorpio, Sagittarius, Capricorn, Aquarius and Pisces have been
-walked end to end. Libra has not, and the method — build a knight from nothing, level it 1 → 4 → 8 → 12 →
-16 → 20, cast everything, check every number against the guide — is still the template. It is also, on the
+**This section is closed.** Libra, the last of them, went in §6.10 — and it was not a re-verification but a
+rebuild, because guide v4 changed the Cloth rather than describing it. The method — build a knight from nothing, level it 1 → 4 → 8 → 12 →
+16 → 20, cast everything, check every number against the guide — is what found every defect in every one of
+them, and is the template for whatever comes next. It is also, on the
 evidence of §4.8, §4.9, §6.7, §6.8 and §6.9, the only thing that finds this class of defect: three abilities
 that could not be cast at all, a Zenith Boon that had never once fired, a volley making one Strike per
 confirmed target instead of its own count, a receipt-key collision that ate the caster's own buff, a choice
@@ -952,11 +1055,14 @@ see every sentence of the guide happen at the table without the GM applying anyt
 remain in the content. Every number the guide states — damage, area, range, duration, frequency,
 threshold — matches what the sheet and the chat card produce, at every rank and under all three skies.
 
-Eleven Cloths are now finished to that standard end to end, with nothing outstanding: **Aries**, **Taurus**,
-**Gemini**, **Cancer**, **Leo**, **Virgo**, **Scorpio**, **Sagittarius**, **Capricorn**, **Aquarius** and
-**Pisces**. One is left, Libra, verified in pieces rather than end to end. One whisper remains, down from
-twenty-two, and it is a rider away — the machinery it needs (forced movement) is the one piece already built
-and proven that has not yet found a second user.
+**All twelve Cloths are now finished to that standard end to end**: **Aries**, **Taurus**, **Gemini**,
+**Cancer**, **Leo**, **Virgo**, **Scorpio**, **Sagittarius**, **Capricorn**, **Aquarius**, **Pisces** and —
+as of this pass — **Libra**. No whispers remain, down from twenty-two.
+
+What is left is not a Cloth. It is one volley still authored as spell damage (*Jumping Stone*, §7.2), three
+Techniques written as prose (§7.3), the six non-basic save ladders pf2e will not apply (§7.5), and the
+broken image paths (§7.6). None of those is a Cloth that has never been walked, which is the category this
+document was opened to close.
 
 Five things this pass changed about how the work is understood. The first is that a Cloth pass is still
 finding defects that stop an ability working *at all* — four abilities that threw on every cast, a Zenith

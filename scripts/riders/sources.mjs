@@ -10,6 +10,7 @@ import {
     shadowTarget,
 } from "./bypass.mjs";
 import { OUTCOMES, isAbilityUse, ridersOn } from "./data.mjs";
+import { halveHealing } from "./libra.mjs";
 import { Relay } from "./relay.mjs";
 
 /**
@@ -229,6 +230,13 @@ export const Sources = {
                     result = await wrapped(params);
                 } finally {
                     restore();
+                }
+                try {
+                    // Libra's crossed blades halve what any healing gives back, and there is no modifier
+                    // selector that multiplies — so the correction is made from the two readings above.
+                    if (game.user.isGM) await halveHealing(this, before);
+                } catch (error) {
+                    console.error("Isaac's Homebrew | The Crossing could not halve a heal", error);
                 }
                 try {
                     await Sources.onDamage(this, params, before);

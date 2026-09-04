@@ -18,5 +18,10 @@
         "name": "Riders",
         "sorting": "a",
         "type": "Item"
+    },
+    {
+        "name": "Lent Arms",
+        "sorting": "a",
+        "type": "Item"
     }
 ]

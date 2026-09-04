@@ -22,7 +22,12 @@ const TOOLBELT_ID = "pf2e-toolbelt";
  * Returns the aimed Region, or null if the caster backed out.
  */
 export async function placeArea(config, originToken) {
-    const shape = shapeFromArea(config.area, originToken, canvas.mousePosition);
+    // A self-anchored area is built where the caster stands, not where the mouse happens to be. An
+    // emanation carries its own base and never asked; a cylinder does not — *Rozan Shō Ryū Ha* is "a
+    // 10-foot-radius, 30-foot-tall cylinder centred on you", and a circle built at `canvas.mousePosition`
+    // and then never placed lands wherever the pointer was resting, which is usually nobody.
+    const point = config.anchor === "self" ? (originToken?.center ?? canvas.mousePosition) : canvas.mousePosition;
+    const shape = shapeFromArea(config.area, originToken, point);
     if (!shape) {
         if (config.area.type === "emanation") {
             ui.notifications.warn(`${config.item.name} needs a token on the scene to originate from.`);

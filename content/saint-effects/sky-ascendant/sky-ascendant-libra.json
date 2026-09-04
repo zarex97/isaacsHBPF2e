@@ -4,7 +4,7 @@
     "name": "Sky: Ascendant (Libra)",
     "system": {
         "description": {
-            "value": "<p><strong>♎ Libra is ascendant today.</strong> Your Cloth is awake. For the whole day your Techniques heighten as though you were <strong>4 levels higher</strong>, and you have your Ascendant Boon.</p><p>You can wield any two Libra weapons regardless of the hands they normally require.</p><p>Your Libra weapons count as one <strong>fundamental rune tier higher</strong> (to the game's maximum). You gain a +2 status bonus to all saving throws, and the first natural 1 you roll each hour counts as a 10.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. Applied and removed by the module's sky tracker; a GM can also drag it on by hand.</p>"
+            "value": "<p><strong>♎ Libra is ascendant today.</strong> Your Cloth is awake. For the whole day your Techniques heighten as though you were <strong>4 levels higher</strong>, and you have your Ascendant Boon.</p><h3>The Balance</h3><p>You may wield <strong>one weapon from each of two different Arms</strong> at once and gain <strong>both</strong> their Arts; the two count as a matched pair for the <strong>twin</strong> trait. @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Summon an Arm] no longer sets down the Arm you were holding, so calling a second one leaves you holding both.</p><p>Your Arms Advance counts as <strong>one tier higher</strong> in both potency and striking &mdash; maximum <strong>+4</strong> and <strong>five damage dice</strong>.</p><p>You gain a <strong>+2 status bonus to all saving throws</strong>, and the first natural 1 you roll each hour counts as a 10.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. Applied and removed by the module's sky tracker; a GM can also drag it on by hand.</p>"
         },
         "duration": {
             "expiry": "turn-start",
@@ -39,22 +39,65 @@
             {
                 "itemType": "weapon",
                 "key": "ItemAlteration",
-                "mode": "add",
+                "label": "The Balance (potency)",
+                "mode": "upgrade",
                 "predicate": [
                     "item:tag:libra-weapon"
                 ],
                 "property": "runes-potency",
-                "value": 1
+                "value": {
+                    "brackets": [
+                        {
+                            "end": 5,
+                            "start": 1,
+                            "value": 2
+                        },
+                        {
+                            "end": 11,
+                            "start": 6,
+                            "value": 3
+                        },
+                        {
+                            "start": 12,
+                            "value": 4
+                        }
+                    ],
+                    "field": "actor|level"
+                }
             },
             {
                 "itemType": "weapon",
                 "key": "ItemAlteration",
-                "mode": "add",
+                "label": "The Balance (striking)",
+                "mode": "upgrade",
                 "predicate": [
                     "item:tag:libra-weapon"
                 ],
                 "property": "runes-striking",
-                "value": 1
+                "value": {
+                    "brackets": [
+                        {
+                            "end": 3,
+                            "start": 1,
+                            "value": 1
+                        },
+                        {
+                            "end": 9,
+                            "start": 4,
+                            "value": 2
+                        },
+                        {
+                            "end": 15,
+                            "start": 10,
+                            "value": 3
+                        },
+                        {
+                            "start": 16,
+                            "value": 4
+                        }
+                    ],
+                    "field": "actor|level"
+                }
             }
         ],
         "start": {

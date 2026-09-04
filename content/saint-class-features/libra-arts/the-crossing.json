@@ -1,0 +1,139 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "damageType": "bleed",
+                        "formula": "origin.libra.bleed",
+                        "type": "persistent-damage"
+                    },
+                    "event": "action-used",
+                    "note": "The cuts cross — persistent bleed equal to the Twin Swords' number of damage dice."
+                },
+                {
+                    "apply": {
+                        "slug": "off-guard",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "expiry": "turn-end",
+                        "unit": "rounds",
+                        "value": 1
+                    },
+                    "event": "action-used"
+                },
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Bleeding from The Crossing"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        {
+                            "or": [
+                                {
+                                    "gte": [
+                                        "self:level",
+                                        14
+                                    ]
+                                },
+                                "libra:lent-tier:perfect"
+                            ]
+                        }
+                    ],
+                    "note": "Perfect — a creature bleeding from The Crossing receives only half the Hit Points from any healing."
+                }
+            ]
+        }
+    },
+    "folder": "Libra Arts",
+    "img": "icons/weapons/swords/shortsword-guard-gold.webp",
+    "name": "The Crossing",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><em>The Art of the Libra Twin Swords &mdash; Rozan J&#363;jiken.</em></p><p><strong>Frequency</strong> once per turn</p><p><strong>Requirements</strong> You are wielding both @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Twin Sword (Right)] and @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Twin Sword (Left)]</p><p><strong>Trigger</strong> You hit the same creature with both Twin Swords this turn</p><hr /><p>The cuts cross. The target takes <strong>persistent bleed equal to your weapons' number of damage dice in d6s</strong> &mdash; 2d6 once you have striking, 5d6 at <em>Athena's Temper</em> &mdash; and is <strong>off-guard until the end of your next turn</strong>.</p><p><strong>Greater (8th level)</strong> The Twin Swords also gain <strong>deadly d8</strong>.</p><p><strong>Perfect (14th level)</strong> The deadly die becomes <strong>d10</strong>, the bleed dice become <strong>d8s</strong>, and a creature bleeding from The Crossing receives only <strong>half the Hit Points</strong> from any healing.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra — the Weapons]. Target the creature you hit twice, then use this; the bleed, the off-guard and the halved healing are all applied for you.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "label": "The Crossing (Greater)",
+                "mode": "add",
+                "predicate": [
+                    "item:tag:libra-arm-twin-swords",
+                    {
+                        "or": [
+                            {
+                                "gte": [
+                                    "self:level",
+                                    8
+                                ]
+                            },
+                            "libra:lent-tier:greater",
+                            "libra:lent-tier:perfect"
+                        ]
+                    }
+                ],
+                "property": "traits",
+                "value": {
+                    "annotation": "d8",
+                    "trait": "deadly"
+                }
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "label": "The Crossing (Perfect)",
+                "mode": "add",
+                "predicate": [
+                    "item:tag:libra-arm-twin-swords",
+                    {
+                        "or": [
+                            {
+                                "gte": [
+                                    "self:level",
+                                    14
+                                ]
+                            },
+                            "libra:lent-tier:perfect"
+                        ]
+                    }
+                ],
+                "property": "traits",
+                "value": {
+                    "annotation": "d10",
+                    "trait": "deadly"
+                }
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "libra-art",
+                "cloth-libra"
+            ],
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "action"
+}

@@ -1,0 +1,99 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "options": [
+                            {
+                                "apply": {
+                                    "arm": "twin-swords",
+                                    "type": "equip"
+                                },
+                                "label": "Twin Swords — 1d8 S, agile finesse twin versatile P · The Crossing"
+                            },
+                            {
+                                "apply": {
+                                    "arm": "tridents",
+                                    "type": "equip"
+                                },
+                                "label": "Tridents — 1d10 P, reach thrown 30 twin versatile S · Setting the Tide"
+                            },
+                            {
+                                "apply": {
+                                    "arm": "nunchaku",
+                                    "type": "equip"
+                                },
+                                "label": "Nunchaku — 1d6 B, agile backswing finesse trip twin · Rebound Rhythm"
+                            },
+                            {
+                                "apply": {
+                                    "arm": "shields",
+                                    "type": "equip"
+                                },
+                                "label": "Shields — 1d6 B, shove twin versatile S · The Twin Bulwark"
+                            },
+                            {
+                                "apply": {
+                                    "arm": "sanjiegun",
+                                    "type": "equip"
+                                },
+                                "label": "Sanjiegun — 1d8 B, disarm reach sweep trip twin · The Whirling Circle"
+                            },
+                            {
+                                "apply": {
+                                    "arm": "tonfa",
+                                    "type": "equip"
+                                },
+                                "label": "Tonfa — 1d6 B, agile finesse parry twin · The Turning Guard"
+                            },
+                            {
+                                "apply": {
+                                    "arm": null,
+                                    "type": "equip"
+                                },
+                                "label": "Dismiss every Arm"
+                            }
+                        ],
+                        "prompt": "Which Arm answers?",
+                        "type": "choice"
+                    },
+                    "event": "action-used",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "folder": "Actions",
+    "img": "systems/pf2e/icons/actions/FreeAction.webp",
+    "name": "Summon an Arm",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "interaction",
+        "description": {
+            "value": "<p>You call one of the Cloth's six Arms into your hands, or send it back.</p><p>An Arm is a <strong>matched pair</strong>, and it always arrives as <em>both</em> weapons at once, one in each hand &mdash; there is no half of an Arm to hold. Summoning one therefore dismisses whichever Arm you were holding, and you gain the new pair's <strong>Art</strong> in place of the old one.</p><p>On a day your constellation is <strong>Ascendant</strong>, <em>The Balance</em> lets you keep one weapon from each of two different Arms and gain both their Arts, so the Arm you were holding is left where it is; on a <strong>Zenith</strong> the Cloth holds what your hands cannot and nothing is ever set down.</p><p>Libra weapons can never be disarmed, sundered, or destroyed. They are set down rather than unmade, so any property rune you have etched onto one is still there when you call it back.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra — the Weapons]. Using this whispers you a card of the six Arms; picking one arms you.</p>"
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "cloth-libra"
+            ],
+            "rarity": "common",
+            "value": [
+                "manipulate",
+                "saint"
+            ]
+        }
+    },
+    "type": "action"
+}

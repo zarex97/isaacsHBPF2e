@@ -1,0 +1,99 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.pf2e.equipment-effects.Item.2YgXoHvJfrDHucMr"
+                    },
+                    "event": "action-used",
+                    "note": "Both Shields come up together.",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "folder": "Libra Arts",
+    "img": "icons/equipment/shield/heater-steel-gold.webp",
+    "name": "The Twin Bulwark",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "defensive",
+        "description": {
+            "value": "<p><em>The Art of the Libra Shields.</em></p><p><strong>Frequency</strong> once per round</p><p><strong>Requirements</strong> You are wielding both @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Shield (Right)] and @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Shield (Left)]</p><hr /><p>While wielding both Shields you may <strong>Raise a Shield as a free action</strong> once per round &mdash; this action &mdash; and you can <strong>Shield Block</strong> as a reaction even without the feat, which the Art grants you outright.</p><p>Each Shield has <strong>Hardness equal to your level</strong>, Hit Points equal to <strong>8 &times; your level</strong>, and a Broken Threshold of half that. A Shield reduced to 0 Hit Points is not destroyed but returns to the Cloth and can be re-summoned after 1 minute.</p><p><strong>Greater (8th level)</strong> You may Shield Block <strong>twice per round</strong> (the second use costs no reaction), and may use it for an <strong>adjacent ally</strong>.</p><p><strong>Perfect (14th level)</strong> You may Shield Block for any ally within <strong>15 feet</strong>, and whenever a Block reduces the damage to 0 the attacker takes your Shield's damage dice in bludgeoning &mdash; @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Twin Bulwark: Riposte].</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra — the Weapons].</p><p><em>Automation note: pf2e models no reaction budget, so the second Block each round and blocking for somebody else are the table's to count &mdash; as they are for every Bastion feat in the game. Everything the Shields themselves are is on the item: Hardness, Hit Points and Broken Threshold all follow your level, and pf2e's own Shield Block dialog does the rest.</em></p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.pf2e.feats-srd.Item.jM72TjJ965jocBV8"
+            },
+            {
+                "itemType": "shield",
+                "key": "ItemAlteration",
+                "label": "The Twin Bulwark",
+                "mode": "override",
+                "predicate": [
+                    "item:tag:libra-arm-shields"
+                ],
+                "property": "hardness",
+                "value": "@actor.level"
+            },
+            {
+                "itemType": "shield",
+                "key": "ItemAlteration",
+                "label": "The Twin Bulwark",
+                "mode": "override",
+                "predicate": [
+                    "item:tag:libra-arm-shields"
+                ],
+                "property": "hp-max",
+                "value": "@actor.level * 8"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "or": [
+                            {
+                                "gte": [
+                                    "self:level",
+                                    14
+                                ]
+                            },
+                            "libra:lent-tier:perfect"
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Twin Bulwark: Riposte"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "libra-art",
+                "cloth-libra"
+            ],
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "action"
+}

@@ -1,0 +1,122 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "area": {
+                    "type": "emanation",
+                    "value": 15
+                }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "onHit": [
+                            {
+                                "apply": {
+                                    "dc": "cosmo",
+                                    "riders": [
+                                        {
+                                            "apply": {
+                                                "slug": "prone",
+                                                "type": "condition"
+                                            },
+                                            "outcomes": [
+                                                "failure",
+                                                "criticalFailure"
+                                            ]
+                                        }
+                                    ],
+                                    "statistic": "reflex",
+                                    "type": "save"
+                                },
+                                "outcomes": [
+                                    "success"
+                                ],
+                                "predicate": [
+                                    {
+                                        "or": [
+                                            {
+                                                "gte": [
+                                                    "self:level",
+                                                    14
+                                                ]
+                                            },
+                                            "libra:lent-tier:perfect"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "apply": {
+                                    "slug": "prone",
+                                    "type": "condition"
+                                },
+                                "outcomes": [
+                                    "criticalSuccess"
+                                ],
+                                "predicate": [
+                                    {
+                                        "or": [
+                                            {
+                                                "gte": [
+                                                    "self:level",
+                                                    14
+                                                ]
+                                            },
+                                            "libra:lent-tier:perfect"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ],
+                        "option": "whirling-circle-greater",
+                        "strike": "libra-sanjiegun-right",
+                        "type": "strikes"
+                    },
+                    "event": "action-used",
+                    "note": "One Strike for each enemy in reach, and the penalty does not climb until they are all made.",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "folder": "Libra Arts",
+    "img": "icons/weapons/staves/staff-simple.webp",
+    "name": "The Whirling Circle (Greater)",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 2
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><em>The Art of the Libra Sanjiegun, Greater &mdash; gained at 8th level.</em></p><p><strong>Frequency</strong> once per round</p><p><strong>Requirements</strong> You are wielding both @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Sanjiegun (Right)] and @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Sanjiegun (Left)]</p><hr /><p>Make one Sanjiegun Strike against <strong>each enemy within your reach</strong>. Each attack counts toward your multiple attack penalty, but the penalty <strong>doesn't increase until you have made all of them</strong>.</p><p><strong>Greater (8th level)</strong> The activity costs <strong>two actions</strong>, and your reach during the whirl increases by <strong>5 feet</strong> &mdash; both are already in this version.</p><p><strong>Perfect (14th level)</strong> Every creature you hit must attempt a <strong>Reflex save</strong> against your Cosmo DC or be knocked <strong>prone</strong>; those you critically hit fall prone with no save.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra — the Weapons] from 8th level, replacing @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Whirling Circle]. pf2e has no way to alter an activity&rsquo;s action cost, so the tier change is a different item rather than a different number.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "libra-art",
+                "cloth-libra"
+            ],
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        },
+        "slug": "the-whirling-circle-greater"
+    },
+    "type": "action"
+}

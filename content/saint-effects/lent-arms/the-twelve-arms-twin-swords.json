@@ -1,0 +1,131 @@
+{
+    "folder": "Lent Arms",
+    "img": "icons/weapons/swords/shortsword-guard-gold.webp",
+    "name": "Effect: The Twelve Arms (Twin Swords)",
+    "system": {
+        "description": {
+            "value": "<p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.The Twelve Arms].</p><p>The Libra Saint has put the <strong>Twin Swords</strong> in your hands &mdash; both of them, one per hand, because an Arm is a matched pair and never arrives as half of one.</p><p>While you hold them you use <strong>the Saint's</strong> weapon proficiency, the weapons carry the Saint's full <strong>Arms Advance</strong> &mdash; potency and damage dice, whatever tier the Saint has reached, a lit sky included &mdash; their Cosmo Strike bonus, and you gain the Arm's Art at whatever tier the Saint has reached &mdash; Greater from their 8th level, Perfect from their 14th &mdash; @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Crossing].</p><p>The weapons cannot be dropped involuntarily, and they return to the Cloth when this ends.</p><hr /><p><em>The Saint's proficiency rank and the Advance's two numbers are written in at the moment the Arm is handed over. The rule element only reaches a player character; an NPC ally is told so in chat instead.</em></p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 3
+        },
+        "level": {
+            "value": 6
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "definition": [
+                    "item:tag:cloth-libra"
+                ],
+                "key": "MartialProficiency",
+                "kind": "attack",
+                "label": "The Twelve Arms",
+                "slug": "libra-loaned",
+                "value": 1
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "label": "The Arms Advance (potency)",
+                "mode": "upgrade",
+                "predicate": [
+                    "item:tag:libra-weapon"
+                ],
+                "property": "runes-potency",
+                "value": 1
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "label": "The Arms Advance (damage dice)",
+                "mode": "upgrade",
+                "predicate": [
+                    "item:tag:libra-weapon"
+                ],
+                "property": "damage-dice-number",
+                "value": 1
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "label": "The Cloth of Arms (Shields)",
+                "mode": "add",
+                "predicate": [
+                    {
+                        "or": [
+                            "item:slug:libra-shield-right",
+                            "item:slug:libra-shield-left"
+                        ]
+                    }
+                ],
+                "property": "other-tags",
+                "value": "libra-weapon"
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "label": "The Cloth of Arms (Shields)",
+                "mode": "add",
+                "predicate": [
+                    {
+                        "or": [
+                            "item:slug:libra-shield-right",
+                            "item:slug:libra-shield-left"
+                        ]
+                    }
+                ],
+                "property": "traits",
+                "value": "twin"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Cosmo Strike",
+                "predicate": [
+                    "item:tag:libra-weapon"
+                ],
+                "selector": "strike-damage",
+                "slug": "cosmo-strike-libra",
+                "type": "untyped",
+                "value": "@weapon.system.damage.dice"
+            },
+            {
+                "key": "RollOption",
+                "label": "The Twelve Arms (the lender's tier)",
+                "option": "libra:lent-tier:lesser"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Twin Sword (Right)"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Twin Sword (Left)"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Crossing"
+            }
+        ],
+        "slug": "the-twelve-arms-twin-swords",
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

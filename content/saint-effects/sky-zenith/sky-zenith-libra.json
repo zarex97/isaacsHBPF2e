@@ -4,7 +4,7 @@
     "name": "Sky: Zenith (Libra)",
     "system": {
         "description": {
-            "value": "<p><strong>♎ Libra rises Exalted today.</strong> This is the one day in two hundred and sixty. For the whole day your Techniques heighten as though you were <strong>8 levels higher</strong>, and you have your Zenith Boon.</p><p>As the Ascendant Boon, plus <strong><em>Rozan Hyaku Ry&#363; Ha</em></strong> once per round &#9670;&#9670;&#9670;: 60-foot line, @Damage[12d10[bludgeoning]] damage, basic Reflex; a critical failure also knocks the target prone and stuns it 2.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
+            "value": "<p><strong>♎ Libra rises Exalted today.</strong> This is the one day in two hundred and sixty. For the whole day your Techniques heighten as though you were <strong>8 levels higher</strong>, and you have your Zenith Boon.</p><h3>The Balance (Zenith)</h3><p>As the Ascendant Boon, except you wield <strong>all six Arms</strong> at once &mdash; the Cloth holds what your hands cannot &mdash; gaining <strong>every Art</strong> simultaneously. @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Summon an Arm] never sets anything down today, so calling each of the six in turn leaves you holding all twelve weapons.</p><p>Your Arms Advance counts as <strong>one tier higher</strong> in both potency and striking &mdash; maximum <strong>+4</strong> and <strong>five damage dice</strong> &mdash; you gain a <strong>+2 status bonus to all saving throws</strong>, and the first natural 1 you roll each hour counts as a 10.</p><p>In addition, <strong><em>Rozan Hyaku Ry&#363; Ha</em></strong> once per round &#9670;&#9670;&#9670;: 60-foot line, @Damage[12d10[bludgeoning]] damage, basic Reflex; a critical failure also knocks the target prone and stuns it 2.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Ascendant Constellation]. A Zenith is scheduled by the GM, never rolled.</p>"
         },
         "duration": {
             "expiry": "turn-start",
@@ -43,22 +43,65 @@
             {
                 "itemType": "weapon",
                 "key": "ItemAlteration",
-                "mode": "add",
+                "label": "The Balance (potency)",
+                "mode": "upgrade",
                 "predicate": [
                     "item:tag:libra-weapon"
                 ],
                 "property": "runes-potency",
-                "value": 1
+                "value": {
+                    "brackets": [
+                        {
+                            "end": 5,
+                            "start": 1,
+                            "value": 2
+                        },
+                        {
+                            "end": 11,
+                            "start": 6,
+                            "value": 3
+                        },
+                        {
+                            "start": 12,
+                            "value": 4
+                        }
+                    ],
+                    "field": "actor|level"
+                }
             },
             {
                 "itemType": "weapon",
                 "key": "ItemAlteration",
-                "mode": "add",
+                "label": "The Balance (striking)",
+                "mode": "upgrade",
                 "predicate": [
                     "item:tag:libra-weapon"
                 ],
                 "property": "runes-striking",
-                "value": 1
+                "value": {
+                    "brackets": [
+                        {
+                            "end": 3,
+                            "start": 1,
+                            "value": 1
+                        },
+                        {
+                            "end": 9,
+                            "start": 4,
+                            "value": 2
+                        },
+                        {
+                            "end": 15,
+                            "start": 10,
+                            "value": 3
+                        },
+                        {
+                            "start": 16,
+                            "value": 4
+                        }
+                    ],
+                    "field": "actor|level"
+                }
             },
             {
                 "key": "GrantItem",

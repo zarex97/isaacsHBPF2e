@@ -14,6 +14,7 @@ import {
 import { Banish, durationSeconds } from "./banish.mjs";
 import { OUTCOME_LABELS, collectRiders, itemFor, riderAt } from "./data.mjs";
 import { Encasement } from "./encasement.mjs";
+import { WEAPON_TAG, crossingBleed, equipArm, libraDice, libraPotency } from "./libra.mjs";
 import { selectRiders } from "./select.mjs";
 
 /** pf2e's DegreeOfSuccess is an index, not a word. */
@@ -247,6 +248,8 @@ async function applyOne(rider, context) {
             return Encasement.apply(rider, context);
         case "escape":
             return applyEscape(rider, context);
+        case "equip":
+            return applyEquip(rider, context);
         default:
             console.warn(`Isaac's Homebrew | ${context.item?.name}: unknown rider type "${apply.type}"`);
     }
@@ -378,8 +381,13 @@ async function applyTeleport(rider, context) {
     // line-shaped Technique means — a creature standing 20 feet along a 60-foot line travels 40, not 60 —
     // so `measure: "from-origin"` reads the distance as where the creature ends up rather than how far it
     // goes, and a creature already past that point is not dragged back.
+    const away = Math.hypot(here.x - origin.x, here.y - origin.y) / perFoot;
     const travel = rider.apply.measure === "from-origin"
-        ? Math.max(0, feet - Math.hypot(here.x - origin.x, here.y - origin.y) / perFoot)
+        // "Finish this far from the caster", whichever way the creature is travelling. A push reads it as
+        // the distance still to cover — a creature 20 feet along a 60-foot line travels 40, not 60 — and a
+        // pull reads it as the distance to close: *Rozan Ryū Hi Shō* carries what it critically hits to the
+        // end of the flight, which means adjacent to the Saint, not sixty feet past them.
+        ? Math.max(0, sign > 0 ? feet - away : away - feet)
         : feet;
     if (travel <= 0) return;
 
@@ -438,14 +446,37 @@ async function applyStrikes(rider, context) {
     const targets = context.targets ?? [];
     if (!actor || targets.length === 0) return;
 
-    const wanted = rider.apply.strike ?? "unarmed";
-    const strike = (actor.system.actions ?? []).find(
-        (action) => action.slug === wanted || action.item?.system?.category === wanted,
-    ) ?? (actor.system.actions ?? [])[0];
+    // Which Strike, or Strikes. A volley is usually one weapon repeated; *Athena's Arsenal: Overdrive* is
+    // the exception the list form exists for — "six Strikes, one with a weapon from each of the six Arms".
+    // A named weapon that is not on the sheet must not quietly become a different one. `findStrike` falls
+    // back to the actor's first Strike when it cannot match, which is right for "unarmed" and disastrous
+    // here: *Athena's Arsenal* struck twice with the same sword and never with the Shield, because a
+    // Shield whose maximum Hit Points had outgrown its current ones is dropped from `prepareStrikes`
+    // altogether. A named Strike is matched exactly or skipped, loudly.
+    const sequence = Array.isArray(rider.apply.strikes)
+        ? rider.apply.strikes.map((wanted) => ({ wanted, strike: findStrike(actor, wanted, { exact: true }) }))
+        : null;
+    const missing = sequence?.filter((entry) => !entry.strike).map((entry) => entry.wanted) ?? [];
+    if (missing.length > 0) {
+        context.notes.push(
+            `${context.item?.name ?? "This activity"} could not find ${missing.join(", ")} on the sheet, `
+                + `so ${missing.length === 1 ? "that Strike was" : "those Strikes were"} not made.`,
+        );
+    }
+    const strikes = sequence?.filter((entry) => entry.strike).map((entry) => entry.strike) ?? null;
+    const strike = strikes ? strikes[0] : findStrike(actor, rider.apply.strike ?? "unarmed");
     if (!strike?.variants?.length) {
         console.warn(`Isaac's Homebrew | ${context.item?.name}: no Strike to make`);
         return;
     }
+
+    // Which variant to roll. `variants[0]` is the one with no multiple attack penalty, which is what
+    // "your multiple attack penalty does not increase" needs and what every volley before Libra wanted.
+    // *Rebound Rhythm* is the first that does not: its free Strike is explicitly "made at your current
+    // multiple attack penalty" until 8th level, and the Strike that triggered it was an attack, so the
+    // second variant is the honest default for the common case.
+    const rawIndex = rider.apply.mapIndex ?? 0;
+    const mapIndex = Math.max(0, Math.min(2, Number(resolveFromOrigin(rawIndex, context) ?? rawIndex) || 0));
 
     // The volley's own buff — the damage it deals, and the ladder of penalties it walks down.
     let effect = null;
@@ -461,26 +492,28 @@ async function applyStrikes(rider, context) {
     }
 
     const slug = rider.apply.option ?? "volley";
-    const count = strikeCount(rider, context, targets.length);
+    const count = strikes ? strikes.length : strikeCount(rider, context, targets.length);
     let allHit = count > 0;
     let lastToken = null;
     try {
         for (let index = 0; index < count; index++) {
+            const thisStrike = strikes ? strikes[index] : strike;
             // More Strikes than creatures is the normal case, not an error: "make four unarmed Strikes
             // against any creatures within 30 feet" is four Strikes whether one creature is in reach or
             // four. They are dealt round-robin so a single target takes all of them.
             const token = targets[index % targets.length];
             lastToken = token;
             const options = [`${slug}:strike:${index + 1}`];
-            await strike.variants[0].roll({ target: token.object ?? null, options, createMessage: true });
+            const variant = thisStrike.variants[mapIndex] ?? thisStrike.variants[0];
+            await variant.roll({ target: token.object ?? null, options, createMessage: true });
 
             // Follow through: an attack that lands should deal its damage without a second prompt.
             const outcome = [...game.messages].reverse()
                 .find((m) => m.flags?.pf2e?.context?.type === "attack-roll")?.flags?.pf2e?.context?.outcome;
-            if (outcome === "criticalSuccess" && typeof strike.critical === "function") {
-                await strike.critical({ target: token.object ?? null, options, createMessage: true });
-            } else if (outcome === "success" && typeof strike.damage === "function") {
-                await strike.damage({ target: token.object ?? null, options, createMessage: true });
+            if (outcome === "criticalSuccess" && typeof thisStrike.critical === "function") {
+                await thisStrike.critical({ target: token.object ?? null, options, createMessage: true });
+            } else if (outcome === "success" && typeof thisStrike.damage === "function") {
+                await thisStrike.damage({ target: token.object ?? null, options, createMessage: true });
             }
             if (outcome !== "success" && outcome !== "criticalSuccess") allHit = false;
 
@@ -513,6 +546,31 @@ async function applyStrikes(rider, context) {
     } finally {
         if (effect) await effect.delete();
     }
+}
+
+/**
+ * The Strike a volley should roll.
+ *
+ * A slug names one weapon exactly — which is what *Athena's Arsenal* needs, since each of its six Strikes
+ * is a different Arm. A category names a kind, which is how every earlier volley asked for "unarmed".
+ * `libra` is the third question, and it is *Rozan Ryū Hi Shō*'s: "one unarmed Strike **or Libra weapon
+ * Strike**", where the answer is whatever is in the Saint's hands — a Libra weapon if one is held, and the
+ * fist if none is, because a Saint holding both Tridents cannot punch with either hand anyway.
+ */
+function findStrike(actor, wanted, { exact = false } = {}) {
+    const actions = actor.system.actions ?? [];
+    if (wanted === "libra") {
+        const held = actions.find(
+            (action) =>
+                action.ready && (action.item?.system?.traits?.otherTags ?? []).includes(WEAPON_TAG),
+        );
+        if (held) return held;
+        return actions.find((action) => action.item?.system?.category === "unarmed") ?? actions[0];
+    }
+    const found = actions.find(
+        (action) => action.slug === wanted || action.item?.system?.category === wanted,
+    );
+    return found ?? (exact ? null : actions[0]);
 }
 
 /**
@@ -567,6 +625,11 @@ async function followUp(rider, context, { token, outcome }) {
     });
     for (const [innerIndex, inner] of followUps.entries()) {
         if (!testPredicate(inner.predicate, options)) continue;
+        // A follow-up that only a *critical* hit earns. `onHit` catches both degrees, which is right for
+        // the bleed a Libra Art applies on any landed cut and wrong for the push and the prone that only
+        // *Setting the Tide*'s critical hit buys. `outcomes` means here exactly what it means everywhere
+        // else in the engine, so nothing new has to be learned to write one.
+        if (Array.isArray(inner.outcomes) && !inner.outcomes.includes(outcome)) continue;
         try {
             await applyOne(inner, {
                 ...context,
@@ -681,6 +744,32 @@ async function applyHeal(rider, context) {
  * here needs to know which item the toggle lives on — which matters, because it lives on the Cloth and the
  * action is granted by it.
  */
+/**
+ * Summon an Arm — Libra's twelve weapons, six matched pairs, one pair in the hands at a time.
+ *
+ * This is a rider rather than an inventory click because the pair is the unit and the sky decides how many
+ * pairs the Saint may hold: one normally, two half-pairs under *The Balance*, and all six under a Zenith,
+ * where "the Cloth holds what your hands cannot". Equipping by hand can express none of that.
+ */
+async function applyEquip(rider, context) {
+    const actor = context.originActor ?? context.actor;
+    if (!actor) return;
+
+    const options = actor.getRollOptions?.() ?? [];
+    const sky = options.includes("sky:zenith") ? "zenith" : options.includes("sky:ascendant") ? "ascendant" : "none";
+    const { equipped, stowed } = await equipArm(actor, rider.apply.arm ?? null, { sky });
+
+    const lines = [];
+    if (equipped.length > 0) lines.push(`<strong>Summoned</strong> ${equipped.join(" and ")}.`);
+    if (stowed.length > 0) lines.push(`<strong>Dismissed</strong> ${stowed.join(", ")}.`);
+    if (lines.length === 0) lines.push("Nothing changed — that Arm is already in your hands.");
+    await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        flavor: context.item?.name ?? "Summon an Arm",
+        content: `<p>${lines.join(" ")}</p>`,
+    });
+}
+
 async function applyToggle(rider, context) {
     const actor = context.actor;
     const { domain = "all", option, cycle = [] } = rider.apply;
@@ -1074,6 +1163,12 @@ async function applyEffect(rider, context) {
     const standing = context.actor.itemTypes.effect.find((e) => e.sourceId === uuid);
     if (rider.apply.once && standing) return;
 
+    // A choice that replaces yesterday's. *Athena's Temper* is re-chosen each morning, and two tempers on
+    // one sheet would be two property runes on every Arm — which is not what "one of your choice" says.
+    if (rider.apply.replace && standing) {
+        await context.actor.deleteEmbeddedDocuments("Item", [standing.id]);
+    }
+
     // An allowance that comes back rather than accumulating. Leo's Zenith grants extra actions "each turn",
     // which is a counter set back to its full value at the start of every turn — not a second copy of the
     // effect, and not one that runs out and stays out.
@@ -1104,6 +1199,13 @@ async function applyEffect(rider, context) {
     }
 
     const [created] = await context.actor.createEmbeddedDocuments("Item", [source]);
+
+    // An effect that hands somebody weapons should put them in their hands. *The Twelve Arms* grants the
+    // matched pair through the effect's own `GrantItem` rules, which is what makes them vanish again when
+    // the effect goes — but a granted weapon arrives carried rather than held, and an ally holding an Arm
+    // they have not equipped is the whole Technique not working.
+    if (rider.apply.arm) await equipArm(context.actor, rider.apply.arm);
+
     if (rider.apply.stack) {
         await crossThresholds(source, 0, Number(source.system?.badge?.value) || 0, context);
     }
@@ -1149,7 +1251,9 @@ async function applyPersistent(rider, context) {
     // rider rather than `system.damage` precisely so a save's *success* can skip it outright instead of
     // pf2e's basic-save halving turning "negates" into "half a d6 of bleed".
     const rawFormula = rider.apply.formula ?? "1d6";
-    const formula = typeof rawFormula === "object" ? (resolveFromOrigin(rawFormula, context) ?? "1d6") : rawFormula;
+    const resolvable = typeof rawFormula === "object"
+        || (typeof rawFormula === "string" && rawFormula.startsWith("origin."));
+    const formula = resolvable ? (resolveFromOrigin(rawFormula, context) ?? "1d6") : rawFormula;
     const count = perCounter ? Math.min(counterOn(context.actor, perCounter), Number(max) || Infinity) : 1;
     const scaled = perCounter ? scaleFormula(formula, count) : formula;
     if (!scaled) return;
@@ -1503,6 +1607,12 @@ function resolveFromOrigin(expression, context) {
     const { originActor } = context;
     if (typeof expression === "number") return expression;
 
+    // A value that is not a question. Every other form here asks the origin something; a literal is the
+    // answer already — *Athena's Temper*'s property rune is a slug the caster picked off a card, and
+    // spelling it as a bare string would make a typo indistinguishable from an expression this does not
+    // know, which is the silent-no-op shape this module keeps paying for.
+    if (expression && typeof expression === "object" && "literal" in expression) return expression.literal;
+
     // A value that changes at named character levels rather than per heightening step. *Tenpōrin'in* is
     // "+1 status bonus… at 12th level the bonus becomes +2 and the immunity extends to confused; at 18th,
     // +3" — three numbers and one immunity keyed to the *caster's* level, on an effect that will be worn by
@@ -1519,8 +1629,31 @@ function resolveFromOrigin(expression, context) {
     // substitution path rather than one hand-written for `damage.perStep`.
     if (expression && typeof expression === "object" && "perStep" in expression) {
         const steps = resolveFromOrigin("origin.item.steps", context) ?? 0;
-        return growByStep(expression.base, expression.perStep, steps);
+        const grown = growByStep(expression.base, expression.perStep, steps);
+        // A ceiling on that growth. *The Twelve Arms* is the reason: "3 rounds at 6th, 10 rounds at 20th,
+        // and 15 rounds is the hard maximum" — a 20th-level Saint on an Exalted day with Cloth Attunement
+        // reaches twelve steps, and the guide stops the ladder there rather than letting it run.
+        const ceiling = Number(expression.max);
+        return Number.isFinite(ceiling) && Number.isFinite(Number(grown)) ? Math.min(Number(grown), ceiling) : grown;
     }
+    // The Arms Advance, asked about from a rider. A Libra Art's numbers are stated in the weapon's own
+    // damage dice — "persistent bleed equal to your weapons' number of damage dice in d6s" — which is a
+    // ladder the item already knows and neither the Technique's rank nor the caster's level can be read
+    // off directly, because a lit sky raises it by a whole tier.
+    if (expression === "origin.libra.dice") return libraDice(originActor);
+    if (expression === "origin.libra.bleed") return crossingBleed(originActor);
+    if (expression === "origin.libra.potency") return libraPotency(originActor);
+    const libraDie = /^origin\.libra\.dice\.(d\d+)$/.exec(String(expression));
+    if (libraDie) return `${libraDice(originActor)}${libraDie[1]}`;
+
+    // An attack proficiency rather than a statistic. *The Twelve Arms* says an ally "uses **your** weapon
+    // proficiency with it", and that is the Saint's *unarmed* rank — Master at 13th — not their Cosmo DC,
+    // which reaches legendary and would hand a borrowed sansetsukon a rank the Saint does not have with it.
+    const proficiency = /^origin\.proficiency\.([\w-]+)$/.exec(String(expression));
+    if (proficiency) {
+        return originActor?.system?.proficiencies?.attacks?.[proficiency[1]]?.rank ?? null;
+    }
+
     const match = /^origin\.statistic\.([\w-]+)\.rank$/.exec(String(expression));
     if (match) return originActor?.getStatistic?.(match[1])?.rank ?? null;
     if (expression === "origin.level") return originActor?.level ?? null;

@@ -1,0 +1,187 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "heightening": {
+                    "at": {
+                        "8": {
+                            "range": 5
+                        }
+                    }
+                },
+                "maxTargets": 1,
+                "range": 10
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "count": 1,
+                        "onHit": [
+                            {
+                                "apply": {
+                                    "text": "Setting the Tide: its movement ends immediately, in the square it now stands in.",
+                                    "type": "prompt"
+                                }
+                            },
+                            {
+                                "apply": {
+                                    "direction": "away",
+                                    "distance": 10,
+                                    "type": "teleport"
+                                },
+                                "outcomes": [
+                                    "criticalSuccess"
+                                ]
+                            },
+                            {
+                                "apply": {
+                                    "slug": "prone",
+                                    "type": "condition"
+                                },
+                                "outcomes": [
+                                    "criticalSuccess"
+                                ]
+                            },
+                            {
+                                "apply": {
+                                    "text": "Setting the Tide (Greater): if the action it was taking was manipulate, it is disrupted.",
+                                    "type": "prompt"
+                                },
+                                "outcomes": [
+                                    "criticalSuccess"
+                                ],
+                                "predicate": [
+                                    {
+                                        "or": [
+                                            {
+                                                "gte": [
+                                                    "self:level",
+                                                    8
+                                                ]
+                                            },
+                                            "libra:lent-tier:greater",
+                                            "libra:lent-tier:perfect"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ],
+                        "option": "setting-the-tide",
+                        "strike": "libra-trident-right",
+                        "type": "strikes"
+                    },
+                    "event": "action-used",
+                    "note": "The trident goes out to meet it.",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "folder": "Libra Arts",
+    "img": "icons/weapons/polearms/trident-silver-red.webp",
+    "name": "Setting the Tide",
+    "system": {
+        "actionType": {
+            "value": "reaction"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><em>The Art of the Libra Tridents.</em></p><p><strong>Frequency</strong> once per round</p><p><strong>Requirements</strong> You are wielding both @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Trident (Right)] and @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra Trident (Left)]</p><p><strong>Trigger</strong> A creature within your reach uses a move action, or leaves a square within your reach</p><hr /><p>Strike it with a trident. On a hit its movement <strong>immediately ends</strong>; on a critical hit it is also pushed 10 feet and knocked <strong>prone</strong>.</p><p><strong>Greater (8th level)</strong> Your reach with the Tridents becomes <strong>15 feet</strong>, and the Art also triggers on a <strong>manipulate</strong> action; on a critical hit, that action is <strong>disrupted</strong>.</p><p><strong>Perfect (14th level)</strong> You gain <strong>one additional reaction each round</strong>, usable only for Setting the Tide &mdash; which is what the second use per round below is.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra — the Weapons]. Target the creature that moved and use this: the Strike is rolled for you, and a critical hit pushes it and puts it down.</p><p><em>Automation note: from 8th level the Tridents trade pf2e's flat <strong>reach</strong> trait for <strong>reach 15 ft.</strong>, a trait this module registers, because pf2e's own reach is +5 feet and cannot say fifteen.</em></p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "label": "Setting the Tide (Greater)",
+                "mode": "remove",
+                "predicate": [
+                    "item:tag:libra-arm-tridents",
+                    {
+                        "or": [
+                            {
+                                "gte": [
+                                    "self:level",
+                                    8
+                                ]
+                            },
+                            "libra:lent-tier:greater",
+                            "libra:lent-tier:perfect"
+                        ]
+                    }
+                ],
+                "property": "traits",
+                "value": "reach"
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "label": "Setting the Tide (Greater)",
+                "mode": "add",
+                "predicate": [
+                    "item:tag:libra-arm-tridents",
+                    {
+                        "or": [
+                            {
+                                "gte": [
+                                    "self:level",
+                                    8
+                                ]
+                            },
+                            "libra:lent-tier:greater",
+                            "libra:lent-tier:perfect"
+                        ]
+                    }
+                ],
+                "property": "traits",
+                "value": "reach-15"
+            },
+            {
+                "itemType": "action",
+                "key": "ItemAlteration",
+                "label": "Setting the Tide (Perfect)",
+                "mode": "override",
+                "predicate": [
+                    "item:slug:setting-the-tide",
+                    {
+                        "or": [
+                            {
+                                "gte": [
+                                    "self:level",
+                                    14
+                                ]
+                            },
+                            "libra:lent-tier:perfect"
+                        ]
+                    }
+                ],
+                "property": "frequency-max",
+                "value": 2
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "libra-art",
+                "cloth-libra"
+            ],
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "action"
+}

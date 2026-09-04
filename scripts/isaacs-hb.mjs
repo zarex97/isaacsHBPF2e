@@ -8,6 +8,7 @@ import { Recharge } from "./economy/recharge.mjs";
 import { Balance } from "./outcomes/balance.mjs";
 import { Om } from "./outcomes/om.mjs";
 import { Banish } from "./riders/banish.mjs";
+import { registerHooks as registerLibraHooks } from "./riders/libra.mjs";
 import { Encasement } from "./riders/encasement.mjs";
 import { Riders } from "./riders/index.mjs";
 import { MODULE_ID, adjacentSigns } from "./sky/signs.mjs";
@@ -58,6 +59,7 @@ Hooks.once("init", () => {
     start("The Balance", () => Balance.registerHooks());
     start("the Crystal Wall", () => CrystalWall.registerHooks());
     start("encasements", () => Encasement.registerHooks());
+    start("the Libra Arms", () => registerLibraHooks());
     start("the sky tracker window", () => SkyTrackerApp.registerHooks());
 
     start("the sky tracker's settings menu", () => {

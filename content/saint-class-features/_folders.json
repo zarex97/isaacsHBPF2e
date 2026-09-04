@@ -18,5 +18,10 @@
         "name": "Libra Weapons",
         "sorting": "a",
         "type": "Item"
+    },
+    {
+        "name": "Libra Arts",
+        "sorting": "a",
+        "type": "Item"
     }
 ]

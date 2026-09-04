@@ -1,0 +1,68 @@
+{
+    "folder": "Libra Weapons",
+    "img": "icons/equipment/shield/heater-steel-gold.webp",
+    "name": "Libra Shield (Left)",
+    "system": {
+        "acBonus": 2,
+        "baseItem": null,
+        "bulk": {
+            "value": 1
+        },
+        "category": "shield",
+        "description": {
+            "value": "<p><em>One half of the Libra Cloth's Shields (Sōtate) &mdash; the left hand.</em></p><p><strong>1d6 bludgeoning, one hand each, shield group; magical, shove, twin, versatile S.</strong></p><p>An Arm always arrives as <em>both</em> weapons at once, one in each hand: summon or dismiss it with @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Summon an Arm]. It can never be disarmed, sundered, or destroyed, and it accepts weapon runes normally.</p><p>A Libra Saint uses their <strong>unarmed proficiency</strong> with it, and it grows on its own along <strong>the Arms Advance</strong> &mdash; potency, striking, and a fifth damage die at 19th level &mdash; without ever being bought or etched. @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Cosmo Strike] applies to it exactly as it does to the Saint's fists.</p><p>While you wield the matched pair you gain its Art, @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Twin Bulwark].</p><hr /><p>An ally lent an Arm by @UUID[Compendium.isaacs-hb-pf2e.saint-techniques.Item.The Twelve Arms] uses the Saint's proficiency, receives the Saint's Arms Advance, and gains the Art.</p>"
+        },
+        "equipped": {
+            "carryType": "worn",
+            "handsHeld": 0
+        },
+        "hardness": 3,
+        "hp": {
+            "brokenThreshold": 12,
+            "max": 24,
+            "value": 24
+        },
+        "level": {
+            "value": 0
+        },
+        "material": {
+            "grade": null,
+            "type": null
+        },
+        "price": {
+            "value": {}
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "quantity": 1,
+        "rules": [
+            {
+                "key": "RollOption",
+                "label": "Wielding the Shields",
+                "option": "libra:arm:shields"
+            }
+        ],
+        "size": "med",
+        "slug": "libra-shield-left",
+        "speedPenalty": 0,
+        "traits": {
+            "otherTags": [
+                "cloth-libra",
+                "libra-weapon",
+                "libra-arm-shields"
+            ],
+            "rarity": "common",
+            "value": [
+                "integrated-1d6-b",
+                "magical"
+            ]
+        },
+        "usage": {
+            "value": "held-in-one-hand"
+        }
+    },
+    "type": "shield"
+}

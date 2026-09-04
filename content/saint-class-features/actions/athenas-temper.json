@@ -1,0 +1,214 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "options": [
+                            {
+                                "apply": {
+                                    "replace": true,
+                                    "substitutions": [
+                                        {
+                                            "path": "system.rules.0.value",
+                                            "value": {
+                                                "literal": "flaming"
+                                            }
+                                        }
+                                    ],
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Athena's Temper"
+                                },
+                                "label": "Flaming — +1d6 fire, and 1d10 persistent fire on a critical hit"
+                            },
+                            {
+                                "apply": {
+                                    "replace": true,
+                                    "substitutions": [
+                                        {
+                                            "path": "system.rules.0.value",
+                                            "value": {
+                                                "literal": "corrosive"
+                                            }
+                                        }
+                                    ],
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Athena's Temper"
+                                },
+                                "label": "Corrosive — +1d6 acid, and it eats through objects"
+                            },
+                            {
+                                "apply": {
+                                    "replace": true,
+                                    "substitutions": [
+                                        {
+                                            "path": "system.rules.0.value",
+                                            "value": {
+                                                "literal": "frost"
+                                            }
+                                        }
+                                    ],
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Athena's Temper"
+                                },
+                                "label": "Frost — +1d6 cold"
+                            },
+                            {
+                                "apply": {
+                                    "replace": true,
+                                    "substitutions": [
+                                        {
+                                            "path": "system.rules.0.value",
+                                            "value": {
+                                                "literal": "shock"
+                                            }
+                                        }
+                                    ],
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Athena's Temper"
+                                },
+                                "label": "Shock — +1d6 electricity, arcing to another creature on a critical hit"
+                            },
+                            {
+                                "apply": {
+                                    "replace": true,
+                                    "substitutions": [
+                                        {
+                                            "path": "system.rules.0.value",
+                                            "value": {
+                                                "literal": "thundering"
+                                            }
+                                        }
+                                    ],
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Athena's Temper"
+                                },
+                                "label": "Thundering — +1d6 sonic, deafening on a critical hit"
+                            },
+                            {
+                                "apply": {
+                                    "replace": true,
+                                    "substitutions": [
+                                        {
+                                            "path": "system.rules.0.value",
+                                            "value": {
+                                                "literal": "keen"
+                                            }
+                                        }
+                                    ],
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Athena's Temper"
+                                },
+                                "label": "Keen — a 19 that hits is a critical hit"
+                            },
+                            {
+                                "apply": {
+                                    "replace": true,
+                                    "substitutions": [
+                                        {
+                                            "path": "system.rules.0.value",
+                                            "value": {
+                                                "literal": "ghostTouch"
+                                            }
+                                        }
+                                    ],
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Athena's Temper"
+                                },
+                                "label": "Ghost touch — it touches what is incorporeal"
+                            },
+                            {
+                                "apply": {
+                                    "replace": true,
+                                    "substitutions": [
+                                        {
+                                            "path": "system.rules.0.value",
+                                            "value": {
+                                                "literal": "grievous"
+                                            }
+                                        }
+                                    ],
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Athena's Temper"
+                                },
+                                "label": "Grievous — the critical specialization effect, made worse"
+                            },
+                            {
+                                "apply": {
+                                    "replace": true,
+                                    "substitutions": [
+                                        {
+                                            "path": "system.rules.0.value",
+                                            "value": {
+                                                "literal": "wounding"
+                                            }
+                                        }
+                                    ],
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Athena's Temper"
+                                },
+                                "label": "Wounding — 1d6 persistent bleed on a hit"
+                            },
+                            {
+                                "apply": {
+                                    "replace": true,
+                                    "substitutions": [
+                                        {
+                                            "path": "system.rules.0.value",
+                                            "value": {
+                                                "literal": "disrupting"
+                                            }
+                                        }
+                                    ],
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Athena's Temper"
+                                },
+                                "label": "Disrupting — +1d6 vitality against undead, and enfeebled 1"
+                            }
+                        ],
+                        "prompt": "Athena's Temper: what are the Arms made of today?",
+                        "type": "choice"
+                    },
+                    "event": "action-used",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "folder": "Actions",
+    "img": "icons/weapons/swords/sword-gold-holy.webp",
+    "name": "Athena's Temper",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "interaction",
+        "description": {
+            "value": "<p><em>The last rung of the Arms Advance, gained at 19th level.</em></p><p><strong>Frequency</strong> once per day</p><hr /><p>Every Libra weapon gains a <strong>fifth damage die</strong>, past the game's own cap &mdash; that part is permanent &mdash; and <strong>one property rune of your choice</strong>, re-chosen each morning. This action is that choice.</p><p>The rune applies to all twelve weapons at once and lasts until you choose again tomorrow. A property rune you bought and etched yourself is untouched; only the one Athena's Temper granted last is replaced.</p><hr /><p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.Libra — the Weapons] at 19th level.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "PT24H",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "cloth-libra"
+            ],
+            "rarity": "common",
+            "value": [
+                "saint"
+            ]
+        }
+    },
+    "type": "action"
+}

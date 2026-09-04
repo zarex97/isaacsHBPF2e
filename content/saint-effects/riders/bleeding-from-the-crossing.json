@@ -1,0 +1,38 @@
+{
+    "folder": "Riders",
+    "img": "icons/weapons/swords/shortsword-guard-gold.webp",
+    "name": "Effect: Bleeding from The Crossing",
+    "system": {
+        "description": {
+            "value": "<p>Granted by @UUID[Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Crossing] at 14th level.</p><p>The Twin Swords crossed in this creature, and the wound will not close. It receives only <strong>half the Hit Points</strong> from any healing while it is bleeding from The Crossing.</p><hr /><p><em>Automation note: pf2e has no modifier that multiplies healing, so the halving is applied to the Hit Points that actually landed, and said out loud in chat each time.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 14
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [],
+        "slug": "bleeding-from-the-crossing",
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}
