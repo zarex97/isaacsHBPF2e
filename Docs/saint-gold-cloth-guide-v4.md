@@ -4,7 +4,9 @@
 
 *The complete, self-contained class. Every Cloth entry now carries its full four-Technique text alongside its Passive and both boons — no cross-referencing. Plugs into **The Sky** framework (Stargazer guide, Part 6). Budget: **exactly 2100 points**.*
 
-**Changes from v3:** purely presentational — the Technique ladders are written out in full inside each Cloth entry rather than listed by name. No mechanical changes.
+**Changes from v3:** the Technique ladders are written out in full inside each Cloth entry rather than listed by name.
+
+**Changes since:** ♎ **Libra rebuilt.** Its six Arms are now **matched pairs** — twelve weapons, two per hand, all with the **twin** trait — each with its own **Art** (a thematic technique with Lesser / Greater / Perfect tiers) and a full stat line. A new **Arms Advance** table scales them with the Saint, 2–4 levels ahead of the standard rune curve, which is what makes *The Twelve Arms* worth accepting. *The Twelve Arms* duration cut from minutes to **3 rounds, capping at 15**. Every Art is benchmarked line-by-line against printed property runes, specific magic items, and class feats in a new ***Measured against the item table*** section. No other Cloth changed.
 
 ---
 
@@ -316,22 +318,116 @@ Your eyes open automatically, spending nothing, if you are knocked unconscious.
 
 ## ♎ Libra — the Weapons · *\[OFFENSE \+ DEFENSE\]*
 
-**Cloth Passive — The Cloth of Arms.** *The only Gold Cloth that carries weapons.* You are **trained in martial weapons**, and they advance with your unarmed proficiency automatically. Your Cloth contains six weapon pairs (twin swords, tridents, nunchaku, shields, sanjiegun, tonfa); you summon or dismiss any of them as a **free action**, they can never be disarmed or destroyed, and they accept weapon runes.
+**Cloth Passive — The Cloth of Arms.** *The only Gold Cloth that carries weapons.* You are **trained in martial weapons**, and they advance with your unarmed proficiency automatically. **Cosmo Strike applies to Libra weapons** — they are magical and gain \+1 damage per weapon damage die, exactly as your fists do.
+
+Your Cloth holds **six Arms**, and every Arm is a **matched pair** — twelve weapons in total, the arsenal Athena entrusted to one Saint. Summoning or dismissing an Arm is a **free action**, and it always arrives as *both* weapons at once, one in each hand. You therefore fight two-weapon by default: every Libra weapon has the **twin** trait, so the second Strike you make each turn with the other half of a matched pair adds a circumstance bonus to damage equal to its number of damage dice.
+
+Libra weapons can never be disarmed, sundered, or destroyed, and they accept weapon runes normally (see *The Arms Advance* — use the better of a granted tier and an etched rune; property runes always apply).
+
+**While you are wielding a matched pair, you gain that Arm's Art** — the technique the weapon itself teaches the hand that holds it. You gain the benefit of only one Arm's Art at a time (the Ascendant boon lifts this).
+
+### The Six Arms
+
+| Arm | Damage | Hands | Group | Traits | Art |
+| :---- | :---- | :---- | :---- | :---- | :---- |
+| **Twin Swords** *(Sōken)* | 1d8 S | 1 each | sword | agile, finesse, magical, twin, versatile P | **The Crossing** — bleed & openings |
+| **Tridents** *(Sansōgeki)* | 1d10 P | 1 each | spear | magical, reach, thrown 30 ft, twin, versatile S | **Setting the Tide** — zone denial |
+| **Nunchaku** *(Sōsetsukon)* | 1d6 B | 1 each | flail | agile, backswing, finesse, magical, trip, twin | **Rebound Rhythm** — extra Strikes |
+| **Shields** *(Sōtate)* | 1d6 B | 1 each | shield | magical, shove, twin, versatile S | **The Twin Bulwark** — free Raise & Block |
+| **Sanjiegun** *(Sansetsukon)* | 1d8 B | 1 each | flail | disarm, magical, reach, sweep, trip, twin | **The Whirling Circle** — melee area |
+| **Tonfa** *(Tonfā)* | 1d6 B | 1 each | club | agile, finesse, magical, parry, twin | **The Turning Guard** — counterattack |
+
+> **Why these are above curve — say this at the table.** Every Arm is deliberately one step better than its printed cousin: the real tonfa is 1d4, the real nunchaku has no twin, the real sansetsukon is **two-handed** for its 1d8, and no printed one-handed weapon combines 1d10 with reach. That is the point of the Cloth: an ally handed one of these by *The Twelve Arms* is straightforwardly upgrading, which is the only reason a fighter puts down the weapon they have spent sixteen levels runing. Libra pays for it by being the one Saint whose damage lives in items the GM can rule on, rather than in the fist. The Arms' *Arts* are priced the same way, against printed runes and class feats — see **Measured against the item table** below for the level-by-level accounting.
+
+### The Arms Advance
+
+Libra weapons grow with the Saint. They never need to be bought, found, or etched with fundamental runes.
+
+| Your level | Every Libra weapon gains | Normal PF2e |
+| :---- | :---- | :---- |
+| **1** | magical, \+1 weapon potency, Cosmo Strike's \+1 per die, each Arm's **Lesser Art** | \+1 at 2nd |
+| **4** | **striking** (2 damage dice) | 4th |
+| **6** | **\+2 weapon potency** | 10th |
+| **8** | each Arm's **Greater Art** | — |
+| **10** | **greater striking** (3 damage dice) | 12th |
+| **12** | **\+3 weapon potency** | 16th |
+| **14** | each Arm's **Perfect Art** | — |
+| **16** | **major striking** (4 damage dice) | 19th |
+| **19** | ***Athena's Temper*** — a **fifth damage die**, past the game's cap, and one **property rune** of your choice on each Arm, re-chosen each morning | — |
+
+You run two to four levels ahead of the item curve the whole way, and finish above it. In exchange, treat Libra as having spent its Cloth budget here: its Techniques are the plainest of the twelve.
+
+### The Arts
+
+Each Art has three tiers: **Lesser** at 1st level, **Greater** at 8th, **Perfect** at 14th. Every Art is priced against a real Pathfinder item or feat — see *Measured against the item table*, below.
+
+**Twin Swords — *The Crossing* (Rozan Jūjiken).** ✦ free action, once per turn. **Trigger** You hit the same creature with both Twin Swords this turn. **Effect** The cuts cross. The target takes **persistent bleed equal to your weapons' number of damage dice in d6s** (2d6 at striking, 5d6 at *Athena's Temper*) and is **off-guard until the end of your next turn**.
+*Greater (8th)* The Twin Swords also gain **deadly d8**.
+*Perfect (14th)* The deadly die becomes **d10**, the bleed dice become **d8s**, and a creature bleeding from The Crossing receives only **half the Hit Points** from any healing.
+
+**Tridents — *Setting the Tide*.** ⤾ reaction, once per round. **Trigger** A creature within your reach uses a move action, or leaves a square within your reach. **Effect** Strike it with a trident. On a hit its movement **immediately ends**; on a critical hit it is also pushed 10 feet and knocked **prone**.
+*Greater (8th)* Your reach with the Tridents becomes **15 feet**, and the Art also triggers on a **manipulate** action; on a critical hit, that action is **disrupted**.
+*Perfect (14th)* You gain **one additional reaction each round**, usable only for Setting the Tide.
+
+**Nunchaku — *Rebound Rhythm*.** ✦ free action, once per turn. **Trigger** You hit a creature with a Nunchaku Strike. **Effect** The chain whips back. Make a Strike with the other Nunchaku against that creature or one adjacent to it. This Strike is made at your current multiple attack penalty and increases it normally, and it always receives the **twin** bonus.
+*Greater (8th)* The free Strike **no longer increases your multiple attack penalty** (it still counts toward it afterward).
+*Perfect (14th)* The Art also triggers on a **miss**.
+
+**Shields — *The Twin Bulwark*.** While wielding both Shields you may **Raise a Shield as a free action** once per round, and you can **Shield Block** as a reaction even without the feat. Each Shield has **Hardness equal to your level**, HP equal to **8 × your level**, and BT half that; a Shield reduced to 0 HP is not destroyed but returns to the Cloth and can be re-summoned after 1 minute.
+*Greater (8th)* You may Shield Block **twice per round** (the second use costs no reaction), and may use it for an **adjacent ally**.
+*Perfect (14th)* You may Shield Block for any ally within **15 feet**, and whenever a Block reduces the damage to 0 the attacker takes your Shield's **damage dice in bludgeoning**.
+
+**Sanjiegun — *The Whirling Circle*.** ✦✦✦ activity, once per round. Make one Sanjiegun Strike against **each enemy within your reach**. Each attack counts toward your multiple attack penalty, but the penalty **doesn't increase until you have made all of them**.
+*Greater (8th)* The activity costs **✦✦** instead, and your reach during the whirl increases by **5 feet**.
+*Perfect (14th)* Every creature you hit must attempt a **Reflex save** against your Cosmo DC or be knocked **prone**; those you critically hit fall prone with no save.
+
+**Tonfa — *The Turning Guard*.** While wielding both Tonfa you gain the **parry** bonus (\+1 circumstance to AC) with **no action spent**. ⤾ reaction, once per round: **Trigger** A melee attack against you **critically fails**. **Effect** Strike the attacker with a Tonfa; this Strike does not increase your multiple attack penalty.
+*Greater (8th)* The reaction triggers on any **miss**, and the parry bonus becomes **\+2** and also applies to **Reflex saves**.
+*Perfect (14th)* You gain **one additional reaction each round**, usable only for The Turning Guard.
+
+### Measured against the item table
+
+The Arms are meant to be better than what the party can buy. *How much* better is the number that matters, so here it is against the printed items and feats each Art is imitating.
+
+| Art (tier) | Its real-game equivalent | Level there | Level here | Ahead by |
+| :---- | :---- | :---- | :---- | :---- |
+| The Crossing — Lesser | ***wounding* rune** (1d6 persistent bleed, flat) | 7 · 340 gp | 1 | 6, but on a two-hit trigger, and it scales to 5d6 |
+| The Crossing — Greater/Perfect | **deadly d8 → d10** on a 1d8 one-hander | no printed equivalent | 8 / 14 | new ground |
+| Setting the Tide — Lesser | **Attack of Opportunity** (Fighter feat) | 1 | 1 | on curve; the movement-ending rider is the bonus |
+| Setting the Tide — Greater | ***extending* rune** (reach on a one-hander) | 9 · 700 gp | 8 | 1 |
+| Setting the Tide — Perfect | **Boundless Reprisals** (a 2nd reaction) | 20 | 14 | 6 |
+| Rebound Rhythm — Lesser | a free extra Strike, at MAP | ≈ Flurry-tier class feature | 1 | class-feature grade |
+| Rebound Rhythm — Greater | ***speed* rune** (a Strike outside your MAP) | 16 · 10,000 gp | 8 | 8 |
+| The Twin Bulwark — shield body | ***supreme sturdy shield*** (Hardness 20 / HP 160) | 19 · 25,000 gp | 20 by the Advance | on curve, but free and unbreakable |
+| The Twin Bulwark — Lesser | **Shield Block** feat \+ Raise as a free action | 1 \+ *Quick Shield Block* (Bastion 4) | 1 | 3 |
+| The Twin Bulwark — Greater/Perfect | **Bastion**'s late feats (blocking for others) | 12–16 | 8 / 14 | ~4 |
+| The Whirling Circle — Lesser | **Whirlwind Strike** (Fighter feat, ✦✦✦) | 14 | 1 | 13 |
+| The Whirling Circle — Greater | the same for **✦✦** | no printed equivalent | 8 | new ground |
+| The Turning Guard — Lesser | **Opportune Riposte** (Swashbuckler, on a crit fail) | 4 | 1 | 3 |
+| The Turning Guard — Greater | the same on **any miss** | no printed equivalent | 8 | new ground |
+| The Turning Guard — Perfect | **Boundless Reprisals** (a 2nd reaction) | 20 | 14 | 6 |
+| **The Arms Advance** | fundamental runes, whole curve | 2/4/10/12/16/19 | 1/4/6/10/12/16 | 2–4, plus a 5th die at 19 |
+
+**Read the last row twice.** \+2 weapon potency is a 10th-level, **935 gp** item and Libra hands it over at 6th, when a party's entire wealth is a couple of hundred gold. *Major striking* is a 19th-level, **31,065 gp** item, granted at 16th. Across the whole curve, the Advance is worth on the order of a character's total expected wealth for their level — sharpest at 6th, mildest around 10th.
+
+**What the Arms deliberately do *not* give.** No elemental damage, no *keen*, no *grievous*, no *ghost touch*, no crit-fishing. Every one of those is a **property rune**, and property runes still have to be bought and etched by the player exactly as normal — the Arms carry only the fundamentals. That is on purpose: it keeps Libra's player shopping in the same market as everyone else, keeps the treasure the GM writes meaningful, and leaves *Athena's Temper* at 19th (one free, re-chosen daily) as a real capstone rather than a rounding error. It is also why Libra can be handed a *flaming* rune and become genuinely frightening — the ceiling is a table decision, not a class one.
 
 ### Techniques
 
 **1st (L1) — *Rozan Shō Ryū Ha* (Rising Dragon)** ✦✦ (cosmo) A 10-ft-radius, 30-ft-tall cylinder centred on you. **1d10 bludgeoning**, basic Reflex; creatures that critically fail are launched 30 feet upward. **Heightening (+2)** \+1d10.
 
-**2nd (L6) — The Twelve Arms** ✦✦ (cosmo) Distribute your Libra weapons to allies within 30 feet. For 1 minute, each ally holding one uses **your** weapon proficiency with it, and the weapon counts as bearing your Cloth's runes. **Heightening (+2)** \+1 minute duration and \+10 feet range.
+**2nd (L6) — The Twelve Arms** ✦✦ (cosmo) *Twelve weapons, six pairs of hands that are not yours.* Distribute up to **five Arms** (matched pairs) to allies within 30 feet; you keep at least one. For **3 rounds**, each ally wielding an Arm uses **your** weapon proficiency with it, receives its full **Arms Advance** for your level, and gains that Arm's **Art** (including its Greater and Perfect upgrades). The weapons cannot be dropped involuntarily and return to your Cloth when the duration ends. **Heightening (+2)** \+1 round and \+10 feet.
 
-**3rd (L11) — *Rozan Ryū Hi Shō* (Dragon Flight)** ✦✦ (cosmo) *The Saint punches forward as if flying — the dragon leaves the ground and carries the strike with it.* **Fly up to 60 feet** in a straight line and make one unarmed Strike at any point during the movement, dealing **\+6d8 damage** on a hit. This movement doesn't trigger reactions. On a hit you may continue to the end of your movement; on a miss you stop adjacent to the target. On a critical hit, the target is carried with you to the end of your flight and knocked prone. **Heightening (+2)** \+1d8 and \+10 feet of flight.
+> **Duration ceiling.** 3 rounds at 6th, 10 rounds at 20th. A 20th-level Saint on an **Exalted** day with **Cloth Attunement** reaches 12 heightening steps — **15 rounds, the hard maximum**. The Arms are a burst of largesse, not a party-wide loadout swap.
 
-**4th (L16) — *Athena's Arsenal: Overdrive*** ✦✦✦ (cosmo) *All twelve weapons released at once — the arsenal Athena entrusted to a single Saint.* Every Libra weapon detaches and attacks independently. Make **six** Strikes distributed as you choose among creatures within 60 feet, each using a different Libra weapon and dealing that weapon's damage **\+2d8**. The multiple attack penalty **does not apply** to any of these Strikes; the activity counts as three attacks for your MAP afterward. For 1 minute afterward the weapons circle you: **\+2 circumstance bonus to AC**, and any creature that ends its turn adjacent to you takes **2d8 slashing**. **Heightening (+2)** \+1d8 per Strike.
+**3rd (L11) — *Rozan Ryū Hi Shō* (Dragon Flight)** ✦✦ (cosmo) *The Saint punches forward as if flying — the dragon leaves the ground and carries the strike with it.* **Fly up to 60 feet** in a straight line and make one **unarmed Strike or Libra weapon Strike** at any point during the movement, dealing **\+6d8 damage** on a hit. This movement doesn't trigger reactions. On a hit you may continue to the end of your movement; on a miss you stop adjacent to the target. On a critical hit, the target is carried with you to the end of your flight and knocked prone. **Heightening (+2)** \+1d8 and \+10 feet of flight.
+
+**4th (L16) — *Athena's Arsenal: Overdrive*** ✦✦✦ (cosmo) *All twelve weapons released at once — the arsenal Athena entrusted to a single Saint.* Every Arm detaches and attacks independently. Make **six** Strikes distributed as you choose among creatures within 60 feet, **one with a weapon from each of the six Arms**, each dealing that weapon's damage **\+2d8**. Each Strike counts as the second weapon of its pair, so the **twin** bonus always applies, and each applies its Arm's **Art** wherever that Art's trigger is met. The multiple attack penalty **does not apply** to any of these Strikes; the activity counts as three attacks for your MAP afterward. For 1 minute afterward the twelve weapons circle you: **\+2 circumstance bonus to AC**, and any creature that ends its turn adjacent to you takes **2d8 slashing**. **Heightening (+2)** \+1d8 per Strike.
 
 ### Boons
 
-- **Ascendant \[OFFENSE/DEFENSE\]** — *The Balance.* Wield any two Libra weapons regardless of hands; they count as **\+1 fundamental rune tier** (to the game's cap); \+2 status bonus to all saves; the first natural 1 you roll each hour counts as a 10\.  
-- **Zenith \[OFFENSE/DEFENSE\]** — as Ascendant, plus ***Rozan Hyaku Ryū Ha*** once per round ✦✦✦: 60-ft line, **12d10**, basic Reflex, critical failure \= prone and stunned 2\.
+- **Ascendant \[OFFENSE/DEFENSE\]** — *The Balance.* You may wield **one weapon from each of two different Arms** at once and gain **both** their Arts; the two count as a matched pair for the **twin** trait. Your Arms Advance counts as **one tier higher** in both potency and striking (maximum \+4 and five damage dice). \+2 status bonus to all saves; the first natural 1 you roll each hour counts as a 10\.  
+- **Zenith \[OFFENSE/DEFENSE\]** — as Ascendant, except you wield **all six Arms** at once — the Cloth holds what your hands cannot — gaining **every Art** simultaneously. In addition, ***Rozan Hyaku Ryū Ha*** once per round ✦✦✦: 60-ft line, **12d10**, basic Reflex, critical failure \= prone and stunned 2\.
 
 ---
 
@@ -471,6 +567,8 @@ Your eyes open automatically, spending nothing, if you are knocked unconscious.
 - **Incapacitation is load-bearing** — never drop it from the death and removal effects, or they cheese bosses.  
 - **Cosmo Strike replaces Handwraps.** Don't double-tax an unarmed class.  
 - **Om is a real cost.** A blinded Virgo genuinely can't see. Don't let the table hand-wave it before 7th level, when Sixth Sense makes it survivable — that gap is the point of the mechanic.  
+- **Libra's weapons are meant to be better than the party's.** The Arms Advance runs 2–4 levels ahead of the rune curve and ends with a fifth damage die. If handing an ally an Arm isn't an obvious upgrade, *The Twelve Arms* is a dead Technique and the whole Cloth collapses into a worse Leo. The counterweight is that Libra's four Techniques are the plainest of the twelve — don't buff those too.  
+- **The Twelve Arms tops out at 15 rounds**, and only for a 20th-level Saint on an Exalted day. Recheck the arithmetic if a table reports otherwise.  
 - **Capricorn needs the GM to seed resistant enemies** on its day, or the boon is a shrug. That's by design; it's a key.  
 - **Two Saints, same Cloth** shouldn't happen — one Gold Cloth per sign. The second is a rival, and a campaign.
 
