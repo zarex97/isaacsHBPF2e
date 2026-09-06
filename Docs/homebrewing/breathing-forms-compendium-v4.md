@@ -1,5 +1,6 @@
 # Breathing Forms Compendium v4 — Re-costed, Re-scaled, Complete
-### Replaces v3. Nine Breathing Styles, each with a **granted skill + stance + style rider + 4 forms + 1 Final/Forbidden Form**.
+### Replaces v3. **Eleven** Breathing Styles, each with a **granted skill + stance + style rider + 4 forms + 1 Final/Forbidden Form**.
+### v4.1 adds the two canon Hashira styles: **Love** (a Flame derivative) and **Serpent** (a Water derivative).
 
 > **This revision implements `Docs/breath-slayer-balance-analysis.md` §7.1 and §7.2, plus the
 > non-damage levers requested alongside it.** Every number below is calibrated against live PF2e
@@ -57,8 +58,8 @@ All values at rank 10 / level 20, all costing 1 Breath Point.
 | **Fourth Form** (feat 12) | 2 | **13d6** area (45.5) **plus a hard condition** | `9d6` @ r6, **H(+1) +1d6** | `Pulverizing Wake` — a *ranger level-9* focus spell |
 | **Final Form** (feat 20) | 1–3 | **13d6+ area**, or **4 Strikes**, or a **1-minute omnibuff** | flat @ r10 | `All Shall End in Flames` (13d6, free, at-will) · `Impossible Flurry` (6 Strikes, free) · `Sever Four Dragonfly Wings` |
 
-**Monotonicity now holds in all nine styles at rank 10:** First ≤ Second ≤ Third ≤ Fourth < Final.
-The audit table is §11. As written, v3 satisfied that inequality in *zero* of nine styles.
+**Monotonicity now holds in all eleven styles at rank 10:** First ≤ Second ≤ Third ≤ Fourth < Final.
+The audit table is §11. As written, v3 satisfied that inequality in *zero* of its nine styles.
 
 ### 0.4 Balance is not only damage
 
@@ -701,6 +702,260 @@ you Refocus**.
 
 ---
 
+# THE TWO DERIVED STYLES
+
+*Added in v4.1. Unlike the four expanded styles, these two are **canon Hashira styles**, and the wiki
+states each one's parent outright: **Love Breathing is directly derived from Flame Breathing**
+(Mitsuri Kanroji reshaped what Kyojuro Rengoku taught her, mid-battle, against Hairo's wolves), and
+**Serpent Breathing is derived from Water Breathing** (Obanai Iguro's own creation). Same
+construction as every other subclass: granted skill + stance + 30-pt style rider + 4 forms + Final
+Form. Sidegrades, so the BCS ledger is unchanged.*
+
+*Both ladders are built **entirely from canon forms** — nothing here is invented except one clearly
+labelled optional sidebar. Form text and Japanese names are taken from the Kimetsu no Yaiba Wiki
+articles for each style; where a popular secondary source contradicts the wiki, the wiki wins and the
+discrepancy is flagged.*
+
+## LOVE BREATHING
+
+*Mitsuri Kanroji's personal creation — the only Breathing Style whose creation is shown on the page.
+Canon lists six forms and demonstrates five (First, Second, Third, Fifth, Sixth); **the Fourth Form
+was never revealed**. Those five demonstrated forms are exactly a full ladder, so the Fourth is
+simply skipped, the way Water skips its Third and Fifth.*
+
+**Granted skill:** Diplomacy — the only style that grants it. *(If your table prefers the technical
+read over the character read, Acrobatics is equally defensible: the wiki describes Love Breathing as
+"gymnastic and movement-oriented," built on superhuman flexibility, dexterity and agility.)*
+**Key ability:** Strength is recommended, as with Stone. Canonically the style works **only** for
+Mitsuri, because it runs on a body with eight times normal muscle density; in this class, treat it as
+a lineage that a slayer can be conditioned into, or, if you want the canon reading, as a style the GM
+gates behind an unusual heritage.
+**Damage type:** slashing. Its slashes throw **pink and green sparks** and leave **pink lines**
+tracing the path of every cut.
+
+**Stance — Whipcord Blade** *(1 action to enter)*
+Love Breathing is at its best with a whip-like katana — a blade ground so thin and tempered so soft
+that it flexes like a ribbon of steel. While in this stance your nichirin Strikes gain the **reach**,
+**disarm**, and **trip** traits.
+*(Anchor: the `whip`'s own trait line, minus its damage penalty. The `reach` trait puts a Medium
+slayer at 10 feet — exactly a reach weapon, a choice open to any character at level 1 — so this
+stance saves you a weapon slot and adds two traits rather than granting the game anything new.)*
+
+**Style rider — Beloved of the Corps**
+The first time each round that you hit a creature, choose one ally within 30 feet who can see or hear
+you. Until the start of your next turn, that ally gains a **+1 circumstance bonus to attack rolls and
+damage rolls against that creature**.
+*(Anchor: Exemplary Finisher, 30 pts. Strictly under `Bless`, which gives a +1 status bonus to attack
+rolls to **every** ally in a growing emanation and needs no hit to trigger. This is the only style
+rider in the book that points outward, and it is the reason to bring a Love slayer.)*
+
+**First Form: Shivers of First Love** — *chassis 1* · 1 BP · **1 action** · base rank 1
+*(Ichi no kata: Hatsukoi no Wananaki — "the user dashes forward and performs a single slash that
+winds through the target, hitting multiple areas with one slice.")*
+Stride up to half your Speed, then make a nichirin Strike with a **+1 status bonus** to the attack
+roll, dealing **+1d6 slashing**. The blade winds as it travels: **this Strike ignores lesser and
+standard cover**. On a **critical hit** the target is **off-guard until the end of your next turn**.
+**H(+2):** +1d6.
+> *Rank 10: +5d6 (17.5), with a half-Speed approach folded into one action. Cover negation is unique
+> to this Form in the whole compendium — a single slice that "hits multiple areas" is a cut the
+> target's shield and the pillar it's behind can't both stop.*
+
+**Second Form: Love Pangs** — *chassis 5* · 1 BP · **2 actions**, flourish · base rank 2
+*(Ni no kata: Ōnō Meguru Koi — "a singular, long-winding swing, akin to a whipping motion, that cuts
+the target at multiple angles.")*
+One swing, folded back on itself. Make **two nichirin Strikes** against the **same creature** (your
+multiple attack penalty applies to the second), each dealing **+1d6 slashing**. **If both Strikes
+hit**, the crossing cuts won't close: the target takes **2d8 persistent bleed**. **H(+2):** +1d6 per
+Strike.
+> *Rank 10: +5d6 (17.5) per Strike, 35.0 in bonus damage on top of two full Strikes, plus bleed.*
+>
+> ⚠ *Secondary sources describe this form as "attacking the area around her," defensively. The wiki
+> is explicit that it is one long swing cutting **the target** from multiple angles, so it is built
+> single-target here.*
+
+**Third Form: Catlove Shower** — *feat 8* · 1 BP · **2 actions** · base rank 4
+*(San no kata: Koi Neko Shigure — "the user leaps into the air and performs multiple arched slashes
+in quick succession." `Shigure` is a passing autumn shower; the slashes come down like rain.)*
+Leap up to your Speed (you have a fly Speed for this movement and must land at the end of it), then
+rain arcing slashes into a **15-foot burst within 30 feet**: **5d6 slashing** with a basic Reflex
+save. A creature that **critically fails** is knocked **prone**.
+**Flying creatures take a −2 circumstance penalty to the save and, on a failure, fall.**
+**H(+1):** +1d6.
+> *Rank 10: 11d6 (38.5) at 30 feet of range, plus a full-Speed leap. The ranged delivery is why this
+> sits below the 13d6 area curve.*
+
+**Fifth Form: Swaying Love, Wildclaw** — *feat 12* · 1 BP · **2 actions** · base rank 6
+*(Go no kata: Yurameku Renjō — Midarezume. "The user leaps into the air before performing a
+somersault and releasing dozens of rapid, winding slashes **from afar** that essentially form a
+tornado of slashes.")*
+Somersault backward and unspool the blade. A **20-foot burst within 60 feet** fills with a whirling
+column of slashes: **9d6 slashing** with a basic Reflex save. A creature that **fails** is **pulled
+10 feet toward the centre** of the burst; one that **critically fails** is also knocked **prone** and
+**off-guard until the start of your next turn**. **H(+1):** +1d6.
+
+> **Marked Wildclaw.** While your **Demon Slayer Mark** is active, the tornado tightens into a drill:
+> the damage increases by **4d6**, and a creature that **fails** its save is **immobilized** until it
+> Escapes (DC = your class DC) instead of being pulled.
+> *(Canon hook: the wiki notes this technique "was shown to have an even more powerful drill-like
+> attack when boosted with a Demon Slayer Mark." It is also the compendium's cleanest
+> conditional-usability gate — a Form that reads your own chassis state instead of costing more.)*
+
+> *Rank 10: 13d6 (45.5) in a 20-ft burst at 60 feet of range — the longest reach of any Form in the
+> book — or 17d6 (59.5) with an immobilize while Marked.*
+
+**FINAL FORM — Sixth Form: Cat-Legged Winds of Love** — *feat 20* · 1 BP · **3 actions**, flourish · **Frequency once per 10 minutes**
+*(Roku no kata: Neko Ashi Koi Kaze. "The user fully extends their sword to perform an arcing slash
+before retracting it and extending it once more, done in quick succession to form a **layer of
+slashes**." Her highest and last named form.)*
+
+Extend, retract, extend, until the air around you is layered with steel. Make **four nichirin
+Strikes**, divided as you choose among creatures **within 15 feet** of you — you may strike the same
+creature more than once. Your multiple attack penalty increases as normal after each Strike. Each
+Strike deals **+4d6 slashing** on a hit.
+
+Any creature **hit two or more times** is wrapped in the layers: it is **restrained** until it
+Escapes (DC = your class DC) and takes **4d6 persistent bleed**.
+
+And every ally within 30 feet is lifted by the sight of it: each gains **temporary Hit Points equal
+to your level** and a **+1 status bonus to attack rolls** until the start of your next turn.
+
+**Self-cost:** nothing human survives its own strength at that pitch. Your muscles tear — you are
+**enfeebled 2 until you Refocus**.
+> *Anchor: `Impossible Flurry` (ranger 18) is six Strikes at −0/−5/−10 for three actions, **free,
+> at-will, single-target, no self-cost**. Four Strikes at 15 feet of reach with a restrain, a bleed,
+> and a party-wide buff, once per 10 minutes for 1 BP, sits under it. Enfeebled 2 on a Strength
+> martial until the next Refocus is the heaviest ongoing self-cost in the book after Vermilion Eye's
+> blindness.*
+
+> ### ⚠ Optional: the missing Fourth Form
+> Canon lists six forms and shows five. If your table wants the gap filled rather than skipped, this
+> is the house form — the "red string of fate" is the register Mitsuri's named techniques sit in, and
+> the franchise's own *Shivers of First Love, **Entwined*** (縛, "bind") shows wrapping is already in
+> Love Breathing's vocabulary. Take it **in place of** Swaying Love, Wildclaw at feat 12, not
+> alongside it.
+>
+> **⚠ Fourth Form: Entwined Hearts, Crimson Thread** — *feat 12* · 1 BP · **2 actions** · base rank 6
+> The whip lashes out in loops and draws taut between them. Choose up to **three creatures within 15
+> feet**; each takes **9d6 slashing** with a basic Reflex save. A creature that **fails** is
+> **grabbed** by the coils (Escape DC = your class DC); one that **critically fails** is
+> **restrained** instead. While **two or more** creatures are bound this way they are all
+> **off-guard**, and whenever one of them takes damage from you, **one other bound creature of your
+> choice takes slashing damage equal to your number of weapon damage dice** — the thread pulls taut.
+> **H(+1):** +1d6.
+> *Rank 10: 13d6 (45.5) across three targets, plus a multi-target bind and a damage-chaining rider.*
+
+---
+
+## SERPENT BREATHING
+
+*Obanai Iguro's own creation, derived from Water Breathing. **All five canon forms are used** — no
+inventions were needed anywhere in this style. Serpent is the compendium's one style with **no area
+Form at all**: it is the single-target, many-Strikes style, the class's answer to a Flurry ranger.*
+
+**Granted skill:** Deception. The wiki is explicit: Serpent's attacks "are not direct and constantly
+meander which can ultimately strike anywhere, which can **fool opponents and catch them off guard**."
+**Damage type:** slashing. Its users visualise **white serpents** accompanying them as the techniques
+land.
+
+**Stance — Winding Posture** *(1 action to enter)*
+Obanai's nichirin is a heavily modified blade shaped along a snake's body — closer to an Indonesian
+kris, or an old-Japanese **dakōken** (蛇行剣, "snake-walking sword"), than to a katana. While in this
+stance your nichirin Strikes gain the **agile** and **finesse** traits: your multiple attack penalty
+with them is **−4/−8**, and you may use Dexterity for their attack rolls.
+*(Anchor: the `kukri`'s trait line, which is what a wavy short blade is in this system. Agile weapons
+are open to everyone at level 1; what this stance grants is agile **without** the smaller damage die
+— the trade being that Serpent has no area Forms anywhere in its ladder.)*
+
+**Style rider — Kaburamaru's Reading**
+A white serpent rides at your throat and reads your enemies before they move. The **first time each
+round that a creature targets you with an attack roll**, you gain a **+2 circumstance bonus to AC**
+against it.
+*(Canon: "Obanai, having always been partially blind in his right eye, performed Serpent Breathing
+with the help of his snake Kaburamaru. Kaburamaru possesses a unique ability which allows him to read
+and predict a target's attacks and then relay that information to Obanai."*
+*Anchor: Exemplary Finisher, 30 pts. `Nimble Dodge` (rogue 1) is exactly this bonus — but it costs
+your reaction and you choose when to spend it. This costs no reaction and fires automatically, but
+only on the first attack of each round, so it can never be saved for the one that matters.)*
+
+**First Form: Winding Serpent Slash** — *chassis 1* · 1 BP · **1 action** · base rank 1
+*(Ichi no kata: Idagiri — "a singular frontal horizontal slash aimed at their target in a winding
+motion.")*
+**Step**, then make a nichirin Strike dealing **+1d6 slashing**. The blade takes a path nobody can
+read: if you Stepped or Strode this turn before the Strike, **the target is off-guard against it**.
+**H(+2):** +1d6.
+> *Rank 10: +5d6 (17.5). The free Step satisfies the Form's own condition, so the off-guard is
+> reliable — and it turns on Concentrated Breathing with no flanking partner. Water's First Form gates
+> bigger dice on movement; Serpent gates the guard itself.*
+
+**Second Form: Venom Fangs of the Narrow Head** — *chassis 5* · 1 BP · **2 actions** · base rank 2
+*(Ni no kata: Kyōzu no Dokuga — "the user dashes behind their opponent at blinding speed and aims to
+swiftly slice off their head from behind horizontally.")*
+Stride up to your Speed; this movement doesn't trigger reactions and you may pass through enemies'
+spaces. You must end adjacent to a creature. Make a nichirin Strike against it dealing **+3d6
+slashing**; **the target is off-guard against this Strike** — you are behind it before it turns. On a
+**critical hit** the fang finds something vital: it is **enfeebled 2 until the end of your next
+turn**. **H(+2):** +1d6.
+> *Rank 10: +7d6 (24.5), guaranteed off-guard, full-Speed repositioning, and a crit rider that guts
+> the target's own offence rather than adding a die.*
+
+**Third Form: Coil Choke** — *feat 8* · 1 BP · **2 actions**, flourish · base rank 4
+*(San no kata: Toguro Jime — "the user circles around their opponent while using their sword to slice
+them from all directions." `Toguro` is a snake's coil.)*
+Stride up to your Speed, circling a single creature without triggering its reactions; you must end
+adjacent to it. Make **two nichirin Strikes** against it (your multiple attack penalty applies to the
+second — **−4**, from your stance). Each hit deals **+2d6 slashing**. **If both Strikes hit**, the
+coils close: the target is **grabbed** (Escape DC = your class DC) and **off-guard until it Escapes**.
+**H(+2):** +1d6 per Strike.
+> *Rank 10: +5d6 (17.5) per Strike, plus a grab a martial otherwise has to buy with an Athletics
+> action and a MAP increase.*
+
+**Fourth Form: Twin-Headed Reptile** — *feat 12* · 1 BP · **2 actions**, flourish · base rank 6
+*(Shi no kata: Keija Sōsei — literally "twin-born neck serpents." "The user leaps forward and
+performs a horizontal slash that slices through the target," visualised as a **two-headed snake**.)*
+Leap up to your Speed (you have a fly Speed for this movement and must land), then release the twin
+heads: make one nichirin Strike each against **two different creatures** within your reach at any
+point along the leap (your multiple attack penalty applies to the second — **−4**). Each hit deals
+**+3d6 slashing**.
+Each creature you hit must succeed at a **Fortitude save** against your class DC or be **stunned 1**
+(**incapacitation**).
+**Any creature reduced to 0 Hit Points by this Form is beheaded.** It dies immediately, and effects
+that would let it regenerate, reconstitute, or return to life at 0 Hit Points do not function.
+**H(+2):** +1d6 per Strike.
+> *Rank 10: +5d6 (17.5) per Strike across two bodies, plus a stun on each.*
+> *The two Strikes are the polycephaly the wiki describes; the name means "neck," and beheading is
+> the only thing that reliably kills a demon. Mechanically the clause is nearly free against ordinary
+> monsters — they die at 0 anyway — and decisive against exactly what this class exists to hunt.
+> Anchor: `All Shall End in Flames` (kineticist 18) kills outright anything it drops to 0.*
+
+**FINAL FORM — Fifth Form: Slithering Serpent** — *feat 20* · 1 BP · **3 actions**, flourish · **Frequency once per 10 minutes**
+*(Go no kata: En'en Chōda. "The user charges forth in a twisting and winding motion, curving their
+sword in multiple directions to slice one or multiple targets with multiple slashes. This technique
+is **capable of decapitating several enemies at once**." In the final battle Obanai fought on after
+Muzan took his eyes, reading the field through Kaburamaru alone; that is what this Form is.)*
+
+Close your eyes and give yourself to the serpent's path. Move up to **double your Speed** along any
+route you choose — it need not be straight. This movement doesn't trigger reactions and can pass
+through creatures' spaces.
+
+Make one nichirin Strike against **each creature** whose space you passed through or moved adjacent
+to, to a maximum of **five Strikes**. Your multiple attack penalty increases as normal after each
+(**−4/−8**, from your stance). Each Strike deals **+4d6 slashing**.
+
+**Any creature reduced to 0 Hit Points by this Form is beheaded**, exactly as Twin-Headed Reptile.
+
+Throughout, you fight blind and it costs you nothing: for the duration you **ignore concealment**, you
+can **target hidden and undetected creatures with no flat check**, and you **cannot be made
+off-guard**.
+
+**Self-cost:** senses pushed that far come back raw. You are **blinded until the end of your next
+turn**, and then **dazzled for 1 minute**.
+> *Five Strikes at −0/−4/−8/−8/−8 across up to 200 feet of weaving movement, each beheading whatever
+> it drops. Anchor: `Impossible Flurry` (ranger 18) is **six** Strikes at −0/−5/−10 for three actions,
+> **free, at-will, no self-cost, and single-target**. Ours reaches five separate bodies and ends them
+> permanently, so it pays a Breath Point, a frequency, and a round of blindness.*
+
+---
+
 # 11. Rank-10 audit — the monotonicity check
 
 All values at **level 20 / rank 10**, all costing **1 Breath Point**. "Strike" means a full nichirin
@@ -717,6 +972,8 @@ Strike lands on top of the listed bonus.
 | **Flower** | reaction: +2 AC, off-guard, +1 atk | Strike +7d6 (24.5), conditional off-guard | 2 Strikes +5d6 ea. + sticky bleed | 2 Strikes +4d6 ea., party off-guard ×2 | +2 AC/Ref/atk 1 min, free off-guard | ✅ |
 | **Mist** | Strike +5d6 + dazzled | 2 Strikes +5d6 ea., ignores circ AC | 11d6 (38.5) + 4d6 zone @30 ft | 2 Strikes +4d6 ea. + disengage + hidden | 20-ft mobile cloud, 1 min, −2 enemy atk | ✅ |
 | **Moon** | Strike +5d6 + movement tax | 13d6 (45.5) cone + bleed | 11d6 (38.5) line + grabbed | 13d6 (45.5) cone + prone + 4d6 zone | 16d6 (56.0) 40-ft cone + 6d6 lingering | ✅ |
+| **Love** | Stride + Strike +5d6, ignores cover | 2 Strikes +5d6 ea. (35.0) + bleed | 11d6 (38.5) burst @30 ft + leap, anti-air | 13d6 (45.5) burst **@60 ft**; 17d6 + immobilize while Marked | 4 Strikes +4d6 ea. + restrain + party temp HP | ✅ |
+| **Serpent** | Step + Strike +5d6, self off-guard | Stride + Strike +7d6 (24.5), off-guard, crit enfeebled 2 | 2 Strikes +5d6 ea. (35.0) + grabbed | 2 targets, +5d6 ea. + stun + **behead** | 5 Strikes +4d6 ea. + behead + blind-fighting | ✅ |
 
 \* *Flame's First Form out-damages its Second on raw numbers because of the persistent fire. The
 Second Form buys 25 feet of vertical movement, self-supplied off-guard, and a crit knockdown, and
@@ -758,3 +1015,17 @@ a per-Strike damage rider the kineticist does not get.
    failures by creatures of your level or lower.
 6. **Flame's stance persistent damage** interacting with `Persistent Ember` (feat 12) — check at your
    table that the die-step increase and the stance's flat scaling aren't being applied twice.
+7. **Serpent's beheading clause** (Twin-Headed Reptile, Slithering Serpent). Against ordinary
+   monsters it changes nothing. Against a regenerating boss, a troll, or anything with a
+   return-at-0-HP ability it is decisive — which is the point, but confirm your GM is happy for a
+   feat-12 Form to be the party's hard answer to regeneration.
+8. **Love's Marked Wildclaw** at 17d6 (59.5) plus an immobilize. It is gated on the Demon Slayer Mark
+   being active, which is a chassis state, not a resource — so at the levels where the Mark is
+   reliably on, treat 59.5 as the real number, not the exception. If that outruns your table, drop
+   the Marked bonus to +2d6.
+9. **Beloved of the Corps** is the only outward-facing style rider in the book. Watch it beside a
+   Flurry ranger or a Ruffian rogue, where +1 to attack and damage is multiplied across three or four
+   Strikes a round rather than one.
+10. **Serpent has no area Form at all.** That is deliberate, but it means a Serpent slayer contributes
+    nothing to a many-weak-enemy encounter beyond ordinary Strikes. Confirm the player knows this
+    before they commit at level 1; the fix, if they want one, is Flowing Stance Shift into Wind.
