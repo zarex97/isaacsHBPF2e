@@ -1,5 +1,7 @@
 # Breath Slayer Class Feats — Compendium v4
 ### Aligned with **Breathing Forms Compendium v4**. Replaces feat compendium v3.
+*v4.1: `Resonant Opening` (feat 12) gains **Serpent** as a qualifying style. No other feat changes —
+the eleven styles all use the same Form ladder, so Love and Serpent need no feats of their own.*
 
 > Implements `Docs/breath-slayer-balance-analysis.md` §7.3 (chassis changes) and §7.4 (feat-level
 > corrections). See `breath-slayer-v4-changelog.md` for the recommendation-by-recommendation audit.
@@ -254,9 +256,13 @@ is off-guard to you until the end of your next turn.
 > apply a second time to the Flame stance's flat per-die persistent fire.*
 
 **Resonant Opening** — *Anchor: debuff-extension feats at 10–12*
-**Prerequisite:** Sound, Flower, or Mist style (primary or secondary). When one of your Forms makes a
-creature off-guard, dazzled, or deafened, that condition lasts 1 additional round. Once per creature
-per combat.
+**Prerequisite:** Sound, Flower, Mist, or **Serpent** style (primary or secondary). When one of your
+Forms makes a creature off-guard, dazzled, or deafened, that condition lasts 1 additional round. Once
+per creature per combat.
+> *v4.1 adds Serpent, whose entire ladder is built on manufactured off-guard — First Form supplies it
+> on a Step, Second Form supplies it outright, Coil Choke supplies it until the target Escapes.
+> Love is deliberately **not** on this list: its rider points at your allies, so its natural feat
+> partners are `Unshakeable Core` (8) and `Selfless Guard` (16) instead.*
 
 **Perfected Water Counter** — ✦ NEW — *Anchor: `Dueling Riposte` (fighter 8) widened four levels later*
 **Prerequisite:** Flowing Water Counter.

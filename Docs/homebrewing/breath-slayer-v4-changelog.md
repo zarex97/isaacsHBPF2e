@@ -215,7 +215,83 @@ Carried forward from the analysis, since they affect the comparisons above:
 
 ---
 
-## 7. Still open
+## 7. v4.1 — Love and Serpent Breathing
+
+Two new styles, bringing the compendium to **eleven**. Both are canon Hashira styles, and unlike the
+four expanded styles they each have a stated parent among the original five, so they slot into the
+Breathing Style relationship chart rather than sitting beside it:
+
+| Style | Parent | Creator | Canon forms | Invented |
+|---|---|---|---|---|
+| **Love** | **Flame** | Mitsuri Kanroji | 6 listed, **5 demonstrated** (First, Second, Third, Fifth, Sixth) | **Nothing.** The five demonstrated forms are exactly a full ladder. |
+| **Serpent** | **Water** | Obanai Iguro | **5, all demonstrated** | **Nothing.** |
+
+Both ladders are built entirely from canon. The only invented content in the whole addition is one
+clearly-labelled optional sidebar for Love's undemonstrated Fourth Form, offered as a *replacement*
+for Swaying Love, Wildclaw rather than an addition to the ladder.
+
+### 7.1 Sourcing note
+
+Fandom is blocked at the fetch proxy (HTTP 402 on every URL, including `api.php`), and `curl` fails
+TLS verification through the same proxy. Python's `urllib` reaches it directly, so the two style
+articles were pulled as raw wikitext from the MediaWiki API and read as the primary source:
+
+```
+python -c "import urllib.request,json; print(json.load(urllib.request.urlopen(
+  urllib.request.Request('https://kimetsu-no-yaiba.fandom.com/api.php?action=parse'
+  '&page=Serpent_Breathing&prop=wikitext&format=json',
+  headers={'User-Agent':'Mozilla/5.0'})))['parse']['wikitext']['*'])"
+```
+
+This mattered — **the popular secondary sources are wrong in three places**, and the designs were
+corrected against the wiki:
+
+| Form | Secondary sources say | Wiki says | What v4.1 does |
+|---|---|---|---|
+| **Winding Serpent Slash** | "slithers around unleashing multiple sword strikes to take out **multiple enemies**" | "a **singular** frontal horizontal slash aimed at their target in a winding motion" | Built single-target, as a Step plus one Strike |
+| **Love Pangs** | "attacking the **area around her**," defensive and offensive | "a singular, long-winding swing… that cuts **the target** at multiple angles" | Built single-target: two Strikes on one creature, no defensive clause |
+| **Twin-Headed Reptile** | a leap and a horizontal slash, no explanation of the name | same, plus trivia: it is **visualised as a polycephalic (two-headed) snake**, and the name 頸蛇双生 means "twin-born **neck** serpents" | Two simultaneous Strikes, and the beheading clause the name points at |
+
+### 7.2 Canon details that became mechanics
+
+Rather than inventing riders, every distinctive clause in these two styles is a canon line converted:
+
+| Canon text | Mechanic |
+|---|---|
+| Kaburamaru "possesses a unique ability which allows him to **read and predict a target's attacks** and then relay that information to Obanai" | **Kaburamaru's Reading** — a free +2 circumstance AC against the first attack each round |
+| Obanai's blade is a **kris / dakōken** (蛇行剣), a wavy short blade | **Winding Posture** grants `agile` and `finesse` — Serpent is the MAP-mitigation style |
+| Slithering Serpent is "capable of **decapitating several enemies at once**"; Obanai fought on **blind** after Muzan took his eyes | Five Strikes, each beheading what it drops, cast while ignoring concealment — paid for with a round of blindness |
+| Love Breathing is best "with a **whip-like katana**" | **Whipcord Blade** grants `reach`, `disarm`, `trip` |
+| Wildclaw "was shown to have an even more powerful **drill-like attack when boosted with a Demon Slayer Mark**" | **Marked Wildclaw** — +4d6 and an immobilize while your Mark is active. A Form that reads your own chassis state instead of costing more. |
+| Love Breathing "relies on her body's special composition" — **eight times normal muscle density** | The Final Form's self-cost is **enfeebled 2 until you Refocus**: she tears herself apart with her own strength |
+| Shivers of First Love "winds through the target, **hitting multiple areas with one slice**" | The only Form in the compendium that **ignores lesser and standard cover** |
+
+### 7.3 Design gaps these two fill
+
+- **Serpent is the first style with no area Form at all** — deliberately the single-target,
+  many-Strikes style, and the class's answer to a Flurry ranger. Its stance granting `agile` without
+  the usual smaller damage die is the compensation, and its watch-list entry warns players about the
+  trade before they commit at level 1.
+- **Love carries the only outward-facing style rider in the book.** Every other rider makes *you*
+  better; `Beloved of the Corps` hands an ally +1 to attack and damage. The class had no support
+  style, and a Flame derivative built by the warmest character in the source is the right place for
+  one.
+- **Diplomacy** is granted for the first time; **Deception** likewise. Skill coverage across the
+  eleven styles is now Acrobatics, Athletics ×2, Deception, Diplomacy, Intimidation ×2, Medicine,
+  Stealth ×2, Survival.
+
+### 7.4 Balance placement
+
+Both pass the rank-10 monotonicity check (audit table, Forms v4 §11). Neither introduces a new
+number: Love's Fifth Form is on the 13d6 (45.5) area curve like every other Fourth-tier Form, and
+Serpent's ladder is entirely Strike-riders on the existing +5d6/+7d6 curve. The two things worth
+watching are **Marked Wildclaw at 17d6 (59.5)**, whose gate is a chassis state rather than a
+resource, and **the beheading clause**, which is nearly free against ordinary monsters and decisive
+against anything that regenerates. Both are on the playtest watch list.
+
+---
+
+## 8. Still open
 
 - **The class guide itself has not been edited** — it isn't in this repository. §1 of the feats v4
   document is written as a portable list of chassis amendments so it can be pasted in. Two chassis
