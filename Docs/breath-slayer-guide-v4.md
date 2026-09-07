@@ -1,54 +1,71 @@
-# Breathing Forms Compendium v4 — Re-costed, Re-scaled, Complete
-### Replaces v3. **Eleven** Breathing Styles, each with a **granted skill + stance + style rider + 4 forms + 1 Final/Forbidden Form**.
-### v4.1 adds the two canon Hashira styles: **Love** (a Flame derivative) and **Serpent** (a Water derivative).
-### v4.2 rebuilds Water's **Dead Calm** around five spendable Stillness counters, and replaces Moon's style rider **Erratic Crescents** with **Borrowed Light**, which buffs allies instead of its holder.
+# The Breath Slayer — PF2e Class Guide, **Version 4.2**
 
-> **This revision implements `Docs/breath-slayer-balance-analysis.md` §7.1 and §7.2, plus the
-> non-damage levers requested alongside it.** Every number below is calibrated against live PF2e
-> system data (`pf2e-14-dev/packs/pf2e`), not against v3's printed values. See
-> `breath-slayer-v4-changelog.md` for the recommendation-by-recommendation audit.
+### *Kimetsu no Yaiba · 鬼滅の刃 · Demon Slayer Corps edition*
+
+*The complete, self-contained class. Chassis, ledger, advancement table, every core feature, all
+**eleven** Breathing Styles with their full Form ladders, and the complete feat compendium — no
+cross-referencing. Companion to **The Saint** (Gold Cloth guide v4) and costed on the same
+**2100-point** budget.*
+
+**Sources folded in:** `breath-slayer-class-feats-v4.md` (v4.1) · `breathing-forms-compendium-v4.md`
+(v4.2) · `breath-slayer-balance-analysis.md` · `breath-slayer-v4-changelog.md`. Where those documents
+left a feature *named but never written* — **Demon Slayer Mark** and **Transparent World Glimpse** —
+this guide writes it, and says so.
+
+**Changes in v4.2:** Water's Final Form **Dead Calm** is rebuilt as a pool of five **Stillness
+counters** spendable either as damage reduction that spills onto the attacker or as MAP-free
+ripostes, at 2 actions instead of 1. Moon's style rider **Erratic Crescents** is replaced by
+**Borrowed Light**, which pays out to allies rather than to its holder. Nothing else changed, and the
+2100-point ledger is untouched — both are inside the 50-point subclass line or the feat-20 slot.
 
 ---
 
-## 0. What changed from v3 (read this first)
+## 1 — Design foundations
 
-### 0.1 Every Form costs **1 Breath Point**
+### 1.1 The pitch
 
-There is no 2-point or 3-point focus spell anywhere in PF2e, and `Refocus` restores exactly 1 point
-per 10 minutes. The 2-FP Fourth Forms and 3-FP Final Forms turned the class's signature abilities
-into once-per-adventuring-day effects wearing a per-encounter costume.
+A Breath Slayer is a human being with a sword. No spells, no bloodline, no god. What they have is a
+breathing form drilled until the lungs oxygenate muscle past what a body should survive, and a blade
+forged from ore that sat in sunlight for a year. Eleven styles descend from the same root; each is a
+different answer to the same question, which is *how do you kill something that heals faster than you
+can cut it.*
 
-**All Forms now cost 1 Breath Point.** The throttles are:
+Mechanically: a full martial Strike routine, a **3-point focus pool** that buys three named
+techniques an encounter, and an unconditional precision rider so that a slayer with an empty pool is
+still a slayer.
+
+### 1.2 Profile & key ability
+
+Martial. **10 HP**, full attack investment, class DC (**Slayer DC**), no spell slots. Key ability
+**Strength or Dexterity**. Weapon-based, not unarmed — a Breath Slayer buys potency and striking runes
+for their nichirin blade exactly as any other martial does.
+
+### 1.3 Forms, Breath Points, and heightening
+
+**Forms** are focus spells with the **slayer** trait. They use your **Slayer DC** and key ability, have
+**no rank**, and are **automatically heightened to half your level rounded up**, exactly like every
+other focus spell in the game.
+
+**Every Form costs 1 Breath Point.** There is no 2-point or 3-point focus spell anywhere in PF2e and
+`Refocus` restores exactly 1 point per 10 minutes, so v3's 2-FP Fourth Forms and 3-FP Final Forms were
+once-per-adventuring-day abilities wearing a per-encounter costume. The throttles are elsewhere:
 
 | Throttle | Applies to |
-|---|---|
-| The 3-point pool itself | Every Form — 3 Forms per encounter, maximum |
+| :---- | :---- |
+| The 3-point pool itself | Every Form — **3 Forms per encounter, maximum** |
 | **Frequency: once per 10 minutes** | Final/Forbidden Forms only |
 | **Self-cost** (a real, lasting condition) | Final/Forbidden Forms only |
 | **Requirement** clauses | Individual Forms that punch above their tier |
 
-Fourth Forms carry **no** frequency limit. Three Forms per encounter is already below what an at-will
-AoE class puts out (kineticist `Blazing Wave`: 42.0 *every round*, from **level 4**); adding a
-per-encounter cap on top of the pool would charge twice for the same thing.
-
-### 0.2 Automatic heightening is now actually applied
-
-> "Focus spells are automatically heightened to half your level rounded up, much like cantrips."
-
-v3 wrote the printed dice as though they were the *level-20* value. They were the **entry-rank**
-value, and the heightening lines then had to carry them all the way to rank 10 — so where the lines
-were `H(+4)` or missing, the form flatlined. Every Form below states an explicit **base rank** and a
-heightening line chosen so its **rank-10 value** is the design target.
-
 **Base rank by tier:** First Form = 1 · Second Form = 2 · Third Form = 4 · Fourth Form = 6 ·
-Final Form = 10. (A Form acquired above its base rank is simply already heightened.)
+Final Form = 10. A Form acquired above its base rank is simply already heightened.
 
-### 0.3 The design curve
+### 1.4 The design curve
 
 All values at rank 10 / level 20, all costing 1 Breath Point.
 
 | Form shape | Actions | Rank-10 target | Standard ladder | Anchor |
-|---|---|---|---|---|
+| :---- | :---- | :---- | :---- | :---- |
 | Single Strike + rider | 1 | **+5d6** (17.5) + status bonus | `1d6` @ r1, **H(+2) +1d6** | `Inner Upheaval` +3d6 — ours is higher because it never doubles on Flurry |
 | Strike + movement/debuff | 2 | **+7d6** (24.5) | `3d6` @ r2, **H(+2) +1d6** | `Pulverizing Wake`'s Strike component (+3d8) |
 | Two Strikes, one target | 2 | **+5d6 each** (35.0) | `1d6` @ r2, **H(+2) +1d6** | two full Strikes already carry most of the value |
@@ -57,17 +74,17 @@ All values at rank 10 / level 20, all costing 1 Breath Point.
 | 30-ft line / 15-ft burst | 2 | **11d6** (38.5) | `5d6` @ r4, **H(+1) +1d6** | area-for-damage trade |
 | Reaction (defensive) | R | resistance formula + **5d6** (17.5) | `2d6` @ r4, **H(+2) +1d6** | `Thermal Nimbus` = resistance equal to level |
 | **Fourth Form** (feat 12) | 2 | **13d6** area (45.5) **plus a hard condition** | `9d6` @ r6, **H(+1) +1d6** | `Pulverizing Wake` — a *ranger level-9* focus spell |
-| **Final Form** (feat 20) | 1–3 | **13d6+ area**, or **4 Strikes**, or a **1-minute omnibuff** | flat @ r10 | `All Shall End in Flames` (13d6, free, at-will) · `Impossible Flurry` (6 Strikes, free) · `Sever Four Dragonfly Wings` |
+| **Final Form** (feat 20) | 1–3 | **13d6+ area**, or **4 Strikes**, or a **1-minute omnibuff** | flat @ r10 | `All Shall End in Flames` · `Impossible Flurry` · `Sever Four Dragonfly Wings` |
 
-**Monotonicity now holds in all eleven styles at rank 10:** First ≤ Second ≤ Third ≤ Fourth < Final.
-The audit table is §11. As written, v3 satisfied that inequality in *zero* of its nine styles.
+**Monotonicity holds in all eleven styles at rank 10:** First ≤ Second ≤ Third ≤ Fourth < Final. The
+audit is §6. As written, v3 satisfied that inequality in *zero* of its nine styles.
 
-### 0.4 Balance is not only damage
+### 1.5 Balance is not only damage
 
 Where v3 reached for a bigger die, v4 reaches for one of these instead. Each has a live system anchor:
 
 | Lever | Anchor in the packs |
-|---|---|
+| :---- | :---- |
 | Condition on a **failed basic save** | `Tempest Surge` (clumsy 2, at rank **1**), `Blazing Wave` (prone on crit fail) |
 | **Immobilized / grabbed** until Escape vs. your class DC | `Hell of 1,000,000 Needles` (kineticist 18) |
 | **Off-guard** generation feeding your own precision rider | `Stumbling Stance` (monk 1), rogue `Debilitating Strike` |
@@ -79,27 +96,463 @@ Where v3 reached for a bigger die, v4 reaches for one of these instead. Each has
 | **Reaction denial** and Speed penalties | `Wave of Despair`, `Clinging Ice` |
 | **Persistent damage that resists the flat check** | `Bloody Debilitation`-tier riders, escalated at capstone |
 
-### 0.5 Two Forms are now chassis features, not feats
+### 1.6 The floor
 
-First Form is granted at **level 1** and Second Form at **level 5** as chassis features, with the
-Breath Point pool growing on the chassis at **1 / 5 / 9**. See `breath-slayer-class-feats-v4.md` §1.
-The Form ladder below is unchanged in content — only who pays for the first two rungs has changed.
-Form entries are tagged *chassis 1*, *chassis 5*, *feat 8*, *feat 12*, *feat 20*.
-
-### 0.6 Unchanged rules
-
-Uncommon + slayer traits · Class DC as spell DC · stance + nichirin blade required · incapacitation
-on hard control · subclass riders budgeted at 30 pts (Exemplary Finisher anchor), so the **BCS 2100
-ledger is untouched**.
+`Concentrated Breathing` is the reason this class works. A Breath Slayer with an empty pool is still
+adding **+8 / +12 / +16** per Strike at four weapon dice. Without it, a slayer who has spent three
+Forms is a fighter with fewer feats. Say this at the table: **the pool is the spike, the rider is the
+floor.**
 
 ---
 
-# THE ORIGINAL FIVE STYLES
+## 2 — The point ledger (2100 exactly)
 
-*(v3 referred these blocks out to the class guide and never reproduced them. They are written out in
-full here, so the compendium is self-contained.)*
+*Costed against **BCS 1.4** (`Docs/homebrewing/BCS 1.4 (current) _ Balanced Core System.xlsx`).
+Proficiency values from its `PROFICIENCYVALUES` tab: **Trained 10 · Expert 50 · Master 110 ·
+Legendary 190 · HP 10 · initial skill 5 · WeaponCS 50 · WeaponWS 70 · WeaponGWS 150**. Weapon and
+armour groups follow the sheet's convention — the **highest** group pays the Expert/Master steps,
+every additional group costs a flat 10.*
 
-## WATER BREATHING
+### Chassis — 1410
+
+| Line | Value | Pts |
+| :---- | :---- | :---- |
+| HP | 10 | 100 |
+| ClassFeatL01 | — | 10 |
+| InitialSkills | Acrobatics *or* Athletics + 3 others | 20 |
+| SubclassSkills | Breathing Style granted skill | 5 |
+| GrantedSkills | Slayer's Vigil (2nd granted skill, L5) | 5 |
+| ClassDC (**Slayer DC**) | T@1 / E@9 / M@17 | 170 |
+| Perception | T@1 / E@1 / M@7 | 170 |
+| FortitudeSave | T@1 / E@1 / M@9 | 170 |
+| ReflexSave | T@1 / E@1 / M@7 | 170 |
+| WillSave | T@1 / E@3 | 60 |
+| Attack — Unarmed | T@1 | 10 |
+| Attack — Simple | T@1 | 10 |
+| Attack — Martial | T@1 / E@5 / M@13 | 170 |
+| WeaponCS@5 / WS@7 / GWS@15 | — | 50 + 70 + 150 |
+| Defense — Unarmored | T@1 | 10 |
+| Defense — Light | T@1 / E@13 | 60 |
+| **Subtotal** | | **1410** |
+
+> **Note on `GrantedSkills`.** Moved out of the feature block and onto the chassis, where BCS puts it
+> (the Champion's row reads `InitialSkills 10 · SubclassSkills 5 · GrantedSkills 5`). There is no
+> `ArmorAS` line: armour specialization only functions in medium or heavy armour, which this class
+> never wears.
+
+### Features — 690
+
+| Lvl | Feature | Pts |
+| :---- | :---- | :---- |
+| 1 | **Breathing Style** (subclass: stance + style rider) | 50 |
+| 1 | **Concentrated Breathing** | 110 |
+| 1 | **Focused Breathing** (Breath pool + First Form) | 10 |
+| 1 | **Sun-Forged Nichirin** | 10 |
+| 5 | **Second Breath** (2nd Breath Point + Second Form) | 40 |
+| 9 | **Nichirin Resonance** (3rd Breath Point + spirit/material) | 80 |
+| 11 | **Transparent World Glimpse** | 70 |
+| 12 | **Total Concentration** | 30 |
+| 13 | **Demon Slayer Mark** | 110 |
+| 15 | **Breath of Instinct** | 30 |
+| 19 | **Constant Total Concentration** | 150 |
+| **Subtotal** | | **690** |
+
+### **TOTAL 1410 + 690 = 2100** ✅
+
+**How the feature prices were set.** BCS allows arbitrary values — the Champion's own sheet carries
+`Divine Smite 90` and `Exalt 110` — so these are anchored to your Saint ledger and to BCS's Champion
+row rather than snapped to the proficiency tiers.
+
+| Feature | Anchor | Pts |
+| :---- | :---- | :---- |
+| Breathing Style | Saint's `The Cloth` = 50; BCS Champion's `Champion's Reaction` = 50. The compendium already budgets the style rider at 30 (Exemplary Finisher); the stance is the other 20 | 50 |
+| Concentrated Breathing | The class's `Sneak Attack`. Unconditional, scaling +2/+3/+4 per die. Well above `Cosmo Strike` (30, +1/die) and `Divine Ally` (30); sits at Saint `Ascendant Constellation` tier | 110 |
+| Focused Breathing | Saint: `Cosmo (focus pool + Signature Technique) = 10`; BCS `FocusSpell1 = 10` | 10 |
+| Sun-Forged Nichirin | BCS Champion's `ShieldBlockL01` = 10 — the level-1 small-extra slot | 10 |
+| Second Breath | Saint: 2nd Technique 10 + `Second Cosmo` (2nd focus point) 30 | 40 |
+| Nichirin Resonance | 3rd focus point 30 (Saint `Third Cosmo`) + resistance/material bypass 50 (Saint `Sixth Sense` tier) | 80 |
+| Transparent World Glimpse | Above `Sixth Sense` (50): precise rather than imprecise, and it strips circumstance bonuses to AC | 70 |
+| Total Concentration | Saint `Cloth Attunement` (30); `Meditative Focus` sits at monk 12, the same level | 30 |
+| Demon Slayer Mark | Saint `Exalt` (110) and `Seventh Sense` (110) tier — a once-per-10-minutes, 1-minute power state | 110 |
+| Breath of Instinct | `Cloth Attunement`-tier free-cast rider (30); `Qi Center` is monk 18 and this is 15 | 30 |
+| Constant Total Concentration | The level-19 capstone. Saint's `Eighth Sense` and Champion's `Hero's Defiance` are both 190; this is deliberately below them — it defies fatigue, not death | 150 |
+
+---
+
+### 2.1 Reconciliation against the values you submitted — **read this**
+
+The chassis you supplied totals **1705**, which leaves **395** for features. What is missing from it
+costs **695** — the 690-point feature block above, plus the 5-point `GrantedSkills` line the
+submitted chassis does not carry. **The submitted ledger is over budget by exactly 300.**
+
+| Line | Submitted | Pts |
+| :---- | :---- | :---- |
+| HP 10/level | — | 100 |
+| Class feat @1 | — | 10 |
+| Initial trained skills ×4 (incl. granted) | — | 20 |
+| Subclass granted skill | — | 5 |
+| ClassFeatL01-style extras | — | 0 |
+| Class DC | T1 → E9 → M17 | 170 |
+| Perception | E1 → M7 | 170 |
+| Fortitude | E1 → M9 | 170 |
+| Reflex | E1 → M7 → **L15** | **360** |
+| Will | T1 → E3 | 60 |
+| Attacks (unarmed + simple + martial) | T1 each; E5; M13 | 190 |
+| Weapon CS@5 + WS@7 + GWS@15 | — | 270 |
+| Armor (unarmored + light) | T1 each; E13; **M19** | **180** |
+| **Submitted chassis total** | | **1705** |
+| Remaining for features | 2100 − 1705 | **395** |
+| Cost of the features + the missing `GrantedSkills` line | §2 above | **690 + 5 = 695** |
+| **Overrun** | | **−300** |
+
+**Why it overruns: the chassis buys two BCS profiles at once.** Against the sheet's own
+`CLASSPROFILES` tab:
+
+| Line | **Martial** (fighter/champion) | **Martial-Skilled** (rogue) | **Submitted** | Taken from |
+| :---- | :---- | :---- | :---- | :---- |
+| HP | **10** | 8 | **10** | Martial |
+| Perception | Expert @11 | Expert @1 / Master @7 / Legendary @13 | Expert @1 / Master @7 | Martial-Skilled |
+| Fortitude | Expert @1 / **Master @9** | Expert @9 | Expert @1 / Master @9 | Martial |
+| Reflex | Expert @9 | Expert @1 / Master @7 / **Legendary @13** | Expert @1 / Master @7 / **Legendary @15** | Martial-Skilled |
+| Will | Expert @3 | Expert @3 | Expert @3 | both |
+| Weapon | Expert @5 / Master @13 | Expert @5 / Master @13 | Expert @5 / Master @13 | both |
+| Armor | Medium, Expert @13 / Master @19 | Light, Expert @13 / Master @19 | Light, Expert @13 / Master @19 | both |
+| Class DC | Expert @9 / Master @17 | Expert @9 / Master @17 | Expert @9 / Master @17 | both |
+
+BCS's own note on Martial-Skilled is that it drops to **8 HP and Expert-only Fortitude** precisely in
+order to afford Legendary Perception and Reflex. The submitted chassis takes Martial's HP *and*
+Martial's Fortitude *and* Martial-Skilled's Perception and Reflex. Take both halves and you are 300
+over — which is exactly what happened.
+
+**The two cuts made in this guide:**
+
+| Line | Submitted | Here | Δ | Reason |
+| :---- | :---- | :---- | :---- | :---- |
+| **Reflex** | E1 → M7 → **L15** = 360 | E1 → M7 = 170 | **−190** | Legendary in a save is the most expensive single line in BCS — more than the level-19 capstone. Master Reflex at **7th** already runs four levels ahead of the Saint. Bites from 15th. |
+| **Armor** | T1, E13, **M19** = 180 | T1, E13 = 70 | **−110** | A slayer wears a school uniform. The class's AC lives in stance riders — Water's *Flowing Form*, Flower's *Honorable Shadow Plum*, Serpent's *Kaburamaru's Reading* — not in proficiency. Bites from 19th. |
+| | | | **−300** | exactly the overrun |
+
+These are the cheapest 300 points *in play*: both land at 15th level or later, and neither touches
+Perception, Fortitude, HP, weapons, or the class DC. The other clean 300s, if you prefer them:
+
+- **Fortitude Master (110) + Reflex Legendary (190)** — keeps armour Master@19 and gives the pure
+  rogue save shape, but −2 Fort from 9th onward is the harshest of the three in actual play.
+- **Perception Master (110) + Reflex Legendary (190)** — cheapest on paper, worst at the table: it
+  costs initiative on a class whose whole opening move is entering a stance first.
+- **Keep the chassis and cut 300 of features** — in practice the level-19 capstone (150),
+  `Transparent World Glimpse` (70) and 80 off `Concentrated Breathing`. Not recommended; those are
+  the class.
+
+### 2.2 What was missing from the submitted list
+
+1. **No subclass line.** The Saint charges **50** for The Cloth and BCS's Champion charges **50** for
+   `Champion's Reaction`. The submitted table priced only the Breathing Style's *granted skill* (5)
+   and nothing for the **stance** or the **style rider** — which `breathing-forms-compendium-v4.md` §0.6 already
+   budgets at **30 pts**. Added at **50**.
+2. **No feature lines at all.** Every chassis feature in `breath-slayer-class-feats-v4.md` §1.1 —
+   `Concentrated Breathing`, `Focused Breathing`, `Second Breath`, `Nichirin Resonance`,
+   `Total Concentration`, `Breath of Instinct` — was unpriced. That is the 395-vs-695 gap.
+3. **Two features named but never written anywhere.** `breath-slayer-v4-changelog.md` §8 flags this: **Demon Slayer
+   Mark** and **Transparent World Glimpse (L11)** are referenced as prerequisites and upgrade targets
+   by `Awakened Mark` (feat 18), `Transparent World` (feat 14) and Love's *Marked Wildclaw*
+   (feat 12), but no text for either existed in the repository. **Both are written in §4 of this
+   guide, and both are new.** Read them before you sign off on the ledger.
+4. **No level-19 chassis feature.** Every PF2e class has one; BCS's Champion spends **190** there
+   (`Hero's Defiance`) and the Saint spends 190 (Eighth Sense). Filled with **Constant Total
+   Concentration** (150).
+5. **No level for the Demon Slayer Mark.** Love's *Marked Wildclaw* is a **feat-12** Form gated on
+   the Mark being active. The Mark is placed at **13** here — the nearest legal chassis slot. If you
+   want the Form live the moment it is bought, swap the Mark to **11** and `Transparent World
+   Glimpse` to **13**; the ledger is unaffected.
+6. **`ClassFeatL01-style extras — 0`.** This is BCS's `ShieldBlockL01` slot — the 10-point "one small
+   extra thing at level 1" line the Champion uses for Shield Block. It is **not** 0 here: the class
+   spends it on **Sun-Forged Nichirin**.
+7. **No `GrantedSkills` line.** BCS separates `InitialSkills` / `SubclassSkills` / `GrantedSkills`.
+   You had the first two; the third (5) buys the level-5 second granted skill.
+8. **Will stops at Expert @3 and never advances.** That matches both BCS martial profiles and the
+   Saint, so it is correct — but it is the class's one real hole, and `Unshakeable Core` (feat 8)
+   only patches fear. Flag it to any player planning to fight casters.
+9. **No `ArmorAS` line — correctly.** BCS prices Armor Specialization at 50 and the Champion buys it
+   at 7th, but it only functions in medium or heavy armour. Omitted on purpose, not by oversight.
+10. **Key ability was unstated.** It is **Strength or Dexterity**. Stone and Love recommend Strength;
+    Serpent's stance grants finesse, which makes Dexterity fully viable there.
+
+---
+
+## 3 — Advancement table
+
+| Lvl | Features |
+| :---- | :---- |
+| 1 | Ancestry & background, initial proficiencies, **Breathing Style**, **Concentrated Breathing**, **Focused Breathing** (+First Form, 1 Breath Point), **Sun-Forged Nichirin**, Breath Slayer feat |
+| 2 | Breath Slayer feat, skill feat |
+| 3 | **Slayer's Resolve** (Will Expert), general feat, skill increase |
+| 4 | Breath Slayer feat, skill feat |
+| 5 | Ability boosts, ancestry feat, **Blade Expertise** (Attacks Expert + sword crit specialization), **Second Breath** (+Second Form, 2nd Breath Point), **Slayer's Vigil** (second granted skill), skill increase |
+| 6 | Breath Slayer feat, skill feat |
+| 7 | **Evasion** (Reflex Master), **Slayer's Alertness** (Perception Master), **Weapon Specialization**, skill increase |
+| 8 | Breath Slayer feat, skill feat |
+| 9 | **Breath Expertise** (Slayer DC Expert), **Juggernaut** (Fortitude Master), **Nichirin Resonance** (3rd Breath Point), ancestry feat, skill increase |
+| 10 | Ability boosts, Breath Slayer feat, skill feat |
+| 11 | **Transparent World Glimpse**, general feat, skill increase |
+| 12 | **Total Concentration**, Breath Slayer feat, skill feat |
+| 13 | **Blade Mastery** (Attacks Master), **Uniform Expertise** (Unarmored & Light Expert), **Demon Slayer Mark**, ancestry feat, skill increase |
+| 14 | Breath Slayer feat, skill feat |
+| 15 | Ability boosts, **Breath of Instinct**, **Greater Weapon Specialization**, general feat, skill increase |
+| 16 | Breath Slayer feat, skill feat |
+| 17 | **Breath Mastery** (Slayer DC Master), ancestry feat, skill increase |
+| 18 | Breath Slayer feat, skill feat |
+| 19 | **Constant Total Concentration**, general feat, skill increase |
+| 20 | Ability boosts, Breath Slayer feat, skill feat |
+
+**Initial proficiencies:** Perception **Expert** · Fortitude **Expert**, Reflex **Expert**, Will
+Trained · Acrobatics *or* Athletics (your choice) + 3 others Trained, **plus your Breathing Style's
+granted skill** · Unarmed, simple and martial weapons Trained · Unarmored and light armour Trained ·
+**Slayer DC** Trained.
+**HP:** 10 + Con per level. **Key ability:** Strength or Dexterity.
+**Nichirin blade:** any martial sword-group weapon (a *katana* by default; a *whip* for Love, a
+*kukri* or *shortsword* for Serpent) forged from scarlet crimson ore.
+
+> **Two things to say at session zero.** (1) **Perception is Expert at 1st** — unusual, and it is the
+> class's signature; you win initiative and you are the party's eyes. (2) **Will never rises past
+> Expert.** A Breath Slayer is a body, not a mind. `Unshakeable Core` (feat 8) covers fear and
+> nothing else.
+
+---
+
+## 4 — Core features
+
+### Breathing Style (L1) — *subclass*
+
+Choose one of the eleven Breathing Styles in §5. It gives you, permanently:
+
+- a **granted skill** (you become trained in it);
+- a **stance**, a 1-action action with the stance trait that you can enter while wielding a nichirin
+  blade;
+- a **style rider**, a passive that functions only while you are in that stance;
+- the **Form ladder** you will learn from — First and Second Form from the chassis, Third, Fourth and
+  Final Form from feats.
+
+A **Breathing Stance** ends when any stance would: you fall unconscious, you enter another stance, or
+the encounter ends. Nearly every feature and feat in this class checks *"while you are in a Breathing
+Stance,"* so entering one is the first action of most fights until 12th level (`Stance Savant`) or
+19th (`Constant Total Concentration`).
+
+### Concentrated Breathing (L1)
+
+*This is the class's floor. Read it before you read anything else.*
+
+While you are in a Breathing Stance and wielding a nichirin blade, your Strikes deal **+2 precision
+damage per weapon damage die**. This increases to **+3 at 9th level** and **+4 at 17th level**.
+
+> At four weapon damage dice that is **+8 / +12 / +16** on every Strike, with no resource spent and
+> no condition to set up. A Breath Slayer whose pool is empty is still a Breath Slayer.
+> *Anchors:* `Sneak Attack` (1d6 → 4d6 at 17, but gated on off-guard), `Rage` (+2 → +18 at 15),
+> `Precise Strike` (+2 → +6 at 17, gated on Panache).
+
+### Focused Breathing (L1)
+
+You gain a focus pool of **1 Breath Point** and learn your Breathing Style's **First Form**.
+
+**Breath Points** are Focus Points with a different name. Forms are focus spells with the **slayer**
+trait: they cost **1 Breath Point**, use your **Slayer DC** and key ability, have no rank, and are
+automatically heightened to half your level rounded up. You **Refocus** by settling your breathing for
+10 minutes, which restores 1 Breath Point (all of them from 12th level — see *Total Concentration*).
+
+Your pool grows on the chassis and nowhere else: **1 at 1st, 2 at 5th, 3 at 9th.** No feat in this
+class grants Breath Points. Three Forms per encounter is the hard ceiling, however many Forms you know.
+
+### Sun-Forged Nichirin (L1)
+
+You carry a nichirin blade, forged from scarlet crimson iron sand and ore quarried from a mountain
+that stands in sunlight all year. It takes your colour the first time you hold it.
+
+- Your nichirin blade is **magical**.
+- It cannot be permanently destroyed. If it is broken or lost, a Corps swordsmith reforges or replaces
+  it during your next week of downtime, at no cost, with all its runes intact.
+- Any weapon a feat or Form calls a "nichirin blade" means this one. If you wield a different weapon,
+  Forms and stance riders do not function.
+
+> You buy potency, striking and property runes for it exactly as any other martial does. Unlike the
+> Saint, this class is **not** pre-paid for its weapon — do not double up.
+
+### Slayer's Resolve (L3)
+
+Your proficiency rank for Will saves increases to expert.
+
+### Blade Expertise (L5)
+
+Your proficiency ranks for unarmed attacks, simple weapons and martial weapons increase to expert, and
+you gain the **critical specialization effect** of your nichirin blade's weapon group.
+
+### Second Breath (L5)
+
+You learn your Breathing Style's **Second Form**, and your focus pool increases to **2 Breath Points**.
+
+### Slayer's Vigil (L5)
+
+You become trained in one additional skill of your choice from Acrobatics, Athletics, Deception,
+Diplomacy, Intimidation, Medicine, Stealth and Survival. You also carry Corps standing: at any Demon
+Slayer Corps estate, waystation or Butterfly Mansion you can claim lodging, food, ordinary equipment
+repair and a night's medical attention without payment or a check.
+
+### Evasion / Slayer's Alertness / Weapon Specialization (L7)
+
+Your proficiency ranks for **Reflex saves** and for **Perception** increase to master. When you roll a
+success on a Reflex save, you get a critical success instead. You also gain **Weapon Specialization**:
++2 damage with weapons and unarmed attacks in which you are an expert, +3 if master, +4 if legendary.
+
+### Breath Expertise / Juggernaut (L9)
+
+Your proficiency rank for your **Slayer DC** increases to expert, and your proficiency rank for
+**Fortitude saves** increases to master. When you roll a success on a Fortitude save, you get a
+critical success instead.
+
+### Nichirin Resonance (L9)
+
+Your focus pool increases to **3 Breath Points** — its permanent maximum. Your breathing has also
+worked itself into the steel:
+
+- Your nichirin Strikes and your Forms may deal **spirit** damage instead of their normal damage type,
+  chosen each time you Strike or use a Form.
+- They **ignore physical resistance up to half your level**.
+- Your nichirin blade counts as **cold iron and silver** against all creatures.
+
+> This absorbs the old feat-10 *Crimson Blade* wholesale. Every Form in the book deals slashing, fire,
+> electricity or sonic — all commonly resisted at high level — and a demon-slayer whose blade does not
+> answer that is a design hole. *Anchors:* `Inner Upheaval`'s free choice of damage type at monk 1,
+> `Overwhelming Breath` (monk 12), `Overwhelming Spellstrike` (magus 12).
+
+### Transparent World Glimpse (L11)
+
+> ✦ **NEW in this guide.** Named as an upgrade target by `Transparent World` (feat 14) but never
+> written anywhere. This is its text.
+
+You have begun to see the body beneath the skin — the muscle under the tension, the blood under the
+muscle, the bone under the blood. While you are in a Breathing Stance:
+
+- You gain **imprecise blood sense** out to **30 feet**. You automatically detect the presence and
+  location of every creature within that range that has blood or an equivalent circulatory fluid,
+  regardless of light, cover, concealment, invisibility, or the hidden and undetected conditions. It
+  does not detect constructs, oozes, or most undead.
+- Once per round, when you Strike a creature within 30 feet, you may **read its flow**: that Strike
+  ignores the target's concealment and needs no flat check against a hidden target, and the target's
+  **circumstance bonuses to AC do not apply** against it.
+- You always know whether a creature within 30 feet is living, undead, a fiend, or a construct.
+
+> *Pricing:* above the Saint's `Sixth Sense` (50) — that is an imprecise sense with an off-guard
+> rider; this adds an AC-stripping Strike rider. Deliberately **not** full concealment negation: that
+> is `Transparent World`, the level-14 feat, which turns this on continuously and adds HP reading.
+
+### Total Concentration (L12)
+
+When you Refocus, you regain **all** of your Breath Points instead of 1.
+
+> *Anchor:* `Meditative Focus` is **monk 12**, verbatim, and `Bloodline Focus` (**sorcerer 12**) is
+> the same effect at the same level. v3 placed this at feat 18, six levels behind two other classes,
+> on the class whose entire identity is its focus pool.
+
+### Blade Mastery / Uniform Expertise (L13)
+
+Your proficiency ranks for unarmed attacks, simple weapons and martial weapons increase to master. Your
+proficiency ranks in unarmoured defence and light armour increase to expert.
+
+### Demon Slayer Mark (L13)
+
+> ✦ **NEW in this guide.** Named as a prerequisite by `Awakened Mark` (feat 18) and as a gate by
+> Love's *Marked Wildclaw* (feat 12), but never written anywhere. This is its text.
+
+**Free action** · **Frequency** once per 10 minutes · **Trigger** You are at half Hit Points or fewer,
+or a creature critically hits you, while you are in a Breathing Stance.
+
+The mark surfaces across your skin in your style's colour and burns there for **1 minute**. Choose one
+benefit when you activate it:
+
+- **Godspeed** — you gain a **+10-foot status bonus** to all your Speeds; or
+- **Ignition** — the **first Form you use** during the duration costs no Breath Point. This cannot be
+  a Final or Forbidden Form.
+
+While the mark is active, your Demon Slayer Mark counts as **active** for any Form, feat or effect
+that reads it.
+
+> **Say this at the table.** In the source material a marked slayer burns through their own lifespan
+> and dies at twenty-five. Nothing here enforces that, and nothing should — but it is the reason the
+> Mark is a once-per-10-minutes emergency and not a stance you live in. GMs who want the price on the
+> page can rule that each *day* on which the Mark is used costs a year off the end.
+>
+> *Pricing:* 110 — Saint `Exalt` and `Seventh Sense` tier, a once-per-10-minutes power state with a
+> real trigger. `Awakened Mark` (feat 18) later grants **both** benefits at once and adds +1 to your
+> Forms' status bonuses.
+
+### Breath of Instinct (L15)
+
+**Frequency** once per minute. You use a Form that takes 1 action without spending a Breath Point.
+
+> *Anchor:* `Qi Center` (monk 18) — a free 1-action stance qi spell once per minute. Ours is three
+> levels earlier and restricted to 1-action Forms, which are the small ones.
+
+### Greater Weapon Specialization (L15)
+
+Your damage from weapon specialization increases to +4 with expert proficiency, +6 with master, and +8
+with legendary.
+
+### Breath Mastery (L17)
+
+Your proficiency rank for your **Slayer DC** increases to master.
+
+### Constant Total Concentration (L19)
+
+*常中 — the breathing that never stops, waking or sleeping.*
+
+- You are **permanently in a Breathing Stance** you know. You never spend an action to enter one; you
+  choose which stance you are in when you make your daily preparations and may change it during any
+  ten minutes of rest. **Nothing can force you out of a stance**, and you remain in it while
+  unconscious.
+- You are **immune to the fatigued condition**, you no longer need to breathe, and you cannot be
+  suffocated or drowned.
+- When you roll initiative, you **regain 1 Breath Point**, up to your maximum.
+
+> *Pricing:* 150, below the 190 that BCS's Champion pays for `Hero's Defiance` and the Saint pays for
+> `Eighth Sense`. Those two cheat death; this one refuses to stop. It also quietly retires
+> `Stance Savant` (feat 12) and `Battle Trance` (feat 10) for anyone who took them — normal for a
+> capstone, and worth telling a level-19 player they may retrain.
+
+---
+
+## 5 — The Eleven Breathing Styles
+
+*Each entry gives the granted skill, the damage type, the stance, the style rider, all four Forms in
+full, and the Final or Forbidden Form. Every Form costs **1 Breath Point**. Tags read
+`chassis 1` · `chassis 5` · `feat 8` · `feat 12` · `feat 20`, which is where on the ladder that Form
+is acquired.*
+
+**Style riders are budgeted at 30 points each** (Exemplary Finisher anchor) and stances at 20, inside
+the single 50-point `Breathing Style` line of the ledger. Every style is a **sidegrade**: choosing one
+over another never changes the total.
+
+| Style | Granted skill | Damage | Shape |
+| :---- | :---- | :---- | :---- |
+| **Water** | Acrobatics | slashing | mobile duellist; the baseline every other style is measured against |
+| **Flame** | Intimidation | fire | persistent damage that feeds its own off-guard loop |
+| **Thunder** | Athletics | electricity | charge-and-nova; the biggest single-target spike in the class |
+| **Wind** | Survival | slashing | area coverage; the best 1-action Form in the book |
+| **Stone** | Athletics | bludgeoning | bulwark and forced movement; **Strength recommended** |
+| **Sound** | Stealth | sonic | Fortitude-targeting areas and the best anti-caster rider |
+| **Flower** | Medicine | slashing | counter-duellist; manufactures off-guard for the whole party |
+| **Mist** | Stealth | slashing | concealment control; fights inside its own weather |
+| **Moon** † | Intimidation | slashing | the most aggressive style, and the only one whose rider gives its damage away |
+| **Love** | Diplomacy | slashing | the only outward-facing rider; **Strength recommended** |
+| **Serpent** | Deception | slashing | single-target, many Strikes, **no area Form at all** |
+
+† *Moon is Kokushibo's style. It suits villains, Upper-Moon-hunter campaigns, or a player on a
+dark-lineage arc.*
+
+---
+## 5.1 — The original five styles
+
+*The five styles the class shipped with. Water is the baseline; every number in §1.4 was calibrated
+against it.*
+
+### WATER BREATHING
 
 **Granted skill:** Acrobatics. **Damage type:** slashing.
 
@@ -186,7 +639,7 @@ stillness has to break.
 
 ---
 
-## FLAME BREATHING
+### FLAME BREATHING
 
 **Granted skill:** Intimidation. **Damage type:** fire.
 
@@ -251,7 +704,7 @@ damage ignores your immunities and resistances to fire) and are **slowed 1** on 
 
 ---
 
-## THUNDER BREATHING
+### THUNDER BREATHING
 
 **Granted skill:** Athletics. **Damage type:** electricity.
 
@@ -287,7 +740,7 @@ also **off-guard until the start of your next turn**. **H(+2):** +1d12.
 > ⚠ **Rescaled from v3.** v3's `2d12` base with `H(+1) +1d12` reached **10d12 (65.0)** at level 20 —
 > above `Tempest Surge`, which is a *single-target* rank-1 druid focus spell, but delivered in a
 > cone, and above every Final Form in the book. The d12 identity is preserved; the ladder now lands
-> on the 2-action cone curve. See the changelog for why this deviates from analysis §7.2's
+> on the 2-action cone curve. See `breath-slayer-v4-changelog.md` for why this deviates from the analysis's
 > "leave it as the benchmark."
 
 **Fifth Form: Heat Lightning** — *feat 8* · 1 BP · **1 action** · base rank 4
@@ -324,7 +777,7 @@ class DC: on a failure it is **stunned 1**, on a critical failure **stunned 2**
 
 ---
 
-## WIND BREATHING
+### WIND BREATHING
 
 **Granted skill:** Survival. **Damage type:** slashing.
 
@@ -387,7 +840,7 @@ end of your next turn**.
 
 ---
 
-## STONE BREATHING
+### STONE BREATHING
 
 **Granted skill:** Athletics.
 **Key ability:** Strength is the recommended key ability for this style; a Stone slayer may choose
@@ -461,12 +914,12 @@ moved**, and you automatically **critically succeed** at saves and DCs against b
 
 ---
 
-# THE FOUR EXPANDED STYLES
+## 5.2 — The four expanded styles
 
 *(From the 5e module. Each is a full subclass: granted skill + stance + 30-pt style rider + 4 forms +
 Final Form. Sidegrades, so the BCS ledger is unchanged.)*
 
-## SOUND BREATHING ⚠
+### SOUND BREATHING ⚠
 
 *Only three Sound forms are canon (First, Fourth, Fifth); the ⚠ forms are adapted from the 5e
 module's inventions.*
@@ -528,7 +981,7 @@ until the end of your next turn**.
 
 ---
 
-## FLOWER BREATHING
+### FLOWER BREATHING
 
 *Canon provides Second, Fourth, Fifth, Sixth and a literal Final Form — a perfect fit.*
 
@@ -592,7 +1045,7 @@ enforce permanent consequences for habitual use, and should not hand out casual 
 
 ---
 
-## MIST BREATHING
+### MIST BREATHING
 
 *All seven Mist forms are canon; four selected, plus Muichiro's personal Seventh as the Final Form.*
 
@@ -660,7 +1113,7 @@ Dense mist erupts in a **20-foot emanation that moves with you**. While it lasts
 
 ---
 
-## MOON BREATHING †
+### MOON BREATHING †
 
 *Kokushibo's style. GMs: it suits villains, Upper-Moon-hunter campaigns, or a player with a
 dark-lineage arc — it is deliberately the most aggressive style, and it pays for that in self-costs.*
@@ -744,7 +1197,7 @@ you Refocus**.
 
 ---
 
-# THE TWO DERIVED STYLES
+## 5.3 — The two derived styles
 
 *Added in v4.1. Unlike the four expanded styles, these two are **canon Hashira styles**, and the wiki
 states each one's parent outright: **Love Breathing is directly derived from Flame Breathing**
@@ -758,7 +1211,7 @@ labelled optional sidebar. Form text and Japanese names are taken from the Kimet
 articles for each style; where a popular secondary source contradicts the wiki, the wiki wins and the
 discrepancy is flagged.*
 
-## LOVE BREATHING
+### LOVE BREATHING
 
 *Mitsuri Kanroji's personal creation — the only Breathing Style whose creation is shown on the page.
 Canon lists six forms and demonstrates five (First, Second, Third, Fifth, Sixth); **the Fourth Form
@@ -888,7 +1341,7 @@ to your level** and a **+1 status bonus to attack rolls** until the start of you
 
 ---
 
-## SERPENT BREATHING
+### SERPENT BREATHING
 
 *Obanai Iguro's own creation, derived from Water Breathing. **All five canon forms are used** — no
 inventions were needed anywhere in this style. Serpent is the compendium's one style with **no area
@@ -997,8 +1450,7 @@ turn**, and then **dazzled for 1 minute**.
 > permanently, so it pays a Breath Point, a frequency, and a round of blindness.*
 
 ---
-
-# 11. Rank-10 audit — the monotonicity check
+## 6 — Rank-10 audit: the monotonicity check
 
 All values at **level 20 / rank 10**, all costing **1 Breath Point**. "Strike" means a full nichirin
 Strike lands on top of the listed bonus.
@@ -1040,7 +1492,407 @@ a per-Strike damage rider the kineticist does not get.
 
 ---
 
-## 12. Playtest watch list
+
+## 7 — Class feats
+
+*Design rules: an anchor is cited for every feat (±2 levels), and **feats sit outside the BCS 2100
+budget** — the 2100 in §2 buys the chassis and the class features only, exactly as it does for every
+published class.*
+
+**What v4 changed.** Breath Point pool growth moved entirely onto the chassis, so **no feat grants
+pool**. Five feats were deleted outright because the chassis now does their job:
+
+| Old feat | Fate |
+| :---- | :---- |
+| Feat 1 **Focused Breathing** | → chassis 1 |
+| Feat 4 **Second Form** | → chassis 5 |
+| Feat 8 **Rapid Concentration** | **Deleted.** Obsoleted by `Total Concentration` at 12; its `Battle Breathing` alternative survives as a standalone feat 8 |
+| Feat 10 **Mark Precursor: Crimson Blade** | → absorbed into chassis 9 (`Nichirin Resonance`) |
+| Feat 18 **Perfect Slayer's Focus** | → chassis 12 (`Total Concentration`) |
+
+**The feat tax, before and after:**
+
+| Build | v3 slots spent on the Form ladder | v4 slots |
+| :---- | :---- | :---- |
+| Single-style | 5 (feats 1 / 4 / 8 / 12 / 20) | **3** (feats 8 / 12 / 20) |
+| Full multi-style | 10 of ~11 | **8 of 11** |
+
+---
+### 7.1 The Form ladders
+
+#### Primary ladder
+
+| Source | Lvl | Grants | Pool |
+|---|---|---|---|
+| **Chassis: Focused Breathing** | 1 | Primary style's **First Form** | 1 |
+| **Chassis: Second Breath** | 5 | Primary's **Second Form** | 2 |
+| **Chassis: Nichirin Resonance** | 9 | — | 3 (cap) |
+| **Feat: Third Form** | 8 | Primary's third listed form | — |
+| **Feat: Fourth Form** | 12 | Primary's fourth listed form | — |
+| **Feat: Hidden Form** | 20 | Primary's **Final/Forbidden Form** | — |
+
+#### Secondary ladder *(requires Flowing Stance Shift, feat 4)*
+
+| Feat | Lvl | Grants | Prerequisite |
+|---|---|---|---|
+| **Borrowed Form** | 6 | Secondary style's **First + Second Form** | Flowing Stance Shift |
+| **Adopted Form** | 10 | Secondary's third form | Borrowed Form; primary **Third Form** |
+| **Assimilated Form** | 14 | Secondary's fourth form | Adopted Form; primary **Fourth Form** |
+
+*Borrowed Form grants two forms because a single low-rank form at level 6 underpays the slot (anchor:
+`Multifarious Muse`-style versatility feats), and because both of those rungs are now free on the
+primary ladder anyway. The primary-ladder prerequisites still enforce "your true style leads."*
+**No slayer ever learns a second Final Form**, and no feat on this ladder grants pool.
+
+
+### 7.2 The feat list
+
+#### Level 1
+
+**Slayer's Conditioning** — *Anchor: Fleet*
++5-foot status bonus to Speed while in a Breathing Stance and wearing no heavier than light armor.
+
+**Demon Lore** — *Anchor: Monster Hunter (ranger 1)*
+Trained in Demon Lore (or Fiend/Undead Lore, GM's call). When you Recall Knowledge about a fiend or
+undead, a success also reveals one weakness or resistance; a critical success also reveals its lowest
+save.
+
+**Water-Wheel Footwork** — *Anchor: Nimble Dodge (rogue 1)*
+**Reaction.** *Trigger:* You are targeted by a melee attack while in a stance. You gain a +2
+circumstance bonus to AC against the triggering attack.
+
+**Deep Breath** — *Anchor: small recovery utility, feat 1 tier*
+**Frequency** once per 10 minutes. 1 action: gain temporary Hit Points equal to half your level
+(minimum 1) for 1 minute, and attempt an assisted flat check (DC 10) to end one source of persistent
+bleed on yourself.
+
+**Flowing Step** — ✦ NEW — *Anchor: a once-per-round 5-foot upgrade; strictly below `Nimble Roll` (rogue 8)*
+Once per round while in a Breathing Stance, your Step covers **10 feet** instead of 5.
+*(Fills the slot vacated by Focused Breathing. Every Breathing Style rewards footwork; this is the
+cheapest way to buy into that at level 1 without touching damage.)*
+
+---
+
+#### Level 2
+
+**Nichirin Draw** — *Anchor: Quick Draw (rogue/ranger 2)*
+Draw your nichirin blade and Strike as a single action. If you were hidden or undetected by the
+target, the Strike deals +1d6 precision damage (once per combat).
+
+**Slayer's Senses** — *Anchor: sense feats, investigator/rogue 2 tier*
+Choose smell or hearing. **Smell:** imprecise scent, 30 feet. **Hearing:** within 15 feet, dim-light
+concealment doesn't apply against you. You can take this feat twice (second time at 6th level) for
+both.
+
+**Guard Break** — *Anchor: Snagging Strike (fighter 1), taxed one level for stance synergy*
+While in a stance, make a Strike; on a hit the target is off-guard against the next attack made
+against it before the start of your next turn.
+
+**Twin-Blade Discipline** — ✦ MOVED from feat 6, flourish removed — *Anchor: Double Slice (fighter 1)*
+**Requirement:** You are wielding a nichirin blade in each hand and are in a stance.
+2 actions: Strike once with each blade. Both Strikes use your current multiple attack penalty, then
+your MAP increases as though you had made one Strike.
+> *v3 charged **five levels** of tax over `Double Slice` and then bolted a flourish tag on top, which
+> blocked it from combining with any other flourish. One level of tax for the stance synergy is
+> enough; the flourish tag is gone.*
+
+---
+
+#### Level 4
+
+**Flowing Stance Shift** — *Anchor: versatility feats; strictly weaker than Stance Savant (monk 12)*
+Learn a second Breathing Style's **stance only** — no style rider, no granted skill. This opens the
+secondary Form ladder (Borrowed / Adopted / Assimilated Form at 6 / 10 / 14). Entering any stance
+costs 1 action as normal.
+
+**Breath-Enforced Blade** — *Anchor: Ki Strike's damage-type flexibility*
+While in a stance, your nichirin Strikes can deal your style's damage type instead of the weapon's,
+chosen per Strike. With a secondary stance active, use that style's type.
+*(Note: chassis **Nichirin Resonance** at 9th level supersedes this for most purposes by adding
+spirit. This feat is the level-4 down payment.)*
+
+**Anticipate Lunge** — *Anchor: `Stand Still` (monk 4). Note that fighters and champions get
+`Reactive Strike` — a broader trigger, and it doesn't count toward MAP — at **level 1**.*
+**Reaction.** *Trigger:* A creature within your reach Strides, Steps, or Flies away from you while
+you're in a stance. Make a nichirin Strike against it.
+
+**Cutting Gale** — ✦ MOVED from feat 8 — *Anchor: Swipe (fighter/barbarian **4**)*
+2 actions, flourish. Make one nichirin Strike against each of two adjacent enemies. Your multiple
+attack penalty increases only after both Strikes resolve.
+> *v3 claimed "heavily discounted `Whirlwind` (fighter 14)." The real anchor is `Swipe` at level 4 —
+> and Cutting Gale is already better than Swipe, because it rolls two attacks instead of one. Sitting
+> it at 8 made it four levels late for something strictly stronger than a level-4 feat.
+> The `Whirlwind Strike` version now exists properly, at 14, as **Whirling Gale**.*
+
+---
+
+#### Level 6
+
+**Borrowed Form** — *(secondary ladder; see §7.1)*
+
+**Flowing Water Counter** — ✦ TRIGGER NARROWED — *Anchor: Dueling Riposte (fighter 8)*
+**Reaction.** *Trigger:* A melee Strike against you **critically fails** while you're in a stance.
+Step, then Strike the triggering creature at your current multiple attack penalty.
+> *v3 triggered on **fail or critical fail**, two levels earlier than `Dueling Riposte`, and threw in
+> a free Step. This was the one place the document was over-generous. The wider trigger now costs a
+> feat of its own — **Perfected Water Counter**, level 12.*
+
+**Twin-Blade Discipline** *(if not taken at 2)* — see Level 2.
+
+**Scent of Blood** — *Anchor: Blind-Fight (fighter 8), discounted for narrow scope*
+**Prerequisite:** Slayer's Senses (smell). Creatures below half Hit Points within your scent range
+are automatically detected unless they mask their scent.
+
+**Ragged Breath** — ✦ NEW — *Anchor: `Retributive Focus` (champion 18), `Surging Focus` (cleric 8), `Linked Focus` (wizard 4)*
+**Frequency** once per day. **Requirement:** You have **0 Breath Points** and are in a Breathing
+Stance. 1 action: draw a shuddering breath and regain **1 Breath Point**.
+> *Every "regain 1 Focus Point" feat in the game is **once per day**, from wizard 4 through champion
+> 18 — and `Retributive Focus` carries the same empty-pool requirement this feat does. Level 6 with
+> a once-per-day frequency sits inside that band. Fills the slot Twin-Blade Discipline vacated, and
+> answers the balance analysis's finding that the class's sustained floor collapses to zero the moment
+> the pool is dry.*
+
+---
+
+#### Level 8
+
+**Third Form** — *(primary ladder)*
+Learn your primary style's third listed form.
+
+**Battle Breathing** — *Anchor: focus-economy feats at the 8–12 tier*
+You gain a +1 circumstance bonus to the attack roll or DC of the **first Form you use in each
+combat**.
+> *v3's `Rapid Concentration` (2 points back on Refocus) is deleted — chassis **Total Concentration**
+> at 12 returns the whole pool, so a partial-recovery feat at 8 is a trap that stops mattering four
+> levels later.*
+
+**Cutting Gale** *(if not taken at 4)* — see Level 4.
+
+**Unshakeable Core** — *Anchor: save-rider feats at 8*
+A success on a Will save against a fear effect is a critical success instead. While in any Breathing
+Stance, allies within 10 feet gain a +1 circumstance bonus to saves against fear.
+
+**Suffocating Pressure** — ✦ NEW — *Anchor: `Demoralize` / `Intimidating Glare`, upgraded to class DC*
+**Frequency** once per round. 1 action (concentrate, emotion, fear, mental). While in a Breathing
+Stance, choose one creature within 30 feet that can see you. It attempts a Will save against your
+class DC.
+- **Failure** It is frightened 1.
+- **Critical Failure** It is frightened 2 and can't reduce its frightened value below 1 until the end
+  of your next turn.
+
+If the creature was **already frightened** when you used this action, it is also **off-guard to you**
+until the end of your next turn, regardless of its save.
+> *A pure-condition feat: no damage, and it feeds Concentrated Breathing and the Flower/Thunder
+> riders by manufacturing off-guard without a flanking partner.*
+
+---
+
+#### Level 10
+
+**Adopted Form** — *(secondary ladder)*
+
+**Total Concentration: Battle Trance** — *Anchor: focus-economy, monk 10–12*
+**Frequency** once per day. When you roll initiative, regain 1 Breath Point (up to your maximum).
+
+**Read the Opening** — *Anchor: Devise-a-Stratagem-adjacent economy*
+1 action. Choose one enemy you can see. Your next nichirin Strike against it this turn gains a +1
+circumstance bonus to the attack roll (+2 if you have hit it with a Form this combat).
+
+**Twin-Blade Cascade** — ✦ NEW — *Anchor: the analysis's own "leave it at 6 and let it make three Strikes"*
+**Prerequisite:** Twin-Blade Discipline.
+Twin-Blade Discipline becomes **3 actions** and makes **three** Strikes, alternating blades. All three
+use your current multiple attack penalty, then your MAP increases as though you had made one Strike.
+> *`Impossible Flurry` (ranger 18) is six Strikes for three actions, free and at-will. Three Strikes
+> at flat MAP for three actions, gated behind a feat, sits comfortably at 10.*
+
+---
+
+#### Level 12
+
+**Fourth Form** — *(primary ladder)*
+Learn your primary style's fourth listed form.
+
+**Stance Savant** — *Anchor: `Reflexive Stance` (monk 12) — identical effect, identical level*
+**Trigger:** You roll initiative. Enter a Breathing Stance you know.
+> *v3 cited "Stance Savant (monk 12)". No feat by that name exists in the Remaster; the feat that
+> does exactly this, at exactly this level, is `Reflexive Stance`. The homebrew name is kept.*
+
+**Persistent Ember** — *Anchor: Bloody Debilitation-tier persistent riders*
+**Prerequisite:** Flame, Thunder, or Moon style (primary or secondary). Your Forms' persistent damage
+dice increase one step, and a creature taking your style's persistent damage at the start of its turn
+is off-guard to you until the end of your next turn.
+> *Ruling for v4: this increases the **die size** of persistent damage from Forms. It does **not**
+> apply a second time to the Flame stance's flat per-die persistent fire.*
+
+**Resonant Opening** — *Anchor: debuff-extension feats at 10–12*
+**Prerequisite:** Sound, Flower, Mist, or **Serpent** style (primary or secondary). When one of your
+Forms makes a creature off-guard, dazzled, or deafened, that condition lasts 1 additional round. Once
+per creature per combat.
+> *v4.1 adds Serpent, whose entire ladder is built on manufactured off-guard — First Form supplies it
+> on a Step, Second Form supplies it outright, Coil Choke supplies it until the target Escapes.
+> Love is deliberately **not** on this list: its rider points at your allies, so its natural feat
+> partners are `Unshakeable Core` (8) and `Selfless Guard` (16) instead.*
+
+**Perfected Water Counter** — ✦ NEW — *Anchor: `Dueling Riposte` (fighter 8) widened four levels later*
+**Prerequisite:** Flowing Water Counter.
+Flowing Water Counter's trigger widens to **any melee Strike against you that fails or critically
+fails**, and the riposte Strike does not increase your multiple attack penalty.
+
+---
+
+#### Level 14
+
+**Assimilated Form** — *(secondary ladder)*
+
+**Transparent World** — *Anchor: Blind-Fight fully online + an info rider; upgrades the L11 chassis feature*
+Your Transparent World Glimpse works continuously while you're in a stance: you ignore concealment
+entirely, and invisible creatures are merely hidden to you. Once per round, when you hit a creature,
+you learn its remaining HP category (healthy / bloodied / near death).
+
+**Two-Style Flow** — *Anchor: strictly weaker `Fuse Stance` (monk 20) precursor*
+**Prerequisite:** Flowing Stance Shift. Once per round, swap between your two known stances as a free
+action.
+
+**Whirling Gale** — ✦ NEW — *Anchor: `Whirlwind Strike` (fighter/barbarian **14**), exact parity*
+**Prerequisite:** Cutting Gale.
+3 actions, flourish. Make one nichirin Strike against **each enemy within your reach**. Your multiple
+attack penalty increases only after all the Strikes resolve.
+> *This is what v3's Cutting Gale claimed to be. It now exists, at the level `Whirlwind Strike`
+> actually sits.*
+
+> ⚠ **Slot congestion note (carried over from v3):** the full multi-style build wants Assimilated
+> Form *and* Two-Style Flow at 14 and can only take one. This is deliberate — the dual-style path is
+> supposed to cost something — but flag it to your players at level 4, when they commit.
+
+---
+
+#### Level 16
+
+**Selfless Guard** — *Anchor: champion-reaction / Bodyguard tier at 14–16*
+**Reaction.** **Frequency** once per 10 minutes. *Trigger:* An ally within your Speed is targeted by
+an attack you can see. Stride to the ally; if you end your movement adjacent to them, you become the
+target of the attack instead.
+
+**Breath of Endurance** — *Anchor: physical-perfection tier (monk 16)*
+You age slowly, need only 4 hours of sleep, and gain a +2 circumstance bonus to Fortitude saves
+against fatigued and drained effects. At half Hit Points or lower, you gain resistance to bleed
+damage equal to half your level.
+> *Ruling: Final/Forbidden Form self-costs are **unavoidable** and unaffected by this feat. That
+> includes Moonbow's drained, Rengoku's fire damage, and Equinoctial Vermilion Eye's blindness.*
+
+**Slayer's Reprisal** — ✦ NEW — *Anchor: `Furious Vengeance` (barbarian **16**), exact level parity*
+**Reaction.** **Frequency** once per 10 minutes. *Trigger:* An ally within 30 feet is reduced to 0
+Hit Points, or a creature within your reach critically hits you, while you're in a Breathing Stance.
+**Effect:** Use a Form you know that takes 1 or 2 actions, spending a Breath Point as normal. You
+can't use a Final/Forbidden Form this way.
+> *`Furious Vengeance` is free, at-will, and unlimited, but triggers only on a critical hit against
+> you and only yields one Strike. Ours has the broader trigger and yields a whole Form, so it pays
+> with a Breath Point and a once-per-10-minutes frequency.*
+
+---
+
+#### Level 18
+
+**Awakened Mark** — *Anchor: Exalt-tier chassis upgrade*
+**Prerequisite:** Demon Slayer Mark. At half Hit Points or lower your Mark manifests: you gain
+**both** Mark benefits (+10-foot status bonus to Speed **and** the once-per-day free Form), and your
+Forms' status bonuses increase by 1.
+> *Updated for v4: the free-Form benefit now costs nothing rather than "2 FP," since no Form costs 2
+> points any more. It still cannot be applied to a Final/Forbidden Form.*
+
+**Unbroken Cadence** — ✦ NEW — *Anchor: `Impossible Flurry` (ranger 18) sets the level-18 ceiling*
+You can use **two actions with the flourish trait** in the same turn instead of one. You still can't
+use the same Form twice in a turn.
+> *Powerful, and correctly priced: every flourish Form still costs a Breath Point, so the pool caps
+> what this can do to three Forms in an encounter.*
+
+**Breath of the Departed** — ✦ NEW — *Anchor: level-18 last-stand effects; genre-defining*
+**Frequency** once per day. **Trigger:** You are reduced to 0 Hit Points while in a Breathing Stance.
+**Effect:** Before you fall unconscious, use a Form you know that takes 1, 2, or 3 actions. You spend
+a Breath Point if you have one; **if you have none, you use the Form anyway**. Then the triggering
+effect resolves as normal.
+> *This is the only place in the class where a Form fires on an empty pool, and it costs a feat at
+> 18, a once-per-day frequency, and being at 0 HP.*
+
+---
+
+#### Level 20
+
+**Hidden Form** — *(the capstone; see your style's Final/Forbidden Form in §5)*
+**Prerequisite:** Fourth Form. Learn your primary style's **Final/Forbidden Form** (1 Breath Point,
+once per 10 minutes, with its style's self-cost).
+
+**Breath of the First** — *Anchor: Fuse Stance (monk 20)*
+**Prerequisite:** Two-Style Flow. Merge your two stances into a single named stance of your creation
+with both stances' benefits and both styles' damage types. You count as being in both styles' stances
+for Forms and feat prerequisites.
+
+---
+
+### 7.3 Complete feat table
+
+| Lvl | Feats available |
+|---|---|
+| 1 | Slayer's Conditioning, Demon Lore, Water-Wheel Footwork, Deep Breath, **Flowing Step** ✦ |
+| 2 | Nichirin Draw, Slayer's Senses, Guard Break, **Twin-Blade Discipline** ↓ |
+| 4 | Flowing Stance Shift, Breath-Enforced Blade, Anticipate Lunge, **Cutting Gale** ↓ |
+| 6 | *Borrowed Form*, Flowing Water Counter ⚖, Scent of Blood, **Ragged Breath** ✦ |
+| 8 | **Third Form**, Battle Breathing, Unshakeable Core, **Suffocating Pressure** ✦ |
+| 10 | *Adopted Form*, Battle Trance, Read the Opening, **Twin-Blade Cascade** ✦ |
+| 12 | **Fourth Form**, Stance Savant, Persistent Ember, Resonant Opening, **Perfected Water Counter** ✦ |
+| 14 | *Assimilated Form*, Transparent World, Two-Style Flow, **Whirling Gale** ✦ |
+| 16 | Selfless Guard, Breath of Endurance, **Slayer's Reprisal** ✦ |
+| 18 | Awakened Mark, **Unbroken Cadence** ✦, **Breath of the Departed** ✦ |
+| 20 | **Hidden Form**, Breath of the First |
+
+**Bold** = primary Form ladder · *Italic* = secondary (multi-style) ladder · ✦ new in v4 ·
+↓ moved down a tier in v4 · ⚖ rebalanced in v4.
+
+**Deleted in v4:** Focused Breathing (→ chassis 1), Second Form (→ chassis 5), Rapid Concentration
+(obsolete), Mark Precursor: Crimson Blade (→ chassis 9), Perfect Slayer's Focus (→ chassis 12).
+
+
+## 8 — Playtest & GM notes
+
+### 8.1 Feats — audit summary
+
+- **The feat tax is fixed.** A single-style slayer now spends **3** of 11 feat slots on the Form
+  ladder instead of 5, and the class is playable out of the box without a pre-committed build. This
+  brings the Breath Slayer into line with your own Saint ledger, where six Techniques are chassis
+  features and every feat slot stays free.
+- **The class has a floor.** `Concentrated Breathing` means a Breath Slayer with an empty pool is
+  still contributing +8/+12/+16 per Strike at 4 weapon dice, instead of contributing nothing. That
+  was the single largest gap against the five high-DPR builds.
+- **Focus economy matches the monk.** Full-pool Refocus at 12 (`Meditative Focus` parity, not six
+  levels late), a `Qi Center` analogue at 15, and an in-combat emergency point at feat 6.
+- **Resistance is answered on the chassis, at 9.** Every style's damage type — slashing, fire,
+  electricity, sonic — is commonly resisted at high level. Spirit damage on demand solves it in one
+  line, fits the demon-slaying fantasy exactly, and costs no feat.
+- **Level 20 is still a genuine choice** between the two capstone fantasies: your style's ultimate
+  technique (**Hidden Form**) or transcendent dual-style mastery (**Breath of the First**). A slayer
+  cannot have both.
+- **The full multi-style build** now costs **8 of 11 slots** (down from 10): Flowing Stance Shift +
+  Borrowed + Adopted + Assimilated + primary Third + primary Fourth + Two-Style Flow + Breath of the
+  First. It still forgoes the Final Form, and it still collides with itself at 14 — deliberately.
+- **Secondary Form feats still grant no pool**, and neither does anything else outside the chassis,
+  so per-encounter output is hard-capped at **3 Forms** regardless of how many forms are known.
+
+### 8.3 Feats — playtest watch list
+
+1. **Unbroken Cadence** (18) — two flourishes per turn is the biggest action-economy swing in the
+   class. It is pool-limited, but watch it alongside `Awakened Mark`'s free Form.
+2. **Suffocating Pressure** (8) — off-guard on demand against an already-frightened target is a
+   strong enabler for `Concentrated Breathing` and the Flower/Thunder riders. If it trivialises
+   flanking at your table, restrict the off-guard clause to once per creature per combat.
+3. **Ragged Breath** (6) and **Battle Trance** (10) are both once-per-day single-point recoveries and
+   stack cleanly. A slayer with both, plus chassis Total Concentration at 12, has a lot of pool
+   economy for a martial — verify at your table that the ceiling is "5 Forms in the hard fight of the
+   day," not "5 Forms every fight."
+4. **Twin-Blade Cascade** (10) — three Strikes at flat MAP for three actions. Compare against a
+   Flurry ranger's turn at the same level before ruling on it.
+5. **The level-14 collision** between `Assimilated Form` and `Two-Style Flow`. If your table finds it
+   punishing rather than interesting, the cleanest fix is moving `Two-Style Flow` to 16.
+### 8.2 Forms — playtest watch list
 
 1. **Equinoctial Vermilion Eye** — a 1-minute +2-status omnibuff is still the strongest single effect
    in the class. The blindness has to bite; if your table has easy blindness removal, add "this
@@ -1083,3 +1935,67 @@ a per-Strike damage rider the kineticist does not get.
 11. **Serpent has no area Form at all.** That is deliberate, but it means a Serpent slayer contributes
     nothing to a many-weak-enemy encounter beyond ordinary Strikes. Confirm the player knows this
     before they commit at level 1; the fix, if they want one, is Flowing Stance Shift into Wind.
+
+### 8.4 GM notes for this guide
+
+- **The pool is the spike, the rider is the floor.** Three Forms per encounter, forever, at every
+  level. If a player is disappointed by that, point at `Concentrated Breathing`: their empty-pool
+  turn is still +8/+12/+16 per Strike.
+- **Everything checks "in a Breathing Stance."** Entering a stance is the first action of the first
+  turn until 12th level (`Stance Savant`) and stops mattering at 19th
+  (`Constant Total Concentration`). A GM who opens fights with the party split or surprised is
+  taxing this class harder than any other; do that on purpose or not at all.
+- **Will is the hole.** Expert at 3rd and never again. Dominate, confusion and fear land on this
+  class. That is the price of Master Perception at 7th and Master Reflex at 7th.
+- **Spirit damage from 9th is not optional flavour.** It is the answer to a genre where everything
+  the class fights resists physical damage. Do not house-rule it away without replacing it.
+- **The Demon Slayer Mark is an emergency, not a mode.** Once per 10 minutes, on a real trigger.
+  If your table wants the canonical price — a marked slayer dies at twenty-five — put it on the
+  calendar, not in the stat block.
+- **Two Final Forms is never legal.** `Hidden Form` (feat 20) is your *primary* style's Final Form,
+  and the secondary ladder ends at Fourth Form by design. A slayer picks one capstone fantasy:
+  their style's ultimate technique, or transcendent dual-style mastery (`Breath of the First`).
+- **Style choice is a sidegrade, not a power choice** — with two documented exceptions to warn
+  players about at level 1: **Serpent has no area Form anywhere in its ladder**, and **Wind's
+  1-action First Form is the deliberate outlier** at 11d6.
+- **Moon and Love recommend different key abilities.** Stone and Love read better with Strength;
+  Serpent's stance grants finesse and plays as a Dexterity style.
+
+---
+
+## Appendix — the system in one block
+
+```
+CHASSIS 1410 + FEATURES 690 = 2100   (BCS 1.4; feats are outside the budget)
+
+PROFILE: Martial HP + Martial Fortitude + Martial-Skilled Perception/Reflex,
+         with Reflex stopping at Master and armour stopping at Expert to pay for it.
+
+Forms have NO RANK. They auto-heighten to half your level, rounded up.
+Every Form costs exactly 1 BREATH POINT. Pool: 1 @ L1 · 2 @ L5 · 3 @ L9. Cap 3, forever.
+
+Base rank by tier:  First 1 · Second 2 · Third 4 · Fourth 6 · Final 10
+Acquired at:        chassis 1 · chassis 5 · feat 8 · feat 12 · feat 20
+
+Throttles:  the 3-point pool (every Form)
+            frequency 1/10 min  (Final Forms only)
+            a lasting self-cost (Final Forms only)
+            requirement clauses (individual Forms above their tier)
+
+Rank-10 targets:  1-action Strike rider  +5d6      2-action Strike rider  +7d6
+                  two Strikes            +5d6 ea.  1-action cone          11d6
+                  2-action cone/emanation 13d6     line / burst           11d6
+                  Fourth Form            13d6 + a hard condition
+                  Final Form             13d6+ area, or 4 Strikes, or a 1-min omnibuff
+
+Floor:  Concentrated Breathing +2/die (L1) → +3 (L9) → +4 (L17), unconditional.
+Focus:  full-pool Refocus at L12. Free 1-action Form 1/min at L15. +1 BP on initiative at L19.
+Saves:  Fort M@9 · Ref M@7 · Will E@3 and never again.
+Class DC (Slayer DC): T@1 / E@9 / M@17.
+```
+
+---
+
+*Breath Slayer, guide v4 — assembled from Breath Slayer Class Feats v4.1, Breathing Forms Compendium
+v4.1, the balance analysis and the v4 changelog, and costed against BCS 1.4. Companion to The Saint,
+Gold Cloth guide v4.*
