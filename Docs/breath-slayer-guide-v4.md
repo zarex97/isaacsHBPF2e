@@ -1,4 +1,4 @@
-# The Breath Slayer — PF2e Class Guide, **Version 4**
+# The Breath Slayer — PF2e Class Guide, **Version 4.2**
 
 ### *Kimetsu no Yaiba · 鬼滅の刃 · Demon Slayer Corps edition*
 
@@ -8,9 +8,15 @@ cross-referencing. Companion to **The Saint** (Gold Cloth guide v4) and costed o
 **2100-point** budget.*
 
 **Sources folded in:** `breath-slayer-class-feats-v4.md` (v4.1) · `breathing-forms-compendium-v4.md`
-(v4.1) · `breath-slayer-balance-analysis.md` · `breath-slayer-v4-changelog.md`. Where those documents
+(v4.2) · `breath-slayer-balance-analysis.md` · `breath-slayer-v4-changelog.md`. Where those documents
 left a feature *named but never written* — **Demon Slayer Mark** and **Transparent World Glimpse** —
 this guide writes it, and says so.
+
+**Changes in v4.2:** Water's Final Form **Dead Calm** is rebuilt as a pool of five **Stillness
+counters** spendable either as damage reduction that spills onto the attacker or as MAP-free
+ripostes, at 2 actions instead of 1. Moon's style rider **Erratic Crescents** is replaced by
+**Borrowed Light**, which pays out to allies rather than to its holder. Nothing else changed, and the
+2100-point ledger is untouched — both are inside the 50-point subclass line or the feat-20 slot.
 
 ---
 
@@ -533,7 +539,7 @@ over another never changes the total.
 | **Sound** | Stealth | sonic | Fortitude-targeting areas and the best anti-caster rider |
 | **Flower** | Medicine | slashing | counter-duellist; manufactures off-guard for the whole party |
 | **Mist** | Stealth | slashing | concealment control; fights inside its own weather |
-| **Moon** † | Intimidation | slashing | the most aggressive style, and it pays for it in self-costs |
+| **Moon** † | Intimidation | slashing | the most aggressive style, and the only one whose rider gives its damage away |
 | **Love** | Diplomacy | slashing | the only outward-facing rider; **Strength recommended** |
 | **Serpent** | Deception | slashing | single-target, many Strikes, **no area Form at all** |
 
@@ -593,23 +599,43 @@ next turn** and **can't Step** until the end of its next turn. Swimming or subme
 > *Rank 10: 13d6 (45.5) in a 10-ft emanation, plus a pull, off-guard, and a Step lock.
 > v3 charged 2 BP for 10d6 in a **5-foot** emanation.*
 
-**FINAL FORM — Eleventh Form: Dead Calm** — *feat 20* · 1 BP · **1 action** · **Frequency once per 10 minutes**
+**FINAL FORM — Eleventh Form: Dead Calm** — *feat 20* · 1 BP · **2 actions** · **Frequency once per 10 minutes**
 *(Giyu Tomioka's personal creation.)*
 **Duration:** until the start of your next turn.
 
-You enter perfect stillness. You gain a **+2 status bonus to AC and to Reflex saves**, and **every
-melee Strike that misses you** (to a maximum of four) triggers an immediate riposte nichirin Strike
-against the attacker. **These ripostes are made at a flat −2 penalty; they neither use nor increase
-your multiple attack penalty.** Each riposte that hits also makes its target **off-guard to you until
-the end of your next turn**.
+You settle into perfect stillness and stop moving at all. You gain a **+2 status bonus to AC and to
+Reflex saves** and **5 Stillness counters**. You can take no actions other than *Still Water*, below,
+while the form lasts; if you take any other action, Dead Calm ends immediately. Any counters you have
+not spent are lost when the duration ends.
 
-You can take no actions other than these ripostes while the form lasts; if you take any other action,
-Dead Calm ends immediately.
+> **Still Water** ✦ *(free action; it does not use your reaction, and you can take it any number of
+> times while Dead Calm lasts)*
+> **Trigger:** A creature's melee Strike targets you, and you have at least 1 Stillness counter.
+> **Effect:** Spend any number of your remaining counters. Each counter spent is **one blade's worth
+> of return**. Resolve them once the triggering Strike's outcome is known:
+>
+> - **The Strike hits or critically hits you.** Roll your nichirin blade's damage once for each
+>   counter spent — weapon dice, runes and your ability modifier, **not** `Concentrated Breathing`,
+>   and never doubled. **Reduce the triggering damage by that total.** If the total exceeds the
+>   damage, the **excess is dealt to the attacker** as slashing damage from your blade.
+> - **The Strike misses or critically misses you.** Each counter spent is instead an immediate
+>   **riposte nichirin Strike** against the attacker at a flat **−2** penalty. These ripostes
+>   **neither use nor increase your multiple attack penalty**, and each one that hits makes its
+>   target **off-guard to you until the end of your next turn**.
 
 **Self-cost:** when Dead Calm ends, you are **off-guard until the end of your next turn** — the
 stillness has to break.
-> *Anchor: `Impossible Flurry` (ranger 18) is six Strikes at full MAP progression, free and at-will.
-> Four MAP-free Strikes, conditional on enemies missing you, once per 10 minutes, sits under it.*
+> *Still water answers whatever touches it, in kind. A counter is always worth exactly one swing;
+> what changes is whether the swing has to roll to land. Against a blow that connects it is
+> guaranteed, but it has to eat the blow first and it carries no precision damage. Against a blow
+> that misses, all of it goes forward at full weight — and every swing rolls.*
+>
+> *Anchor: `Impossible Flurry` (ranger 18) is six Strikes at full MAP progression, free, at-will and
+> single-target. Five swings' worth, once per 10 minutes, for a Breath Point and **your entire turn**,
+> and only if something attacks you in melee, sits under it. **The 2-action cost is the balance
+> lever** — v4 charged 1 action for at most four conditional ripostes; v4.2 charges two for five
+> counters you can spend either way, so opening with Dead Calm means you have done nothing else that
+> round.*
 
 ---
 
@@ -1098,10 +1124,31 @@ dark-lineage arc — it is deliberately the most aggressive style, and it pays f
 Once per round, when you roll damage for a Form, you may **reroll one damage die** and take the
 higher result.
 
-**Style rider — Erratic Crescents**
-On a **critical hit** with a Form, erratic crescent blades splash **one enemy adjacent to your
-target** for slashing damage equal to your **number of weapon damage dice**.
-*(Anchor: 30 pts, crit-gated splash.)*
+**Style rider — Borrowed Light**
+*The moon makes no light of its own. What it takes from something brighter, it hands down to
+everything standing underneath it.*
+
+The first time each round that you hit a creature with a nichirin Strike or a Form, it becomes
+**moonlit** until the end of your next turn — pale crescents cling to it and will not go out.
+
+While a creature is moonlit:
+- It is **not concealed** from you or from any ally within 30 feet of it, and it **can't be hidden or
+  undetected** from them.
+- The first Strike each round that an ally **in a Breathing Stance** makes against it deals **+1
+  precision damage per weapon damage die**. If that ally's own style rider would also apply to that
+  Strike, use the higher of the two — they don't stack.
+- When you **critically hit** it, erratic crescents splash **one enemy adjacent to it** for slashing
+  damage equal to your **number of weapon damage dice**.
+
+**Lend the light.** Once per round as a free action, choose one willing ally within 30 feet. Until
+the end of your next turn they count as being **in a Breathing Stance** — for the second bullet
+above, and for nothing else.
+*(Anchor: Exemplary Finisher tier, 30 pts. The precision clause is Flower's `Blossom's Eye` handed to
+somebody else, and it is the only rider in the book that gives its holder **no direct damage at all** —
+which is the point. It sits strictly under Love's `Beloved of the Corps`, which hands an ally +1 to
+**attack rolls and** damage and needs no hit to set it up. The lending clause is what keeps the rider
+live in a party with no second slayer; without it, Moon's identity would be dead at most tables. The
+old `Erratic Crescents` splash survives as the third bullet, so nothing was lost to pay for this.)*
 
 **First Form: Dark Moon, Evening Palace** — *chassis 1* · 1 BP · **1 action** · base rank 1
 Nichirin Strike with a **+1 status bonus**, dealing **+1d6 slashing**. On a hit, crescents linger: the
@@ -1410,7 +1457,7 @@ Strike lands on top of the listed bonus.
 
 | Style | First | Second | Third | Fourth | Final (1/10 min) | Monotonic? |
 |---|---|---|---|---|---|---|
-| **Water** | Strike +5d6 / +5d8 (17.5–22.5) | Stride + Strike +7d6 (24.5), off-guard | reaction: −22 damage, riposte +5d6 | 13d6 (45.5) emanation, pull + Step-lock | ≤4 MAP-free Strikes, +2 AC/Ref | ✅ |
+| **Water** | Strike +5d6 / +5d8 (17.5–22.5) | Stride + Strike +7d6 (24.5), off-guard | reaction: −22 damage, riposte +5d6 | 13d6 (45.5) emanation, pull + Step-lock | 5 counters: damage reduction that spills onto the attacker, **or** 5 MAP-free Strikes | ✅ |
 | **Flame** | Strike +5d6 + 5d4 persist (30.0)\* | Stride + Strike +7d6 (24.5), off-guard | reaction: res 25, 5d6 all-round | 2 Strikes +4d6 ea. + locked frightened 2 | 13d6 line + Strike + unquenchable fire | ✅ |
 | **Thunder** | charge + Strike +6d6 (21.0) | 7d12 cone (45.5) | Strike +6d6 (21.0), Speed −10, stun on crit | 3 lines × 7d6 (24.5–49.0) + stun | 4d12 path + Strike +6d12 + stun 2 | ✅ |
 | **Wind** | 11d6 cone (38.5), **1 action** | Strike +7d6 (24.5) + immobilize on crit | reaction: res 15, 5d6 all-round | 13d6 (45.5) emanation, anti-fly, prone | 13d6 path + Strike +4d6 + prone-lock | ✅ |
@@ -1850,30 +1897,42 @@ for Forms and feat prerequisites.
 1. **Equinoctial Vermilion Eye** — a 1-minute +2-status omnibuff is still the strongest single effect
    in the class. The blindness has to bite; if your table has easy blindness removal, add "this
    blindness can't be removed by effects of a rank lower than 8."
-2. **Dead Calm's MAP-free ripostes** — capped at four, and only against misses. At tables that run
-   many-weak-enemy encounters, consider capping at three.
-3. **Wind's Dust Whirlwind Cutter** at 11d6 for one action is the deliberate outlier. If it dominates
+2. **Dead Calm's Stillness counters** — five, spendable either way, once per 10 minutes for two
+   actions. Two things to watch. First, the **hit** mode needs no attack roll, so against a boss with
+   one big Strike a slayer can dump all five and turn the whole blow into damage on the attacker;
+   that is intended, but check it against your own boss maths before level 20. Second, at tables that
+   run many-weak-enemy encounters the **miss** mode is five MAP-free Strikes inside a single enemy
+   round — if that dominates, cut the counters to four rather than touching either mode.
+3. **Moon's Borrowed Light** — the first style rider that pays out to somebody else. In a party with
+   one Breath Slayer it is one ally's Strike per round at +1 precision per die, which is fine. In a
+   Corps campaign with three or four slayers it fires for **all of them**, and the concealment clause
+   fires for the whole party at once. If that outruns your table the fix is to drop *Lend the light*,
+   not the precision value — the rider is supposed to be strongest exactly where the flavour says it
+   should be.
+4. **Wind's Dust Whirlwind Cutter** at 11d6 for one action is the deliberate outlier. If it dominates
    play, the fix is `1d6` base with `H(+1) +1d6` (10d6 / 35.0), not a cone-size cut.
-4. **Moonbow's unstoppable bleed** and **Rengoku's unquenchable fire** are intentionally hard to
+5. **Moonbow's unstoppable bleed** and **Rengoku's unquenchable fire** are intentionally hard to
    remove. Watch them against solo bosses, where 4d6 persistent for the rest of the fight is worth
    far more than its printed average.
-5. **Volcanic Rock's immobilize** on a basic **Fortitude** save is the best control in the book, on
+6. **Volcanic Rock's immobilize** on a basic **Fortitude** save is the best control in the book, on
    the defence fewest monsters dump. If it over-performs, restrict the immobilize to critical
    failures by creatures of your level or lower.
-6. **Flame's stance persistent damage** interacting with `Persistent Ember` (feat 12) — check at your
+7. **Flame's stance persistent damage** interacting with `Persistent Ember` (feat 12) — check at your
    table that the die-step increase and the stance's flat scaling aren't being applied twice.
-7. **Serpent's beheading clause** (Twin-Headed Reptile, Slithering Serpent). Against ordinary
+8. **Serpent's beheading clause** (Twin-Headed Reptile, Slithering Serpent). Against ordinary
    monsters it changes nothing. Against a regenerating boss, a troll, or anything with a
    return-at-0-HP ability it is decisive — which is the point, but confirm your GM is happy for a
    feat-12 Form to be the party's hard answer to regeneration.
-8. **Love's Marked Wildclaw** at 17d6 (59.5) plus an immobilize. It is gated on the Demon Slayer Mark
+9. **Love's Marked Wildclaw** at 17d6 (59.5) plus an immobilize. It is gated on the Demon Slayer Mark
    being active, which is a chassis state, not a resource — so at the levels where the Mark is
    reliably on, treat 59.5 as the real number, not the exception. If that outruns your table, drop
    the Marked bonus to +2d6.
-9. **Beloved of the Corps** is the only outward-facing style rider in the book. Watch it beside a
-   Flurry ranger or a Ruffian rogue, where +1 to attack and damage is multiplied across three or four
-   Strikes a round rather than one.
-10. **Serpent has no area Form at all.** That is deliberate, but it means a Serpent slayer contributes
+10. **Beloved of the Corps** — one of the two outward-facing style riders, alongside Moon's
+   `Borrowed Light`. Watch it beside a Flurry ranger or a Ruffian rogue, where +1 to attack and
+   damage is multiplied across three or four Strikes a round rather than one. A party carrying
+   **both** a Love slayer and a Moon slayer stacks +1 attack / +1 damage with +1 precision per die
+   on the same ally Strike; that is legal, and it is the strongest support line the class can build.
+11. **Serpent has no area Form at all.** That is deliberate, but it means a Serpent slayer contributes
     nothing to a many-weak-enemy encounter beyond ordinary Strikes. Confirm the player knows this
     before they commit at level 1; the fix, if they want one, is Flowing Stance Shift into Wind.
 
