@@ -8,8 +8,11 @@
 > especially taking into account the self-cost."*
 
 **Files:**
+- `Docs/breath-slayer-guide-v4.md` — the combined class guide (chassis, ledger, advancement table,
+  all eleven styles, all feats). Added in v4.2; this is now the canonical read.
 - `Docs/homebrewing/breathing-forms-compendium-v4.md` — replaces v3
 - `Docs/homebrewing/breath-slayer-class-feats-v4.md` — replaces v3
+- `Docs/homebrewing/BCS 1.4 (current) _ Balanced Core System.xlsx` — the costing authority
 - v3 files are left in place for diffing.
 
 ---
@@ -34,7 +37,7 @@
 | 30-ft cone / 20-ft burst → ~11d6 | ✅ **Done** | `5d6` @ r4, `H(+1) +1d6` → **11d6 (38.5)** for lines and ranged bursts. |
 | Two Strikes, same target → +4d6 each | ⚙️ **Adjusted to +5d6 at Second-Form tier** | `1d6` @ r2, `H(+2) +1d6` → +5d6 each (35.0) at Second-Form tier; Fourth-Form two-Strike forms use `2d6` @ r6 → +4d6 each, and buy extra targets or hard conditions instead of dice. Preserves monotonicity within the style. |
 | Fourth Forms → copy `Pulverizing Wake` (Strike +3d8 and an 11d8 cone) | ⚙️ **Shape-matched, not copied** | Fourth Forms land on **13d6 (45.5)** — `Pulverizing Wake`'s cone is 49.5 — but each also carries a **hard condition** (immobilize, prone, stun, party-wide off-guard, hidden). Copying the ranger form wholesale nine times would have erased nine style identities. |
-| Final Forms → 13d6 in a 30-ft area, or 4 Strikes, or a 1-min omnibuff | ✅ **Done, all three shapes used** | 13d6+ area: Rengoku, Idaten Typhoon, Honoikazuchi, Moonbow (16d6 / 56.0). 4 Strikes: Arcs of Justice, String Performance, Dead Calm (≤4 MAP-free ripostes). 1-minute omnibuff: Equinoctial Vermilion Eye, Obscuring Clouds. |
+| Final Forms → 13d6 in a 30-ft area, or 4 Strikes, or a 1-min omnibuff | ✅ **Done, all three shapes used** | 13d6+ area: Rengoku, Idaten Typhoon, Honoikazuchi, Moonbow (16d6 / 56.0). 4 Strikes: Arcs of Justice, String Performance, Dead Calm (5 Stillness counters as of v4.2 — see §9.1). 1-minute omnibuff: Equinoctial Vermilion Eye, Obscuring Clouds. |
 | Run the monotonicity check First ≤ Second ≤ Third ≤ Fourth < Final | ✅ **Passes 9/9** | Audit table: Forms v4 §11. It passed **0 of 9** in v3. |
 | `Upper Smash` has no heightening line — add one | ✅ **Done** | `3d6` @ r2, `H(+2) +1d6` → **+7d6 (24.5)**, gated behind a Requirement clause so it can stay at 1 action. |
 | `Lunar Dispersing Mist` has no damage at all — it needs a rider at feat 12 | ✅ **Rewritten** | Two Strikes at +4d6 each across two targets, dazzled + can't-Seek on each, a no-reaction Stride, concealed, and **hidden** from everything it hit. |
@@ -130,7 +133,7 @@ none of them is a damage increase.
 
 | Style | Fourth Form's condition | Final Form's teeth beyond damage |
 |---|---|---|
-| **Water** | Whirlpool **pulls** targets 5 ft toward you; crit fails can't Step | Dead Calm: **≤4 ripostes that neither use nor increase MAP**, +2 status AC/Ref |
+| **Water** | Whirlpool **pulls** targets 5 ft toward you; crit fails can't Step | Dead Calm: **5 Stillness counters** spendable as damage reduction that spills onto the attacker *or* as MAP-free ripostes, +2 status AC/Ref *(rebuilt in v4.2, §9.1)* |
 | **Flame** | Flame Tiger locks **frightened 2** — it can't drop below 1 while the fire burns | Rengoku: persistent fire that **can't be ended by the flat check** (needs an Interact, a dousing, or cold damage) |
 | **Thunder** | Rumble & Flash **stuns 1** where the lines overlap, and gives −2 to the save there | Honoikazuchi: **stunned 2** on a crit-failed Fortitude save, plus stun along the path |
 | **Wind** | Rising Dust Storm knocks **flying creatures out of the air**; difficult terrain; prone | Idaten Typhoon: crit fails **can't Stand** until the end of their next turn |
@@ -272,10 +275,11 @@ Rather than inventing riders, every distinctive clause in these two styles is a 
   many-Strikes style, and the class's answer to a Flurry ranger. Its stance granting `agile` without
   the usual smaller damage die is the compensation, and its watch-list entry warns players about the
   trade before they commit at level 1.
-- **Love carries the only outward-facing style rider in the book.** Every other rider makes *you*
-  better; `Beloved of the Corps` hands an ally +1 to attack and damage. The class had no support
-  style, and a Flame derivative built by the warmest character in the source is the right place for
-  one.
+- **Love carries the first outward-facing style rider in the book.** Every other rider at the time
+  made *you* better; `Beloved of the Corps` hands an ally +1 to attack and damage. The class had no
+  support style, and a Flame derivative built by the warmest character in the source is the right
+  place for one. *(v4.2 adds a second: Moon's `Borrowed Light`, §9.2 — which goes further and gives
+  its holder no direct damage at all.)*
 - **Diplomacy** is granted for the first time; **Deception** likewise. Skill coverage across the
   eleven styles is now Acrobatics, Athletics ×2, Deception, Diplomacy, Intimidation ×2, Medicine,
   Stealth ×2, Survival.
@@ -293,16 +297,115 @@ against anything that regenerates. Both are on the playtest watch list.
 
 ## 8. Still open
 
-- **The class guide itself has not been edited** — it isn't in this repository. §1 of the feats v4
-  document is written as a portable list of chassis amendments so it can be pasted in. Two chassis
-  features are referenced but not redefined because their current text lives only in the guide:
-  **Demon Slayer Mark** and **Transparent World Glimpse** (L11).
-- **BCS ledger.** Chassis additions in feats v4 §1.1 are new lines and will need pricing against the
-  2100-point budget. The style riders and stances are unchanged in value (30 pts each, Exemplary
-  Finisher anchor), so the *subclass* side of the ledger is untouched — but `Concentrated Breathing`,
-  `Nichirin Resonance`, `Total Concentration` and `Breath of Instinct` are genuine new chassis spend,
-  offset by five deleted feats' worth of chassis-equivalent value.
+- ~~**The class guide itself has not been edited**~~ — **closed in v4.2.** `Docs/breath-slayer-guide-v4.md`
+  now exists and is self-contained. The two features that were referenced but never written,
+  **Demon Slayer Mark** (placed at L13) and **Transparent World Glimpse** (L11), are written there
+  for the first time. Both are new text, not recovered text.
+- ~~**BCS ledger**~~ — **closed in v4.2.** Costed against BCS 1.4: **chassis 1410 + features 690 =
+  2100**. The style riders and stances are unchanged in value (30 pts each, Exemplary Finisher
+  anchor), so the *subclass* side is untouched. The submitted chassis values ran **300 over** because
+  they took BCS's **Martial** HP and Fortitude lines together with its **Martial-Skilled** Perception
+  and Reflex lines; resolved by dropping Reflex Legendary@15 (−190) and Armor Master@19 (−110). Full
+  reconciliation in the guide, §2.1–2.2.
 - **Foundry automation.** None of this is implemented in the module yet. The Forms are written in
   system-legible terms (explicit base rank, explicit `H(+N)` interval, named conditions, basic saves
   against class DC) specifically so they can be authored as focus spells with standard
   `system.heightening` interval entries rather than as bespoke rule elements.
+
+---
+
+## 9. v4.2 — Dead Calm rebuilt, and Moon learns to share
+
+Two targeted design changes, both requested at the table. Neither touches the 2100-point ledger:
+Dead Calm lives in the feat-20 slot, which is outside the budget, and Borrowed Light is a
+**replacement** inside Moon's existing 30-point style-rider line.
+
+### 9.1 Water — *Dead Calm* becomes five Stillness counters
+
+**Before (v4):** 1 action. Every melee Strike that **missed** you, to a maximum of four, triggered a
+riposte at a flat −2 that neither used nor increased your MAP. If nothing missed you, the Final Form
+did nothing.
+
+**After (v4.2):** **2 actions**. You gain **5 Stillness counters**, and a free action, *Still Water*,
+that you may take any number of times without spending your reaction. Each time a melee Strike
+targets you, you choose how many counters to spend, and the trigger's outcome decides what they do:
+
+| The triggering Strike | What a spent counter does |
+| :---- | :---- |
+| **Hits or crits you** | Roll your blade's damage (no `Concentrated Breathing`, never doubled). The total **reduces the incoming damage**, and any **excess is dealt to the attacker**. |
+| **Misses or crit-misses you** | It becomes a **riposte nichirin Strike** at a flat −2, MAP-free, making its target off-guard on a hit. |
+
+**Why this shape.** The v4 version had a dead-hand problem: a Final Form that produced literally
+nothing against an enemy who hit you. Making the counters spendable in both directions removes that
+without adding a number — *the total resource is fixed at five swings' worth*, and the only question
+is whether a swing has to roll to land.
+
+**The two modes are deliberately not equal, and they balance each other:**
+
+- **Hit mode is guaranteed** — no attack roll, no chance to whiff — but it has to eat the incoming
+  blow before any of it reaches the attacker, and it explicitly **excludes precision damage**, which
+  at 17th level is +4 per weapon damage die and the single largest term in a slayer's Strike.
+- **Miss mode carries everything** — full Strikes, `Concentrated Breathing` included, crits possible
+  — but every one of the five has to roll.
+
+At level 20 with major striking, five counters is roughly 110 points of guaranteed mitigation and
+spill-over in hit mode, against roughly 120 expected in miss mode. Miss mode stays ahead, which is
+correct: the form is still fundamentally a counter-state, and it should reward being missed.
+
+**The action cost is the balance lever.** v4 charged 1 action; v4.2 charges **2**. Because the form
+already forbids taking any other action for its duration, the action cost is exactly "how much of the
+turn you cast it on do you give up." At two actions, opening with Dead Calm means the slayer has done
+nothing else that round — which is the right price for five swings that need no Breath Points beyond
+the one that started it.
+
+**Anchor, unchanged:** `Impossible Flurry` (ranger 18) is six Strikes at full MAP progression, free,
+at-will and single-target. Five swings' worth, once per 10 minutes, for a Breath Point and a whole
+turn, contingent on being attacked in melee, sits under it.
+
+### 9.2 Moon — *Erratic Crescents* → *Borrowed Light*
+
+> *「月は自ら光らない」 — the moon does not shine on its own.*
+
+**Before (v4):** *Erratic Crescents* — on a critical hit with a Form, splash one adjacent enemy for
+slashing damage equal to your number of weapon damage dice. Crit-gated, self-facing, and the smallest
+rider in the book.
+
+**After (v4.2):** *Borrowed Light* — the first time each round you hit a creature, it becomes
+**moonlit** until the end of your next turn. A moonlit creature can't be concealed, hidden or
+undetected from you or from any ally within 30 feet of it; the first Strike each round that an ally
+**in a Breathing Stance** makes against it deals **+1 precision damage per weapon damage die**; and
+the old crit splash survives untouched as the third clause. Plus **Lend the light** — once per round,
+as a free action, one willing ally within 30 feet counts as being in a Breathing Stance for that
+precision clause and nothing else.
+
+**Why the rider and not the stance.** *Crescent Chaos* (reroll one damage die per round on a Form) is
+Moon's chaos identity and costs about 20 points; the rider is the 30-point Exemplary-Finisher slot
+where a style's *character* is supposed to live. Rewriting the rider keeps the subclass at exactly
+**50 points** — Moon stays a sidegrade, as every style must.
+
+**Why *Lend the light* exists.** A rider that only functions when a *second Breath Slayer* is in the
+party is dead text at most tables. The lending clause makes the payout land on somebody every round
+regardless of party composition, while still scaling up in exactly the campaign the flavour is
+written for — a Corps hunt with three or four slayers, where it fires for all of them at once.
+
+**Pricing.** +1 precision per weapon damage die on one ally Strike per round sits strictly under
+Love's `Beloved of the Corps`, which hands an ally **+1 to attack rolls *and* damage** and needs no
+hit to set it up. The concealment clause is small and mostly redundant against ordinary enemies. The
+crit splash is the old rider, carried over at its old value. Net: 30 points, unchanged.
+
+**What Moon gives up.** Borrowed Light is the only style rider in the book that gives its holder **no
+direct damage at all** — the concealment strip and the crit splash help you, but the precision damage
+goes entirely to somebody else. That is the trade, and it is the whole point: the most aggressive
+style in the compendium, the one with the heaviest self-costs, is now also the one that cannot
+convert its own rider into its own damage.
+
+### 9.3 Watch list additions
+
+Both changes are on the playtest watch list in the guide (§8.2, items 2 and 3):
+
+- **Dead Calm's hit mode needs no attack roll.** Against a boss that lands one big Strike, a slayer
+  can dump all five counters and convert the whole blow into damage on the attacker. Intended, but
+  check it against your own level-20 boss maths. If the miss mode dominates at a many-weak-enemy
+  table instead, cut the counters from five to four rather than touching either mode.
+- **Borrowed Light scales with party composition** in a way nothing else in the class does. If a
+  four-slayer Corps party makes it too strong, drop *Lend the light* rather than the precision value.
