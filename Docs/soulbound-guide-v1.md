@@ -1,4 +1,4 @@
-# The Soul Reaper — PF2e Class Guide, **Version 1.0**
+# Soulbound — PF2e Class Guide, **Version 1.1**
 
 ### *Bleach · ブリーチ · Shinigami / Arrancar / Quincy edition*
 
@@ -10,14 +10,31 @@ compendium — no cross-referencing. Companion to **The Saint** (Gold Cloth guid
 **Sources folded in:** the `soul-reaper-class.md` prototype supplied by the repository owner;
 **BCS 1.4** (`Docs/homebrewing/BCS 1.4 (current) _ Balanced Core System.xlsx`) for every point value;
 live PF2e system data from `pf2e_fork/packs/pf2e` for every mechanical anchor; and the Bleach primary
-wiki for every named technique. Where the prototype left a decision open — §12 "Open Questions For
+wiki for every named technique. Where the prototype left a decision open — §13 "Open Questions For
 You" — this guide makes the call and says which way it went, in §12.
+
+**What changed in v1.1 (read this first if you have v1.0):**
+
+1. **The class is now called *Soulbound*.** "Soul Reaper" was doing two jobs — the class and one of
+   its three Lineages — and now does only the second. The file is renamed to match.
+2. **Every Lineage has kidō.** A Hollow gets **Bala** (cantrip) and **Cero**; a Quincy gets
+   **Heizen** (cantrip) and **Gritz**, both canon Gintō. Two each, fixed and native, where a Soul
+   Reaper still gets six *chosen*. The old `Bala`, `Cero` and `Gintō Flask` feats are gone — they
+   were always kidō wearing a feat's coat — and are replaced by upgrades to them (§8).
+3. **The release ladder is renamed and now has four rungs, not three.** 13th level is **Full
+   Release** (Bankai / Segunda Etapa / Vollständig). **Final Release** is new, at 20th, and is the
+   *Saigo no Getsuga Tenshō* tier — available to all fifteen Spirits, not just Ichigo's.
+4. **§9 is entirely new.** Final Release grants **Severance**, a 10-round state identical for every
+   Spirit, plus one **Severing Art** unique to each — which ends the state when used and **decays
+   every round**, from 20d6 in round 1 to 8d6 in round 7, and cannot be used at all after that.
+5. **Canon corrections:** Bazz-B's technique is **Burner Finger**, not "Burning Finger"; Haschwalth's
+   weapon is **Freund Schild**; nine canon ultimates moved to where canon actually puts them (§9.4).
 
 **What changed from the prototype:**
 
 1. **Hollow-kin and Quincy are folded into the class, not split off.** The prototype made
    Resurrección a "variant subclass" and recommended Quincy be built as a **separate class**
-   (prototype §11). Both are now **Lineages** on a shared chassis, which is what you asked for. §5
+   (prototype §12). Both are now **Lineages** on a shared chassis, which is what you asked for. §5
    explains what each Lineage buys and what it pays for it.
 2. **The subclass axis is now two axes**: **Lineage** (what you *are*) and **Spirit** (what your
    power *is*). Fifteen Spirits, five per Lineage, each built from the canon character's actual
@@ -47,7 +64,7 @@ engine — it is what each Lineage buys with the same allowance:
 | | **Soul Reaper** | **Hollow** | **Quincy** |
 | :---- | :---- | :---- | :---- |
 | Buys | **Kidō breadth** (6 known) + the **Zanjutsu** technique family | **Hierro** (resistance), **Regeneración** (fast healing), **Sonido** (speed) | **Reishi weapon** (ranged), **Blut** (toggle), **Sealing** (counteract) |
-| Pays | No resistance, no fast healing, baseline Speed | **3 kidō only**, no Zanjutsu | **3 kidō only**, no Zanjutsu |
+| Pays | No resistance, no fast healing, baseline Speed | **2 fixed kidō** (Cero, Bala), no Zanjutsu | **2 fixed kidō** (Heizen, Gritz), no Zanjutsu |
 | Release ladder | Shikai → **Bankai** | Resurrección → **Segunda Etapa** | Schrift → **Vollständig** |
 | Plays as | The generalist: a duelist with answers | The bruiser: walks in and does not leave | The controller: denies the enemy their own tricks |
 
@@ -96,9 +113,9 @@ throttles live elsewhere:
 | :---- | :---- |
 | The pool itself (1 → 2 @ 5 → 3 @ 11) | Every technique |
 | **Rising Pressure's per-encounter cap** | The refill, not the spend |
-| **Frequency: once per round** | Release Techniques while in a Final Release |
-| **Frequency: once per day** | Final Release (Bankai / Segunda Etapa / Vollständig) |
-| **Self-cost** (a real, lasting condition) | Final Release, and the 20th-level capstone |
+| **Frequency: once per round** | Release Techniques while in a Full Release |
+| **Frequency: once per day** | Full Release (Bankai / Segunda Etapa / Vollständig) |
+| **Self-cost** (a real, lasting condition) | Full Release, and the 20th-level capstone |
 | **Requirement** clauses | Individual techniques that punch above their tier |
 
 ### 1.5 The design curve
@@ -116,10 +133,10 @@ one repository cannot drift apart. All values at rank 10 / level 20, all costing
 | 30-ft line / 15-ft burst | 2 | **11d6** (38.5) | `5d6` @ r4, **H(+1) +1d6** | area-for-damage trade |
 | Ranged single target (spell attack) | 2 | **13d6** (45.5) | `3d6` @ r1, **H(+1) +1d6** | `Glacial Heart` 10d6 @ r5 (witch) |
 | Reaction (defensive) | R | resistance formula + **5d6** | `2d6` @ r4, **H(+2) +1d6** | `Thermal Nimbus` = resistance equal to level |
-| **Final Release** state (L13) | 2 | a 1-minute power state, not a number | — | `Path to Perfection` tier, BCS 110 |
+| **Full Release** state (L13) | 2 | a 1-minute power state, not a number | — | `Path to Perfection` tier, BCS 110 |
 | **Capstone** (L19–20) | 1–3 | **13d6+ area**, or **4 Strikes**, or a 1-minute omnibuff | flat @ r10 | `Sever Four Dragonfly Wings` · `Hero's Defiance` |
 
-**Base rank by tier:** Release Technique = 1 · Refined upgrade = 5 · Final Release technique = 7 ·
+**Base rank by tier:** Release Technique = 1 · Refined upgrade = 5 · Full Release technique = 7 ·
 Capstone = 10. A technique acquired above its base rank is simply already heightened.
 
 ### 1.6 Balance is not only damage
@@ -144,12 +161,15 @@ system anchor, and every one of them is used somewhere in §7.
 
 ### 1.7 The floor
 
-A Soul Reaper with an empty pool must still be a functioning martial. The floor is deliberately
+A Soulbound with an empty pool must still be a functioning martial. The floor is deliberately
 **not** a damage rider — this class already has three Lineage floors that do the job:
 
-- **Soul Reaper:** the largest kidō list, and kidō cantrips cost nothing.
-- **Hollow:** Hierro and Regeneración are passive and never run out.
-- **Quincy:** Blut is a free action once per round and costs no Reiatsu.
+- **Soul Reaper:** the largest kidō list, and **Shō** costs nothing.
+- **Hollow:** Hierro and Regeneración are passive and never run out, and **Bala** costs nothing.
+- **Quincy:** Blut is a free action once per round, and **Heizen** costs nothing.
+
+All three therefore have a free, repeatable ranged option from 1st level with an empty pool. That is
+the actual floor, and it is the same floor for everyone.
 
 Say this at the table: **the pool is the spike, the Lineage is the floor.**
 
@@ -206,13 +226,20 @@ every additional group costs a flat 10.*
 | 9 | **Refined Release** | 70 |
 | 11 | **Deepening Reserve** (3rd point) | 30 |
 | 11 | **Greater Flash Step** | 30 |
-| 13 | **Final Release** (Bankai / Segunda Etapa / Vollständig) | 110 |
+| 13 | **Full Release** (Bankai / Segunda Etapa / Vollständig) | 110 |
 | 15 | **Lineage Mastery** | 30 |
-| 17 | **Perfected Final Release** | 70 |
+| 17 | **Perfected Full Release** | 70 |
 | 19 | **Unsealed** (capstone) | 110 |
 | **Subtotal** | | **800** |
 
 ### **TOTAL 1300 + 800 = 2100** ✅
+
+> **v1.1 changes nothing in this ledger.** Renaming the class, giving Hollows and Quincy two kidō
+> each, and adding Final Release at 20th are all cost-neutral: the kidō sit inside the already-priced
+> `Lineage` (50) and `Lineage Feature` (50) lines, and **Final Release is a 20th-level class feat**,
+> which BCS prices through the standard feat progression rather than as a chassis or feature line —
+> exactly as the feat it replaces was. The 13th-level line is the same 110 it always was; only its
+> name changed, from *Final Release* to **Full Release**.
 
 ### 2.1 How the feature prices were set
 
@@ -224,7 +251,7 @@ tiers.
 | Feature | Anchor | Pts |
 | :---- | :---- | :---- |
 | Reiatsu | BCS `FocusSpell1 = 10`; Saint `Cosmo` = 10; Slayer `Focused Breathing` = 10 | 10 |
-| **Rising Pressure** | Below Monk's `Action: Flurry of Blows` (**90**) and at Monk's `Metal Strikes` (**70**). It adds no action and no die — it raises resource *throughput* on a hard per-encounter ceiling. See §10.1; this is the single most likely line to need a re-cost | 70 |
+| **Rising Pressure** | Below Monk's `Action: Flurry of Blows` (**90**) and at Monk's `Metal Strikes` (**70**). It adds no action and no die — it raises resource *throughput* on a hard per-encounter ceiling. See §11.1; this is the single most likely line to need a re-cost | 70 |
 | Spirit Weapon | Champion `Divine Ally` = 30; Magus `Action: Arcane Cascade` = 30. Free rune transfer, ghost touch, and unbreakability, but no numbers | 30 |
 | Lineage | Saint `The Cloth` = 50; BCS Champion `Champion's Reaction` = 50; Slayer `Breathing Style` = 50 | 50 |
 | Released Form | The second subclass axis, priced identically to the first. Grants the Release action, a permanent form change, and one Release Technique | 50 |
@@ -236,9 +263,9 @@ tiers.
 | Lineage Feature (L5) | The Lineage's real payload — Zanjutsu access, Regeneración, or Sealing. Priced at `The Cloth` tier again because it is a second subclass grant | 50 |
 | Refined Release | Slayer `Transparent World Glimpse` = 70; Monk `Metal Strikes` = 70 | 70 |
 | Greater Flash Step | `Incredible Movement` tier; a defensive rider on an existing action | 30 |
-| **Final Release** | Monk `Path to Perfection` = **110**; Saint `Exalt` = 110; Slayer `Demon Slayer Mark` = 110. A once-per-day, 1-minute power state | 110 |
+| **Full Release** | Monk `Path to Perfection` = **110**; Saint `Exalt` = 110; Slayer `Demon Slayer Mark` = 110. A once-per-day, 1-minute power state | 110 |
 | Lineage Mastery | Saint `Cloth Attunement` = 30 — a scaling bump to something you already have | 30 |
-| Perfected Final Release | `Metal Strikes` / `Refined Release` tier: duration up, drawback off | 70 |
+| Perfected Full Release | `Metal Strikes` / `Refined Release` tier: duration up, drawback off | 70 |
 | **Unsealed** (L19) | Magus `Double Spellstrike` (L19) = **110**. Deliberately below Monk `Perfected Form` (190) and Saint `Eighth Sense` (190) — it doubles a daily use, it does not defy death | 110 |
 
 ### 2.2 Reconciliation against the prototype — **read this**
@@ -296,7 +323,7 @@ combat maths depended on.
 - **Reflex Master (110) + Perception Expert delayed and Fortitude Master cut (110) + skills (25)** —
   keeps the prototype's saves intact but produces a class that is Expert in two saves at 20th level.
   Not recommended.
-- **Cut 245 of features** — in practice `Unsealed` (110), `Perfected Final Release` (70), and
+- **Cut 245 of features** — in practice `Unsealed` (110), `Perfected Full Release` (70), and
   `Lineage Mastery` (30) plus 35 more. This preserves the prototype's chassis exactly and guts levels
   15–19. Also not recommended; those are the class.
 
@@ -330,7 +357,7 @@ Quincy → Crafting); trained in 3 + Int modifier additional skills
 
 | Level | Class Features |
 | :---- | :---- |
-| 1 | Ancestry and background, attribute boosts, initial proficiencies, **spirit weapon**, **reiatsu**, **Rising Pressure**, **lineage**, **released form**, **spirit sense**, **konsō**, soul reaper feat |
+| 1 | Ancestry and background, attribute boosts, initial proficiencies, **spirit weapon**, **reiatsu**, **Rising Pressure**, **lineage**, **released form**, **spirit sense**, **konsō**, soulbound feat |
 | 2 | Soul reaper feat, skill feat |
 | 3 | **Flash Step**, **departed flesh**, **iron will** (Will expert), general feat, skill increase |
 | 4 | Soul reaper feat, skill feat |
@@ -339,17 +366,17 @@ Quincy → Crafting); trained in 3 + Int modifier additional skills
 | 7 | **Weapon specialization**, general feat, skill increase |
 | 8 | Soul reaper feat, skill feat |
 | 9 | Ancestry feat, **refined release**, **reiatsu expertise** (Reiatsu DC expert), skill increase |
-| 10 | Attribute boosts, soul reaper feat, skill feat |
+| 10 | Attribute boosts, soulbound feat, skill feat |
 | 11 | **Deepening reserve** (pool 3), **greater Flash Step**, **juggernaut** (Fortitude master), general feat, skill increase |
 | 12 | Soul reaper feat, skill feat |
-| 13 | Ancestry feat, **FINAL RELEASE**, **weapon mastery** (martial master), **spirit weave** (light/unarmoured expert), skill increase |
+| 13 | Ancestry feat, **FULL RELEASE**, **weapon mastery** (martial master), **spirit weave** (light/unarmoured expert), skill increase |
 | 14 | Soul reaper feat, skill feat |
 | 15 | Attribute boosts, **lineage mastery**, **evasion** (Reflex master), greater weapon specialization, general feat, skill increase |
 | 16 | Soul reaper feat, skill feat |
 | 17 | Ancestry feat, **perfected final release**, **reiatsu mastery** (Reiatsu DC master), skill increase |
 | 18 | Soul reaper feat, skill feat |
 | 19 | **Unsealed** (capstone), general feat, skill increase |
-| 20 | Attribute boosts, soul reaper feat, skill feat |
+| 20 | Attribute boosts, soulbound feat, skill feat |
 
 ---
 
@@ -478,27 +505,27 @@ Release is *not* a stance and doesn't conflict with stance actions. It lasts the
 **Refined Release (9th).** Your Release Technique gains its **Refined** benefit, listed per Spirit.
 Base rank of the Refined effect is 5.
 
-### 4.8 Final Release (13th) — *Bankai · Segunda Etapa · Vollständig*
+### 4.8 Full Release (13th) — *Bankai · Segunda Etapa · Vollständig*
 
-> **FINAL RELEASE** [two-actions] (auditory, concentrate, reiatsu)
+> **FULL RELEASE** [two-actions] (auditory, concentrate, reiatsu)
 > **Frequency** once per day · **Requirements** Your spirit weapon is in its released form and you
 > have at least 1 Reiatsu Point
 >
 > For **1 minute**:
 > - Your spirit weapon's damage die increases by one step.
-> - You gain your Spirit's **Final Release** ability (§7).
+> - You gain your Spirit's **Full Release** ability (§7).
 > - Your Release Technique costs no Reiatsu Points, but you can use it only once per round.
 > - You emit a **15-foot emanation** of crushing spiritual pressure. An enemy that ends its turn in
 >   the emanation must succeed at a Will save against your Reiatsu DC or become **frightened 1**
 >   (frightened 2 on a critical failure). A creature that succeeds is temporarily immune for
 >   10 minutes.
 >
-> When it ends you become **fatigued** until you rest for 10 minutes, and you can't use Final Release
+> When it ends you become **fatigued** until you rest for 10 minutes, and you can't use Full Release
 > again today.
 
-**Perfected Final Release (17th):** duration 2 minutes, no fatigue, emanation increases to 20 feet.
+**Perfected Full Release (17th):** duration 2 minutes, no fatigue, emanation increases to 20 feet.
 
-**Unsealed (19th, capstone):** You can use Final Release **twice per day**. While in a Final Release
+**Unsealed (19th, capstone):** You can use Full Release **twice per day**. While in a Full Release
 you're immune to fear effects, and the first time each round you critically hit with your spirit
 weapon you regain 1 Reiatsu Point — **this ignores Rising Pressure's per-encounter cap**.
 
@@ -520,9 +547,10 @@ and a 15th-level mastery (30 pts).
 
 **Granted skill:** Society. **Release ladder:** Shikai → Bankai.
 
-**Kidō Adept (1st).** You learn **two** kidō at 1st level instead of one, and one additional kidō at
-5th, 9th, 13th, and 17th level — **six** in total, plus your free kidō cantrip. (Other Lineages learn
-one at 1st and one each at 9th and 17th: **three** total.)
+**Kidō Adept (1st).** You learn **two** kidō of your choice at 1st level, and one additional kidō at
+5th, 9th, 13th, and 17th level — **six chosen kidō** in total, on top of your free cantrip **Shō**.
+You are the only Lineage that *chooses*: a Hollow and a Quincy each get exactly **two fixed** kidō
+native to what they are (§6.4, §6.5).
 
 *Anchor: six known focus effects is the top of the range PF2e permits without a spell list — a Witch knows 1 hex + feats, a Cleric with `Domain Initiate` chains to 2–3. The Slayer's guardrail #5 caps kidō at 6–8 by 20th; this is the Lineage that actually reaches it, and only this one.*
 
@@ -549,6 +577,10 @@ this ignores Rising Pressure's per-encounter cap.
   increases to +10 feet.
 
 *Anchors: `Thermal Nimbus` (kineticist **4**) grants resistance **equal to your level** to one energy type. Hierro is broader (all physical) at **half** that rate, and arrives at 1st on a class with light armour and 10 HP. `Raging Resistance` (barbarian 9) gives 3 + Con to two types while raging. Sonido is below Monk `Incredible Movement` (+10 ft. at 3rd, BCS 30) at 1st and equal to it at 11th.*
+
+**Cero and Bala (1st).** A Hollow's demon arts are not learned, they are *anatomy*. You know exactly
+**two** kidō and they are always these: **Bala** (your free cantrip) and **Cero**. You cannot learn
+others, and no feat grants you more — `Additional Kidō` is closed to you. Full text in §6.4.
 
 **Regeneración (5th).** High-speed regeneration. You gain **fast healing 2**. This increases to
 **fast healing 4** at 11th level and **fast healing 6** at 17th.
@@ -583,6 +615,13 @@ suppresses it).
 
 *Anchors: Vene is Hierro's number, gated behind an action and an exclusive choice, so it is strictly worse than the Hollow's and correctly so. Arterie deliberately grants **no bonus to attack, damage, or DC** — it is a resistance-bypass, which is the `Cut the Cord`/`ghost touch` lever, plus the cover clause from `Pale Lightning`. This is the answer to "how does a Quincy shoot through Hierro" without touching PF2e's attack math.*
 
+**Heizen and Gritz (1st).** A Quincy's demon arts are **Gintō** — small silver tubes of liquefied
+reiryoku, uncorked and spoken over, which is exactly what Kidō is to a Soul Reaper and exactly how
+canon frames them. You know **two** and they are always these: **Heizen** (your free cantrip) and
+**Gritz**. You cannot learn others, and `Additional Kidō` is closed to you. Full text in §6.5.
+*(The third canon Gintō, **Sprenger**, is not a kidō — it needs five Seele Schneider planted in a
+pentacle, and it appears where canon puts it: at Uryū Ishida's Final Release, §9.)*
+
 **Sealing (5th).** The Quincy talent that started a war: they do not out-fight a Soul Reaper, they
 **switch them off**.
 
@@ -612,8 +651,17 @@ can't heighten them with slots. They auto-heighten to **half your level rounded 
 spells. Every kidō has the **kidō** and **reiatsu** traits plus one of **destruction** (Hadō),
 **binding** (Bakudō), or **mending** (Kaidō).
 
-You learn **Thrust (Shō)** free at 1st level as a **kidō cantrip** — it costs no Reiatsu. Every other
-kidō costs **1 Reiatsu Point**. Your Lineage determines how many you know (§5).
+**Every Lineage has kidō. They differ in how many, and in whether you choose them.**
+
+| Lineage | Free cantrip | Costed kidō | Chosen or fixed? |
+| :---- | :---- | :---- | :---- |
+| **Soul Reaper** | **Shō** | **six**, at 1st (×2), 5th, 9th, 13th, 17th | **Chosen** from §6.1–6.3 |
+| **Hollow** | **Bala** | **one** — **Cero** | **Fixed** (§6.4) |
+| **Quincy** | **Heizen** | **one** — **Gritz** | **Fixed** (§6.5) |
+
+Your free cantrip costs no Reiatsu Point and is available from 1st level. Every costed kidō costs
+**1 Reiatsu Point**. A Hollow or a Quincy cannot take `Additional Kidō`; their arts are what they
+physically are, not a curriculum.
 
 > **Canon numbering is preserved** where it exists. The number is flavour; the mechanics are the
 > point. Rename freely.
@@ -649,15 +697,42 @@ kidō costs **1 Reiatsu Point**. Your Lineage determines how many you know (§5)
 > otherwise. Kaidō exists so a lone Soul Reaper can stabilize a dying ally, not so the party can skip
 > a Cleric.
 
-### 6.4 Why kidō must not become a spell list
+### 6.4 Hollow arts — **Cero and Bala**
+
+Canon is unusually precise about the relationship between these two: a Bala is weaker than a Cero but
+can be fired at roughly **twenty times the rate**. That is a cantrip and a focus effect, described in
+the source material before anyone tried to stat it.
+
+| Kidō | Act. | Effect | Base rank / heightening | PF2e anchor |
+| :---- | :---- | :---- | :---- | :---- |
+| **Bala** *(cantrip)* | 1 | Range 60 ft., one creature. **Ranged spell attack**, **1d4 + key attribute** force damage, doubled on a critical hit. Bala has the **agile** trait for the purpose of your multiple attack penalty (−4/−8 rather than −5/−10). | r1, **H(+2) +1d4** | `Force Bolt` for the damage; the agile clause is canon's "twenty times the rate" and the reason this is an attack roll where Shō is a save |
+| **Cero** | 2 | **60-foot line**, basic Reflex, **2d6** force damage. | r1, **H(+1) +1d6** | The standard area ladder (11d6 at rank 10). The line is longer than Shakkahō's burst because Cero is a Hollow's **only** costed kidō — breadth traded for reach |
+
+*Why a Hollow gets two and not three: the Lineage already buys Hierro, Regeneración, and Sonido (§5.2). Cero and Bala are the whole demon-arts budget, and they are flat, reliable, and never situational — which is the Hollow's design in one sentence.*
+
+### 6.5 Quincy arts — **Gintō**
+
+Gintō are silver tubes of liquefied reiryoku that a Quincy uncorks and speaks over. Canon treats them
+as the Quincy's direct counterpart to Kidō, with German names in place of numbered Japanese ones, so
+they slot into this section with no adaptation needed.
+
+| Kidō | Act. | Effect | Base rank / heightening | PF2e anchor |
+| :---- | :---- | :---- | :---- | :---- |
+| **Heizen** *(cantrip)* | 1 | A flat rectangular pane of light. **15-foot line**, basic Reflex, **1d6** force damage. Canon: it slices through what it crosses. | r1, **H(+2) +1d6** | 5d6 in a 15-ft line at rank 10, against `Electric Arc`'s 5d4 + mod to two targets. An area cantrip, so no attribute modifier |
+| **Gritz** | 2 | Range 30 ft., one creature, Reflex save. A man-sized pentacle closes over the target. **Failure** immobilized for 1 round (Escape vs. your Reiatsu DC). **Critical Failure** **restrained** for 1 minute; the target can attempt a new save at the end of each of its turns. | r1 | `Sai` (§6.2) with **restrained** rather than immobilized on a critical failure — one step better because it is the Quincy's only costed kidō. `Web`/`Paralyze` territory without the incapacitation trait |
+
+*Why these two: they are **general Quincy techniques**, not Schrift-specific — any Quincy can carry Gintō, where "The Heat" or "The Thunderbolt" belongs to exactly one person. That makes them the only honest candidates for a Lineage-wide grant.*
+
+### 6.6 Why kidō must not become a spell list
 
 The moment a Soul Reaper can solve arbitrary problems with magic, it is a Magus with better hit
 points and no spell slots to spend. The caps that keep this from happening:
 
-1. **Known kidō are capped by Lineage** — 6 for Soul Reaper, 3 for the others, plus the cantrip.
-   `Additional Kidō` (§8) can be taken three times, so the **hard ceiling is 9 at 20th level** for a
-   Soul Reaper who spends three class feats on it, and that character has given up three Zanjutsu
-   techniques to do it.
+1. **Known kidō are capped by Lineage** — 6 chosen for a Soul Reaper, exactly **1 costed and fixed**
+   for a Hollow or a Quincy, plus each Lineage's free cantrip. `Additional Kidō` (§8) can be taken
+   three times and is **Soul Reaper only**, so the **hard ceiling is 9 at 20th level** for a Soul
+   Reaper who spends three class feats on it, and that character has given up three Zanjutsu
+   techniques to do it. A Hollow or Quincy can never exceed two.
 2. **There is no utility kidō in the list.** No flight, no invisibility, no teleport, no divination,
    no *Comprehend Language*. Every entry above is damage, control, a shield, or a small heal.
 3. **Kidō use the class DC**, so they scale with the chassis and stop at Master (17th), never
@@ -668,7 +743,7 @@ points and no spell slots to spend. The caps that keep this from happening:
 ## 7 — The fifteen Spirits (subclasses)
 
 Each entry gives: what it is, the **Released Form**, the **Release Technique** (1st, base rank 1),
-the **Refined** upgrade (9th, base rank 5), and the **Final Release** (13th, base rank 7 for any
+the **Refined** upgrade (9th, base rank 5), and the **Full Release** (13th, base rank 7 for any
 technique it adds).
 
 **Standard ladders used throughout** (from §1.5):
@@ -679,7 +754,7 @@ technique it adds).
 | Ranged single target, spell attack, 2 actions | `3d6` @ r1, **H(+1) +1d6** | 12d6 (42.0) |
 | Strike + rider, 2 actions | `+1d6` @ r1, **H(+2) +1d6** | +5d6 (17.5) |
 | Reaction | resistance + `2d6` @ r1, **H(+2) +1d6** | resistance + 5d6 |
-| Final Release technique | `5d6` @ r7, **H(+1) +1d6** | 8d6 (28.0) *on top of the state* |
+| Full Release technique | `5d6` @ r7, **H(+1) +1d6** | 8d6 (28.0) *on top of the state* |
 
 > **A note on canon fidelity.** Every technique name below is the character's actual named technique.
 > Where canon gives a character **no** ability at a tier — Aizen has no Bankai, Grimmjow has no
@@ -742,7 +817,7 @@ spirit damage.
 
 **Bankai — Tensa Zangetsu** *(Heaven Chain Slaying Moon)*. Canon compresses rather than expands:
 everything Ichigo has is forced into a smaller, blacker blade. Your spirit weapon's damage die does
-**not** increase (overriding Final Release's normal die-step). Instead:
+**not** increase (overriding Full Release's normal die-step). Instead:
 
 - You gain a **+10-foot status bonus** to all Speeds, and **Flash Step's frequency becomes twice per
   round**.
@@ -783,10 +858,9 @@ canon is explicit that they mark how long until Daiguren Hyōrinmaru **matures**
   takes **5d6** cold damage and is **immobilized** until the end of its next turn; on a critical
   failure it is **restrained** for 1 minute instead (Escape vs. your Reiatsu DC).
   **Heightened (+1)** +1d6.
-- **Hyōten Hyakkasō** *(Frozen Heavens Hundred Flower Funeral)* — Snow falls in a **30-foot
-  emanation**. Each enemy in the area attempts a Fortitude save; on a failure an ice flower blooms on
-  it and it takes **2d6** persistent cold damage that does not allow a flat check to end while it
-  remains in the emanation. Canon: the opponent's life ends when the hundredth petal falls.
+- **Hyōryū Senbi** *(Ice Dragon Whirling Tail)* — Swinging the blade in a line, you throw a crescent
+  of overflowing ice. **60-foot line**, basic Reflex, **5d6** cold damage; creatures that fail are
+  **slowed 1** until the end of their next turn. **Heightened (+1)** +1d6.
 - **Zanhyō Ningyō** *(Remnant Ice Doll)* — [reaction] **Trigger** you are hit by an attack. **Effect**
   A doll of ice takes the blow. Reduce the damage by an amount equal to **twice your level**; the
   doll shatters.
@@ -869,7 +943,7 @@ This is an illusion, mental, and visual effect.
 **Refined (9th).** The flat check from your Shikai form increases to **DC 6**, and Shikake's failure
 effect also makes the target **off-guard** to the misidentified creature.
 
-**Final Release — Kanzen Saimin: Sōten Kisshun** ***[extrapolated]***
+**Full Release — Kanzen Saimin: Sōten Kisshun** ***[extrapolated]***
 
 > **Canon gives Aizen no Bankai.** He never releases one, never names one, and the story treats
 > Kyōka Suigetsu's Shikai as already being the strongest ability in the setting — that is the point
@@ -881,7 +955,7 @@ previously succeeded or became immune**. Hitting you no longer ends the effect; 
 does. Once per round you may **Sustain** to force one hypnotized creature to attempt a Will save; on
 a failure it is **confused** until the end of its turn.
 
-*Anchor: `Confusion` (rank 4) as a sustained, single-target, save-every-round effect at 13th level is well behind the rank-4 spell's area version. The re-save clause is the real power, and it is why this Final Release grants no damage, no resistance, no Speed, and no die-step beyond the base.*
+*Anchor: `Confusion` (rank 4) as a sustained, single-target, save-every-round effect at 13th level is well behind the rank-4 spell's area version. The re-save clause is the real power, and it is why this Full Release grants no damage, no resistance, no Speed, and no die-step beyond the base.*
 
 ---
 
@@ -919,15 +993,10 @@ Your Speed increases by another **10 feet**, and your claws gain **deadly d10**.
 you critically hit with a claw, you may immediately make an additional claw Strike against the same
 target at your current multiple attack penalty.
 
-Additionally you gain:
+Additionally, **Garra de la Pantera**'s cone increases to **60 feet**, and creatures that critically
+fail against it take **2d6 persistent bleed** damage from embedded shards.
 
-> **Desgarrón** [two-actions] *(Panther King's Claw)* · **Frequency** once per round
-> Your claws lengthen into ten blades of condensed reishi and you hurl them. Make a single claw
-> Strike against **up to four** creatures within 60 feet, using the same attack roll against each.
-> This counts as **one attack** for your multiple attack penalty. On a hit, the target also takes
-> **5d6** slashing damage. **Heightened (+1)** +1d6.
-
-*Anchor: `Sever Four Dragonfly Wings` (exemplar) is four Strikes for three actions with a MAP that doesn't escalate until the end. Desgarrón is one roll against four targets for two actions — fewer dice rolled, comparable output, and it cannot chain past four. The prototype's `Rending Barrage` (three Strikes for two actions, each escalating MAP) was the most aggressive line in that document; this replaces it with the single-roll version, which is both more canon and much easier to adjudicate.*
+*Anchor: a shape upgrade rather than a new action, because Grimmjow's actual strongest attack — **Desgarrón**, which canon has him name as such — is placed at his Final Release (§9.2) instead. The prototype's `Rending Barrage` (three Strikes for two actions, each escalating MAP) was the most aggressive line in that document and does not survive into this version at all.*
 
 ---
 
@@ -1058,7 +1127,7 @@ broad hollow-edged blade shaped like a shark's tooth: **1d12 slashing**, two-han
 gain a **swim Speed** equal to your Speed, you can breathe water, and you can create water freely
 from the gill-slits along the blade.
 
-**Release Technique — La Gota / Ola Azul** [two-actions] *(The Drop / Blue Wave)* · **30-foot cone**,
+**Release Technique — La Gota** [two-actions] *(The Drop)* · **30-foot cone**,
 basic Reflex, **2d6** slashing damage from a blade of compressed water; creatures that fail are
 pushed **10 feet** away from you. **Heightened (+1)** +1d6.
 *Anchor: `Pulverizing Cascade` (rank 3, 5d6 in a 10-ft burst, water) scaled back to a rank-1 entry, plus the forced movement `Sundering Wave` pays a die size for.*
@@ -1096,7 +1165,7 @@ fire damage.
 
 A Quincy has no spirit in their weapon. What they have is a **Schrift** — a single letter of the
 alphabet, granted by their king, that names the one thing they are. Your Schrift replaces the
-Released Form; **Vollständig** *(Complete)* replaces the Final Release.
+Released Form; **Vollständig** *(Complete)* replaces the Full Release.
 
 > **On the choice of five.** Yhwach is excluded by request. The five below are the most consistently
 > fan-ranked Quincy in the series and, more usefully, the five whose Schrift produce **five
@@ -1141,16 +1210,14 @@ your right shoulder and drinks the ambient reishi.
 - Your Strikes ignore all **resistances** to physical and spirit damage, and treat cover as one step
   less (as Blut Arterie, and it stacks with choosing Vene, meaning **you may run Vene and this
   simultaneously** — the one exception in the class to Blut's exclusivity).
-- **Sprenger** [three-actions] · **Frequency** once per day. You lay five Seele Schneider in a
-  pentacle. Each creature in a **20-foot burst** within 60 feet takes **9d6** force damage, basic
-  Reflex; creatures that critically fail are **restrained** by lines of light for 1 minute (Escape
-  vs. your Reiatsu DC). **Heightened (+1)** +1d6.
+- **Licht Regen** becomes a **60-foot cone**, and once per round you may use it without spending a
+  Reiatsu Point.
 
 **The cost is canon and it is real.** When Letzt Stil ends, you lose access to **your Schrift Form,
 your Release Technique, Licht Regen, Vollständig, and your entire reiatsu pool** until you complete
 **24 hours of rest**. You keep your weapon, your proficiencies, and your feats.
 
-*Anchor: `Sprenger` at 9d6 in a 20-ft burst is `Grasping Grave` (sorcerer rank 5, 6d6 in a 20-ft burst) at a rank-7 entry, and once-per-day on top. The drawback is modelled on the prototype's 20th-level `Final Release` feat, moved down to 13th where canon puts it and softened from a week to a day because at 13th level a week-long loss is a retired character.*
+*Anchor: a free 60-ft cone once per round at 9d6 rank-10 is `Dragon Breath` (sorcerer rank 3, 5d6 cone) scaled to a 13th-level state. The drawback is canon and it is the reason this Vollständig grants two die steps where every other grants one. Canon's fifth Gintō, **Sprenger**, is placed where it belongs: Uryū's Final Release (§9.3).*
 
 ---
 
@@ -1159,9 +1226,9 @@ your Release Technique, Licht Regen, Vollständig, and your entire reiatsu pool*
 
 **Schrift Form.** Your reishi runs hot. Your spirit weapon's damage type becomes **fire** (you may
 still choose spirit), it gains **deadly d8**, and you gain **fire resistance equal to half your
-level**. Canon's escalation is literal — **Burning Finger One** through **Five** — so:
+level**. Canon's escalation is literal — **Burner Finger One** through **Five** — so:
 
-**Release Technique — Burning Finger** [two-actions] · Choose a number of fingers from one to five.
+**Release Technique — Burner Finger** [two-actions] · Choose a number of fingers from one to five.
 Each choice is a different effect, and each costs the same single Reiatsu Point:
 
 | Fingers | Effect |
@@ -1169,20 +1236,20 @@ Each choice is a different effect, and each costs the same single Reiatsu Point:
 | **One** | Range 60 ft., one creature. Ranged spell attack, **3d6** fire, doubled on a crit. **H(+1)** +1d6 |
 | **Two** | Range 60 ft., two creatures. As **One**, but **2d6** each against two targets. **H(+1)** +1d6 |
 | **Three** | **30-foot line**, basic Reflex, **2d6** fire. **H(+1)** +1d6 |
-| **Four** | **15-foot emanation**, basic Reflex, **2d6** fire; creatures that fail take 1d4 persistent fire. **H(+1)** +1d6 |
+| **Four** | A blade of fire with an elongated crossguard forms around your hand and you slash. **15-foot emanation**, basic Reflex, **2d6** fire; creatures that fail take 1d4 persistent fire. **H(+1)** +1d6 |
 | **Five** | **30-foot cone**, basic Reflex, **2d6** fire; the ground becomes difficult terrain until the start of your next turn. **H(+1)** +1d6 |
 
 *Anchor: this is one technique with five shapes, each independently on a standard ladder from §1.5 — the "One" line is the ranged single-target ladder, the rest are the area ladder. No option is better than another at every moment, which is the whole design; compare a Kineticist choosing an impulse's shape.*
 
-**Refined (9th) — Burning Full Fingers.** All five options gain their next increment early (treat your
-rank as one higher for Burning Finger only), and **Five** additionally leaves the difficult terrain
+**Refined (9th) — Deeper Burn.** All five options gain their next increment early (treat your
+rank as one higher for Burner Finger only), and **Five** additionally leaves the difficult terrain
 burning until the end of your next turn, dealing 2d6 fire to a creature that enters or ends its turn
 there.
 
 **Vollständig — Deus Ex Machina** *(canon: "The Heat" at full output)*. Wings and a halo of blue
 reishi. You gain a **fly Speed** equal to your Speed, **fire immunity**, and:
 
-- Burning Finger's **Five** option becomes a **60-foot cone**.
+- Burner Finger's **Five** option becomes a **60-foot cone**.
 - Once per round, when you damage a creature with fire, it takes **2d6 persistent fire** damage; the
   flat check to end it is DC 20 rather than DC 15.
 
@@ -1193,8 +1260,8 @@ reishi. You gain a **fly Speed** equal to your Speed, **fire immunity**, and:
 #### ⚖ The Balance — *B* · **Jugram Haschwalth**
 *Yhwach's second, and the coldest ability in the series: he does not stop misfortune, he moves it onto someone else.*
 
-**Schrift Form.** Your spirit weapon becomes a **longsword of white reishi** — canon's Haschwalth
-fights with a blade, not a bow: **1d8 slashing**, versatile P, **parry**. You gain a
+**Schrift Form.** Your spirit weapon becomes **Freund Schild** *(Substitute Shield)*, canon's name
+for Haschwalth's spirit weapon — he fights with a blade, not a bow: **1d8 slashing**, versatile P, **parry**. You gain a
 **+1 circumstance bonus to AC** while you have at least 1 Reiatsu Point remaining.
 
 *This is the one flat numeric bonus in the class, it is a **circumstance** bonus so it collides with cover and with `Raise a Shield`, and it switches off the moment you spend your pool — which, given Rising Pressure, is most of the fight. It exists because The Balance is a defensive Schrift and the alternative was giving it resistance that three other Spirits already have.*
@@ -1247,7 +1314,7 @@ electricity damage. Creatures that fail are **stunned 1**; creatures that critic
 creature, ranged spell attack, **6d6** electricity doubled on a crit, and the target is **stunned 1**
 on a hit (incapacitation). Base rank 5, **Heightened (+1)** +1d6.
 
-**Vollständig — Electrocution / Thunderbolt Form.** Your hair becomes lightning and your wings arc
+**Vollständig — Thunderbolt Form.** Your hair becomes lightning and your wings arc
 white. You gain a **fly Speed** equal to your Speed and **electricity immunity**, and:
 
 - You emit a **10-foot emanation** of live current. A creature that ends its turn in it takes **3d6**
@@ -1299,7 +1366,7 @@ body that reassembles itself.
 
 ---
 
-## 8 — Soul Reaper feats
+## 8 — Soulbound feats
 
 A full class wants ~60 feats. This is a spine of **44**, enough to build a character at every level
 without gaps. Feats marked **[SR]**, **[H]**, or **[Q]** require that Lineage.
@@ -1308,12 +1375,12 @@ without gaps. Feats marked **[SR]**, **[H]**, or **[Q]** require that Lineage.
 
 | Feat | Effect | PF2e anchor |
 | :---- | :---- | :---- |
-| **Additional Kidō** | Learn one more kidō. **Special** take up to three times. | `Domain Initiate` / `Basic Witchcraft` |
+| **Additional Kidō** **[SR]** | Learn one more kidō. **Special** take up to three times. | `Domain Initiate` / `Basic Witchcraft` |
 | **Sheathed Draw** | When you roll initiative, manifest your spirit weapon and Release as a single free action. | `Quick Draw` (rogue/ranger 1) |
 | **Reader of Threads** | Recall Knowledge about spirits, haunts, and undead using Spirit Lore as a free action once per round; learn one extra piece of information on a success. | `Dubious Knowledge` + `Thaumaturge's Investigation` |
 | **Zanjutsu Footwork** | When you critically hit with your spirit weapon, Step as a free action. | `Nimble Dodge`-tier; `Qi Center`'s free Step at monk 18, restricted to crits here |
 | **Pesquisa** **[H]** | Spirit Sense's range increases to 120 feet and you learn each detected creature's approximate level relative to yours. | `Detect Magic`-shaped; canon Arrancar ability |
-| **Hirenkyaku Drill** **[Q]** | You may use Flash Step at 1st level instead of 3rd, but only once per encounter until 3rd level. | Front-loads the class's answer to guardrail #4 (§10) |
+| **Hirenkyaku Drill** **[Q]** | You may use Flash Step at 1st level instead of 3rd, but only once per encounter until 3rd level. | Front-loads the class's answer to guardrail #4 (§11) |
 | **Twin Fang** | While your spirit weapon has the twin or agile trait, your second Strike each round with it reduces your multiple attack penalty by 1. | `Twin Feint`; `Agile Grace` (swashbuckler 7) — this is weaker and earlier |
 
 ### 8.2 Second and fourth level
@@ -1323,13 +1390,13 @@ without gaps. Feats marked **[SR]**, **[H]**, or **[Q]** require that Lineage.
 | 2 | **Pressure Flare** [one-action] | Enemies within 15 feet must succeed at a Will save vs. your Reiatsu DC or be **frightened 1**. Once per encounter, no Reiatsu cost. | `Intimidating Glare` + `Dread Aura`; frightened 1 in a small emanation is `Demoralize` without the Intimidation check |
 | 2 | **Guard the Threshold** [reaction] | When an ally within 15 feet takes damage from an undead, spirit, or incorporeal creature, reduce that damage by **2 + your level**. | Champion's reaction, exactly — but restricted to three creature types |
 | 2 | **Kidō Focus** | When you use a kidō, spend 1 additional action to give the target a **−1 circumstance penalty** to its save. | `Spellshape` feats; `Conrasu Spell` tier |
-| 2 | **Bala** **[H]** [one-action] | A ranged unarmed Strike, 30 ft., **1d6** force, **agile**. Canon: weaker than a Cero, fired twenty times as fast. | `Elemental Toss`-shaped, made a Strike so it takes MAP |
-| 2 | **Gintō Flask** **[Q]** | You may prepare 3 silver tubes of condensed reishi during daily preparations. Each can be spent as a free action to make one kidō you know cost no Reiatsu Point. | `Alchemical Formula`-shaped daily consumables; BCS `AlchemicalFormula = 5` |
+| 2 | **Rapid Bala** **[H]** | When you use **Bala**, you may spend 1 additional action to use it again against the same or a different creature. Both uses apply and increase your multiple attack penalty as normal. | `Double Shot` (ranger 4) at 2nd on a cantrip with an agile penalty |
+| 2 | **Gintō Reserve** **[Q]** | You prepare **3 Gintō** during daily preparations. Each may be spent as a free action to use **Gritz** without spending a Reiatsu Point. Unspent Gintō are lost at your next preparations. | `Alchemical Formula`-shaped daily consumables; BCS `AlchemicalFormula = 5` |
 | 4 | **Shunpo Strike** [two-actions] | Flash Step, then Strike. Doesn't count against Flash Step's frequency. | `Sudden Charge` (fighter/barbarian 1) at 2 actions with no reaction-triggering |
 | 4 | **Reiatsu Barrier** [reaction] | Spend 1 Reiatsu Point when you're hit to gain **resistance equal to your level** against that damage. | `Thermal Nimbus` as a one-shot reaction; Bakudō #81's number |
 | 4 | **Chain Anchor** | When you critically hit a creature with your spirit weapon, it can't Step away from you until the end of its next turn. | `Attack of Opportunity` design space, approached from the other side |
 | 4 | **Deep Breath** | You regain 2 Reiatsu Points instead of 1 the first time you use Steady the Breath each day. | `Meditative Wellspring` (monk 12) — much weaker, much earlier |
-| 4 | **Cero** **[H]** [two-actions] | Spend 1 Reiatsu Point. **30-foot line**, basic Reflex, **4d6** force. Base rank 3, **H(+1)** +1d6. | `Dragon Breath` (sorcerer rank 3, 5d6 cone) narrowed to a line and made a feat rather than a subclass grant |
+| 4 | **Cero Doble** **[H]** | **Cero** may be shaped as a **30-foot cone** instead of a 60-foot line, and creatures that critically fail against it are pushed **10 feet** away from you. | `Dragon Breath` (sorcerer rank 3) shape-swap; the push is `Sundering Wave`'s |
 
 ### 8.3 Sixth through twelfth level
 
@@ -1340,7 +1407,7 @@ without gaps. Feats marked **[SR]**, **[H]**, or **[Q]** require that Lineage.
 | 6 | **Cut the Cord** | Your spirit weapon's Strikes ignore the first **5 points** of resistance to spirit damage. | `Cut from the Air`-tier; the exemplar's resistance-bypass ikons |
 | 6 | **Blut Discipline** **[Q]** | You may switch which Blut you have active as a **free action** twice per round instead of once. | Pure action economy on an existing free action |
 | 6 | **Descorrer** **[H]** | Once per hour, open a Garganta: you and up to 5 allies teleport up to 500 feet to a location you can see or have visited. | `Dimension Door` (rank 4) as a once-per-hour class feat at 6th, range-limited to line of sight |
-| 8 | **Inner World** | During daily preparations, commune with your spirit to retrain one soul reaper feat of 6th level or lower in 1 hour. | Free retraining; `Adaptive Adept`-shaped |
+| 8 | **Inner World** | During daily preparations, commune with your spirit to retrain one soulbound feat of 6th level or lower in 1 hour. | Free retraining; `Adaptive Adept`-shaped |
 | 8 | **Pressure Crush** [two-actions] | Spend 1 Reiatsu Point. Enemies in a **20-foot emanation** attempt a Fortitude save; on a failure they're **clumsy 1** and take a −5-ft. status penalty to Speeds for 1 minute. | `Tempest Surge`'s clumsy applied as an area debuff, no damage attached |
 | 8 | **Zanjutsu: Hakuda** **[SR]** | You gain a **1d6 fist** unarmed attack with **agile**, **finesse**, **nonlethal**, and you may make one unarmed Strike as part of any Zanjutsu technique. | `Powerful Fist` (monk, BCS 10) plus a rider |
 | 10 | **Perfected Technique** | Once per encounter, use your Release Technique without spending a Reiatsu Point. | `Free Casting`-tier; Slayer `Breath of Instinct` (BCS 30) at 15th — this is narrower and earlier |
@@ -1371,40 +1438,156 @@ as class feats at the listed level. Each costs **1 Reiatsu Point**, uses the Str
 
 | Lvl | Feat | Effect | PF2e anchor |
 | :---- | :---- | :---- | :---- |
-| 14 | **Instant Final Release** | Final Release takes 1 action instead of 2. | `Quickened Casting`; `Instant Opening` |
-| 14 | **Twin Pressure** | While in a Final Release, the emanation's Will save also applies to enemies that **enter** it, not only those that end their turn in it. | `Thermal Nimbus`'s trigger, exactly |
-| 14 | **Vollständig Endurance** **[Q]** | When your Vollständig ends you are not fatigued, and you may spend 1 Reiatsu Point to extend it by 1 round, up to three times. | `Sustained` duration extension; a partial early `Perfected Final Release` |
+| 14 | **Instant Full Release** | Full Release takes 1 action instead of 2. | `Quickened Casting`; `Instant Opening` |
+| 14 | **Twin Pressure** | While in a Full Release, the emanation's Will save also applies to enemies that **enter** it, not only those that end their turn in it. | `Thermal Nimbus`'s trigger, exactly |
+| 14 | **Vollständig Endurance** **[Q]** | When your Vollständig ends you are not fatigued, and you may spend 1 Reiatsu Point to extend it by 1 round, up to three times. | `Sustained` duration extension; a partial early `Perfected Full Release` |
 | 16 | **Unbroken Chain** | When you would be reduced to 0 HP while released, spend 1 Reiatsu Point to remain at 1 HP instead. Once per day. | `Hero's Defiance` (champion rank 10) at a fraction of the effect and a Reiatsu cost |
-| 16 | **Reiatsu Flood** | Your Rising Pressure per-encounter cap increases by 1. | The single most dangerous feat in the class — see §10.1 |
+| 16 | **Reiatsu Flood** | Your Rising Pressure per-encounter cap increases by 1. | The single most dangerous feat in the class — see §11.1 |
 | 18 | **Beyond the Blade** | Your Release Technique's damage dice increase by two steps (d6→d10, d8→d12). | `Greater Weapon Specialization` shape applied to a focus effect |
-| 18 | **Two Souls, One Edge** | You gain a second Spirit's **Released Form** (not its Release Technique, not its Final Release). You may have only one released at a time and switching costs 1 Reiatsu Point. | `Second Path to Perfection` (monk 11, BCS 110) — this is later and grants strictly less |
-| 20 | **Saigo no Getsuga Tenshō** [three-actions] | **Frequency** once per week. See below. | `Hero's Defiance`; the prototype's `Final Release` capstone |
+| 18 | **Two Souls, One Edge** | You gain a second Spirit's **Released Form** (not its Release Technique, not its Full Release). You may have only one released at a time and switching costs 1 Reiatsu Point. | `Second Path to Perfection` (monk 11, BCS 110) — this is later and grants strictly less |
+| 20 | **Final Release** [three-actions] | **Frequency** once per week. You sever the bond that names you. Full rules in **§9** — it is large enough to need its own section. | `Hero's Defiance`; `Impossible Flurry`; `All Shall End in Flames` |
 
-> **Saigo no Getsuga Tenshō** *(The Final Moon Fang Heaven-Piercer)* [three-actions]
-> **Frequency** once per week
->
-> You become the technique. For 1 minute, your Strikes deal an additional **4d6** spirit damage, you
-> are immune to fear and death effects, and your Release Technique costs nothing and has no frequency
-> limit. Once during this minute you may use **Mugetsu** *(Moonless Sky)*: a **60-foot cone**, basic
-> Reflex, **18d6** spirit damage that ignores all resistances and immunities.
->
-> When it ends, you lose access to your Released Form, your Release Technique, your Final Release, and
-> your entire reiatsu pool until you complete **a week of downtime** rebuilding your bond.
+> **Final Release** is the class's 20th-level capstone and the only thing in this document that can
+> permanently cost you the class. It has fifteen different endings, one per Spirit. **§9** is its
+> section.
 
-*Anchor: `Unfolding Wind Crash` (monk rank 9) is 18d6 single-target; `Arcane Explosion` (wizard rank 9) is 16d6 in a 30-ft emanation. Mugetsu at 18d6 in a 60-ft cone, once per week, with a week of lost class features afterwards, is priced against those and against the fact that this is the 20th-level class feat — the slot where `Impossible Flurry` and `All Shall End in Flames` live. Canon: Ichigo uses it once and loses his powers for seventeen months.*
-
-*Naming note: a Hollow or Quincy taking this feat should rename it — **Segunda Etapa: Vacío** or **Quincy: Letzt Stil, Vollendet**. The mechanics are Lineage-neutral.*
+*Naming note: `Final Release` is the umbrella term. Your character never calls it that — a Soul Reaper
+calls it by their Spirit's own name for it, and canon's own example is Ichigo's **Saigo no Getsuga
+Tenshō**, which is §9.1's entry.*
 
 ---
 
-## 9 — Head-to-head audit against published PF2e
+## 9 — Final Release
+
+*The 20th-level capstone. One feat, one shared state, and **fifteen different endings** — one per
+Spirit. Canon's model is Ichigo's **Saigo no Getsuga Tenshō**: a form that grants enormous general
+power, contains exactly one irreversible attack, and takes your powers when it is done.*
+
+### 9.0 The feat, the state, and the ending
+
+> **FINAL RELEASE** [three-actions] (auditory, concentrate, reiatsu)
+> **Frequency** once per week · **Requirements** You are 20th level and your spirit weapon is in its
+> released form
+>
+> You stop carrying your power and *become* it. You enter **Severance** for **10 rounds**.
+
+**Severance — the general state.** Identical for all fifteen Spirits, all three Lineages:
+
+- Your spirit weapon's Strikes deal an additional **4d6 spirit** damage.
+- You are **immune to fear and death effects**, and to the **frightened** and **doomed** conditions.
+- **Reiatsu stops mattering.** You have no pool and need none: your Release Technique and every kidō
+  you know cost **nothing** and have **no frequency limit**.
+- You gain your Spirit's **Full Release** ability and its 20-foot pressure emanation, without
+  spending your daily Full Release and without the fatigue.
+- Your Speed increases by **20 feet**, and Flash Step's frequency becomes **twice per round**.
+
+**The ending — your Spirit's Severing Art.** Somewhere inside those ten rounds you get exactly one
+irreversible attack, unique to your Spirit (§9.1–9.3). Using it is **[two-actions]**, costs nothing,
+and **immediately ends Severance** whether you want it to or not.
+
+> ### Waning
+> The Severing Art is at its strongest the instant you enter Severance and decays every round after.
+> Its damage depends only on **which round of Severance you use it in**:
+>
+> | Round of Severance | Dice | Average |
+> | :---- | :---- | :---- |
+> | **1st** | **20d6** | 70.0 |
+> | **2nd** | 18d6 | 63.0 |
+> | **3rd** | 16d6 | 56.0 |
+> | **4th** | 14d6 | 49.0 |
+> | **5th** | 12d6 | 42.0 |
+> | **6th** | 10d6 | 35.0 |
+> | **7th** | **8d6** | 28.0 |
+> | **8th, 9th, 10th** | — | **cannot be used** |
+>
+> *(Dice = 22 − 2 × the round number.)* After the 7th round the Art has decayed past the point of
+> being worth the action, and the rules simply say so rather than letting you throw away your one
+> shot for 6d6.
+
+**When Severance ends** — by the Art, or by the clock running out at the end of the 10th round — you
+lose access to your **Released Form**, your **Release Technique**, your **Full Release**, and your
+**entire reiatsu pool** until you complete **a week of downtime** rebuilding what you severed. You
+keep your Hit Points, proficiencies, skills, Lineage features, and every other feat.
+
+### 9.0.1 Why it is shaped this way
+
+The user-facing tension is the point: **the longer you survive in Severance, the more the general
+state has given you, and the less your ending is worth.** Round one is 70 damage and none of the
+buff. Round seven is 28 damage and six rounds of a 4d6 rider, doubled Flash Step, and free kidō.
+There is no dominant line, which is what makes it a decision instead of a script.
+
+| Anchor in `packs/pf2e` | Value | Read |
+| :---- | :---- | :---- |
+| `Unfolding Wind Crash` (monk, rank **9**) | 18d6 single target | A Severing Art matches it in round **2** |
+| `Arcane Explosion` (wizard, rank **9**) | 16d6, 30-ft emanation | Matched in round **3** |
+| `Cataclysm` (rank **10** spell) | ~19d6 across types, 60-ft burst | Round **1** is comparable, once per **week** |
+| `Impossible Flurry` (fighter 20) | 6 Strikes, free action, at-will | The slot this feat competes for |
+| `All Shall End in Flames` (kineticist 20) | 13d6, repeatable | The other one |
+| `Hero's Defiance` (champion, rank 10, BCS **190**) | free-action death denial | Deliberately *not* what this is — Severance grants no survivability beyond fear/death immunity |
+
+**The decay is the balance lever, not the damage.** A once-per-week 20d6 that also demands you spend
+it in round one — before Rising Pressure has given you anything and before you know how the fight is
+going — is not obviously better than a round-five 12d6 thrown at a target you have already read. If
+playtesting shows everyone fires on round one anyway, the fix is to flatten the table (start at 16d6,
+−1d6 per round), not to cut the ceiling.
+
+### 9.1 Severing Arts — Soul Reaper Spirits
+
+All are **[two-actions]**, cost nothing, use the Waning table for damage, and end Severance.
+
+| Spirit | Severing Art | Shape & damage type | Rider |
+| :---- | :---- | :---- | :---- |
+| **Senbonzakura** | **Shūkei: Hakuteiken** *(Endscape: White Imperial Sword)* ✅ | Every blade condenses into a single white sword; wings and a vertical halo open behind you. **One creature within reach.** Make a Strike; on a hit it takes the Waning dice as **slashing**. | Ignores **all** resistances and immunities. On a hit the target can't regain Hit Points, and its regeneration and fast healing are suppressed, for 1 minute. |
+| **Zangetsu** | **Mugetsu** *(Moonless Sky)* ✅ | A blade of black reiatsu pours from your arm. **60-foot cone**, basic Reflex, **spirit**. | Ignores **all** resistances and immunities to spirit damage. **This is the pattern the whole section is built from:** canon's *Saigo no Getsuga Tenshō* is the **state** (here, Severance) and *Mugetsu* is the **one attack inside it**. Every other Spirit gets the same two-part shape. |
+| **Hyōrinmaru** | **Hyōten Hyakkasō** *(Frozen Heavens Hundred Flower Funeral)* ✅ | Snow falls and ice flowers bloom on everything it touches. **30-foot emanation**, basic Fortitude, **cold**. | Creatures that fail are **restrained** in a pillar of ice (Escape vs. your Reiatsu DC) and take **4d6 persistent cold** that allows **no flat check** to end while restrained. Canon: the target's life ends when the hundredth petal falls. |
+| **Ryūjin Jakka** | **Ittō Kasō** *(Single Blade Cremation)* ✅ | A pillar of red fire in the shape of a katana's tip erupts from the ground. **20-foot burst** within 60 feet, basic Reflex, **fire**. | **Self-cost, and it is canon:** Ittō Kasō uses the caster's own body as the catalyst — Aizen calls it the *spell of sacrifice*, and Yamamoto loses his left arm to it. You take damage equal to **half your current Hit Points**, which cannot be prevented, reduced, or resisted. |
+| **Kyōka Suigetsu** | **Kanzen Saimin: Owari** *(Complete Hypnosis: The End)* ⚠️ | The hypnosis stops being a lie about your position and becomes a lie about everything. **60-foot emanation**, basic Will, **mental**. | Creatures that fail are **confused** for 1 minute. On a critical failure the creature perceives its own allies as you for that minute and cannot be shaken loose by damage. ⚠️ **Extrapolated** — Aizen has no canon Final Release, for the same reason he has no canon Bankai. |
+
+### 9.2 Severing Arts — Hollow Spirits
+
+| Spirit | Severing Art | Shape & damage type | Rider |
+| :---- | :---- | :---- | :---- |
+| **Pantera** | **Desgarrón** *(Panther King's Claw)* ✅ | Your claws extend into ten blades of condensed reishi and you throw all of them. **60-foot cone**, basic Reflex, **slashing**. | Creatures that fail take **4d6 persistent bleed**. Canon has Grimmjow name this his strongest attack, which is why it sits here rather than in his Segunda Etapa. |
+| **Murciélago** | **Cero Oscuras: Ceniza** *(Dark Hollow Flash: Ash)* ⚠️ | A black cero fired point-blank down a corridor of nothing. **120-foot line**, basic Reflex, **spirit**. | A creature reduced to 0 Hit Points by this crumbles to ash; returning it to life requires a 10th-rank effect. ⚠️ **Extrapolated name**; the ash is canon — it is how Ulquiorra himself ends. |
+| **Arrogante** | **La Hora Final** *(The Final Hour)* ⚠️ | Respira stops being a breath and becomes a verdict. **30-foot emanation**, basic Fortitude, **void**. | Creatures that fail are **enfeebled 3** for 1 minute and **drained 1** for 24 hours as decades leave them. ⚠️ **Extrapolated**; the aging is Baraggan's canon aspect of death. |
+| **Los Lobos** | **Aullido** *(Howl)* ⚠️ | Every wolf you have left converges on one point and goes off together. **40-foot burst** within 120 feet, basic Reflex, **force**. | **Requirements** at least one wolf remains. You expend **all** remaining wolves and regain none for the rest of the encounter. If you had **five or more**, creatures that critically fail are also knocked **prone** and **stunned 1**. ⚠️ **Extrapolated**; the soul-splitting wolves are canon. |
+| **Tiburón** | **Ola Azul** *(Blue Wave)* ✅ | Reiryoku gathers in the hollow of the blade and leaves it as a single wave. **60-foot line**, basic Reflex, **slashing**. | Creatures that fail are pushed **30 feet** directly away from you and knocked **prone**. Creatures that critically fail are pushed 60 feet instead. |
+
+### 9.3 Severing Arts — Quincy Spirits
+
+| Spirit | Severing Art | Shape & damage type | Rider |
+| :---- | :---- | :---- | :---- |
+| **Antithesis** | **Sprenger** ✅ | Five Seele Schneider planted in a pentacle, and the Gintō poured over them. **20-foot burst** within 60 feet, basic Reflex, **force**. | Creatures that critically fail are **restrained** by lines of light for 1 minute (Escape vs. your Reiatsu DC). Canon's fifth and largest Gintō, and the reason Uryū's Vollständig (§7C) does not carry it. |
+| **The Heat** | **Burning Full Fingers** ✅ | Fire on all five fingertips at once, released as a spiralling torrent. **60-foot cone**, basic Reflex, **fire**. | Creatures that fail take **4d6 persistent fire** whose flat check to end is **DC 20** rather than DC 15. Canon's own name for Bazz-B's strongest technique. |
+| **The Balance** | **The Reckoning** ⚠️ | Every misfortune you have held back for other people, handed to one person at once. **One creature within 60 feet**, basic Fortitude, **spirit**. | Ignores **all** resistances and immunities. The target is **doomed 1**. If you have used your Release Technique at least three times this encounter, it is **doomed 2** instead. ⚠️ **Extrapolated**; the redistribution of fortune is Haschwalth's canon Schrift. |
+| **The Thunderbolt** | **Electrocution** ✅ | You stop directing the lightning and simply become the storm. **30-foot emanation**, basic Reflex, **electricity**. | Creatures that fail are **stunned 2** (**incapacitation**). Canon's name for Candice's strongest technique. |
+| **The Miracle** | **Apotheosis** ⚠️ | Every wound taken all fight arrives at once as growth. **30-foot emanation**, basic Fortitude, **force**. | You gain temporary Hit Points equal to **twice your level**. At the start of your next turn the emanation detonates a second time for **half** the Waning dice. ⚠️ **Extrapolated**; growing stronger from damage is Gerard's canon Schrift. |
+
+### 9.4 What is canon and what is not
+
+**Nine of the fifteen** Severing Arts are the character's actual canon technique, named as such in
+the source: **Shūkei: Hakuteiken**, **Mugetsu**, **Hyōten Hyakkasō**, **Ittō Kasō**, **Desgarrón**,
+**Ola Azul**, **Sprenger**, **Burning Full Fingers**, and **Electrocution**.
+
+**The remaining six** are marked ⚠️ and are extrapolations, each built on a principle canon *does*
+establish: Aizen's hypnosis, Ulquiorra's ash, Baraggan's aging, Starrk's wolves, Haschwalth's
+redistribution of fortune, and Gerard's growth from damage. None is presented as something the manga
+contains.
+
+**Ittō Kasō is the only one with a self-cost**, and that is because canon insists on it: it is a
+forbidden technique that burns the caster as the catalyst. Every other Spirit pays the same price —
+a week without your powers — and no more.
+
+---
+
+## 10 — Head-to-head audit against published PF2e
 
 *This is the section the brief asked for: every mechanic in this class placed next to a **named**
 published feature, with the level it appears at and what it costs there.*
 
-### 9.1 Chassis vs. the published martials
+### 10.1 Chassis vs. the published martials
 
-| Line | **Soul Reaper** | Monk | Magus | Rogue | Champion |
+| Line | **Soulbound** | Monk | Magus | Rogue | Champion |
 | :---- | :---- | :---- | :---- | :---- | :---- |
 | HP | **10** | 10 | 8 | 8 | 10 |
 | Perception | E@5 | E@5 | E@9 | E@1 → M@7 → L@13 | E@11 |
@@ -1420,12 +1603,12 @@ published feature, with the level it appears at and what it costs there.*
 Will capped at Expert, and the saved points spent on Lineage. It is the *only* 10-HP class in the
 comparison whose Will stops at Expert, which is the deliberate genre concession discussed in §2.2.
 
-### 9.2 Class mechanics vs. their nearest published relative
+### 10.2 Class mechanics vs. their nearest published relative
 
 | This class | Published relative | Level there | Verdict |
 | :---- | :---- | :---- | :---- |
-| **Rising Pressure** (focus refills in combat, capped per encounter) | **Nothing.** Panache (swashbuckler 1) is the closest renewable in-combat resource; Focus normally refills only via Refocus | 1 | **Genuinely new.** This is the class's reason to exist and its biggest balance risk (§10.1) |
-| **Release** → **Final Release** (one-way ladder) | Monk/Magus stances (swap freely); Exemplar ikon rotation; Oracle cursebound (escalates into penalties only) | 1 / 13 | New shape. Costs more at each step, pays out in **new actions**, not flat numbers |
+| **Rising Pressure** (focus refills in combat, capped per encounter) | **Nothing.** Panache (swashbuckler 1) is the closest renewable in-combat resource; Focus normally refills only via Refocus | 1 | **Genuinely new.** This is the class's reason to exist and its biggest balance risk (§11.1) |
+| **Release** → **Full Release** (one-way ladder) | Monk/Magus stances (swap freely); Exemplar ikon rotation; Oracle cursebound (escalates into penalties only) | 1 / 13 | New shape. Costs more at each step, pays out in **new actions**, not flat numbers |
 | **Spirit weapon** (bonded, rune-free, ghost touch) | `Handwraps of Mighty Blows`; Champion `Divine Ally`; Exemplar weapon ikon | 1 / 3 / 1 | Inside precedent; the rune-transfer clause is a tax removal, not a power grant |
 | **Flash Step** | Monk `Incredible Movement` (+10 ft. passive) | 3 | Trades passive Speed for a once-per-round reaction-free Stride |
 | **Greater Flash Step** DC 5 flat check | `Blur` (rank 2 spell) | 11 | Rank-2 effect granted at 11th, first attack each round only |
@@ -1433,11 +1616,14 @@ comparison whose Will stops at Expert, which is the deliberate genre concession 
 | **Regeneración** (fast healing 2/4/6) | `Sanguine Mastery` (fast healing = **half level**) | Necromancer **12** | Roughly half the value, 7 levels earlier, with a second off-switch |
 | **Blut Arterie** (resistance bypass, cover −1) | `ghost touch`; `Cut from the Air`; `Pale Lightning`'s cover clause | — | Grants **no** bonus to attack, damage, or DC — by design |
 | **Seal the Art** (counteract a release state) | `Dispel Magic` (rank 2); the counteract rules | — | Suppresses rather than ends; counteract rank = half level, the standard focus line |
-| **Final Release** fear emanation | `Frightful Presence` (monster ability); `Dread Aura` | — | Weaker: frightened 1, ends-of-turn only, 10-minute immunity on a success |
-| **Unsealed** (2× Final Release/day) | Magus `Double Spellstrike` (BCS 110) | 19 | Same price, same slot |
+| **Full Release** fear emanation | `Frightful Presence` (monster ability); `Dread Aura` | — | Weaker: frightened 1, ends-of-turn only, 10-minute immunity on a success |
+| **Unsealed** (2× Full Release/day) | Magus `Double Spellstrike` (BCS 110) | 19 | Same price, same slot |
+| **Final Release / Severance** (§9) | `Impossible Flurry` (fighter 20); `All Shall End in Flames` (kineticist 20) | 20 | Same slot. Both anchors are **repeatable**; this is **once per week** and costs the class for a week |
+| **Severing Art**, round 1 | `Cataclysm` (rank **10** spell); `Unfolding Wind Crash` (monk rank 9, 18d6) | — | 20d6 once per week vs. 18d6 from a focus pool that refills every 10 minutes |
+| **Severing Art**, round 7 | `Arcane Explosion` (wizard rank 9, 16d6) | — | 8d6 — **half** the rank-9 comparator. The decay is the cost of waiting |
 | **Konsō** | `Talking Corpse`; `Ritual: Atone`; a GM-facing haunt resolution | — | Exploration-only; no combat value; can end an encounter, which is the point |
 
-### 9.3 Kidō vs. published focus spells and spells
+### 10.3 Kidō vs. published focus spells and spells
 
 | Kidō | Value at rank 10 | Nearest published | Its value | Verdict |
 | :---- | :---- | :---- | :---- | :---- |
@@ -1451,11 +1637,11 @@ comparison whose Will stops at Expert, which is the deliberate genre concession 
 | **Kin** (2 actions, can't cast 1 round) | stupefied 2, 1 min | `Silence` (r2); `Feeblemind` (r6) | — | Between them; no incapacitation trait because the lockout is only 1 round |
 | **Kaidō** (2 actions, touch) | 50 HP at 20th | `Lay on Hands` (champion, **1 action**) | 6 HP/rank, ~60 at r10 | **Under**, and costs twice the actions |
 
-### 9.4 Release Techniques and Final Releases vs. published focus spells
+### 10.4 Release Techniques and Full Releases vs. published focus spells
 
 All values at **rank 10 / level 20**, all costing **1 Reiatsu Point**.
 
-| Spirit | Release Technique @ r10 | Final Release adds @ r10 | Nearest published anchor |
+| Spirit | Release Technique @ r10 | Full Release adds @ r10 | Nearest published anchor |
 | :---- | :---- | :---- | :---- |
 | **Senbonzakura** | 11d6, 20-ft emanation + difficult terrain | 8d6 **recurring** in two 20-ft emanations | `Impaling Briars` (druid r8, 10d6, sustained) |
 | **Zangetsu** | 11d6, 60-ft line, ignores spirit resistance | 1-action Getsuga + doubled Flash Step | `Qi Blast` (monk r3, 1-action cone); `Flurry of Blows` |
@@ -1479,27 +1665,27 @@ All values at **rank 10 / level 20**, all costing **1 Reiatsu Point**.
 > Release Technique — it is the whole subclass, not one of five Forms — and neither carries an
 > offensive area option. If you would rather hold the line exactly, move both to base rank 4.
 
-### 9.5 Monotonicity audit
+### 10.5 Monotonicity audit
 
-The inequality every tier must satisfy: **Release Technique ≤ Final Release output**, at rank 10.
+The inequality every tier must satisfy: **Release Technique ≤ Full Release output**, at rank 10.
 
-| Spirit | Release Tech. | Final Release adds | In Final Release you get | Monotonic? |
+| Spirit | Release Tech. | Full Release adds | In Full Release you get | Monotonic? |
 | :---- | :---- | :---- | :---- | :---- |
 | All fifteen | X | Y | **X (now free, 1×/round) + Y + die step + fear aura** | ✅ |
 
-Because Final Release makes the Release Technique **cost nothing**, total per-round output in a Final
+Because Full Release makes the Release Technique **cost nothing**, total per-round output in a Full
 Release is always strictly greater than outside it, in every one of the fifteen Spirits, with no
 exceptions and no per-Spirit arithmetic needed. This is a structural guarantee rather than a
-coincidence, and it is the main reason the Final Release was written as a *state* that frees the
+coincidence, and it is the main reason the Full Release was written as a *state* that frees the
 existing technique rather than as a bigger technique that replaces it.
 
 *(The Breath Slayer v4 audit had to check this style-by-style because its Final Forms replaced rather than freed. This chassis avoids that class of bug entirely.)*
 
 ---
 
-## 10 — Balance guardrails and playtest watch-list
+## 11 — Balance guardrails and playtest watch-list
 
-These are the levers to pull, in the order to pull them. Referred to elsewhere as §10.1, §10.2, and so on.
+These are the levers to pull, in the order to pull them. Referred to elsewhere as §11.1, §11.2, and so on.
 
 1. **Rising Pressure's per-encounter cap is load-bearing.** Without it, a long fight is an infinite
    pool. If the class still feels rich, reduce the cap to **half your pool maximum, rounded up** (so
@@ -1519,61 +1705,66 @@ These are the levers to pull, in the order to pull them. Referred to elsewhere a
 6. **Kidō must not become a spell list.** Hard ceiling 9 by 20th, Soul Reaper Lineage only, and only
    for a character who spent three class feats on it. There is no utility kidō in §6 and there should
    not be one.
-7. **`Two Souls, One Edge` (18) is the feat most likely to produce a combination nobody costed.**
-   It grants only the **Released Form**, never a second Release Technique or Final Release. If it
+7. **Final Release's Waning table is the whole balance of §9.** If your table finds everyone firing
+   their Severing Art on round one, flatten the curve rather than cutting the ceiling — start at
+   **16d6** and drop **1d6** per round, which makes rounds 1–7 far closer in value. If instead nobody
+   ever fires it before round seven, the general state is too good: cut Severance's Speed bonus and
+   the doubled Flash Step.
+8. **`Two Souls, One Edge` (18) is the feat most likely to produce a combination nobody costed.**
+   It grants only the **Released Form**, never a second Release Technique or Full Release. If it
    still misbehaves, restrict it to Spirits within your own Lineage.
-8. **The class is intentionally weak on round one.** If players complain about that, the design is
+9. **The class is intentionally weak on round one.** If players complain about that, the design is
    working. If they complain at **3rd level** that they have nothing to do, that is a real problem —
    grant `Hirenkyaku Drill`'s effect to everyone and move one bonus kidō to 3rd.
-9. **Konsō is a narrative superpower.** It can defuse whole encounters. That is intended, but tell
+10. **Konsō is a narrative superpower.** It can defuse whole encounters. That is intended, but tell
    your GM in advance so they can build around it.
-10. **Aizen's Kyōka Suigetsu is the subclass most likely to break a table socially, not
+11. **Aizen's Kyōka Suigetsu is the subclass most likely to break a table socially, not
     mechanically.** An always-on illusion on every enemy that can see you is a lot of GM bookkeeping,
     and "you cannot trust what the GM describes" is a table-consent question, not a balance question.
     Ask first.
 
 ---
 
-## 11 — Variant rules and table options
+## 12 — Variant rules and table options
 
-**Early Final Release (campaigns ending at 10–12).** Move Final Release to **11th** and Refined
-Release to **7th**. Cut Perfected Final Release. Front-loaded, ladder intact.
+**Early Full Release (campaigns ending at 10–12).** Move Full Release to **11th** and Refined
+Release to **7th**. Cut Perfected Full Release. Front-loaded, ladder intact.
 
-**Final Release as a story unlock.** Arguably better for the source material: Bankai is not granted
+**Full Release as a story unlock.** Arguably better for the source material: Bankai is not granted
 by level at all. It is granted by the GM when the character completes a personal arc with their
-Spirit — the class table just reads "Final Release (see GM)." In canon, achieving Bankai normally
+Spirit — the class table just reads "Full Release (see GM)." In canon, achieving Bankai normally
 takes ten years and materialising your own zanpakutō spirit to beat it into submission; Ichigo does
 it in three days and it nearly kills him. Suggested gate: **no earlier than 11th**.
 
-**The Sealed Campaign.** Remove Final Release entirely, cap the pool at 2, run levels 1–10. The class
+**The Sealed Campaign.** Remove Full Release entirely, cap the pool at 2, run levels 1–10. The class
 works fine as a Shikai-only chassis.
 
 **Cross-Lineage characters.** A Visored (Soul Reaper with a Hollow inside) or an Arrancar-Quincy is
 best handled as **your Lineage, plus one feat from another Lineage's list** granted by the GM, rather
-than as a fourth Lineage. The prototype's `Hollow Mask` archetype (§11 of that document) remains the
+than as a fourth Lineage. The prototype's `Hollow Mask` archetype (§12 of that document) remains the
 better home for a Visored who wants the full package.
 
 **Dual zanpakutō.** Treat as a rare GM-granted variant replacing your Spirit with two half-Spirits:
-both Released Forms, one Release Technique, and Final Release works with only one of them. This is
+both Released Forms, one Release Technique, and Full Release works with only one of them. This is
 `Two Souls, One Edge` handed out at 1st level instead of 18th, so it should cost the character
 something real.
 
 ---
 
-## 12 — The prototype's open questions, answered
+## 13 — The prototype's open questions, answered
 
 | # | Question | Answer | Where |
 | :---- | :---- | :---- | :---- |
 | 1 | Charisma-keyed instead of Str/Dex? | **No.** Kept Str/Dex. Reiatsu DC already makes your force of self scale without breaking attack math | §1.2 |
 | 2 | Bump armour to medium? | **No.** Light. Medium is the line against Champion/Guardian, and Hierro already buys defence | §3.1 |
-| 3 | Raise the baseline kidō count? | **No** — made it a **Lineage** decision instead, exactly as the prototype suggested. Soul Reaper gets 6, the others 3 | §5.1 |
+| 3 | Raise the baseline kidō count? | **No** — made it a **Lineage** decision instead, exactly as the prototype suggested. Soul Reaper gets **6 chosen**; a Hollow gets **Cero and Bala** and a Quincy **Heizen and Gritz**, fixed and native, so every Lineage has demon arts but only one has a *list* | §5.1, §6.4–6.5 |
 | 4 | Nine subclasses is a lot to balance | Now **fifteen**, which is more, but they sit on **five shared ladders** (§7 preamble) rather than fifteen bespoke curves. For a first playtest, run **Senbonzakura, Hyōrinmaru, Murciélago, The Heat, The Balance** — that is control, damage, ranged, shape-choice, and defence across all three Lineages | §7 |
-| — | Should Quincy be a separate class? *(prototype §11)* | **No**, per your instruction. The cost of folding them in was 130 points, paid for by cutting Legendary class DC and Master Will | §2.2 |
+| — | Should Quincy be a separate class? *(prototype §12)* | **No**, per your instruction. The cost of folding them in was 130 points, paid for by cutting Legendary class DC and Master Will | §2.2 |
 | — | Should Hollow-kin be "the same sheet"? *(prototype §6b)* | **Partly.** They now differ by a real Lineage package, not just by flavour — which is what makes the three sit at one table without one of them being a reskin | §5 |
 
 ---
 
-## 13 — How it plays
+## 14 — How it plays
 
 **Key Attribute:** Strength or Dexterity · **HP:** 10 · **Source:** Homebrew (Rare)
 
@@ -1591,18 +1782,26 @@ and a Speed nobody else on the field has. A **Quincy** turns the enemy's own esc
 the Art` suppresses a Bankai, a Rage, or an Arcane Cascade for a round, and `Blut` toggles between
 being hard to hurt and being impossible to resist.
 
-At 13th level, **Final Release** turns one fight per day into a one-minute window where your technique
+At 13th level, **Full Release** turns one fight per day into a one-minute window where your technique
 is free, your damage die is bigger, and your presence frightens things — paid for with fatigue
 afterward. Outside combat you are the party's spirit specialist: you sense the dead through walls, you
 hit incorporeal things without special gear, and **Konsō** lets you end a haunting by talking a soul
 into leaving instead of fighting it.
+
+At 20th level, **Final Release** is the ending. One feat, once per week, and it takes the class from
+you for a week afterwards. It grants **Severance** — ten rounds in which reiatsu stops mattering
+entirely, your kidō and your Release Technique are free and unlimited, and your Strikes carry an
+extra 4d6 — and exactly one **Severing Art**, your Spirit's own last technique, which ends Severance
+the moment you use it. The Art is worth **20d6 in round one and 8d6 in round seven**, and nothing at
+all after that, so the whole capstone is a single question asked under pressure: *is this the moment,
+or can I afford to keep swinging?*
 
 **What makes it different.** Two mechanics are genuinely new. First, **focus points that refill inside
 a fight, but only by fighting** — every other focus user in PF2e spends down a pool that cannot be
 replenished until they get ten quiet minutes. That inverts the usual caster tempo: this class's best
 turn is never its first. Second, the **one-way escalation ladder**. Monk and Magus stances swap
 freely; Exemplar rotates a spark between three ikons; Oracle escalates but only into penalties. Sealed
-→ Released → Final Release goes one direction, costs more at each step, and pays out in **new
+→ Released → Full Release goes one direction, costs more at each step, and pays out in **new
 actions** rather than flat numbers, which keeps it inside PF2e's math.
 
 Everything else is deliberately restrained so those two things stand out: no minions (Necromancer's
@@ -1611,19 +1810,19 @@ spell attached to a Strike (Magus's), no spell slots at all, mediocre healing, a
 light.
 
 **Adjacency note.** Watch two things. Rising Pressure plus a long grindy fight is the class's best case
-and needs the per-encounter cap enforced, or the reaper fires every round. And Final Release at 13th is
+and needs the per-encounter cap enforced, or the reaper fires every round. And Full Release at 13th is
 late for a campaign that ends at 10 — see §11.
 
 ---
 
-## 14 — Sources
+## 15 — Sources
 
 **Balance framework:** `Docs/homebrewing/BCS 1.4 (current) _ Balanced Core System.xlsx` —
 `PROFICIENCYVALUES`, `CLASSPROFILES`, `CLASSDATA`, and `CLASSTOTALS` tabs. Every point value in §2 is
 read directly from that workbook.
 
 **Mechanical anchors:** the live PF2e system data in `pf2e_fork/packs/pf2e` — `spells/focus`,
-`feats/class`, `actions/class`, and `class-features`. Every named anchor in §9 is an item in those
+`feats/class`, `actions/class`, and `class-features`. Every named anchor in §10 is an item in those
 packs.
 
 **Companion documents in this repository:** `Docs/breath-slayer-guide-v4.md` (same 2100-point budget,
@@ -1646,4 +1845,14 @@ technique in §7:
 - [Quincy](https://bleach.fandom.com/wiki/Quincy) · [Schrift](https://bleach.fandom.com/wiki/Schrift) · [Quincy: Letzt Stil](https://bleach.fandom.com/wiki/Quincy:_Letzt_Stil) · [Seele Schneider](https://bleach.fandom.com/wiki/Seele_Schneider)
 - [Uryū Ishida](https://bleach.fandom.com/wiki/Ury%C5%AB_Ishida) · [Bazz-B](https://bleach.fandom.com/wiki/Bazz-B) · [Gerard Valkyrie](https://bleach.fandom.com/wiki/Gerard_Valkyrie) · [Lille Barro](https://bleach.fandom.com/wiki/Lille_Barro)
 - [Arrancar](https://bleach.fandom.com/wiki/Arrancar) · [Every Sternritter Schrift power, ranked](https://gamerant.com/bleach-every-quincy-sternritter-schrift-power/) · [Bleach Top 10 Quincy, ranked](https://www.cbr.com/best-bleach-quincy/)
+
+**Added for v1.1** — Lineage kidō and the Severing Arts:
+
+- [Category: Quincy Techniques](https://bleach.fandom.com/wiki/Category:Quincy_Techniques) — Gintō, **Heizen**, **Gritz**, **Wolke**, **Sprenger**
+- [Ittō Kasō](https://bleach.fandom.com/wiki/Itt%C5%8D_Kas%C5%8D) — the "spell of sacrifice"; Yamamoto loses his left arm to it
+- [Burning Full Fingers](https://bleach.fandom.com/wiki/Burning_Full_Fingers) · [Burner Finger 1](https://bleach.fandom.com/wiki/Burner_Finger_1) · [Burner Finger 4](https://bleach.fandom.com/wiki/Burner_Finger_4)
+- [Hyōryū Senbi](https://bleach.fandom.com/wiki/Hy%C5%8Dry%C5%AB_Senbi) · [Ryūsenka](https://bleach.fandom.com/wiki/Ry%C5%ABsenka)
+- [Electrocution](https://bleach.fandom.com/wiki/Electrocution) — Candice Catnipp's strongest technique
+- [Jugram Haschwalth](https://villains.fandom.com/wiki/Jugram_Haschwalth) — **Freund Schild**, his spirit weapon
+- [Quincy: Vollständig](https://bleach.fandom.com/wiki/Quincy:_Vollst%C3%A4ndig)
 
