@@ -1,4 +1,4 @@
-# Soulbound — PF2e Class Guide, **Version 1.1**
+# Soulbound — PF2e Class Guide, **Version 1.2**
 
 ### *Bleach · ブリーチ · Shinigami / Arrancar / Quincy edition*
 
@@ -10,10 +10,26 @@ compendium — no cross-referencing. Companion to **The Saint** (Gold Cloth guid
 **Sources folded in:** the `soul-reaper-class.md` prototype supplied by the repository owner;
 **BCS 1.4** (`Docs/homebrewing/BCS 1.4 (current) _ Balanced Core System.xlsx`) for every point value;
 live PF2e system data from `pf2e_fork/packs/pf2e` for every mechanical anchor; and the Bleach primary
-wiki for every named technique. Where the prototype left a decision open — §13 "Open Questions For
-You" — this guide makes the call and says which way it went, in §12.
+wiki for every named technique. Where the prototype left a decision open — its §12, "Open Questions
+For You" — this guide makes the call and says which way it went, in **§13**.
 
-**What changed in v1.1 (read this first if you have v1.0):**
+**What changed in v1.2:**
+
+1. **`Ittō Kasō` was broken and is fixed.** Its entry listed only a *self-cost* and no effect on
+   enemies, which made the one Severing Art that charges you half your Hit Points also the only one
+   with no rider — strictly the worst ending in the class, for the highest price. It now deals the
+   Waning dice **+2d6** (the only Art that beats the table), **ignores resistance and immunity to
+   fire**, **blocks healing and suppresses regeneration for 1 minute**, and **cremates** anything it
+   drops. The self-cost is broken out under the table so it can't be mistaken for the enemy effect
+   again (§9.1).
+2. **`Two Souls, One Edge` is cut and replaced by the `Borrowed Nature` family (§8.6).** Carrying two
+   zanpakutō spirits has no canon basis; being **two peoples at once** has six. Borrowed Nature (6),
+   Deeper Crossing (12), and Second Nature (18) let any Lineage dip into another — a Soul Reaper
+   wearing a Hollow's mask is a **Visored**, a Hollow taking Shinigami power is what an **Arrancar**
+   already is, a Quincy carrying either has Ichigo's own bloodline behind it. Each direction is
+   listed with its canon precedent, and the borrowed version is always **half** the native rate.
+
+**What changed in v1.1:**
 
 1. **The class is now called *Soulbound*.** "Soul Reaper" was doing two jobs — the class and one of
    its three Lineages — and now does only the second. The file is renamed to match.
@@ -34,7 +50,7 @@ You" — this guide makes the call and says which way it went, in §12.
 
 1. **Hollow-kin and Quincy are folded into the class, not split off.** The prototype made
    Resurrección a "variant subclass" and recommended Quincy be built as a **separate class**
-   (prototype §12). Both are now **Lineages** on a shared chassis, which is what you asked for. §5
+   (prototype §11). Both are now **Lineages** on a shared chassis, which is what you asked for. §5
    explains what each Lineage buys and what it pays for it.
 2. **The subclass axis is now two axes**: **Lineage** (what you *are*) and **Spirit** (what your
    power *is*). Fifteen Spirits, five per Lineage, each built from the canon character's actual
@@ -1405,6 +1421,7 @@ without gaps. Feats marked **[SR]**, **[H]**, or **[Q]** require that Lineage.
 | 6 | **Kidō Combination** [free-action] | Immediately after using a destruction kidō, use a binding kidō against the same target for 1 fewer Reiatsu Point (minimum 0). Once per encounter. | `Spellstrike`-adjacent action compression, once per encounter |
 | 6 | **Second Release** | Re-seal and Release again in the same encounter without spending a Reiatsu Point, once per encounter. | Stance-swapping economy; `Stance Savant` (monk 12) |
 | 6 | **Cut the Cord** | Your spirit weapon's Strikes ignore the first **5 points** of resistance to spirit damage. | `Cut from the Air`-tier; the exemplar's resistance-bypass ikons |
+| 6 | **Borrowed Nature** | You take on a second Lineage's nature, partially and with effort. Full rules in **§8.6**. | `Hollow Mask` archetype (prototype §11); barbarian `Rage`; monk `Path to Perfection` |
 | 6 | **Blut Discipline** **[Q]** | You may switch which Blut you have active as a **free action** twice per round instead of once. | Pure action economy on an existing free action |
 | 6 | **Descorrer** **[H]** | Once per hour, open a Garganta: you and up to 5 allies teleport up to 500 feet to a location you can see or have visited. | `Dimension Door` (rank 4) as a once-per-hour class feat at 6th, range-limited to line of sight |
 | 8 | **Inner World** | During daily preparations, commune with your spirit to retrain one soulbound feat of 6th level or lower in 1 hour. | Free retraining; `Adaptive Adept`-shaped |
@@ -1416,6 +1433,7 @@ without gaps. Feats marked **[SR]**, **[H]**, or **[Q]** require that Lineage.
 | 12 | **Soul Sever** | When you reduce a creature to 0 HP with your spirit weapon, immediately perform a Konsō on it as a free action with no check, permanently preventing it from rising as undead. | `Blade of Justice`'s finisher space; a narrative effect with no combat number |
 | 12 | **Kidō Mastery** | Your destruction kidō deal an additional die of damage of their damage type. | `Reach Spell`/`Widen Spell` tier applied as a flat die; `Kineticist's Gate` bumps |
 | 12 | **Segunda Piel Temprana** **[H]** | Hierro's resistance applies to **spirit** damage for 1 round each time you are critically hit. | An early, conditional taste of the 15th-level Lineage Mastery |
+| 12 | **Deeper Crossing** | **Prerequisite** Borrowed Nature. The borrowed Aspect deepens and you can wear it twice per encounter. **§8.6**. | `Second Path to Perfection` (monk 11) |
 
 ### 8.4 Zanjutsu techniques **[SR]** — the Soul Reaper martial family
 
@@ -1444,7 +1462,7 @@ as class feats at the listed level. Each costs **1 Reiatsu Point**, uses the Str
 | 16 | **Unbroken Chain** | When you would be reduced to 0 HP while released, spend 1 Reiatsu Point to remain at 1 HP instead. Once per day. | `Hero's Defiance` (champion rank 10) at a fraction of the effect and a Reiatsu cost |
 | 16 | **Reiatsu Flood** | Your Rising Pressure per-encounter cap increases by 1. | The single most dangerous feat in the class — see §11.1 |
 | 18 | **Beyond the Blade** | Your Release Technique's damage dice increase by two steps (d6→d10, d8→d12). | `Greater Weapon Specialization` shape applied to a focus effect |
-| 18 | **Two Souls, One Edge** | You gain a second Spirit's **Released Form** (not its Release Technique, not its Full Release). You may have only one released at a time and switching costs 1 Reiatsu Point. | `Second Path to Perfection` (monk 11, BCS 110) — this is later and grants strictly less |
+| 18 | **Second Nature** | **Prerequisite** Deeper Crossing. The borrowed Aspect stops being something you put on and becomes something you are. **§8.6**. | `Third Path to Perfection` (monk 15, BCS 190) — this is later and grants strictly less |
 | 20 | **Final Release** [three-actions] | **Frequency** once per week. You sever the bond that names you. Full rules in **§9** — it is large enough to need its own section. | `Hero's Defiance`; `Impossible Flurry`; `All Shall End in Flames` |
 
 > **Final Release** is the class's 20th-level capstone and the only thing in this document that can
@@ -1454,6 +1472,87 @@ as class feats at the listed level. Each costs **1 Reiatsu Point**, uses the Str
 *Naming note: `Final Release` is the umbrella term. Your character never calls it that — a Soul Reaper
 calls it by their Spirit's own name for it, and canon's own example is Ichigo's **Saigo no Getsuga
 Tenshō**, which is §9.1's entry.*
+
+### 8.6 Borrowed Nature — the cross-Lineage family
+
+*Replaces v1.1's `Two Souls, One Edge`, which granted a second Spirit's Released Form. That feat was
+cut: **nobody in canon carries two zanpakutō spirits**, and the rules problem matched the canon
+problem — two Released Forms on one sheet is a stacking puzzle nobody costed. What canon *does* have,
+constantly, is people who are **two peoples at once**.*
+
+#### Why this is the canon-correct version of that feat
+
+Every one of the six directions has a name in the source material:
+
+| You are… | You borrow… | Canon precedent |
+| :---- | :---- | :---- |
+| **Soul Reaper** | **Hollow** | **The Visored.** Shinji, Kensei, Hiyori, Ichigo — Soul Reapers with a Hollow inside, who wear a mask for a limited time and hear something arguing with them while it is on. This is the archetypal case and the one the mechanics are built from. |
+| **Soul Reaper** | **Quincy** | **The Kurosaki line.** Isshin is a Shinigami, Masaki a Quincy; their son is both, and it is treated as a birthright rather than an experiment. |
+| **Hollow** | **Soul Reaper** | **What an Arrancar literally is** — a Hollow that tore off its own mask and gained Shinigami power, zanpakutō and all. For this Lineage the feat is less "borrowing" than finishing. |
+| **Hollow** | **Quincy** | Arrancar who take ambient reishi instead of devouring souls, and the Hollows the Wandenreich conscripted and rebuilt. |
+| **Quincy** | **Soul Reaper** | **Ichigo, and Kanae Katagiri.** Quincy bloodlines carrying Shinigami power are common enough in canon to have caused a war about it. |
+| **Quincy** | **Hollow** | **Sklaverei** — the Quincy art of subordinating Hollow reishi to your own, and the Sternritter who took Hollow power to survive Auswählen. |
+
+#### The feats
+
+> **BORROWED NATURE** (feat 6)
+> Choose a Lineage other than your own. **This choice is permanent.** You learn that Lineage's free
+> cantrip kidō — **Shō**, **Bala**, or **Heizen** — and it costs you no Reiatsu Point, exactly as it
+> would for someone born to it.
+>
+> You also gain:
+>
+> > **Don the Other Face** [one-action] (concentrate, reiatsu)
+> > **Cost** 1 Reiatsu Point · **Frequency** once per encounter
+> > For **1 minute** you gain your borrowed Lineage's **Aspect**, below. While it is on, you take a
+> > **−1 status penalty to Will saves** — what you are wearing is not yours, and it argues.
+
+**The three Aspects.** Each is the borrowed Lineage's signature at **half** its native rate, which is
+the whole design: a dip is visibly weaker than the real thing, and never catches up to it.
+
+| Aspect | While the Face is on |
+| :---- | :---- |
+| **Soul Reaper's Discipline** | You learn **one** kidō of your choice from §6.1–6.3 permanently, usable at its normal cost. While the Face is on, **every kidō you know costs no Reiatsu Point.** |
+| **Hollow's Mask** | You gain **temporary Hit Points equal to your level**, **resistance to physical damage equal to a quarter of your level** (minimum 1), and a **+5-foot status bonus** to all your Speeds. |
+| **Quincy's Discipline** | You gain **Blut** as a free action once per round (§5.3), except that **Blut Vene** grants resistance equal to a **quarter** of your level rather than half. Your ranged Strikes ignore the target's cover. |
+
+> **DEEPER CROSSING** (feat 12) · **Prerequisite** Borrowed Nature
+> Don the Other Face **twice per encounter**, and your Aspect deepens:
+>
+> - **Soul Reaper's Discipline** — you learn a **second** kidō, and while the Face is on your
+>   **destruction** kidō deal one additional die of damage.
+> - **Hollow's Mask** — temporary Hit Points equal to **twice your level**, resistance equal to
+>   **half** your level, and the Speed bonus increases to **+10 feet**.
+> - **Quincy's Discipline** — Blut Vene's resistance becomes **half** your level, and once per
+>   encounter while the Face is on you may use **Seal the Art** (§5.3), even though you are not a
+>   Quincy.
+
+> **SECOND NATURE** (feat 18) · **Prerequisite** Deeper Crossing
+> The mask stops being something you put on. Your **Borrowed Nature** Aspect — the 6th-level version,
+> not the 12th — is **always active**: no action, no Reiatsu Point, no duration, and **no Will
+> penalty**. Donning the Other Face still upgrades you to the **Deeper Crossing** numbers for 1
+> minute, twice per encounter.
+>
+> *Canon: this is the exact difference between a Visored who has to summon the mask and one who no
+> longer needs to.*
+
+#### Costing and anchors
+
+| Element | Anchor in `packs/pf2e` | Read |
+| :---- | :---- | :---- |
+| Temporary HP = level, 1/encounter @ 6 | Barbarian `Rage` — temp HP = **level + Con**, **at-will**, from **1st** | Far under |
+| Temp HP = 2 × level @ 12 | `Rage` again, plus 12 levels | Comparable, still once or twice per encounter |
+| Resistance = ¼ level @ 6 → ½ level @ 12 | `Thermal Nimbus` (kineticist **4**) = resistance **equal to level** | A quarter, then half, of the anchor — and half of what the Hollow Lineage itself gets |
+| Free kidō for 1 minute | `Perfected Technique` (§8, 10th) frees **one** Release Technique once per encounter | Narrower per use, wider in scope, six levels earlier |
+| Blut on a non-Quincy | The Quincy Lineage's own 1st-level grant | Explicitly halved so it cannot match the native version |
+| −1 status penalty to Will | The prototype's `Hollow Mask` archetype drawback, kept | The canon "it argues with you" clause, and the reason this is safe at 6th |
+| Second Nature @ 18 | Monk `Third Path to Perfection` (15th, BCS **190**) | Three levels later and strictly less: it makes an existing 6th-level effect passive |
+
+**What it deliberately does not do.** No borrowed **Release**, **Release Technique**, **Full
+Release**, or **Severing Art**; no second Spirit; no access to the borrowed Lineage's 5th- or
+15th-level features except the one metered use of `Seal the Art` at 12th. You get the *texture* of
+the other people, never their ladder. A Visored is a Soul Reaper wearing a Hollow's face, not a
+Hollow.
 
 ---
 
@@ -1540,8 +1639,20 @@ All are **[two-actions]**, cost nothing, use the Waning table for damage, and en
 | **Senbonzakura** | **Shūkei: Hakuteiken** *(Endscape: White Imperial Sword)* ✅ | Every blade condenses into a single white sword; wings and a vertical halo open behind you. **One creature within reach.** Make a Strike; on a hit it takes the Waning dice as **slashing**. | Ignores **all** resistances and immunities. On a hit the target can't regain Hit Points, and its regeneration and fast healing are suppressed, for 1 minute. |
 | **Zangetsu** | **Mugetsu** *(Moonless Sky)* ✅ | A blade of black reiatsu pours from your arm. **60-foot cone**, basic Reflex, **spirit**. | Ignores **all** resistances and immunities to spirit damage. **This is the pattern the whole section is built from:** canon's *Saigo no Getsuga Tenshō* is the **state** (here, Severance) and *Mugetsu* is the **one attack inside it**. Every other Spirit gets the same two-part shape. |
 | **Hyōrinmaru** | **Hyōten Hyakkasō** *(Frozen Heavens Hundred Flower Funeral)* ✅ | Snow falls and ice flowers bloom on everything it touches. **30-foot emanation**, basic Fortitude, **cold**. | Creatures that fail are **restrained** in a pillar of ice (Escape vs. your Reiatsu DC) and take **4d6 persistent cold** that allows **no flat check** to end while restrained. Canon: the target's life ends when the hundredth petal falls. |
-| **Ryūjin Jakka** | **Ittō Kasō** *(Single Blade Cremation)* ✅ | A pillar of red fire in the shape of a katana's tip erupts from the ground. **20-foot burst** within 60 feet, basic Reflex, **fire**. | **Self-cost, and it is canon:** Ittō Kasō uses the caster's own body as the catalyst — Aizen calls it the *spell of sacrifice*, and Yamamoto loses his left arm to it. You take damage equal to **half your current Hit Points**, which cannot be prevented, reduced, or resisted. |
+| **Ryūjin Jakka** | **Ittō Kasō** *(Single Blade Cremation)* ✅ | A pillar of red fire in the shape of a katana's tip erupts from the ground. **20-foot burst** within 60 feet, basic Reflex, **fire** — and it deals the Waning dice **+2d6**, the only Art in the class that beats the table. | The fire **ignores resistance and immunity to fire**. Creatures that fail **can't regain Hit Points for 1 minute**, and their regeneration and fast healing are suppressed for that minute. A creature reduced to 0 Hit Points by Ittō Kasō is **cremated** — returning it to life requires a 10th-rank effect. **This Art also costs you: see below.** |
 | **Kyōka Suigetsu** | **Kanzen Saimin: Owari** *(Complete Hypnosis: The End)* ⚠️ | The hypnosis stops being a lie about your position and becomes a lie about everything. **60-foot emanation**, basic Will, **mental**. | Creatures that fail are **confused** for 1 minute. On a critical failure the creature perceives its own allies as you for that minute and cannot be shaken loose by damage. ⚠️ **Extrapolated** — Aizen has no canon Final Release, for the same reason he has no canon Bankai. |
+
+> **Ittō Kasō's self-cost.** Alone among the fifteen, Ittō Kasō charges its user, because canon
+> insists: it is a **forbidden** technique that uses the caster's own body as the catalyst, Aizen
+> calls it the *spell of sacrifice*, and Yamamoto loses his left arm casting it.
+>
+> **When you use Ittō Kasō, you take damage equal to half your current Hit Points.** This damage
+> cannot be prevented, reduced, resisted, or redirected, and it is applied after the Art resolves.
+>
+> That is *why* it is the biggest number in the section (+2d6 over the Waning table) and carries the
+> hardest rider (unresistable, anti-healing, and it destroys the body). A self-cost that bought
+> nothing would just make Ryūjin Jakka the worst Spirit to take to 20th level; a self-cost has to buy
+> the best ending in the class, or it should not exist.
 
 ### 9.2 Severing Arts — Hollow Spirits
 
@@ -1574,9 +1685,10 @@ establish: Aizen's hypnosis, Ulquiorra's ash, Baraggan's aging, Starrk's wolves,
 redistribution of fortune, and Gerard's growth from damage. None is presented as something the manga
 contains.
 
-**Ittō Kasō is the only one with a self-cost**, and that is because canon insists on it: it is a
-forbidden technique that burns the caster as the catalyst. Every other Spirit pays the same price —
-a week without your powers — and no more.
+**Ittō Kasō is the only one with a self-cost**, and it is paid for: it is the only Art that exceeds
+the Waning table (+2d6) and the only one whose damage ignores resistance *and* immunity *and* blocks
+healing *and* destroys the body. Every other Spirit pays the same price and no more — a week without
+your powers.
 
 ---
 
@@ -1618,6 +1730,7 @@ comparison whose Will stops at Expert, which is the deliberate genre concession 
 | **Seal the Art** (counteract a release state) | `Dispel Magic` (rank 2); the counteract rules | — | Suppresses rather than ends; counteract rank = half level, the standard focus line |
 | **Full Release** fear emanation | `Frightful Presence` (monster ability); `Dread Aura` | — | Weaker: frightened 1, ends-of-turn only, 10-minute immunity on a success |
 | **Unsealed** (2× Full Release/day) | Magus `Double Spellstrike` (BCS 110) | 19 | Same price, same slot |
+| **Borrowed Nature** (§8.6) | Barbarian `Rage` (temp HP = level + Con, at-will, 1st); `Thermal Nimbus` (resistance = level, 4th) | 6 / 12 / 18 | A quarter then half of both anchors, once or twice per encounter, with a Will penalty |
 | **Final Release / Severance** (§9) | `Impossible Flurry` (fighter 20); `All Shall End in Flames` (kineticist 20) | 20 | Same slot. Both anchors are **repeatable**; this is **once per week** and costs the class for a week |
 | **Severing Art**, round 1 | `Cataclysm` (rank **10** spell); `Unfolding Wind Crash` (monk rank 9, 18d6) | — | 20d6 once per week vs. 18d6 from a focus pool that refills every 10 minutes |
 | **Severing Art**, round 7 | `Arcane Explosion` (wizard rank 9, 16d6) | — | 8d6 — **half** the rank-9 comparator. The decay is the cost of waiting |
@@ -1710,9 +1823,14 @@ These are the levers to pull, in the order to pull them. Referred to elsewhere a
    **16d6** and drop **1d6** per round, which makes rounds 1–7 far closer in value. If instead nobody
    ever fires it before round seven, the general state is too good: cut Severance's Speed bonus and
    the doubled Flash Step.
-8. **`Two Souls, One Edge` (18) is the feat most likely to produce a combination nobody costed.**
-   It grants only the **Released Form**, never a second Release Technique or Full Release. If it
-   still misbehaves, restrict it to Spirits within your own Lineage.
+8. **`Borrowed Nature` (§8.6) is the feat most likely to produce a combination nobody costed.** Watch
+   two stacks specifically: a **Hollow** who borrows Quincy gets Hierro *and* Blut Vene, and a
+   **Quincy** who borrows Hollow gets Blut Vene *and* the Mask. Both are physical resistance from two
+   sources. **They do not stack — resistances to the same damage type never do in PF2e, you take the
+   highest** — so the real effect is redundancy rather than a doubled number, which is exactly why
+   the borrowed rate is a quarter and then half. If a table plays it as stacking, that is the bug.
+   The other watch item is `Second Nature` (18) making the Mask's temporary Hit Points permanent:
+   they refresh only when you Don the Other Face, not every round.
 9. **The class is intentionally weak on round one.** If players complain about that, the design is
    working. If they complain at **3rd level** that they have nothing to do, that is a real problem —
    grant `Hirenkyaku Drill`'s effect to everyone and move one bonus kidō to 3rd.
@@ -1739,15 +1857,22 @@ it in three days and it nearly kills him. Suggested gate: **no earlier than 11th
 **The Sealed Campaign.** Remove Full Release entirely, cap the pool at 2, run levels 1–10. The class
 works fine as a Shikai-only chassis.
 
-**Cross-Lineage characters.** A Visored (Soul Reaper with a Hollow inside) or an Arrancar-Quincy is
-best handled as **your Lineage, plus one feat from another Lineage's list** granted by the GM, rather
-than as a fourth Lineage. The prototype's `Hollow Mask` archetype (§12 of that document) remains the
-better home for a Visored who wants the full package.
+**Cross-Lineage characters.** As of v1.2 this is no longer a variant — it is the **`Borrowed Nature`**
+feat family at 6th, 12th, and 18th (**§8.6**), and it covers all six directions with a canon
+precedent for each. A Visored is a Soul Reaper who took Borrowed Nature (Hollow). The prototype's
+`Hollow Mask` archetype (§11 of *that* document) is superseded by it and should not be used
+alongside it.
 
-**Dual zanpakutō.** Treat as a rare GM-granted variant replacing your Spirit with two half-Spirits:
-both Released Forms, one Release Technique, and Full Release works with only one of them. This is
-`Two Souls, One Edge` handed out at 1st level instead of 18th, so it should cost the character
-something real.
+**If you want a *full* second Lineage** rather than a dip, that is a GM-granted rarity, not a feat:
+give the character the second Lineage's 1st-level package and nothing above it, and charge them a
+class feat at 6th, 12th, and 18th for it. That is strictly more than `Borrowed Nature` gives and
+should be treated as a story reward, not a build option.
+
+**Dual zanpakutō.** There is no feat for this and deliberately isn't one — **no character in canon
+carries two zanpakutō spirits**, and two Released Forms on one sheet is a stacking puzzle this
+document does not want to cost. If your table wants it anyway, treat it as a rare GM-granted variant
+replacing your Spirit with two half-Spirits: **both Released Forms, only one Release Technique, and
+Full Release works with only one of them.** Never both Full Releases, and never two Severing Arts.
 
 ---
 
@@ -1759,7 +1884,7 @@ something real.
 | 2 | Bump armour to medium? | **No.** Light. Medium is the line against Champion/Guardian, and Hierro already buys defence | §3.1 |
 | 3 | Raise the baseline kidō count? | **No** — made it a **Lineage** decision instead, exactly as the prototype suggested. Soul Reaper gets **6 chosen**; a Hollow gets **Cero and Bala** and a Quincy **Heizen and Gritz**, fixed and native, so every Lineage has demon arts but only one has a *list* | §5.1, §6.4–6.5 |
 | 4 | Nine subclasses is a lot to balance | Now **fifteen**, which is more, but they sit on **five shared ladders** (§7 preamble) rather than fifteen bespoke curves. For a first playtest, run **Senbonzakura, Hyōrinmaru, Murciélago, The Heat, The Balance** — that is control, damage, ranged, shape-choice, and defence across all three Lineages | §7 |
-| — | Should Quincy be a separate class? *(prototype §12)* | **No**, per your instruction. The cost of folding them in was 130 points, paid for by cutting Legendary class DC and Master Will | §2.2 |
+| — | Should Quincy be a separate class? *(prototype §11)* | **No**, per your instruction. The cost of folding them in was 130 points, paid for by cutting Legendary class DC and Master Will | §2.2 |
 | — | Should Hollow-kin be "the same sheet"? *(prototype §6b)* | **Partly.** They now differ by a real Lineage package, not just by flavour — which is what makes the three sit at one table without one of them being a reskin | §5 |
 
 ---
