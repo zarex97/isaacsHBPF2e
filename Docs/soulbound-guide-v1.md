@@ -1,4 +1,4 @@
-# Soulbound — PF2e Class Guide, **Version 1.2**
+# Soulbound — PF2e Class Guide, **Version 1.3**
 
 ### *Bleach · ブリーチ · Shinigami / Arrancar / Quincy edition*
 
@@ -12,6 +12,21 @@ compendium — no cross-referencing. Companion to **The Saint** (Gold Cloth guid
 live PF2e system data from `pf2e_fork/packs/pf2e` for every mechanical anchor; and the Bleach primary
 wiki for every named technique. Where the prototype left a decision open — its §12, "Open Questions
 For You" — this guide makes the call and says which way it went, in **§13**.
+
+**What changed in v1.3:**
+
+1. **`Second Release` (6) is cut.** It paid you a Reiatsu Point to undo something you would never
+   voluntarily do: Release has no downside and lasts the whole encounter, so nobody re-seals by
+   choice. Its only real uses were re-triggering **Kyōka Suigetsu**'s hypnosis — one Spirit out of
+   fifteen — and refunding a point after a Quincy's `Seal the Art` lapsed. Dead for fourteen
+   subclasses and a hidden combo for one is the worst distribution a feat can have. Its anchor was
+   wrong too: it cited `Stance Savant` and *stance-swapping economy*, when §4.7 says outright that
+   **Release is not a stance**. Replaced by **`Reactive Strike`**, which fills a genuine hole — the
+   class had no way at all to punish a creature moving, casting, or shooting in its reach.
+2. **`Inner World` (8) is cut.** Faster retraining is a GM permission, not a class feat: no combat
+   value, and most tables never invoke it. Replaced by **`Rising Tide`**, which ties the class's
+   signature engine to its real weakness — a 10-HP light-armour frontliner — and pays out every
+   round of every fight.
 
 **What changed in v1.2:**
 
@@ -1419,12 +1434,12 @@ without gaps. Feats marked **[SR]**, **[H]**, or **[Q]** require that Lineage.
 | Lvl | Feat | Effect | PF2e anchor |
 | :---- | :---- | :---- | :---- |
 | 6 | **Kidō Combination** [free-action] | Immediately after using a destruction kidō, use a binding kidō against the same target for 1 fewer Reiatsu Point (minimum 0). Once per encounter. | `Spellstrike`-adjacent action compression, once per encounter |
-| 6 | **Second Release** | Re-seal and Release again in the same encounter without spending a Reiatsu Point, once per encounter. | Stance-swapping economy; `Stance Savant` (monk 12) |
+| 6 | **Reactive Strike** | You gain the **Reactive Strike** reaction: when a creature within your reach uses a manipulate or move action, makes a ranged attack, or leaves a square during a move action, make a melee Strike against it; a critical hit disrupts a manipulate action. *(A reaper who stands still is the most dangerous thing on the field.)* | `Reactive Strike` is a **shared class feat at level 6** (`packs/pf2e/feats/class/shared-class-feats/level-6/`) — the same level Barbarian and Champion get it. Granted under its published name so the existing compendium item automates as-is |
 | 6 | **Cut the Cord** | Your spirit weapon's Strikes ignore the first **5 points** of resistance to spirit damage. | `Cut from the Air`-tier; the exemplar's resistance-bypass ikons |
 | 6 | **Borrowed Nature** | You take on a second Lineage's nature, partially and with effort. Full rules in **§8.6**. | `Hollow Mask` archetype (prototype §11); barbarian `Rage`; monk `Path to Perfection` |
 | 6 | **Blut Discipline** **[Q]** | You may switch which Blut you have active as a **free action** twice per round instead of once. | Pure action economy on an existing free action |
 | 6 | **Descorrer** **[H]** | Once per hour, open a Garganta: you and up to 5 allies teleport up to 500 feet to a location you can see or have visited. | `Dimension Door` (rank 4) as a once-per-hour class feat at 6th, range-limited to line of sight |
-| 8 | **Inner World** | During daily preparations, commune with your spirit to retrain one soulbound feat of 6th level or lower in 1 hour. | Free retraining; `Adaptive Adept`-shaped |
+| 8 | **Rising Tide** | The first time each round that **Rising Pressure** grants you a Reiatsu Point, you also gain **temporary Hit Points equal to half your level** (minimum 2). They last until the start of your next turn and don't stack with themselves. | `Renewed Vigor` (barbarian **8**) grants temp HP equal to half your level **+ Con** for **one action**, rising to **level + Con** if you attacked that turn. This grants strictly less, for **no** action, and only after an enemy has connected with you or you with them |
 | 8 | **Pressure Crush** [two-actions] | Spend 1 Reiatsu Point. Enemies in a **20-foot emanation** attempt a Fortitude save; on a failure they're **clumsy 1** and take a −5-ft. status penalty to Speeds for 1 minute. | `Tempest Surge`'s clumsy applied as an area debuff, no damage attached |
 | 8 | **Zanjutsu: Hakuda** **[SR]** | You gain a **1d6 fist** unarmed attack with **agile**, **finesse**, **nonlethal**, and you may make one unarmed Strike as part of any Zanjutsu technique. | `Powerful Fist` (monk, BCS 10) plus a rider |
 | 10 | **Perfected Technique** | Once per encounter, use your Release Technique without spending a Reiatsu Point. | `Free Casting`-tier; Slayer `Breath of Instinct` (BCS 30) at 15th — this is narrower and earlier |
