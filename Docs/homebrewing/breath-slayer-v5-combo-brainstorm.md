@@ -1,7 +1,9 @@
 # Breath Slayer v5 — Combo Rework: Brainstorm
 
-*Working document. Nothing here is final. This is the argument-and-options pass that has to happen
-before a plan, and it deliberately says which options I think are wrong and why.*
+**Revision 2** — the four structural forks are now decided (§1). This revision reworks everything the
+decisions touched, and it retracts one rule from revision 1 that the decisions proved incoherent.
+
+*Working document. Still not a plan.*
 
 **Premise from the design brief:** v4 is a well-costed martial that does not bring a *new verb* to the
 table. Its pitch — "3 focus spells and a precision rider" — is the monk's pitch with a katana.
@@ -10,427 +12,467 @@ thinking two forms ahead.
 
 ---
 
-## 0 — The three findings that should drive every other decision
+## 1 — Decisions taken
 
-Read these first. Most of the design space below collapses once you accept them.
+| Fork | Decision | Consequence |
+| :---- | :---- | :---- |
+| **Forms per turn** | **Unlimited — action economy is the only limit** | The largest consequence in the document. Forms stop being focus spells and become **martial actions**. See §2.4 and §4.3. |
+| **Wheel size** | **Uniform 9 + Secret, all eleven styles** | 110 Forms. Style identity has to move from wheel *size* to wheel *topology* — §6. |
+| **Kamae** | **Feat line from level 2** | The wheel alone carries the chassis. §5. |
+| **Budget** | **Design first, cost it later** | The 2100 total stays a target; §7.3 keeps a running tally so the retrofit isn't brutal. |
 
-### Finding 1 — A nine-link chain cannot complete in a Pathfinder fight
+---
 
-PF2e encounters run **3–5 rounds**. A martial gets 3 actions a turn and needs some of them for
-Striding, Raising a Shield, Demoralizing, standing up, and drinking things.
+## 2 — The four findings that drive everything else
 
-If a Form costs 1–2 actions and the chain advances one link per Form, a realistic turn is **one Form**.
-Four rounds is **four links**. A ladder whose payoff sits at link 9 pays out **never**, in every fight
-that isn't a boss slog.
+### Finding 1 — A nine-link chain barely fits a Pathfinder fight, and only because of the decision above
 
-Three consequences, and they are not optional:
+PF2e encounters run **3–5 rounds**. Under revision 1's "one advance per turn," four rounds was four
+links, and links 5–9 were decoration.
 
-1. **The chain must pay at every link, not at the end.** Escalation has to be a curve you ride, not a
-   door you unlock. If link 4 isn't already good, the design is dead on arrival.
-2. **The chain must accelerate.** The reward for depth should partly be *action compression* — deep
-   links cost fewer actions, so you fit more links per turn as the fight goes on. Round 1 you use one
-   Form; round 4 you're firing two or three. That is exactly the shape of the source material, and it
-   is the only mechanism that makes link 7+ reachable.
-3. **The Secret/Forbidden Form gates at ~6, not 9.** Gate it where a real fight can actually get.
+The **unlimited-Forms** decision fixes this outright. Three 1-action Forms in a turn is three links, so
+Count 9 is reachable by **the end of round 3**. The nine-link wheel is now a real object rather than an
+aspiration.
 
-### Finding 2 — Removing the pool removes the *only* current throttle, and the numbers must halve
+It fixes it *too well*, which is Finding 3.
 
-v4's entire damage budget is "3 Forms per encounter at 25–45 damage each" ≈ **90–110 points of Form
-damage per fight**, on top of a full martial Strike routine and `Concentrated Breathing`.
+### Finding 2 — Removing the pool removes the only throttle, and the numbers must come down hard
 
-Make Forms free and a 4-round fight produces 4–8 Forms. Keeping v4's per-Form numbers roughly
-**doubles-to-triples** class damage. So either:
+v4's damage budget is "3 Forms per encounter at 25–45 each" ≈ **90–110 points of Form damage per fight**,
+on top of a full martial Strike routine and `Concentrated Breathing`.
 
-- every Form's printed numbers come down hard (roughly **halve** the base), with the **chain bonus
-  buying the difference back at depth** — the late-chain Form ends up where a v4 Second Form is now,
-  and the early-chain Form is deliberately small; **or**
-- Forms stay big and something else throttles — one Form per turn, a per-encounter cap, a
-  cooldown wheel. That's re-inventing the pool with extra steps.
+Free Forms plus unlimited Forms per turn means a 4-round fight can produce **8–12 Forms**. At v4's
+per-Form numbers that is not a buff, it is a different game.
 
-I recommend the first. **The chain replaces the pool as the economy**: your resource is no longer
-points, it's *position*. That is the actual new verb, and it's worth the rescaling work.
+**The chain replaces the pool as the economy: your resource is position, not points.** That is the new
+verb and it is worth the work. But it means every printed number on all ~55 existing Forms comes down,
+and §2.4 says how far.
 
-The corollary nobody enjoys: **every one of the ~55 existing Forms gets rewritten**, and you're adding
-~55 more. See §6.
+### Finding 3 — Unlimited Forms *and* a per-Form chain bonus multiply, and the product is absurd
 
-### Finding 3 — Approach 1.b as literally written is 792 table entries. It doesn't have to be.
+This is the one number worth doing on the page. Take the revision-1 rule (+1 damage die per point of
+Breath Count, applied to every Form) with the unlimited-Forms decision:
+
+| Round | Count reached (3 Forms/turn) | Chain bonus per Form | Chain damage that turn |
+| :---- | ---: | ---: | ---: |
+| 1 | 3 | +3d6 (10.5) | ~31 |
+| 2 | 6 | +6d6 (21.0) | ~63 |
+| 3 | 9 | +9d6 (31.5) | ~94 |
+| 4 | 9 (cap) | +9d6 (31.5) | ~94 |
+
+**≈280 points of chain bonus in four rounds, before a single Form's own printed damage.** Triple v4's
+entire Form budget, from the rider alone.
+
+The two multipliers cannot both be uncapped. Pick one:
+
+| Option | Rule | Verdict |
+| :---- | :---- | :---- |
+| **★ Cap the payout** | Forms are unlimited and each one advances the Count, but **the chain bonus is spent once per turn, on a Form you nominate before rolling.** | **Recommended.** Fully honours the decision — you may still use three Forms — and it converts the cap into the best decision point in the class: *which* Form rides the wave. It also pairs perfectly with Kamae. Four-round total: ~74 points of chain bonus, i.e. *under* v4's Form budget, with the rest coming from the extra Forms' own riders. |
+| **Cap the advance** | Every Form carries the full chain bonus, but the Count rises **once per turn**. | This is the option you rejected. Listed only so the tradeoff is visible: it caps the chain at ~4 links in a real fight and makes links 5–9 decoration again. |
+| **Flatten the curve** | +1 die per **two** points of Count (max +4d6 or +5d6), applied to every Form. | Workable, and the simplest to explain. But a +4d6 ceiling makes the difference between Count 2 and Count 9 feel like nothing, which defeats the point of building up. |
+
+I would ship **Cap the payout**. It is the only one of the three that keeps *both* halves of what you
+asked for: many Forms per turn, and a build-up that visibly matters.
+
+### Finding 4 — The wheel makes 1.b free, and this stands
 
 "Each of 9 Forms has 5 favourable and 3 unfavourable successors" categorises **all eight** other Forms
-for every Form. That's 72 ordered transitions per style × 11 styles = **792 authored relationships**,
-none of which a table can hold in its head.
+for every Form: 72 ordered transitions per style × 11 styles = **792 authored relationships**, none of
+which a table can hold in its head.
 
-But look at the shape: 5 good + 3 bad + itself = 9. That is exactly a **wheel**. Number the Forms 1–9
-and arrange them in a circle:
+But 5 good + 3 bad + itself = 9. That is a **wheel**. Number the Forms 1–9 in a circle:
 
-- moving **+1 to +5** around the wheel = favourable
-- moving **−1 to −3** (i.e. +6 to +8) = unfavourable
+- **+1 to +5** around the wheel = favourable
+- **−1 to −3** (i.e. +6 to +8) = unfavourable
 
-One sentence reproduces all 792 entries, needs no table, and is trivially automatable. **1.b is not a
-content problem, it's a notation problem.** This realisation is what makes the whole rework tractable,
-and it's the basis of the approach I recommend below.
+One sentence reproduces all 792 entries, needs no table, and is a modular-arithmetic check on two Form
+IDs to automate. **1.b was never a content problem; it was a notation problem.**
 
----
+### 2.4 — What "unlimited Forms" really did: Forms are no longer focus spells
 
-## 1 — Approach 1.a evaluated (steps / tiers)
+This deserves its own heading because it re-anchors the entire compendium.
 
-**What it is:** 3 Forms in Step 1, 3 in Step 2, 3 in Step 3, Secret Form in Step 4. Use Step 1 → Step 2
-→ Step 3 in order for a reward; skipping steps applies "reverse heightening."
+A focus spell is priced as *a thing you do three times a fight*. An action you can take every turn,
+several times, forever, is priced completely differently — and PF2e has a large, well-tested library of
+exactly that. **Forms should be costed against martial class actions, not against focus spells.**
 
-### What's good about it
+| Old anchor class | New anchor class |
+| :---- | :---- |
+| `Inner Upheaval` (monk, 1 FP) | Fighter `Knockdown`, `Combat Grab`, `Power Attack` |
+| `Pulverizing Wake` (ranger 9, 1 FP) | Monk `Flurry of Blows`; Barbarian `Furious Strikes` |
+| `All Shall End in Flames` (kineticist 18) | Swashbuckler finishers; Exemplar `Sever Four Dragonfly Wings` (free, at-will, MAP-neutral) |
 
-- **One universal rule, remembered instantly.** "Go up a step" is the whole system.
-- **Steps are a natural acquisition unit.** A feat that grants *a whole step* (3 Forms) is a fair
-  level-8 feat, which means 9 Forms cost you **fewer** feat slots than v4's 5 Forms cost now
-  (§6.2). This is a genuinely large quality-of-life win and it's the best argument for 1.a.
-- **Reverse heightening is mechanically elegant and native.** PF2e already scales everything by rank;
-  "this Form functions at rank − 2 per step skipped, minimum rank 1" is one line, uses machinery the
-  system already has, and automates cleanly.
-- **Tier-wide combo riders scale the writing down.** You author *one* rider per step per style (11 × 3
-  = 33) instead of one per Form.
+Concretely, at level 20:
 
-### What's wrong with it
+- an ordinary nichirin Strike is already ≈ **49 damage** (4d8 major striking + ability + weapon
+  specialization + `Concentrated Breathing` +16);
+- a **1-action Strike Form at Count 0** should therefore be ≈ **a Strike plus about +1d6 and a
+  condition** — not v4's **+5d6**;
+- a **2-action Form** should be worth about two Strikes;
+- the Count is what carries it from there: nominated, at Count 9, that same 1-action Form is a Strike
+  **+10d6**, which is where a v4 Second Form sits today.
 
-- **It's a track, not a choice.** Once you know the order, every turn's optimal play is "next step."
-  There is no decision, only compliance. A combo system whose combo is fixed is a chore with extra
-  vocabulary.
-- **Nine Forms, three of which you always open with.** Steps 1a/1b/1c are interchangeable openers, so
-  in practice you have one opener and eight dead options.
-- **The chain terminates.** After Step 3 (or the Secret Form), what? Reset to Step 1 and grind again?
-  In round 4 of 4, that's a dead turn.
-- **It fights Finding 1 head-on.** A strict 3-step ladder plus a Secret Form is a 4-link chain minimum
-  and a 10-link chain maximum, and only the short reading works.
+**The base numbers roughly quarter. The chain buys it back, but only once a turn and only if you've
+earned it.** That is the rescale job, stated honestly.
 
-**Verdict:** keep the tiers, but as **acquisition and rank-gating**, not as the combo rule.
+### 2.5 — The throttles are MAP and `flourish`, and they're both already in the system
 
----
+The happy consequence of Forms-as-martial-actions is that PF2e already throttles martial actions, so
+you don't have to invent anything:
 
-## 2 — Approach 1.b evaluated (per-Form favourable/unfavourable successors)
+- **Strike-based Forms take and increase MAP.** Three Forms in a turn is 0 / −5 / −10, exactly like
+  three Strikes. Spam is self-punishing without a single new rule. **Design implication: the large
+  majority of the 110 Forms should contain a Strike.**
+- **Area Forms ignore MAP, so they need the other throttle.** Three 13d6 cones in one turn is ~136 AoE
+  damage and it must be impossible. The fix is a keyword the system already has and several v4 Forms
+  already carry: **`flourish` — once per turn.** Put it on every area Form, every multi-Strike Form,
+  and the Secret Form.
 
-**What it is:** each Form names 5 Forms it flows into well and 3 it flows into badly; the later in the
-chain, the bigger the hit.
-
-### What's good about it
-
-- **It's an actual decision every turn.** Multiple legal good moves means you're picking, not obeying.
-- **It's how the source material reads.** Nobody in *Kimetsu no Yaiba* runs 1→2→3→4; they read the
-  situation and pick the form that answers it. The favourable-successor graph is a much better fiction
-  model than a staircase.
-- **It naturally supports style identity.** Water's wheel can be permissive (Water flows anywhere);
-  Thunder's can be brutally narrow (Zenitsu knows one Form and it is the only Form).
-
-### What's wrong with it
-
-- **As literally specified: 792 relationships.** Unwritable and unplayable. (Solved by the wheel — §0.3.)
-- **"The later in the chain, the more damage" needs a tracked number anyway** — so you end up with a
-  count *and* a graph. Two subsystems where one might do.
-- **Unfavourable transitions are a trap for new players.** Eight legal options, three of which quietly
-  punish you, is exactly the kind of thing that makes someone's first session feel bad.
-
-**Verdict:** the *idea* is right and the *notation* is wrong. Collapse it into a wheel.
+That gives the shape: **unlimited small Strike Forms, one big Form per turn.** Which is both balanced
+and a fair description of how the source material actually looks.
 
 ---
 
-## 3 — Recommended synthesis: **The Wheel + the Breath Count**
+## 3 — Approaches 1.a and 1.b, evaluated
 
-This is what I'd build. It takes 1.a's tiers, 1.b's graph, and the escalation both want, and makes them
-one mechanic with **one number to track**.
+Kept from revision 1 because the reasoning still decides where each idea lands.
 
-### 3.1 The nine Forms sit on a wheel
+### 1.a — steps / tiers
 
-Each style's Forms are numbered **1–9**, arranged in a circle, plus a **Secret/Forbidden Form** off
-the wheel entirely.
+**Good:** one universal rule, remembered instantly. Steps are a natural **acquisition** unit — a feat
+granting *a whole step of three Forms* is fair at level 8, which is how 9 Forms end up costing **fewer**
+feat slots than v4's 5 Forms cost now (§7.2). Reverse heightening is elegant and native — PF2e scales
+everything by rank already. And tier-wide combo riders cut the writing from 110 blocks to 33.
+
+**Bad:** it's a track, not a choice — once you know the order, every turn's optimal play is "next step,"
+which is compliance rather than decision. Steps 1a/1b/1c are interchangeable openers, so you have one
+real opener and eight dead options. And the chain terminates: after Step 3 there is nowhere to go.
+
+**Verdict:** keep the tiers for **acquisition and rank-gating**. Don't make them the combo rule.
+
+### 1.b — per-Form favourable/unfavourable successors
+
+**Good:** an actual decision every turn, and a much better fiction model — nobody in *Kimetsu no Yaiba*
+runs 1→2→3→4, they read the situation and pick the Form that answers it. It also gives every style a
+topology to differ on, which is now the *only* place style identity can live (§6).
+
+**Bad:** 792 relationships as literally specified. Unwritable, unplayable, and a data-entry project to
+automate. Also, "the later in the chain, the more damage" needs a tracked number anyway, so you'd have a
+count *and* a graph.
+
+**Verdict:** the idea is right, the notation is wrong. Collapse it into the wheel, where the count *is*
+the depth and the graph *is* one sentence.
+
+---
+
+## 4 — The system: **the Wheel and the Breath Count**
+
+### 4.1 The nine Forms sit on a wheel
+
+Each style's Forms are numbered **1–9** in a circle, plus a **Secret/Forbidden Form** off the wheel.
+Compare the Form you're using to the **last Form you used**:
 
 | Transition | Name | Effect |
 | :---- | :---- | :---- |
-| **+1, +2, +3** | **Flowing** | The chain continues. Breath Count **+1**. |
-| **+4, +5** | **Reaching** | The chain continues but strains. Breath Count **+1**, and the Form functions at **rank −2** (min 1). |
-| **−1, −2, −3** (= +6/+7/+8) | **Broken** | The chain **resets to 1**. The Form functions at **rank −2 per link you fall back**, min rank 1. |
-| **Same Form twice** | — | Not permitted in one chain. (This is the anti-spam rule, and it's free.) |
+| **+1, +2, +3** | **Flowing** | Breath Count **+1**. |
+| **+4, +5** | **Reaching** | Breath Count **+1**, and the Form functions at **rank −2** (min 1). |
+| **−1, −2, −3** (= +6/+7/+8) | **Broken** | Breath Count **resets to 1**, and the Form functions at **rank −2 per link fallen** (min 1). |
+| **+0** (the same Form twice running) | **Stalled** | Legal, but no advance and no chain payout. |
 
 Because the wheel **wraps**, a chain never terminates: 7 → 9 → 3 → 5 → 8 is a legal, escalating chain
-five links deep. **This solves 1.a's dead-end problem and 1.b's table problem in the same stroke.**
+five links deep. That solves 1.a's dead end and 1.b's table in one stroke — and it delivers the brief's
+*"the later their position in the chain, the more damage"* keyed to **chain depth** rather than to the
+Form's printed number, which is the reading that actually works at a table.
 
-Note the wheel also delivers the brief's *"the later their position in the chain, the more damage"* —
-but keyed to **chain depth**, not to the Form's printed number, which is the reading that actually
-works at the table.
+> **⚠ Retraction from revision 1.** Revision 1 said *"you may not use the same Form twice in one chain."*
+> With a wrapping wheel and a chain that never resets, that rule forbids you from ever using Form 1
+> again — it is incoherent. It also isn't needed: the wheel already punishes going backward, and MAP
+> already punishes spam (§2.5). Replaced with **Stalled** above, which is the minimum viable
+> anti-repeat rule: using the same Form twice running is allowed, it just pays nothing.
 
-### 3.2 The Breath Count is the whole economy
+### 4.2 The Breath Count is the whole economy
 
-**One tracked number, 0–9.** It starts at 0, goes up 1 per Flowing or Reaching Form, resets on a Break.
+**One tracked number, 0–9.** Up 1 per Flowing or Reaching Form; reset to 1 on a Break.
 
-Every Form gains, on top of its printed effect:
+> **The chain payout.** Once per turn, on **one Form you nominate before rolling**, that Form deals
+> **+1 damage die per point of Breath Count** (d6s; d8s from 9th, d10s from 17th), and its status
+> bonuses increase by **+1 at Count 4** and **+2 at Count 7**.
 
-> **+1 damage die per point of Breath Count** (d6s; d8s from 9th, d10s from 17th — pick one axis, not
-> two), **and** its status bonuses increase by +1 at Count 4 and +2 at Count 7.
+Nominating is the class's signature decision: you have three Forms this turn and one wave to ride, so
+you're choosing between riding it on the accurate Form, the area Form, or the one that sets up next turn.
+It is also exactly what Kamae (§5) plugs into.
 
-At Count 6 with d6s that's **+21 damage**, which lands a small Form squarely in v4 Second Form
-territory. The base printed number can therefore be *tiny* — Finding 2 satisfied — and the class's
-whole damage curve becomes a function of how well the player is chaining.
+### 4.3 Depth buys actions
 
-**Advance at most once per turn.** You may use more than one Form in a turn (and should, at depth), but
-only the first advances the Count. This kills the "spam three 1-action Forms" degenerate line without
-banning multi-Form turns.
-
-### 3.3 Depth buys actions — the acceleration engine
-
-This is the piece that makes Finding 1 survivable and it's the most PF2e-native reward available.
+Less structurally necessary than it was in revision 1 — unlimited Forms already solved the pacing
+problem — but still the most PF2e-native reward available, and now it's about *quality* of turn rather
+than reachability:
 
 | Breath Count | Effect |
 | :---- | :---- |
-| 3+ | The **first** Form you use each turn costs **1 fewer action** (minimum 1). |
-| 6+ | **Flowing** transitions no longer trigger reactions; Reaching no longer takes the rank penalty. |
-| 9 | Your next Form is **automatically critical-success-tier** on its saving throw, or gains +4 to the attack roll. (Placeholder — this rung wants a real playtest.) |
+| 3+ | Your **nominated** Form costs **1 fewer action** (minimum 1). |
+| 6+ | Flowing transitions no longer trigger reactions; **Reaching** no longer takes the rank penalty. |
+| 9 | Your nominated Form gains **+4 status to the attack roll**, or its basic save is treated as one degree worse. *(Placeholder — this rung wants playtesting.)* |
 
-A fight now has a shape: round 1 you spend two actions on a Form and one on positioning; round 4 you're
-firing a 1-action Form and a 2-action Form off the same turn. The class *feels* like it's speeding up,
-because it is.
+Note the interaction: **Count 3 turns a 2-action nominated Form into a 1-action Form**, so a deep chain
+turn can be *three* Forms where a shallow one was two. The acceleration survives, routed through the
+nomination.
 
-### 3.4 What resets the chain
+### 4.4 What resets the chain
 
-Be **stingy** here. A build-up class whose build-up is easy to lose is a bad time.
+Be **stingy**. A build-up class whose build-up is easy to lose is a bad time.
 
 | Event | Chain? | Rationale |
 | :---- | :---- | :---- |
 | Your Form **misses** | **Survives.** No advance, no reset. "You held the breath." | Miss-resets make the class feast-or-famine and unplayable at low levels. |
-| A **Broken** transition | **Resets to 1** | This is the punishment the brief asks for, and it's chosen, not inflicted. |
-| You take a **turn with no Form** | **−1 Count** (not zero) | A soft decay. Preserves the option of a Stride-heavy turn. |
-| You **leave your stance** | **Reset to 0** | Unless you have the cross-style feat line (§5.3). |
-| **Encounter ends** | **Reset to 0** | Until L19 (§6.3). |
-| You are **stunned / paralysed / unconscious** | Reset to 0 | Fair and dramatic. |
+| A **Broken** transition | **Reset to 1** | The punishment the brief asks for — and it's chosen, not inflicted. |
+| A **turn with no Form at all** | **−1 Count** | Soft decay. Preserves the Stride-heavy turn as an option. |
+| You **leave your stance** | Reset to 0 | Unless you have the cross-style feat line (§6.2). |
+| **Encounter ends** | Reset to 0 | Until L19 (§7.3). |
+| **Stunned / paralysed / unconscious** | Reset to 0 | Fair, and dramatic. |
 
-### 3.5 The Secret/Forbidden Form is the chain's payout
+### 4.5 The Secret/Forbidden Form is the chain's payout
 
 Replace v4's "Frequency once per 10 minutes" with an organic gate:
 
-> **Requirement** Your Breath Count is **6 or higher**.
+> **`flourish`** · **Requirement** Your Breath Count is **6 or higher**.
 > **Effect** [the big thing]. **Your Breath Count then drops to 0.**
 
-This is strictly better design than a timer: it's earned rather than granted, it can happen twice in a
-long fight if you're brilliant, and it can't happen at all if you've been sloppy. Keep the v4
-self-costs (Rengoku's self-damage, Dead Calm's off-guard) — they're good and they now stack with
-losing the chain.
+Strictly better than a timer: earned rather than granted, twice in a long fight if you're brilliant,
+never if you've been sloppy. Keep v4's self-costs (Rengoku's self-damage, Dead Calm's off-guard) — they
+now stack with losing the chain, which is the right weight.
 
-**Optional:** allow it below Count 6 as a **Forbidden** use — it works, at rank −2 per point you're
-short, and you take the self-cost twice. The desperation button. Very on-genre.
+With unlimited Forms, note the gate is reachable at the **end of round 2**. If that's too early, raise
+it to 8, or require that no transition in the current chain was Broken — *"nine clean cuts."*
+
+**Optional — the Forbidden use.** Allow it below Count 6: it works at **rank −2 per point you're short**
+and you take the self-cost **twice**. The desperation button, and very on-genre.
 
 ---
 
-## 4 — Point 2: the prediction mechanic (**Kamae**)
+## 5 — Kamae: the prediction mechanic
 
-*構え — "the posture you take before the cut."* This is the most original idea in the brief and it's
-the one I'd protect hardest in the design. PF2e has almost no **declaration** mechanics; the
-Investigator's *Devise a Stratagem* is the nearest thing and it isn't close.
+*構え — "the posture you take before the cut."* The most original idea in the brief and the one I'd
+protect hardest. PF2e has almost no **declaration** mechanics; the Investigator's *Devise a Stratagem* is
+the nearest thing and it isn't close.
 
-### 4.1 The shape
+Confirmed as a **feat line from level 2**, which is the right call: the wheel plus nomination is already
+a full class, and this keeps prediction an opt-in *build* rather than a tax on everyone.
+
+### 5.1 The shape
 
 > **Kamae** ✦ **Free action** · **Trigger** You use a Form.
 > Name a Form on your wheel. Until the end of your next turn you are *set* for that Form.
-> - **If your next Form is the named one:** it costs **1 fewer action** (min 1) *and* counts as **two
->   links** for Breath Count.
-> - **If it isn't:** you gain no benefit, and the transition is treated as **Reaching** even if it
->   would have been Flowing.
+> - **Fulfilled:** it is **automatically your nominated Form** for that turn, it counts as **two links**
+>   of Breath Count, and it costs 1 fewer action (min 1).
+> - **Not fulfilled:** no benefit, and the transition is treated as **Reaching** even if it would have
+>   been Flowing.
 
-Note carefully what the failure case *is not*: it isn't a condition, it isn't damage, and it isn't a
-reset. It's **a downgrade of a reward you hadn't earned yet**. This matters enormously.
+Counting as **two links** is what makes Kamae worth a feat under the nomination cap: the prediction build
+climbs the Count at double speed, so it reaches the deep rungs a round earlier than a slayer who's just
+improvising. That's a real mechanical identity, not a damage bump.
 
-### 4.2 The trap to avoid
+### 5.2 The trap to avoid
 
-**A prediction mechanic must never make you worse off than not predicting.** The enemy will die, move
-out of reach, stun you, or turn out to be fire-immune — and none of that is the player's fault. If
-Kamae's downside is a real penalty, the correct play becomes "never Kamae unless it's round 1 against a
-brick," and the mechanic is dead.
+**A prediction mechanic must never leave you worse off than not predicting.** The enemy will die, move
+out of reach, stun you, or turn out immune — none of that is the player's fault. If Kamae's downside is a
+real penalty, the correct play becomes "never Kamae," and the mechanic is dead.
 
-Two safety valves, take at least one:
+Take at least one safety valve:
 
-- **Release** ✦ free action: cancel a Kamae before it resolves for no benefit and no penalty.
-- **Loose Kamae**: name a **tier or an arc of the wheel** ("any Form 4–6") instead of a single Form.
-  Fulfilled far more often, pays slightly less. This is probably the correct *default*, with the
-  exact-Form call as the high-risk high-reward feat upgrade.
+- **Release** ✦ free action: cancel a Kamae before it resolves, no benefit and no penalty.
+- **Loose Kamae:** name a **tier**, or an **arc of the wheel** ("any Form 4–6"), instead of one Form.
+  Fulfilled far more often, pays slightly less. Probably the right *default*, with the exact call as the
+  high-risk upgrade.
 
-### 4.3 Where it lives
-
-Not on the chassis. Kamae is a **feat line** — that keeps it opt-in for players who don't want the
-cognitive load, and it gives you an obvious upgrade ladder:
+### 5.3 The ladder
 
 | Lvl | Feat | Effect |
 | :---- | :---- | :---- |
-| 2 | **Kamae** | The base action, Loose form only. |
-| 6 | **Read the Thread** | Name an exact Form; the payout goes to **three links** and a +2 status bonus to the Form's attack/DC. |
+| 2 | **Kamae** | The base action, Loose only. |
+| 6 | **Read the Thread** | Name an exact Form; payout rises to **three links** plus +2 status to the Form's attack or DC. |
 | 10 | **Double Kamae** | Hold **two** Kamae at once; fulfil either. |
-| 14 | **Kamae of the Unopened Eye** | Fulfilling a Kamae also lets you make one Strike as a free action. |
-| 16 | **Feint the Form** | If your Kamae is *not* fulfilled and an enemy has reacted to it (a Reaction it spent, a Shield raised), the transition is Flowing anyway and the enemy is off-guard to you. Being wrong on purpose. |
+| 14 | **Kamae of the Unopened Eye** | Fulfilling a Kamae also grants one Strike as a free action. |
+| 16 | **Feint the Form** | If your Kamae is **not** fulfilled but an enemy spent a Reaction or raised a Shield in response to it, the transition is Flowing anyway and that enemy is **off-guard** to you. |
 
-That last one is the best feat on the list and it's the whole class thesis in one paragraph.
-
----
-
-## 5 — Style identity becomes **wheel shape**
-
-This is the payoff that makes the 11 styles actually distinct rather than a damage-type swap — and it
-matches canon, where the styles genuinely have different Form counts (Water 11, Moon 16, Sun 12,
-Thunder 6, Stone 5, Sound 5, Serpent 5, Love 6, Flower 7, Mist 7, Wind 9).
-
-| Lever | Example |
-| :---- | :---- |
-| **Wheel size** | Thunder has a **5-Form** wheel: you loop it fast, Breath Count climbs quickly, but you have almost no menu. Moon has **11**: a huge menu, slower to loop, more chances to Break. |
-| **Reach** | Water's wheel is **Flowing on +1 to +5** (water goes anywhere). Serpent is **Flowing on +1 only** — the snake commits. |
-| **Break penalty** | Stone doesn't reset on a Break; it drops to half, rounded down. The mountain doesn't fall over. |
-| **Count cap** | Sound caps at 6 but every Form gets +2 dice per link instead of +1. Fast burn. |
-| **Wrap bonus** | Flower gains something extra the first time each encounter it completes a full lap of its wheel. |
-
-That is **five orthogonal dials** for eleven styles, and it costs no additional point budget because
-it's all inside the existing 50-point `Breathing Style` line as a sidegrade.
-
-### 5.3 Cross-style chaining is free design space
-
-v4's `Flowing Stance Shift` (feat 4) already allows a secondary style. With a wheel, a whole feat line
-opens up: **the chain survives a stance change** if the Form you leave on and the Form you arrive on
-share a number, or a tier, or a damage type. That's Tanjiro's Hinokami Kagura pivot and Kokushibo's
-style-fusion, and it's the natural home for a 12th-to-16th level feat cluster.
+**Feint the Form** is the best feat on the list and the whole class thesis in one paragraph: being wrong
+on purpose, and being paid for it.
 
 ---
 
-## 6 — The costs of doing this, honestly
+## 6 — Style identity, now that all eleven wheels are the same size
 
-### 6.1 Content volume is the #1 risk
+Uniform 9 + Secret removes the wheel-*size* dial that revision 1 leaned on (Thunder-as-5, Moon-as-11).
+Identity has to come from **wheel topology** instead — *which* transitions are favourable, not how many
+Forms there are. That turns out to be richer, and it costs **zero** additional writing: it's one line in
+each style's header.
 
-9 Forms + Secret × 11 styles = **110 Forms**. v4 has 55. **You are doubling the largest document in the
-repo and rewriting the half that already exists** (Finding 2 forces a rescale on every existing Form).
+| Style | Flowing on | The idea |
+| :---- | :---- | :---- |
+| **Water** | +1 … +5 | The baseline. Water goes anywhere; nothing Reaches, only Breaks. |
+| **Flame** | +1, +2, **+5** | Rewards the big leap. The others are Reaching. |
+| **Thunder** | **+1 only — and it advances 2** | Zenitsu: one Form, perfected, unbelievably fast. Narrowest wheel, steepest climb. |
+| **Wind** | odd steps (+1, +3, +5, +7) | Gusts. Skipping is the *correct* play. |
+| **Stone** | +1 … +3; **a Break halves the Count instead of resetting** | The mountain doesn't fall over. |
+| **Sound** | +1 … +4; **Count caps at 6, but +2 dice per point** | Fast burn, low ceiling. |
+| **Flower** | +1 … +3; **completing a full lap pays out once per encounter** | The counter-duellist's long game. |
+| **Mist** | +1 … +3; **Reaching never takes the rank penalty** | Mist has no edges. The forgiving style. |
+| **Moon** | even steps (+2, +4, +6, +8) | Crescents. **+8 is −1**, so Moon flows into what Breaks everyone else — Kokushibo's geometry is wrong on purpose. |
+| **Love** | +1 … +3; **each Flowing transition also pays an ally** | Love's outward-facing rider, expressed through the chain. |
+| **Serpent** | **+1 and +8 (−1) only** | The snake coils both ways. Narrow, bidirectional, and it loops 9→1 instantly. |
 
-Mitigations, in order of how much they save:
+Eleven genuinely different classes of turn, out of eleven single-line rules. Moon and Wind in particular
+are *different games*, not different damage types — which is the thing the rework set out to fix.
 
-1. **Variable wheel size** (§5) — Thunder/Stone/Sound/Serpent at 5–6 Forms each isn't a compromise,
-   it's *better and more canonical*. Realistic total lands nearer **85** than 110.
-2. **Tier-wide combo riders** — author the "what a Flowing transition into this tier does" text once
-   per tier per style: 33 blocks, not 110.
-3. **Promote v4's existing riders.** Several v4 Forms are already tiered variations of each other
-   (Water's Whirlpool vs. Water Wheel). Split them rather than inventing from zero.
-4. **Ship 3 styles first.** Water (the baseline), Thunder (the short-wheel extreme), Moon (the
-   long-wheel extreme). If the wheel works on those three it works on all eleven; if it doesn't, you've
-   burned three styles' worth of writing and not eleven.
+### 6.2 Cross-style chaining is free design space
 
-### 6.2 Feat tax goes *down*, which is a real win
+v4's `Flowing Stance Shift` (feat 4) already permits a secondary style. With a wheel, a whole feat line
+opens: **the chain survives a stance change** when the Form you leave on and the Form you arrive on share
+a number, a tier, or a damage type. That's Tanjiro's Hinokami Kagura pivot and Kokushibo's style-fusion,
+and it's the natural home for a 12th-to-16th-level cluster.
+
+---
+
+## 7 — The costs, honestly
+
+### 7.1 Content volume is the #1 risk, and the uniform-wheel decision raised it
+
+**110 Forms.** v4 has 55. You are doubling the largest document in the repo *and* rewriting the half that
+exists, because §2.4 forces a rescale on every Form that's already written. With wheel-size variation off
+the table, the mitigations that remain are:
+
+1. **Tier-wide riders, not per-Form riders.** Author "what a Flowing transition into this tier does" once
+   per tier per style: **33 blocks, not 110.** This is now the single largest saving available.
+2. **A fixed Form template.** Every Form is: action cost · Strike-or-area · one printed rider · tier.
+   §2.4's rescale means the printed numbers are small and formulaic — most Forms are three lines, not the
+   twelve that v4's Dead Calm runs to. Uniform wheels make a **template** viable in a way variable ones
+   wouldn't have.
+3. **Split v4's existing Forms rather than inventing.** Several v4 Forms are already tiered variants of
+   each other (Water Wheel vs. Whirlpool). Nine slots absorb v4's five plus their obvious siblings.
+4. **Prototype three styles first: Water, Thunder, Moon.** The baseline, the narrowest wheel, and the
+   deliberately-wrong wheel. If the system works on those three it works on all eleven; if it doesn't,
+   you've burned three styles' writing and not eleven. **This is the recommendation I'd hold hardest.**
+
+### 7.2 Feat tax goes *down*, which is a real win
 
 | | v4 | v5 (tier grants) |
 | :---- | :---- | :---- |
-| Forms known at 20 | 5 | **~10** |
-| Chassis grants | 2 (L1, L5) | 2 tiers = **6 Forms** (L1, L5) |
-| Feats spent on Forms | **3** (8/12/20) | **2** (a tier at 8, the Secret at 20) |
+| Forms known at 20 | 5 | **10** |
+| Chassis grants | 2 Forms (L1, L5) | **2 tiers = 6 Forms** (L1, L5) |
+| Feats spent on Forms | **3** (8 / 12 / 20) | **2** (a tier at 8, the Secret at 20) |
 
-Granting Forms in **tiers of three** is the single best structural argument for keeping 1.a's tiers.
-It's more content for *fewer* feat slots.
+Granting Forms in **tiers of three** is the best structural argument for keeping 1.a's tiers, and it's
+the answer to "110 Forms is too many to learn": you don't learn them one at a time.
 
-### 6.3 The ledger: four chassis features lose their job
+### 7.3 The ledger — deferred, but keep the tally
 
-Removing Breath Points orphans **~160 points** of the 690-point feature block. Translations that keep
-the budget intact and are, I think, straight upgrades:
+"Design first, cost it later" is fine. The one guardrail: keep this table current as the design moves, so
+the retrofit is arithmetic rather than archaeology. Removing Breath Points orphans **~160 points** of
+v4's 690-point feature block.
 
-| v4 feature | Pts | v5 replacement |
-| :---- | ---: | :---- |
-| **Focused Breathing** (pool + First Form) | 10 | **Breath Cadence** — the Count engine + Tier 1 (3 Forms). Probably needs to cost more; take it from below. |
-| **Second Breath** (2nd point + Second Form) | 40 | **Second Breath** — Tier 2 (3 Forms) + your Count cap rises. |
-| **Nichirin Resonance** (3rd point) | 80 | Keep the resistance/material bypass (50); spend the other 30 on **Reaching no longer costs rank**. |
-| **Total Concentration** (full Refocus) | 30 | **Total Concentration** — your chain persists for **1 minute** after an encounter ends, and out of combat you may raise your Count by breathing for a minute. The pre-fight breath. |
-| **Breath of Instinct** (free 1-action Form) | 30 | **Breath of Instinct** — 1/minute, a Form doesn't consume or break the chain regardless of transition. The "get out of a Break free" card. |
-| **Constant Total Concentration** (L19) | 150 | Keep the permanent-stance clause; replace "+1 Breath Point on initiative" with **"you begin every encounter at Breath Count 3."** Straight translation, and it's a beautiful capstone. |
-| **Demon Slayer Mark** (L13) | 110 | *Ignition* ("your next Form is free") is now meaningless. Replace with **"Forms cost 1 fewer action"** or **"every transition counts as Flowing."** The latter is more thematic and much stronger — price accordingly. |
-| **Concentrated Breathing** | 110 | **Unchanged. Do not touch it.** It's the floor, and a build-up class needs its floor more than v4 did — round 1 at Count 0 has to still feel like a slayer. |
+| v4 feature | Pts | v5 replacement | Note |
+| :---- | ---: | :---- | :---- |
+| **Focused Breathing** (pool + First Form) | 10 | **Breath Cadence** — the Count engine + Tier 1 (3 Forms) | Underpriced now; it's the class engine. Take from below. |
+| **Second Breath** (2nd point + Second Form) | 40 | Tier 2 (3 Forms) + the Count cap rises | ≈ neutral |
+| **Nichirin Resonance** (3rd point) | 80 | Keep resistance/material bypass (50); spend 30 on **Reaching costs no rank** | ≈ neutral |
+| **Total Concentration** (full Refocus) | 30 | Chain **persists 1 minute** past an encounter; out of combat, breathe for a minute to raise the Count | The pre-fight breath |
+| **Breath of Instinct** (free 1-action Form) | 30 | 1/min, a Form neither consumes nor Breaks the chain | The get-out-of-a-Break card |
+| **Demon Slayer Mark** (L13) | 110 | *Ignition* ("your next Form is free") is now meaningless → **every transition counts as Flowing** for 1 minute | Much stronger than what it replaces; price up |
+| **Constant Total Concentration** (L19) | 150 | Keep the permanent stance; "+1 Breath Point on initiative" → **"you begin every encounter at Breath Count 3"** | Straight translation, beautiful capstone |
+| **Concentrated Breathing** | 110 | **Unchanged. Do not touch it.** | A build-up class needs its floor *more* than v4 did — round 1 at Count 0 must still feel like a slayer |
 
-### 6.4 Table bookkeeping — be honest about it
+### 7.4 Bookkeeping — the real cost of the unlimited-Forms decision
 
-A player now tracks: stance, **Breath Count**, their wheel, the last Form used, and possibly a held
-Kamae. That is more than any published PF2e martial except maybe the Kineticist.
+A player now tracks: stance, **Breath Count**, the wheel, the last Form used, a possible Kamae — and with
+three Forms a turn, **three transitions to adjudicate per turn** instead of one. That is more than any
+published PF2e martial except perhaps the Kineticist.
 
 Non-negotiable mitigations:
-- **One number.** Breath Count is the only thing written down. Everything else is derived.
-- **A physical wheel.** Ship a one-page printable wheel per style. This is a *design deliverable*, not
-  an afterthought — the wheel diagram is what makes the system legible.
-- **The last Form used is the only history.** Never let a rule depend on two Forms back.
 
-### 6.5 Automation is genuinely feasible here
+- **One number written down.** Breath Count. Everything else is derived or on the card.
+- **A printable wheel, one page per style.** This is a **design deliverable**, not an afterthought — the
+  diagram is what makes the system legible, and with uniform 9-Form wheels it's the *same diagram*
+  eleven times with different labels and a different favourable arc shaded. Uniformity pays for itself
+  here.
+- **Only the last Form is history.** Never let a rule depend on two Forms back.
+- **Nomination is announced, once, out loud.** "This one rides the wave." It's one sentence a turn and it
+  keeps the table synchronised.
 
-The module already has the machinery: `scripts/riders/`, `scripts/outcomes/`, `scripts/economy/`, and
-the Saint's Om-stack system (per the automation programme, §"Om spends for real") is *exactly* a
-counter that accrues, buffs the next roll, and lapses. A Breath Count effect with a counter badge,
-plus `counterThresholds` (which already exists), covers §3.2 and §3.3 almost directly.
+### 7.5 Automation is genuinely feasible
 
-The wheel is a **modular-arithmetic check on two Form IDs** — trivial. This is a strong point in favour
-of the wheel over a hand-authored 792-edge table, which would be a data-entry project.
+The module already has the machinery: `scripts/riders/`, `scripts/outcomes/`, `scripts/economy/`, and the
+Saint's Om-stack system (automation programme, §"Om spends for real") is *exactly* a counter that
+accrues, buffs a nominated roll, and lapses. A Breath Count effect with a counter badge plus the existing
+`counterThresholds` flag covers §4.2 and §4.3 nearly directly.
+
+The wheel is **modular arithmetic on two Form IDs** — ten lines. Which is the whole argument for the
+wheel over a hand-authored 792-edge table.
 
 ---
 
-## 7 — The punishment dial
+## 8 — The punishment dial
 
-The brief asks for skipping to hurt. Three settings; I'd ship the middle one and let the GM notes
-mention the others.
+The brief asks for skipping to hurt. I'd ship the middle setting and put the others in the GM notes.
 
-| Setting | Skipping a step / Breaking does… | Feel |
+| Setting | A skip / Break does… | Feel |
 | :---- | :---- | :---- |
-| **Carrot only** | Nothing. You just don't get the chain bonus. | Safest, most forgiving, least interesting. New-player-proof. |
-| **★ Reverse heightening** *(recommended)* | The Form functions at **rank −2 per link fallen**, min 1, and the Count resets. | Uses native PF2e machinery, automates cleanly, is *large* without being a condition. The Form still works — it just works like a worse slayer used it. That is the right fiction. |
-| **Punitive** | Reverse heightening **plus** you're off-guard until your next turn / the Form has the *manipulate* trait and can be Disrupted. | For Forbidden Forms **only**. Applying this to ordinary Breaks makes the class miserable. |
+| **Carrot only** | Nothing; you just don't get the chain bonus. | Safest, most forgiving, least interesting. |
+| **★ Reverse heightening** | **Rank −2 per link fallen** (min 1), and the Count resets. | Native PF2e machinery, clean to automate, *large* without being a condition. The Form still works — it just works like a worse slayer used it. Right fiction. |
+| **Punitive** | Reverse heightening **plus** off-guard until your next turn, or the Form gains `manipulate` and can be Disrupted. | **Forbidden Forms only.** Applied to ordinary Breaks it makes the class miserable. |
 
-The distinction I'd hold: **Breaking the wheel is a mistake and costs you the chain; using a Forbidden
-Form unready is a sin and hurts you.** Don't blur them.
-
----
-
-## 8 — Open questions that actually change the design
-
-These are the forks where I'd want your call before writing a plan.
-
-1. **Can you use more than one Form per turn?** My recommendation: yes, but only the first advances the
-   Count. The alternative ("one Form per turn, full stop") is simpler and much easier to balance, but it
-   makes the acceleration engine (§3.3) impossible and caps the chain at ~4 forever.
-2. **Does a *miss* break the chain?** I say no, emphatically. But "the chain only advances on a hit" is a
-   defensible harder-edged variant that makes accuracy investment matter enormously.
-3. **Nine Forms for every style, or variable wheels?** Variable is better design *and* less writing, but
-   it makes the styles harder to compare and complicates the monotonicity audit (§6 of the guide) that
-   v4 worked hard to establish.
-4. **Is Kamae chassis or feat?** Feat keeps the class approachable and makes prediction a *build*. Chassis
-   makes it the class's identity from level 1 — which is arguably the actual point of the rework.
-5. **Do we keep the 2100-point BCS budget and the monotonicity audit?** They're the reason v4 is
-   trustworthy. Keeping them means every wheel and every Form gets re-audited, which is a large chunk of
-   the work — but abandoning them means v5 is a vibes document and v4 wasn't.
+Hold this distinction: **Breaking the wheel is a mistake and costs you the chain; using a Forbidden Form
+unready is a sin and hurts you.** Don't blur them.
 
 ---
 
-## 9 — Skeleton of what a v5 would look like, one screen
+## 9 — The system on one screen
 
 ```
 CORE LOOP
-  Enter stance (1 action, or free from L19).
-  Each turn, use a Form. Where it sits on your style's wheel vs. the last Form decides:
-      +1..+3  FLOWING   → Breath Count +1
-      +4..+5  REACHING  → Breath Count +1, this Form at rank −2
-      −1..−3  BROKEN    → Breath Count resets to 1, this Form at rank −2 per link fallen
-  Breath Count adds +1 damage die per point to every Form, and buys actions at 3 and 6.
-  At Count 6 you may use the Secret/Forbidden Form. It resets you to 0.
+  Enter stance (1 action; free from L19).
+  Use as many Forms as your actions allow. Each is compared to the LAST Form used,
+  on your style's 9-Form wheel:
+      FLOWING   (style-specific arc, e.g. +1..+3)  → Breath Count +1
+      REACHING  (the wider arc, e.g. +4..+5)       → Breath Count +1, this Form at rank -2
+      BROKEN    (-1..-3)                           → Count resets to 1, rank -2 per link fallen
+      STALLED   (+0)                               → nothing
+  ONCE PER TURN, nominate one Form before rolling. It gets +1 damage die per point of
+  Breath Count, and +1/+2 to its status bonuses at Count 4/7.
+  At Count 3 the nominated Form costs 1 fewer action. At Count 6, Reaching is free.
+  At Count 6 you may use the Secret/Forbidden Form; it resets you to 0.
+
+THROTTLES  (all pre-existing PF2e machinery, no new rules)
+  MAP           — most Forms contain a Strike, so 3 Forms/turn is 0 / -5 / -10.
+  flourish      — every area Form, multi-Strike Form, and the Secret Form. One big Form per turn.
+  the nomination — the chain pays once a turn, however many Forms you use.
 
 THE THREE THINGS THAT MAKE IT A CLASS
-  Concentrated Breathing  — the floor. +2/+3/+4 precision per weapon die, unconditional.  (unchanged)
-  The Wheel               — the economy. Position replaces points.
-  Kamae                   — the verb. Call your next Form; be paid for being right.
+  Concentrated Breathing — the floor.   +2/+3/+4 precision per weapon die, unconditional. (unchanged)
+  The Wheel              — the economy. Position replaces points.
+  Kamae (feat, L2)       — the verb.    Call your next Form; be paid for being right.
 
 WHAT DIED
-  Breath Points, Refocus, "Frequency once per 10 minutes", the 3-Forms-per-encounter ceiling.
+  Breath Points. Refocus. "Frequency once per 10 minutes." The 3-Forms-per-encounter ceiling.
+  Forms as focus spells — they are martial actions now, and priced like fighter feats.
 
 WHAT SURVIVED
-  The 2100 ledger (re-spent, not re-sized). Concentrated Breathing. The Demon Slayer Mark
-  (new benefits). Every Form's *flavour* — but not one of their numbers.
+  Concentrated Breathing. The Demon Slayer Mark (new benefits). The 2100 target (deferred).
+  Every Form's flavour — and not one of their numbers.
 ```
 
 ---
 
-## 10 — My recommendation in one paragraph
+## 10 — Recommendation in one paragraph
 
-Build **the wheel**, not the staircase. Take 1.a's tiers and use them only for *acquisition* (a feat
-grants three Forms at once — this is a strict improvement on v4's feat tax) and for *rank gating*. Take
-1.b's favourable/unfavourable graph and express it as **+1..+5 good, −1..−3 bad, wrapping**, which
-reproduces every relationship the brief asks for in one sentence, needs no table, and automates in ten
-lines. Track exactly **one number**, the Breath Count, and make it do all three jobs: escalating damage,
-buying actions back, and gating the Secret Form. Put the prediction mechanic (**Kamae**) on a feat line,
-make its failure case a *smaller reward* rather than a punishment, and let the level-16 feat pay you for
-being deliberately wrong. Keep `Concentrated Breathing` untouched, because a build-up class needs a
-floor more than a spike class does. And prototype on **three styles** before committing to eleven,
-because §6.1 is the risk that actually kills this rework.
+Build **the wheel**, not the staircase. Keep 1.a's tiers only for *acquisition* — a feat grants three
+Forms at once, which is how 10 known Forms costs fewer slots than v4's 5 — and for rank gating. Express
+1.b as **+1..+5 favourable, −1..−3 unfavourable, wrapping**, which reproduces all 792 relationships in
+one sentence and automates in ten lines, and let each style differ by *which arc is favourable* rather
+than by wheel size (§6 — this is where the eleven styles finally stop being damage-type reskins). Track
+exactly one number. Then accept what unlimited Forms actually costs: **Forms are martial actions now, not
+focus spells** — reprice them against fighter feats, put a Strike in most of them so MAP does the
+throttling, put `flourish` on every area Form so one nova a turn is the ceiling, and **pay the chain
+bonus once per turn on a Form you nominate**, which is both the balance lever and the best decision in
+the class. Put Kamae on a feat line where it pays in *links* rather than damage, and make its failure
+case a smaller reward rather than a punishment. Leave `Concentrated Breathing` alone. And prototype
+**Water, Thunder, and Moon** before committing to eleven, because §7.1 is still the risk that kills this.
