@@ -1,0 +1,717 @@
+<title>The Nine-Form Wheel</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#eef0f5; --surface:#fbfcfe; --surface-2:#e6e9f0; --sunk:#e2e5ee;
+  --ink:#191b22; --ink-2:#474c5c; --muted:#6b7183; --line:#d0d5e0; --line-2:#b9c0cf;
+  --flow:#27803a; --reach:#9a6a06; --brk:#bb3328;
+  --flow-fill:#27803a1f; --reach-fill:#9a6a061f; --brk-fill:#bb33281f;
+  --accent:#2f7fd4;
+  --shadow:0 1px 2px #191b2214, 0 8px 24px -12px #191b2226;
+  --display:"Shippori Mincho", "Hiragino Mincho ProN", Georgia, serif;
+  --body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#12131a; --surface:#1b1d25; --surface-2:#23262f; --sunk:#161820;
+    --ink:#e9eaf0; --ink-2:#b6bbc9; --muted:#8d93a3; --line:#2d313c; --line-2:#3e4350;
+    --flow:#5fd177; --reach:#e8aa3c; --brk:#f2776a;
+    --flow-fill:#5fd17721; --reach-fill:#e8aa3c21; --brk-fill:#f2776a21;
+    --shadow:0 1px 2px #0007, 0 10px 28px -14px #000a;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#12131a; --surface:#1b1d25; --surface-2:#23262f; --sunk:#161820;
+  --ink:#e9eaf0; --ink-2:#b6bbc9; --muted:#8d93a3; --line:#2d313c; --line-2:#3e4350;
+  --flow:#5fd177; --reach:#e8aa3c; --brk:#f2776a;
+  --flow-fill:#5fd17721; --reach-fill:#e8aa3c21; --brk-fill:#f2776a21;
+  --shadow:0 1px 2px #0007, 0 10px 28px -14px #000a;
+}
+  /* --- per-style accent: a nichirin blade takes its wielder's colour.
+         Sun's is the black blade, so it resolves to ink in either theme. --- */
+  [data-style="water"]{--accent:#2f7fd4;}
+  [data-style="flame"]{--accent:#d2542a;}
+  [data-style="thunder"]{--accent:#c99a15;}
+  [data-style="wind"]{--accent:#0f8a99;}
+  [data-style="stone"]{--accent:#6f7483;}
+  [data-style="sound"]{--accent:#a63a72;}
+  [data-style="flower"]{--accent:#4f8f5e;}
+  [data-style="mist"]{--accent:#8a86a8;}
+  [data-style="moon"]{--accent:#9b4fb5;}
+  [data-style="love"]{--accent:#d95d94;}
+  [data-style="serpent"]{--accent:#4a55a8;}
+  [data-style="sun"]{--accent:#141418;}
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) [data-style="water"]{--accent:#5aa8f0;}
+    :root:not([data-theme="light"]) [data-style="flame"]{--accent:#f5824f;}
+    :root:not([data-theme="light"]) [data-style="thunder"]{--accent:#f0c543;}
+    :root:not([data-theme="light"]) [data-style="wind"]{--accent:#38c2d4;}
+    :root:not([data-theme="light"]) [data-style="stone"]{--accent:#aab0bf;}
+    :root:not([data-theme="light"]) [data-style="sound"]{--accent:#e277ad;}
+    :root:not([data-theme="light"]) [data-style="flower"]{--accent:#7fc994;}
+    :root:not([data-theme="light"]) [data-style="mist"]{--accent:#b6b2d6;}
+    :root:not([data-theme="light"]) [data-style="moon"]{--accent:#c785e0;}
+    :root:not([data-theme="light"]) [data-style="love"]{--accent:#f593bd;}
+    :root:not([data-theme="light"]) [data-style="serpent"]{--accent:#8792e0;}
+    :root:not([data-theme="light"]) [data-style="sun"]{--accent:#f4f2ec;}
+  }
+  :root[data-theme="dark"] [data-style="water"]{--accent:#5aa8f0;}
+  :root[data-theme="dark"] [data-style="flame"]{--accent:#f5824f;}
+  :root[data-theme="dark"] [data-style="thunder"]{--accent:#f0c543;}
+  :root[data-theme="dark"] [data-style="wind"]{--accent:#38c2d4;}
+  :root[data-theme="dark"] [data-style="stone"]{--accent:#aab0bf;}
+  :root[data-theme="dark"] [data-style="sound"]{--accent:#e277ad;}
+  :root[data-theme="dark"] [data-style="flower"]{--accent:#7fc994;}
+  :root[data-theme="dark"] [data-style="mist"]{--accent:#b6b2d6;}
+  :root[data-theme="dark"] [data-style="moon"]{--accent:#c785e0;}
+  :root[data-theme="dark"] [data-style="love"]{--accent:#f593bd;}
+  :root[data-theme="dark"] [data-style="serpent"]{--accent:#8792e0;}
+  :root[data-theme="dark"] [data-style="sun"]{--accent:#f4f2ec;}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);
+  font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:28px 64px}
+h1,h2,h3,h4{margin:0;font-family:var(--display);font-weight:700;text-wrap:balance;letter-spacing:-.01em}
+p{margin:0}
+a{color:var(--accent)}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);font-weight:500}
+:where(button,[tabindex]):focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+/* ---------- masthead ---------- */
+.masthead{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;
+  gap:16px 24px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.masthead h1{font-size:clamp(26px,4.4vw,40px);line-height:1.08}
+.masthead .sub{color:var(--ink-2);max-width:56ch;margin-top:8px;font-size:14.5px}
+.themebtn{font:500 12px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+  background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px 13px;cursor:pointer}
+.themebtn:hover{color:var(--ink);border-color:var(--line-2)}
+
+/* ---------- style tabs ---------- */
+.tabs{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:22px 0 0}
+.famlabel{flex-basis:100%;font:500 10px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;
+  color:var(--muted);margin:10px 0 -2px}
+.famlabel:first-child{margin-top:0}
+.tab{display:flex;align-items:baseline;gap:8px;cursor:pointer;background:var(--surface);
+  border:1px solid var(--line);border-radius:10px;padding:9px 14px 10px;color:var(--ink-2);
+  font-family:var(--display);font-size:16px;font-weight:500;transition:border-color .12s,color .12s}
+.tab .swatch{width:9px;height:9px;border-radius:50%;background:var(--accent);flex:none;
+  align-self:center;box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent)}
+.tab .pat{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.02em}
+.tab:hover{border-color:var(--line-2);color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-color:var(--accent);background:var(--surface);
+  box-shadow:inset 0 -2px 0 var(--accent)}
+
+/* ---------- controls bar ---------- */
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 22px;margin-top:16px;
+  padding:12px 14px;background:var(--sunk);border:1px solid var(--line);border-radius:12px}
+.seg{display:flex;gap:2px;background:var(--surface-2);border:1px solid var(--line);
+  border-radius:8px;padding:2px}
+.seg button{font:500 12.5px/1 var(--mono);color:var(--muted);background:none;border:0;
+  padding:7px 11px;border-radius:6px;cursor:pointer}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);
+  box-shadow:0 1px 2px #0000001a;border:1px solid var(--line)}
+.bar label{font:500 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.ctlgroup{display:flex;align-items:center;gap:9px}
+.ghost{font:500 12px/1 var(--body);color:var(--ink-2);background:var(--surface);
+  border:1px solid var(--line);border-radius:7px;padding:8px 12px;cursor:pointer}
+.ghost:hover{border-color:var(--line-2);color:var(--ink)}
+.ghost:disabled{opacity:.42;cursor:not-allowed}
+
+/* ---------- main grid ---------- */
+.main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,352px);gap:22px;margin-top:22px;align-items:start}
+@media (max-width:880px){.main{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+.panel-pad{padding:18px}
+
+/* ---------- wheel ---------- */
+figure{margin:0}
+.wheelwrap{padding:6px 6px 0}
+svg.wheel{display:block;width:100%;max-width:100%;height:auto;font-family:var(--mono)}
+.node{cursor:pointer}
+.node .disc{fill:var(--surface-2);stroke:var(--line-2);stroke-width:1.5;transition:fill .12s,stroke .12s}
+.node .num{fill:var(--ink-2);font-size:17px;font-weight:600;text-anchor:middle;dominant-baseline:central}
+.node .nm{fill:var(--muted);font-size:10.5px;text-anchor:middle;font-family:var(--body)}
+.node .tierdot{fill:var(--line-2)}
+.node:hover .disc,.node:focus-visible .disc{fill:var(--surface);stroke:var(--accent)}
+.node:hover .num{fill:var(--ink)}
+.node.locked{cursor:not-allowed}
+.node.locked .disc{stroke-dasharray:3 3;opacity:.5}
+.node.locked .num,.node.locked .nm{opacity:.45}
+.node.cur .disc{fill:var(--accent);stroke:var(--accent)}
+.node.cur .num{fill:var(--surface);font-weight:600}
+.node.cur .nm{fill:var(--ink);font-weight:600}
+.node.inchain .disc{stroke:var(--accent);stroke-width:2}
+.edge{fill:none;stroke-linecap:round}
+.edge.flow{stroke:var(--flow);stroke-width:2.4}
+.edge.reach{stroke:var(--reach);stroke-width:2;stroke-dasharray:7 5}
+.edge.brk{stroke:var(--brk);stroke-width:1.4;stroke-dasharray:1.5 4;opacity:.72}
+.loop{fill:none;stroke:var(--accent);stroke-width:1.4;stroke-dasharray:4 6;opacity:.5}
+.rim{fill:none;stroke:var(--line);stroke-width:1}
+.wheel .hub{fill:var(--surface);stroke:var(--line);stroke-width:1}
+.wheel .ctr{text-anchor:middle;font-family:var(--mono)}
+.ctr .big{fill:var(--accent);font-size:44px;font-weight:600}
+.ctr .lbl{fill:var(--muted);font-size:9.5px;letter-spacing:.16em}
+.ctr .cap{fill:var(--ink-2);font-size:10px}
+figcaption{padding:10px 16px 16px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--line);
+  margin-top:6px}
+figcaption b{color:var(--ink-2);font-weight:600}
+
+/* ---------- legend ---------- */
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;padding:12px 16px;border-top:1px solid var(--line)}
+.lg{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2)}
+.lg svg{flex:none}
+.lg b{font-weight:600;color:var(--ink)}
+
+/* ---------- chain strip ---------- */
+.chain{margin-top:22px}
+.chainhead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 16px;
+  padding:15px 18px 0}
+.chainhead h3{font-size:17px}
+.chainhead .hint{color:var(--muted);font-size:12.5px}
+.links{display:flex;gap:8px;overflow-x:auto;padding:14px 18px 18px;scrollbar-width:thin}
+.link{flex:none;min-width:132px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;
+  padding:9px 11px 10px;position:relative;border-left:3px solid var(--line-2)}
+.link.flow{border-left-color:var(--flow)}
+.link.reach{border-left-color:var(--reach)}
+.link.brk{border-left-color:var(--brk)}
+.link.stall{border-left-color:var(--muted)}
+.link .top{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.link .pos{font-size:13px;font-weight:600;color:var(--ink)}
+.link .fname{font-family:var(--body);font-size:12.5px;color:var(--ink-2);margin-top:3px;line-height:1.3}
+.link .badge{margin-top:7px;display:inline-block;font:600 10px/1 var(--mono);letter-spacing:.1em;
+  text-transform:uppercase;padding:4px 6px;border-radius:4px}
+.link.flow .badge{background:var(--flow-fill);color:var(--flow)}
+.link.reach .badge{background:var(--reach-fill);color:var(--reach)}
+.link.brk .badge{background:var(--brk-fill);color:var(--brk)}
+.link.stall .badge{background:var(--surface-2);color:var(--muted)}
+.link .cnt{margin-top:8px;padding-top:7px;border-top:1px dashed var(--line);
+  font-family:var(--mono);font-size:11.5px;color:var(--ink-2);display:flex;justify-content:space-between;gap:8px}
+.link .cnt b{color:var(--ink);font-weight:600}
+.link .badge.bloom{background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent);
+  border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);margin-left:5px}
+.turnend{flex:none;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;
+  min-width:66px;padding:9px 8px;border-left:1px dashed var(--line-2);border-right:1px dashed var(--line-2);
+  background:repeating-linear-gradient(135deg,transparent,transparent 5px,var(--sunk) 5px,var(--sunk) 10px)}
+.turnend .tlabel{font:600 9px/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);text-align:center}
+.turnend .tdec{font:400 9.5px/1.2 var(--body);color:var(--muted);text-align:center}
+.turnend .tcount{font:600 15px/1 var(--mono);color:var(--ink-2)}
+.link.best{background:var(--surface);border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.link.best .crestmark{color:var(--accent);font-weight:600}
+.empty{padding:16px 18px 20px;color:var(--muted);font-size:13.5px}
+
+/* ---------- side panel ---------- */
+.side{display:flex;flex-direction:column;gap:18px}
+.sect+.sect{margin-top:15px;padding-top:15px;border-top:1px solid var(--line)}
+.sect h4{font-size:13.5px;font-family:var(--body);font-weight:600;letter-spacing:0}
+.sect .who{font:500 10.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:5px}
+.sect p{color:var(--ink-2);font-size:13.5px;margin-top:4px}
+.formcard .meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-top:7px}
+.chip{font:500 11px/1 var(--mono);letter-spacing:.06em;padding:5px 8px;border-radius:5px;
+  background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line)}
+.chip.tier{background:color-mix(in srgb,var(--accent) 13%,transparent);
+  color:var(--accent);border-color:color-mix(in srgb,var(--accent) 38%,transparent)}
+.formcard .title{font-family:var(--display);font-size:20px;font-weight:700;line-height:1.2;margin-top:3px}
+.formcard .posnum{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:600}
+.formcard .rules{margin-top:11px;font-size:13.5px;color:var(--ink-2)}
+.more{margin-top:9px}
+.more summary{cursor:pointer;font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);padding:7px 0;list-style:none}
+.more summary::-webkit-details-marker{display:none}
+.more summary::before{content:"▸ ";color:var(--accent)}
+.more[open] summary::before{content:"▾ "}
+.more summary:hover{color:var(--ink)}
+.formcard .rules code,.secret .rules code{font-family:var(--mono);font-size:12px}
+.cad{display:grid;grid-template-columns:auto 1fr;gap:7px 11px;margin-top:8px;align-items:baseline}
+.cad dt{font:600 11px/1.5 var(--mono);color:var(--accent)}
+.cad dd{margin:0;font-size:13px;color:var(--ink-2)}
+.topo{display:flex;flex-direction:column;gap:7px;margin-top:9px}
+.topo .row{display:flex;align-items:center;gap:9px;font-size:13px}
+.topo .key{font:600 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+  width:64px;flex:none}
+.topo .flowk{color:var(--flow)} .topo .reachk{color:var(--reach)} .topo .brkk{color:var(--brk)}
+.topo .val{font-family:var(--mono);font-size:12.5px;color:var(--ink-2)}
+.special{margin-top:11px;padding:10px 12px;background:color-mix(in srgb,var(--accent) 9%,transparent);
+  border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);border-radius:8px;
+  font-size:13px;color:var(--ink-2)}
+.special b{color:var(--ink)}
+.secret{margin-top:0}
+.secret .lamp{display:flex;align-items:center;gap:9px;font:600 11px/1 var(--mono);
+  letter-spacing:.1em;text-transform:uppercase;padding:9px 11px;border-radius:8px;
+  background:var(--surface-2);color:var(--muted);border:1px solid var(--line)}
+.secret .lamp .dot{width:8px;height:8px;border-radius:50%;background:var(--line-2);flex:none}
+.secret .lamp.lit{background:var(--flow-fill);color:var(--flow);border-color:var(--flow)}
+.secret .lamp.lit .dot{background:var(--flow);box-shadow:0 0 0 3px var(--flow-fill)}
+
+/* ---------- comparison ---------- */
+.compare{margin-top:40px}
+.compare h2{font-size:22px}
+.compare .lede{color:var(--ink-2);max-width:66ch;margin-top:7px;font-size:14px}
+.tablewrap{overflow-x:auto;margin-top:18px;border:1px solid var(--line);border-radius:12px;
+  background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;min-width:680px;font-size:13px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+thead th{font:600 10.5px/1.3 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);background:var(--sunk);white-space:nowrap}
+thead th.step{text-align:center;width:38px;padding-inline:0}
+tbody tr:last-child td{border-bottom:0}
+tr.famrow td{font:500 10px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+  background:var(--sunk);padding:7px 12px;border-bottom:1px solid var(--line)}
+td.nm{font-family:var(--display);font-weight:500;font-size:15px;white-space:nowrap}
+td.nm .sw{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;background:var(--accent)}
+td.cell{text-align:center;font-family:var(--mono);font-size:11px;font-weight:600;padding:0;
+  border-left:1px solid var(--line)}
+td.cell span{display:flex;align-items:center;justify-content:center;height:38px}
+td.cell.flow span{background:var(--flow-fill);color:var(--flow)}
+td.cell.reach span{background:var(--reach-fill);color:var(--reach)}
+td.cell.brk span{background:var(--brk-fill);color:var(--brk)}
+td.note{font-size:12.5px;color:var(--muted);min-width:180px}
+td.num{font-family:var(--mono);text-align:center;font-variant-numeric:tabular-nums}
+
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);
+  color:var(--muted);font-size:12.5px}
+footer code{font-family:var(--mono);font-size:12px;color:var(--ink-2)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+<div class="wrap" id="root" data-style="water">
+
+  <header class="masthead">
+    <div>
+      <p class="eyebrow">Breath Slayer v5 · Pathfinder 2e</p>
+      <h1>The Nine-Form Wheel</h1>
+      <p class="sub">All twelve Breathing Styles are nine Forms in a circle. What a Form does depends on
+        <em>which Form came before it</em> — so pick a style, then click positions to build a chain and
+        watch the Breath Count climb or break. <strong>End turn</strong> marks a round boundary: the Crest
+        is spent once per round, and Sun's Count decays there.</p>
+    </div>
+    <button class="themebtn" id="themebtn" type="button">Dark</button>
+  </header>
+
+  <div class="tabs" role="tablist" aria-label="Breathing Style" id="tabs"></div>
+
+  <div class="bar">
+    <div class="ctlgroup">
+      <label for="lv-1">Level</label>
+      <div class="seg" id="levels"></div>
+    </div>
+    <div class="ctlgroup">
+      <label>Chain</label>
+      <button class="ghost" id="endturn" type="button">End turn</button>
+      <button class="ghost" id="undo" type="button">Undo</button>
+      <button class="ghost" id="clear" type="button">Clear</button>
+    </div>
+    <p class="hint" style="color:var(--muted);font-size:12.5px;margin-left:auto">
+      Click a position to add it · hover to preview</p>
+  </div>
+
+  <div class="main">
+    <div>
+      <div class="panel">
+        <figure class="wheelwrap">
+          <svg class="wheel" id="wheel" viewBox="0 0 440 412" role="group"
+               aria-label="Interactive wheel of nine Form positions. Edges from the current position show which steps Flow, Reach or Break."></svg>
+          <div class="legend" id="legend">
+            <span class="lg"><svg width="34" height="10" aria-hidden="true"><line x1="1" y1="5" x2="26" y2="5" stroke="var(--flow)" stroke-width="2.4" stroke-linecap="round"/><polygon points="26,1.5 33,5 26,8.5" fill="var(--flow)"/></svg><span><b>Flowing</b> — Count +1, Cadence rider</span></span>
+            <span class="lg"><svg width="34" height="10" aria-hidden="true"><line x1="1" y1="5" x2="26" y2="5" stroke="var(--reach)" stroke-width="2" stroke-dasharray="7 5" stroke-linecap="round"/><polygon points="26,1.5 33,5 26,8.5" fill="var(--reach)"/></svg><span><b>Reaching</b> — Count +1, no rider, −2</span></span>
+            <span class="lg"><svg width="34" height="10" aria-hidden="true"><line x1="1" y1="5" x2="26" y2="5" stroke="var(--brk)" stroke-width="1.4" stroke-dasharray="1.5 4" stroke-linecap="round"/><polygon points="26,1.5 33,5 26,8.5" fill="var(--brk)"/></svg><span><b>Broken</b> — Count resets, Form loses its rider</span></span>
+            <span class="lg"><svg width="34" height="10" aria-hidden="true"><line x1="1" y1="5" x2="33" y2="5" stroke="var(--accent)" stroke-width="1.4" stroke-dasharray="4 6" opacity="0.6"/></svg><span><b>Tier I loop</b> — the 1st-level triangle</span></span>
+            <span class="lg"><span style="font:600 11px/1 var(--mono);color:var(--accent)">◆</span><span><b>Crest</b> — once per round, on the deepest link</span></span>
+          </div>
+          <figcaption id="cap"></figcaption>
+        </figure>
+      </div>
+
+      <div class="panel chain">
+        <div class="chainhead">
+          <h3>The chain</h3>
+          <div id="thresholds" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+        </div>
+        <div id="links" class="links"></div>
+      </div>
+    </div>
+
+    <aside class="side">
+      <div class="panel panel-pad formcard" id="formcard"></div>
+      <div class="panel panel-pad" id="stylecard"></div>
+      <div class="panel panel-pad secret" id="secretcard"></div>
+    </aside>
+  </div>
+
+  <section class="compare">
+    <p class="eyebrow">All twelve topologies</p>
+    <h2>The same nine positions, twelve different wheels</h2>
+    <p class="lede">A style <em>is</em> its topology. Read each row as "from any Form, a step of +1 … +8
+      does this." The density of green is how forgiving the wheel is: Thunder has one green cell and Sun
+      has eight, and that contrast is the whole spread of the class.</p>
+    <figure>
+      <div class="tablewrap">
+        <table id="cmp">
+          <thead><tr>
+            <th>Style</th>
+            <th class="step">+1</th><th class="step">+2</th><th class="step">+3</th><th class="step">+4</th>
+            <th class="step">+5</th><th class="step">+6</th><th class="step">+7</th><th class="step">+8</th>
+            <th class="num">Count<br>per step</th><th class="num">Cap</th><th>Tier&nbsp;I loop</th><th>What it costs</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <figcaption style="border:0;padding:12px 2px 0">
+        <b>F</b> Flowing · <b>R</b> Reaching · <b>B</b> Broken. Note that +6, +7 and +8 are the same
+        positions as "back three, back two, back one" — there is no backward movement on a wheel, only
+        long steps. Moon, Serpent and Sun are the styles that Flow on them.
+        <b>*</b> Mist's Tier I triangle Reaches rather than Flows, which still advances the Count — the
+        rule is that the triangle must not <em>Break</em>, not that it must Flow.
+      </figcaption>
+    </figure>
+  </section>
+
+  <footer>
+    <p>Built from <code>Docs/breath-slayer-guide-v5.md</code> §4 and §8 — all Form text, topologies,
+      stances, style riders and Cadence riders are read straight out of the guide, so this page and the
+      document cannot disagree. Breath Count caps follow the chassis (2 at 1st, 4 at 5th, 6 at 9th, 9 at
+      13th); Thunder's cap of 7 and Sound's cap of 6 are style clauses, and both upgrade their Crest dice
+      at that ceiling instead of at 9.</p>
+  </footer>
+</div>
+
+<script>
+const DATA = [{"name": "Water", "skill": "Acrobatics", "dmg": "slashing", "flow": "+1, +2, +3", "reach": "+4, +5", "broken": "+6, +7, +8", "special": "", "stance": {"name": "Flowing Form", "text": "While in this stance you gain a **+1 circumstance bonus to AC** until the start of your next turn if you Stepped, Strode, Swam or Flew on your turn."}, "rider": {"name": "Flowing Advance", "text": "The first time each round you Strike a creature after Striding or Stepping that turn, the Strike deals **+1 precision damage per weapon damage die**."}, "cadence": {"I": "You **Step 5 feet** as a free action.", "II": "The target is **off-guard to you** until the end of your next turn.", "III": "You gain a **+2 circumstance bonus to AC** until the start of your next turn."}, "forms": [{"pos": 1, "name": "Water Surface Slash", "tier": "I", "cost": "1 action", "text": "Make a nichirin Strike dealing **+1d6 slashing**. If you Strode or Stepped at least 10 feet this turn before the Strike, it deals **+2d6** instead."}, {"pos": 2, "name": "Drop Ripple Thrust", "tier": "II", "cost": "1 action", "text": "Step 10 feet; this movement doesn't trigger reactions. Then make a nichirin Strike."}, {"pos": 3, "name": "Splashing Water Flow", "tier": "III", "cost": "1 action", "text": "Step, make a nichirin Strike that ignores the target's lesser cover, then Step again."}, {"pos": 4, "name": "Blessed Rain After the Drought", "tier": "I", "cost": "1 action", "text": "Make a nichirin Strike with a **+1 status bonus** to the attack roll. On a hit, you and one willing ally within 30 feet each gain **temporary Hit Points equal to your level** for 1 minute."}, {"pos": 5, "name": "Striking Tide", "tier": "II", "cost": "reaction", "text": "**Trigger** You take damage from a physical Strike while in the Water stance. Reduce the triggering damage by **2 + your level**. If the attacker is within your reach, make a nichirin Strike against it at your current multiple attack penalty."}, {"pos": 6, "name": "Whirlpool", "tier": "III", "cost": "2 actions · `flourish`", "text": "A **10-foot emanation** of churning blades. Each creature in the area takes **a blade's worth of slashing** with a basic Reflex save. On a **failure** a creature is **pulled 5 feet toward you** (this movement doesn't trigger your reactions); on a **critical failure** it also **can't Step** until the end of its next turn."}, {"pos": 7, "name": "Waterfall Basin", "tier": "I", "cost": "1 action", "text": "A descending vertical cut. Make a nichirin Strike with a **+1 status bonus**. On a hit the target is **pushed 5 feet**; on a critical hit it is pushed 10 feet and knocked **prone**."}, {"pos": 8, "name": "Flowing Dance", "tier": "II", "cost": "2 actions · `flourish`", "text": "Make **two nichirin Strikes** against the same creature; your multiple attack penalty increases as normal. You may **Step** between them."}, {"pos": 9, "name": "Constant Flux", "tier": "III", "cost": "2 actions · `flourish`", "text": "Make a nichirin Strike dealing **+2d6 slashing**. Then, until the end of your next turn, **the next Form you use treats its transition as Flowing** regardless of the step. > Water's Tier III answer to its own premise: the style that flows anywhere eventually stops needing the > wheel at all. Pairs viciously with a deep-tier reach you'd otherwise never take."}], "secret": {"kind": "SECRET", "name": "Eleventh Form: Dead Calm", "cost": "2 actions · `flourish`", "req": "Your Breath Count is **7 or higher**. *(Giyu Tomioka's personal creation.)*", "text": "**Duration** Until the start of your next turn. You stop moving entirely. You gain a **+2 status bonus to AC and to Reflex saves** and **5 Stillness counters**. You can take no actions other than *Still Water* while the form lasts; taking any other action ends it. Unspent counters are lost when the duration ends. **Your Breath Count then drops to 0.** > **Still Water** ✦ *(free action; it does not use your reaction, and you may take it any number of times)* > **Trigger** A creature's melee Strike targets you, and you have at least 1 Stillness counter. > **Effect** Spend any number of remaining counters, resolved once the Strike's outcome is known: > - **It hits or critically hits you.** Each counter spent reduces the damage by **a blade's worth**. If > the total exceeds the damage, the **excess is dealt to the attacker** as slashing damage. > - **It misses or critically misses you.** Each counter spent is an immediate **riposte nichirin Strike** > against the attacker at a flat **−2** penalty. These ripostes **neither use nor increase your multiple > attack penalty**, and each hit makes the target **off-guard to you** until the end of your next turn.", "selfcost": "When Dead Calm ends you are **off-guard until the end of your next turn** — the stillness has to break. > *Still water answers whatever touches it, in kind. A counter is always worth exactly one swing; what > changes is whether the swing has to roll to land.*"}}, {"name": "Flame", "skill": "Intimidation", "dmg": "fire", "flow": "+3, +4, +5", "reach": "+1, +2", "broken": "+6, +7, +8", "special": "", "stance": {"name": "Burning Advance", "text": "The **first Strike each round** you hit with while in this stance deals **persistent fire damage equal to 1 per weapon damage die** (2 per die at 8th level, **3 per die at 15th**). *(Persistent fire of the same value doesn't stack — the highest applies.)*"}, "rider": {"name": "Kindled Wound", "text": "The first time each round that a creature takes persistent fire damage from you, it is **off-guard to you** until the end of your next turn."}, "cadence": {"I": "The target takes **1d4 persistent fire**.", "II": "The target is **frightened 1**.", "III": "Until the end of your next turn, persistent fire on the target **can't be ended by the usual flat check** — it must be smothered with an Interact action, doused, or hit with cold damage."}, "forms": [{"pos": 1, "name": "Unknowing Fire", "tier": "I", "cost": "1 action", "text": "Make a nichirin Strike with a **+1 status bonus** to the attack roll, dealing **+1d6 fire**. On a hit the target takes **1d4 persistent fire**; on a critical hit it takes **double** that persistent fire and is **off-guard until that persistent damage ends**."}, {"pos": 2, "name": "Rising Scorching Sun", "tier": "II", "cost": "2 actions", "text": "Stride up to half your Speed — this movement may be vertical and doesn't trigger reactions — then make a nichirin Strike with a **+1 status bonus**. The target is **off-guard against this Strike if it is taking persistent fire damage**. On a critical hit it is pushed **10 feet** and knocked **prone**."}, {"pos": 3, "name": "Blazing Universe", "tier": "III", "cost": "2 actions · `flourish`", "text": "A **15-foot cone** of rolling flame. Each creature takes **a blade's worth of fire** with a basic Reflex save. On a **failure** a creature takes **2d6 persistent fire**; on a **critical failure**, **4d6 persistent fire** and it is **dazzled** until that fire ends."}, {"pos": 4, "name": "Flame Tiger", "tier": "I", "cost": "2 actions · `flourish`", "text": "Make **two nichirin Strikes** against the same creature; your multiple attack penalty increases as normal. **If both hit**, the target takes **2d6 persistent fire** and becomes **frightened 2**, and it can't reduce that frightened condition below 1 while the persistent fire lasts."}, {"pos": 5, "name": "Blooming Flame Undulation", "tier": "II", "cost": "reaction", "text": "**Trigger** You are targeted by a Strike, or you are caught in a damaging area effect. A vortex of flame erupts around you. You gain **resistance 3 + half your level** against the triggering damage, and each creature adjacent to you takes **1d6 fire** with a basic Reflex save."}, {"pos": 6, "name": "Flame Whirl", "tier": "III", "cost": "2 actions · `flourish`", "text": "A **10-foot emanation** of whirling fire. Each creature takes **a blade's worth of fire** with a basic Reflex save. You may then **Stride up to half your Speed**; this movement doesn't trigger reactions."}, {"pos": 7, "name": "Scorching Crescent", "tier": "I", "cost": "1 action", "text": "Make a nichirin Strike. On a hit, each creature **adjacent to the target** takes fire damage equal to **your number of weapon damage dice**."}, {"pos": 8, "name": "Ember Pursuit", "tier": "II", "cost": "1 action", "text": "**Requirement** A creature within 30 feet is taking persistent fire damage. Stride up to half your Speed toward that creature — this movement doesn't trigger its reactions — then make a nichirin Strike against it."}, {"pos": 9, "name": "Sunset Blaze", "tier": "III", "cost": "2 actions", "text": "Make a nichirin Strike with a **+2 status bonus** to the attack roll. On a hit, any **persistent fire the target is taking doubles**. On a critical hit it also **can't use reactions** until that fire ends."}], "secret": {"kind": "SECRET", "name": "Ninth Form: Rengoku", "cost": "3 actions · `flourish`", "req": "Your Breath Count is **7 or higher**. *(The Rengoku family's inherited esoterica.)*", "text": "Stride up to **double your Speed** in a straight line; this movement doesn't trigger reactions and you may move through enemies' spaces. Each creature adjacent to any point of your path takes **a blade's worth of fire plus 4d6 fire** with a basic Reflex save; a creature that **fails** is knocked **prone**, and one that **critically fails** also takes **4d6 persistent fire**. End the movement with a nichirin Strike gaining a **+2 status bonus** to the attack roll. On a hit the target takes **4d6 persistent fire**; on a critical hit that persistent fire **cannot be ended by the usual flat check** — the creature must spend an Interact action to smother it, be doused, or take cold damage. **Your Breath Count then drops to 0.**", "selfcost": "The technique burns its wielder. You take **fire damage equal to your level** (ignoring your own immunities and resistances to fire) and are **slowed 1** on your next turn."}}, {"name": "Thunder", "skill": "Athletics", "dmg": "electricity", "flow": "+3 only — and a Flowing transition advances your Breath Count by 2, not 1", "reach": "none", "broken": "+1, +2, +4, +5, +6, +7, +8", "special": "Your Breath Count cap is 7, whatever your level. At Breath Count 7, your Crest dice are d8s.", "stance": {"name": "Lightning Posture", "text": "You gain a **+5-foot status bonus to all your Speeds**, and **the first time each round you Stride, that movement doesn't trigger reactions**."}, "rider": {"name": "Godspeed", "text": "If you have moved at least **20 feet** this turn, the first Strike you make that turn makes its target **off-guard to you until the end of your turn** on a hit."}, "cadence": {"I": "You **Step 10 feet** as a free action.", "II": "The target takes a **−10-foot status penalty to all its Speeds** until the end of your next turn.", "III": "The target must succeed at a **Fortitude save** against your Slayer DC or be **stunned 1** (**incapacitation**)."}, "forms": [{"pos": 1, "name": "Thunderclap and Flash", "tier": "I", "cost": "1 action", "text": "Stride up to your Speed in a straight line. This movement doesn't trigger reactions and you are **concealed** while moving. Then make a nichirin Strike."}, {"pos": 2, "name": "Rice Spirit", "tier": "II", "cost": "2 actions · `flourish`", "text": "Five arced slashes in a **15-foot cone**. Each creature takes **a blade's worth of electricity** with a basic Reflex save. A creature that **fails** can't use reactions until the end of its next turn."}, {"pos": 3, "name": "Thunder Swarm", "tier": "III", "cost": "2 actions · `flourish`", "text": "Make a nichirin Strike against each of up to **three different creatures** within your reach, each dealing **+1d6 electricity**; your multiple attack penalty increases as normal between them."}, {"pos": 4, "name": "Distant Thunder", "tier": "I", "cost": "1 action", "text": "Throw an arc of lightning off the blade's edge. Make a nichirin Strike against a creature within **30 feet**, ignoring any range penalty. The Strike deals **electricity** instead of its normal damage type."}, {"pos": 5, "name": "Heat Lightning", "tier": "II", "cost": "1 action", "text": "An upward cut faster than the eye. Make a nichirin Strike. On a hit the target **can't use reactions** until the end of its next turn; on a critical hit it is also **stunned 1** (**incapacitation**)."}, {"pos": 6, "name": "Rumble and Flash", "tier": "III", "cost": "2 actions · `flourish`", "text": "A **30-foot line**. Each creature takes **a blade's worth of electricity** with a basic Reflex save; on a **critical failure** a creature is also **stunned 1** (**incapacitation**). You may instead split this into **three 30-foot lines** that may overlap, each dealing **half** a blade's worth; a creature in two or more lines rolls one save at a **−2 circumstance penalty** and takes the damage twice at most."}, {"pos": 7, "name": "Sixfold", "tier": "I", "cost": "2 actions · `flourish`", "text": "Thunderclap and Flash, doubled. Stride up to your Speed in a straight line and Strike, then do it again; your multiple attack penalty increases as normal. Neither movement triggers reactions."}, {"pos": 8, "name": "Eightfold", "tier": "II", "cost": "2 actions · `flourish`", "text": "Stride up to **double your Speed** in a straight line; this movement doesn't trigger reactions and you may move through enemies' spaces. Make a nichirin Strike against each of up to **two creatures** whose space you pass through or move adjacent to; your multiple attack penalty increases as normal."}, {"pos": 9, "name": "Godspeed", "tier": "III", "cost": "2 actions · `flourish`", "text": "Stride up to **triple your Speed**; this movement doesn't trigger reactions and you may move through enemies' spaces. Then make one nichirin Strike with a **+2 status bonus** to the attack roll. On a hit the target is **stunned 1** (**incapacitation**)."}], "secret": {"kind": "SECRET", "name": "Seventh Form: Honoikazuchi no Kami", "cost": "3 actions · `flourish`", "req": "Your Breath Count is **7** (its maximum).", "text": "*(Zenitsu Agatsuma's own form — the god of thunder, drawn once.)* Move up to **100 feet** in a straight line. This movement ignores difficult terrain, doesn't trigger reactions, and can pass through creatures' spaces. A dragon of lightning trails you: each creature adjacent to any point of your path takes **a blade's worth of electricity plus 4d6 electricity** with a basic Reflex save, and one that critically fails is **stunned 1** (**incapacitation**). End with a nichirin Strike gaining a **+2 status bonus** to the attack roll and dealing **+6d6 electricity** on a hit. On a hit, the target must also attempt a **Fortitude save** against your Slayer DC: on a failure it is **stunned 1**, on a critical failure **stunned 2** (**incapacitation**). **Your Breath Count then drops to 0.**", "selfcost": "Your legs give out. You are **slowed 1 for 1 minute**."}}, {"name": "Wind", "skill": "Survival", "dmg": "slashing", "flow": "+3, +5, +7", "reach": "+1", "broken": "+2, +4, +6, +8", "special": "", "stance": {"name": "Cyclone Guard", "text": "Your nichirin Strikes gain the **sweep** trait (+1 circumstance bonus to attack rolls against a target other than the last creature you attacked this turn), and you gain a **+1 circumstance bonus to Reflex saves**."}, "rider": {"name": "Windborne Reach", "text": "Your Forms' cones and emanations are **5 feet larger**, and any creature that **critically fails** a save against one of your Forms is **pushed 5 feet**."}, "cadence": {"I": "The target is **pushed 5 feet**.", "II": "The target takes a **−10-foot status penalty to all Speeds** and **can't Step**, until the end of your next turn.", "III": "You may **Fly up to half your Speed** as a free action; if you end that movement in the air you don't fall until the end of your next turn."}, "forms": [{"pos": 1, "name": "Dust Whirlwind Cutter", "tier": "I", "cost": "1 action · `flourish`", "text": "A **15-foot cone** (20 feet with your rider) of cutting wind. Each creature takes **half a blade's worth of slashing** with a basic Reflex save; a creature that critically fails is knocked **prone**."}, {"pos": 2, "name": "Claws-Purifying Wind", "tier": "II", "cost": "2 actions", "text": "Four descending air-claws. Make a nichirin Strike. On a hit the target takes a **−10-foot status penalty** to all Speeds and **can't Step** until the end of your next turn; on a critical hit it is **immobilized** until the end of its next turn and must Escape against your Slayer DC to move sooner."}, {"pos": 3, "name": "Clean Storm Wind Tree", "tier": "III", "cost": "reaction", "text": "**Trigger** You take damage from a Strike or from a physical effect. A whirling guard of blades. You gain **resistance 3 + half your level** against the triggering damage, and each creature adjacent to you takes **1d6 slashing** with a basic Reflex save; one that fails is **pushed 5 feet**."}, {"pos": 4, "name": "Cold Mountain Wind", "tier": "I", "cost": "1 action", "text": "Make a nichirin Strike. On a hit the target is **pushed 10 feet**, and you may **Step** into any space it left."}, {"pos": 5, "name": "Rising Dust Storm", "tier": "II", "cost": "2 actions · `flourish`", "text": "A **10-foot emanation** (15 feet with your rider) of rising slashes. Each creature takes **a blade's worth of slashing** with a basic Reflex save, and the area becomes **difficult terrain** until the start of your next turn. A creature that **fails** is knocked **prone**. **Flying creatures** roll at a **−2 circumstance penalty** and, on a failure, are knocked out of the air and fall."}, {"pos": 6, "name": "Black Wind, Mountain Mist", "tier": "III", "cost": "2 actions · `flourish`", "text": "Stride up to half your Speed — this movement doesn't trigger reactions — then cut a **30-foot line** along your path. Each creature in the line takes **a blade's worth of slashing** with a basic Reflex save; one that fails is **off-guard until the start of your next turn**."}, {"pos": 7, "name": "Gale, Sudden Gusts", "tier": "I", "cost": "1 action", "text": "Make a nichirin Strike and Stride up to half your Speed, in either order. Neither triggers reactions."}, {"pos": 8, "name": "Primary Gale Slash", "tier": "II", "cost": "2 actions · `flourish`", "text": "Make **two nichirin Strikes** against the same creature; your multiple attack penalty increases as normal. **If both hit**, the target is **pushed 10 feet** and knocked **prone**."}, {"pos": 9, "name": "Tempest's Eye", "tier": "III", "cost": "2 actions", "text": "Make a nichirin Strike with a **+2 status bonus** to the attack roll. On a hit the target is **pushed 15 feet**, and each creature whose space it passes through, or that it ends adjacent to, takes **half a blade's worth of slashing** with a basic Reflex save. > Wind's Tier III single-target Form does not try to out-damage anybody. It turns the enemy into the > projectile."}], "secret": {"kind": "SECRET", "name": "Ninth Form: Idaten Typhoon", "cost": "3 actions · `flourish`", "req": "Your Breath Count is **7 or higher**.", "text": "Backflip-leap up to **double your Speed** in any direction; you have a fly Speed for this movement and must land at the end of it. Each creature adjacent to any point of your path takes **a blade's worth of slashing plus 4d6 slashing** with a basic Reflex save. A creature that **fails** is **pushed 10 feet**; one that **critically fails** is knocked **prone** and **can't Stand** until the end of its next turn. At any point during the movement, make one nichirin Strike with a **+2 status bonus** to the attack roll, dealing **+4d6 slashing** on a hit. **Your Breath Count then drops to 0.**", "selfcost": "The violent rotation leaves you reeling. You are **dazzled and off-guard until the end of your next turn**."}}, {"name": "Stone", "skill": "Athletics", "dmg": "bludgeoning", "flow": "+1, +2, +3", "reach": "+4, +5", "broken": "+6, +7, +8", "special": "A Broken transition halves your Breath Count, rounded down, instead of resetting it to 1.", "stance": {"name": "Immovable Guard", "text": "You gain a **+1 circumstance bonus to Fortitude saves**. If you have not left your space since the end of your last turn, you also gain **resistance to bludgeoning damage equal to half your level** (minimum 1) and a **+2 circumstance bonus** to your Fortitude DC against Shove, Trip, Grapple and Reposition, and to saves against forced movement."}, "rider": {"name": "Mountain's Answer", "text": "Once per round, when a creature within your reach hits you with a melee Strike, it takes **bludgeoning damage equal to your number of weapon damage dice**."}, "cadence": {"I": "You **Shove the target 5 feet** with no check and no multiple attack penalty increase.", "II": "The target is **off-guard to all creatures** until the start of your next turn.", "III": "You gain **resistance to all physical damage equal to half your level** until the start of your next turn."}, "forms": [{"pos": 1, "name": "Serpentinite Bipolar", "tier": "I", "cost": "1 action", "text": "Make a nichirin Strike with a **+1 status bonus** to the attack roll, dealing **+1d6 bludgeoning**. On a hit you **Shove the target 5 feet** with no check and no multiple attack penalty increase; on a critical hit you Shove it **10 feet** and it is knocked **prone**."}, {"pos": 2, "name": "Upper Smash", "tier": "II", "cost": "1 action", "text": "**Requirement** The target is **larger than you**, **prone**, **grabbed**, **restrained**, or has already taken damage from you this combat. Drive the blade upward. Make a nichirin Strike dealing **+2d6 bludgeoning**. On a hit the target is **off-guard to all creatures** until the start of your next turn; on a critical hit it is also knocked **prone**."}, {"pos": 3, "name": "Volcanic Rock, Rapid Conquest", "tier": "III", "cost": "2 actions · `flourish`", "text": "A **15-foot cone** of shattered earth. Each creature takes **a blade's worth of bludgeoning** with a basic **Fortitude** save — note the defence; Stone hits the save most area effects miss. The area becomes **difficult terrain** until the start of your next turn. A creature that **fails** is knocked **prone**; one that **critically fails** is **immobilized** beneath the rubble until it Escapes against your Slayer DC."}, {"pos": 4, "name": "Stone Skin", "tier": "I", "cost": "1 action · Duration 1 minute", "text": "Your skin takes on the density of rock. You gain **resistance to all physical damage except adamantine equal to half your level** (minimum 2), and you **cannot be knocked prone or forcibly moved** by anything other than a creature two or more sizes larger than you."}, {"pos": 5, "name": "Stonefall Crush", "tier": "II", "cost": "2 actions", "text": "Make a nichirin Strike with a **+1 status bonus** to the attack roll. On a hit the target is knocked **prone** and takes a **−10-foot status penalty** to all Speeds until the end of your next turn."}, {"pos": 6, "name": "Iron Mountain Hold", "tier": "III", "cost": "reaction", "text": "**Trigger** A creature within your reach Strikes you, or attempts to Shove, Trip, Grapple or Reposition you. You set your weight against it. Against a forced-movement or positioning attempt you **automatically critically succeed** at the defence; against a Strike you gain **resistance 5 + half your level** to its damage. Either way, the creature takes **half a blade's worth of bludgeoning**."}, {"pos": 7, "name": "Quaking Tread", "tier": "I", "cost": "1 action", "text": "Stride up to half your Speed, ignoring difficult terrain, then make a nichirin Strike. On a hit the target **can't Step** until the end of its next turn."}, {"pos": 8, "name": "Tectonic Grind", "tier": "II", "cost": "2 actions · `flourish`", "text": "Make **two nichirin Strikes** against the same creature; your multiple attack penalty increases as normal. **If both hit**, the target is **grabbed** and must Escape against your Slayer DC."}, {"pos": 9, "name": "Bedrock Sunder", "tier": "III", "cost": "2 actions · `flourish`", "text": "Split the ground in a **10-foot emanation**. Each creature takes **a blade's worth of bludgeoning** with a basic **Fortitude** save; one that fails is knocked **prone**. The ground in the area becomes **difficult terrain until the encounter ends**."}], "secret": {"kind": "SECRET", "name": "Fifth Form: Arcs of Justice", "cost": "3 actions · `flourish`", "req": "Your Breath Count is **7 or higher**.", "text": "Make **four nichirin Strikes**, divided among creatures within your reach as you choose; your multiple attack penalty increases as normal after each. Each deals **+2d6 bludgeoning** on a hit, and each hit lets you either **pull the target 5 feet toward you** or knock it **prone** — your choice, no check, no multiple attack penalty increase. Until the start of your next turn you gain **resistance 15 to all damage**, you **cannot be forcibly moved**, and you automatically **critically succeed** at saves and DCs against being knocked prone. **Your Breath Count then drops to 0.**", "selfcost": "The rooted stance holds you. Your **Speeds are 0 until the end of your next turn**."}}, {"name": "Sound", "skill": "Stealth", "dmg": "sonic", "flow": "+2, +3, +4", "reach": "+1, +5", "broken": "+6, +7, +8", "special": "Your Breath Count caps at 6, whatever your level. At Breath Count 6, your Crest dice are d12s.", "stance": {"name": "Musical Score", "text": "You read the fight as notation. You gain a **+1 circumstance bonus to Perception**, and whenever a creature within 30 feet uses an action with the `concentrate` or `manipulate` trait, you learn what it is attempting before it resolves."}, "rider": {"name": "Concussive Report", "text": "The first time each round that a creature takes sonic damage from you, it must succeed at a **Fortitude save** against your Slayer DC or be **deafened** until the end of your next turn. *(Deafened is the class's only real anti-caster tool: a deafened creature must pass a DC 5 flat check to Cast a Spell with a verbal component or lose it.)*"}, "cadence": {"I": "The target takes **1d6 sonic** and is **deafened** until the end of your next turn.", "II": "The target must succeed at a **Fortitude save** against your Slayer DC or be **stupefied 1** until the end of your next turn.", "III": "The target must succeed at a **Fortitude save** against your Slayer DC or be **slowed 1** until the end of its next turn."}, "forms": [{"pos": 1, "name": "Roar", "tier": "I", "cost": "1 action", "text": "Make a nichirin Strike. On a hit, the target and each creature adjacent to it take **1d6 sonic**."}, {"pos": 2, "name": "String Performance", "tier": "II", "cost": "2 actions · `flourish`", "text": "Wire strung between the blades, sung taut. A **15-foot cone**: each creature takes **a blade's worth of sonic** with a basic **Fortitude** save — note the defence. A creature that **fails** is **deafened** until the end of its next turn."}, {"pos": 3, "name": "Bombardment", "tier": "III", "cost": "2 actions · `flourish`", "text": "A **10-foot emanation** of detonating sound. Each creature takes **a blade's worth of sonic** with a basic **Fortitude** save; one that **critically fails** is **stunned 1** (**incapacitation**)."}, {"pos": 4, "name": "Sound Pressure", "tier": "I", "cost": "1 action", "text": "Make a nichirin Strike. On a hit the target must succeed at a **Fortitude save** against your Slayer DC or be **pushed 5 feet** and **deafened** until the end of its next turn."}, {"pos": 5, "name": "Echo Location", "tier": "II", "cost": "1 action", "text": "Read the room by its returns. Every creature within 30 feet that is not behind total cover ceases to be **hidden or undetected** from you until the end of your turn. Then make a nichirin Strike."}, {"pos": 6, "name": "Crescendo", "tier": "III", "cost": "2 actions", "text": "Make a nichirin Strike with a **+2 status bonus** to the attack roll. On a hit it deals additional sonic damage equal to **twice your number of weapon damage dice**, and the target is **deafened and stupefied 1** until the end of your next turn."}, {"pos": 7, "name": "Constant Resounding Slashes", "tier": "I", "cost": "2 actions · `flourish`", "text": "Make **two nichirin Strikes** against the same creature; your multiple attack penalty increases as normal. **If both hit**, the target takes **2d6 sonic** and is **stupefied 1** until the end of your next turn."}, {"pos": 8, "name": "Rending Chord", "tier": "II", "cost": "2 actions", "text": "Make a nichirin Strike with a **+1 status bonus** to the attack roll. On a hit it deals **+2d6 sonic** and the target **can't use reactions** until the end of its next turn."}, {"pos": 9, "name": "Shattering Report", "tier": "III", "cost": "2 actions · `flourish`", "text": "A **30-foot line** of pressure. Each creature takes **a blade's worth of sonic** with a basic **Fortitude** save; one that **fails** is **deafened** and **slowed 1** until the end of its next turn. Unattended objects of glass, crystal or ceramic in the line shatter."}], "secret": {"kind": "SECRET", "name": "Fifth Form: String Performance, Festival of Fire", "cost": "3 actions · `flourish`", "req": "Your Breath Count is **7 or higher** — for Sound, that needs **`Deepening Breath`** (feat 10).", "text": "*(Tengen Uzui's strongest, and the reason he was the loudest man in the Corps.)* Explosive-strung wire laid across the whole field, then pulled. Choose a **20-foot burst** within 30 feet. Each creature in it takes **a blade's worth of sonic plus 6d6 sonic** with a basic **Fortitude** save. A creature that **fails** is **stunned 1** and **deafened for 1 minute**; one that **critically fails** is **stunned 2** (**incapacitation**) and its deafness lasts **1 hour**. Then make one nichirin Strike against any creature in the burst with a **+2 status bonus** to the attack roll. **Your Breath Count then drops to 0.**", "selfcost": "You were standing inside it. You are **deafened until the end of your next turn** and take a **−2 status penalty to Perception for 1 minute**."}}, {"name": "Flower", "skill": "Medicine", "dmg": "slashing", "flow": "+1, +2, +3", "reach": "+4, +5, +6", "broken": "+7, +8 — only two steps in the whole wheel", "special": "Full Bloom. The first time each encounter your chain returns to a wheel position it has already used, without having Broken since, you immediately regain your Crest for the round — you may give the Crest to a second Form this round. That second Crest pays half as many dice, rounded down.", "stance": {"name": "Honourable Shadow Plum", "text": "While in this stance, the first time each round a creature within your reach **misses you with a melee Strike**, you may **Step** as a free action."}, "rider": {"name": "Blossom's Eye", "text": "The first Strike each round that you make against an **off-guard** creature deals **+1 precision damage per weapon damage die**."}, "cadence": {"I": "The target is **off-guard to you** until the end of your next turn.", "II": "The target is **off-guard to all creatures** until the start of your next turn.", "III": "The target takes **2d6 persistent bleed**, and you gain a **+2 circumstance bonus to AC** until the start of your next turn."}, "forms": [{"pos": 1, "name": "Crimson Hanagoromo", "tier": "I", "cost": "1 action", "text": "A sweeping robe of cuts. Make a nichirin Strike; on a hit the target takes **1d6 persistent bleed**."}, {"pos": 2, "name": "Falling Petals", "tier": "II", "cost": "1 action", "text": "Make a nichirin Strike. On a hit, each creature **adjacent to the target** is **off-guard to you** until the end of your turn."}, {"pos": 3, "name": "Spider Lily Sweep", "tier": "III", "cost": "2 actions · `flourish`", "text": "A **10-foot emanation** of low, circling cuts. Each creature takes **a blade's worth of slashing** with a basic Reflex save; one that **fails** is **off-guard** until the start of your next turn."}, {"pos": 4, "name": "Peach-hued Wind", "tier": "I", "cost": "1 action", "text": "Step 10 feet; this movement doesn't trigger reactions. Then make a nichirin Strike that ignores the target's **lesser cover**."}, {"pos": 5, "name": "Plum Shadow Cut", "tier": "II", "cost": "reaction", "text": "**Trigger** A creature within your reach **misses you** with a melee Strike. Make a nichirin Strike against that creature at your current multiple attack penalty. On a hit it is **off-guard** until the start of your next turn."}, {"pos": 6, "name": "Pistil Piercing", "tier": "III", "cost": "2 actions", "text": "Make a nichirin Strike with a **+2 status bonus** to the attack roll. On a hit, any **persistent bleed the target is taking doubles**, and it is **off-guard to all creatures** until the start of your next turn."}, {"pos": 7, "name": "Whirling Peach", "tier": "I", "cost": "2 actions · `flourish`", "text": "Make **two nichirin Strikes** against the same creature; your multiple attack penalty increases as normal. **If both hit**, the target is **off-guard to all creatures** until the start of your next turn."}, {"pos": 8, "name": "Petal Storm", "tier": "II", "cost": "2 actions · `flourish`", "text": "A **15-foot cone** of shredding petals. Each creature takes **a blade's worth of slashing** with a basic Reflex save; one that **fails** takes **1d6 persistent bleed**."}, {"pos": 9, "name": "Hundred-Petal Cut", "tier": "III", "cost": "2 actions · `flourish`", "text": "Make a nichirin Strike against each of up to **three different creatures** within your reach; your multiple attack penalty increases as normal. Each creature hit is **off-guard to you** until the end of your next turn."}], "secret": {"kind": "SECRET", "name": "Final Form: Equinoctial Vermilion Eye", "cost": "2 actions · `flourish`", "req": "Your Breath Count is **7 or higher**. **Duration** 1 minute.", "text": "*(Higan Bloom — Kanao Tsuyuri's, and it cost her an eye.)* You force your vision past what an eye is built to do. For the duration: - You gain a **+2 status bonus to AC, to Reflex saves, and to attack rolls**. - You **cannot be flanked**, and no creature can become **hidden or undetected** from you. - The **first Strike each round** you make against a creature leaves it **off-guard to you and to every one of your allies** until the end of your next turn. **Your Breath Count then drops to 0.**", "selfcost": "The eye pays. When the duration ends you are **dazzled for 1 hour**. If you use this Form a **second time in the same day**, you are **blinded for 1 hour** instead, and the GM is entirely within their rights to make that permanent in one eye."}}, {"name": "Mist", "skill": "Stealth", "dmg": "slashing", "flow": "+1 — one step, and one step only", "reach": "+2, +3, +4, +5, +6, +7, +8 — everything else", "broken": "none. Mist has no Broken set at all.", "special": "Mist has no edges. No transition you can make ever breaks your chain.", "stance": {"name": "Obscuring Veil", "text": "While in this stance you are **concealed** from any creature more than 30 feet away from you, and you do not need to Hide or take any action to maintain it."}, "rider": {"name": "Nothing to Grasp", "text": "The first Strike each round that you make against a creature which **cannot see you precisely** deals **+1 precision damage per weapon damage die**, and making it does not cause you to become **observed**."}, "cadence": {"I": "You become **concealed** until the start of your next turn.", "II": "The target is **dazzled** until the end of your next turn.", "III": "You become **hidden** from every creature until the start of your next turn, with no Hide check."}, "forms": [{"pos": 1, "name": "Low Clouds, Distant Haze", "tier": "I", "cost": "1 action", "text": "A thrust that arrives from further away than it should. Make a nichirin Strike; **your reach for this Strike increases by 5 feet**."}, {"pos": 2, "name": "Eight-Layered Mist", "tier": "II", "cost": "2 actions · `flourish`", "text": "Make **two nichirin Strikes** against the same creature; your multiple attack penalty increases as normal. If **either** hits, the target is **dazzled** until the end of your next turn."}, {"pos": 3, "name": "Lunar Dispersing Mist", "tier": "III", "cost": "2 actions · `flourish`", "text": "A **30-foot line** of scattering cuts. Each creature takes **a blade's worth of slashing** with a basic Reflex save; one that **fails** is **dazzled** until the end of its next turn."}, {"pos": 4, "name": "Shifting Flow Slash", "tier": "I", "cost": "1 action", "text": "Make a nichirin Strike. If it hits, you may **Step 10 feet** afterward; this movement doesn't trigger reactions."}, {"pos": 5, "name": "Sea of Clouds and Haze", "tier": "II", "cost": "2 actions · `flourish`", "text": "A **15-foot cone**. Each creature takes **a blade's worth of slashing** with a basic Reflex save, and the area **fills with mist** until the start of your next turn: creatures inside it are **concealed**, and **you ignore that concealment**."}, {"pos": 6, "name": "Drifting Cloud Cut", "tier": "III", "cost": "1 action", "text": "Stride up to half your Speed, make a nichirin Strike, then Stride up to half your Speed again. Neither movement triggers reactions."}, {"pos": 7, "name": "Shrouding Step", "tier": "I", "cost": "2 actions", "text": "Make a nichirin Strike. On a hit the target is **dazzled** until the end of your next turn, and you become **concealed** until the start of your next turn."}, {"pos": 8, "name": "Scattering Mist Splash", "tier": "II", "cost": "reaction", "text": "**Trigger** A creature Strikes you. You come apart where the blow lands. Gain a **+2 circumstance bonus to AC** against that attack; if it **misses**, you may **Step 5 feet** and become **concealed** until the start of your next turn."}, {"pos": 9, "name": "Haze of the Deep", "tier": "III", "cost": "2 actions · `flourish`", "text": "A **20-foot emanation** that stays until the start of your next turn. Each creature in it takes **a blade's worth of slashing** with a basic Reflex save, and while the haze lasts every creature inside it other than you is **concealed from everything, including its own allies** — and you ignore that concealment entirely."}], "secret": {"kind": "SECRET", "name": "Seventh Form: Obscuring Clouds", "cost": "2 actions · `flourish`", "req": "Your Breath Count is **7 or higher**. **Duration** 1 minute.", "text": "*(Muichiro Tokito made this one himself, at fourteen.)* Your outline stops being information. For the duration: - You are **concealed** at all times, from every creature, at every distance. A creature **cannot use Seek** to make you observed, and effects that would negate concealment fail against you unless they also negate invisibility. - Your **Strikes ignore all concealment and all cover**. - Once per round, when a creature **misses you** with an attack, you may **Step 10 feet** as a free action. **Your Breath Count then drops to 0.**", "selfcost": "The fog was coming off your body and it takes the rest with it. When the duration ends you are **slowed 1 and dazzled until the end of your next turn**."}}, {"name": "Moon", "skill": "Intimidation", "dmg": "slashing (chaotic crescent blades)", "flow": "+2, +4, +6, +8 — every even step", "reach": "none", "broken": "+1, +3, +5, +7 — every odd step", "special": "A Broken Moon Form keeps its own printed rider. It still loses the Cadence rider, still takes the −2, and still resets your Count to 1.", "stance": {"name": "Crescent Chaos", "text": "Once per round, when you roll damage for a Form, you may **reroll one damage die** and take the higher result."}, "rider": {"name": "Borrowed Light", "text": "*The moon makes no light of its own. What it takes from something brighter, it hands down to everything standing underneath it.* The first time each round that you hit a creature with a nichirin Strike or a Form, it becomes **moonlit** until the end of your next turn. While a creature is moonlit: - It is **not concealed** from you or from any ally within 30 feet of it, and it **can't be hidden or undetected** from them. - The first Strike each round that an ally **in a Breathing Stance** makes against it deals **+1 precision damage per weapon damage die**. If that ally's own style rider would also apply, use the higher — they don't stack. - When you **critically hit** it, erratic crescents splash **one enemy adjacent to it** for slashing damage equal to your **number of weapon damage dice**. **Lend the light.** Once per round as a free action, choose one willing ally within 30 feet. Until the end of your next turn they count as being **in a Breathing Stance** — for the second bullet above, and for nothing else."}, "cadence": {"I": "The target takes **1d6 persistent bleed**.", "II": "The target is **off-guard until the start of your next turn**.", "III": "The target takes **2d6 persistent bleed**, and until the end of your next turn that bleed **can't be ended by the usual flat check**."}, "forms": [{"pos": 1, "name": "Dark Moon, Evening Palace", "tier": "I", "cost": "1 action", "text": "Make a nichirin Strike with a **+1 status bonus** to the attack roll, dealing **+1d6 slashing**. On a hit, crescents linger: the first time the target moves before the start of your next turn, it takes slashing damage equal to **twice your number of weapon damage dice**. On a critical hit it also **can't Step** until the end of its next turn."}, {"pos": 2, "name": "Pearl Flowers, Moongazing", "tier": "II", "cost": "2 actions · `flourish`", "text": "A crescent volley in a **15-foot cone**. Each creature takes **a blade's worth of slashing** with a basic Reflex save. A creature that **fails** takes **2d6 persistent bleed**; one that **critically fails** takes **4d6 persistent bleed** and is **off-guard until the start of your next turn**."}, {"pos": 3, "name": "Loathsome Moon, Chains", "tier": "III", "cost": "2 actions · `flourish`", "text": "Two enormous linked crescents sweep out in a **30-foot line**. Each creature takes **a blade's worth of slashing** with a basic Reflex save. A creature that **fails** is **off-guard until the start of your next turn**; one that **critically fails** is **grabbed by the chains** and must Escape against your Slayer DC to move."}, {"pos": 4, "name": "Moon-Dragon Ringtail", "tier": "I", "cost": "1 action", "text": "Make a nichirin Strike. On a hit, each creature **adjacent to the target** takes slashing damage equal to **your number of weapon damage dice**."}, {"pos": 5, "name": "Mirror of Misfortune, Moonlit", "tier": "II", "cost": "reaction", "text": "**Trigger** A creature you can see within 30 feet hits you with a Strike. The wound reflects. That creature takes slashing damage equal to **twice your number of weapon damage dice** and becomes **moonlit** until the end of your next turn."}, {"pos": 6, "name": "Perpetual Night, Lonely Moon", "tier": "III", "cost": "2 actions", "text": "Make a nichirin Strike with a **+2 status bonus** to the attack roll. On a hit the target takes **2d6 persistent bleed** and becomes **moonlit**; on a critical hit, every creature within 15 feet of it also becomes **moonlit**."}, {"pos": 7, "name": "Moon Spirit Calamity", "tier": "I", "cost": "2 actions · `flourish`", "text": "Rising crescents fill a **20-foot cone**. Each creature takes **a blade's worth of slashing** with a basic Reflex save; one that **fails** is knocked **prone**, and one that **critically fails** also takes **2d6 persistent bleed**. The area stays **filled with spinning crescents** until the start of your next turn: any creature that ends its turn inside, or moves through it, takes **half a blade's worth of slashing**."}, {"pos": 8, "name": "Waning Moonswaths", "tier": "II", "cost": "2 actions · `flourish`", "text": "Make **two nichirin Strikes** against the same creature; your multiple attack penalty increases as normal. A single hit inflicts **1d6 persistent bleed**; **if both hit**, **3d6 persistent bleed** instead."}, {"pos": 9, "name": "Catastrophe, Tenman Crescent Moon", "tier": "III", "cost": "2 actions · `flourish`", "text": "Choose a **10-foot emanation** or a **30-foot line**. Each creature in the area takes **a blade's worth of slashing** with a basic Reflex save; one that **fails** takes **2d6 persistent bleed**, and one that **critically fails** is knocked **prone**."}], "secret": {"kind": "FORBIDDEN", "name": "Sixteenth Form: Moonbow, Half Moon", "cost": "3 actions · `flourish`", "req": "Your Breath Count is **7 or higher**.", "text": "A cascade of half-moon blades rains down in a **40-foot cone**. Each creature takes **a blade's worth of slashing plus 6d6 slashing** with a basic Reflex save. A creature that **fails** takes **4d6 persistent bleed**; one that **critically fails** is also knocked **prone**, and its bleed **cannot be ended by the usual flat check** — it requires magical healing, or an Interact action from an adjacent creature, to stanch. Any creature that **begins its next turn in the area** takes **6d6 slashing** as the crescents keep spinning. **Your Breath Count then drops to 0.**", "selfcost": "The technique feeds on your vitality. You become **drained 1** — **drained 2** if any creature was reduced to 0 Hit Points by the cone — and this drain **cannot be removed until you rest for 10 minutes**."}}, {"name": "Love", "skill": "Diplomacy", "dmg": "slashing", "flow": "+1, +2, +3, +4, +5 — five of eight, the widest Flowing arc in the book", "reach": "none", "broken": "+6, +7, +8", "special": "Every Cadence rider Love earns is spent on somebody else. All three pay an ally, never you.", "stance": {"name": "Whip Blade", "text": "Your nichirin blade uncoils. While in this stance it gains the **finesse** and **reach** traits."}, "rider": {"name": "Beloved of the Corps", "text": "At the start of each of your turns, choose one ally within 30 feet who can see or hear you. Until the start of your next turn, that ally gains a **+1 status bonus to attack rolls and to damage rolls**."}, "cadence": {"I": "One ally within 30 feet gains **temporary Hit Points equal to your level** until the end of your next turn.", "II": "One ally within 30 feet may **Step** as a free action, and your Form's target is **off-guard to that ally** until the end of your next turn.", "III": "One ally within 30 feet may make **one Strike** as a reaction. That Strike does not increase their multiple attack penalty."}, "forms": [{"pos": 1, "name": "Shivers of First Love", "tier": "I", "cost": "1 action", "text": "A lash that arrives before it is seen. Make a nichirin Strike. On a hit the target is **off-guard to the next creature that attacks it** before the start of your next turn."}, {"pos": 2, "name": "Love Pangs", "tier": "II", "cost": "1 action", "text": "Make a nichirin Strike. On a hit, one willing ally within 30 feet gains **temporary Hit Points equal to twice your level** for 1 minute."}, {"pos": 3, "name": "Blushing Coil", "tier": "III", "cost": "2 actions · `flourish`", "text": "The blade coils outward in a **10-foot emanation**. Each creature takes **a blade's worth of slashing** with a basic Reflex save; one that **fails** is **pulled 5 feet toward you**."}, {"pos": 4, "name": "Catlove Shower", "tier": "I", "cost": "2 actions · `flourish`", "text": "Make a nichirin Strike against each of up to **three different creatures** within your reach; your multiple attack penalty increases as normal."}, {"pos": 5, "name": "Hater's Whip", "tier": "II", "cost": "2 actions", "text": "Make a nichirin Strike against a creature within **20 feet**. On a hit it is **pulled 10 feet toward you** and is **off-guard** until the start of your next turn."}, {"pos": 6, "name": "Heart's Reach", "tier": "III", "cost": "1 action", "text": "The blade uncoils its full length. Make a nichirin Strike against a creature within **30 feet**. On a hit, one willing ally within 30 feet may **Stride up to half their Speed** as a reaction."}, {"pos": 7, "name": "Cat-Legged Winds of Love", "tier": "I", "cost": "1 action", "text": "Stride up to your Speed, ignoring difficult terrain; this movement doesn't trigger reactions. Then make a nichirin Strike."}, {"pos": 8, "name": "Swaying Love, Wildclaw", "tier": "II", "cost": "2 actions · `flourish`", "text": "A **15-foot cone** of coiling lashes. Each creature takes **a blade's worth of slashing** with a basic Reflex save; one that **fails** is **off-guard** until the start of your next turn. **While your Demon Slayer Mark is active**, the cone is **30 feet**, and a creature that fails is also **immobilized** until it Escapes against your Slayer DC."}, {"pos": 9, "name": "Unbreakable Bond", "tier": "III", "cost": "2 actions", "text": "Make a nichirin Strike with a **+2 status bonus** to the attack roll. On a hit, until the start of your next turn **every ally within 30 feet** gains a **+1 status bonus to attack rolls and to AC**."}], "secret": {"kind": "SECRET", "name": "Final Form: Hundred-Fold Love", "cost": "3 actions · `flourish`", "req": "Your Breath Count is **7 or higher**.", "text": "*(Mitsuri Kanroji never named a final form on the page. This one is ours, and it is written the way she fought — everything outward, nothing held back.)* Make **four nichirin Strikes**, divided among creatures within your reach as you choose; your multiple attack penalty increases as normal after each. Each deals **+2d6 slashing** on a hit, and each hit lets you **pull the target 5 feet toward you** with no check. Then every ally within 30 feet gains **temporary Hit Points equal to twice your level** and a **+2 status bonus to attack rolls** until the end of your next turn. The **first time** during that duration an ally would be reduced to 0 Hit Points, they are reduced to **1 Hit Point** instead. **Your Breath Count then drops to 0.**", "selfcost": "You gave it all away. You are **enfeebled 2** until you rest for 10 minutes."}}, {"name": "Serpent", "skill": "Deception", "dmg": "slashing", "flow": "+1, +3, +8", "reach": "none", "broken": "+2, +4, +5, +6, +7 — five of eight, the harshest wheel in the book", "special": "Serpent is the only style that Flows both ways by one: +1 and +8 (which is \"back one\"). The snake coils in either direction and commits to nothing else.", "stance": {"name": "Kaburamaru's Reading", "text": "A white snake reads the fight from your shoulder and tells you what it sees. While in this stance your nichirin blade gains the **finesse** and **agile** traits, and you are **never off-guard** to a creature you have already Struck this encounter."}, "rider": {"name": "Coiled Fang", "text": "Your Strikes against a creature you **also Struck during your last turn** deal **+1 precision damage per weapon damage die**."}, "cadence": {"I": "The target takes **1d6 persistent bleed**, and you may **Step** as a free action.", "II": "The target takes a **−10-foot status penalty** to all its Speeds and is **off-guard to you**, both until the end of your next turn.", "III": "The target is **grabbed** and must Escape against your Slayer DC; while grabbed this way it takes **1d6 persistent bleed** each round."}, "forms": [{"pos": 1, "name": "Winding Serpent Slash", "tier": "I", "cost": "1 action", "text": "A cut that arrives around the guard rather than through it. Make a nichirin Strike that **ignores the target's lesser and standard cover**."}, {"pos": 2, "name": "Venom Fangs of the Narrow Head", "tier": "II", "cost": "1 action", "text": "Make a nichirin Strike. On a hit the target takes **1d6 persistent bleed**; on a critical hit it is also **enfeebled 2** until that bleed ends."}, {"pos": 3, "name": "Serpent's Coil", "tier": "III", "cost": "2 actions · `flourish`", "text": "Make **three nichirin Strikes** against the same creature; your multiple attack penalty increases as normal. Each deals **+1d6 slashing** on a hit."}, {"pos": 4, "name": "Twin-Headed Reptile", "tier": "I", "cost": "2 actions · `flourish`", "text": "Make **two nichirin Strikes**, either against the same creature or against two creatures adjacent to each other; your multiple attack penalty increases as normal."}, {"pos": 5, "name": "Coil Choke", "tier": "II", "cost": "2 actions", "text": "Make a nichirin Strike. On a hit the target is **grabbed** and must Escape against your Slayer DC; while grabbed this way it **can't speak** and **can't Cast a Spell with a verbal component**."}, {"pos": 6, "name": "Fanged Constriction", "tier": "III", "cost": "2 actions", "text": "**Requirement** The target is **grabbed**, **restrained**, or **off-guard**. Make a nichirin Strike with a **+2 status bonus** to the attack roll. On a hit the target takes **3d6 persistent bleed** and is **enfeebled 2** for as long as that bleed lasts."}, {"pos": 7, "name": "Narrow Head Strike", "tier": "I", "cost": "1 action", "text": "Step, make a nichirin Strike, then Step. The Strike gains a **+1 status bonus** to the attack roll if you began your turn adjacent to the target."}, {"pos": 8, "name": "Shedding Skin", "tier": "II", "cost": "reaction", "text": "**Trigger** A creature Strikes you. What it hits comes away. Gain a **+2 circumstance bonus to AC** against that attack; if it **misses**, you become **concealed** until the start of your next turn and may **Step 5 feet**."}, {"pos": 9, "name": "Serpent Beheading", "tier": "III", "cost": "2 actions", "text": "Make a nichirin Strike with a **+2 status bonus** to the attack roll. If this Strike **reduces the target to 0 Hit Points**, or if it is a **critical hit against a target already at half Hit Points or fewer**, the head comes off: the creature **dies**. This has the **death** trait and does nothing to a creature immune to death effects, or to one with no discernible head."}], "secret": {"kind": "SECRET", "name": "Fifth Form: Slithering Serpent", "cost": "3 actions · `flourish`", "req": "Your Breath Count is **7 or higher**. *(Obanai Iguro's, and it does not stop coming.)*", "text": "The blade travels a path no straight weapon could. Make **five nichirin Strikes** against creatures within your reach, divided as you choose. Each takes a flat **−2 penalty** that **neither uses nor increases your multiple attack penalty** — the snake does not tire. Each deals **+2d6 slashing** on a hit, and each creature hit is **grabbed** (Escape against your Slayer DC). If any of these Strikes **reduces a creature to 0 Hit Points**, make **one additional Strike** under the same terms. **Your Breath Count then drops to 0.**", "selfcost": "Fully uncoiled, you have nothing left wound. You are **off-guard until the end of your next turn** and **can't use reactions** during that time."}}, {"name": "Sun", "skill": "Performance", "dmg": "fire", "flow": "+1, +2, +3, +4, +5, +6, +7, +8 — every step", "reach": "none", "broken": "none", "special": "The dance cannot stop. At the end of each of your turns, your Breath Count decreases by 1. (On a turn where you used no Form at all, this is the only decrease — it does not stack with the ordinary −1.)", "stance": {"name": "Hinokami Kagura", "text": "You take up the dance. While in this stance you are **never off-guard as a result of using a Form**, and at the start of each of your turns you may **Step** as a free action."}, "rider": {"name": "The Dance Continues", "text": "**While your Breath Count is 1 or higher**, your nichirin Strikes deal **+1 fire damage per weapon damage die**. At Breath Count 0 you get nothing — which for a style that loses a point every turn is a real and recurring threat."}, "cadence": {"I": "The target takes **1d6 fire**, and you may **Step** as a free action.", "II": "The target takes **1d6 persistent fire**.", "III": "The target is **off-guard to you** until the end of your next turn and takes **2d6 persistent fire**."}, "forms": [{"pos": 1, "name": "Dance", "tier": "I", "cost": "1 action", "text": "The first movement: a single overhead cleave, brought straight down. Make a nichirin Strike with a **+1 status bonus** to the attack roll, dealing **+1d6 fire** on a hit."}, {"pos": 2, "name": "Clear Blue Sky", "tier": "II", "cost": "1 action", "text": "A wide circular turn of the whole body. Make a nichirin Strike that **ignores the target's lesser cover**, then **Step**; this movement doesn't trigger reactions."}, {"pos": 3, "name": "Raging Sun", "tier": "III", "cost": "2 actions · `flourish`", "text": "A **15-foot cone** of unfolding flame. Each creature takes **a blade's worth of fire** with a basic Reflex save; one that **fails** takes **2d6 persistent fire**."}, {"pos": 4, "name": "Burning Bones, Summer Sun", "tier": "I", "cost": "2 actions · `flourish`", "text": "Stride up to your Speed; this movement doesn't trigger reactions. Then make a nichirin Strike against each of up to **two creatures** you ended adjacent to; your multiple attack penalty increases as normal."}, {"pos": 5, "name": "Setting Sun Transformation", "tier": "II", "cost": "reaction", "text": "**Trigger** A creature Strikes you. A backflip that turns the blade over as it goes. Gain a **+2 circumstance bonus to AC** against that attack; if it **misses**, make a nichirin Strike against that creature at your current multiple attack penalty, then **Step 10 feet**."}, {"pos": 6, "name": "Solar Heat Haze", "tier": "III", "cost": "1 action", "text": "The blade is not where the eye puts it. Make a nichirin Strike that **ignores lesser and standard cover**, and whose damage is **not reduced by the target's resistances**."}, {"pos": 7, "name": "Beneficent Radiance", "tier": "I", "cost": "1 action", "text": "Make a nichirin Strike. On a hit, each creature **adjacent to the target** takes fire damage equal to **your number of weapon damage dice**."}, {"pos": 8, "name": "Sunflower Thrust", "tier": "II", "cost": "1 action", "text": "A single straight thrust, aimed at the neck. Make a nichirin Strike with a **+1 status bonus** to the attack roll; on a **critical hit** the target is **stunned 1** (**incapacitation**)."}, {"pos": 9, "name": "Fire Wheel", "tier": "III", "cost": "2 actions · `flourish`", "text": "Turn end over end and roll the blade out as a wheel of flame down a **30-foot line**. Each creature takes **a blade's worth of fire** with a basic Reflex save; one that **fails** is knocked **prone**. The line **stays burning** until the start of your next turn: any creature that enters it or ends its turn in it takes **2d6 fire**."}], "secret": {"kind": "SECRET", "name": "Thirteenth Form", "cost": "3 actions · `flourish`", "req": "Your Breath Count is **7 or higher**.", "text": "*(There is no thirteenth movement. There are twelve, performed in a circle so that the twelfth returns to the first, and the circle is the thirteenth. Yoriichi Tsugikuni worked this out; it took his descendants four hundred years to work it out again.)* Make **four nichirin Strikes** against a **single creature**. The second, third and fourth each take a flat **−2 penalty** instead of your multiple attack penalty, and **none of the four increases your multiple attack penalty**. Each deals **+3d6 fire** on a hit. **If at least three of the four hit**, the target takes **6d6 persistent fire** which **cannot be ended by the usual flat check**, and for as long as that fire burns the creature **cannot regain Hit Points by any means** — no regeneration, no fast healing, no reforming, no magical healing. **Your Breath Count then drops to 0.**", "selfcost": "A human body performs this once and then stops working for a while. You take **fire damage equal to twice your level**, ignoring your own immunities and resistances to fire, and you are **slowed 1 for 1 minute**. > **Why this Form is the point of the whole class.** Every other Secret Form in this document is a large > number. This one is a **regeneration lock** — the single thing that actually kills a demon, written as > the only mechanical effect in the class that says a creature cannot heal. Everything else a Breath > Slayer does is an attempt to reach this state by other means. Tell your GM before you take it; it is > the class's answer to \"how do you kill something that heals faster than you can cut it,\" and it should > feel like an answer."}}];
+const KEYS = ["water","flame","thunder","wind","stone","sound","flower","mist","moon","love","serpent","sun"];
+const FAMILY = {water:"original five",flame:"original five",thunder:"original five",wind:"original five",
+  stone:"original five",sound:"expanded four",flower:"expanded four",mist:"expanded four",
+  moon:"expanded four",love:"derived two",serpent:"derived two",sun:"progenitor"};
+const TOPO = {
+  water:  {flow:[1,2,3],       reach:[4,5],     adv:1, cap:9},
+  flame:  {flow:[3,4,5],       reach:[1,2],     adv:1, cap:9},
+  thunder:{flow:[3],           reach:[],        adv:2, cap:7, d8at:7},
+  wind:   {flow:[3,5,7],       reach:[1],       adv:1, cap:9},
+  stone:  {flow:[1,2,3],       reach:[4,5],     adv:1, cap:9, halve:true},
+  sound:  {flow:[2,3,4],       reach:[1,5],     adv:1, cap:6, d12at:6},
+  flower: {flow:[1,2,3],       reach:[4,5,6],   adv:1, cap:9, bloom:true},
+  mist:   {flow:[1],           reach:[2,3,4,5,6,7,8], adv:1, cap:9},
+  moon:   {flow:[2,4,6,8],     reach:[],        adv:1, cap:9, keepRider:true},
+  love:   {flow:[1,2,3,4,5],   reach:[],        adv:1, cap:9},
+  serpent:{flow:[1,3,8],       reach:[],        adv:1, cap:9},
+  sun:    {flow:[1,2,3,4,5,6,7,8], reach:[],    adv:1, cap:9, decay:1}
+};
+const COST = {
+  water:"Five of eight steps advance you. Nothing.",
+  flame:"Its best follow-ups are never the Form next door.",
+  thunder:"Seven of eight steps are fatal, and the ceiling is 7 not 9.",
+  wind:"Only four steps work, and one of them reads as going backwards.",
+  stone:"Nothing — this is the forgiving wheel.",
+  sound:"Below the cap it is the weakest Crest in the book.",
+  flower:"Nothing, until you want the loop closed on a specific turn.",
+  mist:"Riders. Only +1 earns one; everything else is a bare −2 Reach.",
+  moon:"Half of all steps break the breath outright.",
+  serpent:"Five of eight break, with no Reaching set to soften it.",
+  love:"Every rider it earns is spent on somebody else.",
+  sun:"The Count falls by 1 every turn. Standing still loses ground."
+};
+const LEVELS = [
+  {lv:1,  cap:2, tiers:["I"],            secret:false, note:"Tier I only — the 1/4/7 triangle"},
+  {lv:5,  cap:4, tiers:["I","II"],       secret:false, note:"Tier II opens: finer steps inside the triangle"},
+  {lv:8,  cap:4, tiers:["I","II","III"], secret:false, note:"Tier III opens — the whole wheel is live"},
+  {lv:9,  cap:6, tiers:["I","II","III"], secret:false, note:"Cap 6: Reaching stops costing you anything"},
+  {lv:13, cap:9, tiers:["I","II","III"], secret:false, note:"Cap 9 — the full depth of the wheel"},
+  {lv:20, cap:9, tiers:["I","II","III"], secret:true,  note:"Secret Form available at Breath Count 7"}
+];
+const TIER_OF = {1:"I",4:"I",7:"I",2:"II",5:"II",8:"II",3:"III",6:"III",9:"III"};
+const KINDNAME = {flow:"Flowing",reach:"Reaching",brk:"Broken",stall:"Stalled",open:"Opening"};
+const TURN = "|";
+
+let S = {style:"water", lv:5, chain:[1,4,TURN,7,2], hover:null};
+
+const $ = s => document.querySelector(s);
+const esc = t => t.replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const md = t => esc(t)
+  .replace(/\s+&gt;\s+/g, "<br><br>").replace(/\s+-\s+(?=\*\*)/g, "<br>· ")
+  .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")
+  .replace(/\*(.+?)\*/g,"<em>$1</em>").replace(/`(.+?)`/g,"<code>$1</code>");
+const data = () => DATA[KEYS.indexOf(S.style)];
+const lvl = () => LEVELS.find(l => l.lv === S.lv);
+const capNow = () => Math.min(lvl().cap, TOPO[S.style].cap);
+const unlocked = pos => lvl().tiers.includes(TIER_OF[pos]);
+const lastPos = () => { for(let i = S.chain.length-1; i >= 0; i--) if(S.chain[i] !== TURN) return S.chain[i]; return null; };
+
+function kindOf(prev, pos){
+  if(prev == null) return {kind:"open", step:null};
+  const step = ((pos - prev) % 9 + 9) % 9, t = TOPO[S.style];
+  if(step === 0) return {kind:"stall", step};
+  if(t.flow.includes(step)) return {kind:"flow", step};
+  if(t.reach.includes(step)) return {kind:"reach", step};
+  return {kind:"brk", step};
+}
+function crest(count){
+  const t = TOPO[S.style];
+  if(!count) return {txt:"—", n:0};
+  const size = (t.d12at && count >= t.d12at) ? 12
+             : (count >= 9 || (t.d8at && count >= t.d8at)) ? 8 : 6;
+  return {txt:"+" + count + "d" + size, n:count*(size/2+0.5)};
+}
+function compute(){
+  const t = TOPO[S.style], cap = capNow(), links = [];
+  let count = 0, prev = null, turn = 0, usedThisTurn = 0, seen = new Set(), bloomed = false;
+  for(const e of S.chain){
+    if(e === TURN){
+      const dec = (t.decay || !usedThisTurn) ? 1 : 0;   // Sun's decay and the idle -1 do not stack
+      count = Math.max(0, count - dec);
+      links.push({turnEnd:true, count, dec, idle:!usedThisTurn, turn});
+      turn++; usedThisTurn = 0;
+      continue;
+    }
+    const {kind, step} = kindOf(prev, e);
+    if(kind === "open" || kind === "flow") count = Math.min(count + (kind === "open" ? 1 : t.adv), cap);
+    else if(kind === "reach") count = Math.min(count + 1, cap);
+    else if(kind === "brk") count = t.halve ? Math.max(1, Math.floor(count/2)) : 1;
+    let bloom = false;
+    if(kind === "brk") seen = new Set();
+    else if(t.bloom && !bloomed && seen.has(e)){ bloom = true; bloomed = true; }
+    seen.add(e);
+    links.push({pos:e, kind, step, count, turn, bloom});
+    usedThisTurn++; prev = e;
+  }
+  // the Crest is once per round: mark the deepest link of each turn
+  const bestOf = {};
+  links.forEach(l => { if(!l.turnEnd && (bestOf[l.turn] == null || l.count > bestOf[l.turn].count)) bestOf[l.turn] = l; });
+  Object.values(bestOf).forEach(l => l.crested = true);
+  return {links, count, cap, turns:turn+1};
+}
+
+/* ---------------- the wheel ---------------- */
+const CX = 220, CY = 192, R = 126, LR = 170, NR = 25;
+const pt = (p, r) => { const a = (-90 + (p-1)*40) * Math.PI/180; return [CX + r*Math.cos(a), CY + r*Math.sin(a)]; };
+function shortName(n){
+  const head = n.split(", ")[0].replace(/ Form$/,"");
+  const out = [""];
+  for(const word of head.split(" ")){
+    if((out[out.length-1] + " " + word).trim().length > 14 && out.length < 2) out.push(word);
+    else out[out.length-1] = (out[out.length-1] + " " + word).trim();
+  }
+  return out;
+}
+function edgePath(a, b){
+  const [x1,y1] = pt(a,R), [x2,y2] = pt(b,R);
+  const dx = x2-x1, dy = y2-y1, L = Math.hypot(dx,dy), ux = dx/L, uy = dy/L;
+  const sx = x1+ux*NR, sy = y1+uy*NR, ex = x2-ux*(NR+7), ey = y2-uy*(NR+7);
+  const mx = (sx+ex)/2, my = (sy+ey)/2, tox = CX-mx, toy = CY-my, tl = Math.hypot(tox,toy) || 1;
+  const bow = Math.min(26, L*0.11);
+  return `M${sx.toFixed(1)} ${sy.toFixed(1)} Q${(mx+tox/tl*bow).toFixed(1)} ${(my+toy/tl*bow).toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}`;
+}
+function drawWheel(st){
+  const d = data(), t = TOPO[S.style], cur = lastPos();
+  const fwd = t.flow.includes(3) ? 3 : t.flow.includes(6) ? 6 : (t.reach.includes(3) ? 3 : 6);
+  const tri = [1, ((1-1+fwd)%9)+1]; tri.push(((tri[1]-1+fwd)%9)+1);
+  let s = `<defs>
+    <marker id="ah-flow" viewBox="0 0 9 9" refX="7.5" refY="4.5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="var(--flow)"/></marker>
+    <marker id="ah-reach" viewBox="0 0 9 9" refX="7.5" refY="4.5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="var(--reach)"/></marker>
+    <marker id="ah-brk" viewBox="0 0 9 9" refX="7.5" refY="4.5" markerWidth="5.5" markerHeight="5.5" orient="auto"><path d="M0.8 0.8 L8.4 4.5 L0.8 8.2" fill="none" stroke="var(--brk)" stroke-width="1.6" stroke-linejoin="round"/></marker>
+    <marker id="ah-loop" viewBox="0 0 9 9" refX="7" refY="4.5" markerWidth="4.4" markerHeight="4.4" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="var(--accent)" opacity="0.55"/></marker>
+  </defs><circle class="rim" cx="${CX}" cy="${CY}" r="${R}"/>`;
+  for(let i = 0; i < 3; i++) s += `<path class="loop" d="${edgePath(tri[i], tri[(i+1)%3])}" marker-end="url(#ah-loop)"/>`;
+  if(cur != null) for(let p = 1; p <= 9; p++){
+    if(p === cur) continue;
+    s += `<path class="edge ${kindOf(cur,p).kind}" d="${edgePath(cur,p)}" marker-end="url(#ah-${kindOf(cur,p).kind})"/>`;
+  }
+  s += `<circle class="hub" cx="${CX}" cy="${CY}" r="61"/>
+        <text class="ctr" x="${CX}" y="${CY-19}"><tspan class="lbl">BREATH COUNT</tspan></text>
+        <text class="ctr big" x="${CX}" y="${CY+17}">${st.count}</text>
+        <text class="ctr cap" x="${CX}" y="${CY+40}">of ${st.cap} · Crest ${crest(st.count).txt}</text>`;
+  for(let p = 1; p <= 9; p++){
+    const f = d.forms[p-1], [nx,ny] = pt(p,R), [lx,ly] = pt(p,LR), lines = shortName(f.name);
+    const lock = !unlocked(p), inc = S.chain.includes(p), isCur = p === cur;
+    const cls = ["node", lock?"locked":"", inc?"inchain":"", isCur?"cur":""].filter(Boolean).join(" ");
+    const dots = {I:1,II:2,III:3}[f.tier];
+    let dotsvg = "";
+    for(let k = 0; k < dots; k++) dotsvg += `<circle class="tierdot" cx="${nx-(dots-1)*3+k*6}" cy="${ny+13}" r="1.7"/>`;
+    s += `<g class="${cls}" data-pos="${p}" ${lock?'aria-disabled="true"':'tabindex="0" role="button"'}
+             aria-label="Position ${p}, ${esc(f.name)}, Tier ${f.tier}${lock?" (locked at this level)":""}">
+        <circle class="disc" cx="${nx}" cy="${ny}" r="${NR}"/>
+        <text class="num" x="${nx}" y="${ny-3}">${p}</text>${dotsvg}
+        ${lines.map((l,i) => `<text class="nm" x="${lx}" y="${ly+(ly<CY?-6:12)+i*12.5}">${esc(l)}</text>`).join("")}
+      </g>`;
+  }
+  $("#wheel").innerHTML = s;
+}
+
+/* ---------------- panels ---------------- */
+function drawTabs(){
+  let fam = "";
+  $("#tabs").innerHTML = KEYS.map((k,i) => {
+    const t = TOPO[k];
+    const pat = t.flow.length > 5 ? "all" : t.flow.map(n => "+"+n).join(" ");
+    const head = FAMILY[k] !== fam ? `<span class="famlabel">${(fam = FAMILY[k])}</span>` : "";
+    return head + `<button class="tab" role="tab" data-k="${k}" data-style="${k}"
+      aria-selected="${k===S.style}"><span class="swatch"></span>${DATA[i].name}
+      <span class="pat">${pat}</span></button>`;
+  }).join("");
+}
+function drawLevels(){
+  $("#levels").innerHTML = LEVELS.map(l =>
+    `<button id="lv-${l.lv}" data-lv="${l.lv}" aria-pressed="${l.lv===S.lv}" title="${esc(l.note)}">L${l.lv}</button>`).join("");
+}
+function drawThresholds(st){
+  const t = TOPO[S.style];
+  const T = [[3,"action discount"],[4,"+1 status"],[6,"Reaching free"],[7,"Secret Form"],
+             [t.d12at||t.d8at||9, t.d12at ? "d12 Crest" : t.d8at ? "d8 Crest" : "d8 Crest"]];
+  $("#thresholds").innerHTML = T.map(([n,lab]) => {
+    const reachable = n <= st.cap, met = st.count >= n;
+    return `<span class="chip" style="color:${met?"var(--flow)":reachable?"var(--muted)":"var(--line-2)"};
+      background:${met?"var(--flow-fill)":"transparent"};border-color:${met?"var(--flow)":"var(--line)"};
+      ${reachable?"":"opacity:.45"}">${met?"✓":"·"} ${n} ${esc(lab)}</span>`;
+  }).join("");
+}
+function drawLinks(st){
+  const d = data();
+  if(!st.links.length){
+    $("#links").className = "empty";
+    $("#links").innerHTML = `No chain yet. Your first Form of an encounter is always <strong>Flowing</strong> —
+      click any unlocked position to open. At 1st level the only sustainable loop is the Tier I triangle,
+      drawn faintly on the wheel.`;
+    return;
+  }
+  $("#links").className = "links";
+  $("#links").innerHTML = st.links.map(l => {
+    if(l.turnEnd) return `<div class="turnend"><span class="tlabel">end of turn</span>
+      <span class="tdec">${l.dec ? (l.idle ? "no Form used −1" : "decay −1") : "no change"}</span>
+      <span class="tcount">${l.count}</span></div>`;
+    const f = d.forms[l.pos-1], cr = crest(l.count), k = l.kind === "open" ? "flow" : l.kind;
+    return `<div class="link ${k}${l.crested?" best":""}">
+      <div class="top"><span class="pos">${l.pos}</span><span>${l.step==null?"opening":"+"+l.step}</span>
+        <span style="margin-left:auto;opacity:.7">${f.tier}</span></div>
+      <div class="fname">${esc(f.name)}</div>
+      <span class="badge">${KINDNAME[l.kind]}</span>
+      ${l.bloom ? `<span class="badge bloom">Full Bloom</span>` : ""}
+      <div class="cnt"><span>Count <b>${l.count}</b></span>
+        <span class="${l.crested?"crestmark":""}">${l.crested?"◆ ":""}${cr.txt}</span></div>
+    </div>`;
+  }).join("");
+}
+function drawForm(pos){
+  const d = data(), f = d.forms[pos-1];
+  $("#formcard").innerHTML = `
+    <p class="who">Position ${pos} · Tier ${f.tier}</p>
+    <div class="title">${esc(f.name)}</div>
+    <div class="meta"><span class="chip tier">Tier ${f.tier}</span><span class="chip">${md(f.cost)}</span>
+      ${unlocked(pos)?"":`<span class="chip" style="color:var(--brk);border-color:var(--brk)">locked at L${S.lv}</span>`}</div>
+    <p class="rules">${md(f.text)}</p>
+    <div class="sect"><p class="who">Cadence rider — Tier ${f.tier}</p><p>${md(d.cadence[f.tier])}</p></div>`;
+}
+function drawStyle(){
+  const d = data(), t = TOPO[S.style];
+  const row = (cls,key,arr,extra) => `<div class="row"><span class="key ${cls}">${key}</span>
+    <span class="val">${arr.length?arr.map(n=>"+"+n).join("  "):"—"}${extra||""}</span></div>`;
+  const broken = [1,2,3,4,5,6,7,8].filter(n => !t.flow.includes(n) && !t.reach.includes(n));
+  $("#stylecard").innerHTML = `
+    <p class="who">${esc(d.skill)} · ${esc(d.dmg)} · ${FAMILY[S.style]}</p>
+    <h3 style="font-size:20px">${d.name} Breathing</h3>
+    <div class="topo">
+      ${row("flowk","Flowing",t.flow, t.adv>1?`  <span style="color:var(--flow)">(Count +${t.adv})</span>`:"")}
+      ${row("reachk","Reaching",t.reach)}
+      ${row("brkk","Broken",broken)}
+    </div>
+    ${d.special ? `<div class="special">${md(d.special)}</div>` : ""}
+    <div class="sect"><p class="who">Stance</p><h4>${esc(d.stance.name)}</h4><p>${md(d.stance.text)}</p></div>
+    <div class="sect"><p class="who">Style rider</p><h4>${esc(d.rider.name)}</h4><p>${md(d.rider.text)}</p></div>
+    <div class="sect"><p class="who">Cadence riders</p>
+      <dl class="cad">${["I","II","III"].map(k=>`<dt>Tier ${k}</dt><dd>${md(d.cadence[k])}</dd>`).join("")}</dl></div>`;
+}
+function drawSecret(st){
+  const d = data(), sc = d.secret, ok = lvl().secret && st.count >= 7;
+  const capped = TOPO[S.style].cap < 7;
+  const why = !lvl().secret ? "Learned at 20th level (Hidden Form)"
+    : capped && st.count >= TOPO[S.style].cap ? `Cap is ${TOPO[S.style].cap} — needs Deepening Breath (feat 10)`
+    : st.count >= 7 ? "Available now — it will drop you to Count 0"
+    : `Needs Breath Count 7 — you are at ${st.count}`;
+  $("#secretcard").innerHTML = `
+    <div class="lamp${ok?" lit":""}"><span class="dot"></span>${sc.kind} FORM</div>
+    <h3 style="font-size:19px;margin-top:12px">${esc(sc.name)}</h3>
+    <div class="meta" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:7px">
+      <span class="chip">${md(sc.cost)}</span><span class="chip">${esc(why)}</span></div>
+    ${(() => { const i = sc.text.search(/\s>\s/);
+       const lead = i > 0 ? sc.text.slice(0,i) : sc.text, rest = i > 0 ? sc.text.slice(i) : "";
+       return `<p class="rules" style="margin-top:11px;font-size:13px">${md(lead)}</p>` +
+         (rest ? `<details class="more"><summary>Full text</summary>
+            <p class="rules" style="font-size:13px">${md(rest)}</p></details>` : ""); })()}
+    ${sc.selfcost ? `<div class="sect"><p class="who">Self-cost</p><p>${md(sc.selfcost)}</p></div>` : ""}`;
+}
+function drawCap(st){
+  const d = data(), t = TOPO[S.style], cur = lastPos();
+  const c = k => [1,2,3,4,5,6,7,8].filter(x => kindOf(1, (x%9)+1).kind === k).length;
+  const dir = t.flow.includes(3) ? "1 → 4 → 7" : t.flow.includes(6) ? "1 → 7 → 4" : "1 → 4 → 7 (by Reaching)";
+  $("#cap").innerHTML = cur == null
+    ? `Nothing in the chain yet. The faint dashed triangle is <b>${d.name}'s Tier I loop</b> — <b>${dir}</b>,
+       positions 1, 4 and 7, the only three Forms a 1st-level slayer knows and the one cycle they can run forever.`
+    : `Edges run <b>from position ${cur}</b>, the last Form in your chain, to every other position.
+       ${d.name} flows on <b>${c("flow")} of 8</b> steps${t.reach.length?`, reaches on ${c("reach")}`:" and has no Reaching set"},
+       and breaks on <b>${c("brk")}</b>.${t.adv>1?" Each Flowing step advances the Count by two.":""}${
+       t.decay?" The Count falls by 1 at the end of every turn.":""}`;
+}
+function drawCompare(){
+  let fam = "";
+  $("#cmp tbody").innerHTML = KEYS.map((k,i) => {
+    const t = TOPO[k];
+    const loop = t.flow.includes(3) ? "1 → 4 → 7" : t.flow.includes(6) ? "1 → 7 → 4" : "1 → 4 → 7 *";
+    const cells = [1,2,3,4,5,6,7,8].map(n => {
+      const kind = t.flow.includes(n) ? "flow" : t.reach.includes(n) ? "reach" : "brk";
+      return `<td class="cell ${kind}"><span>${{flow:"F",reach:"R",brk:"B"}[kind]}</span></td>`;
+    }).join("");
+    const head = FAMILY[k] !== fam
+      ? `<tr class="famrow"><td colspan="13">${(fam = FAMILY[k])}</td></tr>` : "";
+    return head + `<tr><td class="nm" data-style="${k}"><span class="sw"></span>${DATA[i].name}</td>${cells}
+      <td class="num">${t.decay?"+1 −1":"+"+t.adv}</td><td class="num">${t.cap}</td>
+      <td style="font-family:var(--mono);font-size:12px;white-space:nowrap">${loop}</td>
+      <td class="note">${esc(COST[k])}</td></tr>`;
+  }).join("");
+}
+
+/* ---------------- render + events ---------------- */
+function render(){
+  $("#root").dataset.style = S.style;
+  const st = compute();
+  drawTabs(); drawLevels(); drawWheel(st); drawCap(st);
+  drawThresholds(st); drawLinks(st); drawStyle(); drawSecret(st);
+  drawForm(S.hover || lastPos() || 1);
+  $("#undo").disabled = !S.chain.length;
+  $("#clear").disabled = !S.chain.length;
+  $("#endturn").disabled = !S.chain.length || S.chain[S.chain.length-1] === TURN;
+  wire();
+}
+function wire(){
+  $("#tabs").querySelectorAll(".tab").forEach(b => b.onclick = () => {
+    S.style = b.dataset.k; S.chain = []; S.hover = null; render();
+  });
+  $("#levels").querySelectorAll("button").forEach(b => b.onclick = () => {
+    S.lv = +b.dataset.lv;
+    S.chain = S.chain.filter(e => e === TURN || unlocked(e));
+    render();
+  });
+  $("#wheel").querySelectorAll(".node").forEach(g => {
+    const p = +g.dataset.pos;
+    if(g.classList.contains("locked")) return;
+    const add = () => { S.chain.push(p); S.hover = null; render(); };
+    g.onclick = add;
+    g.onkeydown = e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); add(); } };
+    g.onmouseenter = g.onfocus = () => { S.hover = p; drawForm(p); };
+    g.onmouseleave = g.onblur = () => { S.hover = null; drawForm(lastPos() || 1); };
+  });
+}
+$("#undo").onclick    = () => { S.chain.pop(); render(); };
+$("#clear").onclick   = () => { S.chain = []; render(); };
+$("#endturn").onclick = () => { S.chain.push(TURN); render(); };
+$("#themebtn").onclick = () => {
+  const r = document.documentElement;
+  const dark = r.dataset.theme === "dark" || (!r.dataset.theme && matchMedia("(prefers-color-scheme: dark)").matches);
+  r.dataset.theme = dark ? "light" : "dark";
+  $("#themebtn").textContent = dark ? "Dark" : "Light";
+};
+$("#themebtn").textContent = matchMedia("(prefers-color-scheme: dark)").matches ? "Light" : "Dark";
+drawCompare();
+render();
+
+</script>
