@@ -7,9 +7,9 @@ Each Breathing Style is now a **wheel of nine Forms** plus a Secret or Forbidden
 does depends on **which Form you used before it**. The class's damage lives in a single escalating
 counter, the **Breath Count**, and its decision lives in choosing which Form rides it.*
 
-**Six styles are written in full here:** Water, Flame, Thunder, Wind, Stone, Moon — the original five
-plus the deliberately-wrong one. Love, Serpent, Sound, Flower and Mist are **not in this version**; §11
-says what porting them requires.
+**All twelve styles are written in full:** the original five (Water, Flame, Thunder, Wind, Stone), the
+expanded four (Sound, Flower, Mist, Moon), the derived two (Love, Serpent), and — new to v5 — the
+progenitor, **Sun**, without which a Demon Slayer class is missing the style every other one is a copy of.
 
 **Supersedes:** guide v4.2 (`breath-slayer-guide-v4.md`). **Built from:**
 `breath-slayer-v5-combo-brainstorm.md` rev. 2. **Costed against** BCS 1.4, same 2100-point budget as v4
@@ -137,13 +137,18 @@ measured by position, not by which Forms you happen to have learned.**
 > adds finer steps inside it rather than replacing it.
 
 > **The triangle is one-way, and that constrains Tier I design.** Each tier's three positions are joined by
-> exactly **three** edges — 1 → 4 → 7 → 1 for five of the six styles, and 1 → 7 → 4 → 1 for Moon. There is
-> no alternative route: 1 → 7 is a step of +6, which Flows only for Moon. So a Tier I Form you cannot use
-> **on demand** strands a 1st-level slayer who has nothing else to reach for.
+> exactly **three** edges — 1 → 4 → 7 → 1 for most styles, and 1 → 7 → 4 → 1 for Moon, which walks it the
+> other way on +6. There is no alternative route. So a Tier I Form you cannot use **on demand** strands a
+> 1st-level slayer who has nothing else to reach for.
 >
 > Hence the invariant every style in §8 obeys: **no Tier I Form is a reaction, and no Tier I Form carries a
 > Requirement clause.** Every style's reaction Form sits at Tier II or Tier III, where there are eight other
-> positions to route around it. Check this first when porting a style (§11).
+> positions to route around it.
+>
+> **The triangle must not Break. It does not have to Flow.** Reaching advances the Count too, so a style
+> whose triangle only Reaches is still sustainable — it simply climbs without riders and at −2. **Mist**
+> is built on exactly that: it Flows on +1 alone, so its 1 → 4 → 7 loop is a chain of Reaches, and it works.
+> The test when adding a style is therefore "does +3 or +6 avoid the Broken set", not "is it Flowing".
 
 ### 4.2 Transitions
 
@@ -508,15 +513,27 @@ session.
 
 | Style | Skill | Damage | Flowing on | The shape of a turn |
 | :---- | :---- | :---- | :---- | :---- |
+| *— the original five —* | | | | |
 | **Water** | Acrobatics | slashing | +1 +2 +3 | The baseline. Short, fluid steps; nothing is far away. |
 | **Flame** | Intimidation | fire | **+3 +4 +5** | Inverted. Flame must **leap** — short steps are the strain. |
 | **Thunder** | Athletics | electricity | **+3 only, advancing 2** | Three rhythms, and you commit to one. No forgiveness, fastest ramp, lowest ceiling. |
 | **Wind** | Survival | slashing | **+3 +5 +7** | Gusts. Skipping is correct, and +7 doubles back. |
 | **Stone** | Athletics | bludgeoning | +1 +2 +3 | Water's arc, but **a Break halves the Count instead of resetting it.** The mountain does not fall over. |
+| *— the expanded four —* | | | | |
+| **Sound** | Stealth | sonic | **+2 +3 +4** | The middle band. Caps at **6** and rolls **d12s** there — no middle gear, just off or maximum. |
+| **Flower** | Medicine | slashing | +1 +2 +3 | Breaks on only **two** steps of eight, and closing a loop pays a **second Crest**. |
+| **Mist** | Stealth | slashing | **+1 only** | **Cannot Break at all.** Everything else Reaches — until Count 6 turns the whole wheel Flowing. |
 | **Moon** † | Intimidation | slashing | **even steps** | The same triangle as everyone else, walked backwards. Flows into two steps that break every other style. |
+| *— the derived two —* | | | | |
+| **Love** | Diplomacy | slashing | **+1 … +5** | The widest Flowing arc in the book, and every rider it earns is spent on an ally. |
+| **Serpent** | Deception | slashing | **+1 +3 +8** | The only **bidirectional** wheel, and the harshest: five of eight steps Break. |
+| *— the progenitor —* | | | | |
+| **Sun** ☀ | Performance | fire | **every step** | No wrong move — but the Count **falls by 1 every turn**. The dance cannot stop. |
 
 † *Moon is Kokushibo's style. It suits villains, Upper-Moon-hunter campaigns, or a player on a
 dark-lineage arc.*
+☀ *Sun is the Hinokami Kagura, the style all eleven others descend from. It was not in v4; see its entry
+for why it is here and how to remove it.*
 
 ---
 
@@ -802,8 +819,8 @@ enemies' spaces. Then make one nichirin Strike with a **+2 status bonus** to the
 target is **stunned 1** (**incapacitation**).
 
 **SECRET FORM — Seventh Form: Honoikazuchi no Kami** — *3 actions · `flourish`*
-**Requirement** Your Breath Count is **7** (its maximum). *(Zenitsu Agatsuma's own form — the god of
-thunder, drawn once.)*
+**Requirement** Your Breath Count is **7** (its maximum).
+*(Zenitsu Agatsuma's own form — the god of thunder, drawn once.)*
 
 Move up to **100 feet** in a straight line. This movement ignores difficult terrain, doesn't trigger
 reactions, and can pass through creatures' spaces. A dragon of lightning trails you: each creature
@@ -1137,6 +1154,628 @@ for 10 minutes**.
 
 ---
 
+### SOUND BREATHING
+
+**Granted skill** Stealth · **Damage type** sonic
+
+| | |
+| :---- | :---- |
+| **Flowing** | **+2, +3, +4** |
+| **Reaching** | **+1, +5** |
+| **Broken** | +6, +7, +8 |
+| **Special** | Your Breath Count **caps at 6**, whatever your level. At Breath Count **6**, your **Crest dice are d12s**. |
+
+*Sound is the only style whose Flowing arc sits in the **middle** of the wheel: the single step strains,
+and so does the long one. It keeps time, and a beat that rushes is as wrong as a beat that drags.*
+
+*Its clause is the sharpest trade in the book. A cap of 6 puts the deep rungs permanently out of reach —
+no Count 7, no Count 9, and the Secret Form needs a feat to become usable at all (see below). What Sound
+gets instead is the **d12**: at its ceiling, and only at its ceiling, the Crest rolls **6d12 — 39 points**,
+within a rounding error of what Water takes until Count 9 to produce, and reached a full round sooner.*
+
+*Everything about the style is therefore aimed at **getting to 6 and staying there**. Below the cap a
+Sound slayer is the weakest Crest in the book; at the cap they are among the strongest. There is no middle,
+which is the correct shape for a man who does everything at maximum volume or not at all.*
+
+> Sound is the second style to upgrade its dice at its own ceiling rather than at 9 — Thunder reaches d8s
+> at its cap of 7 for the same reason. Where a style trades away depth, it buys back the die.*
+
+> **The Secret Form problem, and it is deliberate.** `Festival of Fire` requires Breath Count 7, and
+> Sound caps at 6. A Sound slayer cannot use their own Secret Form without **`Deepening Breath`**
+> (feat 10), which raises the cap by 1 to exactly 7. That feat is not optional for Sound; it is the
+> price of the loudest Crest in the class, and it should be stated at character creation.
+
+**Stance — Musical Score** *(1 action)*
+You read the fight as notation. You gain a **+1 circumstance bonus to Perception**, and whenever a
+creature within 30 feet uses an action with the `concentrate` or `manipulate` trait, you learn what it
+is attempting before it resolves.
+
+**Style rider — Concussive Report**
+The first time each round that a creature takes sonic damage from you, it must succeed at a **Fortitude
+save** against your Slayer DC or be **deafened** until the end of your next turn.
+*(Deafened is the class's only real anti-caster tool: a deafened creature must pass a DC 5 flat check to
+Cast a Spell with a verbal component or lose it.)*
+
+**Cadence riders**
+
+| Flowing with a… | grants |
+| :---- | :---- |
+| **Tier I** Form | The target takes **1d6 sonic** and is **deafened** until the end of your next turn. |
+| **Tier II** Form | The target must succeed at a **Fortitude save** against your Slayer DC or be **stupefied 1** until the end of your next turn. |
+| **Tier III** Form | The target must succeed at a **Fortitude save** against your Slayer DC or be **slowed 1** until the end of its next turn. |
+
+**The Forms**
+
+**1 · Roar** — *Tier I · 1 action*
+Make a nichirin Strike. On a hit, the target and each creature adjacent to it take **1d6 sonic**.
+
+**2 · String Performance** — *Tier II · 2 actions · `flourish`*
+Wire strung between the blades, sung taut. A **15-foot cone**: each creature takes **a blade's worth of
+sonic** with a basic **Fortitude** save — note the defence. A creature that **fails** is **deafened**
+until the end of its next turn.
+
+**3 · Bombardment** — *Tier III · 2 actions · `flourish`*
+A **10-foot emanation** of detonating sound. Each creature takes **a blade's worth of sonic** with a basic
+**Fortitude** save; one that **critically fails** is **stunned 1** (**incapacitation**).
+
+**4 · Sound Pressure** — *Tier I · 1 action*
+Make a nichirin Strike. On a hit the target must succeed at a **Fortitude save** against your Slayer DC
+or be **pushed 5 feet** and **deafened** until the end of its next turn.
+
+**5 · Echo Location** — *Tier II · 1 action*
+Read the room by its returns. Every creature within 30 feet that is not behind total cover ceases to be
+**hidden or undetected** from you until the end of your turn. Then make a nichirin Strike.
+
+**6 · Crescendo** — *Tier III · 2 actions*
+Make a nichirin Strike with a **+2 status bonus** to the attack roll. On a hit it deals additional sonic
+damage equal to **twice your number of weapon damage dice**, and the target is **deafened and stupefied
+1** until the end of your next turn.
+
+**7 · Constant Resounding Slashes** — *Tier I · 2 actions · `flourish`*
+Make **two nichirin Strikes** against the same creature; your multiple attack penalty increases as normal.
+**If both hit**, the target takes **2d6 sonic** and is **stupefied 1** until the end of your next turn.
+
+**8 · Rending Chord** — *Tier II · 2 actions*
+Make a nichirin Strike with a **+1 status bonus** to the attack roll. On a hit it deals **+2d6 sonic** and
+the target **can't use reactions** until the end of its next turn.
+
+**9 · Shattering Report** — *Tier III · 2 actions · `flourish`*
+A **30-foot line** of pressure. Each creature takes **a blade's worth of sonic** with a basic
+**Fortitude** save; one that **fails** is **deafened** and **slowed 1** until the end of its next turn.
+Unattended objects of glass, crystal or ceramic in the line shatter.
+
+**SECRET FORM — Fifth Form: String Performance, Festival of Fire** — *3 actions · `flourish`*
+**Requirement** Your Breath Count is **7 or higher** — for Sound, that needs **`Deepening Breath`** (feat 10).
+*(Tengen Uzui's strongest, and the reason he was the loudest man in the Corps.)*
+
+Explosive-strung wire laid across the whole field, then pulled. Choose a **20-foot burst** within 30 feet.
+Each creature in it takes **a blade's worth of sonic plus 6d6 sonic** with a basic **Fortitude** save. A
+creature that **fails** is **stunned 1** and **deafened for 1 minute**; one that **critically fails** is
+**stunned 2** (**incapacitation**) and its deafness lasts **1 hour**.
+
+Then make one nichirin Strike against any creature in the burst with a **+2 status bonus** to the attack
+roll. **Your Breath Count then drops to 0.**
+
+**Self-cost** You were standing inside it. You are **deafened until the end of your next turn** and take a
+**−2 status penalty to Perception for 1 minute**.
+
+---
+
+### FLOWER BREATHING
+
+**Granted skill** Medicine · **Damage type** slashing
+
+| | |
+| :---- | :---- |
+| **Flowing** | **+1, +2, +3** |
+| **Reaching** | **+4, +5, +6** |
+| **Broken** | **+7, +8 — only two steps in the whole wheel** |
+| **Special** | **Full Bloom.** The first time each encounter your chain returns to a wheel position it has already used, without having Broken since, you immediately **regain your Crest for the round** — you may give the Crest to a second Form this round. That second Crest pays **half as many dice, rounded down**. |
+
+*Flower breaks on **two of eight** steps, the fewest of any style. It is the composed one: the
+counter-duellist who does not panic, does not over-reach, and does not lose the thread. Where Stone
+survives a break and Mist cannot have one, Flower simply almost never makes the mistake.*
+
+*`Full Bloom` is what it does with that safety. Closing a loop — 1 → 4 → 7 → 1, or any longer circuit
+back to a position you have already stood on — is worth a **second Crest in the same round**, at half
+dice: the only effect in the class that breaks the once-per-round cap without a 20th-level feat. Flower
+plays for the return, not the reach, and a Flower slayer counting positions is doing the right thing.*
+
+**Stance — Honourable Shadow Plum** *(1 action)*
+While in this stance, the first time each round a creature within your reach **misses you with a melee
+Strike**, you may **Step** as a free action.
+
+**Style rider — Blossom's Eye**
+The first Strike each round that you make against an **off-guard** creature deals **+1 precision damage
+per weapon damage die**.
+
+**Cadence riders**
+
+| Flowing with a… | grants |
+| :---- | :---- |
+| **Tier I** Form | The target is **off-guard to you** until the end of your next turn. |
+| **Tier II** Form | The target is **off-guard to all creatures** until the start of your next turn. |
+| **Tier III** Form | The target takes **2d6 persistent bleed**, and you gain a **+2 circumstance bonus to AC** until the start of your next turn. |
+
+**The Forms**
+
+**1 · Crimson Hanagoromo** — *Tier I · 1 action*
+A sweeping robe of cuts. Make a nichirin Strike; on a hit the target takes **1d6 persistent bleed**.
+
+**2 · Falling Petals** — *Tier II · 1 action*
+Make a nichirin Strike. On a hit, each creature **adjacent to the target** is **off-guard to you** until
+the end of your turn.
+
+**3 · Spider Lily Sweep** — *Tier III · 2 actions · `flourish`*
+A **10-foot emanation** of low, circling cuts. Each creature takes **a blade's worth of slashing** with a
+basic Reflex save; one that **fails** is **off-guard** until the start of your next turn.
+
+**4 · Peach-hued Wind** — *Tier I · 1 action*
+Step 10 feet; this movement doesn't trigger reactions. Then make a nichirin Strike that ignores the
+target's **lesser cover**.
+
+**5 · Plum Shadow Cut** — *Tier II · **reaction***
+**Trigger** A creature within your reach **misses you** with a melee Strike.
+Make a nichirin Strike against that creature at your current multiple attack penalty. On a hit it is
+**off-guard** until the start of your next turn.
+
+**6 · Pistil Piercing** — *Tier III · 2 actions*
+Make a nichirin Strike with a **+2 status bonus** to the attack roll. On a hit, any **persistent bleed the
+target is taking doubles**, and it is **off-guard to all creatures** until the start of your next turn.
+
+**7 · Whirling Peach** — *Tier I · 2 actions · `flourish`*
+Make **two nichirin Strikes** against the same creature; your multiple attack penalty increases as normal.
+**If both hit**, the target is **off-guard to all creatures** until the start of your next turn.
+
+**8 · Petal Storm** — *Tier II · 2 actions · `flourish`*
+A **15-foot cone** of shredding petals. Each creature takes **a blade's worth of slashing** with a basic
+Reflex save; one that **fails** takes **1d6 persistent bleed**.
+
+**9 · Hundred-Petal Cut** — *Tier III · 2 actions · `flourish`*
+Make a nichirin Strike against each of up to **three different creatures** within your reach; your
+multiple attack penalty increases as normal. Each creature hit is **off-guard to you** until the end of
+your next turn.
+
+**SECRET FORM — Final Form: Equinoctial Vermilion Eye** — *2 actions · `flourish`*
+**Requirement** Your Breath Count is **7 or higher**. **Duration** 1 minute.
+*(Higan Bloom — Kanao Tsuyuri's, and it cost her an eye.)*
+
+You force your vision past what an eye is built to do. For the duration:
+
+- You gain a **+2 status bonus to AC, to Reflex saves, and to attack rolls**.
+- You **cannot be flanked**, and no creature can become **hidden or undetected** from you.
+- The **first Strike each round** you make against a creature leaves it **off-guard to you and to every
+  one of your allies** until the end of your next turn.
+
+**Your Breath Count then drops to 0.**
+
+**Self-cost** The eye pays. When the duration ends you are **dazzled for 1 hour**. If you use this Form a
+**second time in the same day**, you are **blinded for 1 hour** instead, and the GM is entirely within
+their rights to make that permanent in one eye.
+
+---
+
+### MIST BREATHING
+
+**Granted skill** Stealth · **Damage type** slashing
+
+| | |
+| :---- | :---- |
+| **Flowing** | **+1 — one step, and one step only** |
+| **Reaching** | **+2, +3, +4, +5, +6, +7, +8 — everything else** |
+| **Broken** | **none. Mist has no Broken set at all.** |
+| **Special** | **Mist has no edges.** No transition you can make ever breaks your chain. |
+
+*The only style in the book that **cannot lose its breath**. Every step you take advances the Breath
+Count; there is no wrong move, no reset, and no way to fall off the wheel. Mist simply drifts.*
+
+*What it pays is the **Cadence rider**. Flowing on +1 alone means the riders — the concealment, the
+dazzle, the free Hide — arrive only when you creep one position forward, and every other step is a
+Reach: the Count climbs, the Form comes out at **−2**, and you get nothing extra. Until Breath Count 6,
+when Reaching stops costing anything at all and **Mist's entire wheel becomes Flowing**. No other style
+transforms at a threshold like that, and it is why a Mist slayer's late fight looks nothing like their
+early one.*
+
+*It is also, with Stone, the style to hand a new player: nothing they can do will break it.*
+
+**Stance — Obscuring Veil** *(1 action)*
+While in this stance you are **concealed** from any creature more than 30 feet away from you, and you do
+not need to Hide or take any action to maintain it.
+
+**Style rider — Nothing to Grasp**
+The first Strike each round that you make against a creature which **cannot see you precisely** deals
+**+1 precision damage per weapon damage die**, and making it does not cause you to become **observed**.
+
+**Cadence riders**
+
+| Flowing with a… | grants |
+| :---- | :---- |
+| **Tier I** Form | You become **concealed** until the start of your next turn. |
+| **Tier II** Form | The target is **dazzled** until the end of your next turn. |
+| **Tier III** Form | You become **hidden** from every creature until the start of your next turn, with no Hide check. |
+
+**The Forms**
+
+**1 · Low Clouds, Distant Haze** — *Tier I · 1 action*
+A thrust that arrives from further away than it should. Make a nichirin Strike; **your reach for this
+Strike increases by 5 feet**.
+
+**2 · Eight-Layered Mist** — *Tier II · 2 actions · `flourish`*
+Make **two nichirin Strikes** against the same creature; your multiple attack penalty increases as normal.
+If **either** hits, the target is **dazzled** until the end of your next turn.
+
+**3 · Lunar Dispersing Mist** — *Tier III · 2 actions · `flourish`*
+A **30-foot line** of scattering cuts. Each creature takes **a blade's worth of slashing** with a basic
+Reflex save; one that **fails** is **dazzled** until the end of its next turn.
+
+**4 · Shifting Flow Slash** — *Tier I · 1 action*
+Make a nichirin Strike. If it hits, you may **Step 10 feet** afterward; this movement doesn't trigger
+reactions.
+
+**5 · Sea of Clouds and Haze** — *Tier II · 2 actions · `flourish`*
+A **15-foot cone**. Each creature takes **a blade's worth of slashing** with a basic Reflex save, and the
+area **fills with mist** until the start of your next turn: creatures inside it are **concealed**, and
+**you ignore that concealment**.
+
+**6 · Drifting Cloud Cut** — *Tier III · 1 action*
+Stride up to half your Speed, make a nichirin Strike, then Stride up to half your Speed again. Neither
+movement triggers reactions.
+
+**7 · Shrouding Step** — *Tier I · 2 actions*
+Make a nichirin Strike. On a hit the target is **dazzled** until the end of your next turn, and you become
+**concealed** until the start of your next turn.
+
+**8 · Scattering Mist Splash** — *Tier II · **reaction***
+**Trigger** A creature Strikes you.
+You come apart where the blow lands. Gain a **+2 circumstance bonus to AC** against that attack; if it
+**misses**, you may **Step 5 feet** and become **concealed** until the start of your next turn.
+
+**9 · Haze of the Deep** — *Tier III · 2 actions · `flourish`*
+A **20-foot emanation** that stays until the start of your next turn. Each creature in it takes **a
+blade's worth of slashing** with a basic Reflex save, and while the haze lasts every creature inside it
+other than you is **concealed from everything, including its own allies** — and you ignore that
+concealment entirely.
+
+**SECRET FORM — Seventh Form: Obscuring Clouds** — *2 actions · `flourish`*
+**Requirement** Your Breath Count is **7 or higher**. **Duration** 1 minute.
+*(Muichiro Tokito made this one himself, at fourteen.)*
+
+Your outline stops being information. For the duration:
+
+- You are **concealed** at all times, from every creature, at every distance. A creature **cannot use
+  Seek** to make you observed, and effects that would negate concealment fail against you unless they
+  also negate invisibility.
+- Your **Strikes ignore all concealment and all cover**.
+- Once per round, when a creature **misses you** with an attack, you may **Step 10 feet** as a free
+  action.
+
+**Your Breath Count then drops to 0.**
+
+**Self-cost** The fog was coming off your body and it takes the rest with it. When the duration ends you
+are **slowed 1 and dazzled until the end of your next turn**.
+
+---
+
+### LOVE BREATHING
+
+**Granted skill** Diplomacy · **Damage type** slashing
+**Key ability** Strength is recommended; a Love slayer may choose Strength in place of the class default.
+**Nichirin blade** A whip-blade — a ribbon of nichirin thin enough to coil. Treat it as a martial
+sword-group weapon with the **finesse** and **reach** traits while you are in the Love stance.
+
+| | |
+| :---- | :---- |
+| **Flowing** | **+1, +2, +3, +4, +5 — five of eight, the widest Flowing arc in the book** |
+| **Reaching** | **none** |
+| **Broken** | +6, +7, +8 |
+| **Special** | **Every Cadence rider Love earns is spent on somebody else.** All three pay an ally, never you. |
+
+*Love reaches further than anything else on the wheel and keeps almost nothing it earns. Five steps out
+of eight carry the breath — no other style flows on more than four — and there is no Reaching set at all,
+because Love does not do things by halves: it either connects or it doesn't.*
+
+*Then read the Cadence riders. Temporary Hit Points **for an ally**. A free Step **for an ally**. A free
+Strike **for an ally**. A Love slayer with a deep chain is the most generous engine in the party and,
+measured alone, the lowest-output style in this document. That is the whole design, and it is the same
+trade v4's `Beloved of the Corps` made — v5 just routes it through the chain.*
+
+**Stance — Whip Blade** *(1 action)*
+Your nichirin blade uncoils. While in this stance it gains the **finesse** and **reach** traits.
+
+**Style rider — Beloved of the Corps**
+At the start of each of your turns, choose one ally within 30 feet who can see or hear you. Until the
+start of your next turn, that ally gains a **+1 status bonus to attack rolls and to damage rolls**.
+
+**Cadence riders**
+
+| Flowing with a… | grants |
+| :---- | :---- |
+| **Tier I** Form | One ally within 30 feet gains **temporary Hit Points equal to your level** until the end of your next turn. |
+| **Tier II** Form | One ally within 30 feet may **Step** as a free action, and your Form's target is **off-guard to that ally** until the end of your next turn. |
+| **Tier III** Form | One ally within 30 feet may make **one Strike** as a reaction. That Strike does not increase their multiple attack penalty. |
+
+**The Forms**
+
+**1 · Shivers of First Love** — *Tier I · 1 action*
+A lash that arrives before it is seen. Make a nichirin Strike. On a hit the target is **off-guard to the
+next creature that attacks it** before the start of your next turn.
+
+**2 · Love Pangs** — *Tier II · 1 action*
+Make a nichirin Strike. On a hit, one willing ally within 30 feet gains **temporary Hit Points equal to
+twice your level** for 1 minute.
+
+**3 · Blushing Coil** — *Tier III · 2 actions · `flourish`*
+The blade coils outward in a **10-foot emanation**. Each creature takes **a blade's worth of slashing**
+with a basic Reflex save; one that **fails** is **pulled 5 feet toward you**.
+
+**4 · Catlove Shower** — *Tier I · 2 actions · `flourish`*
+Make a nichirin Strike against each of up to **three different creatures** within your reach; your
+multiple attack penalty increases as normal.
+
+**5 · Hater's Whip** — *Tier II · 2 actions*
+Make a nichirin Strike against a creature within **20 feet**. On a hit it is **pulled 10 feet toward you**
+and is **off-guard** until the start of your next turn.
+
+**6 · Heart's Reach** — *Tier III · 1 action*
+The blade uncoils its full length. Make a nichirin Strike against a creature within **30 feet**. On a hit,
+one willing ally within 30 feet may **Stride up to half their Speed** as a reaction.
+
+**7 · Cat-Legged Winds of Love** — *Tier I · 1 action*
+Stride up to your Speed, ignoring difficult terrain; this movement doesn't trigger reactions. Then make a
+nichirin Strike.
+
+**8 · Swaying Love, Wildclaw** — *Tier II · 2 actions · `flourish`*
+A **15-foot cone** of coiling lashes. Each creature takes **a blade's worth of slashing** with a basic
+Reflex save; one that **fails** is **off-guard** until the start of your next turn.
+**While your Demon Slayer Mark is active**, the cone is **30 feet**, and a creature that fails is also
+**immobilized** until it Escapes against your Slayer DC.
+
+**9 · Unbreakable Bond** — *Tier III · 2 actions*
+Make a nichirin Strike with a **+2 status bonus** to the attack roll. On a hit, until the start of your
+next turn **every ally within 30 feet** gains a **+1 status bonus to attack rolls and to AC**.
+
+**SECRET FORM — Final Form: Hundred-Fold Love** — *3 actions · `flourish`*
+**Requirement** Your Breath Count is **7 or higher**.
+*(Mitsuri Kanroji never named a final form on the page. This one is ours, and it is written the way she
+fought — everything outward, nothing held back.)*
+
+Make **four nichirin Strikes**, divided among creatures within your reach as you choose; your multiple
+attack penalty increases as normal after each. Each deals **+2d6 slashing** on a hit, and each hit lets
+you **pull the target 5 feet toward you** with no check.
+
+Then every ally within 30 feet gains **temporary Hit Points equal to twice your level** and a **+2 status
+bonus to attack rolls** until the end of your next turn. The **first time** during that duration an ally
+would be reduced to 0 Hit Points, they are reduced to **1 Hit Point** instead.
+
+**Your Breath Count then drops to 0.**
+
+**Self-cost** You gave it all away. You are **enfeebled 2** until you rest for 10 minutes.
+
+---
+
+### SERPENT BREATHING
+
+**Granted skill** Deception · **Damage type** slashing
+**Nichirin blade** A wavy, serpentine edge — a *kukri* or *shortsword* rather than a katana.
+
+| | |
+| :---- | :---- |
+| **Flowing** | **+1, +3, +8** |
+| **Reaching** | **none** |
+| **Broken** | **+2, +4, +5, +6, +7 — five of eight, the harshest wheel in the book** |
+| **Special** | Serpent is the only style that Flows **both ways by one**: **+1** and **+8** (which is "back one"). The snake coils in either direction and commits to nothing else. |
+
+*Five of eight steps break the breath. Serpent has no Reaching set to soften it, no halving clause, and
+no rider retention — a wrong step costs everything, every time. What it has instead is the only
+**bidirectional** wheel in this document: forward one, back one, or around the triangle. Those three
+lines, forever, and they are enough, because Serpent never wanted the whole wheel.*
+
+*This is the single-target style. It has **no area Form above a three-target Strike** and it does not
+want one. Everything it does is aimed at one throat, and §9's `Read the Thread` is close to mandatory —
+with three legal steps out of eight, a Serpent slayer genuinely does know their next Form two turns out.*
+
+> ⚠ **Revised from guide §11.** That section proposed Serpent as *Flowing on +1 and +8 only*. Checked
+> against §4.1, that topology leaves the **Tier I triangle with no surviving edge** — positions 1, 4 and
+> 7 are three apart, and a wheel that flows only on ±1 cannot join them. It would have been unplayable at
+> 1st level. **+3** is added for exactly that reason, and Serpent is still the narrowest wheel with a
+> Reaching set of zero.
+
+**Stance — Kaburamaru's Reading** *(1 action)*
+A white snake reads the fight from your shoulder and tells you what it sees. While in this stance your
+nichirin blade gains the **finesse** and **agile** traits, and you are **never off-guard** to a creature
+you have already Struck this encounter.
+
+**Style rider — Coiled Fang**
+Your Strikes against a creature you **also Struck during your last turn** deal **+1 precision damage per
+weapon damage die**.
+
+**Cadence riders**
+
+| Flowing with a… | grants |
+| :---- | :---- |
+| **Tier I** Form | The target takes **1d6 persistent bleed**, and you may **Step** as a free action. |
+| **Tier II** Form | The target takes a **−10-foot status penalty** to all its Speeds and is **off-guard to you**, both until the end of your next turn. |
+| **Tier III** Form | The target is **grabbed** and must Escape against your Slayer DC; while grabbed this way it takes **1d6 persistent bleed** each round. |
+
+**The Forms**
+
+**1 · Winding Serpent Slash** — *Tier I · 1 action*
+A cut that arrives around the guard rather than through it. Make a nichirin Strike that **ignores the
+target's lesser and standard cover**.
+
+**2 · Venom Fangs of the Narrow Head** — *Tier II · 1 action*
+Make a nichirin Strike. On a hit the target takes **1d6 persistent bleed**; on a critical hit it is also
+**enfeebled 2** until that bleed ends.
+
+**3 · Serpent's Coil** — *Tier III · 2 actions · `flourish`*
+Make **three nichirin Strikes** against the same creature; your multiple attack penalty increases as
+normal. Each deals **+1d6 slashing** on a hit.
+
+**4 · Twin-Headed Reptile** — *Tier I · 2 actions · `flourish`*
+Make **two nichirin Strikes**, either against the same creature or against two creatures adjacent to each
+other; your multiple attack penalty increases as normal.
+
+**5 · Coil Choke** — *Tier II · 2 actions*
+Make a nichirin Strike. On a hit the target is **grabbed** and must Escape against your Slayer DC; while
+grabbed this way it **can't speak** and **can't Cast a Spell with a verbal component**.
+
+**6 · Fanged Constriction** — *Tier III · 2 actions*
+**Requirement** The target is **grabbed**, **restrained**, or **off-guard**.
+Make a nichirin Strike with a **+2 status bonus** to the attack roll. On a hit the target takes **3d6
+persistent bleed** and is **enfeebled 2** for as long as that bleed lasts.
+
+**7 · Narrow Head Strike** — *Tier I · 1 action*
+Step, make a nichirin Strike, then Step. The Strike gains a **+1 status bonus** to the attack roll if you
+began your turn adjacent to the target.
+
+**8 · Shedding Skin** — *Tier II · **reaction***
+**Trigger** A creature Strikes you.
+What it hits comes away. Gain a **+2 circumstance bonus to AC** against that attack; if it **misses**, you
+become **concealed** until the start of your next turn and may **Step 5 feet**.
+
+**9 · Serpent Beheading** — *Tier III · 2 actions*
+Make a nichirin Strike with a **+2 status bonus** to the attack roll. If this Strike **reduces the target
+to 0 Hit Points**, or if it is a **critical hit against a target already at half Hit Points or fewer**,
+the head comes off: the creature **dies**. This has the **death** trait and does nothing to a creature
+immune to death effects, or to one with no discernible head.
+
+**SECRET FORM — Fifth Form: Slithering Serpent** — *3 actions · `flourish`*
+**Requirement** Your Breath Count is **7 or higher**. *(Obanai Iguro's, and it does not stop coming.)*
+
+The blade travels a path no straight weapon could. Make **five nichirin Strikes** against creatures within
+your reach, divided as you choose. Each takes a flat **−2 penalty** that **neither uses nor increases your
+multiple attack penalty** — the snake does not tire. Each deals **+2d6 slashing** on a hit, and each
+creature hit is **grabbed** (Escape against your Slayer DC).
+
+If any of these Strikes **reduces a creature to 0 Hit Points**, make **one additional Strike** under the
+same terms.
+
+**Your Breath Count then drops to 0.**
+
+**Self-cost** Fully uncoiled, you have nothing left wound. You are **off-guard until the end of your next
+turn** and **can't use reactions** during that time.
+
+---
+
+### SUN BREATHING — *Hinokami Kagura* ☀
+
+> ✦ **New in v5.** v4 had no Sun style, and a Demon Slayer class without the **Hinokami Kagura** is
+> missing the one every other style is a failed copy of. It was not in the brief for this pass; it is here
+> because the roster reads as incomplete without it. Cut it freely if you would rather the progenitor
+> stayed off the table — nothing else in this document depends on it.
+
+**Granted skill** Performance · **Damage type** fire
+**Nichirin blade** It turns **black**. A black blade has meant a short career and no promotion for four
+hundred years, and nobody in the Corps will tell you why.
+
+| | |
+| :---- | :---- |
+| **Flowing** | **+1, +2, +3, +4, +5, +6, +7, +8 — every step** |
+| **Reaching** | **none** |
+| **Broken** | **none** |
+| **Special** | **The dance cannot stop.** At the **end of each of your turns**, your Breath Count **decreases by 1**. (On a turn where you used no Form at all, this is the only decrease — it does not stack with the ordinary −1.) |
+
+*The progenitor. Every other style in this document is somebody's incomplete memory of this one, which is
+why Sun is the only wheel with **no wrong move**: every step Flows, every Form gets its Cadence rider,
+and nothing you can do will break the breath.*
+
+*And then it bleeds. A Breath Count that falls by 1 every turn means Sun is the only style that can
+**lose ground by standing still** — three Forms in a turn nets **+2**, two Forms nets **+1**, one Form
+holds level, and a turn spent Striding goes backwards. Sun climbs slower than any style here and reaches
+its ceiling last, but it arrives with **a Cadence rider on every single Form it has used to get there**.*
+
+*Read the trade honestly: Sun trades **depth** for **consistency**. Water peaks higher. Sun never has a
+bad turn, provided it never has a slow one. That is exactly the fiction — the Hinokami Kagura is a dance
+performed from dusk to dawn without pause, and the only man who could do it comfortably was born able to.*
+
+**Stance — Hinokami Kagura** *(1 action)*
+You take up the dance. While in this stance you are **never off-guard as a result of using a Form**, and
+at the start of each of your turns you may **Step** as a free action.
+
+**Style rider — The Dance Continues**
+**While your Breath Count is 1 or higher**, your nichirin Strikes deal **+1 fire damage per weapon damage
+die**. At Breath Count 0 you get nothing — which for a style that loses a point every turn is a real and
+recurring threat.
+
+**Cadence riders**
+
+| Flowing with a… | grants |
+| :---- | :---- |
+| **Tier I** Form | The target takes **1d6 fire**, and you may **Step** as a free action. |
+| **Tier II** Form | The target takes **1d6 persistent fire**. |
+| **Tier III** Form | The target is **off-guard to you** until the end of your next turn and takes **2d6 persistent fire**. |
+
+**The Forms**
+
+**1 · Dance** — *Tier I · 1 action*
+The first movement: a single overhead cleave, brought straight down. Make a nichirin Strike with a **+1
+status bonus** to the attack roll, dealing **+1d6 fire** on a hit.
+
+**2 · Clear Blue Sky** — *Tier II · 1 action*
+A wide circular turn of the whole body. Make a nichirin Strike that **ignores the target's lesser cover**,
+then **Step**; this movement doesn't trigger reactions.
+
+**3 · Raging Sun** — *Tier III · 2 actions · `flourish`*
+A **15-foot cone** of unfolding flame. Each creature takes **a blade's worth of fire** with a basic Reflex
+save; one that **fails** takes **2d6 persistent fire**.
+
+**4 · Burning Bones, Summer Sun** — *Tier I · 2 actions · `flourish`*
+Stride up to your Speed; this movement doesn't trigger reactions. Then make a nichirin Strike against each
+of up to **two creatures** you ended adjacent to; your multiple attack penalty increases as normal.
+
+**5 · Setting Sun Transformation** — *Tier II · **reaction***
+**Trigger** A creature Strikes you.
+A backflip that turns the blade over as it goes. Gain a **+2 circumstance bonus to AC** against that
+attack; if it **misses**, make a nichirin Strike against that creature at your current multiple attack
+penalty, then **Step 10 feet**.
+
+**6 · Solar Heat Haze** — *Tier III · 1 action*
+The blade is not where the eye puts it. Make a nichirin Strike that **ignores lesser and standard cover**,
+and whose damage is **not reduced by the target's resistances**.
+
+**7 · Beneficent Radiance** — *Tier I · 1 action*
+Make a nichirin Strike. On a hit, each creature **adjacent to the target** takes fire damage equal to
+**your number of weapon damage dice**.
+
+**8 · Sunflower Thrust** — *Tier II · 1 action*
+A single straight thrust, aimed at the neck. Make a nichirin Strike with a **+1 status bonus** to the
+attack roll; on a **critical hit** the target is **stunned 1** (**incapacitation**).
+
+**9 · Fire Wheel** — *Tier III · 2 actions · `flourish`*
+Turn end over end and roll the blade out as a wheel of flame down a **30-foot line**. Each creature takes
+**a blade's worth of fire** with a basic Reflex save; one that **fails** is knocked **prone**. The line
+**stays burning** until the start of your next turn: any creature that enters it or ends its turn in it
+takes **2d6 fire**.
+
+**SECRET FORM — Thirteenth Form** — *3 actions · `flourish`*
+**Requirement** Your Breath Count is **7 or higher**.
+*(There is no thirteenth movement. There are twelve, performed in a circle so that the twelfth returns to
+the first, and the circle is the thirteenth. Yoriichi Tsugikuni worked this out; it took his descendants
+four hundred years to work it out again.)*
+
+Make **four nichirin Strikes** against a **single creature**. The second, third and fourth each take a
+flat **−2 penalty** instead of your multiple attack penalty, and **none of the four increases your
+multiple attack penalty**. Each deals **+3d6 fire** on a hit.
+
+**If at least three of the four hit**, the target takes **6d6 persistent fire** which **cannot be ended by
+the usual flat check**, and for as long as that fire burns the creature **cannot regain Hit Points by any
+means** — no regeneration, no fast healing, no reforming, no magical healing.
+
+**Your Breath Count then drops to 0.**
+
+**Self-cost** A human body performs this once and then stops working for a while. You take **fire damage
+equal to twice your level**, ignoring your own immunities and resistances to fire, and you are **slowed 1
+for 1 minute**.
+
+> **Why this Form is the point of the whole class.** Every other Secret Form in this document is a large
+> number. This one is a **regeneration lock** — the single thing that actually kills a demon, written as
+> the only mechanical effect in the class that says a creature cannot heal. Everything else a Breath
+> Slayer does is an attempt to reach this state by other means. Tell your GM before you take it; it is
+> the class's answer to "how do you kill something that heals faster than you can cut it," and it should
+> feel like an answer.
+
+---
+
 ## 9 — Class feats
 
 *Feats sit **outside** the 2100-point budget, exactly as in v4 and as for every published class. An anchor
@@ -1405,15 +2044,30 @@ v4's entire Form budget was **90–110 points of Form damage per four-round figh
 v5's equivalent is the Crest, spent once per round. Round 1 assumes one action spent entering the stance,
 so two Forms; rounds 2–4 assume three.
 
-| Style | Count per Flowing step | Cap | R1 | R2 | R3 | R4 | **4-round Crest total** |
+| Style | Count per step | Cap | R1 | R2 | R3 | R4 | **4-round Crest total** |
 | :---- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | **Water** / Flame / Wind / Stone / Moon | +1 | 9 | 7.0 | 17.5 | 28.0 | 40.5 | **93** |
+| **Flower** / Mist / Love / Serpent | +1 | 9 | 7.0 | 17.5 | 28.0 | 40.5 | **93** |
 | **Thunder** | **+2** | **7** | 10.5 | 31.5 | 31.5 | 31.5 | **105** |
+| **Sound** | +1 | **6**, d12 there | 7.0 | 17.5 | 39.0 | 39.0 | **102** |
+| **Sun** | +1, **−1 each turn** | 9 | 7.0 | 14.0 | 21.0 | 28.0 | **70** |
 
-**Both land inside v4's budget**, which is the result this rework needed. Note the shapes differ even
-though the totals nearly match: Water climbs and peaks on the last round of a long fight, Thunder is at
-its ceiling by round 2 and stays there. Thunder's ~13% higher total is paid for by having **no Reaching
-set at all** — a single mis-stepped Form resets it to 1, and getting back to 7 costs a full turn.
+**Every style lands inside or under v4's budget.** The shapes differ even though the totals mostly match:
+Water climbs and peaks on the last round of a long fight; Thunder is at its ceiling by round 2 and stays
+there; Sound is the weakest Crest in the book until it touches 6 and then the largest single one. Thunder's
+~13% higher total is paid for by having **no Reaching set at all** — a single mis-stepped Form resets it to
+1, and getting back to 7 costs a full turn.
+
+**Two styles need their totals read with a second column.**
+
+- **Sun** has the lowest Crest budget of the twelve, at **70**, because it sheds a point every turn and can
+  never sit at its cap. It gets that back outside the Crest: `The Dance Continues` adds **+1 fire per weapon
+  damage die to every Strike** while the Count is above 0 — roughly **+48** across four rounds at four
+  weapon dice — landing it at ~118 spread thinly over every attack rather than concentrated in one. Sun is
+  the most consistent style and the least explosive, and the arithmetic says so.
+- **Flower** adds one half-dice Crest per encounter from `Full Bloom`, about **+18** at depth, for ~111.
+  That is the highest in the book and it is gated behind closing a loop without Breaking, which on Flower's
+  own wheel is a real piece of play rather than a freebie.
 
 > **The corollary worth stating plainly:** in a fight that ends in two rounds, the Breath Slayer is a
 > martial with a good toolkit and nothing more. The class is explicitly bad at short fights and explicitly
@@ -1453,23 +2107,31 @@ instead.
 
 ---
 
-## 11 — Porting the remaining five styles
+## 11 — Adding a thirteenth style
 
-**Not in this version:** Sound, Flower, Mist, Love, Serpent. Porting each one needs exactly four things.
+**Nothing is outstanding.** All twelve styles are written in §8. This section is now the recipe for adding
+another — a homebrew school, a rival's style, an Upper Moon's — and the record of what checking the
+original five candidates turned up.
+
+> **What the check caught.** The candidate topologies this section carried before all six styles were
+> written were mostly sound, and one was broken. **Serpent** was specified as *Flowing on +1 and +8 only*.
+> On a nine-position wheel that leaves the Tier I triangle — positions 1, 4 and 7, three apart — with **no
+> surviving edge at all**, and a 1st-level Serpent slayer with no legal move but to Break or Stall. It ships
+> with **+1, +3, +8**. **Sound** was specified as paying *2 Crest dice per point at a cap of 6*, which
+> totals **133** over four rounds against v4's 90–110 band; it ships with **d12s at its cap** for 102.
+> Run both checks — §4.1's triangle test and §10.2's four-round budget — before you believe a new topology.
+
+Adding a style needs exactly four things.
 
 1. **A topology.** One line: the Flowing set, the Reaching set, and any style clause. It must contain
-   **+3 or +6**, or the Tier I triangle (positions 1/4/7) cannot close and the style is unplayable at
-   1st level. Candidate topologies held back from v4's identities:
-   - **Sound** — Flowing +1 … +4, but the **Count caps at 6 and the Crest pays +2 dice per point.** Fast
-     burn, low ceiling, highest per-Crest number in the book.
-   - **Flower** — Flowing +1 … +3; **completing a full lap of the wheel in one chain pays out once per
-     encounter.** The counter-duellist's long game.
-   - **Mist** — Flowing +1 … +3, and **Reaching never takes the −2 and always grants the Cadence rider.**
-     Mist has no edges; it is the most forgiving topology and the natural beginner style alongside Stone.
-   - **Love** — Flowing +1 … +3, and **each Flowing transition also pays an ally** (Love's outward-facing
-     rider, routed through the chain).
-   - **Serpent** — Flowing **+1 and +8 only.** The snake coils both ways: the narrowest wheel, but
-     bidirectional, and it loops 9 → 1 instantly. Brutal, and the best fit for `Read the Thread`.
+   a step of **+3 or +6** that is **not in the Broken set** — otherwise the Tier I triangle (positions
+   1/4/7) cannot close and the style is unplayable at 1st level. It does not have to Flow; Mist's triangle
+   only Reaches and works fine.
+
+   The twelve shipped topologies already cover most of the obvious shapes — a narrow wheel (Thunder,
+   Serpent), a wide one (Love), an inverted one (Flame), an unbreakable one (Mist, Sun), a forgiving one
+   (Stone, Flower), a parity one (Moon, Wind) and a capped one (Sound). A thirteenth style earns its place
+   by finding a shape none of those occupy, not by re-skinning one that does.
 2. **Three Cadence riders**, one per tier. Small / medium / large. This is where most of the style's feel
    lives and it is three lines, not nine.
 3. **Nine Forms** at positions 1–9, with **Tier I at 1/4/7** — and Tier I must be playable as a **directed
@@ -1498,6 +2160,10 @@ were built for a resource economy that no longer exists.
 | **`Ceaseless Breath` (feat 18)** | Free Count every turn decouples the Count from playing well | Limit to once per encounter, or require that you used no Form that turn |
 | **Moon's rider-on-Break clause** | Combined with persistent bleed Cadence riders, a Moon slayer who never cares about breaking may out-damage one who does | Remove the clause and give Moon a Reaching set of +1 instead |
 | **Reaction Forms advancing the chain** | It is strong, it is intended, and it means four Forms in a round is reachable | Nothing — but know that it is why every style here has exactly one reaction Form and no more |
+| **Sound's d12 cliff** | 5 → 6 on the Count more than doubles the Crest (17.5 → 39). A Sound slayer parked at cap is the biggest single number in the class | Make the d12 apply only to a Form of Tier III, or drop it to d10 |
+| **Flower's `Full Bloom`** | A second Crest per encounter is the only thing outside feat 20 that breaks the once-per-round cap | It is already half dice and once per encounter; if it still runs hot, require the loop to be at least four links long |
+| **Sun's decay vs. haste** | Sun with an extra action every turn stops decaying in practice and becomes strictly the best wheel | Make the decay 1 per turn *or* 1 per Form short of three, whichever is worse for the slayer |
+| **Sun's Thirteenth Form** | A regeneration lock is the strongest single clause in the document, and trivialises any encounter built on a healing enemy | It is meant to. Warn the GM at character creation, not after |
 
 ### 12.2 Running the table
 
@@ -1510,8 +2176,9 @@ were built for a resource economy that no longer exists.
   shaded and different names, so one template serves the whole class.
 - **Do not let a rule depend on two Forms back.** Only the last Form is history. If a player asks whether
   something three Forms ago matters, the answer is always no.
-- **A new player should be handed Stone or (once ported) Mist.** Both forgive a misread wheel. Hand Flame
-  or Moon to someone who wants to think.
+- **A new player should be handed Mist or Stone.** Mist literally cannot break; Stone breaks softly. Hand
+  **Flame, Moon or Serpent** to someone who wants to think, and **Sun** to someone who will keep acting
+  every single turn — Sun punishes a quiet turn harder than any other style punishes a mistake.
 
 ### 12.3 Two things this version deliberately does not do
 
@@ -1577,7 +2244,13 @@ TOPOLOGIES Water   Flowing +1 +2 +3      Reaching +4 +5
            Thunder Flowing +3 only, +2 Count, cap 7, d8 at 7, no Reaching
            Wind    Flowing +3 +5 +7      Reaching +1         (+7 doubles back)
            Stone   Flowing +1 +2 +3      Reaching +4 +5      Break halves, not resets
+           Sound   Flowing +2 +3 +4      Reaching +1 +5      cap 6, d12 AT 6
+           Flower  Flowing +1 +2 +3      Reaching +4 +5 +6   loop closed = 2nd Crest, half dice
+           Mist    Flowing +1 only       Reaching +2..+8     NEVER BREAKS
            Moon    Flowing even steps    no Reaching         Broken keeps the rider
+           Love    Flowing +1..+5        no Reaching         every rider pays an ally
+           Serpent Flowing +1 +3 +8      no Reaching         5 of 8 break; bidirectional
+           Sun     Flowing EVERY step    no Reaching         -1 Count at the end of each turn
 ```
 
 ---
