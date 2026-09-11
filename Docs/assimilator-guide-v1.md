@@ -1,11 +1,11 @@
-# The Carapace — PF2e Class Guide, **Version 1**
+# The Assimilator — PF2e Class Guide, **Version 1**
 
 ### *The symbiont · Substrate · Essence · Mutation*
 
 *The complete class: chassis, the 2100-point ledger, advancement table, every core feature, the nine
-Instincts, the Bond rules, and forty-two class feats from 1st to 20th. The thirty-six Substrates and
+Instincts, the Bond rules, and forty-five class feats from 1st to 20th. The thirty-six Substrates and
 the thirty named Bonds live in its companion volume,
-**`Docs/homebrewing/carapace-material-lexicon-v3.md`** — that document is this class's Chapter 5 and
+**`Docs/homebrewing/assimilator-material-lexicon-v3.md`** — that document is this class's Chapter 5 and
 is not duplicated here. Costed on the same **2100-point** budget as **The Saint** (guide v4), **The
 Breath Slayer** (v4.2) and **Soulbound** (v1.3).*
 
@@ -16,7 +16,11 @@ every mechanical anchor: the Monk's chassis (`packs/pf2e/classes/monk.json` — 
 Perception, three Expert saves, **Expert unarmored defence at 1st**, no armour proficiencies) as the
 model for an unarmoured class, and the Barbarian's for a bruiser's saves.
 
-**Decisions taken since the lexicon.** You confirmed the Carapace is **unarmed**, so §4.1 makes the
+**Names.** The class is the **Assimilator**. The symbiont it wears is the **Carapace**, and keeps that
+name throughout — *Carapace Strike*, *Carapace Block*, *the Carapace breaking*. One word for the
+character, another for the thing on them, the way the Saint has *the Cloth*.
+
+**Decisions taken since the lexicon.** You confirmed the Assimilator is **unarmed**, so §4.1 makes the
 Carapace Strike the only weapon the class has and §4.2 makes the symbiont itself the armour. Per your
 instruction, **only the chassis is BCS-costed** — proficiencies, key attribute and Hit Points in §2.1,
 and the class features they pay for in §2.2. **The feats in §8 are not individually priced**, as with
@@ -45,12 +49,12 @@ are visible on you.
 | **Saves** | Fortitude **Expert**, Reflex Expert, Will Expert |
 | **Attacks** | Unarmed Trained. **No weapon proficiency of any kind.** |
 | **Defences** | Unarmoured **Expert**. **No armour proficiency of any kind** — you cannot wear armour over a living thing. |
-| **Class DC** | The **Carapace DC**, Trained, keyed to your key attribute |
+| **Class DC** | The **Assimilator DC**, Trained, keyed to your key attribute |
 | **Skills** | Athletics, plus 3 + Int |
 | **Profile** | Martial — Brute |
 
 **Constitution is this class's most important secondary attribute** and the guide will not pretend
-otherwise. Hit Points at 10/level, Fortitude as the save that matters, and a Carapace that breaks when
+otherwise. Hit Points at 10/level, Fortitude as the save that matters, and an Assimilator that breaks when
 it runs out of Hit Points all point the same way. Strength or Dexterity to hit; Constitution to
 survive the thing you are wearing.
 
@@ -83,7 +87,7 @@ scaling table**. Two of v3's nine clauses didn't obey this; §5.2 amends them so
 - **11th–16th.** Depth 3. Mutations begin doing things other classes cannot do at all — Mercury's
   damage reduction, Lead's spell penalty aura, Tin's precise tremorsense.
 - **17th–20th.** Depth 4, and every capstone rider comes online at once. This is the spike, and it is
-  deliberately late: a Carapace is the slowest-blooming martial in the book and is paid for it at the
+  deliberately late: an Assimilator is the slowest-blooming martial in the book and is paid for it at the
   top.
 
 ### 1.6 What the class deliberately cannot do
@@ -94,9 +98,9 @@ Honesty about the floor matters more than the ceiling.
 - **No armour.** Your AC is Dexterity plus proficiency plus the runes you etch into your own plate.
 - **No spell slots, no focus pool.** A handful of Substrates grant once-per-day or per-encounter
   actives; none of them is a spell list.
-- **A build that costs money to change.** Shedding destroys the Substrate. A Carapace who wants to be
+- **A build that costs money to change.** Shedding destroys the Substrate. An Assimilator who wants to be
   something else next month pays for it in material.
-- **A Carapace that can break.** §4.3. When it does, everything at Depth 3 or higher switches off
+- **An Assimilator that can break.** §4.3. When it does, everything at Depth 3 or higher switches off
   until it's repaired. No other martial has a failure state like this, and it is the price of the
   Hardness.
 
@@ -110,7 +114,7 @@ Honesty about the floor matters more than the ceiling.
 | :-- | :-- | --: |
 | HP | 10 | 100 |
 | Class feat @1 | — | 10 |
-| Carapace DC | T@1 / E@9 / M@17 | 170 |
+| Assimilator DC | T@1 / E@9 / M@17 | 170 |
 | Perception | T@1 / E@7 | 60 |
 | Fortitude | T@1 / E@1 / M@9 | 170 |
 | Reflex | T@1 / E@1 | 60 |
@@ -124,7 +128,7 @@ Honesty about the floor matters more than the ceiling.
 | **Subtotal** | | **1260** |
 
 **Why this shape.** The Monk is the anchor: HP 10, Trained Perception, Expert unarmoured defence at
-1st, and not one point spent on armour categories. The Carapace spends nothing on light, medium or
+1st, and not one point spent on armour categories. The Assimilator spends nothing on light, medium or
 heavy armour because it physically cannot use them — that's **60 points the Saint had to spend and
 this class doesn't**, and it's where the Substrate engine gets funded. Three Expert saves at 1st with
 Master Fortitude at 9th is the Barbarian's shape with the Monk's unarmoured line on top.
@@ -166,7 +170,7 @@ carries, and it is the honest place to look first if the class plays too strong 
 A Skin at 110 points is doing a great deal of work: it raises the Depth cap for **every** Substrate you
 hold, raises Mass in both tracks, and — because every Instinct clause keys off Depth (§1.4) — levels
 up your Instinct at the same time. Three effects for a Master-proficiency price. The defence is that
-the Carapace has no focus pool, no spell slots, no weapon proficiency and no armour proficiency, and
+the Assimilator has no focus pool, no spell slots, no weapon proficiency and no armour proficiency, and
 those four absences are worth roughly what the Skins cost. If playtest says otherwise, the first lever
 is moving the Depth-4 cap from 17th to 19th, which costs the class its whole top-end spike and is
 therefore a real correction rather than a nudge.
@@ -177,34 +181,34 @@ therefore a real correction rather than a nudge.
 
 | Lvl | Features |
 | :-- | :-- |
-| 1 | Ancestry & background, initial proficiencies, **Instinct**, **The Carapace**, **Assimilation**, Carapace feat |
-| 2 | Carapace feat, skill feat |
+| 1 | Ancestry & background, initial proficiencies, **Instinct**, **The Carapace**, **Assimilation**, Assimilator feat |
+| 2 | Assimilator feat, skill feat |
 | 3 | **Growth** (Mass +1 Gem), general feat, skill increase |
-| 4 | **First Bond**, Carapace feat, skill feat |
+| 4 | **First Bond**, Assimilator feat, skill feat |
 | 5 | Attribute boosts, ancestry feat, **Second Skin** (Depth cap 2, Mass +1/+1), **Carapace Expertise** (Unarmed Expert), skill increase |
-| 6 | Carapace feat, skill feat |
+| 6 | Assimilator feat, skill feat |
 | 7 | **Symbiotic Reflex**, **Alertness** (Perception Expert), **Living Weapon** (brawling crit spec), skill increase |
-| 8 | **Second Bond** (Mass +2/+2), Carapace feat, skill feat |
-| 9 | **Assimilation Expertise** (Carapace DC Expert), **Juggernaut** (Fortitude Master), **Weapon Specialization**, ancestry feat, skill increase |
-| 10 | Attribute boosts, Carapace feat, skill feat |
+| 8 | **Second Bond** (Mass +2/+2), Assimilator feat, skill feat |
+| 9 | **Assimilation Expertise** (Assimilator DC Expert), **Juggernaut** (Fortitude Master), **Weapon Specialization**, ancestry feat, skill increase |
+| 10 | Attribute boosts, Assimilator feat, skill feat |
 | 11 | **Third Skin** (Depth cap 3, Mass +2/+1), general feat, skill increase |
-| 12 | **Third Bond** (Mass +2/+2), Carapace feat, skill feat |
+| 12 | **Third Bond** (Mass +2/+2), Assimilator feat, skill feat |
 | 13 | **Carapace Mastery** (Unarmed Master), **Shell Mastery** (Unarmoured Master), ancestry feat, skill increase |
-| 14 | **Growth** (Mass +2/+2), Carapace feat, skill feat |
+| 14 | **Growth** (Mass +2/+2), Assimilator feat, skill feat |
 | 15 | Attribute boosts, **Alien Physiology**, general feat, skill increase |
-| 16 | **Fourth Bond** (Mass +2/+1), Carapace feat, skill feat |
-| 17 | **Fourth Skin** (Depth cap 4, Mass +2/+1), **Assimilation Mastery** (Carapace DC Master), **Greater Weapon Specialization**, ancestry feat, skill increase |
-| 18 | Carapace feat, skill feat |
+| 16 | **Fourth Bond** (Mass +2/+1), Assimilator feat, skill feat |
+| 17 | **Fourth Skin** (Depth cap 4, Mass +2/+1), **Assimilation Mastery** (Assimilator DC Master), **Greater Weapon Specialization**, ancestry feat, skill increase |
+| 18 | Assimilator feat, skill feat |
 | 19 | **Apotheosis**, general feat, skill increase |
-| 20 | Attribute boosts, **Fifth Bond** (Mass +2/+2), Carapace feat, skill feat |
+| 20 | Attribute boosts, **Fifth Bond** (Mass +2/+2), Assimilator feat, skill feat |
 
 **Initial proficiencies:** Perception Trained · Fortitude, Reflex and Will Expert · Athletics + 3 + Int
-others Trained · **Unarmed Trained, no weapons** · **Unarmoured Expert, no armour** · Carapace DC
+others Trained · **Unarmed Trained, no weapons** · **Unarmoured Expert, no armour** · Assimilator DC
 Trained. **HP** 10 + Con per level.
 
 ### 3.1 Mass and Depth by level
 
-The two tables a Carapace player actually keeps open.
+The two tables an Assimilator player actually keeps open.
 
 | Level | 1 | 3 | 5 | 8 | 11 | 14 | 17 | 20 |
 | :-- | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
@@ -268,7 +272,7 @@ switches off** until the Carapace is repaired. Repair is the Repair activity aga
 or one hour of Feeding it any Substrate you don't bind.
 
 This is the only genuine failure state in any of the four classes, and it exists because Hardness is a
-very strong defence in pf2e and something has to be able to take it away. A Carapace who blocks
+very strong defence in pf2e and something has to be able to take it away. An Assimilator who blocks
 everything will break, and a broken Carapace at 17th loses its Depth 4 riders — which is to say, most
 of what it is.
 
@@ -298,7 +302,7 @@ Your **Instinct** is the colour you have invested the most total Mass in, counti
 grants that colour's **Instinct clause** (§5), which applies to **every Mutation you have**, including
 Mutations of other colours. Ties are broken by you, freely, at daily preparations.
 
-Instinct is recalculated at daily preparations and costs nothing to change — a Carapace who sheds
+Instinct is recalculated at daily preparations and costs nothing to change — an Assimilator who sheds
 material can be a different creature in the morning. That is intentional. The cost of changing
 Instinct is the **material you destroyed to do it**, and that is a real enough price.
 
@@ -390,7 +394,7 @@ Same gem. Three creatures.
 
 ## 6 — The Substrates
 
-**The thirty-six Substrates are the companion volume**, `Docs/homebrewing/carapace-material-lexicon-v3.md`
+**The thirty-six Substrates are the companion volume**, `Docs/homebrewing/assimilator-material-lexicon-v3.md`
 §5–13. Eighteen gems, eighteen metals, two of each per colour, each with an Essence, an appearance and
 a four-step Depth ladder. They are not reprinted here; that document is this class's Chapter 5 and the
 two are maintained together.
@@ -402,7 +406,7 @@ What this guide adds to them:
    because the cap is, so the lexicon's per-entry level notes are redundant and should be deleted.
 3. **Electrum at Depth 4** (two full Instinct clauses) is the strongest single entry in the lexicon
    and lands at 17th like everything else at Depth 4. I have left it as a Substrate rather than
-   promoting it to a feat, because 4 of 11 Gem Mass is a real price and a Carapace who pays it has
+   promoting it to a feat, because 4 of 11 Gem Mass is a real price and an Assimilator who pays it has
    given up two Depth-2 gems to do so. It stays on the watch list.
 4. **Emerald's fast healing 10 at Depth 4** is troll-tier and also costs 4 Mass at 17th. Same verdict,
    same watch list.
@@ -429,7 +433,7 @@ happens to you because of what you ate, and it should not compete with feats for
 
 ---
 
-## 8 — Carapace feats
+## 8 — Assimilator feats
 
 Forty-five feats across the eleven class-feat levels — five at 1st, four at each level after. Per your instruction these are **not**
 individually BCS-costed — a class feat is priced by its level like any other PF2e class feat, and the
@@ -531,7 +535,7 @@ your level**, and until your next daily preparations one bound Substrate counts 
 **Living Fortress** · If you did not move on your last turn, your Carapace's **Hardness doubles** until
 you do.
 
-**Assimilate** · Once per day, ◆◆◆ *(10 minutes, over the remains of a creature of your level or
+**Harvest** · Once per day, ◆◆◆ *(10 minutes, over the remains of a creature of your level or
 lower)*: gain **one of its resistances, senses, or movement modes** until your next daily preparations.
 Not its spells and not its Strikes.
 
@@ -571,8 +575,8 @@ its real Depth.
 **Fifth Depth** · One Substrate may reach **Depth 5**, costing 5 Mass. Its Depth 4 rider applies
 **twice** where that is meaningful, and all of its numeric values increase by **half again**.
 
-**Total Assimilation** · *Prerequisite: Assimilate.* One ability taken with **Assimilate** becomes
-**permanent**. You may replace it by using Assimilate on something better.
+**Total Harvest** · *Prerequisite: Harvest.* One ability taken with **Harvest** becomes
+**permanent**. You may replace it by using Harvest on something better.
 
 **Devouring Plate** · When you reduce a creature to 0 Hit Points with a Carapace Strike, you may
 **Feed** on it as a free action: gain a **temporary Substrate of any kind at Depth 2** until your next
@@ -600,7 +604,7 @@ Mass** in either track. The item is destroyed and nobody is getting it back.
 
 ---
 
-## 9 — Three Carapaces at 11th level
+## 9 — Three Assimilators at 11th level
 
 The same class, the same level, and three characters a table would never confuse.
 
@@ -653,12 +657,12 @@ A Carapace's power comes out of your hands more directly than any other class's.
 safe:
 
 1. **Depth 1–2 is shoppable.** Ordinary rubies, copper ingots and pearls are 5 sp to 500 gp items that
-   already exist in the game. Let players buy them. Low-level Carapaces should feel like they can feed
+   already exist in the game. Let players buy them. Low-level Assimilators should feel like they can feed
    the thing on scrap, because they can.
 2. **Depth 3–4 is yours.** A quickened specimen grew somewhere impossible — inside a creature, on a
    leyline, at a planar breach, under something that died badly. These are adventure hooks with a
-   price tag attached, and a Carapace player will chase them the way a Saint chases a Zenith.
-3. **The Vein provides.** Every Mass increase grants a free Substrate, so a Carapace is never below its
+   price tag attached, and an Assimilator player will chase them the way a Saint chases a Zenith.
+3. **The Vein provides.** Every Mass increase grants a free Substrate, so an Assimilator is never below its
    own chassis because you forgot. What you hand out changes what the character *is*, not how strong
    it is. That distinction is the whole safety margin.
 
@@ -668,16 +672,16 @@ A broken Carapace at 17th loses every Depth 3+ Mutation. That's severe, and it s
 means the plate is a resource the player spends, and the moment it cracks is a story beat. Do not
 target it out of spite; do let a boss with adamantine claws be genuinely frightening.
 
-### 10.3 What a Carapace looks like at your table
+### 10.3 What an Assimilator looks like at your table
 
-It is loud. A Red Carapace lights the room and can't stop. A Green one drips. A Black one is hard to
+It is loud. A Red Assimilator lights the room and can't stop. A Green one drips. A Black one is hard to
 look directly at. **Ask the player to describe the plate every time they feed it something**, because
-the class's whole premise is that the build is visible, and a Carapace nobody can see is a Carapace
+the class's whole premise is that the build is visible, and an Assimilator nobody can see is an Assimilator
 playing a different game.
 
 ### 10.4 Feeding in downtime
 
-Feed is 10 minutes, which means a Carapace rebuilds between encounters if it has material. That's
+Feed is 10 minutes, which means an Assimilator rebuilds between encounters if it has material. That's
 intended: the constraint is **material**, not time. If your campaign has long stretches with no
 shopping, be more generous with Depth 1–2 specimens rather than shortening the activity.
 
@@ -685,7 +689,7 @@ shopping, be more generous with Depth 1–2 specimens rather than shortening the
 
 ## 11 — Where this stands
 
-**Answered since the lexicon.** The Carapace is **unarmed** (§4.1), the symbiont is the armour (§4.2),
+**Answered since the lexicon.** The Assimilator is **unarmed** (§4.1), the symbiont is the armour (§4.2),
 the chassis is costed (§2), Instinct recalculates freely at daily preparations (§4.5), and Bonds are
 their own slots rather than feats (§7).
 
@@ -700,8 +704,8 @@ their own slots rather than feats (§7).
    Mass and the Carapace takes the damage it blocks — but this is the number most likely to need a
    cap, and a cap of **half your level + 10** would be the obvious one.
 5. **Living Plate accepting armour runes.** It keeps the class inside pf2e's fundamental-rune economy,
-   which is right, but it does mean a Carapace buys both handwraps and armour runes on the normal
+   which is right, but it does mean an Assimilator buys both handwraps and armour runes on the normal
    schedule. Check that the item budget actually stretches.
 
 **What comes next** is the automation programme:
-`Docs/homebrewing/carapace-automation-programme.md`.
+`Docs/homebrewing/assimilator-automation-programme.md`.

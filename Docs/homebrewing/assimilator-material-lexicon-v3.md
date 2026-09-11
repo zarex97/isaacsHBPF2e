@@ -1,4 +1,4 @@
-# The Carapace — Material Lexicon, **Version 3**
+# The Assimilator — Material Lexicon, **Version 3**
 
 ### *The symbiont class · Substrate · Essence · Mutation*
 
@@ -111,7 +111,7 @@ Instead of counting slots, each track has a pool of **Mass**. A Substrate at **D
 | **Metal Mass** | 1 | 1 | 2 | 4 | 5 | 7 | 8 | 10 |
 | **Depth cap** | 1 | 1 | 2 | 2 | 3 | 3 | 4 | 4 |
 
-So a 20th-level Carapace has 13 Gem Mass: three gems at Depth 4 and one at Depth 1, or thirteen gems
+So a 20th-level Assimilator has 13 Gem Mass: three gems at Depth 4 and one at Depth 1, or thirteen gems
 at Depth 1, or anything between. **Wide or deep is the build question**, and it's asked twice — once
 for each track.
 
@@ -140,7 +140,7 @@ The general ladder. Individual Substrates in §5 use it or state their own.
 
 Honest against the rune curve and slightly behind it: *flaming* is +1d6 at item level 8, *greater
 flaming* is +1d6 plus 2d10 persistent at 15. Depth 3 lands at 11th and Depth 4's rider at 17th. The
-Carapace is unarmed and will never own a rune, so paying two or three levels of lateness for a
+Assimilator is unarmed and will never own a rune, so paying two or three levels of lateness for a
 rune-equivalent is roughly the right trade.
 
 ### 3.5 Bonds
@@ -336,7 +336,7 @@ does, and a four-step Depth ladder. Depth 1 is always available; the rest unlock
 
 ### ⚙️ Cobalt — Essence: **Energy / Conductivity**
 *A lash of blue-white energy that is not attached to anything and comes back anyway.*
-**Mutation — Arcane Channel.** *Blue's ranged option, and the only Substrate that makes the Carapace a ranged class.*
+**Mutation — Arcane Channel.** *Blue's ranged option, and the only Substrate that makes the Assimilator a ranged class.*
 
 | D | |
 | :-: | :-- |
@@ -717,7 +717,7 @@ already precious materials. A player *will* ask whether the 100 gp ruby they jus
 That gives the class cheap, fun, shoppable progression at low levels, keeps the high end firmly in the
 GM's gift, and means the treasure table and the class table never fight. **The class also hands you one
 free Substrate every time your Mass increases**, so a forgetful GM or a low-magic campaign can never
-leave a Carapace below its own chassis. Found material is *variety*; the free grants are the *floor*.
+leave an Assimilator below its own chassis. Found material is *variety*; the free grants are the *floor*.
 
 Nothing in this document changes what an ordinary ruby, or silver, or cold iron **does** for anybody
 else. Feeding one to a symbiont is a new use, not a new rule for the item.
@@ -772,10 +772,10 @@ than it sounds.
 
 ## 17 — Open questions
 
-1. **Is the Carapace unarmed?** Assumed yes throughout — the symbiont *is* the weapon. If it holds a
+1. **Is the Assimilator unarmed?** Assumed yes throughout — the symbiont *is* the weapon. If it holds a
    weapon instead, roughly a third of the Depth ladders need re-pointing.
 2. **Can Instinct change mid-adventure?** It's currently recalculated at daily preparations, which
-   means a Carapace who sheds material can flip Instinct overnight. Cheap and flexible, or should
+   means an Assimilator who sheds material can flip Instinct overnight. Cheap and flexible, or should
    flipping cost something?
 3. **Electrum at Depth 4 gives two full Instinct clauses.** That is the strongest thing in the
    document and I put it at 17th on purpose — but it may want to be a capstone feat rather than a

@@ -1,4 +1,4 @@
-# The Carapace — Automation Programme
+# The Assimilator — Automation Programme
 
 ### *How the class gets built in this module, in what order, and which parts will fight back*
 
@@ -7,8 +7,8 @@
 record of what we intend to do before we do it, so that the five genuinely hard problems are named
 while they are still cheap.*
 
-**Companion documents:** `Docs/carapace-guide-v1.md` (the class) and
-`Docs/homebrewing/carapace-material-lexicon-v3.md` (the thirty-six Substrates and thirty Bonds).
+**Companion documents:** `Docs/assimilator-guide-v1.md` (the class) and
+`Docs/homebrewing/assimilator-material-lexicon-v3.md` (the thirty-six Substrates and thirty Bonds).
 
 ---
 
@@ -17,7 +17,7 @@ while they are still cheap.*
 The Saint is a class of **fixed content**: twelve Cloths, forty-eight Techniques, and a tracker that
 picks one of thirteen skies. Every Technique is a document that exists before the game starts.
 
-The Carapace is not that. It is a class of **derived state**:
+The Assimilator is not that. It is a class of **derived state**:
 
 - Thirty-six Substrates × four Depths = **144 distinct rule-sets**, of which a character holds six to
   nine at a time.
@@ -39,18 +39,18 @@ Instinct clause is a bespoke script.
 
 ## 2 — What already exists, and what it gives us
 
-This module is not a blank page. The Saint's machinery covers more of the Carapace than it looks.
+This module is not a blank page. The Saint's machinery covers more of the Assimilator than it looks.
 
 | We need | Already in the repo | What it gives us |
 | :-- | :-- | :-- |
-| "Treat resistance as N lower" — **Ruby D3, Sapphire D3, Manganese D2–4, Blue's Instinct, Gray's Edge, Keentear, Silver, Black's Unmaking** | `scripts/riders/bypass.mjs` → `shadowTarget(actor, { reduction, hardness })` | The single biggest reuse in the programme. Its own docstring records *why* `DamageAlteration` and `roll.options.bypass` cannot do partial reduction — `applyIWR` drops an ignored resistance whole rather than reading `IgnoredResistance.max`. The Carapace needs partial reduction in **eight** places and the answer is already written and already debugged. |
+| "Treat resistance as N lower" — **Ruby D3, Sapphire D3, Manganese D2–4, Blue's Instinct, Gray's Edge, Keentear, Silver, Black's Unmaking** | `scripts/riders/bypass.mjs` → `shadowTarget(actor, { reduction, hardness })` | The single biggest reuse in the programme. Its own docstring records *why* `DamageAlteration` and `roll.options.bypass` cannot do partial reduction — `applyIWR` drops an ignored resistance whole rather than reading `IgnoredResistance.max`. The Assimilator needs partial reduction in **eight** places and the answer is already written and already debugged. |
 | Ignoring Hardness — **Iron D4, Voidsteel, Siege Frame, Black's Unmaking** | same file, `hardness: "ignore"` | `actor.hardness` is a prototype getter, so an own property shadows it and `delete` restores it. Already proven. |
 | A safe place to wrap system methods | `scripts/lib/wrap.mjs` | The registry that turns "two features wrapped the same method" into a named error instead of a dead `setup` hook. **Read §3.1 before wrapping anything.** |
 | Predicate options about a target's live state | `scripts/lib/roll-options.mjs` | `targetingOptions()` and the `rider:` family. Blue's **Study** and every "against a creature that has already lost Hit Points" clause (Red, Garnet) need exactly this. |
 | Emanations, lines, cones, walls, lingering areas | `scripts/targeting/` | **Magnesium's** flare, **Lead's** suppression emanation, **Amber's** 30-foot line, **Onyx's** darkness, **Wall of Me**. Scene Regions, aiming, and the "everything inside becomes your target" flow are done. |
 | Applying conditions on a failed save without clicking sheets | `scripts/riders/apply.mjs` | **Sapphire's** slowed, **Amethyst's** confused, **Green's** sickened, **Topaz's** frightened, **Magnesium's** dazzled/blinded. |
 | A GM window with settings, a macro fallback and an API | `scripts/sky/tracker-app.mjs`, and the `module.api` block at the end of `scripts/isaacs-hb.mjs` | The pattern for **the Gullet** (§8). Including the lesson in that file's comment — the API is registered outside the `start()` isolation so a broken window never makes the class unplayable. |
-| Per-feature crash isolation | `start()` in `scripts/isaacs-hb.mjs` | Every Carapace feature registers through it. One feature failing costs one feature. |
+| Per-feature crash isolation | `start()` in `scripts/isaacs-hb.mjs` | Every Assimilator feature registers through it. One feature failing costs one feature. |
 | Content → pack build with validation | `build/build-packs.mjs`, `build/validate.mjs`, `build/lib/pack.mjs` | Add pack definitions to `module.json`, add folders under `content/`, and the pipeline already compiles, validates and stages. |
 
 **Estimated reuse: roughly 60% of the hard engineering is already written.** What is genuinely new is
@@ -73,7 +73,7 @@ on the same path is refused by design — that refusal *is* the bug `wrap.mjs` w
 
 > **Decision.** Extract the wrap into **`scripts/lib/damage-bus.mjs`**, which owns the single claim and
 > exposes `DamageBus.register(stage, priority, fn)`. `riders/sources.mjs` becomes its first consumer
-> and keeps its current behaviour; the Carapace registers its own stages behind it. Do this **before**
+> and keeps its current behaviour; the Assimilator registers its own stages behind it. Do this **before**
 > Phase 1, while `sources.mjs` is the only caller and the refactor is twenty lines.
 
 Doing it later means doing it with two callers and a release in between.
@@ -117,26 +117,26 @@ A single **`RollOption`** rule element on the **Assimilation** class feature emi
 picture, rebuilt on every change:
 
 ```
-carapace:substrate:ruby            # bound at all
-carapace:substrate:ruby:1          # one option per Depth step reached,
-carapace:substrate:ruby:2          #   so predicates never need `gte`
-carapace:substrate:ruby:3
-carapace:colour:red:6              # total Mass invested in red, per step
-carapace:instinct:red              # the derived Instinct
-carapace:depth-cap:3
-carapace:mass:gem:7
-carapace:mass:metal:5
-carapace:bond:molten-carapace
-carapace:intact                    # absent while the Carapace is broken
-carapace:highest-depth:3
+assimilator:substrate:ruby            # bound at all
+assimilator:substrate:ruby:1          # one option per Depth step reached,
+assimilator:substrate:ruby:2          #   so predicates never need `gte`
+assimilator:substrate:ruby:3
+assimilator:colour:red:6              # total Mass invested in red, per step
+assimilator:instinct:red              # the derived Instinct
+assimilator:depth-cap:3
+assimilator:mass:gem:7
+assimilator:mass:metal:5
+assimilator:bond:molten-carapace
+assimilator:intact                    # absent while the Carapace is broken
+assimilator:highest-depth:3
 ```
 
 **Why one option per step rather than one option plus a `gte` predicate.** Predicates written as
-`carapace:substrate:ruby:3` are readable in pf2e's own predicate editor by any GM who has ever written
+`assimilator:substrate:ruby:3` are readable in pf2e's own predicate editor by any GM who has ever written
 one, and they survive a player poking at the sheet. `gte` against a flag works too, and is harder to
 debug at two in the morning.
 
-**`carapace:intact` is deliberately a positive option that disappears**, not a negative one that
+**`assimilator:intact` is deliberately a positive option that disappears**, not a negative one that
 appears. Every Depth 3 and Depth 4 rule predicates on it, so the broken state is expressed as *"these
 rules require the plate to be whole"* rather than as a scattering of `not` clauses that a later edit
 can forget.
@@ -144,7 +144,7 @@ can forget.
 ### 4.2 Actor flags are the source of truth
 
 ```js
-flags["isaacs-hb-pf2e"].carapace = {
+flags["isaacs-hb-pf2e"].assimilator = {
     gems:    { ruby: 3, garnet: 3, carnelian: 1 },
     metals:  { iron: 3, copper: 2 },
     bonds:   ["molten-carapace", "conduction"],
@@ -160,7 +160,7 @@ flags["isaacs-hb-pf2e"].carapace = {
 
 The Effect items on the actor are a **projection** of this, not the record. One function,
 `rebuild(actor)`, reads the flag and reconciles items, badges and roll options. Every other piece of
-the Carapace calls it and nothing else writes derived state. This is the single most important rule in
+the Assimilator calls it and nothing else writes derived state. This is the single most important rule in
 the programme: the Saint's worst bugs — *Two Cosmo entries on every Saint*, in
 `full-automation-programme.md` §4.5 — were all two writers disagreeing about derived state.
 
@@ -170,8 +170,8 @@ Red's clause is *"+1 damage per Depth **of its Substrate**"*. That is a provenan
 untagged modifiers cannot answer it.
 
 > **Rule, enforced by `build/validate.mjs`:** every `DamageDice` and `FlatModifier` rule element in a
-> Substrate item **must** carry `slug: "carapace-<substrate>"` and
-> `flags["isaacs-hb-pf2e"].carapace = { substrate, depth }`.
+> Substrate item **must** carry `slug: "assimilator-<substrate>"` and
+> `flags["isaacs-hb-pf2e"].assimilator = { substrate, depth }`.
 
 The Instinct dispatch in §5 then reads the modifier list rather than guessing. A validator check is
 cheap now and saves a class of silent no-op that, per the Saint's §4, is the kind this module keeps
@@ -196,7 +196,7 @@ projection for one Substrate with a `+1`, which `rebuild()` already does if the 
 the flag (§4.2) — so Gold is data, not code. *"Apply that Substrate's Depth 4 rider on a critical
 hit"* is the harder half: it requires the Depth 4 rules to be evaluable out of order. Implement it by
 giving every Depth 4 rider a **second copy** predicated on
-`carapace:gold-crit` — a roll option set for the duration of one damage roll. Ugly, explicit, and it
+`assimilator:gold-crit` — a roll option set for the duration of one damage roll. Ugly, explicit, and it
 works without a rules engine of our own.
 
 ---
@@ -207,35 +207,35 @@ Mirroring the Saint's existing `content/` convention exactly.
 
 ```
 content/
-  carapace-class/                     carapace.json                       1 document
-  carapace-class-features/
-    core/                             the-carapace, living-plate, assimilation,
-                                      carapace-block, symbiotic-reflex,
-                                      alien-physiology, apotheosis, the four Skins,
-                                      the proficiency bumps                ~18
-    instincts/                        red, gold, orange, blue, purple,
-                                      green, black, white, gray             9
-    actions/                          feed, shed, study, carapace-block      4
-  carapace-substrates/
-    gems/                             ruby … moonstone                     18
-    metals/                           iron … silver                        18
-  carapace-bonds/                     molten-carapace … impossible-body     30
-  carapace-feats/
-    level-1/ … level-20/                                                   45
-  carapace-effects/
-    mutations/                        one per Substrate, the projection     36
-    riders/                           sickened, slowed, dazzled, confused…  ~12
-    states/                           broken, studied, instinctive-surge…    ~8
-  carapace-macros/                    open-the-gullet                        1
-  carapace-journals/                  the handbook                           1
+  assimilator-class/            assimilator.json                          1
+  assimilator-class-features/
+    core/                       the-carapace, living-plate, assimilation,
+                                carapace-block, symbiotic-reflex,
+                                alien-physiology, apotheosis, the four
+                                Skins, the proficiency bumps            ~18
+    instincts/                  red, gold, orange, blue, purple,
+                                green, black, white, gray                 9
+    actions/                    feed, shed, study, carapace-block         4
+  assimilator-substrates/
+    gems/                       ruby … moonstone                         18
+    metals/                     iron … silver                            18
+  assimilator-bonds/            molten-carapace … impossible-body        30
+  assimilator-feats/
+    level-1/ … level-20/                                                 45
+  assimilator-effects/
+    mutations/                  one per Substrate, the projection        36
+    riders/                     sickened, slowed, dazzled, confused…    ~12
+    states/                     broken, studied, instinctive-surge…      ~8
+  assimilator-macros/           open-the-gullet                           1
+  assimilator-journals/         the handbook                              1
 ```
 
 Total: **≈ 200 documents.** The Saint already ships **227** across seven packs, so this is a known
 quantity for the existing build pipeline rather than a new order of magnitude.
 
 **`module.json`** gains **eight** pack definitions — the Saint's seven with `techniques` replaced by
-`substrates` and `bonds`: `carapace-class`, `carapace-class-features`, `carapace-substrates`,
-`carapace-bonds`, `carapace-feats`, `carapace-effects`, `carapace-macros`, `carapace-journals`. Follow
+`substrates` and `bonds`: `assimilator-class`, `assimilator-class-features`, `assimilator-substrates`,
+`assimilator-bonds`, `assimilator-feats`, `assimilator-effects`, `assimilator-macros`, `assimilator-journals`. Follow
 the existing block exactly, including `ownership: { PLAYER: "OBSERVER", ASSISTANT: "OWNER" }`.
 
 **The module's `id`, `title` and `description` all say "The Saint" today.** Adding a second class means
@@ -272,21 +272,21 @@ One item, four predicated tiers, provenance tags per §4.3.
 ```json
 [
   { "key": "ItemAlteration", "mode": "add", "property": "traits", "value": "fire",
-    "itemType": "weapon", "predicate": ["item:category:unarmed", "carapace:substrate:ruby:1"] },
+    "itemType": "weapon", "predicate": ["item:category:unarmed", "assimilator:substrate:ruby:1"] },
 
-  { "key": "DamageDice", "selector": "unarmed-damage", "slug": "carapace-ruby",
+  { "key": "DamageDice", "selector": "unarmed-damage", "slug": "assimilator-ruby",
     "damageType": "fire", "diceNumber": 1, "dieSize": "d4",
-    "predicate": ["carapace:substrate:ruby:2", { "not": "carapace:substrate:ruby:3" }],
-    "flags": { "isaacs-hb-pf2e": { "carapace": { "substrate": "ruby", "depth": 2 } } } },
+    "predicate": ["assimilator:substrate:ruby:2", { "not": "assimilator:substrate:ruby:3" }],
+    "flags": { "isaacs-hb-pf2e": { "assimilator": { "substrate": "ruby", "depth": 2 } } } },
 
-  { "key": "DamageDice", "selector": "unarmed-damage", "slug": "carapace-ruby",
+  { "key": "DamageDice", "selector": "unarmed-damage", "slug": "assimilator-ruby",
     "damageType": "fire", "diceNumber": 1, "dieSize": "d6",
-    "predicate": ["carapace:substrate:ruby:3", "carapace:intact"],
-    "flags": { "isaacs-hb-pf2e": { "carapace": { "substrate": "ruby", "depth": 3 } } } }
+    "predicate": ["assimilator:substrate:ruby:3", "assimilator:intact"],
+    "flags": { "isaacs-hb-pf2e": { "assimilator": { "substrate": "ruby", "depth": 3 } } } }
 ]
 ```
 
-Note `carapace:intact` appearing from Depth 3 (§4.1) and the `not` clause that stops Depth 2 and Depth
+Note `assimilator:intact` appearing from Depth 3 (§4.1) and the `not` clause that stops Depth 2 and Depth
 3 stacking.
 
 **Depth 3's resistance reduction is not a rule element.** It routes through `shadowTarget()` and is
@@ -306,12 +306,12 @@ code.
 ### 7.3 A Bond
 
 ```json
-{ "key": "RollOption", "domain": "all", "option": "carapace:bond:molten-carapace",
-  "predicate": ["carapace:substrate:ruby:2", "carapace:substrate:iron:2",
-                "carapace:bond-slotted:molten-carapace"] }
+{ "key": "RollOption", "domain": "all", "option": "assimilator:bond:molten-carapace",
+  "predicate": ["assimilator:substrate:ruby:2", "assimilator:substrate:iron:2",
+                "assimilator:bond-slotted:molten-carapace"] }
 ```
 
-Bond content then predicates on `carapace:bond:molten-carapace`, and suppression when a Substrate
+Bond content then predicates on `assimilator:bond:molten-carapace`, and suppression when a Substrate
 drops below Depth 2 is automatic — no cleanup code, which is the failure mode
 `full-automation-programme.md` §4.1 calls "the rider leak".
 
@@ -338,7 +338,7 @@ requirements, the Carapace's Hardness / HP / BT with a broken indicator, and the
 2. **It only ever touches items it created itself**, keyed by a module flag. Anything a GM dragged
    onto the sheet by hand is untouched. The Sky Tracker's guarantee, and it is why people trust it.
 
-A **macro** in `content/carapace-macros/` opens it, mirroring `set-todays-sky.json`.
+A **macro** in `content/assimilator-macros/` opens it, mirroring `set-todays-sky.json`.
 
 ---
 
@@ -348,11 +348,11 @@ The pipeline needs no structural change — `build/build-packs.mjs` walks whatev
 What it needs is **new checks in `build/validate.mjs`**, because the Carapace's failure modes are
 silent ones:
 
-1. **Provenance tags** — every `DamageDice`/`FlatModifier` in `carapace-substrates/` carries the
+1. **Provenance tags** — every `DamageDice`/`FlatModifier` in `assimilator-substrates/` carries the
    `slug` and `flags` from §4.3. Without this, Red and Orange silently under-count.
 2. **Depth coverage** — every Substrate item declares rules for all four Depths, and every predicate
    references a Depth that exists.
-3. **`carapace:intact`** — every Depth 3 and Depth 4 rule carries it. A missing one means a broken
+3. **`assimilator:intact`** — every Depth 3 and Depth 4 rule carries it. A missing one means a broken
    Carapace keeps a rider it shouldn't.
 4. **Bond closure** — every Bond names two Substrates that exist, and every Substrate appears in at
    least one Bond. *(Both already hold for the lexicon as written; the check keeps them holding.)*
@@ -371,18 +371,18 @@ Each phase ends in something playable. Nothing is merged on the promise of a lat
 ### Phase 0 — Foundations *(no content)*
 Refactor `applyDamage` into `scripts/lib/damage-bus.mjs` (§3.1). Add the pack definitions and content
 folders. Retitle the module, keeping the `id`. Add the five validator checks from §9 as failing stubs.
-**Done when:** the existing Saint test suite still passes and the empty Carapace packs build.
+**Done when:** the existing Saint test suite still passes and the empty Assimilator packs build.
 
 ### Phase 1 — The chassis
 The class item, the Carapace Strike, Living Plate, the shield-item modelling and Carapace Block, the
 proficiency bumps, and the advancement table's non-Substrate entries.
-**Done when:** a 1st-level Carapace can be created from the compendium, Strikes for 1d8 with correct
+**Done when:** a 1st-level Assimilator can be created from the compendium, Strikes for 1d8 with correct
 attack and damage modifiers, has the right AC and saves, and can Block.
 
 ### Phase 2 — One colour, end to end
 `rebuild()`, the flag model (§4.2), the roll-option emitter (§4.1), the Gullet, and **Red only** — four
 Substrates, the Red Instinct clause, two Bonds.
-**Done when:** a Carapace can Feed a ruby, see Furnace Veins on the sheet, deal fire, hit Depth 2, gain
+**Done when:** an Assimilator can Feed a ruby, see Furnace Veins on the sheet, deal fire, hit Depth 2, gain
 Red's bonus damage with the correct provenance, form *Molten Carapace*, and lose the Depth 3 rider when
 the plate breaks. **This is the phase that proves the architecture.** If §4 is wrong, it is wrong here,
 with four Substrates written instead of thirty-six.
@@ -447,7 +447,7 @@ Five predictions, so they are on the record before they cost a release.
    automation will make it real and visible, and the number will be wrong before the rules are.
 4. **Gold's Depth 4 crit rider.** §5 calls the solution ugly on purpose. It is the piece most likely to
    need rewriting once the other eight clauses exist and the shape of the dispatch is clearer.
-5. **The Substrate name collision.** `carapace-substrates` will contain items called *Ruby*, *Emerald*
+5. **The Substrate name collision.** `assimilator-substrates` will contain items called *Ruby*, *Emerald*
    and *Diamond*, and `packs/pf2e/equipment` already contains treasure by those names. Compendium
    search will return both. Prefix every Substrate's item `name` — *"Substrate: Ruby"* — or accept that
    every GM will drag the wrong one onto a sheet exactly once.
