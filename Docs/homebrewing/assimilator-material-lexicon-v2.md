@@ -1,4 +1,4 @@
-# The Carapace — Material Lexicon, **Version 2**
+# The Assimilator — Material Lexicon, **Version 2**
 
 ### *The symbiont class · the Nine Veins · seventy-two materials that exist only for this class*
 
@@ -7,7 +7,7 @@ feeds on. Nine colours, four tiers, **two separate slot tracks** — thirty-six 
 gems, none of which exist anywhere else in Pathfinder.*
 
 **What changed from v1.** v1 sorted PF2e's *existing* precious materials and gemstones into nine
-colours. That's out. Everything in this document is **new and exclusive to the Carapace** — adamantine,
+colours. That's out. Everything in this document is **new and exclusive to the Assimilator** — adamantine,
 djezet, orichalcum, rubies and sapphires are untouched and keep doing exactly what the core books say
 they do. v1 also had one undifferentiated pool of slots; v2 splits the build into a **metal track** and
 a **gem track** that do genuinely different jobs.
@@ -17,9 +17,9 @@ item-level and Price bands sampled from `packs/pf2e/equipment` (275 level-1 item
 etc.), the damage-type list from `src/scripts/config/damage.ts`, and the property-rune curve for every
 damage rider. Nothing here invents a new number shape — only new things to hang the numbers on.
 
-> **Working title.** The class is **the Carapace**, and so is the symbiont — the Saint's *"the Cloth"*
-> convention. Alternates on the table: **the Reliquary**, **the Hoard**, **the Lode**, **the Gild**.
-> Renaming is free now and expensive later.
+> **Names.** The class is **the Assimilator**. The symbiont it wears keeps the name **the Carapace** —
+> the Saint's *"the Cloth"* convention, one word for the character and another for the thing. This
+> document was written before the class had its name and has been renamed in place.
 
 ---
 
@@ -37,7 +37,7 @@ and no legitimate use.
 Your Carapace disagrees. These are the **Nine Veins**, and they are the only thing it will eat.
 
 **Why this framing matters mechanically.** The Veins sit outside the economy on purpose. They aren't
-shop inventory, they can't be Crafted by anyone who isn't already a Carapace, and their nominal Prices
+shop inventory, they can't be Crafted by anyone who isn't already an Assimilator, and their nominal Prices
 in §4 are for GMs who want a black market — not a default. A Carapace's power should come from what
 the *campaign* put in front of them, which makes the class's progression a GM-facing adventure lever
 instead of a shopping trip. §4.3 makes sure that never becomes a trap.
@@ -104,8 +104,8 @@ Three derived values, recalculated at daily preparations.
 
 Ties in either track are broken by you, freely, each morning.
 
-**This is the whole build-tension of the class.** A split Carapace — Black Frame, Orange Focus — is
-tough in one direction and dangerous in another, covering more of the board. A **resonant** Carapace
+**This is the whole build-tension of the class.** A split Assimilator — Black Frame, Orange Focus — is
+tough in one direction and dangerous in another, covering more of the board. A **resonant** Assimilator
 is narrower and gets a signature ability nobody else gets. Neither is correct; both should be viable,
 and the nine Resonances in §5 are priced to be worth roughly what breadth is worth.
 
@@ -117,7 +117,7 @@ Your Plating and Edge numbers come from the **highest-tier** bound material of t
 track. Every *other* bound material still gives its **Grain** (metals) or **Glint** (gems) in full,
 regardless of tier.
 
-So a 17th-level Carapace with *Mawheart* (IV) in the Frame still has a live reason to keep *Sootslag*
+So a 17th-level Assimilator with *Mawheart* (IV) in the Frame still has a live reason to keep *Sootslag*
 (I) in a second slot — the slag's Grain never stopped working, and it was never paying for the
 resistance number anyway. Same principle as the Saint's Techniques never becoming dead weight.
 
@@ -160,10 +160,10 @@ a contaminant nobody wants — cheap for its level *if* you can find a buyer, an
 
 Read against the property-rune curve this is honest and slightly behind it: *flaming* is +1d6 at item
 level 8, *greater flaming* is +1d6 plus 2d10 persistent at level 15. Tier III lands at 10th and Tier
-IV's rider at 16th. The Carapace is unarmed and will never have rune slots, so paying two levels of
+IV's rider at 16th. The Assimilator is unarmed and will never have rune slots, so paying two levels of
 lateness for a rune-equivalent is roughly the right trade.
 
-**The number most likely to move** is off-Frame resistance. At 16th a 4-metal Carapace could be sitting
+**The number most likely to move** is off-Frame resistance. At 16th a 4-metal Assimilator could be sitting
 on 12 / 6 / 6 / 6 across four damage types, always on. If that reads too broad in play, the first lever
 is capping off-Frame resistance at a flat 3 regardless of tier. Flagged for the ledger pass.
 
@@ -487,12 +487,12 @@ Instead of the §4.2 Facet table, Gray uses this one:
 
 Five, and they're yours rather than mine.
 
-**1. Is the Carapace unarmed?** I've assumed yes throughout — the armour *is* the weapon, like the
+**1. Is the Assimilator unarmed?** I've assumed yes throughout — the armour *is* the weapon, like the
 Saint. If it's meant to hold a weapon instead, the Facet track needs re-pointing, because half its
 entries currently modify "Carapace Strikes."
 
 **2. Do the Veins stack across colours in the Frame?** Right now **yes** — every bound metal gives its
-Grain, so a four-metal Carapace at 17th has four Grains running at once. That's the intended feel
+Grain, so a four-metal Assimilator at 17th has four Grains running at once. That's the intended feel
 (you are visibly a pile of things you ate), but it's also four always-on riders and it's the most
 likely place for the ledger to say no. The alternative is that only your Frame colour's metals give
 Grains, which is cleaner to cost and much less fun.
@@ -527,5 +527,6 @@ This document is the food. The class still needs:
    machinery: each bound material is an Effect item carrying its Grain or Glint as rule elements, and
    Frame / Focus / Resonance are a recalculation on daily preparations.
 
-Answer §15.1 (unarmed or not) and §15.2 (do Grains stack), tell me whether the class keeps the name
-**Carapace**, and I'll take it to the chassis and the ledger next.
+§15.1 is answered — the Assimilator is **unarmed** — and the chassis and ledger were built on v3
+instead, in `Docs/assimilator-guide-v1.md`. §15.2 (do Grains stack) is still open, and only matters if
+this version is ever revived.
