@@ -359,4 +359,29 @@ check(
     { expiry: null, sustained: false, unit: "minutes", value: 10 },
 );
 
+/* ---------------------------------------------------------------------------------------------- */
+/*  The live test rig                                                                               */
+/* ---------------------------------------------------------------------------------------------- */
+
+const rig = contentDoc("soulbound-macros/test-rig.json");
+check("the rig is a script macro", [rig.type, typeof rig.command], ["script", "string"]);
+check(
+    "it carries the three guards that cost hours in earlier live sessions",
+    [
+        rig.command.includes("PickAThingPrompt"),
+        rig.command.includes("system.details.alliance"),
+        rig.command.includes("deepClone"),
+    ],
+    [true, true, true],
+);
+check("it never default-picks a Spirit — an unknown prompt is left open", rig.command.includes("return undefined"), true);
+// A macro with a syntax error fails silently at the table: no dialog, no console entry the GM would see.
+try {
+    new Function(rig.command);
+    check("the rig parses as JavaScript", true, true);
+} catch (error) {
+    check("the rig parses as JavaScript", String(error), true);
+}
+check("it asserts the Reiatsu DC stops at master, not legendary", rig.command.includes("not legendary"), true);
+
 report("Soulbound tests");
