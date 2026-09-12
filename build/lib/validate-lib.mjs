@@ -17,7 +17,12 @@ const RULE_KEYS = new Set([
     "SubstituteRoll", "TempHP", "TokenEffectIcon", "TokenImage", "TokenLight", "TokenMark", "TokenName", "Weakness",
 ]);
 
-const ITEM_TYPES = new Set(["class", "feat", "spell", "effect", "action", "armor", "weapon", "shield", "equipment"]);
+// `lore` is here because a class cannot train one: the class data model carries only `trainedSkills`
+// `.value` and `.additional`, and the `lore` array exists on backgrounds alone. A Lore skill is a
+// document, so "trained in Spirit Lore" has to be one.
+const ITEM_TYPES = new Set([
+    "class", "feat", "spell", "effect", "action", "armor", "weapon", "shield", "equipment", "lore",
+]);
 
 /** The six Arms of the Libra Cloth, as an `equip` rider names them. */
 const LIBRA_ARMS = new Set(["twin-swords", "tridents", "nunchaku", "shields", "sanjiegun", "tonfa"]);
@@ -174,7 +179,9 @@ function validateItem(doc, where, errors, family) {
 
     // Traits
     const traits = system.traits?.value;
-    if (doc.type !== "class" && !Array.isArray(traits)) {
+    // A `lore` document carries no traits at all — pf2e's own do not — and a class carries them in a
+    // different shape, so neither is required to have the array.
+    if (doc.type !== "class" && doc.type !== "lore" && !Array.isArray(traits)) {
         errors.push(`${where}: missing system.traits.value`);
     } else if (Array.isArray(traits)) {
         const allowed = allowedTraits(doc.type);
@@ -1300,7 +1307,7 @@ const ADVANCEMENT = {
  * so `classFeatLevels` carries all eleven and this table says nothing about feats.
  */
 const SOULBOUND_ADVANCEMENT = {
-    1: ["Spirit Weapon", "Reiatsu", "Rising Pressure", "Released Form", "Spirit Sense", "Konsō"],
+    1: ["Spirit Weapon", "Reiatsu", "Rising Pressure", "Released Form", "Spirit Sense", "Konsō", "Lineage"],
     3: ["Flash Step", "Departed Flesh", "Iron Will"],
     5: ["Deepening Reserve", "Alertness", "Weapon Expertise"],
     7: ["Weapon Specialization"],

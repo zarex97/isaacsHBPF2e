@@ -11,7 +11,7 @@
         },
         "category": "classfeature",
         "description": {
-            "value": "<p>You automatically sense the presence and approximate strength of undead, haunts, spirits, and incorporeal creatures within <strong>60 feet</strong>, even through thin barriers, without learning their exact location &mdash; they are <strong>hidden</strong> to you rather than undetected.</p><p>You can see and target incorporeal creatures normally.</p>"
+            "value": "<p>You automatically sense the presence and approximate strength of undead, haunts, spirits, and incorporeal creatures within <strong>60 feet</strong>, even through thin barriers, without learning their exact location &mdash; they are <strong>hidden</strong> to you rather than undetected.</p><p>You can see and target incorporeal creatures normally.</p><p>You are also trained in <strong>Spirit Lore</strong>: souls, the afterlife, haunts, and hollow-things.</p>"
         },
         "level": {
             "value": 1
@@ -30,6 +30,10 @@
                 "key": "Sense",
                 "range": 60,
                 "selector": "spiritsense"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Spirit Lore"
             }
         ],
         "traits": {

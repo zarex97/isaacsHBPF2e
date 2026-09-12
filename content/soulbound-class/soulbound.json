@@ -128,6 +128,12 @@
                 "name": "Konsō",
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Konsō"
             },
+            "linea": {
+                "img": "icons/magic/symbols/runes-triangle-blue.webp",
+                "level": 1,
+                "name": "Lineage",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Lineage"
+            },
             "perfr": {
                 "img": "icons/magic/light/explosion-star-large-purple.webp",
                 "level": 17,
