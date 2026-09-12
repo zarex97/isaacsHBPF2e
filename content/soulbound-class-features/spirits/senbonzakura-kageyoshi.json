@@ -1,0 +1,44 @@
+{
+    "folder": "Spirits",
+    "img": "icons/magic/nature/leaf-petals-pink-red.webp",
+    "name": "Senbonzakura Kageyoshi",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><em>Vibrant Display of a Thousand Cherry Blossoms.</em> Two rows of a thousand blades rise from the ground and scatter.</p><p>You gain a second <strong>20-foot emanation</strong> centred on a point within 60 feet. At the start of each of your turns, each enemy in <strong>either</strong> emanation takes @Damage[5d6[slashing]] damage with a basic Reflex save.</p><p>You can <strong>Sustain</strong> once per round to move the second emanation up to 30 feet, or to switch between these modes:</p><ul><li><strong>Gokei</strong> <em>(Total Scene)</em> &mdash; the blades amass into a sphere around one creature and implode. The second emanation shrinks to a <strong>10-foot burst</strong> centred on one enemy; that enemy takes <strong>double</strong> the damage and cannot benefit from cover or concealment against it.</li><li><strong>Senkei</strong> <em>(Slaughterscape)</em> &mdash; you abandon defence entirely. The blades condense into a thousand swords forming a 20-foot cage around you and one enemy. Neither of you can leave; your Strikes against that enemy <strong>ignore all resistances</strong>, and you may make one extra Strike each round at your current multiple attack penalty. <strong>You lose Senbonzakura's reach and cover-ignoring</strong>, and enemies outside the cage cannot be targeted by you.</li></ul><hr /><p><em>Canon: Senkei \"abandons the defensive attributes to focus entirely on offense.\"</em></p>"
+        },
+        "level": {
+            "value": 13
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Senbonzakura Kageyoshi"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

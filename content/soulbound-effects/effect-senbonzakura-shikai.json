@@ -1,0 +1,58 @@
+{
+    "img": "icons/magic/nature/leaf-petals-pink.webp",
+    "name": "Effect: Senbonzakura — Shikai",
+    "system": {
+        "description": {
+            "value": "<p>A slow cloud of petal-fine blades. Your Strikes have <strong>reach 15 feet</strong> and ignore cover between you and the target.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:senbonzakura:scattered",
+                "value": true
+            },
+            {
+                "key": "ItemAlteration",
+                "itemType": "weapon",
+                "mode": "add",
+                "predicate": [
+                    "item:tag:soulbound-spirit-weapon"
+                ],
+                "property": "traits",
+                "value": "reach-15"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

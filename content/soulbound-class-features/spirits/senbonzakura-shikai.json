@@ -1,0 +1,44 @@
+{
+    "folder": "Spirits",
+    "img": "icons/magic/nature/leaf-petals-pink.webp",
+    "name": "Senbonzakura — Shikai",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your blade disintegrates into a slow cloud of petal-fine blades.</p><p>Your Strikes gain <strong>reach 15 feet</strong> and lose the two-hand and twin traits; your hands are empty. Your Strikes are <strong>not affected by cover</strong> between you and the target &mdash; the blades simply go around it.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Senbonzakura — Shikai"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

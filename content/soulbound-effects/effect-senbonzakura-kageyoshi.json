@@ -1,0 +1,63 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "damageType": "slashing",
+                        "formula": "5d6",
+                        "perStep": "1d6",
+                        "type": "damage"
+                    },
+                    "area": {
+                        "type": "emanation",
+                        "value": 20
+                    },
+                    "areaTargeting": {
+                        "affects": "enemies",
+                        "includesSelf": false
+                    },
+                    "event": "turn-start",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "img": "icons/magic/nature/leaf-petals-pink-red.webp",
+    "name": "Effect: Senbonzakura Kageyoshi",
+    "system": {
+        "description": {
+            "value": "<p>Two emanations of petal-blades. At the start of each of your turns every enemy in either takes <strong>5d6 slashing</strong> damage with a basic Reflex save.</p><p>Sustain once per round to move the second emanation, or to enter <strong>Gokei</strong> or <strong>Senkei</strong>.</p>"
+        },
+        "duration": {
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}
