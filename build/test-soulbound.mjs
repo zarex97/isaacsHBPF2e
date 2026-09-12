@@ -559,4 +559,55 @@ for (const [way, name] of [["bakudo", "sai"], ["bakudo", "hainawa"], ["bakudo", 
     check(`${name}: declares its tier`, (doc.system.traits.otherTags ?? []).includes("sb-tier-kido"), true);
 }
 
+const bala = kidoDoc("hollow", "bala");
+check(
+    "Bala is a cantrip spell attack that adds the key attribute (guide §6.4)",
+    [bala.system.traits.value.includes("cantrip"), bala.system.defense, bala.system.damage["0"].applyMod],
+    [true, null, true],
+);
+// `agile` is a WEAPON trait — pf2e reads it off a weapon when computing a Strike's MAP and would never
+// look for it on a spell, so authoring it here would validate and do nothing.
+check(
+    "Bala's agile clause is a MultipleAttackPenalty rule, not an inert weapon trait",
+    [
+        bala.system.traits.value.includes("agile"),
+        bala.system.rules.some((r) => r.key === "MultipleAttackPenalty" && r.value === 1),
+    ],
+    [false, true],
+);
+
+const cero = kidoDoc("hollow", "cero");
+check(
+    "Cero is a 60-foot line on a basic Reflex save (guide §6.4)",
+    [cero.system.area, cero.system.defense.save.basic, cero.system.damage["0"].formula],
+    [{ type: "line", value: 60 }, true, "2d6"],
+);
+
+const heizen = kidoDoc("quincy", "heizen");
+check(
+    "Heizen is an area cantrip and so adds no attribute modifier (guide §6.5)",
+    [heizen.system.traits.value.includes("cantrip"), heizen.system.damage["0"].applyMod, heizen.system.area],
+    [true, false, { type: "line", value: 15 }],
+);
+
+const gritz = kidoDoc("quincy", "gritz");
+check(
+    "Gritz restrains on a critical failure — one step better than Sai, being the Quincy's only costed kidō",
+    gritz.flags["isaacs-hb-pf2e"].riders.find((r) => r.outcomes.includes("criticalFailure")).apply.slug,
+    "restrained",
+);
+
+// Guide §6: three free cantrips, one per Lineage, and every other kidō is costed.
+const cantrips = ["hado/sho", "hollow/bala", "quincy/heizen"];
+for (const path of cantrips) {
+    const [way, name] = path.split("/");
+    check(`${name} is one of the three free cantrips`, kidoDoc(way, name).system.traits.value.includes("cantrip"), true);
+}
+for (const path of ["hado/byakurai", "hado/shakkaho", "hado/sokatsui", "hado/soren-sokatsui", "hado/kurohitsugi",
+                    "bakudo/sai", "bakudo/hainawa", "bakudo/rikujokoro", "bakudo/danku", "bakudo/kin",
+                    "kaido/kaido", "hollow/cero", "quincy/gritz"]) {
+    const [way, name] = path.split("/");
+    check(`${name} is costed, not free`, kidoDoc(way, name).system.traits.value.includes("cantrip"), false);
+}
+
 report("Soulbound tests");

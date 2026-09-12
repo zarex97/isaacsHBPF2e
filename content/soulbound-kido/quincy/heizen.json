@@ -1,0 +1,85 @@
+{
+    "folder": "Quincy Arts (Gintō)",
+    "img": "icons/magic/light/beam-rays-blue-large.webp",
+    "name": "Heizen",
+    "system": {
+        "area": {
+            "type": "line",
+            "value": 15
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "1d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "force"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><em>A flat rectangular pane of light. Canon is plain about what it does: it slices through what it crosses.</em></p><p>Each creature in a 15-foot line takes @Damage[1d6[force]] damage with a basic Reflex save.</p><hr /><p><strong>Heightened (+2)</strong> The damage increases by 1d6.</p><hr /><p><em>An area cantrip, so it adds no attribute modifier.</em></p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "area": 0,
+            "damage": {
+                "0": "1d6"
+            },
+            "interval": 2,
+            "type": "interval"
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "15 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "1"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-kido",
+                "soulbound-kido-quincy"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "cantrip",
+                "destruction",
+                "focus",
+                "force",
+                "kido",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

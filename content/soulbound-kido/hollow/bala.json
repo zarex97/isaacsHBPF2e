@@ -1,0 +1,84 @@
+{
+    "folder": "Hollow Arts",
+    "img": "icons/magic/fire/projectile-bolt-glowing-red.webp",
+    "name": "Bala",
+    "system": {
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": true,
+                "category": null,
+                "formula": "1d4",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "force"
+            }
+        },
+        "defense": null,
+        "description": {
+            "value": "<p><em>A Hollow's demon arts are not learned, they are anatomy. A Bala is weaker than a Cero and fired at roughly twenty times the rate — which is a cantrip and a focus effect, described in the source material before anyone tried to stat it.</em></p><p>Make a spell attack roll against one creature within 60 feet. On a hit it takes @Damage[1d4[force]] damage plus your key attribute modifier, doubled on a critical hit.</p><p>Bala counts as <strong>agile</strong> for the purpose of your multiple attack penalty (&minus;4/&minus;8 rather than &minus;5/&minus;10).</p><hr /><p><strong>Heightened (+2)</strong> The damage increases by 1d4.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "area": 0,
+            "damage": {
+                "0": "1d4"
+            },
+            "interval": 2,
+            "type": "interval"
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [
+            {
+                "key": "MultipleAttackPenalty",
+                "label": "Bala (agile)",
+                "selector": "spell-attack",
+                "value": 1
+            }
+        ],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "1"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-kido",
+                "soulbound-kido-hollow"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "attack",
+                "cantrip",
+                "destruction",
+                "focus",
+                "force",
+                "kido",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}
