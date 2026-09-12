@@ -1,0 +1,65 @@
+{
+    "folder": "Borrowed Nature",
+    "img": "icons/magic/symbols/runes-triangle-blue.webp",
+    "name": "Borrowed Nature",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>You take on a second Lineage's nature, partially and with effort. Choose a Lineage other than your own; <strong>this choice is permanent</strong>.</p><p>You learn that Lineage's free cantrip kid&#333; &mdash; <strong>Sh&#333;</strong>, <strong>Bala</strong> or <strong>Heizen</strong> &mdash; and it costs you no Reiatsu Point, exactly as it would for someone born to it.</p><p>You also gain <strong>Don the Other Face</strong>.</p><hr /><p><em>Every one of the six directions has a name in the source material: a Soul Reaper wearing a Hollow's mask is a <strong>Visored</strong>; a Hollow taking Shinigami power is what an <strong>Arrancar</strong> already is; a Quincy carrying either has Ichigo's own bloodline behind it.</em></p>"
+        },
+        "level": {
+            "value": 6
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "adjustName": false,
+                "choices": [
+                    {
+                        "label": "Soul Reaper — Shō",
+                        "value": "soul-reaper"
+                    },
+                    {
+                        "label": "Hollow — Bala",
+                        "value": "hollow"
+                    },
+                    {
+                        "label": "Quincy — Heizen",
+                        "value": "quincy"
+                    }
+                ],
+                "flag": "borrowed",
+                "key": "ChoiceSet",
+                "prompt": "Whose face do you borrow?",
+                "rollOption": "soulbound-borrowed"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Don the Other Face"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

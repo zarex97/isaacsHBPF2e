@@ -1,0 +1,71 @@
+{
+    "img": "icons/skills/melee/blade-tips-triple-steel.webp",
+    "name": "Zanjutsu: Kendō",
+    "system": {
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "5d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "untyped"
+            }
+        },
+        "defense": null,
+        "description": {
+            "value": "<p><strong>Requirements</strong> Your spirit weapon is Released · <strong>Cost</strong> 1 Reiatsu Point</p><hr /><p>Make one Strike. <strong>Before rolling</strong>, choose:</p><ul><li>it <strong>ignores all resistances and immunities</strong> to its damage type, <em>or</em></li><li>it treats the target's <strong>AC as 2 lower</strong>.</li></ul><p>On a hit, it deals an additional @Damage[5d6[untyped]] damage.</p><hr /><p><strong>Heightened (+1)</strong> +1d6.</p><hr /><p><em>The AC clause is capped at &minus;2 so it cannot combine with flanking and a status penalty to erase a boss's defence. The choice is made before the roll, so it is a stance you enter for one Strike rather than a result you pick afterwards &mdash; the two modes below are that choice.</em></p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "area": 0,
+            "damage": {
+                "0": "1d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 8
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "melee"
+        },
+        "requirements": "Your spirit weapon is Released",
+        "rules": [],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-zanjutsu"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "focus",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

@@ -1,0 +1,73 @@
+{
+    "img": "icons/creatures/abilities/wing-bat-membrane-green-large.webp",
+    "name": "Cero Oscuras: Ceniza",
+    "system": {
+        "area": {
+            "type": "line",
+            "value": 120
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "20d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "spirit"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><strong>Cost</strong> nothing · <strong>Requirements</strong> You are in <strong>Severance</strong></p><hr /><p><em>Dark Hollow Flash: Ash.</em> A black cero fired point-blank down a corridor of nothing.</p><p><strong>120-foot line</strong>, basic Reflex, <strong>spirit</strong> damage.</p><p>A creature reduced to 0 Hit Points by this <strong>crumbles to ash</strong>; returning it to life requires a 10th-rank effect.</p><hr /><p><strong>&#9888; Extrapolated name</strong> &mdash; the ash is canon: it is how Ulquiorra himself ends.</p><hr /><p><strong>Waning.</strong> The damage is <strong>20d6</strong> if used in the first round of Severance, and two dice fewer each round after &mdash; 18d6, 16d6, 14d6, 12d6, 10d6, and <strong>8d6</strong> in the seventh. After the seventh round this cannot be used at all.</p><p><strong>Using this ends Severance</strong>, whether you want it to or not.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "level": {
+            "value": 10
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "120 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-severing",
+                "soulbound-art-murcielago"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "focus",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

@@ -1,0 +1,53 @@
+{
+    "img": "icons/magic/symbols/runes-carved-stone-blue.webp",
+    "name": "Effect: Soul Reaper's Discipline",
+    "system": {
+        "description": {
+            "value": "<p>You are wearing a reaper's discipline. <strong>Every kid&#333; you know costs no Reiatsu Point</strong> while the Face is on.</p>"
+        },
+        "duration": {
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 6
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:aspect:soul-reaper",
+                "value": true
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Borrowed Nature",
+                "selector": "will",
+                "type": "status",
+                "value": -1
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

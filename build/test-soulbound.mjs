@@ -1296,4 +1296,138 @@ check(
     ["item:tag:soulbound-seele-schneider"],
 );
 
+/* ---------------------------------------------------------------------------------------------- */
+/*  Feats, Zanjutsu, Borrowed Nature, and Severance                                                 */
+/* ---------------------------------------------------------------------------------------------- */
+
+function featDoc(name) {
+    return contentDoc(`soulbound-feats/${name}.json`);
+}
+
+// Guide §6.6 calls the kidō ceiling load-bearing: Additional Kidō is Soul Reaper only, three times, and
+// a Hollow or Quincy can never exceed two.
+const additional = featDoc("additional-kido");
+check(
+    "Additional Kidō is Soul Reaper only and takeable three times (guide §6.6)",
+    [additional.system.maxTakable, JSON.stringify(additional.system.prerequisites.value)],
+    [3, JSON.stringify([{ value: "Soul Reaper lineage" }])],
+);
+
+// Every Lineage-gated feat must actually say so, or the gate is decoration.
+for (const [name, lineage] of [
+    ["pesquisa", "Hollow"], ["hirenkyaku-drill", "Quincy"], ["rapid-bala", "Hollow"],
+    ["ginto-reserve", "Quincy"], ["cero-doble", "Hollow"], ["blut-discipline", "Quincy"],
+    ["descorrer", "Hollow"], ["zanjutsu-hakuda", "Soul Reaper"], ["reishi-mastery", "Quincy"],
+    ["segunda-piel-temprana", "Hollow"], ["vollstandig-endurance", "Quincy"],
+]) {
+    check(`${name} requires its Lineage`,
+        featDoc(name).system.prerequisites.value.some((p) => p.value === `${lineage} lineage`), true);
+}
+
+// pf2e's frequency intervals are tokens, not English words — "week" would simply never recharge.
+check(
+    "once-per-week and once-per-hour use pf2e's own interval tokens",
+    [featDoc("final-release").system.frequency.per, featDoc("descorrer").system.frequency.per],
+    ["P1W", "PT1H"],
+);
+
+check(
+    "Reactive Strike is granted under its published pf2e name, resolved through the snapshot",
+    featDoc("reactive-strike").system.rules.some((r) => r.key === "GrantItem" && String(r.uuid).startsWith("Compendium.pf2e.")),
+    true,
+);
+
+/* --- the Waning table --------------------------------------------------------------------------- */
+
+const { waningDice, roundOfSeverance } = await import("../scripts/soulbound/severance.mjs");
+
+// Guide §9: dice = 22 − 2 × round, rounds 1–7, refused after. The decay IS the balance lever — §9.0.1
+// says if everyone fires on round one the fix is to flatten this table, not cut the ceiling. A number
+// that lives in one function can be flattened; one scattered across fifteen documents cannot.
+check("the Waning table, all ten rounds (guide §9)", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(waningDice),
+    [20, 18, 16, 14, 12, 10, 8, 0, 0, 0]);
+check("and nothing outside it rolls anything", [waningDice(0), waningDice(-1), waningDice(1.5)], [0, 0, 0]);
+check("the round of Severance counts from the round it began",
+    [roundOfSeverance({ began: 3, now: 3 }), roundOfSeverance({ began: 3, now: 9 })], [1, 7]);
+
+const severance = contentDoc("soulbound-effects/effect-severance.json");
+check("Severance lasts ten rounds", severance.system.duration, { unit: "rounds", value: 10 });
+check(
+    "and grants the four immunities guide §9 names",
+    severance.system.rules.filter((r) => r.key === "Immunity").map((r) => r.type).sort(),
+    ["death-effects", "doomed", "fear-effects", "frightened"],
+);
+check(
+    "its Strike rider is 4d6 spirit on the spirit weapon",
+    (() => { const r = severance.system.rules.find((x) => x.key === "DamageDice");
+             return [r?.diceNumber, r?.dieSize, r?.damageType]; })(),
+    [4, "d6", "spirit"],
+);
+
+// Both ways out of Severance cost the same, and the cost is a real state.
+const severed = contentDoc("soulbound-effects/effect-severed.json");
+check(
+    "losing Severance drops the pool's ceiling to zero for a week",
+    [severed.system.duration, severed.system.rules.find((r) => r.path === "system.resources.focus.cap")?.value],
+    [{ expiry: null, sustained: false, unit: "days", value: 7 }, 0],
+);
+
+/* --- fifteen Severing Arts, one per Spirit ------------------------------------------------------ */
+
+const ARTS = [
+    ["shukei-hakuteiken", "senbonzakura"], ["mugetsu", "zangetsu"], ["hyoten-hyakkaso", "hyorinmaru"],
+    ["itto-kaso", "ryujin-jakka"], ["kanzen-saimin-owari", "kyoka-suigetsu"],
+    ["desgarron", "pantera"], ["cero-oscuras-ceniza", "murcielago"], ["la-hora-final", "arrogante"],
+    ["aullido", "los-lobos"], ["ola-azul", "tiburon"],
+    ["sprenger", "antithesis"], ["burning-full-fingers", "the-heat"], ["the-reckoning", "the-balance"],
+    ["electrocution", "the-thunderbolt"], ["apotheosis", "the-miracle"],
+];
+check("there are fifteen Severing Arts, one per Spirit", ARTS.length, 15);
+for (const [file, spirit] of ARTS) {
+    const doc = techDoc(file);
+    check(`${file}: a severing-tier effect at base rank 10, tagged to its Spirit`, [
+        doc.system.level.value,
+        doc.system.traits.otherTags.includes("sb-tier-severing"),
+        doc.system.traits.otherTags.includes(`soulbound-art-${spirit}`),
+    ], [10, true, true]);
+    check(`${file}: prints round one's 20d6`, doc.system.damage["0"].formula, "20d6");
+}
+
+// Ittō Kasō is the only Art with a self-cost, and the only one that beats the table.
+const itto = techDoc("itto-kaso");
+check(
+    "Ittō Kasō states its self-cost and its +2d6 in its own text",
+    [itto.system.description.value.includes("half your current Hit Points"),
+     itto.system.description.value.includes("+2d6")],
+    [true, true],
+);
+// Six Arts are extrapolations and must say so where someone reads them.
+for (const file of ["kanzen-saimin-owari", "cero-oscuras-ceniza", "la-hora-final", "aullido",
+                    "the-reckoning", "apotheosis"]) {
+    check(`${file} is marked extrapolated in its own text (guide §9.4)`,
+        techDoc(file).system.description.value.includes("Extrapolated"), true);
+}
+
+/* --- Zanjutsu ----------------------------------------------------------------------------------- */
+
+for (const file of ["sokotsu", "hitotsume-nadegiri", "shitonegaeshi", "nadegiri", "ikkotsu",
+                    "zanjutsu-kendo"]) {
+    check(`${file} is a Zanjutsu technique requiring a Released weapon`, [
+        techDoc(file).system.traits.otherTags.includes("sb-tier-zanjutsu"),
+        techDoc(file).system.requirements,
+    ], [true, "Your spirit weapon is Released"]);
+}
+check("Ikkotsu's stun carries incapacitation (guide §8.4)",
+    techDoc("ikkotsu").system.traits.value.includes("incapacitation"), true);
+// "One Strike against EACH enemy in reach" is one per confirmed target — the volley's default. A count
+// would have fixed the number, which is the opposite of what the technique says.
+check("Nadegiri strikes once per enemy caught, with no fixed count",
+    techDoc("nadegiri").flags["isaacs-hb-pf2e"].riders[0].apply.count, undefined);
+// Phase 2 left this a placeholder on purpose; it now grants a real choice.
+check(
+    "the Zanjutsu Lineage feature grants one free technique, closing Phase 2's placeholder",
+    lineageDoc("zanjutsu").system.rules.filter((r) => r.key === "ChoiceSet").length,
+    1,
+);
+
 report("Soulbound tests");

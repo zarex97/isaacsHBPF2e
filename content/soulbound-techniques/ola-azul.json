@@ -1,0 +1,110 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "direction": "away",
+                        "distance": 30,
+                        "type": "teleport"
+                    },
+                    "outcomes": [
+                        "failure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "direction": "away",
+                        "distance": 60,
+                        "type": "teleport"
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "slug": "prone",
+                        "type": "condition"
+                    },
+                    "outcomes": [
+                        "failure",
+                        "criticalFailure"
+                    ]
+                }
+            ]
+        }
+    },
+    "img": "icons/creatures/fish/fish-shark-swimming.webp",
+    "name": "Ola Azul",
+    "system": {
+        "area": {
+            "type": "line",
+            "value": 60
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "20d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "slashing"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><strong>Cost</strong> nothing · <strong>Requirements</strong> You are in <strong>Severance</strong></p><hr /><p><em>Blue Wave.</em> Reiryoku gathers in the hollow of the blade and leaves it as a single wave.</p><p><strong>60-foot line</strong>, basic Reflex, <strong>slashing</strong> damage.</p><p>Creatures that fail are pushed <strong>30 feet</strong> directly away from you and knocked <strong>prone</strong>. Creatures that critically fail are pushed <strong>60 feet</strong> instead.</p><hr /><p><strong>Waning.</strong> The damage is <strong>20d6</strong> if used in the first round of Severance, and two dice fewer each round after &mdash; 18d6, 16d6, 14d6, 12d6, 10d6, and <strong>8d6</strong> in the seventh. After the seventh round this cannot be used at all.</p><p><strong>Using this ends Severance</strong>, whether you want it to or not.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "level": {
+            "value": 10
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-severing",
+                "soulbound-art-tiburon"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "focus",
+                "reiatsu",
+                "soulbound",
+                "water"
+            ]
+        }
+    },
+    "type": "spell"
+}

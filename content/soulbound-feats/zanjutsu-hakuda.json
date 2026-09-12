@@ -1,0 +1,51 @@
+{
+    "folder": "8th",
+    "img": "icons/skills/melee/unarmed-punch-fist.webp",
+    "name": "Zanjutsu: Hakuda",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>You gain a <strong>1d6 fist</strong> unarmed attack with <strong>agile</strong>, <strong>finesse</strong> and <strong>nonlethal</strong>, and you may make one unarmed Strike as part of any Zanjutsu technique.</p>"
+        },
+        "level": {
+            "value": 8
+        },
+        "prerequisites": {
+            "value": [
+                {
+                    "value": "Soul Reaper lineage"
+                }
+            ]
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:hakuda",
+                "value": true
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat",
+                "soulbound-feat-soul-reaper"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

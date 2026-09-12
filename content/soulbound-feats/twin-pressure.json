@@ -1,0 +1,46 @@
+{
+    "folder": "14th",
+    "img": "icons/magic/air/wind-vortex-blue-large.webp",
+    "name": "Twin Pressure",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>While in a <strong>Full Release</strong>, the emanation's Will save also applies to enemies that <strong>enter</strong> it, not only those that end their turn in it.</p>"
+        },
+        "level": {
+            "value": 14
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:twin-pressure",
+                "value": true
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

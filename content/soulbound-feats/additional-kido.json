@@ -1,0 +1,71 @@
+{
+    "folder": "1st",
+    "img": "icons/magic/symbols/runes-carved-stone-blue.webp",
+    "name": "Additional Kidō",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>You learn one more kid&#333; of your choice.</p><p><strong>Special</strong> You can take this feat up to three times.</p><hr /><p><em>A Hollow or a Quincy cannot take this: their arts are what they physically are, not a curriculum. With three of these a Soul Reaper reaches nine kid&#333; at 20th &mdash; the hard ceiling &mdash; and has given up three Zanjutsu techniques to do it.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "maxTakable": 3,
+        "prerequisites": {
+            "value": [
+                {
+                    "value": "Soul Reaper lineage"
+                }
+            ]
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "adjustName": false,
+                "choices": {
+                    "filter": [
+                        "item:tag:sb-tier-kido",
+                        {
+                            "not": "item:trait:cantrip"
+                        },
+                        {
+                            "not": "item:tag:soulbound-kido-hollow"
+                        },
+                        {
+                            "not": "item:tag:soulbound-kido-quincy"
+                        }
+                    ],
+                    "itemType": "spell"
+                },
+                "flag": "extraKido",
+                "key": "ChoiceSet",
+                "prompt": "Choose one more kidō"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "{item|flags.system.rulesSelections.extraKido}"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat",
+                "soulbound-feat-soul-reaper"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

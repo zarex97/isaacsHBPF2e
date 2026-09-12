@@ -1,0 +1,51 @@
+{
+    "folder": "12th",
+    "img": "icons/equipment/chest/breastplate-scale-grey.webp",
+    "name": "Segunda Piel Temprana",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Hierro's resistance applies to <strong>spirit</strong> damage for 1 round each time you are critically hit.</p>"
+        },
+        "level": {
+            "value": 12
+        },
+        "prerequisites": {
+            "value": [
+                {
+                    "value": "Hollow lineage"
+                }
+            ]
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:segunda-piel-temprana",
+                "value": true
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat",
+                "soulbound-feat-hollow"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

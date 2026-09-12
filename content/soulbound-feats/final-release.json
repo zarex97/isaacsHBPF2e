@@ -1,0 +1,52 @@
+{
+    "folder": "20th",
+    "img": "icons/magic/death/skull-energy-light-white.webp",
+    "name": "Final Release",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 3
+        },
+        "category": "class",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per week · <strong>Requirements</strong> You are 20th level and your spirit weapon is in its released form</p><hr /><p>You stop carrying your power and <em>become</em> it. You enter <strong>Severance</strong> for <strong>10 rounds</strong>.</p><p>Somewhere inside those ten rounds you get exactly one irreversible attack, unique to your Spirit &mdash; your <strong>Severing Art</strong>. Using it is two actions, costs nothing, and <strong>immediately ends Severance</strong> whether you want it to or not.</p><p>Its damage depends only on which round of Severance you use it in, and it decays every round: <strong>20d6</strong> in the first, down to <strong>8d6</strong> in the seventh, and it <strong>cannot be used at all</strong> after that.</p><hr /><p><em>Your character never calls it Final Release. A Soul Reaper calls it by their Spirit's own name for it.</em></p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "P1W",
+            "value": 1
+        },
+        "level": {
+            "value": 20
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Severance"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "auditory",
+                "concentrate",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

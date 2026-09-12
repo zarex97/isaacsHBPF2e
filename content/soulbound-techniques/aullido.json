@@ -1,0 +1,98 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "slug": "prone",
+                        "type": "condition"
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "value": 1,
+                        "slug": "stunned",
+                        "type": "condition"
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                }
+            ]
+        }
+    },
+    "img": "icons/creatures/abilities/wolf-howl-moon-grey-large.webp",
+    "name": "Aullido",
+    "system": {
+        "area": {
+            "type": "burst",
+            "value": 40
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "20d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "force"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><strong>Cost</strong> nothing · <strong>Requirements</strong> You are in <strong>Severance</strong></p><hr /><p><em>Howl.</em> Every wolf you have left converges on one point and goes off together.</p><p><strong>Requirements</strong> At least one wolf remains.</p><p><strong>40-foot burst</strong> within 120 feet, basic Reflex, <strong>force</strong> damage.</p><p>You expend <strong>all</strong> remaining wolves and regain none for the rest of the encounter. If you had <strong>five or more</strong>, creatures that critically fail are also knocked <strong>prone</strong> and <strong>stunned 1</strong>.</p><hr /><p><strong>&#9888; Extrapolated</strong> &mdash; the soul-splitting wolves are canon.</p><hr /><p><strong>Waning.</strong> The damage is <strong>20d6</strong> if used in the first round of Severance, and two dice fewer each round after &mdash; 18d6, 16d6, 14d6, 12d6, 10d6, and <strong>8d6</strong> in the seventh. After the seventh round this cannot be used at all.</p><p><strong>Using this ends Severance</strong>, whether you want it to or not.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "level": {
+            "value": 10
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "120 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-severing",
+                "soulbound-art-los-lobos"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "focus",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}
