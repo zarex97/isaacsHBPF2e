@@ -75,11 +75,40 @@ const MUST_BE_INCAPACITATION = new Set([
  */
 const SLOT_RANK = { 1: 1, 6: 3, 11: 6, 16: 8 };
 
+/**
+ * Soulbound guide §7's preamble and §9: a Soulbound effect's base rank is fixed by which rung of the
+ * release ladder it sits on, not by the level it is gained at.
+ *
+ * Kidō (§6) and Zanjutsu (§8.4) have authored base ranks that follow no formula — Sōren Sōkatsui is rank
+ * 5 at 9th level, Kurohitsugi rank 8 at 15th, Nadegiri rank 6 at 10th — so they declare their tier and
+ * are checked only for being a legal rank. The four ladder rungs are the ones the guide states as a rule,
+ * and a Technique authored at the wrong one heightens wrong for the whole campaign with no other symptom.
+ */
+const SB_TIER_RANK = { release: 1, refined: 5, "full-release": 7, severing: 10 };
+const SB_TIERS = new Set([...Object.keys(SB_TIER_RANK), "kido", "zanjutsu"]);
+
+/**
+ * Which class guide a pack's documents are held to.
+ *
+ * Every validator below used to assume the Saint, because the Saint was the only class. A Soulbound
+ * Technique carries `reiatsu` where a Saint's carries `cosmo`, and has no technique slot at all — so
+ * running the Saint's rules over it reports an error on every single document rather than none.
+ */
+const FAMILY_PREFIXES = [
+    ["saint-", "saint"],
+    ["soulbound-", "soulbound"],
+];
+
+export function familyOf(packName) {
+    return FAMILY_PREFIXES.find(([prefix]) => String(packName).startsWith(prefix))?.[1] ?? null;
+}
+
 export function validate(packs, { errors }) {
     for (const { def, docs } of packs) {
+        const family = familyOf(def.name);
         for (const { file, doc } of docs) {
             const where = rel(file);
-            if (def.type === "Item") validateItem(doc, where, errors);
+            if (def.type === "Item") validateItem(doc, where, errors, family);
             if (def.type === "JournalEntry") validateJournal(doc, where, errors);
             if (def.type === "Macro") validateMacro(doc, where, errors);
         }
@@ -118,7 +147,7 @@ function validateActionsAreReachable(packs, errors) {
     }
 }
 
-function validateItem(doc, where, errors) {
+function validateItem(doc, where, errors, family) {
     if (!ITEM_TYPES.has(doc.type)) errors.push(`${where}: unknown item type "${doc.type}"`);
     if (!doc.img) errors.push(`${where}: missing img`);
     const system = doc.system;
@@ -198,10 +227,10 @@ function validateItem(doc, where, errors) {
         }
     }
 
-    if (doc.type === "feat") validateFeat(doc, where, errors);
-    if (doc.type === "spell") validateSpell(doc, where, errors);
+    if (doc.type === "feat") validateFeat(doc, where, errors, family);
+    if (doc.type === "spell") validateSpell(doc, where, errors, family);
     if (doc.type === "effect") validateEffect(doc, where, errors);
-    if (doc.type === "class") validateClass(doc, where, errors);
+    if (doc.type === "class") validateClass(doc, where, errors, family);
 
     validateAreaTargeting(doc, where, errors);
     validateRiders(doc, where, errors);
@@ -1054,13 +1083,16 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
     }
 }
 
-function validateFeat(doc, where, errors) {
+function validateFeat(doc, where, errors, family) {
     const system = doc.system;
     if (typeof system.level?.value !== "number") errors.push(`${where}: feat missing system.level.value`);
     if (!FEAT_CATEGORIES.has(system.category)) errors.push(`${where}: bad feat category "${system.category}"`);
     if (!system.actionType?.value) errors.push(`${where}: feat missing actionType.value`);
-    if (system.category === "class" && !(system.traits?.value ?? []).includes("saint")) {
-        errors.push(`${where}: Saint class feat must carry the "saint" trait`);
+    if (system.category === "class") {
+        const trait = family === "soulbound" ? "soulbound" : "saint";
+        if (!(system.traits?.value ?? []).includes(trait)) {
+            errors.push(`${where}: ${trait} class feat must carry the "${trait}" trait`);
+        }
     }
     for (const [slug, increase] of Object.entries(system.subfeatures?.proficiencies ?? {})) {
         if (typeof increase?.rank !== "number") {
@@ -1069,14 +1101,11 @@ function validateFeat(doc, where, errors) {
     }
 }
 
-function validateSpell(doc, where, errors) {
+function validateSpell(doc, where, errors, family) {
     const system = doc.system;
     const traits = system.traits?.value ?? [];
     const rank = system.level?.value;
     if (typeof rank !== "number" || rank < 1 || rank > 10) errors.push(`${where}: spell rank must be 1-10`);
-    for (const required of ["focus", "cosmo", "saint"]) {
-        if (!traits.includes(required)) errors.push(`${where}: Technique must carry the "${required}" trait`);
-    }
     if (!system.traits?.traditions) errors.push(`${where}: spell missing traits.traditions`);
 
     const damage = system.damage ?? {};
@@ -1086,6 +1115,14 @@ function validateSpell(doc, where, errors) {
             errors.push(`${where}: damage.${key} unknown damage type "${part.type}"`);
         }
         if (!part.formula) errors.push(`${where}: damage.${key} has no formula`);
+    }
+
+    // The two classes diverge here. Everything above is true of any pf2e spell; everything below is the
+    // Saint's own rank spine, which a Soulbound effect does not have and must not be measured against.
+    if (family === "soulbound") return validateSoulboundSpell(doc, where, errors, rank);
+
+    for (const required of ["focus", "cosmo", "saint"]) {
+        if (!traits.includes(required)) errors.push(`${where}: Technique must carry the "${required}" trait`);
     }
 
     // Every Technique must declare which slot it occupies, because its base rank has to match: a
@@ -1139,6 +1176,44 @@ function validateSpell(doc, where, errors) {
     }
 }
 
+/**
+ * A Soulbound focus effect: a Technique, a kidō, a Zanjutsu technique, or a Severing Art.
+ *
+ * Guide §6 is explicit that kidō are not spells — they use the Reiatsu DC, cannot be counteracted as
+ * spells and cannot be heightened with slots — but pf2e has exactly one document type that can carry a
+ * damage formula, an area and a save, so all four are `spell` documents distinguished by their tier tag.
+ */
+function validateSoulboundSpell(doc, where, errors, rank) {
+    const system = doc.system;
+    const traits = system.traits?.value ?? [];
+    for (const required of ["focus", "reiatsu"]) {
+        if (!traits.includes(required)) {
+            errors.push(`${where}: Soulbound effect must carry the "${required}" trait`);
+        }
+    }
+
+    const tags = system.traits?.otherTags ?? [];
+    const tierTag = tags.find((t) => t.startsWith("sb-tier-"));
+    if (!tierTag) {
+        errors.push(
+            `${where}: Soulbound effect has no sb-tier-<tier> tag ` +
+                `(${[...SB_TIERS].join("/")}) — guide §7/§9`,
+        );
+        return;
+    }
+
+    const tier = tierTag.slice("sb-tier-".length);
+    if (!SB_TIERS.has(tier)) {
+        errors.push(`${where}: unknown Soulbound tier "${tier}" — expected one of ${[...SB_TIERS].join("/")}`);
+        return;
+    }
+    if (tier in SB_TIER_RANK && rank !== SB_TIER_RANK[tier]) {
+        errors.push(
+            `${where}: ${tier} effects have base rank ${SB_TIER_RANK[tier]}, not ${rank} (guide §7/§9)`,
+        );
+    }
+}
+
 function validateEffect(doc, where, errors) {
     const system = doc.system;
     if (!system.duration) errors.push(`${where}: effect missing duration`);
@@ -1146,11 +1221,17 @@ function validateEffect(doc, where, errors) {
     if (!system.tokenIcon) errors.push(`${where}: effect missing tokenIcon`);
 }
 
-function validateClass(doc, where, errors) {
+function validateClass(doc, where, errors, family) {
     const system = doc.system;
-    if (system.slug !== "saint") errors.push(`${where}: class slug must be "saint" (it keys the Cosmo DC)`);
-    if (!(system.traits?.value ?? []).includes("saint")) errors.push(`${where}: class must carry the "saint" trait`);
-    if (system.hp !== 10) errors.push(`${where}: Saint HP should be 10 (guide §2)`);
+    const expected = family === "soulbound" ? "soulbound" : "saint";
+    const dcName = family === "soulbound" ? "Reiatsu DC" : "Cosmo DC";
+    if (system.slug !== expected) {
+        errors.push(`${where}: class slug must be "${expected}" (it keys the ${dcName})`);
+    }
+    if (!(system.traits?.value ?? []).includes(expected)) {
+        errors.push(`${where}: class must carry the "${expected}" trait`);
+    }
+    if (system.hp !== 10) errors.push(`${where}: HP should be 10 (guide §2)`);
     const keyAbility = system.keyAbility?.value ?? [];
     if (keyAbility.length !== 2 || !keyAbility.includes("str") || !keyAbility.includes("dex")) {
         errors.push(`${where}: key ability should be Strength or Dexterity (guide §1.5)`);
