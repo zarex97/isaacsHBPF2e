@@ -1,0 +1,51 @@
+{
+    "folder": "Core",
+    "img": "icons/equipment/chest/breastplate-layered-leather-blue.webp",
+    "name": "Spirit Weave",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Reishi settles into the weave of what you wear. Your proficiency ranks in light armor and unarmored defense increase to expert.</p>"
+        },
+        "level": {
+            "value": 13
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "subfeatures": {
+            "proficiencies": {
+                "light": {
+                    "attribute": null,
+                    "rank": 2
+                },
+                "unarmored": {
+                    "attribute": null,
+                    "rank": 2
+                }
+            }
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

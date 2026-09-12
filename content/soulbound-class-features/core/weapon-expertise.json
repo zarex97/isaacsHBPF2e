@@ -1,0 +1,55 @@
+{
+    "folder": "Core",
+    "img": "icons/weapons/swords/sword-guard-blue.webp",
+    "name": "Weapon Expertise",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Practice has made the blade an extension of the argument. Your proficiency ranks for simple weapons, martial weapons, unarmed attacks, and your spirit weapon increase to expert. You also gain access to the critical specialization effects of all weapons you are at least expert with.</p>"
+        },
+        "level": {
+            "value": 5
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "subfeatures": {
+            "proficiencies": {
+                "simple": {
+                    "attribute": null,
+                    "rank": 2
+                },
+                "martial": {
+                    "attribute": null,
+                    "rank": 2
+                },
+                "unarmed": {
+                    "attribute": null,
+                    "rank": 2
+                }
+            }
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

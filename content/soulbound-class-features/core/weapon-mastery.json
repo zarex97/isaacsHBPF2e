@@ -1,0 +1,55 @@
+{
+    "folder": "Core",
+    "img": "icons/weapons/swords/sword-guard-blue.webp",
+    "name": "Weapon Mastery",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your proficiency ranks for simple weapons, martial weapons, unarmed attacks, and your spirit weapon increase to master.</p>"
+        },
+        "level": {
+            "value": 13
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "subfeatures": {
+            "proficiencies": {
+                "simple": {
+                    "attribute": null,
+                    "rank": 3
+                },
+                "martial": {
+                    "attribute": null,
+                    "rank": 3
+                },
+                "unarmed": {
+                    "attribute": null,
+                    "rank": 3
+                }
+            }
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

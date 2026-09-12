@@ -1,0 +1,47 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/light/explosion-star-glow-blue.webp",
+    "name": "Reiatsu Expertise",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your spiritual pressure has weight others can feel across a room. Your proficiency rank for your Reiatsu DC increases to expert.</p>"
+        },
+        "level": {
+            "value": 9
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "subfeatures": {
+            "proficiencies": {
+                "soulbound": {
+                    "attribute": null,
+                    "rank": 2
+                }
+            }
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}
