@@ -98,6 +98,12 @@
                 "name": "Greater Flash Step",
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Greater Flash Step"
             },
+            "fullr": {
+                "img": "icons/magic/light/explosion-star-large-blue.webp",
+                "level": 13,
+                "name": "Full Release",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Full Release"
+            },
             "great": {
                 "img": "icons/skills/melee/hand-grip-sword-orange.webp",
                 "level": 15,
@@ -122,6 +128,18 @@
                 "name": "Konsō",
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Konsō"
             },
+            "perfr": {
+                "img": "icons/magic/light/explosion-star-large-purple.webp",
+                "level": 17,
+                "name": "Perfected Full Release",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Perfected Full Release"
+            },
+            "refin": {
+                "img": "icons/magic/light/explosion-star-glow-purple.webp",
+                "level": 9,
+                "name": "Refined Release",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Refined Release"
+            },
             "reiat": {
                 "img": "icons/magic/light/explosion-star-glow-blue.webp",
                 "level": 1,
@@ -139,6 +157,12 @@
                 "level": 17,
                 "name": "Reiatsu Mastery",
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Reiatsu Mastery"
+            },
+            "relea": {
+                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "level": 1,
+                "name": "Released Form",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Released Form"
             },
             "rispr": {
                 "img": "icons/magic/air/wind-vortex-blue.webp",
@@ -163,6 +187,12 @@
                 "level": 1,
                 "name": "Spirit Weapon",
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Spirit Weapon"
+            },
+            "unsea": {
+                "img": "icons/magic/light/explosion-star-large-orange.webp",
+                "level": 19,
+                "name": "Unsealed",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Unsealed"
             },
             "weape": {
                 "img": "icons/weapons/swords/sword-guard-blue.webp",

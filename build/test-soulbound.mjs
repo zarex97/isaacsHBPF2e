@@ -320,4 +320,43 @@ check("Konsō is a 10-minute exploration activity, not a combat action", [
     featureDoc("konso").system.actions.value,
 ], [true, null]);
 
+/* ---------------------------------------------------------------------------------------------- */
+/*  The release ladder                                                                              */
+/* ---------------------------------------------------------------------------------------------- */
+
+const { fullReleaseShape, Release } = await import("../scripts/soulbound/release.mjs");
+
+check("13th: one minute, 15-foot emanation, fatigued after, once a day (guide §4.8)", fullReleaseShape(13), { minutes: 1, emanation: 15, fatigue: true, usesPerDay: 1 });
+check("16th: unchanged — Perfected arrives at 17th, not before", fullReleaseShape(16), { minutes: 1, emanation: 15, fatigue: true, usesPerDay: 1 });
+check("17th, Perfected: two minutes, 20 feet, no fatigue", fullReleaseShape(17), { minutes: 2, emanation: 20, fatigue: false, usesPerDay: 1 });
+check("19th, Unsealed: twice a day, keeping Perfected's shape", fullReleaseShape(19), { minutes: 2, emanation: 20, fatigue: false, usesPerDay: 2 });
+check("below 13th there is no Full Release at all", fullReleaseShape(12), { minutes: 0, emanation: 0, fatigue: false, usesPerDay: 0 });
+
+check("an actor with no flag is sealed", Release.stateOf({ getFlag: () => undefined }), "sealed");
+check("the state is read from the module's own flag", Release.stateOf({ getFlag: () => "full" }), "full");
+check("a non-Soulbound has no release state to read", Release.stateOf(null), "sealed");
+
+const fullReleaseFeature = featureDoc("full-release");
+check(
+    "Full Release is a two-action activity, once per day (guide §4.8)",
+    [fullReleaseFeature.system.actions.value, fullReleaseFeature.system.frequency],
+    [2, { max: 1, per: "day", value: 1 }],
+);
+
+const releaseAction = featureDoc("released-form");
+check("Released Form grants the Release action and is not itself one", releaseAction.system.actionType.value, "passive");
+
+const pressure = contentDoc("soulbound-effects/effect-full-release.json");
+const emanation = pressure.flags["isaacs-hb-pf2e"].riders[0];
+check(
+    "the pressure emanation is a turn-end area rider on the Reiatsu DC (guide §4.8)",
+    [emanation.event, emanation.area.value, emanation.apply.type, emanation.apply.statistic, emanation.apply.dc],
+    ["turn-end", 15, "save", "will", "reiatsu"],
+);
+check(
+    "a creature that succeeds is made immune for 10 minutes rather than asked again",
+    contentDoc("soulbound-effects/effect-steeled-against-pressure.json").system.duration,
+    { expiry: null, sustained: false, unit: "minutes", value: 10 },
+);
+
 report("Soulbound tests");

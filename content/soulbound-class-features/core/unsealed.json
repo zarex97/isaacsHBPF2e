@@ -1,0 +1,50 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/light/explosion-star-large-orange.webp",
+    "name": "Unsealed",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>You can use <strong>Full Release twice per day</strong>. While in a Full Release you're immune to fear effects, and the first time each round you critically hit with your spirit weapon you regain 1 Reiatsu Point.</p>"
+        },
+        "level": {
+            "value": 19
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "ItemAlteration",
+                "mode": "override",
+                "property": "frequency-max",
+                "predicate": [
+                    "item:slug:full-release"
+                ],
+                "itemType": "feat",
+                "value": 2
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}
