@@ -392,16 +392,39 @@ The plan said to check rather than assume, and both checks came back yes:
 
 ### 6.5 Still open
 
-**A released form's weapon sits beside the sealed profile rather than replacing it.** Guide §7 says the
-spirit weapon "becomes" Luz de la Luna or Gran Caída; Foundry has no notion of one document becoming
-another, so the released form grants its own weapon and both are on the sheet, equipped. A
-`reconcile` pass in `weapon.mjs` stows the sealed profile whenever a replacement is present — written,
-committed, and **not yet taking effect at the table**. Until it does, the table uses the released
-weapon and ignores the sealed one. It is cosmetic rather than numeric: every statistic on the released
-weapon is correct.
+**Nothing.** The one item this phase left open — a released form's weapon sitting beside the sealed
+profile rather than replacing it — is closed. See §6.6.
 
 **Canon honesty.** Four of these five Segunda Etapas are invented — Ulquiorra is explicitly the only
 Espada who reached one — and each says so at the top of its own text, not in a design document.
+
+### 6.6 The replaced weapon, closed
+
+Guide §7 says the spirit weapon "becomes" Luz de la Luna or Gran Caída. Foundry has no notion of one
+document becoming another, so a released form grants its own weapon — and the sealed profile sat on
+the sheet beside it, equipped and usable. A player choosing between them is a choice the class never
+offered.
+
+`weapon.mjs` now stows the sealed profile whenever a replacement is present, and takes it back up when
+the form ends. **Stowed rather than deleted**: it is the character's own weapon, it returns when the
+form does, and deleting it would take its runes with it.
+
+The first version of that pass did nothing, and the reason is worth keeping. Called by hand it worked
+perfectly; it simply never ran at the moment it mattered. Two faults, both about *when*:
+
+1. **It was gated on `isSoulbound`.** During character creation the class item, the Lineage, the
+   Spirit and both weapons land in a single cascade, and `actor.class` is not yet readable when the
+   weapons arrive — so the guard was false exactly when it needed to be true. The spirit-weapon tag is
+   only ever on this class's content, so it is guard enough by itself.
+2. **It ran during the cascade rather than after it.** Reconciling on each `createItem` asks "is a
+   replacement present?" while the answer is still changing: the sealed profile arrives first and is
+   correctly left in hand, and nothing asks again once the claws land. The work is now deferred to the
+   end of the tick and coalesced per actor, so one cascade settles once.
+
+Verified live on fresh characters: Pantera and Murciélago both come out of creation with the released
+weapon **held** and the sealed profile **stowed**; deleting the released weapon returns the profile to
+**held**; and Zangetsu — which alters the weapon rather than replacing it — keeps its Blade in hand at
+the 1d10 its Shikai steps it to. Four checks pin the decision logic so it cannot regress.
 
 ---
 
