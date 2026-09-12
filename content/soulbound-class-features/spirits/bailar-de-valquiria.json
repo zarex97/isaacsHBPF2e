@@ -1,0 +1,44 @@
+{
+    "folder": "Spirits",
+    "img": "icons/magic/holy/angel-winged-humanoid-golden.webp",
+    "name": "Bailar de Valquiria",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><em>The Miracle Made Flesh.</em> Golden wings, a mane of light, and a body that reassembles itself.</p><ul><li>You gain <strong>fast healing equal to your current Miracle points</strong>.</li><li>When you are reduced to 0 Hit Points while you have at least <strong>5</strong> Miracle points, you instead remain at <strong>1 Hit Point</strong>, lose 5 Miracle points, and your spirit weapon's damage die increases by one step for the rest of the encounter. This can occur any number of times as long as you have the points to pay for it.</li><li>Miracle points are <strong>no longer capped</strong>, but you still gain only 2 per round.</li></ul><hr /><p><em>This is the class's only true \"does not die\" ability, and it is paid for in a resource the enemy controls: it only accrues while you are being hit, and each save costs half your maximum pool.</em></p>"
+        },
+        "level": {
+            "value": 13
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Bailar de Valquiria"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

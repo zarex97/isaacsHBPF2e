@@ -1180,4 +1180,103 @@ const RELEASED = [SPIRIT_WEAPON_TAG];
     check("reconcile does not wait for the class item to land", actor.updates.length, 1);
 }
 
+/* ---------------------------------------------------------------------------------------------- */
+/*  Quincy Spirits — and all fifteen                                                                */
+/* ---------------------------------------------------------------------------------------------- */
+
+const QUINCY_SPIRITS = ["antithesis", "the-heat", "the-balance", "the-thunderbolt", "the-miracle"];
+for (const name of QUINCY_SPIRITS) {
+    const doc = spiritDoc(name);
+    check(`${name}: a Quincy Spirit its own Lineage can offer`, [
+        doc.system.traits.otherTags.includes("soulbound-spirit"),
+        doc.system.traits.otherTags.includes("soulbound-lineage-quincy"),
+    ], [true, true]);
+    check(`${name}: three rungs, the Vollständig gated to 13th`, [
+        doc.system.rules.filter((r) => r.key === "GrantItem").length,
+        doc.system.rules.some((r) => r.key === "GrantItem" && JSON.stringify(r.predicate ?? []).includes("13")),
+    ], [3, true]);
+}
+
+// Guide §7C is explicit that these carry incapacitation: stunned on a failed basic save at rank 1 is
+// above the curve without it, and against a higher-level creature it should do nothing but damage.
+for (const name of ["galvano-blast", "galvano-javelin"]) {
+    check(`${name} carries incapacitation (guide §7C)`,
+        techDoc(name).system.traits.value.includes("incapacitation"), true);
+}
+
+// The exception blut.mjs was written blind to accept in Phase 2, so it would never learn Uryū's name.
+check(
+    "Letzt Stil is the one thing in the class that sets soulbound:blut-both",
+    contentDoc("soulbound-effects/effect-quincy-letzt-stil.json").system.rules
+        .some((r) => r.key === "RollOption" && r.option === "soulbound:blut-both"),
+    true,
+);
+check(
+    "and it steps the die twice, as two rules — one `upgrade` steps once",
+    contentDoc("soulbound-effects/effect-quincy-letzt-stil.json").system.rules
+        .filter((r) => r.property === "damage-dice-faces").length,
+    2,
+);
+check(
+    "its cost is a real state: the pool's ceiling goes to zero for 24 hours",
+    (() => {
+        const spent = contentDoc("soulbound-effects/effect-letzt-stil-spent.json");
+        const rule = spent.system.rules.find((r) => r.path === "system.resources.focus.cap");
+        return [spent.system.duration, rule?.value];
+    })(),
+    [{ expiry: null, sustained: false, unit: "hours", value: 24 }, 0],
+);
+
+// Burner Finger is one technique with five shapes, which is what overlays are for.
+const burner = techDoc("burner-finger");
+check(
+    "Burner Finger has four overlays beside its base shape — five fingers in all (guide §7C)",
+    Object.keys(burner.system.overlays).length,
+    4,
+);
+check(
+    "the base is the ranged attack; the others are line, emanation and cone",
+    [burner.system.defense, ...Object.values(burner.system.overlays).map((o) => o.system.area?.type ?? "none")],
+    [null, "none", "line", "emanation", "cone"],
+);
+
+// The AC bonus must read the POOL, not a roll option nothing sets.
+const balanceSchrift = contentDoc("soulbound-effects/effect-the-balance-schrift.json");
+check(
+    "The Balance's AC bonus is a circumstance bonus gated on holding a Reiatsu Point",
+    (() => { const r = balanceSchrift.system.rules.find((x) => x.selector === "ac");
+             return [r?.type, r?.value, JSON.stringify(r?.predicate)]; })(),
+    ["circumstance", 1, JSON.stringify([{ gte: ["self:resource:focus:value", 1] }])],
+);
+
+// Miracle points are the charge pool again, and the resistance reads the badge on its own item.
+const miracle = contentDoc("soulbound-effects/effect-miracle-points.json");
+check(
+    "Miracle points are a counter badge capped at 10, and resistance tracks the count",
+    [miracle.system.badge.max, miracle.system.rules.find((r) => r.key === "Resistance")?.value],
+    [10, "@item.badge.value"],
+);
+check(
+    "Bailar de Valquiria's fast healing lives on the item holding the count, not beside it",
+    miracle.system.rules.some((r) => r.key === "FastHealing" && r.value === "@item.badge.value"),
+    true,
+);
+
+/* --- all fifteen Spirits, five per Lineage ------------------------------------------------------ */
+
+const ALL_SPIRITS = [
+    ["soul-reaper", ["senbonzakura", "zangetsu", "hyorinmaru", "ryujin-jakka", "kyoka-suigetsu"]],
+    ["hollow", HOLLOW_SPIRITS],
+    ["quincy", QUINCY_SPIRITS],
+];
+for (const [lineage, names] of ALL_SPIRITS) {
+    check(`${lineage} has exactly five Spirits`, names.length, 5);
+    for (const name of names) {
+        const doc = spiritDoc(name);
+        check(`${name}: exactly one Lineage claims it`, [
+            doc.system.traits.otherTags.filter((t) => t.startsWith("soulbound-lineage-")),
+        ], [[`soulbound-lineage-${lineage}`]]);
+    }
+}
+
 report("Soulbound tests");

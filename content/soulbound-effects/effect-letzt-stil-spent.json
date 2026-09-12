@@ -1,0 +1,55 @@
+{
+    "img": "icons/magic/light/explosion-star-glow-blue-dim.webp",
+    "name": "Effect: Letzt Stil — Spent",
+    "system": {
+        "description": {
+            "value": "<p>You removed the limiter, and the bow has taken its price.</p><p>You have lost your <strong>Schrift Form</strong>, your <strong>Release Technique</strong>, <strong>Licht Regen</strong>, <strong>Vollst&auml;ndig</strong>, and your <strong>entire reiatsu pool</strong>. They return when you complete <strong>24 hours of rest</strong>.</p><p>You keep your weapon, your proficiencies, and your feats.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "hours",
+            "value": 24
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "ActiveEffectLike",
+                "mode": "override",
+                "path": "system.resources.focus.cap",
+                "priority": 99,
+                "value": 0
+            },
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:letzt-stil-spent",
+                "value": true
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

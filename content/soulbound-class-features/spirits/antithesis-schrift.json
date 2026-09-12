@@ -1,0 +1,44 @@
+{
+    "folder": "Spirits",
+    "img": "icons/weapons/bows/bow-recurve-blue.webp",
+    "name": "Antithesis — Schrift",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your Heilig Bogen takes its full shape &mdash; a broad blue bow of light.</p><p>Your spirit weapon gains the <strong>Spirit Bow</strong> profile if it did not have it, its damage die increases by one step, and its range increment increases to <strong>100 feet</strong>.</p><p>You also gain <strong>Seele Schneider</strong> <em>(Soul Cutter)</em>: your bow may be used as a melee weapon, <strong>1d8 slashing</strong>, <strong>finesse</strong>, whose vibrating reishi edge means its Strikes <strong>ignore resistance to slashing damage</strong>.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Antithesis — Schrift"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

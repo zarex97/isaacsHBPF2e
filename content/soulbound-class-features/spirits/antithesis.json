@@ -1,0 +1,63 @@
+{
+    "folder": "Spirits",
+    "img": "icons/weapons/bows/bow-recurve-blue.webp",
+    "name": "Antithesis",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><em>A &mdash; Ury&#363; Ishida.</em></p><p>The last Quincy of the old line, and the only one who chose his letter's meaning himself. Antithesis reverses two events that have already happened.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Antithesis — Schrift"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-techniques.Item.Antithesis"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            13
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Quincy: Letzt Stil"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-spirit",
+                "soulbound-spirit-antithesis",
+                "soulbound-lineage-quincy"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

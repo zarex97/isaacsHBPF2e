@@ -1,0 +1,207 @@
+{
+    "img": "icons/magic/fire/projectile-fireball-smoke-strong-red.webp",
+    "name": "Burner Finger",
+    "system": {
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "3d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "fire"
+            }
+        },
+        "defense": null,
+        "description": {
+            "value": "<p>Choose a number of fingers from one to five. Each choice is a different effect, and each costs the same single Reiatsu Point.</p><table><tbody><tr><th>Fingers</th><th>Effect</th></tr><tr><td><strong>One</strong></td><td>Range 60 ft., one creature. Ranged spell attack, <strong>3d6</strong> fire, doubled on a crit.</td></tr><tr><td><strong>Two</strong></td><td>Range 60 ft., <strong>two</strong> creatures. As One, but <strong>2d6</strong> each.</td></tr><tr><td><strong>Three</strong></td><td><strong>30-foot line</strong>, basic Reflex, <strong>2d6</strong> fire.</td></tr><tr><td><strong>Four</strong></td><td>A blade of fire with an elongated crossguard forms around your hand and you slash. <strong>15-foot emanation</strong>, basic Reflex, <strong>2d6</strong> fire; creatures that fail take 1d4 persistent fire.</td></tr><tr><td><strong>Five</strong></td><td><strong>30-foot cone</strong>, basic Reflex, <strong>2d6</strong> fire; the ground becomes difficult terrain until the start of your next turn.</td></tr></tbody></table><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d6.</p><p><strong>Refined (9th) &mdash; Deeper Burn.</strong> All five options gain their next increment early (treat your rank as one higher for Burner Finger only), and <strong>Five</strong> additionally leaves the difficult terrain <em>burning</em> until the end of your next turn, dealing 2d6 fire to a creature that enters or ends its turn there.</p><hr /><p><em>No option is better than another at every moment, which is the whole design.</em></p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "area": 0,
+            "damage": {
+                "0": "1d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-release"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "attack",
+                "concentrate",
+                "fire",
+                "focus",
+                "manipulate",
+                "reiatsu",
+                "soulbound"
+            ]
+        },
+        "overlays": {
+            "burnerfingertwo": {
+                "_id": "burnerfingertwo",
+                "name": "Burner Finger Two",
+                "overlayType": "override",
+                "sort": 2,
+                "system": {
+                    "damage": {
+                        "0": {
+                            "applyMod": false,
+                            "category": null,
+                            "formula": "2d6",
+                            "kinds": [
+                                "damage"
+                            ],
+                            "materials": [],
+                            "type": "fire"
+                        }
+                    },
+                    "target": {
+                        "value": "2 creatures"
+                    }
+                }
+            },
+            "burnerfingerthree": {
+                "_id": "burnerfingerthree",
+                "name": "Burner Finger Three",
+                "overlayType": "override",
+                "sort": 3,
+                "system": {
+                    "area": {
+                        "type": "line",
+                        "value": 30
+                    },
+                    "damage": {
+                        "0": {
+                            "applyMod": false,
+                            "category": null,
+                            "formula": "2d6",
+                            "kinds": [
+                                "damage"
+                            ],
+                            "materials": [],
+                            "type": "fire"
+                        }
+                    },
+                    "defense": {
+                        "save": {
+                            "basic": true,
+                            "statistic": "reflex"
+                        }
+                    },
+                    "range": {
+                        "value": "30 feet"
+                    },
+                    "target": {
+                        "value": ""
+                    }
+                }
+            },
+            "burnerfingerfour": {
+                "_id": "burnerfingerfour",
+                "name": "Burner Finger Four",
+                "overlayType": "override",
+                "sort": 4,
+                "system": {
+                    "area": {
+                        "type": "emanation",
+                        "value": 15
+                    },
+                    "damage": {
+                        "0": {
+                            "applyMod": false,
+                            "category": null,
+                            "formula": "2d6",
+                            "kinds": [
+                                "damage"
+                            ],
+                            "materials": [],
+                            "type": "fire"
+                        }
+                    },
+                    "defense": {
+                        "save": {
+                            "basic": true,
+                            "statistic": "reflex"
+                        }
+                    },
+                    "range": {
+                        "value": ""
+                    },
+                    "target": {
+                        "value": ""
+                    }
+                }
+            },
+            "burnerfingerfive": {
+                "_id": "burnerfingerfive",
+                "name": "Burner Finger Five",
+                "overlayType": "override",
+                "sort": 5,
+                "system": {
+                    "area": {
+                        "type": "cone",
+                        "value": 30
+                    },
+                    "damage": {
+                        "0": {
+                            "applyMod": false,
+                            "category": null,
+                            "formula": "2d6",
+                            "kinds": [
+                                "damage"
+                            ],
+                            "materials": [],
+                            "type": "fire"
+                        }
+                    },
+                    "defense": {
+                        "save": {
+                            "basic": true,
+                            "statistic": "reflex"
+                        }
+                    },
+                    "range": {
+                        "value": "30 feet"
+                    },
+                    "target": {
+                        "value": ""
+                    }
+                }
+            }
+        }
+    },
+    "type": "spell"
+}

@@ -1,0 +1,45 @@
+{
+    "img": "icons/weapons/bows/bow-recurve-blue.webp",
+    "name": "Effect: Antithesis — Reversed",
+    "system": {
+        "description": {
+            "value": "<p>The harm was sent back where it came from. You have <strong>resistance equal to the Quincy's level</strong> against the triggering damage.</p>"
+        },
+        "duration": {
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "Resistance",
+                "type": "all-damage",
+                "value": "@actor.level"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

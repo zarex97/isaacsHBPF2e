@@ -1,0 +1,44 @@
+{
+    "folder": "Spirits",
+    "img": "icons/equipment/shield/heater-crystal-blue.webp",
+    "name": "The Balance — Schrift",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your spirit weapon becomes <strong>Freund Schild</strong> <em>(Substitute Shield)</em>, canon's name for Haschwalth's spirit weapon &mdash; he fights with a blade, not a bow: <strong>1d8 slashing</strong>, versatile P, <strong>parry</strong>.</p><p>You gain a <strong>+1 circumstance bonus to AC</strong> while you have at least 1 Reiatsu Point remaining.</p><hr /><p><em>This is the one flat numeric bonus in the class. It is a circumstance bonus, so it collides with cover and with Raise a Shield, and it switches off the moment you spend your pool &mdash; which, given Rising Pressure, is most of the fight.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: The Balance — Schrift"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

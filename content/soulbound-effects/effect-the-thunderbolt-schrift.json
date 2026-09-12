@@ -1,0 +1,57 @@
+{
+    "img": "icons/magic/lightning/bolt-strike-white.webp",
+    "name": "Effect: The Thunderbolt — Schrift",
+    "system": {
+        "description": {
+            "value": "<p>A sword of arcing electricity, resistance to the same, and a Flash Step that is really a teleport.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-equipment.Item.The Thunderbolt — Arcing Sword"
+            },
+            {
+                "key": "Resistance",
+                "type": "electricity",
+                "value": "max(1,floor(@actor.level/2))"
+            },
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:thunderbolt:flash-step-teleport",
+                "value": true
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

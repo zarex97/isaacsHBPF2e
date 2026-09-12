@@ -1,0 +1,63 @@
+{
+    "folder": "Spirits",
+    "img": "icons/magic/fire/projectile-fireball-smoke-strong-red.webp",
+    "name": "The Heat",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><em>H &mdash; Bazz-B.</em></p><p>Loud, disloyal, and the best pure offensive Schrift in the Wandenreich. He controls heat by counting on his fingers.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.The Heat — Schrift"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-techniques.Item.Burner Finger"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            13
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Deus Ex Machina"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-spirit",
+                "soulbound-spirit-the-heat",
+                "soulbound-lineage-quincy"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

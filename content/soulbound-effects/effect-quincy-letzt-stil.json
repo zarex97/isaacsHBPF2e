@@ -1,0 +1,89 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "bypass": [
+                {
+                    "resistance": {
+                        "max": null,
+                        "types": [
+                            "physical",
+                            "spirit"
+                        ]
+                    }
+                }
+            ]
+        }
+    },
+    "img": "icons/magic/light/explosion-star-large-blue.webp",
+    "name": "Effect: Quincy: Letzt Stil",
+    "system": {
+        "description": {
+            "value": "<p>The limiter is off. Two die steps, resistance-piercing Strikes that stack with Blut Vene, and Licht Regen as a 60-foot cone once per round for free.</p><p><strong>When this ends you lose your Schrift Form, your Release Technique, Licht Regen, Vollst&auml;ndig and your entire reiatsu pool until 24 hours of rest.</strong></p>"
+        },
+        "duration": {
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "ItemAlteration",
+                "itemType": "weapon",
+                "mode": "upgrade",
+                "predicate": [
+                    "item:tag:soulbound-spirit-weapon"
+                ],
+                "property": "damage-dice-faces"
+            },
+            {
+                "key": "ItemAlteration",
+                "itemType": "weapon",
+                "mode": "upgrade",
+                "predicate": [
+                    "item:tag:soulbound-spirit-weapon"
+                ],
+                "property": "damage-dice-faces"
+            },
+            {
+                "key": "ItemAlteration",
+                "itemType": "spell",
+                "mode": "override",
+                "predicate": [
+                    "item:slug:licht-regen"
+                ],
+                "property": "area-size",
+                "value": 60
+            },
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:blut-both",
+                "value": true
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}
