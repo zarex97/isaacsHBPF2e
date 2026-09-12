@@ -610,4 +610,72 @@ for (const path of ["hado/byakurai", "hado/shakkaho", "hado/sokatsui", "hado/sor
     check(`${name} is costed, not free`, kidoDoc(way, name).system.traits.value.includes("cantrip"), false);
 }
 
+/* ---------------------------------------------------------------------------------------------- */
+/*  Lineage features                                                                                */
+/* ---------------------------------------------------------------------------------------------- */
+
+const hierro = lineageDoc("hierro-and-sonido");
+const resistance = hierro.system.rules.find((r) => r.key === "Resistance");
+check(
+    "Hierro is physical resistance at half level, minimum 1 (guide §5.2)",
+    [resistance?.type, resistance?.value],
+    ["physical", "max(1,floor(@actor.level/2))"],
+);
+check(
+    "Sonido is +5 ft below 11th and +10 at 11th, never both",
+    hierro.system.rules.filter((r) => r.key === "FlatModifier" && r.selector === "speed").map((r) => r.value),
+    [5, 10],
+);
+
+const regen = lineageDoc("regeneracion");
+const fh = regen.system.rules.find((r) => r.key === "FastHealing");
+check("Regeneración is fast healing that scales 2 / 4 / 6 (guide §5.2)", typeof fh?.value === "string" && fh.value.includes("17"), true);
+// The spelling matters more than the presence. pf2e emits `self:condition:dying` with no value suffix —
+// `self:condition:dying:0` is never true, so a predicate written that way leaves fast healing permanently
+// OFF, which looks exactly like the feature not existing. `self:effect:<slug>` is pf2e's own spelling too
+// (see its `air-gate` class feature).
+check(
+    "and it is off while dying and while suppressed, in pf2e's own spellings",
+    fh?.predicate,
+    [{ not: "self:condition:dying" }, { not: "self:effect:regeneracion-suppressed" }],
+);
+
+const segunda = lineageDoc("segunda-piel");
+check("Segunda Piel extends Hierro to spirit damage (guide §5.2)", segunda.system.rules.find((r) => r.key === "Resistance")?.type, "spirit");
+
+const kidoAdept = lineageDoc("kido-adept");
+const choices = kidoAdept.system.rules.filter((r) => r.key === "ChoiceSet");
+check("Kidō Adept chooses six kidō (guide §5.1)", choices.length, 6);
+check(
+    "every kidō ChoiceSet says itemType spell — queryCompendium defaults to feat",
+    choices.every((c) => c.choices.itemType === "spell"),
+    true,
+);
+check(
+    "and none of them can offer a cantrip or another Lineage's fixed art",
+    choices.every((c) => JSON.stringify(c.choices.filter).includes("cantrip")
+        && JSON.stringify(c.choices.filter).includes("soulbound-kido-hollow")),
+    true,
+);
+check(
+    "the four later kidō are level-gated and re-evaluate as you level",
+    kidoAdept.system.rules.filter((r) => r.key === "GrantItem" && r.reevaluateOnUpdate === true).length,
+    4,
+);
+check("Shō is granted outright, not chosen", kidoAdept.system.rules.some((r) => r.key === "GrantItem" && String(r.uuid).includes("Shō")), true);
+
+const cba = lineageDoc("cero-and-bala");
+check("A Hollow's two arts are granted, never chosen (guide §6.4)", [
+    cba.system.rules.filter((r) => r.key === "GrantItem").length,
+    cba.system.rules.some((r) => r.key === "ChoiceSet"),
+], [2, false]);
+
+for (const [file, expected] of [["soul-reaper", 3], ["hollow", 4]]) {
+    check(
+        `${file} grants its own features`,
+        lineageDoc(file).system.rules.filter((r) => r.key === "GrantItem").length,
+        expected,
+    );
+}
+
 report("Soulbound tests");
