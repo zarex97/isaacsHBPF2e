@@ -16,6 +16,7 @@ import { SkyTrackerApp } from "./sky/tracker-app.mjs";
 import { SkyTracker } from "./sky/tracker.mjs";
 import { Reiatsu } from "./soulbound/reiatsu.mjs";
 import { Release } from "./soulbound/release.mjs";
+import { SoulboundRig } from "./soulbound/rig.mjs";
 import { RisingPressure } from "./soulbound/rising-pressure.mjs";
 import { SpiritWeapon } from "./soulbound/weapon.mjs";
 import { AreaTargeting } from "./targeting/index.mjs";
@@ -106,6 +107,7 @@ Hooks.once("init", () => {
         reiatsu: Reiatsu,
         risingPressure: RisingPressure,
         release: Release,
+        rig: SoulboundRig,
         open: () => new SkyTrackerApp().render(true),
         adjacentSigns,
     };
