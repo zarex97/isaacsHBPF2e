@@ -1,0 +1,66 @@
+{
+    "img": "icons/weapons/swords/sword-guard-blue.webp",
+    "name": "Soulbound",
+    "system": {
+        "ancestryFeatLevels": {
+            "value": [1, 5, 9, 13, 17]
+        },
+        "attacks": {
+            "advanced": 0,
+            "martial": 1,
+            "other": {
+                "name": "",
+                "rank": 0
+            },
+            "simple": 1,
+            "unarmed": 1
+        },
+        "classFeatLevels": {
+            "value": [1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+        },
+        "defenses": {
+            "heavy": 0,
+            "light": 1,
+            "medium": 0,
+            "unarmored": 1
+        },
+        "description": {
+            "value": "<p>Three peoples fight the same war with the same physics and opposite manners. A <strong>Soul Reaper</strong> carries their own soul as a sword, and it argues with them. A <strong>Hollow</strong> ate its own heart and wears the hole; its power is sealed <em>inside</em> it rather than carried. A <strong>Quincy</strong> owns no soul-weapon at all &mdash; they reach into the air, take the spirit particles that are already there, and make a bow out of them.</p><p>You are a martial focus-user whose pool refills <em>by fighting</em>. Every technique costs 1 Reiatsu Point, and <strong>Rising Pressure</strong> hands one back the first time each round you deal damage with your spirit weapon or take damage from an enemy &mdash; on a hard per-encounter ceiling.</p><p><strong>Key Attribute</strong> Strength or Dexterity</p><p><strong>Hit Points</strong> 10 plus your Constitution modifier</p><hr /><h2>Initial Proficiencies</h2><p><strong>Perception</strong> Trained</p><p><strong>Saving Throws</strong> Expert in Fortitude, Expert in Reflex, Trained in Will</p><p><strong>Skills</strong> Trained in Religion, trained in Spirit Lore, trained in your Lineage skill, and trained in a number of additional skills equal to 3 plus your Intelligence modifier</p><p><strong>Attacks</strong> Trained in simple weapons, martial weapons, unarmed attacks, and your spirit weapon</p><p><strong>Defenses</strong> Trained in light armor and unarmored defense</p><p><strong>Class DC</strong> Trained in your Reiatsu DC</p>"
+        },
+        "generalFeatLevels": {
+            "value": [3, 7, 11, 15, 19]
+        },
+        "hp": 10,
+        "items": {},
+        "keyAbility": {
+            "value": ["str", "dex"]
+        },
+        "perception": 1,
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "savingThrows": {
+            "fortitude": 2,
+            "reflex": 2,
+            "will": 1
+        },
+        "skillFeatLevels": {
+            "value": [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+        },
+        "skillIncreaseLevels": {
+            "value": [3, 5, 7, 9, 11, 13, 15, 17, 19]
+        },
+        "slug": "soulbound",
+        "traits": {
+            "rarity": "common",
+            "value": ["soulbound"]
+        },
+        "trainedSkills": {
+            "additional": 3,
+            "value": ["religion"]
+        }
+    },
+    "type": "class"
+}
