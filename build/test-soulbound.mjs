@@ -260,4 +260,25 @@ check(
 
 check("a Saint gets no Reiatsu entry", await Reiatsu.ensureEntry({ type: "character", class: { system: { slug: "saint" } } }), null);
 
+/* ---------------------------------------------------------------------------------------------- */
+/*  Rising Pressure                                                                                 */
+/* ---------------------------------------------------------------------------------------------- */
+
+const { grantFor } = await import("../scripts/soulbound/rising-pressure.mjs");
+
+const base = { current: 0, max: 2, round: 1, roundStamp: null, gained: 0, cap: 2 };
+
+check("the first qualifying event in a round pays a point", grantFor(base), 1);
+check("the second in the same round pays nothing", grantFor({ ...base, roundStamp: 1 }), 0);
+check("a new round pays again", grantFor({ ...base, roundStamp: 1, round: 2 }), 1);
+check("a full pool gains nothing", grantFor({ ...base, current: 2 }), 0);
+check("the per-encounter ceiling stops the refill even with room in the pool (guide §1.3)", grantFor({ ...base, gained: 2 }), 0);
+check("one short of the ceiling still pays", grantFor({ ...base, gained: 1 }), 1);
+check("Reiatsu Flood raises the ceiling by 1 and nothing else", grantFor({ ...base, gained: 2, cap: 3 }), 1);
+check("out of combat there is no round, and so no refill", grantFor({ ...base, round: null }), 0);
+check("a 1st-level pool of 1 pays once per encounter and no more", [
+    grantFor({ current: 0, max: 1, round: 1, roundStamp: null, gained: 0, cap: 1 }),
+    grantFor({ current: 0, max: 1, round: 2, roundStamp: 1, gained: 1, cap: 1 }),
+], [1, 0]);
+
 report("Soulbound tests");
