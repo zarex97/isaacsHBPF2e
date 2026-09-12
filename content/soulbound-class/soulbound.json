@@ -98,6 +98,12 @@
                 "name": "Juggernaut",
                 "uuid": "Compendium.pf2e.classfeatures.Item.Juggernaut"
             },
+            "reiat": {
+                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "level": 1,
+                "name": "Reiatsu",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Reiatsu"
+            },
             "reiax": {
                 "img": "icons/magic/light/explosion-star-glow-blue.webp",
                 "level": 9,
@@ -109,6 +115,12 @@
                 "level": 17,
                 "name": "Reiatsu Mastery",
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Reiatsu Mastery"
+            },
+            "rispr": {
+                "img": "icons/magic/air/wind-vortex-blue.webp",
+                "level": 1,
+                "name": "Rising Pressure",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Rising Pressure"
             },
             "spirw": {
                 "img": "icons/equipment/chest/breastplate-layered-leather-blue.webp",
