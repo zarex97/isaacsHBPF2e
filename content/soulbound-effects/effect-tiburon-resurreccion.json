@@ -1,0 +1,51 @@
+{
+    "img": "icons/creatures/fish/fish-shark-swimming.webp",
+    "name": "Effect: Tiburón — Resurrección",
+    "system": {
+        "description": {
+            "value": "<p>A shark's tooth in your hands, a swim Speed, and water whenever you want it.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-equipment.Item.Tiburón — Hollow-Edged Blade"
+            },
+            {
+                "key": "BaseSpeed",
+                "selector": "swim",
+                "value": "@actor.system.movement.speeds.land.value"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

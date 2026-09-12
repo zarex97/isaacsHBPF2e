@@ -1,0 +1,52 @@
+{
+    "folder": "Spirits",
+    "img": "icons/magic/water/water-elemental-blue.webp",
+    "name": "Hirviendo",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>Canon gives Harribel no Segunda Etapa.</strong> Hirviendo itself is canon &mdash; she boils away all water around her, including ice.</p><p>Water rises around you in a <strong>20-foot emanation</strong>, difficult terrain for enemies. Once per round when you hit with your spirit weapon you may push the target 5 feet. <strong>La Gota</strong> may be used as a <strong>60-foot line</strong> instead of a cone.</p><p>You also gain <strong>Trident</strong> and <strong>Hirviendo</strong>.</p>"
+        },
+        "level": {
+            "value": 13
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Hirviendo"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-techniques.Item.Trident"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-techniques.Item.Hirviendo — Boil"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

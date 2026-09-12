@@ -1,0 +1,73 @@
+{
+    "img": "icons/weapons/guns/gun-pistol-flintlock.webp",
+    "name": "Los Lobos — Pistols",
+    "system": {
+        "baseItem": "flintlock-pistol",
+        "bonus": {
+            "value": 0
+        },
+        "bonusDamage": {
+            "value": 0
+        },
+        "bulk": {
+            "value": 1
+        },
+        "category": "martial",
+        "damage": {
+            "damageType": "piercing",
+            "dice": 1,
+            "die": "d6"
+        },
+        "description": {
+            "value": "<p><em>Two ornate pistols that need no ammunition and speak when they feel like it.</em></p>"
+        },
+        "equipped": {
+            "carryType": "held",
+            "handsHeld": 1
+        },
+        "group": "firearm",
+        "level": {
+            "value": 0
+        },
+        "material": {
+            "grade": null,
+            "type": null
+        },
+        "price": {
+            "value": {}
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "quantity": 1,
+        "range": 60,
+        "reload": {
+            "value": "0"
+        },
+        "rules": [],
+        "runes": {
+            "potency": 0,
+            "property": [],
+            "striking": 0
+        },
+        "splashDamage": {
+            "value": 0
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-spirit-weapon"
+            ],
+            "rarity": "common",
+            "value": [
+                "agile"
+            ]
+        },
+        "usage": {
+            "canBeAmmo": false,
+            "value": "held-in-one-hand"
+        }
+    },
+    "type": "weapon"
+}
