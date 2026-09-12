@@ -14,6 +14,7 @@ import { Riders } from "./riders/index.mjs";
 import { MODULE_ID, adjacentSigns } from "./sky/signs.mjs";
 import { SkyTrackerApp } from "./sky/tracker-app.mjs";
 import { SkyTracker } from "./sky/tracker.mjs";
+import { SpiritWeapon } from "./soulbound/weapon.mjs";
 import { AreaTargeting } from "./targeting/index.mjs";
 import { Lingering } from "./targeting/lingering.mjs";
 import { CrystalWall } from "./targeting/wall.mjs";
@@ -60,6 +61,7 @@ Hooks.once("init", () => {
     start("the Crystal Wall", () => CrystalWall.registerHooks());
     start("encasements", () => Encasement.registerHooks());
     start("the Libra Arms", () => registerLibraHooks());
+    start("the spirit weapon", () => SpiritWeapon.registerHooks());
     start("the sky tracker window", () => SkyTrackerApp.registerHooks());
 
     start("the sky tracker's settings menu", () => {
@@ -94,6 +96,7 @@ Hooks.once("init", () => {
         balance: Balance,
         crystalWall: CrystalWall,
         encasement: Encasement,
+        spiritWeapon: SpiritWeapon,
         open: () => new SkyTrackerApp().render(true),
         adjacentSigns,
     };

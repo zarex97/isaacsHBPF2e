@@ -1,0 +1,74 @@
+{
+    "img": "icons/weapons/bows/bow-recurve-blue.webp",
+    "name": "Spirit Weapon (Spirit Bow)",
+    "system": {
+        "baseItem": "longbow",
+        "bonus": {
+            "value": 0
+        },
+        "bonusDamage": {
+            "value": 0
+        },
+        "bulk": {
+            "value": 1
+        },
+        "category": "martial",
+        "damage": {
+            "damageType": "piercing",
+            "dice": 1,
+            "die": "d8"
+        },
+        "description": {
+            "value": "<p><em>A Quincy owns no soul-weapon. They reach into the air, take the spirit particles that are already there, and make a bow out of them.</em></p><p><strong>Bonded.</strong> You can manifest or dismiss it as a free action once per round. Dismissed, it cannot be taken from you. If it leaves your hands you can Interact to call it back from up to 30 feet away. It cannot be permanently destroyed while you live; if broken, it re-forms after 10 minutes of rest.</p><p><strong>Soul-Etched.</strong> During your daily preparations you can transfer weapon runes into or out of your spirit weapon for free, with no cost and no Crafting check.</p><p><strong>Spirit-Cutting.</strong> Its Strikes can deal <strong>spirit</strong> damage instead of their normal damage type, and affect incorporeal creatures as though the weapon had the <em>ghost touch</em> rune.</p>"
+        },
+        "equipped": {
+            "carryType": "held",
+            "handsHeld": 1
+        },
+        "group": "bow",
+        "level": {
+            "value": 0
+        },
+        "material": {
+            "grade": null,
+            "type": null
+        },
+        "price": {
+            "value": {}
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "quantity": 1,
+        "range": 60,
+        "reload": {
+            "value": "0"
+        },
+        "rules": [],
+        "runes": {
+            "potency": 0,
+            "property": [],
+            "striking": 0
+        },
+        "splashDamage": {
+            "value": 0
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-weapon-profile",
+                "soulbound-spirit-weapon"
+            ],
+            "rarity": "common",
+            "value": [
+                "propulsive"
+            ]
+        },
+        "usage": {
+            "canBeAmmo": false,
+            "value": "held-in-one-plus-hands"
+        }
+    },
+    "type": "weapon"
+}
