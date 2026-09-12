@@ -1430,4 +1430,16 @@ check(
     1,
 );
 
+/* --- Seal the Art's suppression, the last item Phase 2 left open -------------------------------- */
+
+const sealNow = contentDoc("soulbound-class-features/actions/seal-the-art.json");
+// Guide §5.3: a release state is "not ended outright but suppressed until the end of the target's next
+// turn". Deleting a 13th-level Bankai with a 5th-level action is exactly what that clause prevents.
+check("Seal the Art suppresses rather than ends", sealNow.flags["isaacs-hb-pf2e"].riders[0].apply.suppress, true);
+check(
+    "and its own text no longer says the distinction is unimplemented",
+    sealNow.system.description.value.includes("not yet distinguished"),
+    false,
+);
+
 report("Soulbound tests");
