@@ -1,0 +1,115 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "damageType": "fire",
+                        "formula": "1d4",
+                        "perStep": "1d4",
+                        "type": "persistent-damage"
+                    },
+                    "outcomes": [
+                        "failure",
+                        "criticalFailure"
+                    ]
+                }
+            ],
+            "areaTargeting": {
+                "affects": "enemies",
+                "includesSelf": false
+            },
+            "lingering": {
+                "difficultTerrain": 2,
+                "duration": {
+                    "unit": "rounds",
+                    "value": 1
+                },
+                "name": "Ennetsu Jigoku — embers",
+                "predicate": [
+                    "self:feature:refined-release"
+                ]
+            }
+        }
+    },
+    "img": "icons/magic/fire/blade-two-handed-glowing-orange.webp",
+    "name": "Ennetsu Jigoku",
+    "system": {
+        "area": {
+            "type": "emanation",
+            "value": 15
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "2d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "fire"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><em>Scorching Heat Hell.</em></p><p>Each creature in a 15-foot emanation takes @Damage[2d6[fire]] damage with a basic Reflex save. Creatures that fail also take <strong>1d4 persistent fire</strong> damage.</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d6, and the persistent damage by 1d4 at every other increment.</p><p><strong>Refined (9th)</strong> The emanation increases to <strong>20 feet</strong>, and the ground within it becomes <strong>difficult terrain</strong> from burning debris until the end of your next turn.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "area": 0,
+            "damage": {
+                "0": "1d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": ""
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-release"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "fire",
+                "focus",
+                "manipulate",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

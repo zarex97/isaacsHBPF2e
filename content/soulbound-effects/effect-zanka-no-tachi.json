@@ -1,0 +1,81 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "damageType": "fire",
+                        "formula": "1d6",
+                        "type": "damage"
+                    },
+                    "area": {
+                        "type": "emanation",
+                        "value": 30
+                    },
+                    "areaTargeting": {
+                        "affects": "all",
+                        "includesSelf": false
+                    },
+                    "event": "turn-start",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "img": "icons/magic/fire/blade-two-handed-blackened-orange.webp",
+    "name": "Effect: Zanka no Tachi",
+    "system": {
+        "description": {
+            "value": "<p>Every flame pulled into one blackened blade. Your damage die is two steps larger, your fire resistance is gone, and everything within 30 feet of you — <strong>allies included</strong> — burns for 1d6 at the start of each of your turns.</p><p>Sustain once per round to select a cardinal aspect.</p>"
+        },
+        "duration": {
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "ItemAlteration",
+                "itemType": "weapon",
+                "mode": "upgrade",
+                "predicate": [
+                    "item:tag:soulbound-spirit-weapon"
+                ],
+                "property": "damage-dice-faces"
+            },
+            {
+                "key": "ItemAlteration",
+                "itemType": "weapon",
+                "mode": "upgrade",
+                "predicate": [
+                    "item:tag:soulbound-spirit-weapon"
+                ],
+                "property": "damage-dice-faces"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

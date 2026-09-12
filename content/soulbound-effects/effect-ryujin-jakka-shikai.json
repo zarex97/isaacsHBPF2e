@@ -1,0 +1,72 @@
+{
+    "img": "icons/magic/fire/blade-two-handed-glowing-orange.webp",
+    "name": "Effect: Ryūjin Jakka — Shikai",
+    "system": {
+        "description": {
+            "value": "<p>A blade sheathed in flame. Its damage type is <strong>fire</strong>, it is <strong>deadly d8</strong>, and you have <strong>fire resistance equal to half your level</strong>.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "Resistance",
+                "type": "fire",
+                "predicate": [
+                    {
+                        "not": "self:effect:zanka-no-tachi"
+                    }
+                ],
+                "value": "max(1,floor(@actor.level/2))"
+            },
+            {
+                "key": "ItemAlteration",
+                "itemType": "weapon",
+                "mode": "override",
+                "predicate": [
+                    "item:tag:soulbound-spirit-weapon"
+                ],
+                "property": "damage-type",
+                "value": "fire"
+            },
+            {
+                "key": "ItemAlteration",
+                "itemType": "weapon",
+                "mode": "add",
+                "predicate": [
+                    "item:tag:soulbound-spirit-weapon"
+                ],
+                "property": "traits",
+                "value": "deadly-d8"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

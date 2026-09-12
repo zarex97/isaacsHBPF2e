@@ -1,0 +1,50 @@
+{
+    "folder": "Spirits",
+    "img": "icons/weapons/swords/greatsword-crossguard-black.webp",
+    "name": "Zangetsu — Shikai",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>An oversized cleaver with no guard and no proper hilt.</p><p>Your spirit weapon's damage die increases by one step and it gains <strong>two-handed d12</strong> if it did not already have a two-handed trait.</p><p><strong>Your first Release each encounter is free and requires no action</strong> &mdash; you begin every encounter already released.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Zangetsu — Shikai"
+            },
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:release:never-sealed",
+                "value": true
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}
