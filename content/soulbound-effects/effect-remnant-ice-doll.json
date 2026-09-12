@@ -1,0 +1,45 @@
+{
+    "img": "icons/magic/water/snowflake-ice-swirl-blue.webp",
+    "name": "Effect: Remnant Ice Doll",
+    "system": {
+        "description": {
+            "value": "<p>A doll of ice stands where the blow landed. The damage is reduced by <strong>twice your level</strong>, and the doll shatters.</p>"
+        },
+        "duration": {
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "Resistance",
+                "type": "all-damage",
+                "value": "@actor.level*2"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

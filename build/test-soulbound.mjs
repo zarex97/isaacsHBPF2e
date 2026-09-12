@@ -847,4 +847,62 @@ check(
     ["turn-start", "5d6", 20, "enemies"],
 );
 
+/* --- Hyōrinmaru, and the charge pool ---------------------------------------------------------- */
+
+const { afterSpend, afterRefresh } = await import("../scripts/soulbound/charges.mjs");
+
+const petals = { held: 3, spending: 1, perRound: 1, spentThisRound: 0 };
+check("a petal-flower is spent and two remain", afterSpend(petals), { allowed: true, held: 2, reason: null });
+// The per-round limit is the half that goes wrong quietly: three petals with no per-round check is three
+// times the damage the Bankai is costed for, with nothing on the sheet to show for it.
+check("a second petal in the same round is refused", afterSpend({ ...petals, spentThisRound: 1 }).allowed, false);
+check("spending more than you hold is refused", afterSpend({ ...petals, held: 0 }).allowed, false);
+check("and the refusal says why", afterSpend({ ...petals, held: 0 }).reason, "not enough charges");
+check("a refresh never exceeds the maximum", afterRefresh({ held: 3, max: 3, regain: 1 }), 3);
+check("and never falls below nothing", afterRefresh({ held: 0, max: 3, regain: -5 }), 0);
+
+const hyorin = spiritDoc("hyorinmaru");
+check("Hyōrinmaru grants a Shikai, Ryūsenka and a Bankai at 13th",
+    hyorin.system.rules.filter((r) => r.key === "GrantItem").length, 3);
+
+const daiguren = contentDoc("soulbound-effects/effect-daiguren-hyorinmaru.json");
+check(
+    "the Bankai holds three petal-flowers as a counter badge, the way this module counts everything",
+    [daiguren.system.badge.type, daiguren.system.badge.value, daiguren.system.badge.max],
+    ["counter", 3, 3],
+);
+check(
+    "and it grants a fly Speed and cold resistance equal to level (guide §7A)",
+    [
+        daiguren.system.rules.some((r) => r.key === "Resistance" && r.type === "cold" && r.value === "@actor.level"),
+        daiguren.system.rules.some((r) => r.key === "BaseSpeed" && r.selector === "fly"),
+    ],
+    [true, true],
+);
+
+const ryusenka = techDoc("ryusenka");
+check(
+    "Ryūsenka is a Strike rider on the +2 ladder, not an area (guide §1.5)",
+    [ryusenka.system.damage["0"].formula, ryusenka.system.heightening.interval, ryusenka.system.area],
+    ["1d6", 2, undefined],
+);
+check(
+    "its immobilize is gated behind landing the Strike AND a failed save",
+    (() => {
+        const r = ryusenka.flags["isaacs-hb-pf2e"].riders[0];
+        return [r.event, r.outcomes, r.apply.type, r.apply.statistic, r.apply.riders[0].apply.slug];
+    })(),
+    ["strike-resolved", ["success"], "save", "fortitude", "immobilized"],
+);
+
+for (const name of ["sennen-hyoro", "hyoryu-senbi", "zanhyo-ningyo"]) {
+    const doc = techDoc(name);
+    check(`${name}: a Full Release technique, base rank 7 (guide §7 preamble)`,
+        [doc.system.level.value, doc.system.traits.otherTags.includes("sb-tier-full-release")], [7, true]);
+}
+check("Zanhyō Ningyō is a reaction, using the machinery Phase 2 built",
+    [techDoc("zanhyo-ningyo").system.time.value,
+     techDoc("zanhyo-ningyo").flags["isaacs-hb-pf2e"].riders[0].apply.type],
+    ["reaction", "reaction"]);
+
 report("Soulbound tests");

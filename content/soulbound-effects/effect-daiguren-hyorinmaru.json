@@ -1,0 +1,61 @@
+{
+    "img": "icons/magic/water/snowflake-ice-swirl-blue.webp",
+    "name": "Effect: Daiguren Hyōrinmaru",
+    "system": {
+        "description": {
+            "value": "<p>Wings, claws and a tail of ice. You have a <strong>fly Speed</strong> equal to your Speed and <strong>cold resistance equal to your level</strong>.</p><p>The badge counts your <strong>petal-flowers</strong>: one may be spent per round.</p>"
+        },
+        "duration": {
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "Resistance",
+                "type": "cold",
+                "value": "@actor.level"
+            },
+            {
+                "key": "BaseSpeed",
+                "selector": "fly",
+                "value": "@actor.system.movement.speeds.land.value"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        },
+        "badge": {
+            "labels": [
+                "1",
+                "2",
+                "3"
+            ],
+            "max": 3,
+            "min": 0,
+            "type": "counter",
+            "value": 3
+        }
+    },
+    "type": "effect"
+}

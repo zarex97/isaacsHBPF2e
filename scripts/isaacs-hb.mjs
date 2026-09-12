@@ -15,6 +15,7 @@ import { MODULE_ID, adjacentSigns } from "./sky/signs.mjs";
 import { SkyTrackerApp } from "./sky/tracker-app.mjs";
 import { SkyTracker } from "./sky/tracker.mjs";
 import { Blut } from "./soulbound/blut.mjs";
+import { Charges } from "./soulbound/charges.mjs";
 import { Modes } from "./soulbound/modes.mjs";
 import { Reiatsu } from "./soulbound/reiatsu.mjs";
 import { Release } from "./soulbound/release.mjs";
@@ -112,6 +113,7 @@ Hooks.once("init", () => {
         release: Release,
         blut: Blut,
         modes: Modes,
+        charges: Charges,
         rig: SoulboundRig,
         open: () => new SkyTrackerApp().render(true),
         adjacentSigns,

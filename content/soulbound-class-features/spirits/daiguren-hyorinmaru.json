@@ -1,0 +1,56 @@
+{
+    "folder": "Spirits",
+    "img": "icons/magic/water/snowflake-ice-swirl-blue.webp",
+    "name": "Daiguren Hyōrinmaru",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><em>Grand Crimson Lotus Ice Ring.</em> Ice sheathes you as wings, claws, and a tail.</p><p>You gain a <strong>fly Speed</strong> equal to your Speed and <strong>cold resistance equal to your level</strong>.</p><p>Three <strong>four-petaled ice flowers</strong> hang in the air behind you. They are not a timer &mdash; canon is explicit that they mark how long until Daiguren Hy&#333;rinmaru <em>matures</em>. Each is a charge. <strong>Once per round you may spend one petal-flower</strong> to use Sennen Hy&#333;r&#333;, Hy&#333;ry&#363; Senbi, or Zanhy&#333; Ningy&#333;.</p><p><strong>Perfected (17th)</strong> restores one spent petal-flower at the start of each of your turns.</p><hr /><p><em>This Bankai has no passive per-round damage where Senbonzakura Kageyoshi does: it front-loads into three big, chosen moments instead.</em></p>"
+        },
+        "level": {
+            "value": 13
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Daiguren Hyōrinmaru"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-techniques.Item.Sennen Hyōrō"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-techniques.Item.Hyōryū Senbi"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-techniques.Item.Zanhyō Ningyō"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}
