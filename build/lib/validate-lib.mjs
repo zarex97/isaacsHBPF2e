@@ -99,6 +99,20 @@ const FAMILY_PREFIXES = [
     ["soulbound-", "soulbound"],
 ];
 
+/**
+ * The DC spellings a rider may name.
+ *
+ * `"cosmo"` is the Saint's Cosmo DC and predates the second class; `"reiatsu"` is the Soulbound's;
+ * `"class"` means whichever class the origin actually has. `scripts/riders/apply.mjs#resolveDC` accepts
+ * exactly these three, and this must accept exactly the same set or the build and the runtime disagree
+ * about what the content means.
+ */
+const CLASS_DC_NAMES = new Set(["cosmo", "reiatsu", "class"]);
+
+function isClassDC(dc) {
+    return CLASS_DC_NAMES.has(dc) || Number.isInteger(dc);
+}
+
 export function familyOf(packName) {
     return FAMILY_PREFIXES.find(([prefix]) => String(packName).startsWith(prefix))?.[1] ?? null;
 }
@@ -498,8 +512,8 @@ function validateLingering(doc, where, errors) {
         if (!SAVE_STATISTICS.has(flag.save.statistic)) {
             errors.push(`${sat} needs fortitude/reflex/will — got "${flag.save.statistic}"`);
         }
-        if (flag.save.dc !== "cosmo" && !Number.isInteger(flag.save.dc)) {
-            errors.push(`${sat} dc must be "cosmo" or a whole number — got "${flag.save.dc}"`);
+        if (!isClassDC(flag.save.dc)) {
+            errors.push(`${sat} dc must be one of ${[...CLASS_DC_NAMES].join("/")} or a whole number — got "${flag.save.dc}"`);
         }
         if (!Array.isArray(flag.save.riders) || flag.save.riders.length === 0) {
             errors.push(`${sat} needs at least one rider of its own, or the save decides nothing`);
@@ -959,8 +973,8 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
                     if (!CONDITION_SLUGS.has(slug)) errors.push(`${at} "${slug}" is not a pf2e condition slug`);
                 }
             }
-            if (apply.escapeDc !== undefined && apply.escapeDc !== "cosmo" && !Number.isInteger(apply.escapeDc)) {
-                errors.push(`${at} escapeDc must be "cosmo" or a whole number — got "${apply.escapeDc}"`);
+            if (apply.escapeDc !== undefined && !isClassDC(apply.escapeDc)) {
+                errors.push(`${at} escapeDc must be one of ${[...CLASS_DC_NAMES].join("/")} or a whole number — got "${apply.escapeDc}"`);
             }
             break;
         }
@@ -1040,8 +1054,8 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
             if (!SAVE_STATISTICS.has(apply.statistic)) {
                 errors.push(`${at} save riders need fortitude/reflex/will — got "${apply.statistic}"`);
             }
-            if (apply.dc !== "cosmo" && !Number.isInteger(apply.dc)) {
-                errors.push(`${at} save dc must be "cosmo" or a whole number — got "${apply.dc}"`);
+            if (!isClassDC(apply.dc)) {
+                errors.push(`${at} save dc must be one of ${[...CLASS_DC_NAMES].join("/")} or a whole number — got "${apply.dc}"`);
             }
             const nested = apply.riders;
             if (!Array.isArray(nested) || nested.length === 0) {

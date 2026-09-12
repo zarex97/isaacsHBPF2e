@@ -1,0 +1,52 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/light/explosion-star-large-blue.webp",
+    "name": "Full Release",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 2
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per day<br /><strong>Requirements</strong> Your spirit weapon is in its released form and you have at least 1 Reiatsu Point</p><hr /><p><em>Bankai &middot; Segunda Etapa &middot; Vollst&auml;ndig.</em></p><p>For <strong>1 minute</strong>:</p><ul><li>Your spirit weapon's damage die increases by one step.</li><li>You gain your Spirit's <strong>Full Release</strong> ability.</li><li>Your Release Technique costs no Reiatsu Points, but you can use it only <strong>once per round</strong>.</li><li>You emit a <strong>15-foot emanation</strong> of crushing spiritual pressure. An enemy that ends its turn in the emanation must succeed at a Will save against your Reiatsu DC or become <strong>frightened 1</strong> (frightened 2 on a critical failure). A creature that succeeds is temporarily immune for 10 minutes.</li></ul><p>When it ends you become <strong>fatigued</strong> until you rest for 10 minutes, and you can't use Full Release again today.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
+        },
+        "level": {
+            "value": 13
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Full Release"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "auditory",
+                "concentrate",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

@@ -1,0 +1,44 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/light/explosion-star-glow-blue.webp",
+    "name": "Released Form",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Choose a <strong>Spirit</strong>. It grants a <strong>Release</strong> action, a <strong>Released Form</strong> &mdash; permanent changes to your weapon's statistics and traits while released &mdash; and a <strong>Release Technique</strong>, a signature effect costing 1 Reiatsu Point and usable only while released.</p><p><strong>Release is not a stance.</strong> It doesn't conflict with stance actions, and it lasts the whole encounter.</p><p><em>Release should stay free and permanent-per-encounter. If it cost a point, everyone would Release on round one anyway and feel taxed. The interesting decision is what you do after releasing.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Release"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}
