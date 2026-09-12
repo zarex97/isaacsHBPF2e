@@ -175,12 +175,36 @@
                     "saint": {
                         "label": "Saint",
                         "description": "A creature, item, or ability of the Saint class."
+                    },
+                    "soulbound": {
+                        "label": "Soulbound",
+                        "description": "A creature, item, or ability of the Soulbound class."
                     }
                 },
                 "spellTraits": {
                     "cosmo": {
                         "label": "Cosmo",
                         "description": "A Technique powered by a Saint's inner cosmo. Techniques are focus spells that use the Saint's Cosmo DC and heighten once per 2 character levels above the level they were gained."
+                    },
+                    "reiatsu": {
+                        "label": "Reiatsu",
+                        "description": "An effect powered by a Soulbound's spiritual pressure. Reiatsu effects are focus effects that use the Reiatsu DC and heighten to half the character's level, rounded up."
+                    },
+                    "kido": {
+                        "label": "Kidō",
+                        "description": "A demon art. Kidō are not spells: they use the Reiatsu DC, cannot be counteracted as spells, and cannot be heightened with slots."
+                    },
+                    "destruction": {
+                        "label": "Destruction",
+                        "description": "The Way of Destruction — Hadō. A kidō that does harm."
+                    },
+                    "binding": {
+                        "label": "Binding",
+                        "description": "The Way of Binding — Bakudō. A kidō that restrains or shields."
+                    },
+                    "mending": {
+                        "label": "Mending",
+                        "description": "The Way of Mending — Kaidō. A kidō that heals."
                     }
                 },
                 "featTraits": {
