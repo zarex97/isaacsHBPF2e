@@ -210,4 +210,54 @@ check(
     null,
 );
 
+/* ---------------------------------------------------------------------------------------------- */
+/*  The Reiatsu pool                                                                                */
+/* ---------------------------------------------------------------------------------------------- */
+
+const { Reiatsu } = await import("../scripts/soulbound/reiatsu.mjs");
+
+check(
+    "a reiatsu-trait spell is recognised; a cosmo one is not",
+    [
+        Reiatsu.isReiatsuEffect({ type: "spell", system: { traits: { value: ["focus", "reiatsu"] } } }),
+        Reiatsu.isReiatsuEffect({ type: "spell", system: { traits: { value: ["focus", "cosmo"] } } }),
+        Reiatsu.isReiatsuEffect({ type: "action", system: { traits: { value: ["reiatsu"] } } }),
+    ],
+    [true, false, false],
+);
+
+check(
+    "the entry is found by its proficiency slug, not by its name",
+    Reiatsu.entryFor({
+        itemTypes: { spellcastingEntry: [{ id: "e9", name: "Renamed By A Player", system: { proficiency: { slug: "soulbound" } } }] },
+    })?.id,
+    "e9",
+);
+
+/** Three concurrent callers, one actor, one entry — the bug that gave every Saint two Cosmo entries. */
+{
+    let created = 0;
+    const actor = {
+        id: "a1",
+        type: "character",
+        class: { system: { slug: "soulbound" } },
+        itemTypes: { spellcastingEntry: [] },
+        classDCs: { soulbound: { attribute: "str" } },
+        async createEmbeddedDocuments(_type, [data]) {
+            created += 1;
+            await new Promise((resolve) => setTimeout(resolve, 5));
+            const entry = { ...data, id: `e${created}` };
+            actor.itemTypes.spellcastingEntry.push(entry);
+            return [entry];
+        },
+    };
+    await Promise.all([Reiatsu.ensureEntry(actor), Reiatsu.ensureEntry(actor), Reiatsu.ensureEntry(actor)]);
+    check("three concurrent ensureEntry calls create exactly one entry", created, 1);
+    check("and it resolves its DC through the Reiatsu DC, not a spellcasting proficiency",
+        actor.itemTypes.spellcastingEntry[0].system.proficiency.slug, "soulbound");
+    check("and it is a focus pool entry", actor.itemTypes.spellcastingEntry[0].system.prepared.value, "focus");
+}
+
+check("a Saint gets no Reiatsu entry", await Reiatsu.ensureEntry({ type: "character", class: { system: { slug: "saint" } } }), null);
+
 report("Soulbound tests");
