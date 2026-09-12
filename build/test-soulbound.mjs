@@ -980,4 +980,55 @@ for (const name of ["senbonzakura", "hyorinmaru", "zangetsu", "ryujin-jakka"]) {
     ], [true, true]);
 }
 
+/* --- Kyōka Suigetsu, and the hypnosis register -------------------------------------------------- */
+
+const { windowFor, shouldRoll } = await import("../scripts/soulbound/hypnosis.mjs");
+
+check("a critical success buys 24 hours of immunity (guide §7A)", windowFor("criticalSuccess").immuneFor, { unit: "hours", value: 24 });
+check("a success buys 10 minutes", windowFor("success").immuneFor, { unit: "minutes", value: 10 });
+check("a failure is one minute hypnotized, and no immunity", [windowFor("failure").hypnotizedFor, windowFor("failure").immuneFor], [{ unit: "minutes", value: 1 }, null]);
+// "Seen it once, falls to it forever" is one branch of four, invisible in the JSON, and getting it wrong
+// makes Aizen either harmless or unbeatable with nothing in between.
+check("a critical failure is an hour, and makes a permanent victim", [windowFor("criticalFailure").hypnotizedFor, windowFor("criticalFailure").permanentVictim], [{ unit: "hours", value: 1 }, true]);
+
+const observer = { canSee: true, immuneUntil: null, now: 100, alreadyHypnotized: false, permanentVictim: false };
+check("a creature that can see and is not immune rolls", shouldRoll(observer), { roll: true, autoHypnotize: false });
+check("the blind are Aizen's blind spot — canon's own exemption", shouldRoll({ ...observer, canSee: false }), { roll: false, autoHypnotize: false });
+check("an immunity window is respected", shouldRoll({ ...observer, immuneUntil: 500 }), { roll: false, autoHypnotize: false });
+check("and expires", shouldRoll({ ...observer, immuneUntil: 50 }), { roll: true, autoHypnotize: false });
+check("a permanent victim does not roll — it simply falls again", shouldRoll({ ...observer, permanentVictim: true }), { roll: false, autoHypnotize: true });
+check("someone already hypnotized is not asked twice", shouldRoll({ ...observer, alreadyHypnotized: true }), { roll: false, autoHypnotize: false });
+
+const kyoka = spiritDoc("kyoka-suigetsu");
+check("Kyōka Suigetsu grants a Shikai, Shikake and a Full Release at 13th",
+    kyoka.system.rules.filter((r) => r.key === "GrantItem").length, 3);
+
+const hypnotized = contentDoc("soulbound-effects/effect-hypnotized.json");
+check(
+    "the displaced image is a DC 5 flat check, using the type Phase 2 added",
+    (() => { const r = hypnotized.flags["isaacs-hb-pf2e"].riders[0]; return [r.apply.type, r.apply.dc, r.event]; })(),
+    ["flat-check", 5, "strike-resolved"],
+);
+
+const shikake = techDoc("shikake");
+check(
+    "Shikake is an illusion, mental and visual effect on a Will save (guide §7A)",
+    [shikake.system.defense.save.statistic, ["illusion", "mental", "visual"].every((t) => shikake.system.traits.value.includes(t))],
+    ["will", true],
+);
+check(
+    "its critical failure lasts two rounds where a failure lasts one",
+    shikake.flags["isaacs-hb-pf2e"].riders.slice(0, 2).map((r) => [r.outcomes[0], r.duration.value]),
+    [["failure", 1], ["criticalFailure", 2]],
+);
+
+// All five Soul Reaper Spirits, each with its full ladder.
+for (const name of ["senbonzakura", "zangetsu", "hyorinmaru", "ryujin-jakka", "kyoka-suigetsu"]) {
+    const doc = spiritDoc(name);
+    check(`${name}: three rungs granted, the Full Release gated to 13th`, [
+        doc.system.rules.filter((r) => r.key === "GrantItem").length,
+        doc.system.rules.some((r) => r.key === "GrantItem" && JSON.stringify(r.predicate ?? []).includes("13")),
+    ], [3, true]);
+}
+
 report("Soulbound tests");

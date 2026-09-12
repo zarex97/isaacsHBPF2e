@@ -1,0 +1,110 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Shikake"
+                    },
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "failure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Shikake"
+                    },
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 2
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "slug": "off-guard",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "failure",
+                        "criticalFailure"
+                    ],
+                    "predicate": [
+                        "self:feature:refined-release"
+                    ]
+                }
+            ]
+        }
+    },
+    "img": "icons/magic/perception/eye-ringed-glow-angry-purple.webp",
+    "name": "Shikake",
+    "system": {
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": {
+            "save": {
+                "basic": false,
+                "statistic": "will"
+            }
+        },
+        "description": {
+            "value": "<p><em>The Setup.</em></p><p>One creature within 30 feet attempts a Will save.</p><p><strong>Failure</strong> The target treats one creature of your choice within its reach as if it were you, and treats <strong>you</strong> as an ally, until the end of its next turn.</p><p><strong>Critical Failure</strong> As failure, for 2 rounds.</p><hr /><p><strong>Refined (9th)</strong> The failure effect also makes the target <strong>off-guard</strong> to the misidentified creature.</p><hr /><p><em>This is an illusion, a mental effect, and a visual one. It breaks the moment the illusion is contradicted by the GM's judgement.</em></p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-release"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "focus",
+                "illusion",
+                "manipulate",
+                "mental",
+                "reiatsu",
+                "soulbound",
+                "visual"
+            ]
+        }
+    },
+    "type": "spell"
+}
