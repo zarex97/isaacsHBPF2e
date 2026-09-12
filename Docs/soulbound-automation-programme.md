@@ -15,8 +15,8 @@ it is done. This document records how much of that prose currently happens by it
 The standard is the one the Saint's programme already sets: **every sentence in the class guide
 should happen by itself.** Not "should be trackable", not "should be reminded about" — should happen.
 
-The design is in `Docs/superpowers/specs/2026-09-12-soulbound-design.md`; Phase 1's task-by-task plan
-is in `Docs/superpowers/plans/2026-09-12-soulbound-phase-1-chassis.md`.
+The design is in `Docs/superpowers/specs/2026-09-12-soulbound-design.md`; each phase's task-by-task
+plan is in `Docs/superpowers/plans/`.
 
 ---
 
@@ -27,13 +27,13 @@ Six phases, each gated on `npm test` plus a live pass in world `pf` before the n
 | # | Phase | State |
 | :-- | :-- | :-- |
 | 1 | Chassis | **Done, verified live** |
-| 2 | Lineages and kidō | Not started |
+| 2 | Lineages and kidō | **Done, verified live** |
 | 3 | Soul Reaper Spirits | Not started |
 | 4 | Hollow Spirits | Not started |
 | 5 | Quincy Spirits | Not started |
 | 6 | Feats and Final Release | Not started |
 
-**Counts after Phase 1:** 259 documents across 16 packs (32 of them Soulbound), 310 rider checks, 77
+**Counts after Phase 2:** 305 documents across 16 packs (78 of them Soulbound), 310 rider checks, 183
 Soulbound checks, round-trip clean.
 
 ---
@@ -83,9 +83,10 @@ features whose pattern had been copied. In pf2e 8.x a focus pool's size is **der
 non-cantrip focus effect known, then clamped to `cap`. The three pool features therefore set **`cap`**
 (1 / 2 / 3 by level, on ascending priority), which is the lever the migration leaves open.
 
-> **A consequence worth stating plainly.** Until a Spirit grants a Release Technique in Phase 3, a
-> Soulbound knows no focus effects and the pool reads **0**. That is correct rather than broken, and
-> the class features say so in their own text.
+> **Superseded in Phase 2 — see §4.2.** This conclusion was half right. `cap` is indeed the lever the
+> migration leaves open, but pf2e's derivation counts the focus effects you know, and a Hollow knows
+> exactly one costed kidō forever. Setting `cap` alone left the Hollow and the Quincy on a pool of 1
+> at 11th level where the guide says 3.
 
 **Rising Pressure never fired.** `updateActor` runs *after* the update is applied, so `actor._source`
 already holds the new hit points and the question "was this damage?" was always answered "no". The
@@ -133,7 +134,118 @@ does not fully happen by itself.
 
 ---
 
-## 4. Corrections owed to the guide
+## 4. Phase 2 — the Lineages and the kidō
+
+The Lineage axis and its three branches, all sixteen kidō, Blut, Seal the Art, and the reaction
+machinery Phase 1 left a hole for.
+
+### 4.1 Verified live
+
+Three characters — one per Lineage — built in world `pf` and levelled through **1 / 5 / 9 / 11**:
+**27/27, 28/28 and 26/26**, no failures and no stuck prompts.
+
+The kidō ceilings of guide §6.6 hold at the table: a Soul Reaper's chosen kidō grow 2 → 3 → 4 across
+1st, 5th and 9th, while a Hollow holds Bala and Cero and a Quincy holds Heizen and Gritz, with no way
+to add to either.
+
+**Cero cast from a Hollow at 11th level** is the proof the whole kidō design rests on:
+
+| | |
+| :-- | :-- |
+| Rank | **6** — half the character's level rounded up, as a focus effect should |
+| DC | **26**, identical to that character's Reiatsu DC |
+| Cost | one Reiatsu Point, spent |
+| Card | posted, with Cero as its origin item |
+
+That the entry's DC and the Reiatsu DC are the same number is the load-bearing part: it means
+`proficiency.slug = "soulbound"` resolves through the class DC rather than through a spellcasting
+proficiency the class does not have.
+
+Area targeting now covers reiatsu effects too — casting Cero with placement enabled put its 60-foot
+line on the cursor, which is Phase 1's `isTechnique` change working on live content for the first
+time.
+
+### 4.2 The pool: Phase 1's fix was half wrong
+
+Phase 1 concluded that a Soulbound's pool should be expressed as `focus.cap`, because pf2e's
+`Migration889RemoveFocusMaxIncreases` strips any rule writing `focus.max`. That much was right. What
+was wrong was believing `cap` alone was enough.
+
+pf2e **derives** the pool: `+1` per non-cantrip focus spell known, then clamped to `cap`. For most
+classes that is the same thing, because knowing more focus spells is how their pool grows. It is not
+the same thing here — and the first character tested was a Soul Reaper, who knows four costed kidō at
+11th and so landed on the right pool **by accident**.
+
+A Hollow knows exactly one costed kidō and always will; guide §1.7 is explicit that Bala and Cero are
+the whole demon-arts budget. At 11th level the Hollow and the Quincy both sat on a pool of **1** where
+the guide says **3**, and no amount of content could have fixed it.
+
+A Soulbound's maximum is now its ceiling, set in a `prepareDerivedData` wrap. Two details the first
+version of that wrap got wrong:
+
+- Actors are prepared during `setupGame`, **before** the `setup` hook installs the wrap. A sweep at
+  `ready` re-prepares every Soulbound; without it the pool is correct all session *except* immediately
+  after a reload, which is the most confusing possible version of the bug.
+- `npm run test:riders` pins the exact set of wrapped methods, which caught the new wrap and forced a
+  written reason for it.
+
+Verified at 11th: all three Lineages read **0/3**, and the Saint reads 1/3, still deriving its pool
+the ordinary way.
+
+### 4.3 Silent no-ops caught before they shipped
+
+Each of these validated, built, and would have done nothing.
+
+- **Bala's `agile`.** Guide §6.4 gives it agile for multiple-attack-penalty purposes. `agile` lives in
+  pf2e's `actionTraits`, so the validator accepted it on a spell — but pf2e reads `agile` off a
+  **weapon** when computing a Strike's MAP and never looks for it on a spell attack. It is now a
+  `MultipleAttackPenalty` rule element, which actually says the number.
+- **Regeneración's dying clause**, written `self:condition:dying:0`. pf2e emits
+  `self:condition:dying` with no value suffix, so the predicate was never true and the fast healing
+  would have been permanently **off** — at a table, indistinguishable from the feature not existing.
+- **Kidō Adept's six ChoiceSets.** A `ChoiceSet` resolves once, when the item carrying it is created;
+  a `predicate` decides whether it applies at all rather than making it ask again later, and
+  `reevaluateOnUpdate` is a `GrantItem` property. Six level-gated ChoiceSets on one feature asked all
+  six questions at 1st level and never asked the later four, leaving a Soul Reaper on two kidō
+  forever. Each pickup is now its own small feature, granted at its level.
+- **Rikujōkōrō's immobilize**, first written as a `GrantItem` of a pf2e condition from inside an
+  effect. The uuid guard refused the foreign reference; the condition is now its own rider.
+
+### 4.4 Machinery added
+
+- **`reaction`**, a rider apply type. It lives in `scripts/riders/` rather than `scripts/soulbound/` —
+  a deviation from the plan and the right one, since nothing about it is Soulbound-specific and the
+  Saint's own reaction Techniques could move onto it unchanged. It mirrors the choice and counteract
+  cards down to the trust boundary: the card carries an address, never rider data, so the GM re-reads
+  what the ability does and a stale client cannot fire a reaction edited out of the compendium. **The
+  offer never blocks** — declining is spelled "ignore the card", because a timer that auto-spent a
+  reaction would be worse than not offering, and a modal would stall whoever's turn it is.
+- **`flat-check`**, added because it was nearly authored as though it already existed. Three things
+  promise "succeed at a DC N flat check or the effect fails" — Greater Flash Step, Kyōka Suigetsu,
+  Arrogante — and pf2e offers a module no way to demand one.
+- **`lore` as an item type**, because a class cannot train a Lore: `trainedSkills` on a class carries
+  only `value` and `additional`, and the `lore` array exists on backgrounds alone.
+
+### 4.5 Phase 1's open item, closed
+
+**Greater Flash Step's DC 5 flat check** is now offered as a reaction at the moment it is owed. pf2e
+has still settled the attack roll by then, so a failed check is announced rather than silently
+rewriting the hit — but the check happens, in public, without anyone having to remember it. The
+effect's own text says exactly that.
+
+### 4.6 Still open
+
+- **Seal the Art's suppression.** Guide §5.3 says a counteracted *release state* is suppressed until
+  the end of the target's next turn rather than ended, and that the target cannot re-enter it
+  meanwhile. The counteract itself works; the suppression is not yet distinguished, so a counteracted
+  release state is removed rather than paused. It lands with the release ladder's final pass, and the
+  item's own text says so.
+- **Zanjutsu** grants access and a roll option; the technique family itself is Phase 6's, with the
+  feats.
+
+---
+
+## 5. Corrections owed to the guide
 
 To be written into `Docs/soulbound-guide-v1.md` as **v1.4** in Phase 6, so the guide and the module
 never disagree.
@@ -147,13 +259,18 @@ never disagree.
    you to release your weapon" is not a category Pathfinder models. The automated subset is
    `possession` and `mental` effects plus a GM tag, and the item's text says as much rather than
    promising more than it delivers.
-4. **§4.2's pool.** The guide describes a pool of 1/2/3 by level. In Foundry that is a **ceiling**,
-   and the pool's actual size is the number of focus effects known, up to it. The two agree from the
-   moment a Spirit is chosen; before that the pool reads 0.
+4. **§4.2's pool.** The guide describes a pool of 1/2/3 by level, and that is exactly what it is —
+   but Pathfinder derives a focus pool from the effects you know, which would have left a Hollow on a
+   pool of 1 forever. The module sets the pool from the level instead. Worth a sentence in the guide
+   so nobody "fixes" it back.
+5. **§6.4's Bala.** "Agile for the purpose of your multiple attack penalty" is a rule element, not the
+   agile trait: Pathfinder reads agile off weapons and ignores it on a spell.
+6. **§3.1's Spirit Lore.** A class cannot train a Lore in Pathfinder's data model, so it is granted as
+   a Lore item by the 1st-level spiritual package. Same effect, different sentence.
 
 ---
 
-## 5. Environment notes
+## 6. Environment notes
 
 Three things cost real time in this phase and are worth not re-learning.
 
