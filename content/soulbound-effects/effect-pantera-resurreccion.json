@@ -28,7 +28,7 @@
                 "key": "FlatModifier",
                 "label": "Pantera",
                 "selector": "speed",
-                "type": "status",
+                "type": "untyped",
                 "value": 10
             }
         ],

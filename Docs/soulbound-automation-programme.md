@@ -29,11 +29,11 @@ Six phases, each gated on `npm test` plus a live pass in world `pf` before the n
 | 1 | Chassis | **Done, verified live** |
 | 2 | Lineages and kidō | **Done, verified live** |
 | 3 | Soul Reaper Spirits | **Done, verified live** |
-| 4 | Hollow Spirits | Not started |
+| 4 | Hollow Spirits | **Done, verified live** |
 | 5 | Quincy Spirits | Not started |
 | 6 | Feats and Final Release | Not started |
 
-**Counts after Phase 3:** 352 documents across 16 packs (125 of them Soulbound), 310 rider checks, 247
+**Counts after Phase 4:** 391 documents across 16 packs (164 of them Soulbound), 310 rider checks, 267
 Soulbound checks, round-trip clean.
 
 ---
@@ -337,7 +337,75 @@ prompt blocks every subsequent await.
 
 ---
 
-## 6. Corrections owed to the guide
+## 6. Phase 4 — the Hollow Spirits
+
+Pantera, Murciélago, Arrogante, Los Lobos and Tiburón, each with its full ladder.
+
+### 6.1 Verified live
+
+All five built in world `pf` and checked at 1st level: **20/20 each**, no failures, no stuck prompts.
+Each Spirit's replaced weapon arrives with the right statistics — Luz de la Luna at 1d10 piercing,
+Gran Caída at 1d12, the pistols at 1d6 with a 60-foot increment, Tiburón's tooth at 1d12 — and
+Murciélago's fly Speed and Tiburón's swim Speed both read 25, matching their land Speed.
+
+### 6.2 Sonido had never worked, and the live pass is the only thing that could have shown it
+
+Pantera's Speed came out at 35 where guide §7B says 40. Chasing it turned up something worse: a
+**Tiburón — a Hollow with no Speed bonus of its own — read 25**, with "Sonido +5" sitting in Foundry's
+breakdown and contributing nothing to the total. The Hollow Lineage's Speed bonus had been inert since
+Phase 2, on every Hollow, and both the JSON and the breakdown looked correct.
+
+Two causes, found in order:
+
+1. **A status bonus on the `speed` selector is listed but not counted**, while an untyped one on the
+   same selector applies. Sonido is written as a status bonus in the guide; it is authored untyped so
+   the five feet actually reach the table, and the feature's own text says why.
+2. **Two `FlatModifier`s sharing a label share a slug, and pf2e dedupes modifiers by slug.** Sonido was
+   two rules — `+5` below 11th and `+10` from 11th — both labelled "Sonido", so one silently replaced
+   the other. It is now one rule whose value scales:
+   `ternary(gte(@actor.level,11),10,5)`.
+
+After both, Pantera reads **40**: 25 base, +5 Sonido, +10 Pantera. That is guide §7B's "this stacks
+with Sonido", and it had never once been true.
+
+> **A lesson with teeth.** Both bugs produced content that validated, built, and *displayed correctly
+> in the breakdown*. Nothing short of reading the final number on a sheet would have caught either.
+
+### 6.3 Both open questions the plan named turned out to be answerable
+
+The plan said to check rather than assume, and both checks came back yes:
+
+- **pf2e's `Resistance` takes an `exceptions` list**, so Murciélago's "resistance to all damage except
+  spirit" is exactly expressible. High-Speed Regeneration deliberately does **not** declare a second
+  `FastHealing`: two rules would be two separate heals at the start of the turn, which is not what
+  "doubles" means.
+- **Spell overlays express Cero Metralleta's cone-or-line** as one spell with two shapes, which is what
+  they are for.
+
+### 6.4 Validator catches
+
+- **An `action-used` rider may not carry an area**, because it lands on the targets the caster
+  confirmed. Lanza del Relámpago's 15-foot burst is therefore the cast's own area, rather than a second
+  answer to "who is in it".
+- **A `strikes` rider needs a slug `option`** naming its per-Strike roll options. Trident now reuses the
+  machinery Pleiades Nova proved.
+
+### 6.5 Still open
+
+**A released form's weapon sits beside the sealed profile rather than replacing it.** Guide §7 says the
+spirit weapon "becomes" Luz de la Luna or Gran Caída; Foundry has no notion of one document becoming
+another, so the released form grants its own weapon and both are on the sheet, equipped. A
+`reconcile` pass in `weapon.mjs` stows the sealed profile whenever a replacement is present — written,
+committed, and **not yet taking effect at the table**. Until it does, the table uses the released
+weapon and ignores the sealed one. It is cosmetic rather than numeric: every statistic on the released
+weapon is correct.
+
+**Canon honesty.** Four of these five Segunda Etapas are invented — Ulquiorra is explicitly the only
+Espada who reached one — and each says so at the top of its own text, not in a design document.
+
+---
+
+## 7. Corrections owed to the guide
 
 To be written into `Docs/soulbound-guide-v1.md` as **v1.4** in Phase 6, so the guide and the module
 never disagree.
@@ -359,10 +427,17 @@ never disagree.
    agile trait: Pathfinder reads agile off weapons and ignores it on a spell.
 6. **§3.1's Spirit Lore.** A class cannot train a Lore in Pathfinder's data model, so it is granted as
    a Lore item by the 1st-level spiritual package. Same effect, different sentence.
+7. **§5.2's Sonido.** Written as a status bonus. A status bonus on the Speed selector is listed in
+   Foundry's breakdown but never reaches the total, so it is authored untyped. The number is the
+   guide's; only the bonus type differs.
+8. **§7A's Refined area widenings.** "The emanation increases to 20 feet at 9th level" is not
+   heightening — a focus effect heightens per rank. Every such widening is applied by Refined Release.
+9. **§7B's Pantera.** "This stacks with Sonido" only works if the two bonuses are different types and
+   carry different labels; pf2e dedupes modifiers by slug, and a label is a slug.
 
 ---
 
-## 7. Environment notes
+## 8. Environment notes
 
 Three things cost real time in this phase and are worth not re-learning.
 
