@@ -11,7 +11,7 @@
         },
         "category": "classfeature",
         "description": {
-            "value": "<p>The well goes down further still. Your maximum reiatsu pool increases to <strong>3</strong> Reiatsu Points.</p>"
+            "value": "<p>The well goes down further still. Your maximum reiatsu pool increases to <strong>3</strong> Reiatsu Points.</p><hr /><p><em>How this works in Foundry: Pathfinder derives your focus pool's size from the focus effects you know &mdash; one point per non-cantrip focus effect &mdash; and then clamps it to a ceiling. This feature sets that ceiling. Until you have chosen a Spirit and gained its Release Technique, you know no focus effects and the pool reads 0, which is correct rather than broken.</em></p>"
         },
         "level": {
             "value": 11
@@ -27,8 +27,9 @@
         "rules": [
             {
                 "key": "ActiveEffectLike",
-                "mode": "upgrade",
-                "path": "system.resources.focus.max",
+                "mode": "override",
+                "path": "system.resources.focus.cap",
+                "priority": 30,
                 "value": 3
             }
         ],

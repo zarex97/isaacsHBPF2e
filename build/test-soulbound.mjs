@@ -363,25 +363,77 @@ check(
 /*  The live test rig                                                                               */
 /* ---------------------------------------------------------------------------------------------- */
 
-const rig = contentDoc("soulbound-macros/test-rig.json");
-check("the rig is a script macro", [rig.type, typeof rig.command], ["script", "string"]);
-check(
-    "it carries the three guards that cost hours in earlier live sessions",
-    [
-        rig.command.includes("PickAThingPrompt"),
-        rig.command.includes("system.details.alliance"),
-        rig.command.includes("deepClone"),
-    ],
-    [true, true, true],
-);
-check("it never default-picks a Spirit — an unknown prompt is left open", rig.command.includes("return undefined"), true);
-// A macro with a syntax error fails silently at the table: no dialog, no console entry the GM would see.
+const rigMacro = contentDoc("soulbound-macros/test-rig.json");
+check("the rig macro is a script macro", [rigMacro.type, typeof rigMacro.command], ["script", "string"]);
+// The macro is a thin wrapper on purpose: a macro's body only changes when the world is shut down and
+// the packs are recompiled, while a module script is re-read on F5. Iterating the rig cost a full
+// shutdown-rebuild-relaunch cycle each time until it moved.
+check("the macro delegates to the module script rather than carrying the rig", rigMacro.command.includes("api.rig.run"), true);
 try {
-    new Function(rig.command);
-    check("the rig parses as JavaScript", true, true);
+    // A macro with a syntax error fails silently at the table: no dialog, no console entry a GM sees.
+    new Function(rigMacro.command.replace(/\bawait\b/g, ""));
+    check("the rig macro parses as JavaScript", true, true);
 } catch (error) {
-    check("the rig parses as JavaScript", String(error), true);
+    check("the rig macro parses as JavaScript", String(error), true);
 }
-check("it asserts the Reiatsu DC stops at master, not legendary", rig.command.includes("not legendary"), true);
+
+const rigSource = fs.readFileSync(path.join(ROOT, "scripts/soulbound/rig.mjs"), "utf8");
+check(
+    "the rig carries the four guards that cost hours in live sessions",
+    [
+        rigSource.includes("PickAThingPrompt"),
+        rigSource.includes("system.details.alliance"),
+        rigSource.includes("deepClone"),
+        rigSource.includes("promptProblems"),
+    ],
+    [true, true, true, true],
+);
+check("it never default-picks a Spirit — an unknown prompt is left open", rigSource.includes("return undefined"), true);
+check("it does not call prepareData itself — pf2e cannot redefine `system` twice", !/await\s+actor\.prepareData\(\)/.test(rigSource), true);
+check("it asserts the Reiatsu DC stops at master, not legendary", rigSource.includes("not legendary"), true);
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  Foreign-pack references                                                                         */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * Every `Compendium.pf2e.*` reference in the content must resolve to an id at build time.
+ *
+ * pf2e does not resolve a name-shaped compendium uuid at runtime: `fromUuid` returns null, silently, and
+ * the grant simply does nothing. That is how every Saint in every world came to be missing Alertness,
+ * Iron Will, Juggernaut, Evasion and both Weapon Specializations — Perception still trained at 20th
+ * level, with nothing anywhere reporting it.
+ */
+const foreignUuids = JSON.parse(fs.readFileSync(path.join(ROOT, "build/lib/pf2e-uuids.json"), "utf8"));
+const known = new Set(
+    Object.entries(foreignUuids)
+        .filter(([pack]) => !pack.startsWith("_"))
+        .flatMap(([pack, names]) => Object.keys(names).map((name) => `${pack}|${name}`)),
+);
+
+const unresolved = [];
+(function walkContent(dir) {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) walkContent(full);
+        else if (entry.name.endsWith(".json")) {
+            const raw = fs.readFileSync(full, "utf8");
+            for (const match of raw.matchAll(/Compendium\.pf2e\.([\w-]+)\.[A-Za-z]+\.([^"\]|}<]+)/g)) {
+                const [, pack, tail] = match;
+                const name = tail.trim();
+                if (/^[A-Za-z0-9]{16}$/.test(name)) continue; // already an id
+                if (known.has(`pf2e.${pack}|${name}`)) continue;
+                unresolved.push(`${path.relative(ROOT, full)}: pf2e.${pack} "${name}"`);
+            }
+        }
+    }
+})(path.join(ROOT, "content"));
+
+check("every pf2e reference in the content has a snapshotted id", unresolved, []);
+check(
+    "the snapshot records which system version it was taken from",
+    typeof foreignUuids._systemVersion === "string",
+    true,
+);
 
 report("Soulbound tests");

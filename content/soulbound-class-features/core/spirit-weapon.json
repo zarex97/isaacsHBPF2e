@@ -30,7 +30,8 @@
                 "choices": {
                     "filter": [
                         "item:tag:soulbound-weapon-profile"
-                    ]
+                    ],
+                    "itemType": "weapon"
                 },
                 "flag": "profile",
                 "key": "ChoiceSet",

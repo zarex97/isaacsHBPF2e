@@ -4,6 +4,15 @@ import { SpiritWeapon } from "./weapon.mjs";
 const MODULE_ID = "isaacs-hb-pf2e";
 
 /**
+ * Actors whose in-flight update is a loss of hit points.
+ *
+ * Written in `preUpdateActor`, where the old value still exists, and read in `updateActor`, where it no
+ * longer does. A `WeakSet` rather than a flag on the actor: this is one tick of bookkeeping, not state
+ * anyone should be able to find on a sheet.
+ */
+const tookDamage = new WeakSet();
+
+/**
  * The whole of Rising Pressure, as arithmetic (guide §4.2).
  *
  * > Once per round, the first time you either deal damage to an enemy with your spirit weapon or take
@@ -77,14 +86,26 @@ export const RisingPressure = {
     },
 
     registerHooks() {
-        // Damage taken from an enemy. A GM-only guard, because a player cannot write to their own
-        // resources reliably mid-combat and two clients both granting would pay the point twice.
-        Hooks.on("updateActor", async (actor, changes) => {
+        // Damage taken from an enemy, in two halves.
+        //
+        // `updateActor` fires AFTER the update is applied, and by then `actor._source` already holds the
+        // new hit points — so comparing the incoming value against it is always "equal", and the guard
+        // rejects every single time. The old value only exists during `preUpdateActor`, so that is where
+        // "was this damage?" is decided; the grant itself waits for the update to land, because it writes
+        // to the same document.
+        Hooks.on("preUpdateActor", (actor, changes) => {
             if (!game.user.isGM) return;
-            const hp = foundry.utils.getProperty(changes, "system.attributes.hp.value");
-            if (typeof hp !== "number") return;
-            // `_source` is the pre-update value: reading `.value` here would already be the new one.
-            if (hp >= (actor._source.system?.attributes?.hp?.value ?? 0)) return; // healing, not damage
+            const next = foundry.utils.getProperty(changes, "system.attributes.hp.value");
+            if (typeof next !== "number") return;
+            const current = actor.system?.attributes?.hp?.value ?? 0;
+            if (next < current) tookDamage.add(actor);
+        });
+
+        // A GM-only guard, because a player cannot write to their own resources reliably mid-combat and
+        // two clients both granting would pay the point twice.
+        Hooks.on("updateActor", async (actor) => {
+            if (!game.user.isGM) return;
+            if (!tookDamage.delete(actor)) return;
             await tryGrant(actor);
         });
 
