@@ -31,10 +31,22 @@ Six phases, each gated on `npm test` plus a live pass in world `pf` before the n
 | 3 | Soul Reaper Spirits | **Done, verified live** |
 | 4 | Hollow Spirits | **Done, verified live** |
 | 5 | Quincy Spirits | **Done, verified live** |
-| 6 | Feats and Final Release | Not started |
+| 6 | Feats and Final Release | **Done, verified live** |
 
-**Counts after Phase 5:** 431 documents across 16 packs (204 of them Soulbound), 310 rider checks, 312
-Soulbound checks, round-trip clean. **All fifteen Spirits exist**, five per Lineage.
+**Counts after Phase 6:** 515 documents across 16 packs (**288 of them Soulbound**), 310 rider
+checks, 382 Soulbound checks, round-trip clean. **The class is complete.**
+
+| Pack | Documents |
+| :-- | --: |
+| `soulbound-class` | 1 |
+| `soulbound-equipment` | 13 |
+| `soulbound-class-features` | 97 |
+| `soulbound-techniques` | 46 |
+| `soulbound-kido` | 16 |
+| `soulbound-feats` | 47 |
+| `soulbound-effects` | 66 |
+| `soulbound-journals` | 1 |
+| `soulbound-macros` | 1 |
 
 ---
 
@@ -477,7 +489,72 @@ worth remembering for Phase 6, which adds more of them.
 
 ---
 
-## 8. Corrections owed to the guide
+## 8. Phase 6 — the feats, and Final Release
+
+The class feat spine, the Zanjutsu family, Borrowed Nature at three tiers, and §9 entire: Severance,
+the Waning table, and fifteen Severing Arts. Plus the handbook, guide v1.4, and both remaining open
+items.
+
+### 8.1 Verified live
+
+**The Waning table is exact at the table.** A 20th-level Zangetsu entered Severance and the rounds were
+advanced one at a time:
+
+| Round | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+| :-- | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: |
+| Dice | 20d6 | 18d6 | 16d6 | 14d6 | 12d6 | 10d6 | 8d6 | **0** | **0** | **0** |
+
+Speed read **45** — 25 base plus Severance's 20 — and all four immunities were present: death effects,
+fear effects, frightened, doomed.
+
+**The cost lands.** Ending Severance removed it, applied `Effect: Severed`, and dropped the pool's
+ceiling to **0**. The week of downtime is a real state on the sheet, not a line of prose.
+
+### 8.2 Four validator catches
+
+- **pf2e's frequency intervals are tokens, not English words.** `per: "week"` and `per: "hour"` are not
+  intervals pf2e knows, so Final Release and Descorrer would have recharged *never*. `P1W` and `PT1H`.
+- **`areaTargeting` is read on spells and actions, not feats.** Pressure Flare's granted item became an
+  action document, which is what it should have been.
+- **An `action-used` rider may not carry an area**, twice more — it lands on the targets the caster
+  confirmed, so the area belongs in the targeting config.
+- **Nadegiri had a fixed count.** "One Strike against *each* enemy in your reach" is one per confirmed
+  target, which is the volley's default; a count would have fixed the number, the opposite of what the
+  technique says.
+
+### 8.3 The decay lives in one function
+
+`waningDice(round)` is pure and exported, and all ten rounds are pinned by tests. That is deliberate:
+guide §9.0.1 says if playtesting shows everyone fires on round one, the fix is to **flatten the table**
+— start at 16d6, drop 1d6 a round — not to cut the ceiling. A number that lives in one function can be
+flattened in one line; one scattered across fifteen documents cannot.
+
+Both routes out of Severance — the Art being used, and the clock running out — end in the same
+function, because the price is identical and putting it in one place is what stops one route quietly
+forgetting it.
+
+### 8.4 Both open items closed
+
+- **Seal the Art now suppresses a release state** rather than ending it (guide §5.3). The `counteract`
+  type gained a `suppress` option rather than a second apply type; a suppressed effect is disabled
+  rather than removed, so it returns with its own duration and flags intact. Deleting a 13th-level
+  Bankai with a 5th-level action is precisely what that clause exists to prevent.
+- **Zanjutsu's placeholder is gone.** The Lineage feature grants one free technique from the family,
+  and the other five are class feats at their listed levels.
+
+### 8.5 Guide v1.4
+
+Every correction this programme accumulated is now written into `Docs/soulbound-guide-v1.md`, with a
+"What changed in v1.4" section naming each one and an in-place edit so the body agrees with the
+changelog. **No balance number changed.** Four are expressed differently, and two — Sonido and the
+Hollow's pool — were never reaching the table at all until the live passes found them.
+
+The guide and the module no longer disagree anywhere. That was the point of the whole exercise: the
+prose is the specification, and the specification should be true.
+
+---
+
+## 9. Corrections owed to the guide — **all applied in v1.4**
 
 To be written into `Docs/soulbound-guide-v1.md` as **v1.4** in Phase 6, so the guide and the module
 never disagree.
@@ -509,7 +586,7 @@ never disagree.
 
 ---
 
-## 9. Environment notes
+## 10. Environment notes
 
 Three things cost real time in this phase and are worth not re-learning.
 
