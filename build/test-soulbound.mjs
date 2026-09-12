@@ -478,4 +478,85 @@ check(
     true,
 );
 
+/* ---------------------------------------------------------------------------------------------- */
+/*  Kidō                                                                                            */
+/* ---------------------------------------------------------------------------------------------- */
+
+function kidoDoc(way, name) {
+    return contentDoc(`soulbound-kido/${way}/${name}.json`);
+}
+
+const sho = kidoDoc("hado", "sho");
+check(
+    "Shō is a cantrip, so it costs no Reiatsu and does not inflate the pool (guide §6)",
+    [sho.system.traits.value.includes("cantrip"), sho.system.level.value],
+    [true, 1],
+);
+check("Shō adds the key attribute, being the class's only free filler", sho.system.damage["0"].applyMod, true);
+
+const byakurai = kidoDoc("hado", "byakurai");
+check(
+    "Byakurai is a spell attack — defense null plus the attack trait, as pf2e's own Fire Ray does it",
+    [byakurai.system.defense, byakurai.system.traits.value.includes("attack")],
+    [null, true],
+);
+check("Byakurai is 1 action at 60 feet (guide §6.1)", [byakurai.system.time.value, byakurai.system.range.value], ["1", "60 feet"]);
+
+const kurohitsugi = kidoDoc("hado", "kurohitsugi");
+check(
+    "Kurohitsugi enters at rank 8 with 9d6 void (guide §6.1)",
+    [kurohitsugi.system.level.value, kurohitsugi.system.damage["0"].formula, kurohitsugi.system.damage["0"].type],
+    [8, "9d6", "void"],
+);
+
+const sorenSokatsui = kidoDoc("hado", "soren-sokatsui");
+check("Sōren Sōkatsui is rank 5 and twice the basic variant's power (guide §6.1)", [sorenSokatsui.system.level.value, sorenSokatsui.system.damage["0"].formula], [5, "7d6"]);
+
+for (const name of ["sho", "byakurai", "shakkaho", "sokatsui", "soren-sokatsui", "kurohitsugi"]) {
+    const doc = kidoDoc("hado", name);
+    const traits = doc.system.traits.value;
+    check(`${name}: carries kidō, reiatsu, focus and destruction`, [
+        traits.includes("kido"), traits.includes("reiatsu"), traits.includes("focus"), traits.includes("destruction"),
+    ], [true, true, true, true]);
+    check(`${name}: declares its tier`, (doc.system.traits.otherTags ?? []).includes("sb-tier-kido"), true);
+}
+
+const sai = kidoDoc("bakudo", "sai");
+check(
+    "Sai immobilizes on a failure and escalates on a critical failure (guide §6.2)",
+    sai.flags["isaacs-hb-pf2e"].riders.map((r) => [r.outcomes, r.apply.slug, r.duration.unit]),
+    [[["failure"], "immobilized", "rounds"], [["criticalFailure"], "immobilized", "minutes"]],
+);
+check("Sai's escape is against the Reiatsu DC", sai.flags["isaacs-hb-pf2e"].riders[0].apply.escapeDc, "reiatsu");
+
+const danku = kidoDoc("bakudo", "danku");
+check("Danku is a reaction (guide §6.2)", [danku.system.time.value, danku.system.traits.value.includes("binding")], ["reaction", true]);
+
+const rikujokoro = kidoDoc("bakudo", "rikujokoro");
+check(
+    "Rikujōkōrō is Fortitude, and has no incapacitation trait — it stops short of paralysed (guide §6.2)",
+    [rikujokoro.system.defense.save.statistic, rikujokoro.system.traits.value.includes("incapacitation")],
+    ["fortitude", false],
+);
+
+const kaido = kidoDoc("kaido", "kaido");
+check(
+    "Kaidō heals rather than harms, the way pf2e's own Heal Animal does it",
+    [kaido.system.damage["0"].kinds, kaido.system.damage["0"].type, kaido.system.traits.value.includes("mending")],
+    [["healing"], "untyped", true],
+);
+check(
+    "and it scales 5 per rank, which is guide §6.3's 5 per half your level",
+    [kaido.system.damage["0"].formula, kaido.system.heightening.damage["0"], kaido.system.heightening.interval],
+    ["5", "5", 1],
+);
+check("Kaidō is two actions at touch (guide §6.3)", [kaido.system.time.value, kaido.system.range.value], ["2", "touch"]);
+
+for (const [way, name] of [["bakudo", "sai"], ["bakudo", "hainawa"], ["bakudo", "rikujokoro"], ["bakudo", "danku"], ["bakudo", "kin"], ["kaido", "kaido"]]) {
+    const doc = kidoDoc(way, name);
+    const traits = doc.system.traits.value;
+    check(`${name}: carries kidō and reiatsu`, [traits.includes("kido"), traits.includes("reiatsu")], [true, true]);
+    check(`${name}: declares its tier`, (doc.system.traits.otherTags ?? []).includes("sb-tier-kido"), true);
+}
+
 report("Soulbound tests");

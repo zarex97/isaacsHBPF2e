@@ -1,0 +1,55 @@
+{
+    "folder": "Way of Binding (Bakudō)",
+    "img": "icons/magic/defensive/barrier-shield-dome-blue.webp",
+    "name": "Danku — Splitting Void",
+    "system": {
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p><strong>Trigger</strong> You or an ally within 15 feet would take damage from a ranged attack, a spell, or an area effect.</p><hr /><p><em>Bakudō #81. A wall of pure nothing, held up flat against whatever is coming.</em></p><p>The target of the trigger gains <strong>resistance equal to your level</strong> against the triggering damage.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "15 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "you or 1 ally"
+        },
+        "time": {
+            "value": "reaction"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-kido",
+                "soulbound-kido-bakudo"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "binding",
+                "focus",
+                "kido",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}
