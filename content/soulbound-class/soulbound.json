@@ -3,7 +3,13 @@
     "name": "Soulbound",
     "system": {
         "ancestryFeatLevels": {
-            "value": [1, 5, 9, 13, 17]
+            "value": [
+                1,
+                5,
+                9,
+                13,
+                17
+            ]
         },
         "attacks": {
             "advanced": 0,
@@ -16,7 +22,19 @@
             "unarmed": 1
         },
         "classFeatLevels": {
-            "value": [1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+            "value": [
+                1,
+                2,
+                4,
+                6,
+                8,
+                10,
+                12,
+                14,
+                16,
+                18,
+                20
+            ]
         },
         "defenses": {
             "heavy": 0,
@@ -28,12 +46,100 @@
             "value": "<p>Three peoples fight the same war with the same physics and opposite manners. A <strong>Soul Reaper</strong> carries their own soul as a sword, and it argues with them. A <strong>Hollow</strong> ate its own heart and wears the hole; its power is sealed <em>inside</em> it rather than carried. A <strong>Quincy</strong> owns no soul-weapon at all &mdash; they reach into the air, take the spirit particles that are already there, and make a bow out of them.</p><p>You are a martial focus-user whose pool refills <em>by fighting</em>. Every technique costs 1 Reiatsu Point, and <strong>Rising Pressure</strong> hands one back the first time each round you deal damage with your spirit weapon or take damage from an enemy &mdash; on a hard per-encounter ceiling.</p><p><strong>Key Attribute</strong> Strength or Dexterity</p><p><strong>Hit Points</strong> 10 plus your Constitution modifier</p><hr /><h2>Initial Proficiencies</h2><p><strong>Perception</strong> Trained</p><p><strong>Saving Throws</strong> Expert in Fortitude, Expert in Reflex, Trained in Will</p><p><strong>Skills</strong> Trained in Religion, trained in Spirit Lore, trained in your Lineage skill, and trained in a number of additional skills equal to 3 plus your Intelligence modifier</p><p><strong>Attacks</strong> Trained in simple weapons, martial weapons, unarmed attacks, and your spirit weapon</p><p><strong>Defenses</strong> Trained in light armor and unarmored defense</p><p><strong>Class DC</strong> Trained in your Reiatsu DC</p>"
         },
         "generalFeatLevels": {
-            "value": [3, 7, 11, 15, 19]
+            "value": [
+                3,
+                7,
+                11,
+                15,
+                19
+            ]
         },
         "hp": 10,
-        "items": {},
+        "items": {
+            "alert": {
+                "img": "icons/creatures/eyes/human-single-blue.webp",
+                "level": 5,
+                "name": "Alertness",
+                "uuid": "Compendium.pf2e.classfeatures.Item.Alertness"
+            },
+            "deepr": {
+                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "level": 5,
+                "name": "Deepening Reserve (5th)",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Deepening Reserve (5th)"
+            },
+            "deepx": {
+                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "level": 11,
+                "name": "Deepening Reserve (11th)",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Deepening Reserve (11th)"
+            },
+            "evasi": {
+                "img": "systems/pf2e/icons/features/classes/evasion.webp",
+                "level": 15,
+                "name": "Evasion",
+                "uuid": "Compendium.pf2e.classfeatures.Item.Evasion"
+            },
+            "great": {
+                "img": "icons/skills/melee/hand-grip-sword-orange.webp",
+                "level": 15,
+                "name": "Greater Weapon Specialization",
+                "uuid": "Compendium.pf2e.classfeatures.Item.Greater Weapon Specialization"
+            },
+            "ironw": {
+                "img": "systems/pf2e/icons/features/classes/iron-will.webp",
+                "level": 3,
+                "name": "Iron Will",
+                "uuid": "Compendium.pf2e.classfeatures.Item.Iron Will"
+            },
+            "jugge": {
+                "img": "icons/creatures/mammals/bull-horned-blue.webp",
+                "level": 11,
+                "name": "Juggernaut",
+                "uuid": "Compendium.pf2e.classfeatures.Item.Juggernaut"
+            },
+            "reiax": {
+                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "level": 9,
+                "name": "Reiatsu Expertise",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Reiatsu Expertise"
+            },
+            "reiaz": {
+                "img": "icons/magic/light/explosion-star-glow-purple.webp",
+                "level": 17,
+                "name": "Reiatsu Mastery",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Reiatsu Mastery"
+            },
+            "spirw": {
+                "img": "icons/equipment/chest/breastplate-layered-leather-blue.webp",
+                "level": 13,
+                "name": "Spirit Weave",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Spirit Weave"
+            },
+            "weape": {
+                "img": "icons/weapons/swords/sword-guard-blue.webp",
+                "level": 5,
+                "name": "Weapon Expertise",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Weapon Expertise"
+            },
+            "weapm": {
+                "img": "icons/weapons/swords/sword-guard-blue.webp",
+                "level": 13,
+                "name": "Weapon Mastery",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Weapon Mastery"
+            },
+            "weaps": {
+                "img": "icons/skills/melee/hand-grip-sword-red.webp",
+                "level": 7,
+                "name": "Weapon Specialization",
+                "uuid": "Compendium.pf2e.classfeatures.Item.Weapon Specialization"
+            }
+        },
         "keyAbility": {
-            "value": ["str", "dex"]
+            "value": [
+                "str",
+                "dex"
+            ]
         },
         "perception": 1,
         "publication": {
@@ -47,19 +153,44 @@
             "will": 1
         },
         "skillFeatLevels": {
-            "value": [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+            "value": [
+                2,
+                4,
+                6,
+                8,
+                10,
+                12,
+                14,
+                16,
+                18,
+                20
+            ]
         },
         "skillIncreaseLevels": {
-            "value": [3, 5, 7, 9, 11, 13, 15, 17, 19]
+            "value": [
+                3,
+                5,
+                7,
+                9,
+                11,
+                13,
+                15,
+                17,
+                19
+            ]
         },
         "slug": "soulbound",
         "traits": {
             "rarity": "common",
-            "value": ["soulbound"]
+            "value": [
+                "soulbound"
+            ]
         },
         "trainedSkills": {
             "additional": 3,
-            "value": ["religion"]
+            "value": [
+                "religion"
+            ]
         }
     },
     "type": "class"

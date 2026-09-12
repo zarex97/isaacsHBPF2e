@@ -1,0 +1,47 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/light/explosion-star-glow-purple.webp",
+    "name": "Reiatsu Mastery",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Standing near you is a decision other people have to make. Your proficiency rank for your Reiatsu DC increases to master.</p>"
+        },
+        "level": {
+            "value": 17
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "subfeatures": {
+            "proficiencies": {
+                "soulbound": {
+                    "attribute": null,
+                    "rank": 3
+                }
+            }
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}
