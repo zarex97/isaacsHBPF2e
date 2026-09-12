@@ -1,0 +1,47 @@
+{
+    "img": "icons/skills/melee/blade-tips-triple-steel.webp",
+    "name": "Effect: Kendō — Piercing",
+    "system": {
+        "description": {
+            "value": "<p>Your next Zanjutsu: Kend&#333; Strike treats the target's <strong>AC as 2 lower</strong>.</p>"
+        },
+        "duration": {
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 14
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Kendō — Piercing",
+                "selector": "strike-attack-roll",
+                "type": "circumstance",
+                "value": 2
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

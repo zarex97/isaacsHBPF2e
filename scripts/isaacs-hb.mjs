@@ -20,6 +20,7 @@ import { Hypnosis } from "./soulbound/hypnosis.mjs";
 import { Modes } from "./soulbound/modes.mjs";
 import { Reiatsu } from "./soulbound/reiatsu.mjs";
 import { Release } from "./soulbound/release.mjs";
+import { Severance } from "./soulbound/severance.mjs";
 import { SoulboundRig } from "./soulbound/rig.mjs";
 import { RisingPressure } from "./soulbound/rising-pressure.mjs";
 import { SpiritWeapon } from "./soulbound/weapon.mjs";
@@ -73,6 +74,7 @@ Hooks.once("init", () => {
     start("Reiatsu", () => Reiatsu.registerHooks());
     start("Rising Pressure", () => RisingPressure.registerHooks());
     start("the release ladder", () => Release.registerHooks());
+    start("Severance", () => Severance.registerHooks());
     start("Blut", () => Blut.registerHooks());
     start("the sky tracker window", () => SkyTrackerApp.registerHooks());
 
@@ -112,6 +114,7 @@ Hooks.once("init", () => {
         reiatsu: Reiatsu,
         risingPressure: RisingPressure,
         release: Release,
+        severance: Severance,
         blut: Blut,
         modes: Modes,
         charges: Charges,

@@ -1,0 +1,94 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "bypass": [
+                {
+                    "immunity": {
+                        "mode": "ignore",
+                        "types": [
+                            "fire"
+                        ]
+                    },
+                    "resistance": {
+                        "max": null,
+                        "types": [
+                            "fire"
+                        ]
+                    }
+                }
+            ]
+        }
+    },
+    "img": "icons/magic/fire/blade-two-handed-glowing-orange.webp",
+    "name": "Ittō Kasō",
+    "system": {
+        "area": {
+            "type": "burst",
+            "value": 20
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "20d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "fire"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><strong>Cost</strong> nothing · <strong>Requirements</strong> You are in <strong>Severance</strong></p><hr /><p><em>Single Blade Cremation.</em> A pillar of red fire in the shape of a katana's tip erupts from the ground.</p><p><strong>20-foot burst</strong> within 60 feet, basic Reflex, <strong>fire</strong> damage &mdash; and it deals the Waning dice <strong>+2d6</strong>, the only Art in the class that beats the table.</p><p>The fire <strong>ignores resistance and immunity to fire</strong>. Creatures that fail <strong>can't regain Hit Points for 1 minute</strong>, and their regeneration and fast healing are suppressed for that minute. A creature reduced to 0 Hit Points by Itt&#333; Kas&#333; is <strong>cremated</strong> &mdash; returning it to life requires a 10th-rank effect.</p><hr /><p><strong>This Art costs you.</strong> When you use Itt&#333; Kas&#333;, you take damage equal to <strong>half your current Hit Points</strong>. This damage cannot be prevented, reduced, resisted, or redirected, and it is applied after the Art resolves.</p><p><em>Canon insists: it is a forbidden technique that uses the caster's own body as the catalyst, Aizen calls it the spell of sacrifice, and Yamamoto loses his left arm casting it. That self-cost is why it is the biggest number in the section and carries the hardest rider &mdash; a cost that bought nothing would just make Ry&#363;jin Jakka the worst Spirit to take to 20th.</em></p><hr /><p><strong>Waning.</strong> The damage is <strong>20d6</strong> if used in the first round of Severance, and two dice fewer each round after &mdash; 18d6, 16d6, 14d6, 12d6, 10d6, and <strong>8d6</strong> in the seventh. After the seventh round this cannot be used at all.</p><p><strong>Using this ends Severance</strong>, whether you want it to or not.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "level": {
+            "value": 10
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-severing",
+                "soulbound-art-ryujin-jakka"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "fire",
+                "focus",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

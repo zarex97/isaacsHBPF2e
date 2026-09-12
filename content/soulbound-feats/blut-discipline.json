@@ -1,0 +1,55 @@
+{
+    "folder": "6th",
+    "img": "icons/magic/control/buff-flight-wings-blue.webp",
+    "name": "Blut Discipline",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>You may switch which <strong>Blut</strong> you have active as a free action <strong>twice per round</strong> instead of once.</p>"
+        },
+        "level": {
+            "value": 6
+        },
+        "prerequisites": {
+            "value": [
+                {
+                    "value": "Quincy lineage"
+                }
+            ]
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "ItemAlteration",
+                "itemType": "feat",
+                "mode": "override",
+                "predicate": [
+                    "item:slug:blut"
+                ],
+                "property": "frequency-max",
+                "value": 2
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat",
+                "soulbound-feat-quincy"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

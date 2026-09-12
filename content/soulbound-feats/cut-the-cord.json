@@ -1,0 +1,56 @@
+{
+    "folder": "6th",
+    "img": "icons/weapons/swords/sword-guard-blue.webp",
+    "name": "Cut the Cord",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Your spirit weapon's Strikes ignore the first <strong>5 points</strong> of resistance to spirit damage.</p>"
+        },
+        "level": {
+            "value": 6
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat",
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "bypass": [
+                {
+                    "predicate": [
+                        "item:tag:soulbound-spirit-weapon"
+                    ],
+                    "resistance": {
+                        "max": 5,
+                        "types": [
+                            "spirit"
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,55 @@
+{
+    "folder": "1st",
+    "img": "icons/weapons/swords/swords-short-blue.webp",
+    "name": "Twin Fang",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>While your spirit weapon has the <strong>twin</strong> or <strong>agile</strong> trait, your second Strike each round with it reduces your multiple attack penalty by 1.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "MultipleAttackPenalty",
+                "label": "Twin Fang",
+                "predicate": [
+                    {
+                        "or": [
+                            "item:trait:twin",
+                            "item:trait:agile"
+                        ]
+                    },
+                    "item:tag:soulbound-spirit-weapon"
+                ],
+                "selector": "strike-attack-roll",
+                "value": 1
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

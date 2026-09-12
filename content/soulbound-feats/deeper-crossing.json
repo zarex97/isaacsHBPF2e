@@ -1,0 +1,50 @@
+{
+    "folder": "Borrowed Nature",
+    "img": "icons/magic/symbols/runes-triangle-purple.webp",
+    "name": "Deeper Crossing",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p><strong>Prerequisite</strong> Borrowed Nature</p><hr /><p>You may <strong>Don the Other Face</strong> twice per encounter, and your Aspect deepens:</p><ul><li><strong>Soul Reaper's Discipline</strong> &mdash; you learn a <strong>second</strong> kid&#333;, and while the Face is on your <strong>destruction</strong> kid&#333; deal one additional die of damage.</li><li><strong>Hollow's Mask</strong> &mdash; temporary Hit Points equal to <strong>twice</strong> your level, resistance equal to <strong>half</strong> your level, and the Speed bonus increases to <strong>+10 feet</strong>.</li><li><strong>Quincy's Discipline</strong> &mdash; Blut Vene's resistance becomes <strong>half</strong> your level, and once per encounter while the Face is on you may use <strong>Seal the Art</strong>, even though you are not a Quincy.</li></ul>"
+        },
+        "level": {
+            "value": 12
+        },
+        "prerequisites": {
+            "value": [
+                {
+                    "value": "Borrowed Nature"
+                }
+            ]
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:deeper-crossing",
+                "value": true
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}
