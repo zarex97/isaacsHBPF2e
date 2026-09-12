@@ -1,0 +1,47 @@
+{
+    "img": "icons/magic/water/snowflake-ice-blue-white.webp",
+    "name": "Effect: Frosted Stride",
+    "system": {
+        "description": {
+            "value": "<p>Ice has taken your feet. You have a <strong>&minus;5-foot status penalty</strong> to your Speeds.</p>"
+        },
+        "duration": {
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Hyōrinmaru",
+                "selector": "speed",
+                "type": "status",
+                "value": -5
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}
