@@ -116,6 +116,12 @@
                 "name": "Spirit Weave",
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Spirit Weave"
             },
+            "spwea": {
+                "img": "icons/weapons/swords/sword-guard-blue.webp",
+                "level": 1,
+                "name": "Spirit Weapon",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Spirit Weapon"
+            },
             "weape": {
                 "img": "icons/weapons/swords/sword-guard-blue.webp",
                 "level": 5,

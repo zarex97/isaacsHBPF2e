@@ -145,4 +145,69 @@ check("ancestry feats on the standard PF2e levels", cs.ancestryFeatLevels.value,
 check("skill increases on every odd level from 3rd", cs.skillIncreaseLevels.value, [3, 5, 7, 9, 11, 13, 15, 17, 19]);
 check("the class slug keys the Reiatsu DC", cs.slug, "soulbound");
 
+/* ---------------------------------------------------------------------------------------------- */
+/*  The spirit weapon                                                                               */
+/* ---------------------------------------------------------------------------------------------- */
+
+const blade = contentDoc("soulbound-equipment/blade.json");
+check(
+    "Blade: 1d8 slashing, versatile P, two-hand d10 (guide §4.1)",
+    [blade.system.damage.die, blade.system.damage.damageType, [...blade.system.traits.value].sort()],
+    ["d8", "slashing", ["two-hand-d10", "versatile-p"]],
+);
+
+const greatBlade = contentDoc("soulbound-equipment/great-blade.json");
+// Guide §4.1 says "two-handed, sweep", but pf2e has no `two-handed` trait: a weapon that is only ever
+// two-handed says so in `usage`, exactly as its own greatsword does. Correction for guide v1.4.
+check(
+    "Great Blade: 1d10 slashing, sweep, two-handed expressed in usage as pf2e does it",
+    [greatBlade.system.damage.die, greatBlade.system.usage.value, [...greatBlade.system.traits.value].sort()],
+    ["d10", "held-in-two-hands", ["sweep"]],
+);
+
+const paired = contentDoc("soulbound-equipment/paired-blades.json");
+check(
+    "Paired Blades: 1d6 slashing, agile, finesse, twin (guide §4.1)",
+    [paired.system.damage.die, [...paired.system.traits.value].sort()],
+    ["d6", ["agile", "finesse", "twin"]],
+);
+
+const bow = contentDoc("soulbound-equipment/spirit-bow.json");
+check(
+    "Spirit Bow: 1d8 piercing, propulsive, range 60, reload 0 (guide §4.1)",
+    [bow.system.damage.die, bow.system.damage.damageType, bow.system.range, bow.system.reload.value],
+    ["d8", "piercing", 60, "0"],
+);
+
+for (const name of ["blade", "great-blade", "paired-blades", "spirit-bow"]) {
+    const doc = contentDoc(`soulbound-equipment/${name}.json`);
+    const tags = doc.system.traits.otherTags ?? [];
+    check(`${name}: a martial weapon the class is always proficient with`, doc.system.category, "martial");
+    check(`${name}: tagged for the ChoiceSet and for weaponOf`, [
+        tags.includes("soulbound-weapon-profile"),
+        tags.includes("soulbound-spirit-weapon"),
+    ], [true, true]);
+}
+
+const { SpiritWeapon } = await import("../scripts/soulbound/weapon.mjs");
+
+/** An actor stub holding one tagged weapon and one ordinary one. */
+const armed = {
+    type: "character",
+    class: { system: { slug: "soulbound" } },
+    itemTypes: {
+        weapon: [
+            { id: "w1", system: { traits: { otherTags: ["mundane"] } } },
+            { id: "w2", system: { traits: { otherTags: ["soulbound-spirit-weapon"] } } },
+        ],
+    },
+};
+check("weaponOf finds the spirit weapon by its tag, not by position", SpiritWeapon.weaponOf(armed)?.id, "w2");
+check("a Saint has no spirit weapon to find", SpiritWeapon.weaponOf({ ...armed, class: { system: { slug: "saint" } } }), null);
+check(
+    "dismissed, there is nothing to find and that is not an error",
+    SpiritWeapon.weaponOf({ ...armed, itemTypes: { weapon: [] } }),
+    null,
+);
+
 report("Soulbound tests");
