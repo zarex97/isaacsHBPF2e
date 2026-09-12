@@ -1,0 +1,48 @@
+{
+    "img": "icons/magic/control/energy-stream-link-red.webp",
+    "name": "Effect: Blut Arterie",
+    "system": {
+        "description": {
+            "value": "<p>Reishi runs through your arteries. Your Strikes with your spirit weapon <strong>ignore resistances to physical and spirit damage</strong>, and treat the target's cover as one step less.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:blut-arterie",
+                "value": true
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

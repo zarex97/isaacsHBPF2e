@@ -14,6 +14,7 @@ import { Riders } from "./riders/index.mjs";
 import { MODULE_ID, adjacentSigns } from "./sky/signs.mjs";
 import { SkyTrackerApp } from "./sky/tracker-app.mjs";
 import { SkyTracker } from "./sky/tracker.mjs";
+import { Blut } from "./soulbound/blut.mjs";
 import { Reiatsu } from "./soulbound/reiatsu.mjs";
 import { Release } from "./soulbound/release.mjs";
 import { SoulboundRig } from "./soulbound/rig.mjs";
@@ -69,6 +70,7 @@ Hooks.once("init", () => {
     start("Reiatsu", () => Reiatsu.registerHooks());
     start("Rising Pressure", () => RisingPressure.registerHooks());
     start("the release ladder", () => Release.registerHooks());
+    start("Blut", () => Blut.registerHooks());
     start("the sky tracker window", () => SkyTrackerApp.registerHooks());
 
     start("the sky tracker's settings menu", () => {
@@ -107,6 +109,7 @@ Hooks.once("init", () => {
         reiatsu: Reiatsu,
         risingPressure: RisingPressure,
         release: Release,
+        blut: Blut,
         rig: SoulboundRig,
         open: () => new SkyTrackerApp().render(true),
         adjacentSigns,

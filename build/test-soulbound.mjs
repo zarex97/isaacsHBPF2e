@@ -678,4 +678,81 @@ for (const [file, expected] of [["soul-reaper", 3], ["hollow", 4]]) {
     );
 }
 
+/* ---------------------------------------------------------------------------------------------- */
+/*  Reactions, Blut, and Seal the Art                                                               */
+/* ---------------------------------------------------------------------------------------------- */
+
+const { canOffer } = await import("../scripts/riders/reactions.mjs");
+
+const offerBase = { hasReaction: true, alreadyOffered: false, ownerOnline: true, frequencyLeft: 1 };
+check("an owner with a reaction available is offered it", canOffer(offerBase), true);
+check("a reaction the actor cannot take is not offered", canOffer({ ...offerBase, hasReaction: false }), false);
+check("the same trigger is never offered twice", canOffer({ ...offerBase, alreadyOffered: true }), false);
+check("an exhausted frequency is not offered", canOffer({ ...offerBase, frequencyLeft: 0 }), false);
+check("with nobody at the keyboard, nothing is offered", canOffer({ ...offerBase, ownerOnline: false }), false);
+
+const dankuReaction = kidoDoc("bakudo", "danku").flags["isaacs-hb-pf2e"].riders[0];
+check(
+    "Danku is a real reaction offered when damage lands (guide §6.2)",
+    [dankuReaction.apply.type, dankuReaction.event, dankuReaction.self],
+    ["reaction", "damage-applied", true],
+);
+check(
+    "and it grants resistance equal to your level",
+    contentDoc("soulbound-effects/effect-splitting-void.json").system.rules[0],
+    { key: "Resistance", type: "all-damage", value: "@actor.level" },
+);
+
+// Phase 1 left this open: the flat check could only be reported after the fact. It is now offered.
+const gfs = contentDoc("soulbound-effects/effect-greater-flash-step.json").flags["isaacs-hb-pf2e"].riders[0];
+check(
+    "Greater Flash Step's DC 5 flat check is offered as a reaction (Phase 1's open item)",
+    [gfs.apply.type, gfs.event, gfs.apply.riders[0].apply.type, gfs.apply.riders[0].apply.dc],
+    ["reaction", "strike-received", "flat-check", 5],
+);
+check(
+    "and its description no longer says it is unautomated",
+    contentDoc("soulbound-effects/effect-greater-flash-step.json").system.description.value.includes("Not yet automated"),
+    false,
+);
+
+const { Blut } = await import("../scripts/soulbound/blut.mjs");
+const withEffect = (name) => ({
+    type: "character", class: { system: { slug: "soulbound" } },
+    itemTypes: { effect: name ? [{ id: "e1", name }] : [] },
+    getRollOptions: () => [],
+});
+check(
+    "Blut reports which form is standing, or none",
+    [Blut.active(withEffect("Effect: Blut Vene")), Blut.active(withEffect("Effect: Blut Arterie")), Blut.active(withEffect(null))],
+    ["vene", "arterie", null],
+);
+check(
+    "both forms are refused unless the content says otherwise — canon's two reishi systems",
+    [
+        Blut.allowsBoth(withEffect(null)),
+        Blut.allowsBoth({ ...withEffect(null), getRollOptions: () => ["soulbound:blut-both"] }),
+    ],
+    [false, true],
+);
+
+const sealArt = contentDoc("soulbound-class-features/actions/seal-the-art.json");
+const sealRider = sealArt.flags["isaacs-hb-pf2e"].riders[0];
+check(
+    "Seal the Art counteracts, on use, for the whole cast (guide §5.3)",
+    [sealRider.apply.type, sealRider.event, sealRider.self, sealArt.system.actions.value],
+    ["counteract", "action-used", true, 2],
+);
+check("and it reaches release states, stances and auras", [
+    sealRider.apply.traits.includes("soulbound"),
+    sealRider.apply.traits.includes("stance"),
+    sealRider.apply.traits.includes("cosmo"),
+], [true, true, true]);
+
+check(
+    "the Quincy grants all four of its features",
+    lineageDoc("quincy").system.rules.filter((r) => r.key === "GrantItem").length,
+    4,
+);
+
 report("Soulbound tests");

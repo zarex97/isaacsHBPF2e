@@ -3,7 +3,7 @@
     "name": "Effect: Greater Flash Step",
     "system": {
         "description": {
-            "value": "<p>An afterimage stands where you were. The <strong>first attack made against you each round</strong> requires the attacker to succeed at a <strong>DC 5 flat check</strong> or the attack misses.</p><hr /><p><em>Not yet automated. Pathfinder settles an attack's outcome before a module can see it, so cancelling a hit after the fact is not something a rule element or a rider can do &mdash; it needs the attack interrupted on the way in. Roll the flat check at the table for now.</em></p>"
+            "value": "<p>An afterimage stands where you were. The <strong>first attack made against you each round</strong> requires the attacker to succeed at a <strong>DC 5 flat check</strong> or the attack misses.</p><p><em>When an attack resolves against you, a card offers the flat check. Pathfinder has already settled the attack roll by then, so a failed check is announced for the table to apply rather than silently rewriting the hit &mdash; but the check itself is rolled, and it is offered before you have to remember it.</em></p>"
         },
         "duration": {
             "expiry": "turn-start",
@@ -37,5 +37,30 @@
             ]
         }
     },
-    "type": "effect"
+    "type": "effect",
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "label": "Roll the afterimage's DC 5 flat check",
+                        "prompt": "An attack has found you. Was it the afterimage it hit?",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "dc": 5,
+                                    "formula": "1d20",
+                                    "label": "Afterimage — DC 5 flat check; on a failure the attack misses",
+                                    "type": "flat-check"
+                                }
+                            }
+                        ],
+                        "type": "reaction"
+                    },
+                    "event": "strike-received",
+                    "self": true
+                }
+            ]
+        }
+    }
 }

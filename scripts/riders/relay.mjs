@@ -1,5 +1,5 @@
 import { MODULE_ID } from "../sky/signs.mjs";
-import { applyRiders, applyChoice, resolveCounteract } from "./apply.mjs";
+import { applyRiders, applyChoice, resolveCounteract, resolveReaction } from "./apply.mjs";
 import { applyOverlap } from "../targeting/overlap.mjs";
 
 const CHANNEL = `module.${MODULE_ID}`;
@@ -8,6 +8,7 @@ const HANDLERS = {
     applyRiders,
     applyChoice,
     applyCounteract: resolveCounteract,
+    applyReaction: resolveReaction,
     applyOverlap,
 };
 
