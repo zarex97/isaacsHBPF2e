@@ -1,4 +1,4 @@
-# Soulbound — PF2e Class Guide, **Version 1.3**
+# Soulbound — PF2e Class Guide, **Version 1.4**
 
 ### *Bleach · ブリーチ · Shinigami / Arrancar / Quincy edition*
 
@@ -12,6 +12,50 @@ compendium — no cross-referencing. Companion to **The Saint** (Gold Cloth guid
 live PF2e system data from `pf2e_fork/packs/pf2e` for every mechanical anchor; and the Bleach primary
 wiki for every named technique. Where the prototype left a decision open — its §12, "Open Questions
 For You" — this guide makes the call and says which way it went, in **§13**.
+
+**What changed in v1.4:**
+
+*This is the first version written **after** the class was built and played in Foundry. Every change
+below came from the implementation disagreeing with the text, and the module now matches this document
+exactly. The full account, with what was found and how, is in
+`Docs/soulbound-automation-programme.md`.*
+
+1. **§3.2's feat levels are one list, not two.** The table printed "soul reaper feat" on the even
+   levels beside "soulbound feat" at 1/10/20 — prototype naming from before the rename in v1.1. There
+   are **eleven class feats**: levels 1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20.
+2. **§4.1's Great Blade is "two-handed" in the usage line, not as a trait.** Pathfinder has no
+   `two-handed` trait; a weapon that is only ever two-handed says so in how it is held, exactly as the
+   greatsword does. The statistics are unchanged: **1d10 slashing, sweep**.
+3. **§4.1's Voice in the Blade names what it covers.** "Effects that would control you, possess you, or
+   force you to release your weapon" is not a category Pathfinder models. The bonus applies to
+   **possession** and **mental** effects, and to anything the GM tags as such. Same +1, stated honestly.
+4. **§3.1's Spirit Lore is a Lore skill you are trained in, granted with Spirit Sense.** A class cannot
+   train a Lore in Pathfinder's data model — only a background can — so it arrives as part of the
+   1st-level spiritual package. No change to what you have.
+5. **§4.2's pool is set by your level, full stop.** Pathfinder normally derives a focus pool from how
+   many focus effects you know. That rule would leave a **Hollow**, who knows exactly one costed kidō
+   forever, on a pool of one at 11th level. The pool is 1 / 2 at 5th / 3 at 11th regardless of what you
+   know. *If anyone "corrects" this back, the Hollow and the Quincy lose two thirds of their resource.*
+6. **§5.2's Sonido is a flat bonus, not a status bonus.** A status bonus to Speed is displayed by
+   Foundry and never added to the total. The five feet — ten from 11th — are unchanged; only the bonus
+   type differs, and it now actually applies.
+7. **§7B's Pantera stacks with Sonido because the two are different bonus types.** Two bonuses sharing
+   a name are treated as one, so a Hollow Pantera was losing five feet. At 1st level a Pantera has
+   **40 feet** of Speed: 25 base, +5 Sonido, +10 Pantera.
+8. **§6.4's Bala is agile for multiple-attack-penalty purposes, and nothing else.** `agile` is a weapon
+   property Pathfinder reads off weapons; on a spell attack it would be decoration. The −4/−8 is real
+   and unchanged.
+9. **Refined benefits that widen an area apply at 9th level, not per rank.** A focus effect heightens
+   by rank, and "at 9th level" is not a rank step. Senbonzakura's emanation still goes from 15 to 20
+   feet, Ennetsu Jigoku's likewise; they are simply granted by **Refined Release** rather than by the
+   Technique's own heightening line.
+10. **§9's Waning table is arithmetic:** dice = **22 − 2 × the round of Severance**, rounds 1–7, and the
+    Art **cannot be used** in rounds 8–10. Unchanged from v1.3 — stated as a formula because that is how
+    it is implemented, and because flattening it later should be a one-line change.
+
+**Nothing about the class's balance changed in v1.4.** Every number in this document is the number in
+v1.3; what changed is how four of them are *expressed*, and the admission that two of them were never
+reaching the table at all.
 
 **What changed in v1.3:**
 
@@ -389,23 +433,23 @@ Quincy → Crafting); trained in 3 + Int modifier additional skills
 | Level | Class Features |
 | :---- | :---- |
 | 1 | Ancestry and background, attribute boosts, initial proficiencies, **spirit weapon**, **reiatsu**, **Rising Pressure**, **lineage**, **released form**, **spirit sense**, **konsō**, soulbound feat |
-| 2 | Soul reaper feat, skill feat |
+| 2 | Soulbound feat, skill feat |
 | 3 | **Flash Step**, **departed flesh**, **iron will** (Will expert), general feat, skill increase |
-| 4 | Soul reaper feat, skill feat |
+| 4 | Soulbound feat, skill feat |
 | 5 | Ancestry feat, attribute boosts, **deepening reserve** (pool 2), **lineage feature**, **alertness** (Perception expert), **weapon expertise** (martial expert, crit specialization), skill increase |
-| 6 | Soul reaper feat, skill feat |
+| 6 | Soulbound feat, skill feat |
 | 7 | **Weapon specialization**, general feat, skill increase |
-| 8 | Soul reaper feat, skill feat |
+| 8 | Soulbound feat, skill feat |
 | 9 | Ancestry feat, **refined release**, **reiatsu expertise** (Reiatsu DC expert), skill increase |
 | 10 | Attribute boosts, soulbound feat, skill feat |
 | 11 | **Deepening reserve** (pool 3), **greater Flash Step**, **juggernaut** (Fortitude master), general feat, skill increase |
-| 12 | Soul reaper feat, skill feat |
+| 12 | Soulbound feat, skill feat |
 | 13 | Ancestry feat, **FULL RELEASE**, **weapon mastery** (martial master), **spirit weave** (light/unarmoured expert), skill increase |
-| 14 | Soul reaper feat, skill feat |
+| 14 | Soulbound feat, skill feat |
 | 15 | Attribute boosts, **lineage mastery**, **evasion** (Reflex master), greater weapon specialization, general feat, skill increase |
-| 16 | Soul reaper feat, skill feat |
+| 16 | Soulbound feat, skill feat |
 | 17 | Ancestry feat, **perfected final release**, **reiatsu mastery** (Reiatsu DC master), skill increase |
-| 18 | Soul reaper feat, skill feat |
+| 18 | Soulbound feat, skill feat |
 | 19 | **Unsealed** (capstone), general feat, skill increase |
 | 20 | Attribute boosts, soulbound feat, skill feat |
 
@@ -424,7 +468,7 @@ Choose one sealed profile:
 | Profile | Damage | Traits |
 | :---- | :---- | :---- |
 | **Blade** | 1d8 slashing | versatile P, two-hand d10 |
-| **Great Blade** | 1d10 slashing | two-handed, sweep |
+| **Great Blade** | 1d10 slashing | two-handed *(held in two hands; PF2e has no such trait)*, sweep |
 | **Paired Blades** | 1d6 slashing (each) | agile, finesse, twin |
 | **Spirit Bow** *(Quincy only)* | 1d8 piercing | propulsive, range increment 60 ft., reload 0 |
 
@@ -443,7 +487,8 @@ spirit weapon for free, with no cost and no Crafting check.
 damage type, and affect incorporeal creatures as though the weapon had the *ghost touch* rune.
 
 **Voice in the Blade.** You gain a **+1 circumstance bonus** to saves against effects that would
-control you, possess you, or force you to release your weapon. Your spirit weapon cannot be Stolen
+control you, possess you, or force you to release your weapon — in play, **possession** and
+**mental** effects, plus anything your GM names as one. Your spirit weapon cannot be Stolen
 or permanently Disarmed.
 *This is the hand-back for Will stopping at Expert (§2.2). A circumstance bonus, not status — it stacks with nothing your party is already handing out.*
 
@@ -604,8 +649,9 @@ this ignores Rising Pressure's per-encounter cap.
 **Hierro and Sonido (1st).**
 - **Hierro** ("iron skin") — Your compressed reiryoku hardens your skin. You gain **resistance to
   physical damage equal to half your level (minimum 1)**.
-- **Sonido** ("sound") — You gain a **+5-foot status bonus** to all your Speeds. At 11th level this
-  increases to +10 feet.
+- **Sonido** ("sound") — You gain a **+5-foot bonus** to all your Speeds. At 11th level this
+  increases to +10 feet. *(Untyped rather than status: a status bonus to Speed is displayed by
+  Foundry and never added, and Pantera needs a different type to stack with it.)*
 
 *Anchors: `Thermal Nimbus` (kineticist **4**) grants resistance **equal to your level** to one energy type. Hierro is broader (all physical) at **half** that rate, and arrives at 1st on a class with light armour and 10 HP. `Raging Resistance` (barbarian 9) gives 3 + Con to two types while raging. Sonido is below Monk `Incredible Movement` (+10 ft. at 3rd, BCS 30) at 1st and equal to it at 11th.*
 
