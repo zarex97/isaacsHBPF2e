@@ -1,0 +1,46 @@
+{
+    "img": "icons/magic/perception/eye-ringed-glow-angry-large-purple.webp",
+    "name": "Effect: Kanzen Saimin: Sōten Kisshun",
+    "system": {
+        "description": {
+            "value": "<p>The hypnosis stops being a lie about your position and becomes a lie about everything. Every enemy within 60 feet who can see you must attempt the Shikai save, <strong>including those already immune</strong>. Only a critical hit breaks it.</p><p>Sustain once per round to force one hypnotized creature to attempt a Will save or be <strong>confused</strong> until the end of its turn.</p>"
+        },
+        "duration": {
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:kyoka:total",
+                "value": true
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

@@ -1,0 +1,48 @@
+{
+    "img": "icons/magic/perception/eye-ringed-glow-angry-purple.webp",
+    "name": "Effect: Kanzen Saimin",
+    "system": {
+        "description": {
+            "value": "<p>Everything anyone sees of you is a lie you are telling. A creature that has seen your release and failed its Will save perceives you 5 feet from where you stand.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:kyoka:hypnotist",
+                "value": true
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}
