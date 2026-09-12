@@ -1,0 +1,53 @@
+{
+    "img": "icons/creatures/abilities/paw-print-pair-blue.webp",
+    "name": "Effect: Pantera — Resurrección",
+    "system": {
+        "description": {
+            "value": "<p>White armour, claws, and a whip of a tail. Two claw attacks, and +10 feet of Speed.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-equipment.Item.Pantera — Claws"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Pantera",
+                "selector": "speed",
+                "type": "status",
+                "value": 10
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

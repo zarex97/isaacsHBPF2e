@@ -1,0 +1,81 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "includesSelf": false
+            }
+        }
+    },
+    "img": "icons/magic/fire/flame-burning-water-blue.webp",
+    "name": "Hirviendo — Boil",
+    "system": {
+        "area": {
+            "type": "emanation",
+            "value": 20
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "2d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "fire"
+            }
+        },
+        "defense": null,
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per round</p><hr /><p>You boil the water around you. All water and ice within your emanation &mdash; including that created by other creatures, and including effects with the <strong>water</strong> or <strong>cold</strong> trait that create terrain &mdash; is destroyed, and each enemy in the emanation takes @Damage[2d6[fire]] damage.</p><hr /><p><em>Terrain denial with a small damage rider: the counterpart to the Quincy's Seal the Art, aimed at battlefield control effects rather than at buffs.</em></p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "level": {
+            "value": 7
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": ""
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "free"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-full-release"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "fire",
+                "focus",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

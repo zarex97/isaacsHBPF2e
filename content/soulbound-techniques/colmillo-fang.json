@@ -1,0 +1,99 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "areas": 1,
+                "includesSelf": false,
+                "range": 60
+            },
+            "overlap": {
+                "from": 2,
+                "predicate": [
+                    "item:slug:colmillo-fang"
+                ],
+                "selector": "reflex",
+                "value": 0
+            }
+        }
+    },
+    "img": "icons/creatures/abilities/wolf-howl-moon-grey-large.webp",
+    "name": "Colmillo — Fang",
+    "system": {
+        "area": {
+            "type": "burst",
+            "value": 10
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "3d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "force"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><strong>Requirements</strong> at least one wolf remains</p><hr /><p>Expend any number of wolves. Each wolf you expend moves to a point within 60 feet and detonates in a <strong>10-foot burst</strong>: @Damage[3d6[force]] damage, basic Reflex.</p><p>A creature in more than one burst takes damage <strong>only from the highest</strong>.</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d6.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "area": 0,
+            "damage": {
+                "0": "1d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 7
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "1"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-full-release"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "focus",
+                "manipulate",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

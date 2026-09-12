@@ -1,0 +1,44 @@
+{
+    "folder": "Spirits",
+    "img": "icons/magic/death/skull-crowned-white.webp",
+    "name": "Arrogante — Resurrección",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your flesh sloughs away and you stand as a crowned skeleton in a dark cloak.</p><p>Your spirit weapon becomes <strong>Gran Ca&iacute;da</strong> <em>(Great Fall)</em>: <strong>1d12 slashing</strong>, two-handed, <strong>sweep</strong>, <strong>forceful</strong>.</p><p>You become immune to <strong>disease</strong>, <strong>poison</strong>, and the <strong>doomed</strong> condition's worsening &mdash; you can still gain doomed, but it never increases past 1.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Arrogante — Resurrección"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

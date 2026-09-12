@@ -1031,4 +1031,91 @@ for (const name of ["senbonzakura", "zangetsu", "hyorinmaru", "ryujin-jakka", "k
     ], [3, true]);
 }
 
+/* ---------------------------------------------------------------------------------------------- */
+/*  Hollow Spirits                                                                                  */
+/* ---------------------------------------------------------------------------------------------- */
+
+const HOLLOW_SPIRITS = ["pantera", "murcielago", "arrogante", "los-lobos", "tiburon"];
+for (const name of HOLLOW_SPIRITS) {
+    const doc = spiritDoc(name);
+    check(`${name}: a Hollow Spirit its own Lineage can offer`, [
+        doc.system.traits.otherTags.includes("soulbound-spirit"),
+        doc.system.traits.otherTags.includes("soulbound-lineage-hollow"),
+    ], [true, true]);
+    check(`${name}: three rungs, the Segunda Etapa gated to 13th`, [
+        doc.system.rules.filter((r) => r.key === "GrantItem").length,
+        doc.system.rules.some((r) => r.key === "GrantItem" && JSON.stringify(r.predicate ?? []).includes("13")),
+    ], [3, true]);
+}
+
+// pf2e's Resistance takes an `exceptions` list, so guide §7B's "all damage except spirit" is exactly
+// expressible and did not need approximating.
+const murcielagoSegunda = contentDoc("soulbound-effects/effect-murcielago-segunda-etapa.json");
+check(
+    "Murciélago resists everything except spirit, at half level",
+    murcielagoSegunda.system.rules.find((r) => r.key === "Resistance"),
+    { exceptions: ["spirit"], key: "Resistance", type: "all-damage", value: "max(1,floor(@actor.level/2))" },
+);
+// Two FastHealing rules would be two separate heals at turn start, which is not what "doubles" means.
+check(
+    "and High-Speed Regeneration does not declare a second fast healing",
+    murcielagoSegunda.system.rules.some((r) => r.key === "FastHealing"),
+    false,
+);
+
+const lanza = techDoc("lanza-del-relampago");
+check(
+    "Lanza del Relámpago is an attack whose burst is the cast's own area, not a second one",
+    [lanza.system.defense, lanza.flags["isaacs-hb-pf2e"].areaTargeting.area,
+     lanza.flags["isaacs-hb-pf2e"].riders[0].area],
+    [null, { type: "burst", value: 15 }, undefined],
+);
+
+const claws = contentDoc("soulbound-equipment/pantera-claws.json");
+check(
+    "Pantera's claws are agile finesse unarmed attacks in the brawling group (guide §7B)",
+    [claws.system.category, claws.system.group, claws.system.damage.die, [...claws.system.traits.value].sort()],
+    ["unarmed", "brawling", "d8", ["agile", "finesse", "unarmed"]],
+);
+
+// Cero Metralleta is one spell with two shapes, which is what pf2e's spell overlays are for.
+const metralleta = techDoc("cero-metralleta");
+check(
+    "Cero Metralleta is a 60-foot cone with a 120-foot line variant",
+    [metralleta.system.area, Object.values(metralleta.system.overlays)[0].system.area],
+    [{ type: "cone", value: 60 }, { type: "line", value: 120 }],
+);
+
+const colmillo = techDoc("colmillo-fang");
+check(
+    "Colmillo's overlapping bursts do not stack — the existing overlap flag, not a new answer",
+    [colmillo.flags["isaacs-hb-pf2e"].overlap.from, colmillo.flags["isaacs-hb-pf2e"].overlap.value],
+    [2, 0],
+);
+check(
+    "and the wolves are a counter badge, like every other charge in this module",
+    contentDoc("soulbound-effects/effect-colmillo.json").system.badge,
+    { max: 8, min: 0, type: "counter", value: 8 },
+);
+
+const trident = techDoc("trident");
+check(
+    "Trident is three Strikes at one MAP, through the type Pleiades Nova already proved",
+    (() => { const r = trident.flags["isaacs-hb-pf2e"].riders[0]; return [r.apply.type, r.apply.count, r.self]; })(),
+    ["strikes", 3, true],
+);
+
+const respira = techDoc("respira");
+check(
+    "Respira's miasma lingers and grows with rank",
+    [respira.flags["isaacs-hb-pf2e"].lingering.damage.formula, respira.flags["isaacs-hb-pf2e"].lingering.damage.perStep],
+    ["1d6", "1d6"],
+);
+check(
+    "Respira Absoluta's decay is a flat check on what is aimed at you",
+    contentDoc("soulbound-effects/effect-respira-absoluta.json").flags["isaacs-hb-pf2e"].riders
+        .find((r) => r.apply.type === "flat-check").apply.dc,
+    5,
+);
+
 report("Soulbound tests");

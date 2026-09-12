@@ -1,0 +1,145 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "value": 1,
+                        "slug": "enfeebled",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "failure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "value": 2,
+                        "slug": "enfeebled",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "value": 1,
+                        "slug": "clumsy",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                }
+            ],
+            "areaTargeting": {
+                "affects": "enemies",
+                "includesSelf": false
+            },
+            "lingering": {
+                "damage": {
+                    "formula": "1d6",
+                    "perStep": "1d6",
+                    "type": "void"
+                },
+                "duration": {
+                    "unit": "rounds",
+                    "value": 1
+                },
+                "name": "Respira — miasma"
+            }
+        }
+    },
+    "img": "icons/magic/death/skull-crowned-white.webp",
+    "name": "Respira",
+    "system": {
+        "area": {
+            "type": "emanation",
+            "value": 15
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "2d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "void"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "fortitude"
+            }
+        },
+        "description": {
+            "value": "<p><em>Breath of Death.</em> A black miasma spills from you and everything in it gets older.</p><p>Each creature in a 15-foot emanation takes @Damage[2d6[void]] damage with a basic Fortitude save. Creatures that fail are <strong>enfeebled 1</strong> for 1 minute as they age; on a critical failure, <strong>enfeebled 2</strong> and <strong>clumsy 1</strong> instead.</p><p>The miasma lingers: until the start of your next turn, an enemy that enters or ends its turn in the area takes <strong>1d6 void</strong> damage with no save.</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d6, and the lingering damage by 1d6 at every other increment.</p><p><strong>Refined (9th)</strong> The emanation increases to <strong>20 feet</strong>, objects and unattended structures in the area are <strong>broken</strong> (already-broken objects are destroyed), and a creature that critically fails also can't regain Hit Points until the end of its next turn.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "area": 0,
+            "damage": {
+                "0": "1d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": ""
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-release"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "focus",
+                "manipulate",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

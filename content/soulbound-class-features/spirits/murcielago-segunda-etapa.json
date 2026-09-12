@@ -1,0 +1,48 @@
+{
+    "folder": "Spirits",
+    "img": "icons/creatures/abilities/wing-bat-membrane-green-large.webp",
+    "name": "Murciélago — Segunda Etapa",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>The only canon Segunda Etapa in the series.</strong> Your remaining humanity sheds: black fur, a long whip-like tail, horns, and the mask gone entirely.</p><ul><li>Your fly Speed increases by <strong>20 feet</strong>.</li><li>You gain <strong>resistance to all damage except spirit equal to half your level</strong>.</li><li><strong>High-Speed Regeneration.</strong> Your Regeneraci&oacute;n fast healing <strong>doubles</strong>, and it now restores lost limbs.</li><li>You gain <strong>Lanza del Rel&aacute;mpago</strong>.</li></ul>"
+        },
+        "level": {
+            "value": 13
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Murciélago — Segunda Etapa"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-techniques.Item.Lanza del Relámpago"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

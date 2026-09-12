@@ -1,0 +1,61 @@
+{
+    "img": "icons/creatures/abilities/wing-bat-membrane-green-large.webp",
+    "name": "Effect: Murciélago — Segunda Etapa",
+    "system": {
+        "description": {
+            "value": "<p>Black fur, a whip-like tail, horns, and no mask at all. +20 feet of fly Speed, <strong>resistance to all damage except spirit equal to half your level</strong>, and Regeneraci&oacute;n at double rate.</p>"
+        },
+        "duration": {
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Segunda Etapa",
+                "selector": "fly-speed",
+                "type": "status",
+                "value": 20
+            },
+            {
+                "exceptions": [
+                    "spirit"
+                ],
+                "key": "Resistance",
+                "type": "all-damage",
+                "value": "max(1,floor(@actor.level/2))"
+            },
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:murcielago:high-speed-regeneration",
+                "value": true
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

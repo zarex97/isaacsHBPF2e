@@ -1,0 +1,45 @@
+{
+    "img": "icons/creatures/abilities/wolf-howl-moon-grey-large.webp",
+    "name": "Effect: Colmillo",
+    "system": {
+        "description": {
+            "value": "<p>Eight spirit wolves stand in the squares around you. The badge counts them; you regain one at the start of each of your turns.</p>"
+        },
+        "duration": {
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        },
+        "badge": {
+            "max": 8,
+            "min": 0,
+            "type": "counter",
+            "value": 8
+        }
+    },
+    "type": "effect"
+}

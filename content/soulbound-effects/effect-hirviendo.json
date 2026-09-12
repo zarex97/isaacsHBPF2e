@@ -1,0 +1,50 @@
+{
+    "img": "icons/magic/water/water-elemental-blue.webp",
+    "name": "Effect: Hirviendo",
+    "system": {
+        "description": {
+            "value": "<p>Water stands around you in a 20-foot emanation, difficult terrain for enemies. La Gota may be thrown as a 60-foot line.</p>"
+        },
+        "duration": {
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "ItemAlteration",
+                "itemType": "spell",
+                "mode": "override",
+                "predicate": [
+                    "item:slug:la-gota"
+                ],
+                "property": "area-size",
+                "value": 60
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

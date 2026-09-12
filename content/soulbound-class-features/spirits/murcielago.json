@@ -1,0 +1,63 @@
+{
+    "folder": "Spirits",
+    "img": "icons/creatures/abilities/wing-bat-membrane-green.webp",
+    "name": "Murciélago",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><em>Bat &mdash; Ulquiorra Cifer.</em></p><p><strong>Release: \"Enclose.\"</strong> Emptiness given form. Cold, precise, and genuinely curious about what a heart is.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Murciélago — Resurrección"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-techniques.Item.Cero Oscuras"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            13
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Murciélago — Segunda Etapa"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-spirit",
+                "soulbound-spirit-murcielago",
+                "soulbound-lineage-hollow"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

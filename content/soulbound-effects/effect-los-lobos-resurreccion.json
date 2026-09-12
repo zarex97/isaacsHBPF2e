@@ -1,0 +1,53 @@
+{
+    "img": "icons/creatures/abilities/wolf-howl-moon-grey.webp",
+    "name": "Effect: Los Lobos — Resurrección",
+    "system": {
+        "description": {
+            "value": "<p>Two ornate pistols that never run dry, and five more feet of Speed.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-equipment.Item.Los Lobos — Pistols"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Los Lobos",
+                "selector": "speed",
+                "type": "status",
+                "value": 5
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

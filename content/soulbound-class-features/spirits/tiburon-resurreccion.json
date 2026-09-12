@@ -1,0 +1,44 @@
+{
+    "folder": "Spirits",
+    "img": "icons/creatures/fish/fish-shark-swimming.webp",
+    "name": "Tiburón — Resurrección",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Water erupts around you and you step out of it.</p><p>Your spirit weapon becomes a broad hollow-edged blade shaped like a shark's tooth: <strong>1d12 slashing</strong>, two-handed, <strong>sweep</strong>. You gain a <strong>swim Speed</strong> equal to your Speed, you can breathe water, and you can create water freely from the gill-slits along the blade.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Tiburón — Resurrección"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}
