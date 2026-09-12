@@ -1,0 +1,47 @@
+{
+    "folder": "Lineages",
+    "img": "icons/weapons/bows/bow-recurve-blue.webp",
+    "name": "Quincy",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>You own no soul-weapon at all. You reach into the air, take the spirit particles that are already there, and make a bow out of them.</p><p><strong>Granted skill</strong> Crafting. <strong>Release ladder</strong> Schrift &rarr; Vollst&auml;ndig.</p><p>Your demon arts are <strong>Gint&#333;</strong> &mdash; silver tubes of liquefied reiryoku, uncorked and spoken over. You know <strong>Heizen</strong> and <strong>Gritz</strong>, and you cannot learn others. At 5th level you gain the talent that started a war: you do not out-fight a Soul Reaper, you <strong>switch them off</strong>.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "ActiveEffectLike",
+                "mode": "upgrade",
+                "path": "system.skills.crafting.rank",
+                "value": 1
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-lineage",
+                "soulbound-lineage-quincy"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

@@ -1,0 +1,47 @@
+{
+    "folder": "Lineages",
+    "img": "icons/weapons/swords/sword-guard-blue.webp",
+    "name": "Soul Reaper",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><em>Shinigami.</em> You carry your own soul as a sword, and it argues with you.</p><p><strong>Granted skill</strong> Society. <strong>Release ladder</strong> Shikai &rarr; Bankai.</p><p>You are the only Lineage that <em>chooses</em> its demon arts: six kid&#333; of your own selection, on top of your free cantrip <strong>Sh&#333;</strong>. You also drill the sword arts rather than intuiting them, and gain the <strong>Zanjutsu</strong> family at 5th level.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "ActiveEffectLike",
+                "mode": "upgrade",
+                "path": "system.skills.society.rank",
+                "value": 1
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-lineage",
+                "soulbound-lineage-soul-reaper"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

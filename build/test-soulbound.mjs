@@ -436,4 +436,46 @@ check(
     true,
 );
 
+/* ---------------------------------------------------------------------------------------------- */
+/*  The Lineage axis                                                                                */
+/* ---------------------------------------------------------------------------------------------- */
+
+function lineageDoc(name) {
+    return contentDoc(`soulbound-class-features/lineages/${name}.json`);
+}
+
+const lineageFeature = featureDoc("lineage");
+const lineageChoice = lineageFeature.system.rules.find((r) => r.key === "ChoiceSet");
+check(
+    "Lineage is chosen at 1st level from the tagged Lineage items",
+    [lineageFeature.system.level.value, lineageChoice?.flag, lineageChoice?.choices?.filter],
+    [1, "lineage", ["item:tag:soulbound-lineage"]],
+);
+check(
+    "and the choice is granted",
+    lineageFeature.system.rules.some((r) => r.key === "GrantItem" && r.uuid === "{item|flags.system.rulesSelections.lineage}"),
+    true,
+);
+
+// `subfeatures.proficiencies` cannot grant a skill: pf2e's applier handles Perception, saves, weapon and
+// armour categories and class DCs, and nothing else. A skill is an ActiveEffectLike on its rank, which is
+// how the Saint's Aquarius Cloth already grants Occultism or Arcana.
+for (const [file, skill] of [["soul-reaper", "society"], ["hollow", "athletics"], ["quincy", "crafting"]]) {
+    const doc = lineageDoc(file);
+    check(`${file}: tagged for the ChoiceSet`, (doc.system.traits.otherTags ?? []).includes("soulbound-lineage"), true);
+    const rank = doc.system.rules.find((r) => r.key === "ActiveEffectLike" && r.path === `system.skills.${skill}.rank`);
+    check(`${file}: trains its Lineage skill (guide §5)`, [rank?.mode, rank?.value], ["upgrade", 1]);
+}
+
+// Guide §3.1 trains every Soulbound in Spirit Lore. The class data model has no `lore` field — only a
+// background does — so it is a real `lore` item, granted by the chassis rather than by the Lineage.
+const spiritLore = contentDoc("soulbound-class-features/core/spirit-lore.json");
+check("Spirit Lore is a lore item, the only shape pf2e has for it", spiritLore.type, "lore");
+check("trained, not merely present", spiritLore.system.proficient.value, 1);
+check(
+    "and the chassis grants it, so all three Lineages have it",
+    featureDoc("spirit-sense").system.rules.some((r) => r.key === "GrantItem" && String(r.uuid).endsWith("Spirit Lore")),
+    true,
+);
+
 report("Soulbound tests");
