@@ -1,0 +1,48 @@
+{
+    "folder": "Spirits",
+    "img": "icons/magic/fire/blade-two-handed-blackened-orange.webp",
+    "name": "Zanka no Tachi",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><em>Longsword of the Remnant Flame.</em> Canon inverts every expectation: the Bankai does not release more fire, it <strong>pulls all of it into the blade</strong>. The sword blackens and looks burnt out. Everything around you dries and cracks.</p><p>Your spirit weapon's damage die increases by <strong>two</strong> steps instead of one. You <strong>lose your fire resistance</strong> while it is active. At the start of each of your turns, each creature <strong>other than you</strong> within 30 feet &mdash; <strong>allies included</strong> &mdash; takes @Damage[1d6[fire]] damage from ambient heat, with no save.</p><p>Once per round you may <strong>Sustain</strong> to select one cardinal aspect, which lasts until you select another:</p><ul><li><strong>Higashi: Kyokujitsujin</strong> <em>(East, Rising Sun Blade)</em> &mdash; your Strikes ignore all resistances and immunities, and a creature damaged by your spirit weapon can't regain Hit Points and has its regeneration and fast healing suppressed until the end of your next turn.</li><li><strong>Nishi: Zanjitsu Gokui</strong> <em>(West, Setting Sun Ultimate Form)</em> &mdash; you gain <strong>fire immunity</strong> and <strong>resistance to all damage equal to half your level</strong>; a creature that damages you with an unarmed attack, a melee weapon, or a Grapple takes <strong>4d6</strong> fire damage.</li><li><strong>Minami: Kaka Jūmanokushi Daisōjin</strong> <em>(South, Great Funeral Pyre of 1,500,000)</em> &mdash; the ash of everything your flames have killed rises in a 20-foot emanation. Enemies that end their turn in it must succeed at a Reflex save or be <strong>grabbed</strong> by ash-figures (Escape against your Reiatsu DC). The figures take no actions and are not creatures.</li><li><strong>Kita: Tenchi Kaijin</strong> <em>(North, Heaven and Earth End in Ashes)</em> &mdash; [two-actions, once per round] a 60-foot line of flame, basic Reflex, <strong>5d6</strong> fire. This damage <strong>cannot be reduced by resistance to fire, by Blut Vene, or by Hierro</strong>. <strong>Heightened (+1)</strong> +1d6.</li></ul><hr /><p><strong>Design note.</strong> This is the only thing in the class that damages your own party, and that is deliberate and canon &mdash; Yamamoto's Bankai is a liability to everyone standing near it. If your table dislikes friendly fire, the cleanest fix is to exempt allies and reduce the die steps from two to one. That variant is a table decision, not the default.</p>"
+        },
+        "level": {
+            "value": 13
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Zanka no Tachi"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-techniques.Item.Kita: Tenchi Kaijin"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

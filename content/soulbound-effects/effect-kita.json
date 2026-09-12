@@ -1,0 +1,46 @@
+{
+    "img": "icons/magic/fire/blade-two-handed-blackened-orange.webp",
+    "name": "Effect: Kita",
+    "system": {
+        "description": {
+            "value": "<p><em>Heaven and Earth End in Ashes.</em> You may use <strong>Kita: Tenchi Kaijin</strong> once per round.</p>"
+        },
+        "duration": {
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:zanka:kita",
+                "value": true
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

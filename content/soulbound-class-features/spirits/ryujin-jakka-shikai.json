@@ -1,0 +1,44 @@
+{
+    "folder": "Spirits",
+    "img": "icons/magic/fire/blade-two-handed-glowing-orange.webp",
+    "name": "Ryūjin Jakka — Shikai",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>The blade sheathes itself in flame.</p><p>Your spirit weapon's damage type becomes <strong>fire</strong> (you may still choose spirit) and it gains <strong>deadly d8</strong>. You gain <strong>fire resistance equal to half your level</strong>.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Ryūjin Jakka — Shikai"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

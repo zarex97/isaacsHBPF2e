@@ -905,4 +905,79 @@ check("Zanhyō Ningyō is a reaction, using the machinery Phase 2 built",
      techDoc("zanhyo-ningyo").flags["isaacs-hb-pf2e"].riders[0].apply.type],
     ["reaction", "reaction"]);
 
+/* --- Zangetsu and Ryūjin Jakka ----------------------------------------------------------------- */
+
+const zangetsuShikai = spiritDoc("zangetsu-shikai");
+check(
+    "Zangetsu is never sealed, and the state machine reads a roll option rather than Ichigo's name",
+    zangetsuShikai.system.rules.some((r) => r.key === "RollOption" && r.option === "soulbound:release:never-sealed"),
+    true,
+);
+// pf2e's `damage-dice-faces` steps once per `upgrade` and refuses a value unless the mode is override.
+// Two steps is two rules, which is also how the Bankai says "two steps instead of one" out loud.
+check(
+    "the Shikai steps the die once; Zanka no Tachi steps it twice",
+    [
+        contentDoc("soulbound-effects/effect-zangetsu-shikai.json").system.rules
+            .filter((r) => r.property === "damage-dice-faces").length,
+        contentDoc("soulbound-effects/effect-zanka-no-tachi.json").system.rules
+            .filter((r) => r.property === "damage-dice-faces").length,
+    ],
+    [1, 2],
+);
+check(
+    "Tensa Zangetsu compresses: Getsuga to 1 action, Flash Step to twice a round",
+    (() => {
+        const rules = contentDoc("soulbound-effects/effect-tensa-zangetsu.json").system.rules;
+        return [
+            rules.some((r) => r.property === "time" && r.value === "1"),
+            rules.some((r) => r.property === "frequency-max" && r.value === 2),
+            rules.some((r) => r.property === "damage-dice-faces"),
+        ];
+    })(),
+    [true, true, false],
+);
+
+const getsuga = techDoc("getsuga-tensho");
+check(
+    "Getsuga Tenshō: 30-foot line, 2d6 spirit, +1d6 per rank (guide §7A)",
+    [getsuga.system.area, getsuga.system.damage["0"].formula, getsuga.system.damage["0"].type],
+    [{ type: "line", value: 30 }, "2d6", "spirit"],
+);
+check(
+    "and Kuroi Getsuga's spirit-resistance bypass waits for Refined Release",
+    getsuga.flags["isaacs-hb-pf2e"].bypass[0].predicate,
+    ["self:feature:refined-release"],
+);
+
+const zanka = contentDoc("soulbound-effects/effect-zanka-no-tachi.json");
+const ambient = zanka.flags["isaacs-hb-pf2e"].riders[0];
+check(
+    "Zanka no Tachi burns EVERYTHING within 30 feet, allies included — guide §7A is explicit",
+    [ambient.event, ambient.area.value, ambient.areaTargeting.affects, ambient.areaTargeting.includesSelf],
+    ["turn-start", 30, "all", false],
+);
+check(
+    "and the Shikai's fire resistance switches off while the Bankai stands",
+    contentDoc("soulbound-effects/effect-ryujin-jakka-shikai.json").system.rules
+        .find((r) => r.key === "Resistance").predicate,
+    [{ not: "self:effect:zanka-no-tachi" }],
+);
+
+const kita = techDoc("kita-tenchi-kaijin");
+check(
+    "Kita is the only unresistable damage in the class — fire and physical resistance both bypassed",
+    kita.flags["isaacs-hb-pf2e"].bypass[0].resistance.types,
+    ["fire", "physical"],
+);
+check("and it is metered to once per round", kita.system.frequency, { max: 1, per: "round", value: 1 });
+
+for (const name of ["senbonzakura", "hyorinmaru", "zangetsu", "ryujin-jakka"]) {
+    const doc = spiritDoc(name);
+    check(`${name}: tagged as a Soul Reaper Spirit`, [
+        doc.system.traits.otherTags.includes("soulbound-spirit"),
+        doc.system.traits.otherTags.includes("soulbound-lineage-soul-reaper"),
+    ], [true, true]);
+}
+
 report("Soulbound tests");

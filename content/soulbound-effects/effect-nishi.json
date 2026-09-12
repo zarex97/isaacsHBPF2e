@@ -1,0 +1,72 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "damageType": "fire",
+                        "formula": "4d6",
+                        "type": "damage"
+                    },
+                    "event": "strike-received",
+                    "predicate": [
+                        {
+                            "or": [
+                                "item:category:unarmed",
+                                "item:melee",
+                                "item:slug:grapple"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "img": "icons/magic/fire/barrier-wall-flame-ring-orange.webp",
+    "name": "Effect: Nishi",
+    "system": {
+        "description": {
+            "value": "<p><em>Setting Sun Ultimate Form.</em> You are wreathed in heat: <strong>fire immunity</strong> and <strong>resistance to all damage equal to half your level</strong>. A creature that damages you with an unarmed attack, a melee weapon, or a Grapple takes <strong>4d6 fire</strong>.</p>"
+        },
+        "duration": {
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "Immunity",
+                "type": "fire"
+            },
+            {
+                "key": "Resistance",
+                "type": "all-damage",
+                "value": "max(1,floor(@actor.level/2))"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}
