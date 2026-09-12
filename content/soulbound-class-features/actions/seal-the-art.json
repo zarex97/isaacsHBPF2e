@@ -5,6 +5,7 @@
                 {
                     "apply": {
                         "prompt": "Which art do you switch off?",
+                        "suppress": true,
                         "traits": [
                             "magical",
                             "stance",
@@ -33,7 +34,7 @@
         },
         "category": "classfeature",
         "description": {
-            "value": "<p><strong>Cost</strong> 1 Reiatsu Point<br /><strong>Range</strong> 30 feet, one creature</p><hr /><p>Attempt to <strong>counteract</strong> one ongoing magical effect, stance, aura, or release state affecting the target. Your counteract check uses your Reiatsu DC's proficiency and key attribute; your counteract rank is <strong>half your level, rounded up</strong>.</p><p>A <strong>release state</strong> &mdash; Shikai, Bankai, Resurrecci&oacute;n, Segunda Etapa, Vollst&auml;ndig, a Barbarian's Rage, a Magus's Arcane Cascade, or any comparable ongoing self-buff &mdash; is not ended outright but <strong>suppressed until the end of the target's next turn</strong>, and the target can't re-enter it during that time.</p><hr /><p><em>Automation note: the counteract itself is rolled and applied. Suppression rather than outright ending is not yet distinguished &mdash; a counteracted release state is removed, not paused &mdash; and that distinction lands with the release ladder's final pass. Against anything that is not a release state, this is complete.</em></p>"
+            "value": "<p><strong>Cost</strong> 1 Reiatsu Point<br /><strong>Range</strong> 30 feet, one creature</p><hr /><p>Attempt to <strong>counteract</strong> one ongoing magical effect, stance, aura, or release state affecting the target. Your counteract check uses your Reiatsu DC's proficiency and key attribute; your counteract rank is <strong>half your level, rounded up</strong>.</p><p>A <strong>release state</strong> &mdash; Shikai, Bankai, Resurrecci&oacute;n, Segunda Etapa, Vollst&auml;ndig, a Barbarian's Rage, a Magus's Arcane Cascade, or any comparable ongoing self-buff &mdash; is not ended outright but <strong>suppressed until the end of the target's next turn</strong>, and the target can't re-enter it during that time.</p>"
         },
         "level": {
             "value": 5

@@ -848,6 +848,9 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
             if (rider.self !== true) {
                 errors.push(`${at} a counteract rider must be \`self\`: it offers one choice for the whole cast`);
             }
+            if (apply.suppress !== undefined && typeof apply.suppress !== "boolean") {
+                errors.push(`${at} counteract suppress must be true or false — got "${apply.suppress}"`);
+            }
             break;
         case "prompt":
             if (!apply.text) errors.push(`${at} prompt riders need text — it is the only thing they do`);

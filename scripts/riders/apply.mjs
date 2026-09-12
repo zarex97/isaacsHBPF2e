@@ -959,6 +959,7 @@ async function applyCounteract(rider, context) {
                     // Falls back to the origin's own class, so a Soulbound's Seal the Art counteracts
                     // on the Reiatsu DC without the content having to name it.
                     statistic: rider.apply.statistic ?? classSlugOf(context.originActor) ?? "saint",
+                    suppress: rider.apply.suppress === true,
                 },
             },
         },
@@ -1000,16 +1001,44 @@ export async function resolveCounteract(payload) {
     const reach = { criticalSuccess: 3, success: 1, failure: -1, criticalFailure: -Infinity }[outcome] ?? -Infinity;
     const counteracted = targetRank <= ourRank + reach;
 
-    if (counteracted) await effect.delete();
+    // Suppression rather than ending, for the things that are a STATE rather than a spell.
+    //
+    // The Soulbound's Seal the Art (guide §5.3) says a release state — Shikai, Bankai, Resurrección,
+    // Vollständig, a Barbarian's Rage, a Magus's Arcane Cascade — is "not ended outright but suppressed
+    // until the end of the target's next turn", and cannot be re-entered meanwhile. Deleting a 13th-level
+    // Bankai with a 5th-level action is exactly what that clause exists to prevent.
+    //
+    // A suppressed effect is disabled rather than removed, so it comes back with its own duration and
+    // its own flags intact, and a marker says it may not be re-entered yet.
+    const suppressible = payload.suppress
+        && (effect.system?.traits?.value ?? []).some((t) => SUPPRESSIBLE_TRAITS.has(t));
+
+    if (counteracted && suppressible) {
+        await effect.update({ disabled: true, [`flags.${MODULE_ID}.suppressedUntil`]: "end-of-next-turn" });
+    } else if (counteracted) {
+        await effect.delete();
+    }
+
     await ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor }),
         flavor: item?.name ?? "Counteract",
-        content: counteracted
-            ? `<p><strong>${effect.name}</strong> is counteracted and gone.</p>`
-            : `<p><strong>${effect.name}</strong> holds — rank ${targetRank} against a counteract rank of `
-                + `${ourRank} on a ${OUTCOME_LABELS[outcome] ?? "failed check"}.</p>`,
+        content: counteracted && suppressible
+            ? `<p><strong>${effect.name}</strong> is <strong>suppressed</strong> until the end of `
+                + `${effect.actor?.name ?? "the target"}'s next turn, and cannot be re-entered until then.</p>`
+            : counteracted
+                ? `<p><strong>${effect.name}</strong> is counteracted and gone.</p>`
+                : `<p><strong>${effect.name}</strong> holds — rank ${targetRank} against a counteract rank of `
+                    + `${ourRank} on a ${OUTCOME_LABELS[outcome] ?? "failed check"}.</p>`,
     });
 }
+
+/**
+ * What "a release state" means for suppression.
+ *
+ * A release state is an ongoing self-buff a creature chose to enter, which is what makes deleting it
+ * disproportionate. These are the traits the ones in play actually carry.
+ */
+const SUPPRESSIBLE_TRAITS = new Set(["soulbound", "cosmo", "stance", "polymorph"]);
 
 /** pf2e's level-based DC table, which a module cannot import and which has not moved in four editions. */
 function dcByLevel(level) {
