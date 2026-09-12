@@ -1,3 +1,4 @@
+import { classSlugOf, classStatisticOf } from "../lib/class-dc.mjs";
 import { describeActor, describeDamage, riderOptions, testPredicate } from "../lib/roll-options.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 import { catchTokens } from "../targeting/catch.mjs";
@@ -15,6 +16,7 @@ import { Banish, durationSeconds } from "./banish.mjs";
 import { OUTCOME_LABELS, collectRiders, itemFor, riderAt } from "./data.mjs";
 import { Encasement } from "./encasement.mjs";
 import { WEAPON_TAG, crossingBleed, equipArm, libraDice, libraPotency } from "./libra.mjs";
+import { offerReaction } from "./reactions.mjs";
 import { selectRiders } from "./select.mjs";
 
 /** pf2e's DegreeOfSuccess is an index, not a word. */
@@ -198,6 +200,69 @@ export async function applyChoice(payload) {
     if (work.prompts.length > 0) await postPrompts(work);
 }
 
+/**
+ * A reaction, come back from a click on its card.
+ *
+ * Mirrors `applyChoice`: the payload carries an address rather than rider data, so the GM re-reads what
+ * the ability actually does. The nested `riders` are applied against whoever the trigger was about — which
+ * for a defensive reaction is usually the reacting actor themselves, and for Antithesis is the creature
+ * that dealt the damage.
+ */
+export async function resolveReaction(payload) {
+    const context = await resolveContext(payload);
+    if (!context) return;
+
+    const item = await fromUuid(payload.riderItemUuid);
+    const rider = riderAt(item, payload.riderIndex);
+    const nested = rider?.apply?.riders ?? [];
+    if (nested.length === 0) return;
+
+    const origin = await fromUuid(payload.originUuid);
+    const originActor = origin?.actor ?? origin;
+    const target = payload.targetUuid ? await fromUuid(payload.targetUuid) : null;
+    const actor = target?.actor ?? originActor;
+
+    const work = {
+        ...context, originActor, actor, target, item,
+        outcome: payload.outcome ?? null,
+        adjustments: [], prompts: [], notes: [], choices: [], moves: [],
+    };
+    for (const [index, inner] of nested.entries()) {
+        await applyOne(inner, { ...work, riderIndex: [payload.riderIndex, "riders", index].flat() });
+    }
+    if (work.notes.length > 0) await postNotes(work);
+    if (work.prompts.length > 0) await postPrompts(work);
+}
+
+/**
+ * A flat check, rolled and announced.
+ *
+ * Three things in this module promise "succeed at a DC N flat check or the effect fails": Greater Flash
+ * Step's afterimage, Kyōka Suigetsu's displaced image, and Arrogante's decay. pf2e rolls flat checks for
+ * its own persistent damage but offers a module no way to demand one, so this rolls it.
+ *
+ * It reports rather than rewrites, and that distinction is the honest part: by the time a Strike has
+ * resolved, pf2e has already settled whether it hit, and nothing a module does afterwards un-hits it. What
+ * this removes is the *remembering* — the check happens, in public, at the moment it is owed.
+ */
+async function applyFlatCheck(rider, context) {
+    const dc = Number(rider.apply.dc) || 5;
+    const roll = await new Roll(rider.apply.formula ?? "1d20").evaluate();
+    const passed = roll.total >= dc;
+    const label = rider.apply.label ?? `DC ${dc} flat check`;
+
+    await roll.toMessage({
+        speaker: ChatMessage.getSpeaker({ actor: context.originActor ?? context.actor }),
+        flavor: `${label} — <strong>${passed ? "success" : "failure"}</strong> against DC ${dc}`,
+    });
+
+    const branch = passed ? rider.apply.onSuccess : rider.apply.onFailure;
+    for (const [index, inner] of (branch ?? []).entries()) {
+        await applyOne(inner, { ...context, riderIndex: [context.riderIndex, "riders", index].flat() });
+    }
+}
+
+
 async function applyOne(rider, context) {
     const apply = rider.apply ?? {};
     switch (apply.type) {
@@ -244,6 +309,10 @@ async function applyOne(rider, context) {
             return applyToggle(rider, context);
         case "counteract":
             return applyCounteract(rider, context);
+        case "reaction":
+            return offerReaction(rider, context);
+        case "flat-check":
+            return applyFlatCheck(rider, context);
         case "encasement":
             return Encasement.apply(rider, context);
         case "escape":
@@ -887,7 +956,10 @@ async function applyCounteract(rider, context) {
                 counteract: {
                     originUuid: context.originActor?.uuid ?? null,
                     itemUuid: (context.item ?? context.riderItem)?.uuid ?? null,
-                    statistic: rider.apply.statistic ?? "saint",
+                    // Falls back to the origin's own class, so a Soulbound's Seal the Art counteracts
+                    // on the Reiatsu DC without the content having to name it.
+                    statistic: rider.apply.statistic ?? classSlugOf(context.originActor) ?? "saint",
+                    suppress: rider.apply.suppress === true,
                 },
             },
         },
@@ -910,9 +982,10 @@ export async function resolveCounteract(payload) {
     const actor = origin?.actor ?? origin;
     if (!actor || !effect) return;
 
-    const statistic = actor.getStatistic?.(payload.statistic ?? "saint");
+    const slug = payload.statistic ?? classSlugOf(actor) ?? "saint";
+    const statistic = actor.getStatistic?.(slug);
     if (!statistic) {
-        ui.notifications.warn(`${actor.name} has no ${payload.statistic ?? "saint"} statistic to counteract with.`);
+        ui.notifications.warn(`${actor.name} has no ${slug} statistic to counteract with.`);
         return;
     }
 
@@ -928,16 +1001,44 @@ export async function resolveCounteract(payload) {
     const reach = { criticalSuccess: 3, success: 1, failure: -1, criticalFailure: -Infinity }[outcome] ?? -Infinity;
     const counteracted = targetRank <= ourRank + reach;
 
-    if (counteracted) await effect.delete();
+    // Suppression rather than ending, for the things that are a STATE rather than a spell.
+    //
+    // The Soulbound's Seal the Art (guide §5.3) says a release state — Shikai, Bankai, Resurrección,
+    // Vollständig, a Barbarian's Rage, a Magus's Arcane Cascade — is "not ended outright but suppressed
+    // until the end of the target's next turn", and cannot be re-entered meanwhile. Deleting a 13th-level
+    // Bankai with a 5th-level action is exactly what that clause exists to prevent.
+    //
+    // A suppressed effect is disabled rather than removed, so it comes back with its own duration and
+    // its own flags intact, and a marker says it may not be re-entered yet.
+    const suppressible = payload.suppress
+        && (effect.system?.traits?.value ?? []).some((t) => SUPPRESSIBLE_TRAITS.has(t));
+
+    if (counteracted && suppressible) {
+        await effect.update({ disabled: true, [`flags.${MODULE_ID}.suppressedUntil`]: "end-of-next-turn" });
+    } else if (counteracted) {
+        await effect.delete();
+    }
+
     await ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor }),
         flavor: item?.name ?? "Counteract",
-        content: counteracted
-            ? `<p><strong>${effect.name}</strong> is counteracted and gone.</p>`
-            : `<p><strong>${effect.name}</strong> holds — rank ${targetRank} against a counteract rank of `
-                + `${ourRank} on a ${OUTCOME_LABELS[outcome] ?? "failed check"}.</p>`,
+        content: counteracted && suppressible
+            ? `<p><strong>${effect.name}</strong> is <strong>suppressed</strong> until the end of `
+                + `${effect.actor?.name ?? "the target"}'s next turn, and cannot be re-entered until then.</p>`
+            : counteracted
+                ? `<p><strong>${effect.name}</strong> is counteracted and gone.</p>`
+                : `<p><strong>${effect.name}</strong> holds — rank ${targetRank} against a counteract rank of `
+                    + `${ourRank} on a ${OUTCOME_LABELS[outcome] ?? "failed check"}.</p>`,
     });
 }
+
+/**
+ * What "a release state" means for suppression.
+ *
+ * A release state is an ongoing self-buff a creature chose to enter, which is what makes deleting it
+ * disproportionate. These are the traits the ones in play actually carry.
+ */
+const SUPPRESSIBLE_TRAITS = new Set(["soulbound", "cosmo", "stance", "polymorph"]);
 
 /** pf2e's level-based DC table, which a module cannot import and which has not moved in four editions. */
 function dcByLevel(level) {
@@ -1478,17 +1579,18 @@ export async function runSave(spec, context) {
     }
 }
 
-/** The Saint's Cosmo DC, or a flat number written in the content. */
+/**
+ * A class DC — the Saint's Cosmo or the Soulbound's Reiatsu — or a flat number written in the content.
+ *
+ * All three spellings are kept. `"cosmo"` is the Saint's own and predates the second class, so every one
+ * of the 48 Techniques already shipped says it; rewriting them to prove a point is how content breaks.
+ * `"class"` means whichever class the origin actually has, which is what a rider on a shared item wants.
+ */
 function resolveDC(dc, context) {
     if (typeof dc === "number") return dc;
-    if (dc === "cosmo") {
-        return (
-            context.originActor?.getStatistic?.("saint")?.dc?.value ??
-            context.originActor?.classDCs?.saint?.dc?.value ??
-            null
-        );
-    }
-    return null;
+    const slug = { cosmo: "saint", reiatsu: "soulbound", class: null }[dc];
+    if (slug === undefined) return null;
+    return classStatisticOf(context.originActor, slug)?.dc?.value ?? null;
 }
 
 function counterOn(actor, uuid) {

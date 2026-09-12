@@ -1,0 +1,78 @@
+{
+    "folder": "Actions",
+    "img": "icons/magic/air/wind-vortex-blue.webp",
+    "name": "Pressure Flare (Action)",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per encounter</p><hr /><p>Enemies within 15 feet must succeed at a Will save against your Reiatsu DC or be <strong>frightened 1</strong>.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "concentrate",
+                "emotion",
+                "fear",
+                "mental",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "action",
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "dc": "reiatsu",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "value": 1,
+                                    "slug": "frightened",
+                                    "type": "condition"
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            }
+                        ],
+                        "statistic": "will",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "self": true
+                }
+            ],
+            "areaTargeting": {
+                "affects": "enemies",
+                "area": {
+                    "type": "emanation",
+                    "value": 15
+                },
+                "includesSelf": false
+            }
+        }
+    }
+}

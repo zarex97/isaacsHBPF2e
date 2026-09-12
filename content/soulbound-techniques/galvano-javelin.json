@@ -1,0 +1,93 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "value": 1,
+                        "slug": "stunned",
+                        "type": "condition"
+                    },
+                    "event": "strike-resolved",
+                    "outcomes": [
+                        "success",
+                        "criticalSuccess"
+                    ]
+                }
+            ]
+        }
+    },
+    "img": "icons/magic/lightning/bolt-strike-white.webp",
+    "name": "Galvano Javelin",
+    "system": {
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "6d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "electricity"
+            }
+        },
+        "defense": null,
+        "description": {
+            "value": "<p>You throw a javelin of lightning. Make a ranged spell attack against one creature within 90 feet; on a hit it takes @Damage[6d6[electricity]] damage, doubled on a critical hit, and is <strong>stunned 1</strong>.</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d6.</p><hr /><p><em>Carries the <strong>incapacitation</strong> trait.</em></p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "area": 0,
+            "damage": {
+                "0": "1d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 5
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "90 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-refined"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "attack",
+                "concentrate",
+                "electricity",
+                "focus",
+                "incapacitation",
+                "manipulate",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

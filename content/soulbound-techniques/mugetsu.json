@@ -1,0 +1,93 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "bypass": [
+                {
+                    "immunity": {
+                        "mode": "ignore",
+                        "types": [
+                            "spirit"
+                        ]
+                    },
+                    "resistance": {
+                        "max": null,
+                        "types": [
+                            "spirit"
+                        ]
+                    }
+                }
+            ]
+        }
+    },
+    "img": "icons/magic/death/projectile-dark-blue.webp",
+    "name": "Mugetsu",
+    "system": {
+        "area": {
+            "type": "cone",
+            "value": 60
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "20d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "spirit"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><strong>Cost</strong> nothing · <strong>Requirements</strong> You are in <strong>Severance</strong></p><hr /><p><em>Moonless Sky.</em> A blade of black reiatsu pours from your arm.</p><p><strong>60-foot cone</strong>, basic Reflex, <strong>spirit</strong> damage.</p><p>This <strong>ignores all resistances and immunities to spirit damage</strong>.</p><hr /><p><em>Canon's Saigo no Getsuga Tensh&#333; is the <strong>state</strong> &mdash; here, Severance &mdash; and Mugetsu is the one attack inside it. Every other Spirit gets the same two-part shape.</em></p><hr /><p><strong>Waning.</strong> The damage is <strong>20d6</strong> if used in the first round of Severance, and two dice fewer each round after &mdash; 18d6, 16d6, 14d6, 12d6, 10d6, and <strong>8d6</strong> in the seventh. After the seventh round this cannot be used at all.</p><p><strong>Using this ends Severance</strong>, whether you want it to or not.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "level": {
+            "value": 10
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-severing",
+                "soulbound-art-zangetsu"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "focus",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

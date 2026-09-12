@@ -1,0 +1,46 @@
+{
+    "img": "icons/equipment/shield/heater-crystal-white.webp",
+    "name": "Effect: The Balance, at Night",
+    "system": {
+        "description": {
+            "value": "<p>Wings of white light and a sword in each hand. Your reduction is three times your level, an ally's harm can be taken onto yourself once a round, and you allot one enemy's fortune each turn.</p>"
+        },
+        "duration": {
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:the-balance:at-night",
+                "value": true
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

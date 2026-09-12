@@ -1,0 +1,44 @@
+{
+    "folder": "Spirits",
+    "img": "icons/equipment/shield/heater-crystal-white.webp",
+    "name": "The Balance, at Night",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Canon's Haschwalth holds Yhwach's power while his king sleeps. Wings of white light, a halo, and a sword in each hand.</p><ul><li>Your Release Technique's damage reduction increases to <strong>three times your level</strong>.</li><li>Once per round, when an <strong>ally</strong> within 60 feet would take damage, you may redirect that damage to yourself; you then apply your Release Technique's reduction to it as a free action <strong>without spending your reaction</strong>. You may do this even while your reaction is spent.</li><li><strong>Sight of the Balance:</strong> at the start of each of your turns, choose one enemy within 60 feet. Until the start of your next turn, that creature takes a <strong>&minus;2 status penalty</strong> to its next saving throw, and the next ally who attacks it gains a <strong>+1 status bonus</strong> to that attack roll.</li></ul>"
+        },
+        "level": {
+            "value": 13
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: The Balance, at Night"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

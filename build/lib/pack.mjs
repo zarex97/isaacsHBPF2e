@@ -7,6 +7,9 @@ const ROOT = path.resolve(url.fileURLToPath(new URL(".", import.meta.url)), ".."
 const MODULE_ID = "isaacs-hb-pf2e";
 const CONTENT_DIR = path.join(ROOT, "content");
 
+/** Ids for documents in packs this build cannot see. See the note in `prepare`. */
+const foreignUuids = JSON.parse(fs.readFileSync(path.join(ROOT, "build", "lib", "pf2e-uuids.json"), "utf8"));
+
 /** Foundry document IDs are 16 characters from this alphabet. */
 const ID_ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
@@ -168,11 +171,26 @@ export function prepare(packs, { errors }) {
 
     // Pass 2: UUID resolution. Anything addressing this module by name must resolve, or the reference is
     // dead at runtime — better to fail the build than ship a broken grant.
-    const prefix = `Compendium.${MODULE_ID}.`;
+    //
+    // The same is true of a FOREIGN pack, and for a long time it was not handled: the rewriting below only
+    // ever looked at this module's own names, so `Compendium.pf2e.classfeatures.Item.Alertness` shipped
+    // exactly as written. pf2e does not resolve a name-shaped compendium uuid at runtime — `fromUuid`
+    // returns null, silently — so every Saint in every world was missing Alertness, Iron Will, Juggernaut,
+    // Evasion and both Weapon Specializations, with Perception still untrained-plus-one at 20th level and
+    // nothing anywhere saying so. `build/lib/pf2e-uuids.json` is a snapshot of the ids those names have in
+    // the shipped system, resolved here so the grants actually land.
+    for (const [packId, names] of Object.entries(foreignUuids)) {
+        if (packId.startsWith("_")) continue;
+        for (const [name, id] of Object.entries(names)) {
+            nameToUuid.set(`Compendium.${packId}.Item.${name}`, `Compendium.${packId}.Item.${id}`);
+        }
+    }
+
+    const prefix = `Compendium.`;
     // Document names legitimately contain apostrophes ("Titan's Stance") and spaces, so the terminator set
     // is only the characters that actually end a UUID in our sources: @UUID[...] brackets, the {...|label}
     // form, JSON quoting, and an opening HTML tag.
-    const uuidPattern = /Compendium\.isaacs-hb-pf2e\.[^.\s]+\.[A-Za-z]+\.[^\]|}"<]+/g;
+    const uuidPattern = /Compendium\.[\w-]+\.[^.\s]+\.[A-Za-z]+\.[^\]|}"<]+/g;
     for (const { docs } of packs) {
         for (const { file, doc } of docs) {
             mapStrings(doc, (str) => {

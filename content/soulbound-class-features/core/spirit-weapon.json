@@ -1,0 +1,80 @@
+{
+    "folder": "Core",
+    "img": "icons/weapons/swords/sword-guard-blue.webp",
+    "name": "Spirit Weapon",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your power has a shape. What that shape <em>is</em> depends on your Lineage &mdash; a Soul Reaper's zanpakut&#333; is their own soul with an edge on it, a Hollow's is the fragment of mask that sealed their power inside their body, a Quincy's is a bow condensed out of the air &mdash; but the rules are identical.</p><p>Choose one sealed profile. Your spirit weapon is a <strong>martial weapon</strong> and always counts as one you're proficient with, regardless of its released form.</p><table><tbody><tr><th>Profile</th><th>Damage</th><th>Traits</th></tr><tr><td><strong>Blade</strong></td><td>1d8 slashing</td><td>versatile P, two-hand d10</td></tr><tr><td><strong>Great Blade</strong></td><td>1d10 slashing</td><td>two-handed, sweep</td></tr><tr><td><strong>Paired Blades</strong></td><td>1d6 slashing (each)</td><td>agile, finesse, twin</td></tr><tr><td><strong>Spirit Bow</strong> <em>(Quincy only)</em></td><td>1d8 piercing</td><td>propulsive, range increment 60 ft., reload 0</td></tr></tbody></table><p><strong>Voice in the Blade.</strong> You gain a <strong>+1 circumstance bonus</strong> to saves against effects that would control you, possess you, or force you to release your weapon. Your spirit weapon cannot be Stolen or permanently Disarmed.</p><p><em>A Quincy has no spirit inside the bow, so the bonus instead reflects the Quincy discipline of never letting go of your own reishi. Same number, different sentence.</em></p><hr /><p><em>Automation note: \"effects that would control you\" is not a category Pathfinder models. The bonus applies automatically to <strong>possession</strong> and <strong>mental</strong> effects, and to anything your GM tags <code>soulbound-control-save</code>.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "adjustName": false,
+                "choices": {
+                    "filter": [
+                        "item:tag:soulbound-weapon-profile"
+                    ],
+                    "itemType": "weapon"
+                },
+                "flag": "profile",
+                "key": "ChoiceSet",
+                "prompt": "Choose your spirit weapon's sealed profile"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "{item|flags.system.rulesSelections.profile}"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Manifest or Dismiss Spirit Weapon"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Voice in the Blade",
+                "predicate": [
+                    {
+                        "or": [
+                            "item:trait:possession",
+                            "item:trait:mental",
+                            "item:tag:soulbound-control-save"
+                        ]
+                    }
+                ],
+                "selector": [
+                    "fortitude",
+                    "reflex",
+                    "will"
+                ],
+                "type": "circumstance",
+                "value": 1
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

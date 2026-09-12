@@ -1,0 +1,44 @@
+{
+    "folder": "Spirits",
+    "img": "icons/magic/perception/eye-ringed-glow-angry-purple.webp",
+    "name": "Kanzen Saimin",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><em>Complete Hypnosis.</em> Canon's condition is precise and this implements it literally: <strong>the target must have seen your Shikai release</strong>, and thereafter they are in your hypnosis every time you release. <strong>The blind are immune.</strong></p><p>When you Release, and when a creature that can see first observes you while released, that creature must succeed at a <strong>Will save</strong> against your Reiatsu DC or be <strong>hypnotized</strong> for 1 minute. While hypnotized:</p><ul><li>It perceives you <strong>5 feet from where you actually stand</strong>. Attacks against you from it require a <strong>DC 5 flat check</strong>.</li><li>You are <strong>hidden</strong> from it whenever you are not adjacent to it, without needing to Hide.</li></ul><p>A creature that <strong>critically succeeds</strong> is immune for 24 hours. One that <strong>succeeds</strong> is immune for 10 minutes. One that <strong>critically fails</strong> is hypnotized for 1 hour and, once per encounter thereafter, is <strong>automatically</strong> hypnotized when you Release &mdash; the \"seen it once, falls to it forever\" clause. A creature that cannot see is unaffected entirely.</p><hr /><p><strong>Refined (9th)</strong> The flat check increases to <strong>DC 6</strong>, and Shikake's failure effect also makes the target <strong>off-guard</strong> to the misidentified creature.</p><hr /><p><em>Automation note: the module remembers, per creature, whether it has seen your release, what it rolled, and which immunity window it is inside. That memory travels with you between scenes and outlives the encounter, because canon's clause is about what a creature has seen, not about a fight.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Kanzen Saimin"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

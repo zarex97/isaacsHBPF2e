@@ -1,0 +1,66 @@
+{
+    "folder": "Lineages",
+    "img": "icons/magic/symbols/runes-carved-stone-blue.webp",
+    "name": "Kidō Learned (2nd)",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>You learn one kid&#333; of your choice from the Ways of Destruction, Binding and Mending.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "adjustName": false,
+                "choices": {
+                    "filter": [
+                        "item:tag:sb-tier-kido",
+                        {
+                            "not": "item:trait:cantrip"
+                        },
+                        {
+                            "not": "item:tag:soulbound-kido-hollow"
+                        },
+                        {
+                            "not": "item:tag:soulbound-kido-quincy"
+                        }
+                    ],
+                    "itemType": "spell"
+                },
+                "flag": "kido2",
+                "key": "ChoiceSet",
+                "prompt": "Choose a kidō"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "{item|flags.system.rulesSelections.kido2}"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound",
+                "lineage"
+            ]
+        }
+    },
+    "type": "feat"
+}

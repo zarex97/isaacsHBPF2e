@@ -1,0 +1,105 @@
+{
+    "folder": "Lineages",
+    "img": "icons/magic/symbols/runes-carved-stone-blue.webp",
+    "name": "Kidō Adept",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>You learn <strong>two</strong> kidō of your choice at 1st level, and one additional kidō at 5th, 9th, 13th and 17th level &mdash; <strong>six chosen kidō</strong> in total, on top of your free cantrip <strong>Sh&#333;</strong>.</p><p>You are the only Lineage that <em>chooses</em>: a Hollow and a Quincy each get exactly two fixed kidō native to what they are.</p><hr /><p><em>Six known focus effects is the top of the range Pathfinder permits without a spell list, and this is the Lineage that actually reaches it.</em></p><hr /><p><em>Each pickup arrives as its own small feature, so its question is asked at the level it belongs to. A ChoiceSet resolves once, when the item carrying it is created; a predicate decides whether it applies at all rather than making it ask again later.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-kido.Item.Shō — Thrust"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Kidō Learned (1st)"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Kidō Learned (2nd)"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            5
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Kidō Learned (5th)"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            9
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Kidō Learned (9th)"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            13
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Kidō Learned (13th)"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            17
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Kidō Learned (17th)"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound",
+                "lineage"
+            ]
+        }
+    },
+    "type": "feat"
+}

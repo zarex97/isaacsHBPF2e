@@ -1,0 +1,103 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "damageType": "fire",
+                        "formula": "5d6",
+                        "perStep": "1d6",
+                        "type": "damage"
+                    },
+                    "event": "action-used",
+                    "self": true
+                }
+            ],
+            "areaTargeting": {
+                "affects": "all",
+                "area": {
+                    "type": "burst",
+                    "value": 15
+                },
+                "includesSelf": false,
+                "range": 120
+            }
+        }
+    },
+    "img": "icons/magic/lightning/bolt-strike-forked-green.webp",
+    "name": "Lanza del Relámpago",
+    "system": {
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "5d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "electricity"
+            }
+        },
+        "defense": null,
+        "description": {
+            "value": "<p><em>Lance of the Lightning.</em> <strong>Frequency</strong> once per round</p><hr /><p>You forge a javelin of crackling green lightning and throw it. Make a ranged spell attack against one creature within 120 feet; on a hit it takes @Damage[5d6[electricity]] damage, doubled on a critical hit.</p><p>Whether or not you hit, the lance detonates in a <strong>15-foot burst</strong> at that point: <strong>5d6 fire</strong> damage, basic Reflex.</p><hr /><p><strong>Heightened (+1)</strong> +1d6 to both.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "heightening": {
+            "area": 0,
+            "damage": {
+                "0": "1d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 7
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "120 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-full-release"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "attack",
+                "concentrate",
+                "focus",
+                "manipulate",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

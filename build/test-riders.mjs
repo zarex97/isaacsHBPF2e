@@ -669,6 +669,10 @@ for (const call of wrapCalls) {
 check("no method is wrapped twice", duplicates, []);
 check("every wrap the module needs is still there", [...claimedBy.keys()].sort(), [
     "CONFIG.PF2E.Actor.documentClasses.character.prototype.applyDamage",
+    // The Soulbound's pool is its ceiling, not the count of focus effects it knows. pf2e derives the
+    // latter and a Hollow knows exactly one costed kido forever, so the derivation had it sitting on a
+    // pool of 1 at 11th level where the guide says 3.
+    "CONFIG.PF2E.Actor.documentClasses.character.prototype.prepareDerivedData",
     "CONFIG.PF2E.Item.documentClasses.action.prototype.toMessage",
     "CONFIG.PF2E.Item.documentClasses.spellcastingEntry.prototype.cast",
 ]);

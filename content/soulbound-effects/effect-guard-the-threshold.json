@@ -1,0 +1,45 @@
+{
+    "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+    "name": "Effect: Guard the Threshold",
+    "system": {
+        "description": {
+            "value": "<p>Something stands between you and the dead. Reduce the triggering damage by <strong>2 + the Soulbound's level</strong>.</p>"
+        },
+        "duration": {
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 2
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "Resistance",
+                "type": "all-damage",
+                "value": "2 + @actor.level"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

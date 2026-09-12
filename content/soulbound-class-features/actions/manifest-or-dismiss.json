@@ -1,0 +1,38 @@
+{
+    "folder": "Actions",
+    "img": "icons/weapons/swords/sword-guard-blue.webp",
+    "name": "Manifest or Dismiss Spirit Weapon",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "interaction",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per round</p><hr /><p>Your spirit weapon appears in your hand, or dissolves. Dismissed, it cannot be taken from you. If it leaves your hands you can Interact to call it back from up to 30 feet away.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "action"
+}

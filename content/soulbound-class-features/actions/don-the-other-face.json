@@ -1,0 +1,40 @@
+{
+    "folder": "Actions",
+    "img": "icons/magic/symbols/runes-triangle-blue.webp",
+    "name": "Don the Other Face",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><strong>Cost</strong> 1 Reiatsu Point · <strong>Frequency</strong> once per encounter</p><hr /><p>For <strong>1 minute</strong> you gain your borrowed Lineage's <strong>Aspect</strong>. While it is on, you take a <strong>&minus;1 status penalty to Will saves</strong> &mdash; what you are wearing is not yours, and it argues.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "concentrate",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "action"
+}

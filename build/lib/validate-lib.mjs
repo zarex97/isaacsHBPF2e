@@ -17,7 +17,12 @@ const RULE_KEYS = new Set([
     "SubstituteRoll", "TempHP", "TokenEffectIcon", "TokenImage", "TokenLight", "TokenMark", "TokenName", "Weakness",
 ]);
 
-const ITEM_TYPES = new Set(["class", "feat", "spell", "effect", "action", "armor", "weapon", "shield", "equipment"]);
+// `lore` is here because a class cannot train one: the class data model carries only `trainedSkills`
+// `.value` and `.additional`, and the `lore` array exists on backgrounds alone. A Lore skill is a
+// document, so "trained in Spirit Lore" has to be one.
+const ITEM_TYPES = new Set([
+    "class", "feat", "spell", "effect", "action", "armor", "weapon", "shield", "equipment", "lore",
+]);
 
 /** The six Arms of the Libra Cloth, as an `equip` rider names them. */
 const LIBRA_ARMS = new Set(["twin-swords", "tridents", "nunchaku", "shields", "sanjiegun", "tonfa"]);
@@ -75,11 +80,54 @@ const MUST_BE_INCAPACITATION = new Set([
  */
 const SLOT_RANK = { 1: 1, 6: 3, 11: 6, 16: 8 };
 
+/**
+ * Soulbound guide §7's preamble and §9: a Soulbound effect's base rank is fixed by which rung of the
+ * release ladder it sits on, not by the level it is gained at.
+ *
+ * Kidō (§6) and Zanjutsu (§8.4) have authored base ranks that follow no formula — Sōren Sōkatsui is rank
+ * 5 at 9th level, Kurohitsugi rank 8 at 15th, Nadegiri rank 6 at 10th — so they declare their tier and
+ * are checked only for being a legal rank. The four ladder rungs are the ones the guide states as a rule,
+ * and a Technique authored at the wrong one heightens wrong for the whole campaign with no other symptom.
+ */
+const SB_TIER_RANK = { release: 1, refined: 5, "full-release": 7, severing: 10 };
+const SB_TIERS = new Set([...Object.keys(SB_TIER_RANK), "kido", "zanjutsu"]);
+
+/**
+ * Which class guide a pack's documents are held to.
+ *
+ * Every validator below used to assume the Saint, because the Saint was the only class. A Soulbound
+ * Technique carries `reiatsu` where a Saint's carries `cosmo`, and has no technique slot at all — so
+ * running the Saint's rules over it reports an error on every single document rather than none.
+ */
+const FAMILY_PREFIXES = [
+    ["saint-", "saint"],
+    ["soulbound-", "soulbound"],
+];
+
+/**
+ * The DC spellings a rider may name.
+ *
+ * `"cosmo"` is the Saint's Cosmo DC and predates the second class; `"reiatsu"` is the Soulbound's;
+ * `"class"` means whichever class the origin actually has. `scripts/riders/apply.mjs#resolveDC` accepts
+ * exactly these three, and this must accept exactly the same set or the build and the runtime disagree
+ * about what the content means.
+ */
+const CLASS_DC_NAMES = new Set(["cosmo", "reiatsu", "class"]);
+
+function isClassDC(dc) {
+    return CLASS_DC_NAMES.has(dc) || Number.isInteger(dc);
+}
+
+export function familyOf(packName) {
+    return FAMILY_PREFIXES.find(([prefix]) => String(packName).startsWith(prefix))?.[1] ?? null;
+}
+
 export function validate(packs, { errors }) {
     for (const { def, docs } of packs) {
+        const family = familyOf(def.name);
         for (const { file, doc } of docs) {
             const where = rel(file);
-            if (def.type === "Item") validateItem(doc, where, errors);
+            if (def.type === "Item") validateItem(doc, where, errors, family);
             if (def.type === "JournalEntry") validateJournal(doc, where, errors);
             if (def.type === "Macro") validateMacro(doc, where, errors);
         }
@@ -118,7 +166,7 @@ function validateActionsAreReachable(packs, errors) {
     }
 }
 
-function validateItem(doc, where, errors) {
+function validateItem(doc, where, errors, family) {
     if (!ITEM_TYPES.has(doc.type)) errors.push(`${where}: unknown item type "${doc.type}"`);
     if (!doc.img) errors.push(`${where}: missing img`);
     const system = doc.system;
@@ -131,7 +179,9 @@ function validateItem(doc, where, errors) {
 
     // Traits
     const traits = system.traits?.value;
-    if (doc.type !== "class" && !Array.isArray(traits)) {
+    // A `lore` document carries no traits at all — pf2e's own do not — and a class carries them in a
+    // different shape, so neither is required to have the array.
+    if (doc.type !== "class" && doc.type !== "lore" && !Array.isArray(traits)) {
         errors.push(`${where}: missing system.traits.value`);
     } else if (Array.isArray(traits)) {
         const allowed = allowedTraits(doc.type);
@@ -198,10 +248,10 @@ function validateItem(doc, where, errors) {
         }
     }
 
-    if (doc.type === "feat") validateFeat(doc, where, errors);
-    if (doc.type === "spell") validateSpell(doc, where, errors);
+    if (doc.type === "feat") validateFeat(doc, where, errors, family);
+    if (doc.type === "spell") validateSpell(doc, where, errors, family);
     if (doc.type === "effect") validateEffect(doc, where, errors);
-    if (doc.type === "class") validateClass(doc, where, errors);
+    if (doc.type === "class") validateClass(doc, where, errors, family);
 
     validateAreaTargeting(doc, where, errors);
     validateRiders(doc, where, errors);
@@ -296,7 +346,7 @@ const DURATION_UNITS = new Set(["rounds", "minutes", "hours", "days", "unlimited
 const RIDER_TYPES = new Set([
     "condition", "effect", "prompt", "choice", "save", "damage", "persistent-damage", "death", "teleport",
     "strikes", "banish", "heal", "readout", "toggle", "counteract", "encasement", "escape",
-    "equip",
+    "equip", "reaction", "flat-check",
 ]);
 const RIDER_EVENTS = new Set([
     "save-rolled", "strike-resolved", "strike-received", "action-used", "damage-applied",
@@ -469,8 +519,8 @@ function validateLingering(doc, where, errors) {
         if (!SAVE_STATISTICS.has(flag.save.statistic)) {
             errors.push(`${sat} needs fortitude/reflex/will — got "${flag.save.statistic}"`);
         }
-        if (flag.save.dc !== "cosmo" && !Number.isInteger(flag.save.dc)) {
-            errors.push(`${sat} dc must be "cosmo" or a whole number — got "${flag.save.dc}"`);
+        if (!isClassDC(flag.save.dc)) {
+            errors.push(`${sat} dc must be one of ${[...CLASS_DC_NAMES].join("/")} or a whole number — got "${flag.save.dc}"`);
         }
         if (!Array.isArray(flag.save.riders) || flag.save.riders.length === 0) {
             errors.push(`${sat} needs at least one rider of its own, or the save decides nothing`);
@@ -798,6 +848,9 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
             if (rider.self !== true) {
                 errors.push(`${at} a counteract rider must be \`self\`: it offers one choice for the whole cast`);
             }
+            if (apply.suppress !== undefined && typeof apply.suppress !== "boolean") {
+                errors.push(`${at} counteract suppress must be true or false — got "${apply.suppress}"`);
+            }
             break;
         case "prompt":
             if (!apply.text) errors.push(`${at} prompt riders need text — it is the only thing they do`);
@@ -869,6 +922,34 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
                 errors.push(`${at} maxPerCast must be a positive number or "origin.level"`);
             }
             break;
+        case "flat-check":
+            if (!(Number(apply.dc) > 0)) {
+                errors.push(`${at} a flat check needs a positive dc — got "${apply.dc}"`);
+            }
+            for (const branch of ["onSuccess", "onFailure"]) {
+                if (apply[branch] === undefined) continue;
+                if (!Array.isArray(apply[branch])) {
+                    errors.push(`${at} ${branch} must be an array of riders`);
+                    continue;
+                }
+                apply[branch].forEach((inner, index) => {
+                    validateRider(inner, `${at}.${branch}[${index}]`, errors, { doc, depth: depth + 1 });
+                });
+            }
+            break;
+        case "reaction":
+            // A reaction that offers nothing is a card with a button that does nothing — the same silent
+            // shape as a grant whose uuid does not resolve.
+            if (!Array.isArray(apply.riders) || apply.riders.length === 0) {
+                errors.push(`${at} a reaction rider needs at least one nested rider in apply.riders`);
+            }
+            if (rider.self !== true) {
+                errors.push(`${at} a reaction rider must be \`self\`: it is offered to the ability's owner`);
+            }
+            (apply.riders ?? []).forEach((inner, index) => {
+                validateRider(inner, `${at}.riders[${index}]`, errors, { doc, depth: depth + 1 });
+            });
+            break;
         case "readout":
             // A tracked readout asks about one creature named at grant time, not a range scan of the board —
             // *Royal Funeral*'s "you know the target's exact Hit Points" has nobody else to report on.
@@ -930,8 +1011,8 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
                     if (!CONDITION_SLUGS.has(slug)) errors.push(`${at} "${slug}" is not a pf2e condition slug`);
                 }
             }
-            if (apply.escapeDc !== undefined && apply.escapeDc !== "cosmo" && !Number.isInteger(apply.escapeDc)) {
-                errors.push(`${at} escapeDc must be "cosmo" or a whole number — got "${apply.escapeDc}"`);
+            if (apply.escapeDc !== undefined && !isClassDC(apply.escapeDc)) {
+                errors.push(`${at} escapeDc must be one of ${[...CLASS_DC_NAMES].join("/")} or a whole number — got "${apply.escapeDc}"`);
             }
             break;
         }
@@ -1011,8 +1092,8 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
             if (!SAVE_STATISTICS.has(apply.statistic)) {
                 errors.push(`${at} save riders need fortitude/reflex/will — got "${apply.statistic}"`);
             }
-            if (apply.dc !== "cosmo" && !Number.isInteger(apply.dc)) {
-                errors.push(`${at} save dc must be "cosmo" or a whole number — got "${apply.dc}"`);
+            if (!isClassDC(apply.dc)) {
+                errors.push(`${at} save dc must be one of ${[...CLASS_DC_NAMES].join("/")} or a whole number — got "${apply.dc}"`);
             }
             const nested = apply.riders;
             if (!Array.isArray(nested) || nested.length === 0) {
@@ -1054,13 +1135,16 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
     }
 }
 
-function validateFeat(doc, where, errors) {
+function validateFeat(doc, where, errors, family) {
     const system = doc.system;
     if (typeof system.level?.value !== "number") errors.push(`${where}: feat missing system.level.value`);
     if (!FEAT_CATEGORIES.has(system.category)) errors.push(`${where}: bad feat category "${system.category}"`);
     if (!system.actionType?.value) errors.push(`${where}: feat missing actionType.value`);
-    if (system.category === "class" && !(system.traits?.value ?? []).includes("saint")) {
-        errors.push(`${where}: Saint class feat must carry the "saint" trait`);
+    if (system.category === "class") {
+        const trait = family === "soulbound" ? "soulbound" : "saint";
+        if (!(system.traits?.value ?? []).includes(trait)) {
+            errors.push(`${where}: ${trait} class feat must carry the "${trait}" trait`);
+        }
     }
     for (const [slug, increase] of Object.entries(system.subfeatures?.proficiencies ?? {})) {
         if (typeof increase?.rank !== "number") {
@@ -1069,14 +1153,11 @@ function validateFeat(doc, where, errors) {
     }
 }
 
-function validateSpell(doc, where, errors) {
+function validateSpell(doc, where, errors, family) {
     const system = doc.system;
     const traits = system.traits?.value ?? [];
     const rank = system.level?.value;
     if (typeof rank !== "number" || rank < 1 || rank > 10) errors.push(`${where}: spell rank must be 1-10`);
-    for (const required of ["focus", "cosmo", "saint"]) {
-        if (!traits.includes(required)) errors.push(`${where}: Technique must carry the "${required}" trait`);
-    }
     if (!system.traits?.traditions) errors.push(`${where}: spell missing traits.traditions`);
 
     const damage = system.damage ?? {};
@@ -1086,6 +1167,14 @@ function validateSpell(doc, where, errors) {
             errors.push(`${where}: damage.${key} unknown damage type "${part.type}"`);
         }
         if (!part.formula) errors.push(`${where}: damage.${key} has no formula`);
+    }
+
+    // The two classes diverge here. Everything above is true of any pf2e spell; everything below is the
+    // Saint's own rank spine, which a Soulbound effect does not have and must not be measured against.
+    if (family === "soulbound") return validateSoulboundSpell(doc, where, errors, rank);
+
+    for (const required of ["focus", "cosmo", "saint"]) {
+        if (!traits.includes(required)) errors.push(`${where}: Technique must carry the "${required}" trait`);
     }
 
     // Every Technique must declare which slot it occupies, because its base rank has to match: a
@@ -1139,6 +1228,44 @@ function validateSpell(doc, where, errors) {
     }
 }
 
+/**
+ * A Soulbound focus effect: a Technique, a kidō, a Zanjutsu technique, or a Severing Art.
+ *
+ * Guide §6 is explicit that kidō are not spells — they use the Reiatsu DC, cannot be counteracted as
+ * spells and cannot be heightened with slots — but pf2e has exactly one document type that can carry a
+ * damage formula, an area and a save, so all four are `spell` documents distinguished by their tier tag.
+ */
+function validateSoulboundSpell(doc, where, errors, rank) {
+    const system = doc.system;
+    const traits = system.traits?.value ?? [];
+    for (const required of ["focus", "reiatsu"]) {
+        if (!traits.includes(required)) {
+            errors.push(`${where}: Soulbound effect must carry the "${required}" trait`);
+        }
+    }
+
+    const tags = system.traits?.otherTags ?? [];
+    const tierTag = tags.find((t) => t.startsWith("sb-tier-"));
+    if (!tierTag) {
+        errors.push(
+            `${where}: Soulbound effect has no sb-tier-<tier> tag ` +
+                `(${[...SB_TIERS].join("/")}) — guide §7/§9`,
+        );
+        return;
+    }
+
+    const tier = tierTag.slice("sb-tier-".length);
+    if (!SB_TIERS.has(tier)) {
+        errors.push(`${where}: unknown Soulbound tier "${tier}" — expected one of ${[...SB_TIERS].join("/")}`);
+        return;
+    }
+    if (tier in SB_TIER_RANK && rank !== SB_TIER_RANK[tier]) {
+        errors.push(
+            `${where}: ${tier} effects have base rank ${SB_TIER_RANK[tier]}, not ${rank} (guide §7/§9)`,
+        );
+    }
+}
+
 function validateEffect(doc, where, errors) {
     const system = doc.system;
     if (!system.duration) errors.push(`${where}: effect missing duration`);
@@ -1146,11 +1273,17 @@ function validateEffect(doc, where, errors) {
     if (!system.tokenIcon) errors.push(`${where}: effect missing tokenIcon`);
 }
 
-function validateClass(doc, where, errors) {
+function validateClass(doc, where, errors, family) {
     const system = doc.system;
-    if (system.slug !== "saint") errors.push(`${where}: class slug must be "saint" (it keys the Cosmo DC)`);
-    if (!(system.traits?.value ?? []).includes("saint")) errors.push(`${where}: class must carry the "saint" trait`);
-    if (system.hp !== 10) errors.push(`${where}: Saint HP should be 10 (guide §2)`);
+    const expected = family === "soulbound" ? "soulbound" : "saint";
+    const dcName = family === "soulbound" ? "Reiatsu DC" : "Cosmo DC";
+    if (system.slug !== expected) {
+        errors.push(`${where}: class slug must be "${expected}" (it keys the ${dcName})`);
+    }
+    if (!(system.traits?.value ?? []).includes(expected)) {
+        errors.push(`${where}: class must carry the "${expected}" trait`);
+    }
+    if (system.hp !== 10) errors.push(`${where}: HP should be 10 (guide §2)`);
     const keyAbility = system.keyAbility?.value ?? [];
     if (keyAbility.length !== 2 || !keyAbility.includes("str") || !keyAbility.includes("dex")) {
         errors.push(`${where}: key ability should be Strength or Dexterity (guide §1.5)`);
@@ -1194,21 +1327,66 @@ const ADVANCEMENT = {
     19: ["Eighth Sense"],
 };
 
-function validateAdvancementTable(packs, errors) {
-    const classPack = packs.find((p) => p.def.name === "saint-class");
-    const saint = classPack?.docs.find((d) => d.doc.system?.slug === "saint")?.doc;
-    if (!saint) return; // absent during early scaffolding; the class validator reports a missing class
+/**
+ * The Soulbound's advancement table (guide §3.2).
+ *
+ * Grown phase by phase: a level listed here must have its feature in the packs, so a name added ahead of
+ * its content fails the build rather than waiting to be noticed at a table.
+ *
+ * Guide §3.2 prints "soul reaper feat" on the even levels beside "soulbound feat" at 1/10/20. That is
+ * prototype naming from before the class was renamed in v1.1 — there is one class feat list, not two —
+ * so `classFeatLevels` carries all eleven and this table says nothing about feats.
+ */
+const SOULBOUND_ADVANCEMENT = {
+    1: ["Spirit Weapon", "Reiatsu", "Rising Pressure", "Released Form", "Spirit Sense", "Konsō", "Lineage"],
+    3: ["Flash Step", "Departed Flesh", "Iron Will"],
+    5: ["Deepening Reserve", "Alertness", "Weapon Expertise"],
+    7: ["Weapon Specialization"],
+    9: ["Refined Release", "Reiatsu Expertise"],
+    11: ["Greater Flash Step", "Juggernaut"],
+    13: ["Full Release", "Weapon Mastery", "Spirit Weave"],
+    15: ["Evasion", "Greater Weapon Specialization"],
+    17: ["Perfected Full Release", "Reiatsu Mastery"],
+    19: ["Unsealed"],
+};
+
+/**
+ * A class item's grant levels must match its guide's advancement table.
+ *
+ * This is the single easiest thing to get wrong by hand and the hardest to notice in play: a feature
+ * granted one level late is invisible until someone reaches that level, which on a 20-level class can be
+ * most of a campaign away.
+ */
+function checkAdvancement(packs, errors, { pack, slug, table, guideRef }) {
+    const classPack = packs.find((p) => p.def.name === pack);
+    const classDoc = classPack?.docs.find((d) => d.doc.system?.slug === slug)?.doc;
+    if (!classDoc) return; // absent during early scaffolding; the class validator reports a missing class
 
     const byLevel = {};
-    for (const grant of Object.values(saint.system.items ?? {})) {
+    for (const grant of Object.values(classDoc.system.items ?? {})) {
         (byLevel[grant.level] ??= []).push(grant.name);
     }
-    for (const [level, expected] of Object.entries(ADVANCEMENT)) {
+    for (const [level, expected] of Object.entries(table)) {
         const actual = byLevel[level] ?? [];
         for (const name of expected) {
             if (!actual.some((a) => a.startsWith(name))) {
-                errors.push(`content/saint-class: advancement table expects "${name}" at level ${level} (guide §3)`);
+                errors.push(`content/${pack}: advancement table expects "${name}" at level ${level} (${guideRef})`);
             }
         }
     }
+}
+
+function validateAdvancementTable(packs, errors) {
+    checkAdvancement(packs, errors, {
+        pack: "saint-class",
+        slug: "saint",
+        table: ADVANCEMENT,
+        guideRef: "guide §3",
+    });
+    checkAdvancement(packs, errors, {
+        pack: "soulbound-class",
+        slug: "soulbound",
+        table: SOULBOUND_ADVANCEMENT,
+        guideRef: "guide §3.2",
+    });
 }

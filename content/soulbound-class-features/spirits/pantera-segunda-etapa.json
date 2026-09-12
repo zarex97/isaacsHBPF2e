@@ -1,0 +1,44 @@
+{
+    "folder": "Spirits",
+    "img": "icons/creatures/abilities/paw-print-pair-blue-large.webp",
+    "name": "Pantera — Segunda Etapa",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>Canon gives Grimmjow no Segunda Etapa</strong> &mdash; Ulquiorra is explicitly the only Espada who reached one. The <em>technique</em> Desgarr&oacute;n is canon and appears where canon puts it, at his Final Release. This second released form is <strong>invented</strong>, and is deliberately the least transformative of the five Hollow entries for that reason.</p><p>Your Speed increases by another <strong>10 feet</strong>, and your claws gain <strong>deadly d10</strong>. Once per round when you critically hit with a claw, you may immediately make an additional claw Strike against the same target at your current multiple attack penalty.</p><p>Additionally, <strong>Garra de la Pantera</strong>'s cone increases to <strong>60 feet</strong>, and creatures that critically fail against it take <strong>2d6 persistent bleed</strong> from embedded shards.</p>"
+        },
+        "level": {
+            "value": 13
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Pantera — Segunda Etapa"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

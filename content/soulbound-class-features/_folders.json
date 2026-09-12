@@ -1,0 +1,22 @@
+[
+    {
+        "name": "Core",
+        "sorting": "m",
+        "type": "Item"
+    },
+    {
+        "name": "Lineages",
+        "sorting": "m",
+        "type": "Item"
+    },
+    {
+        "name": "Spirits",
+        "sorting": "m",
+        "type": "Item"
+    },
+    {
+        "name": "Actions",
+        "sorting": "a",
+        "type": "Item"
+    }
+]

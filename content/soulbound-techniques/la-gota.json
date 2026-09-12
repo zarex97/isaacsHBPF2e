@@ -1,0 +1,126 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "direction": "away",
+                        "distance": 10,
+                        "type": "teleport"
+                    },
+                    "outcomes": [
+                        "failure",
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "slug": "prone",
+                        "type": "condition"
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ],
+                    "predicate": [
+                        "self:feature:refined-release"
+                    ]
+                }
+            ],
+            "areaTargeting": {
+                "affects": "enemies",
+                "includesSelf": false
+            },
+            "lingering": {
+                "difficultTerrain": 2,
+                "duration": {
+                    "unit": "rounds",
+                    "value": 1
+                },
+                "name": "Cascada — standing water",
+                "predicate": [
+                    "self:feature:refined-release"
+                ]
+            }
+        }
+    },
+    "img": "icons/creatures/fish/fish-shark-swimming.webp",
+    "name": "La Gota",
+    "system": {
+        "area": {
+            "type": "cone",
+            "value": 30
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "2d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "slashing"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><em>The Drop.</em> A blade of compressed water thrown from the edge.</p><p>Each creature in a 30-foot cone takes @Damage[2d6[slashing]] damage with a basic Reflex save; creatures that fail are pushed <strong>10 feet</strong> away from you.</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d6.</p><p><strong>Refined (9th) &mdash; Cascada</strong> <em>(Waterfall)</em>. The cone increases to <strong>40 feet</strong>, creatures that critically fail fall <strong>prone</strong>, and the area becomes <strong>difficult terrain</strong> from standing water until the start of your next turn.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "area": 0,
+            "damage": {
+                "0": "1d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-release"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "focus",
+                "manipulate",
+                "reiatsu",
+                "soulbound",
+                "water"
+            ]
+        }
+    },
+    "type": "spell"
+}

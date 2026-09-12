@@ -1,0 +1,49 @@
+{
+    "folder": "Lineages",
+    "img": "icons/magic/fire/beam-jet-stream-red.webp",
+    "name": "Cero and Bala",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>A Hollow's demon arts are not learned, they are <em>anatomy</em>. You know exactly <strong>two</strong> kidō and they are always these: <strong>Bala</strong>, your free cantrip, and <strong>Cero</strong>.</p><p>You cannot learn others, and no feat grants you more.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-kido.Item.Bala"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-kido.Item.Cero"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound",
+                "lineage"
+            ]
+        }
+    },
+    "type": "feat"
+}

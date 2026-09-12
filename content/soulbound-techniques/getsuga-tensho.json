@@ -1,0 +1,113 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "damageType": "spirit",
+                        "formula": "1d6",
+                        "type": "persistent-damage"
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ],
+                    "predicate": [
+                        "self:feature:refined-release"
+                    ]
+                }
+            ],
+            "bypass": [
+                {
+                    "predicate": [
+                        "self:feature:refined-release"
+                    ],
+                    "resistance": {
+                        "max": null,
+                        "types": [
+                            "spirit"
+                        ]
+                    }
+                }
+            ]
+        }
+    },
+    "img": "icons/magic/death/projectile-dark-blue.webp",
+    "name": "Getsuga Tenshō",
+    "system": {
+        "area": {
+            "type": "line",
+            "value": 30
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "2d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "spirit"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><em>Moon Fang Heaven-Piercer.</em></p><p>Each creature in a 30-foot line takes @Damage[2d6[spirit]] damage with a basic Reflex save.</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d6.</p><p><strong>Refined (9th) &mdash; Kuroi Getsuga</strong> <em>(Black Moon Fang)</em>. The line increases to <strong>60 feet</strong>, the damage <strong>ignores resistance to spirit damage</strong>, and creatures that critically fail take 1d6 persistent spirit damage.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "area": 0,
+            "damage": {
+                "0": "1d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-release"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "focus",
+                "manipulate",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

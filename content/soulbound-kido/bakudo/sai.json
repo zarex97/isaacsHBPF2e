@@ -1,0 +1,94 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "escapeDc": "reiatsu",
+                        "slug": "immobilized",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "failure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "escapeDc": "reiatsu",
+                        "slug": "immobilized",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                }
+            ]
+        }
+    },
+    "folder": "Way of Binding (Bakudō)",
+    "img": "icons/magic/control/debuff-chains-ropes-red.webp",
+    "name": "Sai — Restrain",
+    "system": {
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": {
+            "save": {
+                "basic": false,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><em>Bakudō #1. The arms lock behind the back and stay there.</em></p><p>One creature within 30 feet attempts a Reflex save.</p><p><strong>Failure</strong> It is <strong>immobilized</strong> for 1 round (Escape against your Reiatsu DC).</p><p><strong>Critical Failure</strong> It is <strong>immobilized</strong> for 1 minute. It can attempt a new save at the end of each of its turns.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "1"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-kido",
+                "soulbound-kido-bakudo"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "binding",
+                "focus",
+                "kido",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

@@ -1,0 +1,47 @@
+{
+    "img": "icons/magic/control/debuff-chains-ropes-yellow.webp",
+    "name": "Effect: Crawling Rope",
+    "system": {
+        "description": {
+            "value": "<p>A rope of yellow energy is wound around your legs. You take a &minus;10-foot status penalty to your Speeds and you can't Step.</p>"
+        },
+        "duration": {
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Crawling Rope",
+                "selector": "speed",
+                "type": "status",
+                "value": -10
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

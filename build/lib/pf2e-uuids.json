@@ -1,0 +1,16 @@
+{
+    "_comment": "Compendium ids for the pf2e documents this module's content references by name. The build rewrites its OWN name-based uuids to ids, but a foreign pack's names it cannot see, and pf2e does not resolve a name-shaped compendium uuid at runtime — it silently returns null and the grant does nothing. Snapshotted from a running pf2e 8.4.1; regenerate with the `Soulbound: Refresh pf2e UUIDs` macro if a system update ever renumbers them (the build fails loudly on an unknown name rather than shipping a dead grant).",
+    "_systemVersion": "8.4.1",
+    "pf2e.classfeatures": {
+        "Alertness": "D8CSi8c9XiRpVc5M",
+        "Evasion": "MV6XIuAgN9uSA0Da",
+        "Greater Weapon Specialization": "Z7HX6TeFsaup7Dx9",
+        "Iron Will": "wMyDcVNmA7xGK83S",
+        "Juggernaut": "OMZs5y16jZRW9KQK",
+        "Weapon Specialization": "9EqIasqfI8YIM3Pt"
+    },
+    "pf2e.actionspf2e": {
+        "Reactive Strike": "KAVf7AmRnbCAHrkT",
+        "Refocus": "OSefkMgojBLqmRDh"
+    }
+}

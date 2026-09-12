@@ -1,0 +1,63 @@
+{
+    "folder": "Lineages",
+    "img": "icons/skills/melee/blade-tips-triple-blue.webp",
+    "name": "Zanjutsu",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>The sword arts, drilled rather than intuited. You gain access to the <strong>Zanjutsu</strong> feat family and <strong>one Zanjutsu technique</strong> of your choice for free.</p><p>Zanjutsu techniques are Strike-based reiatsu effects, each costing 1 Reiatsu Point and requiring your spirit weapon to be Released.</p><hr /><p><em>More of the family can be taken as class feats at their listed levels.</em></p>"
+        },
+        "level": {
+            "value": 5
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:zanjutsu-access",
+                "value": true
+            },
+            {
+                "adjustName": false,
+                "choices": {
+                    "filter": [
+                        "item:tag:sb-tier-zanjutsu"
+                    ],
+                    "itemType": "spell"
+                },
+                "flag": "zanjutsu",
+                "key": "ChoiceSet",
+                "prompt": "Which sword art did you drill first?"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "{item|flags.system.rulesSelections.zanjutsu}"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound",
+                "lineage"
+            ]
+        }
+    },
+    "type": "feat"
+}

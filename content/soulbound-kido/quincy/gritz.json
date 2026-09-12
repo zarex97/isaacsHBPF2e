@@ -1,0 +1,94 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "escapeDc": "reiatsu",
+                        "slug": "immobilized",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "failure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "escapeDc": "reiatsu",
+                        "slug": "restrained",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                }
+            ]
+        }
+    },
+    "folder": "Quincy Arts (Gintō)",
+    "img": "icons/magic/control/debuff-chains-ropes-net-white.webp",
+    "name": "Gritz",
+    "system": {
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": {
+            "save": {
+                "basic": false,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><em>A silver tube uncorked and spoken over; a man-sized pentacle closes over what it names.</em></p><p>One creature within 30 feet attempts a Reflex save.</p><p><strong>Failure</strong> It is <strong>immobilized</strong> for 1 round (Escape against your Reiatsu DC).</p><p><strong>Critical Failure</strong> It is <strong>restrained</strong> for 1 minute. It can attempt a new save at the end of each of its turns.</p><hr /><p><em>One step better than Sai on a critical failure, because it is the Quincy's only costed kid&#333;.</em></p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-kido",
+                "soulbound-kido-quincy"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "binding",
+                "focus",
+                "kido",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

@@ -1,0 +1,44 @@
+{
+    "folder": "6th",
+    "img": "icons/skills/melee/blade-tip-chipped-blood-red.webp",
+    "name": "Reactive Strike",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>You gain the <strong>Reactive Strike</strong> reaction: when a creature within your reach uses a manipulate or move action, makes a ranged attack, or leaves a square during a move action, make a melee Strike against it. A critical hit disrupts a manipulate action.</p><hr /><p><em>A reaper who stands still is the most dangerous thing on the field. This is pf2e's own shared class feat at the level Barbarian and Champion get it, granted under its published name so the existing compendium item automates as-is.</em></p>"
+        },
+        "level": {
+            "value": 6
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.pf2e.actionspf2e.Item.Reactive Strike"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

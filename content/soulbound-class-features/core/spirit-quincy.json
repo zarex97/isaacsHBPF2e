@@ -1,0 +1,57 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/symbols/runes-star-blue.webp",
+    "name": "Spirit (Quincy)",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Choose your <strong>Spirit</strong> &mdash; your Schrift. It grants a <strong>Released Form</strong>, a <strong>Release Technique</strong>, and, at 13th level, a <strong>Full Release</strong>.</p><p>The choice is permanent.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "adjustName": false,
+                "choices": {
+                    "filter": [
+                        "item:tag:soulbound-spirit",
+                        "item:tag:soulbound-lineage-quincy"
+                    ],
+                    "itemType": "feat"
+                },
+                "flag": "spirit",
+                "key": "ChoiceSet",
+                "prompt": "Which letter did your king give you?"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "{item|flags.system.rulesSelections.spirit}"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

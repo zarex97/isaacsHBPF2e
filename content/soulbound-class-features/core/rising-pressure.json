@@ -1,0 +1,39 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/air/wind-vortex-blue.webp",
+    "name": "Rising Pressure",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Once per round, the first time you either deal damage to an enemy with your spirit weapon or take damage from an enemy, you regain <strong>1 Reiatsu Point</strong>.</p><p>You can't exceed your maximum pool, and over the course of a single encounter you can't regain more points this way than your maximum pool size.</p><table><tbody><tr><th>Level</th><th>Pool</th><th>Max per encounter</th><th>Techniques per fight</th></tr><tr><td>1&ndash;4</td><td>1</td><td>+1</td><td><strong>2</strong></td></tr><tr><td>5&ndash;10</td><td>2</td><td>+2</td><td><strong>4</strong></td></tr><tr><td>11&ndash;20</td><td>3</td><td>+3</td><td><strong>6</strong></td></tr></tbody></table><p><em>Every other focus user in Pathfinder spends down a pool that cannot be replenished until they get ten quiet minutes. This one refills by fighting &mdash; and none of it on round one.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

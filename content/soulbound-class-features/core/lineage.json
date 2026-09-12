@@ -1,0 +1,55 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/symbols/runes-triangle-blue.webp",
+    "name": "Lineage",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Three peoples fight the same war with the same physics and opposite manners. Choose what you are; the choice is permanent.</p><table><tbody><tr><th></th><th>Soul Reaper</th><th>Hollow</th><th>Quincy</th></tr><tr><td><strong>Buys</strong></td><td>Kid&#333; breadth (six chosen) and the Zanjutsu family</td><td>Hierro, Regeneraci&oacute;n, Sonido</td><td>Reishi weapon, Blut, Sealing</td></tr><tr><td><strong>Pays</strong></td><td>No resistance, no fast healing, baseline Speed</td><td>Two fixed kid&#333; (Cero, Bala); no Zanjutsu</td><td>Two fixed kid&#333; (Heizen, Gritz); no Zanjutsu</td></tr><tr><td><strong>Ladder</strong></td><td>Shikai &rarr; Bankai</td><td>Resurrecci&oacute;n &rarr; Segunda Etapa</td><td>Schrift &rarr; Vollst&auml;ndig</td></tr><tr><td><strong>Plays as</strong></td><td>The generalist: a duelist with answers</td><td>The bruiser: walks in and does not leave</td><td>The controller: denies the enemy their own tricks</td></tr></tbody></table>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "adjustName": false,
+                "choices": {
+                    "filter": [
+                        "item:tag:soulbound-lineage"
+                    ]
+                },
+                "flag": "lineage",
+                "key": "ChoiceSet",
+                "prompt": "What are you?"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "{item|flags.system.rulesSelections.lineage}"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

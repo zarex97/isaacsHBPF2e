@@ -1,0 +1,53 @@
+{
+    "folder": "2nd",
+    "img": "icons/magic/air/wind-vortex-blue.webp",
+    "name": "Pressure Flare",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "class",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per encounter</p><hr /><p>Enemies within 15 feet must succeed at a Will save against your Reiatsu DC or be <strong>frightened 1</strong>. This costs no Reiatsu Point.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "level": {
+            "value": 2
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Pressure Flare (Action)"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "concentrate",
+                "emotion",
+                "fear",
+                "mental",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

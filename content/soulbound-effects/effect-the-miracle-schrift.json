@@ -1,0 +1,53 @@
+{
+    "img": "icons/magic/holy/angel-winged-humanoid-blue.webp",
+    "name": "Effect: The Miracle — Schrift",
+    "system": {
+        "description": {
+            "value": "<p>A sword and shield too large for you, and a body that treats being broken as an instruction.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-equipment.Item.The Miracle — Sword and Shield"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "The Miracle",
+                "selector": "hp",
+                "type": "untyped",
+                "value": "@actor.level"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

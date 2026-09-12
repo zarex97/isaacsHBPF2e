@@ -1,0 +1,45 @@
+{
+    "folder": "Lineages",
+    "img": "icons/weapons/bows/bow-recurve-blue.webp",
+    "name": "Heilig Bogen and Blut",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>Heilig Bogen</strong> (\"holy bow\"). You may choose the <strong>Spirit Bow</strong> profile for your spirit weapon. Your bow needs no ammunition; you condense arrows out of ambient reishi. In an area with little or no ambient spiritual energy &mdash; a dead-magic zone, a sealed vault &mdash; your bow's damage die decreases by one step.</p><p><strong>Blut</strong> [free-action] <strong>Frequency</strong> once per round. Choose <strong>Vene</strong> or <strong>Arterie</strong>. The choice lasts until the start of your next turn. <strong>You cannot have both</strong> &mdash; canon is explicit that they run on two different reishi systems.</p><ul><li><strong>Blut Vene</strong> (defensive) &mdash; resistance to physical damage equal to half your level (minimum 1).</li><li><strong>Blut Arterie</strong> (offensive) &mdash; your Strikes with your spirit weapon ignore resistances to physical and spirit damage, and treat the target's cover as one step less.</li></ul><hr /><p><em>Arterie grants no bonus to attack, damage, or DC. It is a resistance bypass, which is how a Quincy shoots through Hierro without touching Pathfinder's attack math.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Blut"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound",
+                "lineage"
+            ]
+        }
+    },
+    "type": "feat"
+}

@@ -1,0 +1,46 @@
+{
+    "folder": "8th",
+    "img": "icons/magic/air/wind-vortex-blue.webp",
+    "name": "Rising Tide",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>The first time each round that <strong>Rising Pressure</strong> grants you a Reiatsu Point, you also gain <strong>temporary Hit Points equal to half your level</strong> (minimum 2). They last until the start of your next turn and don't stack with themselves.</p><hr /><p><em>This ties the class's signature engine to its real weakness &mdash; a 10-Hit-Point light-armour frontliner &mdash; and pays out every round of every fight.</em></p>"
+        },
+        "level": {
+            "value": 8
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:rising-tide",
+                "value": true
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

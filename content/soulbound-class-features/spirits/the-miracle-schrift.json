@@ -1,0 +1,44 @@
+{
+    "folder": "Spirits",
+    "img": "icons/magic/holy/angel-winged-humanoid-blue.webp",
+    "name": "The Miracle — Schrift",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>You take up an enormous sword and shield of white reishi. Your spirit weapon becomes <strong>1d12 slashing</strong>, two-handed, <strong>forceful</strong>, <strong>shove</strong>.</p><p>Your maximum Hit Points increase by your level, and you gain a <strong>+1 circumstance bonus</strong> to saves against effects that would reduce your Hit Points to 0.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: The Miracle — Schrift"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

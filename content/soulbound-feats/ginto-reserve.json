@@ -1,0 +1,49 @@
+{
+    "folder": "2nd",
+    "img": "icons/consumables/potions/bottle-conical-corked-blue.webp",
+    "name": "Gintō Reserve",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>You prepare <strong>3 Gint&#333;</strong> during your daily preparations. Each may be spent as a free action to use <strong>Gritz</strong> without spending a Reiatsu Point. Unspent Gint&#333; are lost at your next preparations.</p>"
+        },
+        "level": {
+            "value": 2
+        },
+        "prerequisites": {
+            "value": [
+                {
+                    "value": "Quincy lineage"
+                }
+            ]
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Gintō Reserve"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat",
+                "soulbound-feat-quincy"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

@@ -1,0 +1,67 @@
+[
+    {
+        "name": "1st",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "2nd",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "4th",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "6th",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "8th",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "10th",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "12th",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "14th",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "16th",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "18th",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "20th",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "Zanjutsu",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "Borrowed Nature",
+        "sorting": "a",
+        "type": "Item"
+    }
+]

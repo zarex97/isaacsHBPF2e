@@ -1,0 +1,50 @@
+{
+    "folder": "14th",
+    "img": "icons/magic/light/explosion-star-large-blue.webp",
+    "name": "Instant Full Release",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p><strong>Full Release</strong> takes 1 action instead of 2.</p>"
+        },
+        "level": {
+            "value": 14
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "ItemAlteration",
+                "itemType": "feat",
+                "mode": "override",
+                "predicate": [
+                    "item:slug:full-release"
+                ],
+                "property": "action-cost",
+                "value": 1
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

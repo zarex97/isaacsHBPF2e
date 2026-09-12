@@ -1,0 +1,93 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "slug": "off-guard",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 1
+                    },
+                    "event": "strike-resolved",
+                    "outcomes": [
+                        "success",
+                        "criticalSuccess"
+                    ]
+                }
+            ]
+        }
+    },
+    "img": "icons/skills/melee/blade-tips-triple-blue.webp",
+    "name": "Hitotsume: Nadegiri",
+    "system": {
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "1d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "untyped"
+            }
+        },
+        "defense": null,
+        "description": {
+            "value": "<p><strong>Requirements</strong> Your spirit weapon is Released · <strong>Cost</strong> 1 Reiatsu Point</p><hr /><p><em>First: Clean Sweep.</em> Stride up to your Speed, then make one Strike dealing an additional @Damage[1d6[untyped]] damage; if the Strike hits, the target is <strong>off-guard</strong> until the end of your turn.</p><hr /><p><strong>Heightened (+2)</strong> +1d6.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "area": 0,
+            "damage": {
+                "0": "1d6"
+            },
+            "interval": 2,
+            "type": "interval"
+        },
+        "level": {
+            "value": 2
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "melee"
+        },
+        "requirements": "Your spirit weapon is Released",
+        "rules": [],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-zanjutsu"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "focus",
+                "move",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

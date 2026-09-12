@@ -1,0 +1,62 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "bypass": [
+                {
+                    "immunity": {
+                        "mode": "ignore",
+                        "types": "all"
+                    },
+                    "resistance": {
+                        "max": null,
+                        "types": "all"
+                    }
+                }
+            ]
+        }
+    },
+    "img": "icons/magic/fire/blade-two-handed-glowing-red.webp",
+    "name": "Effect: Higashi",
+    "system": {
+        "description": {
+            "value": "<p><em>Rising Sun Blade.</em> Your Strikes ignore all resistances and immunities. A creature damaged by your spirit weapon can't regain Hit Points, and its regeneration and fast healing are suppressed, until the end of your next turn.</p>"
+        },
+        "duration": {
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:zanka:higashi",
+                "value": true
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

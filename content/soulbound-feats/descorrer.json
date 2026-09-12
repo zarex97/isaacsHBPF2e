@@ -1,0 +1,51 @@
+{
+    "folder": "6th",
+    "img": "icons/magic/movement/portal-vortex-purple.webp",
+    "name": "Descorrer",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 2
+        },
+        "category": "class",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per hour</p><hr /><p>You open a <strong>Garganta</strong>: you and up to 5 allies teleport up to 500 feet to a location you can see or have visited.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "PT1H",
+            "value": 1
+        },
+        "level": {
+            "value": 6
+        },
+        "prerequisites": {
+            "value": [
+                {
+                    "value": "Hollow lineage"
+                }
+            ]
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat",
+                "soulbound-feat-hollow"
+            ],
+            "rarity": "common",
+            "value": [
+                "concentrate",
+                "soulbound",
+                "teleportation"
+            ]
+        }
+    },
+    "type": "feat"
+}

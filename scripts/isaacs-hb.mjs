@@ -14,6 +14,16 @@ import { Riders } from "./riders/index.mjs";
 import { MODULE_ID, adjacentSigns } from "./sky/signs.mjs";
 import { SkyTrackerApp } from "./sky/tracker-app.mjs";
 import { SkyTracker } from "./sky/tracker.mjs";
+import { Blut } from "./soulbound/blut.mjs";
+import { Charges } from "./soulbound/charges.mjs";
+import { Hypnosis } from "./soulbound/hypnosis.mjs";
+import { Modes } from "./soulbound/modes.mjs";
+import { Reiatsu } from "./soulbound/reiatsu.mjs";
+import { Release } from "./soulbound/release.mjs";
+import { Severance } from "./soulbound/severance.mjs";
+import { SoulboundRig } from "./soulbound/rig.mjs";
+import { RisingPressure } from "./soulbound/rising-pressure.mjs";
+import { SpiritWeapon } from "./soulbound/weapon.mjs";
 import { AreaTargeting } from "./targeting/index.mjs";
 import { Lingering } from "./targeting/lingering.mjs";
 import { CrystalWall } from "./targeting/wall.mjs";
@@ -60,6 +70,12 @@ Hooks.once("init", () => {
     start("the Crystal Wall", () => CrystalWall.registerHooks());
     start("encasements", () => Encasement.registerHooks());
     start("the Libra Arms", () => registerLibraHooks());
+    start("the spirit weapon", () => SpiritWeapon.registerHooks());
+    start("Reiatsu", () => Reiatsu.registerHooks());
+    start("Rising Pressure", () => RisingPressure.registerHooks());
+    start("the release ladder", () => Release.registerHooks());
+    start("Severance", () => Severance.registerHooks());
+    start("Blut", () => Blut.registerHooks());
     start("the sky tracker window", () => SkyTrackerApp.registerHooks());
 
     start("the sky tracker's settings menu", () => {
@@ -94,6 +110,16 @@ Hooks.once("init", () => {
         balance: Balance,
         crystalWall: CrystalWall,
         encasement: Encasement,
+        spiritWeapon: SpiritWeapon,
+        reiatsu: Reiatsu,
+        risingPressure: RisingPressure,
+        release: Release,
+        severance: Severance,
+        blut: Blut,
+        modes: Modes,
+        charges: Charges,
+        hypnosis: Hypnosis,
+        rig: SoulboundRig,
         open: () => new SkyTrackerApp().render(true),
         adjacentSigns,
     };
@@ -103,6 +129,7 @@ Hooks.once("init", () => {
 // spellcasting entry's `cast` and an activity's `toMessage`, and the rider sources wrap `applyDamage`.
 Hooks.once("setup", () => {
     start("the cast pipeline", () => CastPipeline.install());
+    start("the reiatsu pool", () => Reiatsu.install());
     start("the rider engine", () => Riders.registerHooks());
 });
 

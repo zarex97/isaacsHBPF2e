@@ -1,0 +1,44 @@
+{
+    "folder": "Spirits",
+    "img": "icons/creatures/abilities/paw-print-pair-blue.webp",
+    "name": "Pantera — Resurrección",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your mask-fragment dissolves into white armour, claws, and a whip of a tail.</p><p>You gain two <strong>claw</strong> unarmed attacks: <strong>1d8 slashing</strong>, <strong>agile</strong>, <strong>finesse</strong>, in the brawling group. Your Speed increases by <strong>10 feet</strong> (this stacks with Sonido).</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Pantera — Resurrección"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}
