@@ -1,0 +1,76 @@
+{
+    "folder": "Way of Destruction (Hadō)",
+    "img": "icons/magic/lightning/bolt-strike-blue.webp",
+    "name": "Byakurai — Pale Lightning",
+    "system": {
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "2d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "electricity"
+            }
+        },
+        "defense": null,
+        "description": {
+            "value": "<p><em>Hadō #4. A single white bolt from one finger. Precise, quiet, and faster than the eye.</em></p><p>Make a spell attack roll against one creature within 60 feet. On a hit it takes @Damage[2d6[electricity]] damage, doubled on a critical hit. This ignores <strong>lesser cover</strong>.</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d6.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "area": 0,
+            "damage": {
+                "0": "1d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "1"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-kido",
+                "soulbound-kido-hado"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "attack",
+                "destruction",
+                "electricity",
+                "focus",
+                "kido",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

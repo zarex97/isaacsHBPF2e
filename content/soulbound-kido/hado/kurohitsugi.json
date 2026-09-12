@@ -1,0 +1,103 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "escapeDc": "reiatsu",
+                        "slug": "immobilized",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                }
+            ]
+        }
+    },
+    "folder": "Way of Destruction (Hadō)",
+    "img": "icons/magic/death/skull-humanoid-crown-white-blue.webp",
+    "name": "Kurohitsugi — Black Coffin",
+    "system": {
+        "area": {
+            "type": "burst",
+            "value": 10
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "9d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "void"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><em>Hadō #90. A box of black reiatsu closes over the target, and what is inside it is pierced from every direction at once.</em></p><p>Each creature in a 10-foot burst within 60 feet takes @Damage[9d6[void]] damage with a basic Reflex save. A creature that critically fails is <strong>immobilized</strong> until the end of its next turn (Escape against your Reiatsu DC).</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d6.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "area": 0,
+            "damage": {
+                "0": "1d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 8
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-kido",
+                "soulbound-kido-hado"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "destruction",
+                "focus",
+                "kido",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}
