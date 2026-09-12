@@ -1,0 +1,47 @@
+{
+    "folder": "Lineages",
+    "img": "icons/skills/melee/blade-tips-triple-blue.webp",
+    "name": "Zanjutsu",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>The sword arts, drilled rather than intuited. You gain access to the <strong>Zanjutsu</strong> feat family and <strong>one Zanjutsu technique</strong> of your choice for free.</p><p>Zanjutsu techniques are Strike-based reiatsu effects, each costing 1 Reiatsu Point and requiring your spirit weapon to be Released.</p><hr /><p><em>The Zanjutsu techniques themselves arrive with the class feats. Until then this grants the access and nothing else &mdash; it is not hiding a grant that failed.</em></p>"
+        },
+        "level": {
+            "value": 5
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:zanjutsu-access",
+                "value": true
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound",
+                "lineage"
+            ]
+        }
+    },
+    "type": "feat"
+}

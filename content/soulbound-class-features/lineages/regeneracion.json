@@ -1,0 +1,54 @@
+{
+    "folder": "Lineages",
+    "img": "icons/magic/life/cross-area-circle-green-white.webp",
+    "name": "Regeneración",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>High-speed regeneration. You gain <strong>fast healing 2</strong>. This increases to <strong>fast healing 4</strong> at 11th level and <strong>fast healing 6</strong> at 17th.</p><p>It is <strong>deactivated while you have the dying condition</strong>, and <strong>suppressed until the end of your next turn</strong> whenever you take spirit damage or damage from a holy or vitality effect.</p><hr /><p><em>Soul Reapers and Quincy exist to shut this down, and both can, from 1st level. That clause is the point, not a caveat.</em></p>"
+        },
+        "level": {
+            "value": 5
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "FastHealing",
+                "type": "fast-healing",
+                "predicate": [
+                    {
+                        "not": "self:condition:dying"
+                    },
+                    {
+                        "not": "self:effect:regeneracion-suppressed"
+                    }
+                ],
+                "value": "ternary(gte(@actor.level,17),6,ternary(gte(@actor.level,11),4,2))"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound",
+                "lineage"
+            ]
+        }
+    },
+    "type": "feat"
+}

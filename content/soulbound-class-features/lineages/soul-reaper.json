@@ -30,6 +30,36 @@
                 "mode": "upgrade",
                 "path": "system.skills.society.rank",
                 "value": 1
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Kidō Adept"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            5
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Zanjutsu"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            15
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Zanjutsu Mastery"
             }
         ],
         "traits": {

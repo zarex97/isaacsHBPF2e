@@ -1,0 +1,263 @@
+{
+    "folder": "Lineages",
+    "img": "icons/magic/symbols/runes-carved-stone-blue.webp",
+    "name": "Kidō Adept",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>You learn <strong>two</strong> kidō of your choice at 1st level, and one additional kidō at 5th, 9th, 13th and 17th level &mdash; <strong>six chosen kidō</strong> in total, on top of your free cantrip <strong>Sh&#333;</strong>.</p><p>You are the only Lineage that <em>chooses</em>: a Hollow and a Quincy each get exactly two fixed kidō native to what they are.</p><hr /><p><em>Six known focus effects is the top of the range Pathfinder permits without a spell list, and this is the Lineage that actually reaches it.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "adjustName": false,
+                "choices": {
+                    "filter": [
+                        "item:tag:sb-tier-kido",
+                        {
+                            "not": "item:trait:cantrip"
+                        },
+                        {
+                            "not": "item:tag:soulbound-kido-hollow"
+                        },
+                        {
+                            "not": "item:tag:soulbound-kido-quincy"
+                        }
+                    ],
+                    "itemType": "spell"
+                },
+                "flag": "kido1",
+                "key": "ChoiceSet",
+                "prompt": "Your first kidō"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "{item|flags.system.rulesSelections.kido1}"
+            },
+            {
+                "adjustName": false,
+                "choices": {
+                    "filter": [
+                        "item:tag:sb-tier-kido",
+                        {
+                            "not": "item:trait:cantrip"
+                        },
+                        {
+                            "not": "item:tag:soulbound-kido-hollow"
+                        },
+                        {
+                            "not": "item:tag:soulbound-kido-quincy"
+                        }
+                    ],
+                    "itemType": "spell"
+                },
+                "flag": "kido2",
+                "key": "ChoiceSet",
+                "prompt": "Your second kidō"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "{item|flags.system.rulesSelections.kido2}"
+            },
+            {
+                "adjustName": false,
+                "choices": {
+                    "filter": [
+                        "item:tag:sb-tier-kido",
+                        {
+                            "not": "item:trait:cantrip"
+                        },
+                        {
+                            "not": "item:tag:soulbound-kido-hollow"
+                        },
+                        {
+                            "not": "item:tag:soulbound-kido-quincy"
+                        }
+                    ],
+                    "itemType": "spell"
+                },
+                "flag": "kido3",
+                "key": "ChoiceSet",
+                "prompt": "A kidō learned at 5th level",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            5
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            5
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "{item|flags.system.rulesSelections.kido3}"
+            },
+            {
+                "adjustName": false,
+                "choices": {
+                    "filter": [
+                        "item:tag:sb-tier-kido",
+                        {
+                            "not": "item:trait:cantrip"
+                        },
+                        {
+                            "not": "item:tag:soulbound-kido-hollow"
+                        },
+                        {
+                            "not": "item:tag:soulbound-kido-quincy"
+                        }
+                    ],
+                    "itemType": "spell"
+                },
+                "flag": "kido4",
+                "key": "ChoiceSet",
+                "prompt": "A kidō learned at 9th level",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            9
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            9
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "{item|flags.system.rulesSelections.kido4}"
+            },
+            {
+                "adjustName": false,
+                "choices": {
+                    "filter": [
+                        "item:tag:sb-tier-kido",
+                        {
+                            "not": "item:trait:cantrip"
+                        },
+                        {
+                            "not": "item:tag:soulbound-kido-hollow"
+                        },
+                        {
+                            "not": "item:tag:soulbound-kido-quincy"
+                        }
+                    ],
+                    "itemType": "spell"
+                },
+                "flag": "kido5",
+                "key": "ChoiceSet",
+                "prompt": "A kidō learned at 13th level",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            13
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            13
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "{item|flags.system.rulesSelections.kido5}"
+            },
+            {
+                "adjustName": false,
+                "choices": {
+                    "filter": [
+                        "item:tag:sb-tier-kido",
+                        {
+                            "not": "item:trait:cantrip"
+                        },
+                        {
+                            "not": "item:tag:soulbound-kido-hollow"
+                        },
+                        {
+                            "not": "item:tag:soulbound-kido-quincy"
+                        }
+                    ],
+                    "itemType": "spell"
+                },
+                "flag": "kido6",
+                "key": "ChoiceSet",
+                "prompt": "A kidō learned at 17th level",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            17
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            17
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "{item|flags.system.rulesSelections.kido6}"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-kido.Item.Shō — Thrust"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound",
+                "lineage"
+            ]
+        }
+    },
+    "type": "feat"
+}
