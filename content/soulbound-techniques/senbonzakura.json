@@ -1,0 +1,115 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "slug": "off-guard",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ],
+                    "predicate": [
+                        "self:feature:refined-release"
+                    ]
+                }
+            ],
+            "areaTargeting": {
+                "affects": "enemies",
+                "includesSelf": false
+            },
+            "lingering": {
+                "difficultTerrain": 2,
+                "duration": {
+                    "unit": "rounds",
+                    "value": 1
+                },
+                "name": "Senbonzakura — petals"
+            }
+        }
+    },
+    "img": "icons/magic/nature/leaf-petals-pink.webp",
+    "name": "Senbonzakura",
+    "system": {
+        "area": {
+            "type": "emanation",
+            "value": 15
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "2d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "slashing"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><em>Byakuya Kuchiki's Release Technique.</em></p><p>Each creature in a 15-foot emanation takes @Damage[2d6[slashing]] damage with a basic Reflex save. The area is <strong>difficult terrain</strong> for enemies until the start of your next turn.</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d6.</p><p><strong>Refined (9th)</strong> The emanation increases to <strong>20 feet</strong>, and creatures that critically fail are <strong>off-guard</strong> until the start of your next turn.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "area": 0,
+            "damage": {
+                "0": "1d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": ""
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-release"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "focus",
+                "manipulate",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

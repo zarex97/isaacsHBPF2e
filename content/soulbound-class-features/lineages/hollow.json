@@ -64,6 +64,10 @@
                 ],
                 "reevaluateOnUpdate": true,
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Segunda Piel"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Spirit (Hollow)"
             }
         ],
         "traits": {

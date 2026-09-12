@@ -1,0 +1,56 @@
+{
+    "img": "icons/magic/nature/leaf-petals-white.webp",
+    "name": "Effect: Senkei",
+    "system": {
+        "description": {
+            "value": "<p><em>Slaughterscape.</em> A thousand swords form a 20-foot cage around you and one enemy. Neither of you can leave. Your Strikes against that enemy <strong>ignore all resistances</strong>, and you may make one extra Strike each round at your current multiple attack penalty.</p><p>You <strong>lose</strong> Senbonzakura's reach and cover-ignoring, and you cannot target enemies outside the cage.</p>"
+        },
+        "duration": {
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:senbonzakura:senkei",
+                "value": true
+            },
+            {
+                "key": "ItemAlteration",
+                "itemType": "weapon",
+                "mode": "remove",
+                "predicate": [
+                    "item:tag:soulbound-spirit-weapon"
+                ],
+                "property": "traits",
+                "value": "reach-15"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

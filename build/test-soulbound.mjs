@@ -684,9 +684,10 @@ check("A Hollow's two arts are granted, never chosen (guide §6.4)", [
     cba.system.rules.some((r) => r.key === "ChoiceSet"),
 ], [2, false]);
 
-for (const [file, expected] of [["soul-reaper", 3], ["hollow", 4]]) {
+// Each Lineage grants its own features plus its Spirit chooser.
+for (const [file, expected] of [["soul-reaper", 4], ["hollow", 5]]) {
     check(
-        `${file} grants its own features`,
+        `${file} grants its own features and its Spirit chooser`,
         lineageDoc(file).system.rules.filter((r) => r.key === "GrantItem").length,
         expected,
     );
@@ -764,9 +765,86 @@ check("and it reaches release states, stances and auras", [
 ], [true, true, true]);
 
 check(
-    "the Quincy grants all four of its features",
+    "the Quincy grants all four of its features, plus its Spirit chooser",
     lineageDoc("quincy").system.rules.filter((r) => r.key === "GrantItem").length,
-    4,
+    5,
+);
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  Spirits — the axis, and Senbonzakura                                                            */
+/* ---------------------------------------------------------------------------------------------- */
+
+// A ChoiceSet stores its selection as a UUID, not a tag, so a filter cannot join "this Spirit's Lineage"
+// to "the Lineage you chose". Proved in the live world before five Spirits depended on it; the fallback
+// the design already named is three per-Lineage choosers, which cannot offer the wrong Spirit at all.
+for (const [slug, lineage] of [["soul-reaper", "Soul Reaper"], ["hollow", "Hollow"], ["quincy", "Quincy"]]) {
+    const chooser = featureDoc(`spirit-${slug}`);
+    const choice = chooser.system.rules.find((r) => r.key === "ChoiceSet");
+    check(`Spirit (${lineage}): offers only its own Lineage's Spirits`, choice.choices.filter, [
+        "item:tag:soulbound-spirit", `item:tag:soulbound-lineage-${slug}`,
+    ]);
+    check(`Spirit (${lineage}): is granted by its Lineage`,
+        lineageDoc(slug).system.rules.some((r) => r.key === "GrantItem" && String(r.uuid).endsWith(`Spirit (${lineage})`)), true);
+}
+
+function spiritDoc(name) {
+    return contentDoc(`soulbound-class-features/spirits/${name}.json`);
+}
+function techDoc(name) {
+    return contentDoc(`soulbound-techniques/${name}.json`);
+}
+
+const senbon = spiritDoc("senbonzakura");
+check("Senbonzakura is a Soul Reaper Spirit the chooser can find", [
+    senbon.system.traits.otherTags.includes("soulbound-spirit"),
+    senbon.system.traits.otherTags.includes("soulbound-lineage-soul-reaper"),
+], [true, true]);
+check("and it grants a Shikai, a Release Technique and a Bankai at 13th",
+    senbon.system.rules.filter((r) => r.key === "GrantItem").length, 3);
+check("the Bankai is level-gated", senbon.system.rules.some((r) => r.key === "GrantItem" && r.reevaluateOnUpdate === true), true);
+
+const senbonTech = techDoc("senbonzakura");
+check(
+    "Senbonzakura: 15-foot emanation, basic Reflex, 2d6 slashing, +1d6 per rank (guide §7A)",
+    [senbonTech.system.area, senbonTech.system.defense.save.basic, senbonTech.system.damage["0"].formula,
+     senbonTech.system.damage["0"].type, senbonTech.system.heightening.damage["0"], senbonTech.system.level.value],
+    [{ type: "emanation", value: 15 }, true, "2d6", "slashing", "1d6", 1],
+);
+check(
+    "and it leaves difficult terrain behind for a round",
+    [senbonTech.flags["isaacs-hb-pf2e"].lingering.difficultTerrain, senbonTech.flags["isaacs-hb-pf2e"].lingering.duration],
+    [2, { unit: "rounds", value: 1 }],
+);
+
+// "The emanation increases to 20 feet" is a 9th-level benefit, and a focus effect heightens per RANK —
+// "at 9th level" is not a rank step. pf2e's own `area-size` alteration is the lever, applied by the
+// feature that grants the benefit.
+const refined = featureDoc("refined-release");
+check(
+    "Refined Release widens a Release Technique's area by 5 feet",
+    refined.system.rules.find((r) => r.key === "ItemAlteration"),
+    { itemType: "spell", key: "ItemAlteration", mode: "add", predicate: ["item:tag:sb-tier-release"], property: "area-size", value: 5 },
+);
+
+const { nextMode } = await import("../scripts/soulbound/modes.mjs");
+const AVAILABLE = ["Gokei", "Senkei"];
+check("a mode switch moves to the mode asked for", nextMode({ current: null, wanted: "Gokei", available: AVAILABLE }), "Gokei");
+check("switching replaces rather than adds", nextMode({ current: "Gokei", wanted: "Senkei", available: AVAILABLE }), "Senkei");
+check("a mode this family does not have is refused, leaving what stood", nextMode({ current: "Gokei", wanted: "Higashi", available: AVAILABLE }), "Gokei");
+
+check(
+    "Senkei takes back the reach the Shikai granted, rather than cancelling it elsewhere",
+    contentDoc("soulbound-effects/effect-senkei.json").system.rules
+        .some((r) => r.key === "ItemAlteration" && r.mode === "remove" && r.value === "reach-15"),
+    true,
+);
+check(
+    "the Bankai ticks at the start of your turn against enemies in the emanation",
+    (() => {
+        const r = contentDoc("soulbound-effects/effect-senbonzakura-kageyoshi.json").flags["isaacs-hb-pf2e"].riders[0];
+        return [r.event, r.apply.formula, r.area.value, r.areaTargeting.affects];
+    })(),
+    ["turn-start", "5d6", 20, "enemies"],
 );
 
 report("Soulbound tests");

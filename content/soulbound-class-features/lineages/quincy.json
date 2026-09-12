@@ -64,6 +64,10 @@
                 ],
                 "reevaluateOnUpdate": true,
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Sklaverei"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Spirit (Quincy)"
             }
         ],
         "traits": {
