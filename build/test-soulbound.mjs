@@ -621,11 +621,18 @@ check(
     [resistance?.type, resistance?.value],
     ["physical", "max(1,floor(@actor.level/2))"],
 );
+// ONE rule, not two. Two FlatModifiers sharing the label "Sonido" share a slug, and pf2e dedupes
+// modifiers by slug — so the pair resolved to one and the +5 never reached the total. Sonido was inert
+// on every Hollow from Phase 2 until the live pass read the final number off a sheet.
+const sonido = hierro.system.rules.filter((r) => r.key === "FlatModifier" && r.selector === "speed");
 check(
-    "Sonido is +5 ft below 11th and +10 at 11th, never both",
-    hierro.system.rules.filter((r) => r.key === "FlatModifier" && r.selector === "speed").map((r) => r.value),
-    [5, 10],
+    "Sonido is one rule whose value scales, not two rules sharing a label",
+    [sonido.length, sonido[0]?.value],
+    [1, "ternary(gte(@actor.level,11),10,5)"],
 );
+// A status bonus on the speed selector is listed in the breakdown and never counted; an untyped one on
+// the same selector applies. The guide says status; the table gets the five feet.
+check("and it is untyped, because a status bonus to Speed never reaches the total", sonido[0]?.type, "untyped");
 
 const regen = lineageDoc("regeneracion");
 const fh = regen.system.rules.find((r) => r.key === "FastHealing");
