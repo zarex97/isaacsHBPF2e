@@ -1,0 +1,44 @@
+{
+    "folder": "Spirits",
+    "img": "icons/magic/light/explosion-star-large-blue.webp",
+    "name": "Quincy: Letzt Stil",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><em>Last Form.</em> Unlike every other Vollst&auml;ndig, Letzt Stil is not a wings-and-halo transformation &mdash; it is the old Quincy technique of <strong>removing the limiter</strong> on your own bow. A blue quiver of pure reiryoku forms at your right shoulder and drinks the ambient reishi.</p><ul><li>Your spirit weapon's damage die increases by <strong>two</strong> steps instead of one.</li><li>Your Strikes ignore all <strong>resistances</strong> to physical and spirit damage, and treat cover as one step less &mdash; as Blut Arterie, and <strong>it stacks with choosing Vene</strong>. This is the one exception in the class to Blut's exclusivity.</li><li><strong>Licht Regen</strong> becomes a <strong>60-foot cone</strong>, and once per round you may use it without spending a Reiatsu Point.</li></ul><hr /><p><strong>The cost is canon and it is real.</strong> When Letzt Stil ends, you lose access to your <strong>Schrift Form</strong>, your <strong>Release Technique</strong>, <strong>Licht Regen</strong>, <strong>Vollst&auml;ndig</strong>, and your <strong>entire reiatsu pool</strong> until you complete <strong>24 hours of rest</strong>. You keep your weapon, your proficiencies, and your feats.</p><p><em>That drawback is the reason this Vollst&auml;ndig grants two die steps where every other grants one.</em></p>"
+        },
+        "level": {
+            "value": 13
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Quincy: Letzt Stil"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

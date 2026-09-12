@@ -1,0 +1,74 @@
+{
+    "img": "icons/weapons/swords/sword-guard-blue.webp",
+    "name": "Seele Schneider",
+    "system": {
+        "baseItem": "shortsword",
+        "bonus": {
+            "value": 0
+        },
+        "bonusDamage": {
+            "value": 0
+        },
+        "bulk": {
+            "value": 1
+        },
+        "category": "martial",
+        "damage": {
+            "damageType": "slashing",
+            "dice": 1,
+            "die": "d8"
+        },
+        "description": {
+            "value": "<p><em>Soul Cutter — a vibrating reishi edge that cuts what resists cutting.</em></p>"
+        },
+        "equipped": {
+            "carryType": "held",
+            "handsHeld": 1
+        },
+        "group": "sword",
+        "level": {
+            "value": 0
+        },
+        "material": {
+            "grade": null,
+            "type": null
+        },
+        "price": {
+            "value": {}
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "quantity": 1,
+        "range": null,
+        "reload": {
+            "value": "-"
+        },
+        "rules": [],
+        "runes": {
+            "potency": 0,
+            "property": [],
+            "striking": 0
+        },
+        "splashDamage": {
+            "value": 0
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-spirit-weapon",
+                "soulbound-seele-schneider"
+            ],
+            "rarity": "common",
+            "value": [
+                "finesse"
+            ]
+        },
+        "usage": {
+            "canBeAmmo": false,
+            "value": "held-in-one-hand"
+        }
+    },
+    "type": "weapon"
+}

@@ -1,0 +1,44 @@
+{
+    "folder": "Spirits",
+    "img": "icons/magic/lightning/bolt-strike-white.webp",
+    "name": "The Thunderbolt — Schrift",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your spirit weapon becomes a <strong>sword of arcing electricity</strong>: <strong>1d8 slashing</strong>, versatile P, and its damage type becomes <strong>electricity</strong> (you may still choose spirit).</p><p>You gain <strong>electricity resistance equal to half your level</strong>, and your Flash Step becomes an <strong>electricity-flavoured teleport</strong> &mdash; it ignores difficult terrain and you may pass through creatures' spaces, though you can't end there.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: The Thunderbolt — Schrift"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

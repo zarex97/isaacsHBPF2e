@@ -1,0 +1,98 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "dc": "reiatsu",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "electricity",
+                                    "formula": "3d6",
+                                    "perStep": "1d6",
+                                    "multiplier": 0.5,
+                                    "type": "damage"
+                                },
+                                "outcomes": [
+                                    "success"
+                                ]
+                            },
+                            {
+                                "apply": {
+                                    "damageType": "electricity",
+                                    "formula": "3d6",
+                                    "perStep": "1d6",
+                                    "type": "damage"
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
+                    },
+                    "area": {
+                        "type": "emanation",
+                        "value": 10
+                    },
+                    "areaTargeting": {
+                        "affects": "enemies",
+                        "includesSelf": false
+                    },
+                    "event": "turn-end",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "img": "icons/magic/lightning/bolt-strike-forked-white.webp",
+    "name": "Effect: Thunderbolt Form",
+    "system": {
+        "description": {
+            "value": "<p>Lightning for hair and white arcs for wings. A 10-foot emanation of live current, and arcs that jump from whatever you hit.</p>"
+        },
+        "duration": {
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "Immunity",
+                "type": "electricity"
+            },
+            {
+                "key": "BaseSpeed",
+                "selector": "fly",
+                "value": "@actor.system.movement.speeds.land.value"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

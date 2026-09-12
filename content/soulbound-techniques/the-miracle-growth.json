@@ -1,0 +1,82 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "label": "Take it as growth",
+                        "prompt": "That hurt. Take it as growth?",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "stack": true,
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Miracle Points",
+                                    "value": 2
+                                }
+                            }
+                        ],
+                        "type": "reaction"
+                    },
+                    "event": "damage-applied",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "img": "icons/magic/holy/angel-winged-humanoid-blue.webp",
+    "name": "The Miracle — Growth",
+    "system": {
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p><strong>Trigger</strong> You take damage from an enemy · <strong>Frequency</strong> once per round</p><hr /><p>Damage is a promise of growth. Gain <strong>2 Miracle points</strong> (to a maximum of 10).</p><p>While you have 1 or more Miracle points you gain <strong>resistance to all damage equal to the number of Miracle points you have</strong>. You may spend any number of Miracle points as a free action at the start of your turn; for each point spent, until the end of your turn your spirit weapon's Strikes deal <strong>+1d6</strong> damage of its type.</p><p>Miracle points are lost when the encounter ends.</p><hr /><p><strong>Refined (9th) &mdash; Blitz of the Hero.</strong> Your maximum Miracle points increase to <strong>15</strong>. When you spend Miracle points, you also gain a <strong>+5-foot status bonus</strong> to Speeds per point spent, to a maximum of +20 feet, until the end of your turn.</p><hr /><p><em>This is the one Release Technique in the class that is a free action, and it costs a Reiatsu Point only the first time each encounter &mdash; because a Schrift that charges you to be hit is not The Miracle.</em></p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": ""
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "free"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-release"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "focus",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

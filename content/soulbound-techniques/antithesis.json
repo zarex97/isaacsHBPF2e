@@ -1,0 +1,102 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "label": "Reverse the two events",
+                        "prompt": "Something has just landed. Reverse it?",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "spirit",
+                                    "formula": "2d6",
+                                    "perStep": "1d6",
+                                    "type": "damage"
+                                }
+                            },
+                            {
+                                "apply": {
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Antithesis — Reversed"
+                                }
+                            }
+                        ],
+                        "type": "reaction"
+                    },
+                    "event": "damage-applied",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "img": "icons/weapons/bows/bow-recurve-blue.webp",
+    "name": "Antithesis",
+    "system": {
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "2d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "spirit"
+            }
+        },
+        "defense": null,
+        "description": {
+            "value": "<p><strong>Trigger</strong> You or an ally within 30 feet takes damage from a creature you can see.</p><hr /><p>You reverse the two events. The triggering creature takes @Damage[2d6[spirit]] damage, and the target of the trigger gains <strong>resistance equal to your level</strong> against the triggering damage.</p><hr /><p><strong>Heightened (+2)</strong> The damage increases by 1d6.</p><p><strong>Refined (9th)</strong> You additionally gain <strong>Licht Regen</strong>.</p><hr /><p><em>This is Bakud&#333; #81 with the damage reflected instead of absorbed, which is exactly what Antithesis does in canon.</em></p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "area": 0,
+            "damage": {
+                "0": "1d6"
+            },
+            "interval": 2,
+            "type": "interval"
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "reaction"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-release"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "focus",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

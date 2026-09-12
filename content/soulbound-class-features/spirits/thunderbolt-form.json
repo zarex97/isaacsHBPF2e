@@ -1,0 +1,44 @@
+{
+    "folder": "Spirits",
+    "img": "icons/magic/lightning/bolt-strike-forked-white.webp",
+    "name": "Thunderbolt Form",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your hair becomes lightning and your wings arc white.</p><p>You gain a <strong>fly Speed</strong> equal to your Speed and <strong>electricity immunity</strong>, and:</p><ul><li>You emit a <strong>10-foot emanation</strong> of live current. A creature that ends its turn in it takes @Damage[3d6[electricity]] damage (basic Reflex).</li><li>Once per round when you hit with your spirit weapon, arcs jump: one other creature within 15 feet of the target takes <strong>3d6 electricity</strong> (basic Reflex).</li></ul>"
+        },
+        "level": {
+            "value": 13
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Thunderbolt Form"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}
