@@ -74,4 +74,49 @@ check(
     true,
 );
 
+/* ---------------------------------------------------------------------------------------------- */
+/*  The shared engine, made class-general                                                           */
+/* ---------------------------------------------------------------------------------------------- */
+
+const { classSlugOf, classStatisticOf } = await import("../scripts/lib/class-dc.mjs");
+
+/** An actor stub carrying one class DC, the way pf2e exposes it. */
+function actorWith(slug, dc) {
+    return {
+        class: { system: { slug } },
+        classDCs: { [slug]: { dc: { value: dc } } },
+        getStatistic(wanted) {
+            return wanted === slug ? { dc: { value: dc } } : null;
+        },
+    };
+}
+
+const saintActor = actorWith("saint", 31);
+const soulboundActor = actorWith("soulbound", 28);
+
+check(
+    "the class slug comes off the actor's own class",
+    [classSlugOf(saintActor), classSlugOf(soulboundActor), classSlugOf(null)],
+    ["saint", "soulbound", null],
+);
+check("an explicit slug wins over the actor's class", classStatisticOf(saintActor, "saint")?.dc?.value, 31);
+check("with no slug given, the actor's own class answers", classStatisticOf(soulboundActor)?.dc?.value, 28);
+check("a class the actor does not have resolves to nothing", classStatisticOf(saintActor, "soulbound"), null);
+
+const { isTechnique } = await import("../scripts/targeting/config.mjs");
+
+function spellItem(traits) {
+    return { type: "spell", system: { traits: { value: traits } } };
+}
+check(
+    "area targeting recognises both classes' focus effects and nothing else",
+    [
+        isTechnique(spellItem(["cosmo"])),
+        isTechnique(spellItem(["reiatsu"])),
+        isTechnique(spellItem(["focus"])),
+        isTechnique({ type: "action", system: { traits: { value: ["reiatsu"] } } }),
+    ],
+    [true, true, false, false],
+);
+
 report("Soulbound tests");
