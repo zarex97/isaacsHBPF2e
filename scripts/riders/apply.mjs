@@ -1,3 +1,4 @@
+import { classSlugOf, classStatisticOf } from "../lib/class-dc.mjs";
 import { describeActor, describeDamage, riderOptions, testPredicate } from "../lib/roll-options.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 import { catchTokens } from "../targeting/catch.mjs";
@@ -887,7 +888,9 @@ async function applyCounteract(rider, context) {
                 counteract: {
                     originUuid: context.originActor?.uuid ?? null,
                     itemUuid: (context.item ?? context.riderItem)?.uuid ?? null,
-                    statistic: rider.apply.statistic ?? "saint",
+                    // Falls back to the origin's own class, so a Soulbound's Seal the Art counteracts
+                    // on the Reiatsu DC without the content having to name it.
+                    statistic: rider.apply.statistic ?? classSlugOf(context.originActor) ?? "saint",
                 },
             },
         },
@@ -910,9 +913,10 @@ export async function resolveCounteract(payload) {
     const actor = origin?.actor ?? origin;
     if (!actor || !effect) return;
 
-    const statistic = actor.getStatistic?.(payload.statistic ?? "saint");
+    const slug = payload.statistic ?? classSlugOf(actor) ?? "saint";
+    const statistic = actor.getStatistic?.(slug);
     if (!statistic) {
-        ui.notifications.warn(`${actor.name} has no ${payload.statistic ?? "saint"} statistic to counteract with.`);
+        ui.notifications.warn(`${actor.name} has no ${slug} statistic to counteract with.`);
         return;
     }
 
@@ -1478,17 +1482,18 @@ export async function runSave(spec, context) {
     }
 }
 
-/** The Saint's Cosmo DC, or a flat number written in the content. */
+/**
+ * A class DC — the Saint's Cosmo or the Soulbound's Reiatsu — or a flat number written in the content.
+ *
+ * All three spellings are kept. `"cosmo"` is the Saint's own and predates the second class, so every one
+ * of the 48 Techniques already shipped says it; rewriting them to prove a point is how content breaks.
+ * `"class"` means whichever class the origin actually has, which is what a rider on a shared item wants.
+ */
 function resolveDC(dc, context) {
     if (typeof dc === "number") return dc;
-    if (dc === "cosmo") {
-        return (
-            context.originActor?.getStatistic?.("saint")?.dc?.value ??
-            context.originActor?.classDCs?.saint?.dc?.value ??
-            null
-        );
-    }
-    return null;
+    const slug = { cosmo: "saint", reiatsu: "soulbound", class: null }[dc];
+    if (slug === undefined) return null;
+    return classStatisticOf(context.originActor, slug)?.dc?.value ?? null;
 }
 
 function counterOn(actor, uuid) {
