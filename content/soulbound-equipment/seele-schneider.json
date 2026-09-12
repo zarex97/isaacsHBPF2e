@@ -19,7 +19,7 @@
             "die": "d8"
         },
         "description": {
-            "value": "<p><em>Soul Cutter — a vibrating reishi edge that cuts what resists cutting.</em></p>"
+            "value": "<p><em>Soul Cutter — a vibrating reishi edge that cuts what resists cutting.</em></p><p><em>An additional way to use your bow, not a replacement for it: the Heilig Bogen stays in your hands.</em></p>"
         },
         "equipped": {
             "carryType": "held",
@@ -57,7 +57,6 @@
         },
         "traits": {
             "otherTags": [
-                "soulbound-spirit-weapon",
                 "soulbound-seele-schneider"
             ],
             "rarity": "common",

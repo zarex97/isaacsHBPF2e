@@ -1279,4 +1279,21 @@ for (const [lineage, names] of ALL_SPIRITS) {
     }
 }
 
+// Guide §7C: Antithesis's bow "may be used as a melee weapon". Seele Schneider is an ADDITIONAL use of
+// it, not a replacement — tagging it as a spirit weapon made reconcile stow the very bow the Schrift is
+// about.
+const seele = contentDoc("soulbound-equipment/seele-schneider.json");
+check(
+    "Seele Schneider does not replace the bow",
+    [seele.system.traits.otherTags.includes("soulbound-spirit-weapon"),
+     seele.system.traits.otherTags.includes("soulbound-seele-schneider")],
+    [false, true],
+);
+check(
+    "and it still ignores resistance to slashing, keyed to its own tag",
+    contentDoc("soulbound-effects/effect-antithesis-schrift.json")
+        .flags["isaacs-hb-pf2e"].bypass[0].predicate,
+    ["item:tag:soulbound-seele-schneider"],
+);
+
 report("Soulbound tests");

@@ -30,11 +30,11 @@ Six phases, each gated on `npm test` plus a live pass in world `pf` before the n
 | 2 | Lineages and kidō | **Done, verified live** |
 | 3 | Soul Reaper Spirits | **Done, verified live** |
 | 4 | Hollow Spirits | **Done, verified live** |
-| 5 | Quincy Spirits | Not started |
+| 5 | Quincy Spirits | **Done, verified live** |
 | 6 | Feats and Final Release | Not started |
 
-**Counts after Phase 4:** 391 documents across 16 packs (164 of them Soulbound), 310 rider checks, 267
-Soulbound checks, round-trip clean.
+**Counts after Phase 5:** 431 documents across 16 packs (204 of them Soulbound), 310 rider checks, 312
+Soulbound checks, round-trip clean. **All fifteen Spirits exist**, five per Lineage.
 
 ---
 
@@ -428,7 +428,56 @@ the 1d10 its Shikai steps it to. Four checks pin the decision logic so it cannot
 
 ---
 
-## 7. Corrections owed to the guide
+## 7. Phase 5 — the Quincy Spirits
+
+Antithesis, The Heat, The Balance, The Thunderbolt and The Miracle. With these, **all fifteen Spirits
+exist** — five per Lineage, each claimed by exactly one, which is now a build-time check.
+
+### 7.1 Verified live
+
+All five built in world `pf` and checked at 1st level: **20/20 each**.
+
+**The Blut exception, authored blind in Phase 2, works.** `blut.mjs` was written so that an actor
+carrying `soulbound:blut-both` keeps whichever form is already on — deliberately, so the file would
+never learn Uryū's name. Letzt Stil is the only thing in the class that sets it, and at the table:
+
+| Step | Result |
+| :-- | :-- |
+| Blut Vene | Vene alone |
+| then Blut Arterie | Arterie alone — canon's two reishi systems, exclusive |
+| Letzt Stil applied | `allowsBoth` becomes true |
+| Blut Vene again | **both** Vene and Arterie stand |
+
+**Miracle points track exactly.** Resistance follows the count — 2 points/resistance 2, grown to
+5/resistance 5, spend two and it drops to 3/resistance 3 — and an over-refresh clamps at the cap of 10.
+Maximum Hit Points read 11 at 1st level, which is the Schrift's "+your level".
+
+### 7.2 Two corrections while authoring
+
+**Bailar de Valquiria's "fast healing equal to your current Miracle points"** was first written as a
+JavaScript expression reaching for another item's badge. pf2e resolves `@`-paths, not JavaScript. The
+rule moved onto the item that *holds* the count, where `@item.badge.value` means what it says, with a
+predicate making it a Vollständig benefit rather than a permanent one.
+
+**Seele Schneider was replacing the bow.** Guide §7C says Antithesis's Heilig Bogen "may be used as a
+melee weapon" — Seele Schneider is an *additional* use of it, not a substitute. Tagged as a spirit
+weapon, Phase 4's reconcile pass dutifully stowed the very bow the Schrift is about. It now carries only
+its own tag, so the bow stays in hand and the slashing-resistance bypass still keys off it.
+
+> That second one is worth noting as a shape: the reconcile pass is *correct*, and it did exactly what
+> the tag told it to. The bug was in the tag. A mechanism that obeys its data will faithfully carry out
+> a mistake in the data.
+
+### 7.3 A testing note
+
+The Miracle first appeared to have both weapons in hand. It did not: `reconcile` is deliberately
+deferred by 100 ms so one cascade of grants settles once, and the check simply read the sheet before it
+fired. Re-reading after the debounce showed it correct. **A deferred fix needs a deferred assertion** —
+worth remembering for Phase 6, which adds more of them.
+
+---
+
+## 8. Corrections owed to the guide
 
 To be written into `Docs/soulbound-guide-v1.md` as **v1.4** in Phase 6, so the guide and the module
 never disagree.
@@ -460,7 +509,7 @@ never disagree.
 
 ---
 
-## 8. Environment notes
+## 9. Environment notes
 
 Three things cost real time in this phase and are worth not re-learning.
 
