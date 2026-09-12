@@ -1,4 +1,5 @@
 import { classSlugOf } from "../lib/class-dc.mjs";
+import { wrap } from "../lib/wrap.mjs";
 
 const MODULE_ID = "isaacs-hb-pf2e";
 const ENTRY_NAME = "Reiatsu";
@@ -102,6 +103,53 @@ export const Reiatsu = {
         const entry = (await this.ensureEntry(actor)) ?? this.entryFor(actor);
         if (!entry) return;
         await spell.update({ "system.location.value": entry.id });
+    },
+
+    /**
+     * The pool is the ceiling — the whole of guide §4.2's 1 / 2 / 5th / 3 at 11th.
+     *
+     * pf2e derives a focus pool's size from the focus effects you know: `+1` per non-cantrip focus spell
+     * in `SpellPF2e#prepareActorData`, clamped to `cap`. For most classes that is the same thing, because
+     * knowing more focus spells IS how their pool grows. It is not the same thing here, and the live pass
+     * is what showed it: a Soul Reaper at 11th knows four costed kidō and got the right pool by accident,
+     * while a **Hollow knows exactly one, forever**, and sat on a pool of 1 at 11th level where the guide
+     * says 3. Guide §1.7 is explicit that the Hollow's floor is Bala and Cero and nothing more, so no
+     * amount of content fixes this — the derivation is simply the wrong rule for this class.
+     *
+     * The class features set `cap` to 1 / 2 / 3 by level (migration 889 strips an AE-like on `max`, but
+     * leaves `cap` alone), so the correction is one line: a Soulbound's maximum is its ceiling.
+     */
+    install() {
+        wrap(
+            "CONFIG.PF2E.Actor.documentClasses.character.prototype.prepareDerivedData",
+            function (wrapped, ...args) {
+                const result = wrapped(...args);
+                try {
+                    if (classSlugOf(this) === "soulbound") {
+                        const focus = this.system?.resources?.focus;
+                        if (focus) {
+                            focus.max = focus.cap ?? focus.max;
+                            focus.value = Math.min(focus.value ?? 0, focus.max);
+                        }
+                    }
+                } catch (error) {
+                    console.error("Isaac's Homebrew | the reiatsu pool could not be sized", error);
+                }
+                return result;
+            },
+            { feature: "the reiatsu pool" },
+        );
+
+        // Actors are prepared during `setupGame`, which runs BEFORE the `setup` hook this wrap installs
+        // from — so every Soulbound in the world loads with the pool pf2e derived and only picks up the
+        // correction the next time something re-prepares it. One sweep at `ready` closes that window;
+        // without it the pool reads correctly all session except immediately after a reload, which is the
+        // most confusing possible version of the bug.
+        Hooks.once("ready", () => {
+            for (const actor of game.actors) {
+                if (classSlugOf(actor) === "soulbound") actor.reset();
+            }
+        });
     },
 
     registerHooks() {

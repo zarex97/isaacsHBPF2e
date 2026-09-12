@@ -120,6 +120,7 @@ Hooks.once("init", () => {
 // spellcasting entry's `cast` and an activity's `toMessage`, and the rider sources wrap `applyDamage`.
 Hooks.once("setup", () => {
     start("the cast pipeline", () => CastPipeline.install());
+    start("the reiatsu pool", () => Reiatsu.install());
     start("the rider engine", () => Riders.registerHooks());
 });
 
