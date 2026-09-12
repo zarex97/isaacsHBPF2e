@@ -119,4 +119,30 @@ check(
     [true, true, false, false],
 );
 
+/* ---------------------------------------------------------------------------------------------- */
+/*  The class item                                                                                  */
+/* ---------------------------------------------------------------------------------------------- */
+
+const fs = await import("node:fs");
+const path = await import("node:path");
+const { ROOT } = await import("./lib/pack.mjs");
+
+function contentDoc(relative) {
+    return JSON.parse(fs.readFileSync(path.join(ROOT, "content", relative), "utf8"));
+}
+
+const cs = contentDoc("soulbound-class/soulbound.json").system;
+
+check("10 HP, and the key attribute is Strength or Dexterity (guide §1.2)", [cs.hp, [...cs.keyAbility.value].sort()], [10, ["dex", "str"]]);
+check("Fortitude and Reflex expert, Will trained (guide §3.1)", cs.savingThrows, { fortitude: 2, reflex: 2, will: 1 });
+check("Perception trained; Expertise arrives at 5th as a feature, not here", cs.perception, 1);
+check("simple, martial and unarmed trained; no advanced (guide §3.1)", [cs.attacks.simple, cs.attacks.martial, cs.attacks.unarmed, cs.attacks.advanced], [1, 1, 1, 0]);
+check("light armour and unarmoured only — medium is the line this class does not cross (guide §3.1)", [cs.defenses.light, cs.defenses.unarmored, cs.defenses.medium, cs.defenses.heavy], [1, 1, 0, 0]);
+check("Religion, plus 3 + Int (the Lineage skill and Spirit Lore are granted by features)", [cs.trainedSkills.value, cs.trainedSkills.additional], [["religion"], 3]);
+check("eleven class feats, on the even levels plus 1st (guide §3.2)", cs.classFeatLevels.value, [1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20]);
+check("general feats on the standard PF2e levels", cs.generalFeatLevels.value, [3, 7, 11, 15, 19]);
+check("ancestry feats on the standard PF2e levels", cs.ancestryFeatLevels.value, [1, 5, 9, 13, 17]);
+check("skill increases on every odd level from 3rd", cs.skillIncreaseLevels.value, [3, 5, 7, 9, 11, 13, 15, 17, 19]);
+check("the class slug keys the Reiatsu DC", cs.slug, "soulbound");
+
 report("Soulbound tests");

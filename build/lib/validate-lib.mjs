@@ -1275,21 +1275,66 @@ const ADVANCEMENT = {
     19: ["Eighth Sense"],
 };
 
-function validateAdvancementTable(packs, errors) {
-    const classPack = packs.find((p) => p.def.name === "saint-class");
-    const saint = classPack?.docs.find((d) => d.doc.system?.slug === "saint")?.doc;
-    if (!saint) return; // absent during early scaffolding; the class validator reports a missing class
+/**
+ * The Soulbound's advancement table (guide §3.2).
+ *
+ * Grown phase by phase: a level listed here must have its feature in the packs, so a name added ahead of
+ * its content fails the build rather than waiting to be noticed at a table.
+ *
+ * Guide §3.2 prints "soul reaper feat" on the even levels beside "soulbound feat" at 1/10/20. That is
+ * prototype naming from before the class was renamed in v1.1 — there is one class feat list, not two —
+ * so `classFeatLevels` carries all eleven and this table says nothing about feats.
+ */
+const SOULBOUND_ADVANCEMENT = {
+    1: ["Spirit Weapon", "Reiatsu", "Rising Pressure", "Released Form", "Spirit Sense", "Konsō"],
+    3: ["Flash Step", "Departed Flesh", "Iron Will"],
+    5: ["Deepening Reserve", "Alertness", "Weapon Expertise"],
+    7: ["Weapon Specialization"],
+    9: ["Refined Release", "Reiatsu Expertise"],
+    11: ["Greater Flash Step", "Juggernaut"],
+    13: ["Full Release", "Weapon Mastery", "Spirit Weave"],
+    15: ["Evasion", "Greater Weapon Specialization"],
+    17: ["Perfected Full Release", "Reiatsu Mastery"],
+    19: ["Unsealed"],
+};
+
+/**
+ * A class item's grant levels must match its guide's advancement table.
+ *
+ * This is the single easiest thing to get wrong by hand and the hardest to notice in play: a feature
+ * granted one level late is invisible until someone reaches that level, which on a 20-level class can be
+ * most of a campaign away.
+ */
+function checkAdvancement(packs, errors, { pack, slug, table, guideRef }) {
+    const classPack = packs.find((p) => p.def.name === pack);
+    const classDoc = classPack?.docs.find((d) => d.doc.system?.slug === slug)?.doc;
+    if (!classDoc) return; // absent during early scaffolding; the class validator reports a missing class
 
     const byLevel = {};
-    for (const grant of Object.values(saint.system.items ?? {})) {
+    for (const grant of Object.values(classDoc.system.items ?? {})) {
         (byLevel[grant.level] ??= []).push(grant.name);
     }
-    for (const [level, expected] of Object.entries(ADVANCEMENT)) {
+    for (const [level, expected] of Object.entries(table)) {
         const actual = byLevel[level] ?? [];
         for (const name of expected) {
             if (!actual.some((a) => a.startsWith(name))) {
-                errors.push(`content/saint-class: advancement table expects "${name}" at level ${level} (guide §3)`);
+                errors.push(`content/${pack}: advancement table expects "${name}" at level ${level} (${guideRef})`);
             }
         }
     }
+}
+
+function validateAdvancementTable(packs, errors) {
+    checkAdvancement(packs, errors, {
+        pack: "saint-class",
+        slug: "saint",
+        table: ADVANCEMENT,
+        guideRef: "guide §3",
+    });
+    checkAdvancement(packs, errors, {
+        pack: "soulbound-class",
+        slug: "soulbound",
+        table: SOULBOUND_ADVANCEMENT,
+        guideRef: "guide §3.2",
+    });
 }
