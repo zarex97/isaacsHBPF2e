@@ -15,6 +15,7 @@ import { MODULE_ID, adjacentSigns } from "./sky/signs.mjs";
 import { SkyTrackerApp } from "./sky/tracker-app.mjs";
 import { SkyTracker } from "./sky/tracker.mjs";
 import { Reiatsu } from "./soulbound/reiatsu.mjs";
+import { RisingPressure } from "./soulbound/rising-pressure.mjs";
 import { SpiritWeapon } from "./soulbound/weapon.mjs";
 import { AreaTargeting } from "./targeting/index.mjs";
 import { Lingering } from "./targeting/lingering.mjs";
@@ -64,6 +65,7 @@ Hooks.once("init", () => {
     start("the Libra Arms", () => registerLibraHooks());
     start("the spirit weapon", () => SpiritWeapon.registerHooks());
     start("Reiatsu", () => Reiatsu.registerHooks());
+    start("Rising Pressure", () => RisingPressure.registerHooks());
     start("the sky tracker window", () => SkyTrackerApp.registerHooks());
 
     start("the sky tracker's settings menu", () => {
@@ -100,6 +102,7 @@ Hooks.once("init", () => {
         encasement: Encasement,
         spiritWeapon: SpiritWeapon,
         reiatsu: Reiatsu,
+        risingPressure: RisingPressure,
         open: () => new SkyTrackerApp().render(true),
         adjacentSigns,
     };
