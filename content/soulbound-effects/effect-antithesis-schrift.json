@@ -1,0 +1,72 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "bypass": [
+                {
+                    "predicate": [
+                        "item:tag:soulbound-seele-schneider"
+                    ],
+                    "resistance": {
+                        "max": null,
+                        "types": [
+                            "slashing"
+                        ]
+                    }
+                }
+            ]
+        }
+    },
+    "img": "icons/weapons/bows/bow-recurve-blue.webp",
+    "name": "Effect: Antithesis — Schrift",
+    "system": {
+        "description": {
+            "value": "<p>A broad blue bow of light, and a blade of vibrating reishi beside it.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-equipment.Item.Seele Schneider"
+            },
+            {
+                "key": "ItemAlteration",
+                "itemType": "weapon",
+                "mode": "upgrade",
+                "predicate": [
+                    "item:tag:soulbound-weapon-profile"
+                ],
+                "property": "damage-dice-faces"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

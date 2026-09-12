@@ -1,0 +1,23 @@
+{
+    "folder": "Core",
+    "img": "systems/pf2e/icons/default-icons/lore.svg",
+    "name": "Spirit Lore",
+    "system": {
+        "description": {
+            "value": "<p>Souls, the afterlife, haunts, and hollow-things &mdash; where they come from, what they want, and what is owed to them.</p>"
+        },
+        "mod": {
+            "value": 0
+        },
+        "proficient": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": []
+    },
+    "type": "lore"
+}

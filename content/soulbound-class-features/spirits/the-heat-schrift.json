@@ -1,0 +1,44 @@
+{
+    "folder": "Spirits",
+    "img": "icons/magic/fire/projectile-fireball-smoke-strong-red.webp",
+    "name": "The Heat — Schrift",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your reishi runs hot. Your spirit weapon's damage type becomes <strong>fire</strong> (you may still choose spirit), it gains <strong>deadly d8</strong>, and you gain <strong>fire resistance equal to half your level</strong>.</p><p>Canon's escalation is literal &mdash; <strong>Burner Finger One</strong> through <strong>Five</strong>.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: The Heat — Schrift"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

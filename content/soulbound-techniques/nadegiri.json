@@ -1,0 +1,74 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "option": "nadegiri",
+                        "type": "strikes"
+                    },
+                    "event": "action-used",
+                    "self": true
+                }
+            ],
+            "areaTargeting": {
+                "affects": "enemies",
+                "area": {
+                    "type": "emanation",
+                    "value": 10
+                },
+                "includesSelf": false
+            }
+        }
+    },
+    "img": "icons/skills/melee/blade-tips-triple-blue.webp",
+    "name": "Nadegiri",
+    "system": {
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p><strong>Requirements</strong> Your spirit weapon is Released · <strong>Cost</strong> 1 Reiatsu Point</p><hr /><p><em>Clean Sweep.</em> Make one Strike against <strong>each</strong> enemy in your reach, each at your current multiple attack penalty; the penalty doesn't increase until all Strikes are made.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "level": {
+            "value": 6
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "melee"
+        },
+        "requirements": "Your spirit weapon is Released",
+        "rules": [],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-zanjutsu"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "focus",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

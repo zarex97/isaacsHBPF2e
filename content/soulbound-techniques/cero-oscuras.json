@@ -1,0 +1,96 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "slug": "off-guard",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 1
+                    },
+                    "event": "strike-resolved",
+                    "outcomes": [
+                        "criticalSuccess"
+                    ],
+                    "predicate": [
+                        "self:feature:refined-release"
+                    ]
+                }
+            ]
+        }
+    },
+    "img": "icons/creatures/abilities/wing-bat-membrane-green.webp",
+    "name": "Cero Oscuras",
+    "system": {
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "3d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "spirit"
+            }
+        },
+        "defense": null,
+        "description": {
+            "value": "<p><em>Dark Hollow Flash.</em> A cero so black it takes the light with it.</p><p>Make a spell attack roll against one creature within 90 feet. On a hit it takes @Damage[3d6[spirit]] damage, doubled on a critical hit.</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d6.</p><p><strong>Refined (9th)</strong> On a critical hit the target is <strong>off-guard</strong> until the start of your next turn, and Cero Oscuras gains a <strong>5-foot burst</strong> at the target's location dealing half damage to other creatures in it (basic Reflex).</p><hr /><p><em>A spell attack roll rather than a save is what buys the higher die count.</em></p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "area": 0,
+            "damage": {
+                "0": "1d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "90 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-release"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "attack",
+                "concentrate",
+                "focus",
+                "manipulate",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

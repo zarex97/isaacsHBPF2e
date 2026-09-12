@@ -1,0 +1,46 @@
+{
+    "img": "icons/magic/holy/angel-winged-humanoid-golden.webp",
+    "name": "Effect: Bailar de Valquiria",
+    "system": {
+        "description": {
+            "value": "<p>Golden wings and a body that reassembles itself. Fast healing equal to your Miracle points, and five of them will buy your life.</p>"
+        },
+        "duration": {
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:the-miracle:made-flesh",
+                "value": true
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

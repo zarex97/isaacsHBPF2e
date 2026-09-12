@@ -1,0 +1,84 @@
+{
+    "folder": "Way of Destruction (Hadō)",
+    "img": "icons/magic/fire/explosion-fireball-medium-red.webp",
+    "name": "Shakkahō — Crimson Bloom",
+    "system": {
+        "area": {
+            "type": "burst",
+            "value": 10
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "2d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "fire"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><em>Hadō #31. A sphere of red fire gathered in the palm and thrown. The workhorse of the destructive arts.</em></p><p>Each creature in a 10-foot burst within 60 feet takes @Damage[2d6[fire]] damage with a basic Reflex save.</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d6.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "area": 0,
+            "damage": {
+                "0": "1d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-kido",
+                "soulbound-kido-hado"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "destruction",
+                "fire",
+                "focus",
+                "kido",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

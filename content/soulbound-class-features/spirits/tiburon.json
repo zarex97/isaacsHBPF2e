@@ -1,0 +1,63 @@
+{
+    "folder": "Spirits",
+    "img": "icons/creatures/fish/fish-shark-swimming.webp",
+    "name": "Tiburón",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><em>Shark &mdash; Tier Harribel.</em></p><p><strong>Release: \"Destroy.\"</strong> A spirit that measures everything against the ocean and finds it wanting. Sacrifice, not slaughter.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Tiburón — Resurrección"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-techniques.Item.La Gota"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            13
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Hirviendo"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-spirit",
+                "soulbound-spirit-tiburon",
+                "soulbound-lineage-hollow"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

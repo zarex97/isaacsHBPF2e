@@ -1,0 +1,76 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "label": "Let the doll take it",
+                        "prompt": "An attack has landed. Spend a petal-flower and let the ice doll take it?",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Remnant Ice Doll"
+                                }
+                            }
+                        ],
+                        "type": "reaction"
+                    },
+                    "event": "damage-applied",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "img": "icons/magic/water/snowflake-ice-swirl-blue.webp",
+    "name": "Zanhyō Ningyō",
+    "system": {
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p><em>Remnant Ice Doll.</em> <strong>Cost</strong> one petal-flower.</p><p><strong>Trigger</strong> You are hit by an attack.</p><hr /><p>A doll of ice takes the blow. Reduce the damage by an amount equal to <strong>twice your level</strong>; the doll shatters.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "level": {
+            "value": 7
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": ""
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "reaction"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-full-release"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "cold",
+                "concentrate",
+                "focus",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

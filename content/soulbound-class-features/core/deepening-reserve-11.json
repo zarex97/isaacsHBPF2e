@@ -1,0 +1,47 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/light/explosion-star-glow-blue.webp",
+    "name": "Deepening Reserve (11th)",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>The well goes down further still. Your maximum reiatsu pool increases to <strong>3</strong> Reiatsu Points.</p><hr /><p><em>How this works in Foundry: Pathfinder derives your focus pool's size from the focus effects you know &mdash; one point per non-cantrip focus effect &mdash; and then clamps it to a ceiling. This feature sets that ceiling. Until you have chosen a Spirit and gained its Release Technique, you know no focus effects and the pool reads 0, which is correct rather than broken.</em></p>"
+        },
+        "level": {
+            "value": 11
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "ActiveEffectLike",
+                "mode": "override",
+                "path": "system.resources.focus.cap",
+                "priority": 30,
+                "value": 3
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

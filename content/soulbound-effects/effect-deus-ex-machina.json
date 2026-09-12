@@ -1,0 +1,67 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "damageType": "fire",
+                        "dc": 20,
+                        "formula": "2d6",
+                        "type": "persistent-damage"
+                    },
+                    "event": "damage-applied",
+                    "predicate": [
+                        "rider:damage:type:fire"
+                    ]
+                }
+            ]
+        }
+    },
+    "img": "icons/magic/fire/explosion-fireball-large-orange.webp",
+    "name": "Effect: Deus Ex Machina",
+    "system": {
+        "description": {
+            "value": "<p>Wings and a halo of blue reishi. Fire immunity, a fly Speed, and fire that does not go out easily.</p>"
+        },
+        "duration": {
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "Immunity",
+                "type": "fire"
+            },
+            {
+                "key": "BaseSpeed",
+                "selector": "fly",
+                "value": "@actor.system.movement.speeds.land.value"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

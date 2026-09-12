@@ -1,0 +1,51 @@
+{
+    "folder": "1st",
+    "img": "icons/magic/perception/third-eye-blue-red.webp",
+    "name": "Pesquisa",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Spirit Sense's range increases to <strong>120 feet</strong>, and you learn each detected creature's approximate level relative to your own.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": [
+                {
+                    "value": "Hollow lineage"
+                }
+            ]
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "acuity": "imprecise",
+                "key": "Sense",
+                "range": 120,
+                "selector": "spiritsense"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat",
+                "soulbound-feat-hollow"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

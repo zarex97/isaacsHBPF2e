@@ -1,0 +1,58 @@
+{
+    "folder": "18th",
+    "img": "icons/weapons/swords/sword-guard-purple.webp",
+    "name": "Beyond the Blade",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Your <strong>Release Technique</strong>'s damage dice increase by two steps (d6&rarr;d10, d8&rarr;d12).</p>"
+        },
+        "level": {
+            "value": 18
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "ItemAlteration",
+                "itemType": "spell",
+                "mode": "upgrade",
+                "predicate": [
+                    "item:tag:sb-tier-release"
+                ],
+                "property": "damage-dice-faces"
+            },
+            {
+                "key": "ItemAlteration",
+                "itemType": "spell",
+                "mode": "upgrade",
+                "predicate": [
+                    "item:tag:sb-tier-release"
+                ],
+                "property": "damage-dice-faces"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

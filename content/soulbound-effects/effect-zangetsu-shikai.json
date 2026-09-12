@@ -1,0 +1,51 @@
+{
+    "img": "icons/weapons/swords/greatsword-crossguard-black.webp",
+    "name": "Effect: Zangetsu — Shikai",
+    "system": {
+        "description": {
+            "value": "<p>A blade that is never sealed. Your spirit weapon's damage die is one step larger.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "ItemAlteration",
+                "itemType": "weapon",
+                "mode": "upgrade",
+                "predicate": [
+                    "item:tag:soulbound-spirit-weapon"
+                ],
+                "property": "damage-dice-faces"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

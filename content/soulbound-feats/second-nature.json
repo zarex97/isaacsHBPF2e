@@ -1,0 +1,50 @@
+{
+    "folder": "Borrowed Nature",
+    "img": "icons/magic/symbols/runes-triangle-orange.webp",
+    "name": "Second Nature",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p><strong>Prerequisite</strong> Deeper Crossing</p><hr /><p>The mask stops being something you put on. Your <strong>Borrowed Nature</strong> Aspect &mdash; the 6th-level version, not the 12th &mdash; is <strong>always active</strong>: no action, no Reiatsu Point, no duration, and <strong>no Will penalty</strong>.</p><p>Donning the Other Face still upgrades you to the <strong>Deeper Crossing</strong> numbers for 1 minute, twice per encounter.</p><hr /><p><em>Canon: this is the exact difference between a Visored who has to summon the mask and one who no longer needs to.</em></p>"
+        },
+        "level": {
+            "value": 18
+        },
+        "prerequisites": {
+            "value": [
+                {
+                    "value": "Deeper Crossing"
+                }
+            ]
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:second-nature",
+                "value": true
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

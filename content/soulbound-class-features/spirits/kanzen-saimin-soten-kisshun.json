@@ -1,0 +1,44 @@
+{
+    "folder": "Spirits",
+    "img": "icons/magic/perception/eye-ringed-glow-angry-large-purple.webp",
+    "name": "Kanzen Saimin: Sōten Kisshun",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>Canon gives Aizen no Bankai.</strong> He never releases one, never names one, and the story treats Ky&#333;ka Suigetsu's Shikai as already being the strongest ability in the setting &mdash; that is the point of the character. This entry is therefore <strong>invented</strong>, and it is built as an extension of the Shikai rather than a new form, which is the only honest way to do it.</p><p>All enemies within <strong>60 feet</strong> who can see you must attempt the Shikai save, <strong>including those who previously succeeded or became immune</strong>.</p><p>Hitting you no longer ends the effect; only a <strong>critical hit</strong> does.</p><p>Once per round you may <strong>Sustain</strong> to force one hypnotized creature to attempt a Will save; on a failure it is <strong>confused</strong> until the end of its turn.</p><hr /><p><em>This Full Release grants no damage, no resistance, no Speed and no die step beyond the base. The re-save clause is the whole of its power.</em></p>"
+        },
+        "level": {
+            "value": 13
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Kanzen Saimin: Sōten Kisshun"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

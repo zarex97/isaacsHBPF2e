@@ -1,0 +1,120 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "escapeDc": "reiatsu",
+                        "slug": "immobilized",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "failure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "escapeDc": "reiatsu",
+                        "slug": "immobilized",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 2
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Six Rods"
+                    },
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "failure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Six Rods"
+                    },
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 2
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                }
+            ]
+        }
+    },
+    "folder": "Way of Binding (Bakudō)",
+    "img": "icons/magic/control/debuff-chains-ropes-purple.webp",
+    "name": "Rikujōkōrō — Six Rods",
+    "system": {
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": {
+            "save": {
+                "basic": false,
+                "statistic": "fortitude"
+            }
+        },
+        "description": {
+            "value": "<p><em>Bakudō #61. Six thin rods of light slam into the midsection from six directions and hold it there.</em></p><p>One creature within 30 feet attempts a Fortitude save.</p><p><strong>Failure</strong> It is <strong>immobilized</strong> and can't use manipulate actions for 1 round.</p><p><strong>Critical Failure</strong> As failure, for 2 rounds.</p><hr /><p><em>Deliberately without the incapacitation trait, which is why it stops at \"no manipulate actions\" rather than at paralysed.</em></p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "level": {
+            "value": 4
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-kido",
+                "soulbound-kido-bakudo"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "binding",
+                "focus",
+                "kido",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

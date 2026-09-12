@@ -1,0 +1,36 @@
+{
+    "folder": "Actions",
+    "img": "icons/magic/light/explosion-star-glow-blue.webp",
+    "name": "Release",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><strong>Requirements</strong> Your spirit weapon is manifested.</p><hr /><p>You speak your release command. Your spirit weapon assumes its released form <strong>for the rest of the encounter</strong>.</p><p><strong>The first Release each encounter is free.</strong> Releasing again after re-sealing costs 1 Reiatsu Point. You can't Release while your spirit weapon is dismissed.</p><p>Release is <em>not</em> a stance and doesn't conflict with stance actions.</p>"
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "auditory",
+                "concentrate",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "action"
+}

@@ -1,0 +1,8 @@
+{
+    "author": null,
+    "command": "/**\n * Soulbound test rig — build a character, level it through the checkpoints, and assert at each one.\n *\n * The rig itself lives in `scripts/soulbound/rig.mjs` so it can be iterated without a pack rebuild:\n * a macro's body only changes when the world is shut down and the packs are recompiled, while a\n * module script is re-read on F5.\n */\nconst api = game.modules.get(\"isaacs-hb-pf2e\").api;\nconst out = await api.rig.run();\nconst passed = out.total - out.failed.length;\nlet body = `<p><strong>${passed}/${out.total}</strong> checks passed.</p>`;\nif (out.failed.length > 0) {\n    body += `<ul>${out.failed.map((f) => `<li>L${f.level} ${f.label}<br /><em>expected ${f.expected}, got ${f.actual}</em></li>`).join(\"\")}</ul>`;\n}\nfor (const problem of out.promptProblems ?? []) body += `<p><strong>Prompt:</strong> ${problem}</p>`;\nChatMessage.create({ content: `<h3>Soulbound test rig</h3>${body}`, whisper: [game.user.id] });\n",
+    "img": "icons/tools/laboratory/vial-flask-clear-blue.webp",
+    "name": "Soulbound: Test Rig",
+    "scope": "global",
+    "type": "script"
+}

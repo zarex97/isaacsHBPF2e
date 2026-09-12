@@ -1,0 +1,55 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "dc": 5,
+                        "formula": "1d20",
+                        "label": "Mirror Flower, Water Moon — on a failure the attack finds nothing",
+                        "type": "flat-check"
+                    },
+                    "event": "strike-resolved",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "img": "icons/magic/perception/eye-ringed-glow-angry-purple.webp",
+    "name": "Effect: Hypnotized",
+    "system": {
+        "description": {
+            "value": "<p>You perceive this Soulbound <strong>5 feet from where they actually stand</strong>. Attacks you make against them require a <strong>DC 5 flat check</strong> (DC 6 if they have Refined Release), and they are <strong>hidden</strong> from you whenever they are not adjacent to you.</p>"
+        },
+        "duration": {
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

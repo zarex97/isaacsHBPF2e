@@ -1,0 +1,53 @@
+{
+    "folder": "Lineages",
+    "img": "icons/equipment/chest/breastplate-scale-grey.webp",
+    "name": "Hierro and Sonido",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>Hierro</strong> (\"iron skin\"). Your compressed reiryoku hardens your skin. You gain <strong>resistance to physical damage equal to half your level</strong> (minimum 1).</p><p><strong>Sonido</strong> (\"sound\"). You gain a <strong>+5-foot status bonus</strong> to all your Speeds. At 11th level this increases to +10 feet.</p><hr /><p><em>Hierro is broader than <em>Thermal Nimbus</em> — all physical rather than one energy type — at half the rate, and it arrives at 1st level on a class with light armour and 10 Hit Points.</em></p><hr /><p><em>Automation note: Sonido is written as a status bonus in the class guide. A status bonus on the Speed selector is listed in Foundry's breakdown but contributes nothing to the total, while an untyped one on the same selector applies — so it is authored untyped and the five feet actually reach the table.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "Resistance",
+                "type": "physical",
+                "value": "max(1,floor(@actor.level/2))"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Sonido",
+                "selector": "speed",
+                "type": "untyped",
+                "value": "ternary(gte(@actor.level,11),10,5)"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound",
+                "lineage"
+            ]
+        }
+    },
+    "type": "feat"
+}

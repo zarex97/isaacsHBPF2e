@@ -1,7 +1,7 @@
 {
     "id": "isaacs-hb-pf2e",
-    "title": "Isaac's Homebrew (PF2e): The Saint",
-    "description": "<p>Homebrew content for the Pathfinder Second Edition system: <strong>The Saint</strong>, a martial focus-user whose power answers to the sky. Twelve Gold Cloths with four Techniques each, rankless Techniques that heighten every 2 levels, Ascendant and Zenith boons that heighten them further, a full class feat list, and a sky tracker that decides whose day it is.</p>",
+    "title": "Isaac's Homebrew (PF2e): The Saint and The Soulbound",
+    "description": "<p>Homebrew content for the Pathfinder Second Edition system. <strong>The Saint</strong>, a martial focus-user whose power answers to the sky: twelve Gold Cloths with four Techniques each, and a sky tracker that decides whose day it is. <strong>The Soulbound</strong>, a martial focus-user whose pool refills by fighting: three Lineages, fifteen Spirits with four-rung release ladders, the Kidō list, and a capstone that takes your powers when it is done.</p>",
     "version": "99.0.0",
     "license": "./LICENSE",
     "authors": [
@@ -150,6 +150,123 @@
                 "ASSISTANT": "OWNER"
             },
             "flags": {}
+        },
+        {
+            "name": "soulbound-class",
+            "label": "The Soulbound: Class",
+            "path": "packs/soulbound-class",
+            "type": "Item",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/blue.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "soulbound-equipment",
+            "label": "The Soulbound: Spirit Weapons",
+            "path": "packs/soulbound-equipment",
+            "type": "Item",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/blue.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "soulbound-class-features",
+            "label": "The Soulbound: Class Features",
+            "path": "packs/soulbound-class-features",
+            "type": "Item",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/blue.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "soulbound-techniques",
+            "label": "The Soulbound: Techniques",
+            "path": "packs/soulbound-techniques",
+            "type": "Item",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/purple.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "soulbound-kido",
+            "label": "The Soulbound: Kidō",
+            "path": "packs/soulbound-kido",
+            "type": "Item",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/purple.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "soulbound-feats",
+            "label": "The Soulbound: Feats",
+            "path": "packs/soulbound-feats",
+            "type": "Item",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/blue.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "soulbound-effects",
+            "label": "The Soulbound: Effects",
+            "path": "packs/soulbound-effects",
+            "type": "Item",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/green.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "soulbound-journals",
+            "label": "The Soulbound: Handbook",
+            "path": "packs/soulbound-journals",
+            "type": "JournalEntry",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/green.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "soulbound-macros",
+            "label": "The Soulbound: Macros",
+            "path": "packs/soulbound-macros",
+            "type": "Macro",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/green.webp",
+            "ownership": {
+                "PLAYER": "NONE",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
         }
     ],
     "packFolders": [
@@ -166,6 +283,22 @@
                 "saint-journals",
                 "saint-macros"
             ]
+        },
+        {
+            "name": "Isaac's Homebrew: The Soulbound",
+            "sorting": "m",
+            "color": "#2f5d8a",
+            "packs": [
+                "soulbound-class",
+                "soulbound-equipment",
+                "soulbound-class-features",
+                "soulbound-techniques",
+                "soulbound-kido",
+                "soulbound-feats",
+                "soulbound-effects",
+                "soulbound-journals",
+                "soulbound-macros"
+            ]
         }
     ],
     "flags": {
@@ -175,12 +308,36 @@
                     "saint": {
                         "label": "Saint",
                         "description": "A creature, item, or ability of the Saint class."
+                    },
+                    "soulbound": {
+                        "label": "Soulbound",
+                        "description": "A creature, item, or ability of the Soulbound class."
                     }
                 },
                 "spellTraits": {
                     "cosmo": {
                         "label": "Cosmo",
                         "description": "A Technique powered by a Saint's inner cosmo. Techniques are focus spells that use the Saint's Cosmo DC and heighten once per 2 character levels above the level they were gained."
+                    },
+                    "reiatsu": {
+                        "label": "Reiatsu",
+                        "description": "An effect powered by a Soulbound's spiritual pressure. Reiatsu effects are focus effects that use the Reiatsu DC and heighten to half the character's level, rounded up."
+                    },
+                    "kido": {
+                        "label": "Kidō",
+                        "description": "A demon art. Kidō are not spells: they use the Reiatsu DC, cannot be counteracted as spells, and cannot be heightened with slots."
+                    },
+                    "destruction": {
+                        "label": "Destruction",
+                        "description": "The Way of Destruction — Hadō. A kidō that does harm."
+                    },
+                    "binding": {
+                        "label": "Binding",
+                        "description": "The Way of Binding — Bakudō. A kidō that restrains or shields."
+                    },
+                    "mending": {
+                        "label": "Mending",
+                        "description": "The Way of Mending — Kaidō. A kidō that heals."
                     }
                 },
                 "featTraits": {

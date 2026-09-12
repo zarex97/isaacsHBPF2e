@@ -1,0 +1,80 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "bypass": [
+                {
+                    "immunity": {
+                        "mode": "ignore",
+                        "types": "all"
+                    },
+                    "resistance": {
+                        "max": null,
+                        "types": "all"
+                    }
+                }
+            ]
+        }
+    },
+    "img": "icons/weapons/swords/sword-guard-white.webp",
+    "name": "Shūkei: Hakuteiken",
+    "system": {
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "20d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "slashing"
+            }
+        },
+        "defense": null,
+        "description": {
+            "value": "<p><strong>Cost</strong> nothing · <strong>Requirements</strong> You are in <strong>Severance</strong></p><hr /><p><em>Endscape: White Imperial Sword.</em> Every blade condenses into a single white sword; wings and a vertical halo open behind you.</p><p><strong>One creature within reach.</strong> Make a Strike; on a hit it takes the Waning dice as <strong>slashing</strong> damage.</p><p>This <strong>ignores all resistances and immunities</strong>. On a hit the target can't regain Hit Points, and its regeneration and fast healing are suppressed, for 1 minute.</p><hr /><p><strong>Waning.</strong> The damage is <strong>20d6</strong> if used in the first round of Severance, and two dice fewer each round after &mdash; 18d6, 16d6, 14d6, 12d6, 10d6, and <strong>8d6</strong> in the seventh. After the seventh round this cannot be used at all.</p><p><strong>Using this ends Severance</strong>, whether you want it to or not.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "level": {
+            "value": 10
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "melee"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-severing",
+                "soulbound-art-senbonzakura"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "focus",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

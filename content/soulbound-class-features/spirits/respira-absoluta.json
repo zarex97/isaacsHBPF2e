@@ -1,0 +1,44 @@
+{
+    "folder": "Spirits",
+    "img": "icons/magic/death/skull-crowned-white-purple.webp",
+    "name": "Respira Absoluta",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>Canon gives Baraggan no Segunda Etapa</strong>; his Resurrecci&oacute;n is already treated as the end state. This form <strong>extrapolates</strong> from what canon does establish: Respira ages <em>everything</em> it touches, including attacks aimed at him and the ground he stands on, and Baraggan can control its speed.</p><p>Respira becomes <strong>permanent and free</strong>. You emit a <strong>20-foot emanation</strong> of aging miasma for as long as the Segunda Etapa lasts. Enemies that end their turn in it take @Damage[3d6[void]] damage (basic Fortitude) and are <strong>enfeebled 1</strong> for 1 round on a failure.</p><p><strong>Your decay consumes what is aimed at you.</strong> When a creature within the emanation targets you with an attack or a spell, it must succeed at a <strong>DC 5 flat check</strong> or the attack or spell ages to nothing before it lands and has no effect. A creature that succeeds is temporarily immune to this flat check for 1 minute.</p>"
+        },
+        "level": {
+            "value": 13
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Respira Absoluta"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

@@ -1,0 +1,47 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/light/explosion-star-glow-blue.webp",
+    "name": "Reiatsu",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>You have a <strong>reiatsu pool</strong>: maximum 1 Reiatsu Point, increasing to 2 at 5th level and 3 at 11th. Refill it during your daily preparations, or by spending 10 minutes on <strong>Steady the Breath</strong> &mdash; the Refocus activity. You meditate, or you argue with your sword, or you eat something.</p><p>Techniques and kid&#333; are focus effects with the <strong>reiatsu</strong> trait. They use your <strong>Reiatsu DC</strong> and key attribute, have <strong>no rank</strong>, and are automatically heightened to half your level rounded up, exactly like every other focus effect.</p><p>Every technique and every costed kid&#333; costs <strong>1 Reiatsu Point</strong>. There is no 2-point effect anywhere in the class; the throttles are the pool itself, Rising Pressure's per-encounter ceiling, and the frequencies on individual abilities.</p><hr /><p><em>How this works in Foundry: Pathfinder derives your focus pool's size from the focus effects you know &mdash; one point per non-cantrip focus effect &mdash; and then clamps it to a ceiling. This feature sets that ceiling. Until you have chosen a Spirit and gained its Release Technique, you know no focus effects and the pool reads 0, which is correct rather than broken.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "ActiveEffectLike",
+                "mode": "override",
+                "path": "system.resources.focus.cap",
+                "priority": 10,
+                "value": 1
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

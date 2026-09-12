@@ -1,0 +1,72 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "count": 3,
+                        "option": "trident",
+                        "type": "strikes"
+                    },
+                    "event": "action-used",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "img": "icons/weapons/polearms/trident-blue.webp",
+    "name": "Trident",
+    "system": {
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per round</p><hr /><p>You infuse the blade and fire a high-force slash in a series of three. Make <strong>three</strong> ranged Strikes with your spirit weapon against one creature within 60 feet, each at your current multiple attack penalty; <strong>the penalty does not increase until all three are made</strong>.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "level": {
+            "value": 7
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-full-release"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "focus",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

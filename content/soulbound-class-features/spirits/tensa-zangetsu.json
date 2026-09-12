@@ -1,0 +1,44 @@
+{
+    "folder": "Spirits",
+    "img": "icons/weapons/swords/sword-katana-black.webp",
+    "name": "Tensa Zangetsu",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><em>Heaven Chain Slaying Moon.</em> Canon compresses rather than expands: everything Ichigo has is forced into a smaller, blacker blade.</p><p>Your spirit weapon's damage die does <strong>not</strong> increase, overriding Full Release's normal die step. Instead:</p><ul><li>You gain a <strong>+10-foot status bonus</strong> to all Speeds, and <strong>Flash Step's frequency becomes twice per round</strong>.</li><li><strong>Getsuga Tenshō becomes 1 action</strong>, and its line is 60 feet (90 with Refined).</li><li>The first time each round you hit with your spirit weapon, you may <strong>Step</strong> as a free action.</li></ul><hr /><p><em>This is the speed Bankai, not the damage one, and it gives up its damage-die step to pay for the action compression.</em></p>"
+        },
+        "level": {
+            "value": 13
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Tensa Zangetsu"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

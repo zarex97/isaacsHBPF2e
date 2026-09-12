@@ -1,0 +1,101 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "dc": "reiatsu",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "slug": "frightened",
+                                    "type": "condition",
+                                    "value": 1
+                                },
+                                "outcomes": [
+                                    "failure"
+                                ]
+                            },
+                            {
+                                "apply": {
+                                    "slug": "frightened",
+                                    "type": "condition",
+                                    "value": 2
+                                },
+                                "outcomes": [
+                                    "criticalFailure"
+                                ]
+                            },
+                            {
+                                "apply": {
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Steeled Against Pressure"
+                                },
+                                "outcomes": [
+                                    "success",
+                                    "criticalSuccess"
+                                ]
+                            }
+                        ],
+                        "statistic": "will",
+                        "type": "save"
+                    },
+                    "area": {
+                        "type": "emanation",
+                        "value": 15
+                    },
+                    "areaTargeting": {
+                        "affects": "enemies",
+                        "includesSelf": false
+                    },
+                    "event": "turn-end",
+                    "predicate": [
+                        {
+                            "not": "rider:target:effect:steeled-against-pressure"
+                        }
+                    ],
+                    "self": true
+                }
+            ]
+        }
+    },
+    "img": "icons/magic/light/explosion-star-large-blue.webp",
+    "name": "Effect: Full Release",
+    "system": {
+        "description": {
+            "value": "<p>Your spirit weapon's damage die increases by one step, your Release Technique costs no Reiatsu Points but works only once per round, and you emit a <strong>15-foot emanation</strong> of crushing spiritual pressure &mdash; an enemy that ends its turn in it must succeed at a Will save against your Reiatsu DC or become <strong>frightened 1</strong>, or <strong>frightened 2</strong> on a critical failure. A creature that succeeds is temporarily immune for 10 minutes.</p><p>When this ends you are <strong>fatigued</strong> until you rest for 10 minutes.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

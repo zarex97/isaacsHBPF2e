@@ -1,0 +1,46 @@
+{
+    "img": "icons/magic/nature/leaf-petals-red.webp",
+    "name": "Effect: Gokei",
+    "system": {
+        "description": {
+            "value": "<p><em>Total Scene.</em> The blades amass into a sphere around one creature and implode. Your second emanation is a <strong>10-foot burst</strong> on one enemy; that enemy takes <strong>double</strong> damage from it and cannot benefit from cover or concealment against it.</p>"
+        },
+        "duration": {
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:senbonzakura:gokei",
+                "value": true
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

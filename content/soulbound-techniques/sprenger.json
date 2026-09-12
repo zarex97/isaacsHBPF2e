@@ -1,0 +1,93 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "escapeDc": "reiatsu",
+                        "slug": "restrained",
+                        "type": "condition"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                }
+            ]
+        }
+    },
+    "img": "icons/magic/light/explosion-star-glow-blue.webp",
+    "name": "Sprenger",
+    "system": {
+        "area": {
+            "type": "burst",
+            "value": 20
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "20d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "force"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><strong>Cost</strong> nothing · <strong>Requirements</strong> You are in <strong>Severance</strong></p><hr /><p>Five Seele Schneider planted in a pentacle, and the Gint&#333; poured over them.</p><p><strong>20-foot burst</strong> within 60 feet, basic Reflex, <strong>force</strong> damage.</p><p>Creatures that critically fail are <strong>restrained</strong> by lines of light for 1 minute (Escape against your Reiatsu DC).</p><hr /><p><em>Canon's fifth and largest Gint&#333;, and the reason Ury&#363;'s Vollst&auml;ndig does not carry it.</em></p><hr /><p><strong>Waning.</strong> The damage is <strong>20d6</strong> if used in the first round of Severance, and two dice fewer each round after &mdash; 18d6, 16d6, 14d6, 12d6, 10d6, and <strong>8d6</strong> in the seventh. After the seventh round this cannot be used at all.</p><p><strong>Using this ends Severance</strong>, whether you want it to or not.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "level": {
+            "value": 10
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-severing",
+                "soulbound-art-antithesis"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "focus",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

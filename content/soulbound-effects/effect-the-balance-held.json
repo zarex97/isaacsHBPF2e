@@ -1,0 +1,51 @@
+{
+    "img": "icons/equipment/shield/heater-crystal-blue.webp",
+    "name": "Effect: The Balance — Held",
+    "system": {
+        "description": {
+            "value": "<p>Misfortune has been handed to you. You take a <strong>&minus;1 status penalty to saving throws</strong> (and to AC if the Quincy has Refined Release).</p>"
+        },
+        "duration": {
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "The Balance",
+                "selector": [
+                    "fortitude",
+                    "reflex",
+                    "will"
+                ],
+                "type": "status",
+                "value": -1
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

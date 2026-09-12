@@ -1,0 +1,39 @@
+{
+    "img": "icons/magic/perception/eye-ringed-glow-angry-purple.webp",
+    "name": "Effect: Shikake",
+    "system": {
+        "description": {
+            "value": "<p>You have been shown the wrong person. You treat one creature within your reach as though it were the Soulbound, and you treat the Soulbound as an <strong>ally</strong>.</p>"
+        },
+        "duration": {
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

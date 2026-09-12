@@ -1,0 +1,47 @@
+{
+    "folder": "Lineages",
+    "img": "icons/skills/melee/blade-tips-triple-steel.webp",
+    "name": "Zanjutsu Mastery",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your Zanjutsu techniques' damage dice increase by one step (d6&rarr;d8, d8&rarr;d10).</p><p>Once per round, when you critically hit with your spirit weapon, you regain 1 Reiatsu Point. This <strong>ignores Rising Pressure's per-encounter cap</strong>.</p>"
+        },
+        "level": {
+            "value": 15
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:zanjutsu-mastery",
+                "value": true
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound",
+                "lineage"
+            ]
+        }
+    },
+    "type": "feat"
+}

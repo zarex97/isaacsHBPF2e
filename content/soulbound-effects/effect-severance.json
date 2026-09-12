@@ -1,0 +1,90 @@
+{
+    "img": "icons/magic/death/skull-energy-light-white.webp",
+    "name": "Effect: Severance",
+    "system": {
+        "description": {
+            "value": "<p>You have stopped carrying your power and become it. For <strong>10 rounds</strong>:</p><ul><li>Your spirit weapon's Strikes deal an additional <strong>4d6 spirit</strong> damage.</li><li>You are <strong>immune to fear and death effects</strong>, and to the <strong>frightened</strong> and <strong>doomed</strong> conditions.</li><li><strong>Reiatsu stops mattering.</strong> Your Release Technique and every kid&#333; you know cost <strong>nothing</strong> and have <strong>no frequency limit</strong>.</li><li>You gain your Spirit's <strong>Full Release</strong> ability and its 20-foot pressure emanation, without spending your daily Full Release and without the fatigue.</li><li>Your Speed increases by <strong>20 feet</strong>, and Flash Step's frequency becomes <strong>twice per round</strong>.</li></ul><hr /><p><strong>Waning.</strong> Your Severing Art is strongest the instant you enter Severance and decays every round: <strong>20d6</strong> in the first round, 18d6 in the second, and so on down to <strong>8d6</strong> in the seventh. After the seventh round it <strong>cannot be used at all</strong>.</p><p><em>The longer you survive, the more this state has given you, and the less your ending is worth. There is no dominant line, which is what makes it a decision instead of a script.</em></p>"
+        },
+        "duration": {
+            "unit": "rounds",
+            "value": 10
+        },
+        "level": {
+            "value": 20
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:severance",
+                "value": true
+            },
+            {
+                "key": "Immunity",
+                "type": "death-effects"
+            },
+            {
+                "key": "Immunity",
+                "type": "fear-effects"
+            },
+            {
+                "key": "Immunity",
+                "type": "frightened"
+            },
+            {
+                "key": "Immunity",
+                "type": "doomed"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Severance",
+                "selector": "speed",
+                "type": "untyped",
+                "value": 20
+            },
+            {
+                "damageType": "spirit",
+                "diceNumber": 4,
+                "dieSize": "d6",
+                "key": "DamageDice",
+                "label": "Severance",
+                "predicate": [
+                    "item:tag:soulbound-spirit-weapon"
+                ],
+                "selector": "strike-damage"
+            },
+            {
+                "key": "ItemAlteration",
+                "itemType": "feat",
+                "mode": "override",
+                "predicate": [
+                    "item:slug:flash-step"
+                ],
+                "property": "frequency-max",
+                "value": 2
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

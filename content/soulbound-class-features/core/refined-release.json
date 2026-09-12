@@ -1,0 +1,50 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/light/explosion-star-glow-purple.webp",
+    "name": "Refined Release",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your Release Technique gains its <strong>Refined</strong> benefit, listed under your Spirit. The base rank of the Refined effect is 5.</p><hr /><p><em>Where a Refined benefit widens an area, it is applied here rather than authored into the Technique: a focus effect heightens per rank, and \"at 9th level\" is not a rank step.</em></p>"
+        },
+        "level": {
+            "value": 9
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "itemType": "spell",
+                "key": "ItemAlteration",
+                "mode": "add",
+                "predicate": [
+                    "item:tag:sb-tier-release"
+                ],
+                "property": "area-size",
+                "value": 5
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

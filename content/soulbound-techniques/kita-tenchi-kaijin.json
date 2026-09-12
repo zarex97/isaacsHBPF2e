@@ -1,0 +1,102 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "bypass": [
+                {
+                    "resistance": {
+                        "max": null,
+                        "types": [
+                            "fire",
+                            "physical"
+                        ]
+                    }
+                }
+            ]
+        }
+    },
+    "img": "icons/magic/fire/blade-two-handed-blackened-orange.webp",
+    "name": "Kita: Tenchi Kaijin",
+    "system": {
+        "area": {
+            "type": "line",
+            "value": 60
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "5d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "fire"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><em>North, Heaven and Earth End in Ashes.</em> <strong>Frequency</strong> once per round · <strong>Requirements</strong> you are in the Kita aspect.</p><hr /><p>Each creature in a 60-foot line takes @Damage[5d6[fire]] damage with a basic Reflex save.</p><p>This damage <strong>cannot be reduced by resistance to fire, by Blut Vene, or by Hierro</strong>.</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d6.</p><hr /><p><em>Canon's note that \"not even Blut Vene can block this attack\" is the only unresistable damage in the class. The friendly-fire clause of the Bankai is the price.</em></p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "heightening": {
+            "area": 0,
+            "damage": {
+                "0": "1d6"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 7
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-full-release"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "fire",
+                "focus",
+                "manipulate",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

@@ -1,0 +1,96 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "direction": "away",
+                        "distance": 5,
+                        "type": "teleport"
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                }
+            ]
+        }
+    },
+    "folder": "Way of Destruction (Hadō)",
+    "img": "icons/magic/movement/abstract-impact-white.webp",
+    "name": "Shō — Thrust",
+    "system": {
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": true,
+                "category": null,
+                "formula": "1d4",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "force"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><em>Hadō #1. A blunt shove of pure pressure — the first thing anyone learns, and the one a reaper never stops using.</em></p><p>One creature within 30 feet takes @Damage[1d4[force]] damage plus your key attribute modifier, with a basic Reflex save. On a critical failure it is also pushed 5 feet.</p><hr /><p><strong>Heightened (+2)</strong> The damage increases by 1d4.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "area": 0,
+            "damage": {
+                "0": "1d4"
+            },
+            "interval": 2,
+            "type": "interval"
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "1"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-kido",
+                "soulbound-kido-hado"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "cantrip",
+                "destruction",
+                "focus",
+                "kido",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

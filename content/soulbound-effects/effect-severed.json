@@ -1,0 +1,55 @@
+{
+    "img": "icons/magic/death/skull-energy-light-white-dim.webp",
+    "name": "Effect: Severed",
+    "system": {
+        "description": {
+            "value": "<p>You severed the bond that named you, and it is gone.</p><p>You have lost your <strong>Released Form</strong>, your <strong>Release Technique</strong>, your <strong>Full Release</strong>, and your <strong>entire reiatsu pool</strong>. They return when you complete <strong>a week of downtime</strong> rebuilding what you severed.</p><p>You keep your Hit Points, your proficiencies, your skills, your Lineage features, and every other feat.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "days",
+            "value": 7
+        },
+        "level": {
+            "value": 20
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "ActiveEffectLike",
+                "mode": "override",
+                "path": "system.resources.focus.cap",
+                "priority": 99,
+                "value": 0
+            },
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:severed",
+                "value": true
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

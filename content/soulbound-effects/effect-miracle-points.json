@@ -1,0 +1,59 @@
+{
+    "img": "icons/magic/holy/angel-winged-humanoid-blue.webp",
+    "name": "Effect: Miracle Points",
+    "system": {
+        "description": {
+            "value": "<p>Every wound has been counted and kept. The badge is your <strong>Miracle points</strong>: you have <strong>resistance to all damage equal to the number you hold</strong>, and you may spend any number at the start of your turn for <strong>+1d6</strong> damage each until the end of it.</p>"
+        },
+        "duration": {
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "Resistance",
+                "type": "all-damage",
+                "value": "@item.badge.value"
+            },
+            {
+                "key": "FastHealing",
+                "predicate": [
+                    "self:effect:bailar-de-valquiria"
+                ],
+                "type": "fast-healing",
+                "value": "@item.badge.value"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        },
+        "badge": {
+            "max": 10,
+            "min": 0,
+            "type": "counter",
+            "value": 2
+        }
+    },
+    "type": "effect"
+}

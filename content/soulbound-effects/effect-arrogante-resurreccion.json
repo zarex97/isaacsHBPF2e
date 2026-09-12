@@ -1,0 +1,60 @@
+{
+    "img": "icons/magic/death/skull-crowned-white.webp",
+    "name": "Effect: Arrogante — Resurrección",
+    "system": {
+        "description": {
+            "value": "<p>A crowned skeleton with a vast double axe. Immune to disease and poison, and doomed never rises above 1.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-equipment.Item.Gran Caída"
+            },
+            {
+                "key": "Immunity",
+                "type": "disease"
+            },
+            {
+                "key": "Immunity",
+                "type": "poison"
+            },
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:arrogante:doomed-capped",
+                "value": true
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

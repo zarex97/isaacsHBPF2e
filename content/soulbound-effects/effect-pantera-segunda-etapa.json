@@ -1,0 +1,67 @@
+{
+    "img": "icons/creatures/abilities/paw-print-pair-blue-large.webp",
+    "name": "Effect: Pantera — Segunda Etapa",
+    "system": {
+        "description": {
+            "value": "<p>Another +10 feet of Speed, claws that are <strong>deadly d10</strong>, and a 60-foot Garra de la Pantera whose critical failures bleed.</p>"
+        },
+        "duration": {
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Segunda Etapa",
+                "selector": "speed",
+                "type": "untyped",
+                "value": 10
+            },
+            {
+                "key": "ItemAlteration",
+                "itemType": "weapon",
+                "mode": "add",
+                "predicate": [
+                    "item:tag:soulbound-pantera-claw"
+                ],
+                "property": "traits",
+                "value": "deadly-d10"
+            },
+            {
+                "key": "ItemAlteration",
+                "itemType": "spell",
+                "mode": "override",
+                "predicate": [
+                    "item:slug:garra-de-la-pantera"
+                ],
+                "property": "area-size",
+                "value": 60
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

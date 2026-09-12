@@ -1,0 +1,61 @@
+{
+    "img": "icons/equipment/shield/heater-crystal-blue.webp",
+    "name": "Effect: The Balance — Schrift",
+    "system": {
+        "description": {
+            "value": "<p>Freund Schild in your hands, and fortune on your side while the pool holds.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-equipment.Item.Freund Schild"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "The Balance",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:resource:focus:value",
+                            1
+                        ]
+                    }
+                ],
+                "selector": "ac",
+                "type": "circumstance",
+                "value": 1
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

@@ -1,0 +1,63 @@
+{
+    "folder": "Spirits",
+    "img": "icons/magic/fire/blade-two-handed-glowing-orange.webp",
+    "name": "Ryūjin Jakka",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><em>Flowing Blade-like Flame &mdash; Genry&#363;sai Shigekuni Yamamoto.</em></p><p><strong>Release: \"Reduce all creation to ash.\"</strong> The oldest and strongest fire zanpakut&#333; in Soul Society. It does not burn things down so much as decide they are finished.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Ryūjin Jakka — Shikai"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-techniques.Item.Ennetsu Jigoku"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            13
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Zanka no Tachi"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-spirit",
+                "soulbound-spirit-ryujin-jakka",
+                "soulbound-lineage-soul-reaper"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

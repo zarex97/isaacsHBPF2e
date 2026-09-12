@@ -1,0 +1,41 @@
+{
+    "img": "icons/magic/light/explosion-star-glow-blue.webp",
+    "name": "Effect: Released",
+    "system": {
+        "description": {
+            "value": "<p>Your spirit weapon is in its released form for the rest of the encounter.</p><p><em>Release is not a stance: this does not conflict with stance actions, and nothing but the end of the encounter, or re-sealing on purpose, takes it away.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

@@ -1,0 +1,44 @@
+{
+    "folder": "Spirits",
+    "img": "icons/creatures/abilities/wing-bat-membrane-green.webp",
+    "name": "Murciélago — Resurrección",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Black membranous wings, a tattered coat of energy, and green tear-tracks.</p><p>You gain a <strong>fly Speed</strong> equal to your Speed. Your spirit weapon becomes <strong>Luz de la Luna</strong> <em>(Light of the Moon)</em>, a javelin of hardened green energy: <strong>1d10 piercing</strong>, versatile S, <strong>reach</strong>, and it re-forms in your hand instantly if thrown or dropped.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Murciélago — Resurrección"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

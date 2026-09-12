@@ -1,0 +1,53 @@
+{
+    "img": "icons/weapons/bows/bow-recurve-blue.webp",
+    "name": "Effect: Quincy's Discipline",
+    "system": {
+        "description": {
+            "value": "<p>You are wearing a Quincy's discipline. You gain <strong>Blut</strong> as a free action once per round, except that <strong>Blut Vene</strong> grants resistance equal to a <strong>quarter</strong> of your level rather than half. Your ranged Strikes ignore the target's cover.</p>"
+        },
+        "duration": {
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 6
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:aspect:quincy",
+                "value": true
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Borrowed Nature",
+                "selector": "will",
+                "type": "status",
+                "value": -1
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

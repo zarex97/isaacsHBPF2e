@@ -1,0 +1,44 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/movement/trail-streak-impact-blue.webp",
+    "name": "Greater Flash Step",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>You leave an afterimage. Until the start of your next turn after you use Flash Step, the first attack made against you each round requires the attacker to succeed at a <strong>DC 5 flat check</strong> or the attack misses.</p><hr /><p><em>Automation note: the flat check is rolled and announced when an attack resolves against you. Pathfinder fixes an attack's outcome before this module can see it, so for now the roll is reported for the table to apply rather than silently cancelling the hit.</em></p>"
+        },
+        "level": {
+            "value": 11
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Greater Flash Step"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

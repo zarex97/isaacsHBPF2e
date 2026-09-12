@@ -1,0 +1,51 @@
+{
+    "folder": "4th",
+    "img": "icons/magic/fire/beam-jet-stream-red.webp",
+    "name": "Cero Doble",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p><strong>Cero</strong> may be shaped as a <strong>30-foot cone</strong> instead of a 60-foot line, and creatures that critically fail against it are pushed <strong>10 feet</strong> away from you.</p>"
+        },
+        "level": {
+            "value": 4
+        },
+        "prerequisites": {
+            "value": [
+                {
+                    "value": "Hollow lineage"
+                }
+            ]
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:cero-doble",
+                "value": true
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat",
+                "soulbound-feat-hollow"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

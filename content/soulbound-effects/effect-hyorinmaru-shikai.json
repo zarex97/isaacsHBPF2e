@@ -1,0 +1,76 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Frosted Stride"
+                    },
+                    "event": "strike-resolved",
+                    "outcomes": [
+                        "criticalSuccess"
+                    ],
+                    "predicate": [
+                        {
+                            "or": [
+                                "item:tag:soulbound-spirit-weapon",
+                                "item:category:unarmed"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "img": "icons/magic/water/snowflake-ice-blue-white.webp",
+    "name": "Effect: Hyōrinmaru — Shikai",
+    "system": {
+        "description": {
+            "value": "<p>Your spirit weapon's damage type is <strong>cold</strong>. A critical hit slows what it touches.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "ItemAlteration",
+                "itemType": "weapon",
+                "mode": "override",
+                "predicate": [
+                    "item:tag:soulbound-spirit-weapon"
+                ],
+                "property": "damage-type",
+                "value": "cold"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

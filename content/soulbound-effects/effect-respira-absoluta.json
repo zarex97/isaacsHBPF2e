@@ -1,0 +1,97 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "dc": "reiatsu",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "void",
+                                    "formula": "3d6",
+                                    "perStep": "1d6",
+                                    "type": "damage"
+                                }
+                            },
+                            {
+                                "apply": {
+                                    "value": 1,
+                                    "slug": "enfeebled",
+                                    "type": "condition"
+                                },
+                                "duration": {
+                                    "unit": "rounds",
+                                    "value": 1
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            }
+                        ],
+                        "statistic": "fortitude",
+                        "type": "save"
+                    },
+                    "area": {
+                        "type": "emanation",
+                        "value": 20
+                    },
+                    "areaTargeting": {
+                        "affects": "enemies",
+                        "includesSelf": false
+                    },
+                    "event": "turn-end",
+                    "self": true
+                },
+                {
+                    "apply": {
+                        "dc": 5,
+                        "formula": "1d20",
+                        "label": "Respira — the attack may simply age to nothing",
+                        "type": "flat-check"
+                    },
+                    "event": "strike-received",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "img": "icons/magic/death/skull-crowned-white-purple.webp",
+    "name": "Effect: Respira Absoluta",
+    "system": {
+        "description": {
+            "value": "<p>A permanent 20-foot emanation of aging miasma. Enemies that end their turn in it take 3d6 void with a basic Fortitude save, and what is aimed at you may simply age to nothing.</p>"
+        },
+        "duration": {
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

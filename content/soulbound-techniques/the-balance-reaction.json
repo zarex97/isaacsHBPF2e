@@ -1,0 +1,94 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "label": "Hand it to someone else",
+                        "prompt": "You have been hurt. Move the misfortune onto someone else?",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: The Balance — Held"
+                                }
+                            }
+                        ],
+                        "type": "reaction"
+                    },
+                    "event": "damage-applied",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "img": "icons/equipment/shield/heater-crystal-blue.webp",
+    "name": "The Balance — Reaction",
+    "system": {
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "2d6",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "spirit"
+            }
+        },
+        "defense": null,
+        "description": {
+            "value": "<p><strong>Trigger</strong> You take damage from a creature or effect you can perceive.</p><hr /><p>You redistribute the harm. Reduce the damage you take by <strong>twice your level</strong>, then choose one enemy within 60 feet: it takes @Damage[2d6[spirit]] damage, and until the end of its next turn it takes a <strong>&minus;1 status penalty to saving throws</strong>.</p><hr /><p><strong>Heightened (+2)</strong> The damage increases by 1d6.</p><p><strong>Refined (9th)</strong> The status penalty applies to <strong>AC and saving throws</strong>, and if the triggering damage would have reduced you to 0 Hit Points, you instead remain at 1 Hit Point. That last clause functions <strong>once per day</strong>.</p><hr /><p><em>Canon: damage he takes is negated, and the one who dealt it suffers for having landed it.</em></p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "area": 0,
+            "damage": {
+                "0": "1d6"
+            },
+            "interval": 2,
+            "type": "interval"
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "1 enemy"
+        },
+        "time": {
+            "value": "reaction"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-release"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "concentrate",
+                "focus",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

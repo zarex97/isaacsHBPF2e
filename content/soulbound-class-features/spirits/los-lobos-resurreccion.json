@@ -1,0 +1,44 @@
+{
+    "folder": "Spirits",
+    "img": "icons/creatures/abilities/wolf-howl-moon-grey.webp",
+    "name": "Los Lobos — Resurrección",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your spirit weapon splits into <strong>two ornate pistols</strong>. Each is a ranged weapon: <strong>1d6 piercing</strong>, <strong>agile</strong>, range increment 60 feet, reload 0, and they need no ammunition. You may wield and fire both. You also gain a grey wolf-pelt coat and bandolier; your Speed increases by 5 feet.</p><hr /><p><em>On the second voice: canon's Los Lobos is two beings sharing one power, and the pistols speak. That is a roleplaying fact, not a familiar and not a minion &mdash; the second voice takes no actions and has no statistics.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Los Lobos — Resurrección"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

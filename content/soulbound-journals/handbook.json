@@ -1,0 +1,91 @@
+{
+    "_id": "sbhandbook000001",
+    "img": "icons/sundries/books/book-embossed-blue.webp",
+    "name": "The Soulbound: Handbook",
+    "pages": [
+        {
+            "_id": "sbhandbook0100",
+            "name": "The Soulbound at a glance",
+            "sort": 100,
+            "text": {
+                "content": "<p>Three peoples fight the same war with the same physics and opposite manners. A <strong>Soul Reaper</strong> carries their own soul as a sword, and it argues with them. A <strong>Hollow</strong> ate its own heart and wears the hole. A <strong>Quincy</strong> owns no soul-weapon at all &mdash; they reach into the air and make a bow out of what is already there.</p><p>Mechanically they are one chassis: 10 Hit Points, light armour, a <strong>Reiatsu DC</strong>, and a focus pool that refills <em>by fighting</em>.</p><h2>The three things a new player should know</h2><ul><li><strong>The pool is the spike; the Lineage is the floor.</strong> Every Lineage has a free, repeatable ranged option from 1st level with an empty pool &mdash; Sh&#333;, Bala, or Heizen.</li><li><strong>Release is not a stance.</strong> It lasts the whole encounter, doesn't conflict with stance actions, and the first one each encounter is free.</li><li><strong>Every technique costs exactly one Reiatsu Point.</strong> There is no 2-point effect anywhere in the class.</li></ul>",
+                "format": 1
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text"
+        },
+        {
+            "_id": "sbhandbook0200",
+            "name": "Reiatsu and Rising Pressure",
+            "sort": 200,
+            "text": {
+                "content": "<p>Your reiatsu pool is Pathfinder's focus pool: <strong>1 point, 2 at 5th level, 3 at 11th</strong>. <strong>Steady the Breath</strong> is Refocus &mdash; you meditate, or you argue with your sword, or you eat something.</p><h2>Rising Pressure</h2><p>Once per round, the first time you either deal damage to an enemy with your spirit weapon or take damage from an enemy, you regain 1 Reiatsu Point. You can't exceed your maximum, and <strong>over a single encounter you can't regain more points this way than your maximum pool size</strong>.</p><p>That last clause is the one that matters. Without it a long fight is an infinite pool. The module enforces it and will say so in chat when a point is granted.</p><table><tbody><tr><th>Level</th><th>Pool</th><th>Per encounter</th><th>Techniques per fight</th></tr><tr><td>1&ndash;4</td><td>1</td><td>+1</td><td><strong>2</strong></td></tr><tr><td>5&ndash;10</td><td>2</td><td>+2</td><td><strong>4</strong></td></tr><tr><td>11&ndash;20</td><td>3</td><td>+3</td><td><strong>6</strong></td></tr></tbody></table><h2>A note for the GM</h2><p>The pool's size is set from your level, not from how many techniques you happen to know. Pathfinder normally derives a focus pool from the effects you know, which would leave a Hollow &mdash; who knows exactly one costed kid&#333;, forever &mdash; on a pool of one at 11th level. If someone \"fixes\" that, the Hollow and the Quincy quietly lose two thirds of their resource.</p>",
+                "format": 1
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text"
+        },
+        {
+            "_id": "sbhandbook0300",
+            "name": "The release ladder",
+            "sort": 300,
+            "text": {
+                "content": "<p>Four rungs, and each is a state rather than a stance.</p><table><tbody><tr><th>Rung</th><th>Level</th><th>Lasts</th></tr><tr><td><strong>Release</strong> (Shikai / Resurrecci&oacute;n / Schrift)</td><td>1</td><td>the encounter</td></tr><tr><td><strong>Refined Release</strong></td><td>9</td><td>&mdash;</td></tr><tr><td><strong>Full Release</strong> (Bankai / Segunda Etapa / Vollst&auml;ndig)</td><td>13</td><td>1 minute, 2 from 17th</td></tr><tr><td><strong>Final Release</strong> &mdash; Severance</td><td>20</td><td>10 rounds, once per week</td></tr></tbody></table><h2>What the module does for you</h2><p>Releasing applies the state and its effects; the encounter ending takes them away. A released form that <em>replaces</em> your weapon &mdash; Luz de la Luna, Gran Ca&iacute;da, Starrk's pistols &mdash; stows the sealed profile and hands it back when the form ends. Your runes stay on it.</p>",
+                "format": 1
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text"
+        },
+        {
+            "_id": "sbhandbook0400",
+            "name": "The Waning table",
+            "sort": 400,
+            "text": {
+                "content": "<p>At 20th level, <strong>Final Release</strong> puts you into <strong>Severance</strong> for ten rounds. Somewhere inside those ten rounds you get exactly one irreversible attack &mdash; your <strong>Severing Art</strong> &mdash; and it is worth less the longer you wait.</p><table><tbody><tr><th>Round of Severance</th><th>Dice</th><th>Average</th></tr><tr><td><strong>1st</strong></td><td><strong>20d6</strong></td><td>70.0</td></tr><tr><td>2nd</td><td>18d6</td><td>63.0</td></tr><tr><td>3rd</td><td>16d6</td><td>56.0</td></tr><tr><td>4th</td><td>14d6</td><td>49.0</td></tr><tr><td>5th</td><td>12d6</td><td>42.0</td></tr><tr><td>6th</td><td>10d6</td><td>35.0</td></tr><tr><td><strong>7th</strong></td><td><strong>8d6</strong></td><td>28.0</td></tr><tr><td>8th, 9th, 10th</td><td colspan=\"2\"><strong>cannot be used</strong></td></tr></tbody></table><p>Dice = <strong>22 &minus; 2 &times; the round number</strong>.</p><p><strong>The tension is the point.</strong> Round one is 70 damage and none of the buff. Round seven is 28 damage and six rounds of a 4d6 rider, doubled Flash Step and free kid&#333;. There is no dominant line.</p><p>Using the Art <strong>ends Severance</strong> whether you want it to or not, and when Severance ends by either route you lose your Released Form, your Release Technique, your Full Release and your entire pool until <strong>a week of downtime</strong>.</p><p><em>If your table finds everyone fires on round one, flatten the table &mdash; start at 16d6 and drop 1d6 a round &mdash; rather than cutting the ceiling. The module keeps this arithmetic in one function for exactly that reason.</em></p>",
+                "format": 1
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text"
+        },
+        {
+            "_id": "sbhandbook0500",
+            "name": "Kidō, and its ceilings",
+            "sort": 500,
+            "text": {
+                "content": "<p>Kid&#333; are <strong>not spells</strong>. They use your Reiatsu DC, can't be counteracted as spells, and can't be heightened with slots. They auto-heighten to half your level, rounded up.</p><table><tbody><tr><th>Lineage</th><th>Free cantrip</th><th>Costed</th><th>Chosen?</th></tr><tr><td>Soul Reaper</td><td>Sh&#333;</td><td><strong>six</strong>, at 1st (&times;2), 5th, 9th, 13th, 17th</td><td><strong>chosen</strong></td></tr><tr><td>Hollow</td><td>Bala</td><td><strong>one</strong> &mdash; Cero</td><td>fixed</td></tr><tr><td>Quincy</td><td>Heizen</td><td><strong>one</strong> &mdash; Gritz</td><td>fixed</td></tr></tbody></table><p><strong>The ceilings are load-bearing.</strong> <em>Additional Kid&#333;</em> is Soul Reaper only and takeable three times, so the hard ceiling is <strong>nine</strong> at 20th for a Soul Reaper who spends three class feats on it &mdash; and that character has given up three Zanjutsu techniques to do it. A Hollow or Quincy can never exceed two.</p><p>There is <strong>no utility kid&#333;</strong> in the list. No flight, no invisibility, no teleport, no divination. Every entry is damage, control, a shield, or a small heal. The moment a Soul Reaper can solve arbitrary problems with magic, the class is a Magus with better hit points.</p>",
+                "format": 1
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text"
+        },
+        {
+            "_id": "sbhandbook0600",
+            "name": "GM notes",
+            "sort": 600,
+            "text": {
+                "content": "<h2>Ry&#363;jin Jakka burns your own party</h2><p><strong>Zanka no Tachi</strong> deals 1d6 fire at the start of each of its user's turns to every creature within 30 feet <em>including allies</em>. That is deliberate and canon &mdash; Yamamoto's Bankai is a liability to everyone standing near it &mdash; and the module makes it actually happen rather than leaving it in prose.</p><p>If your table dislikes friendly fire, the cleanest fix is to <strong>exempt allies and reduce the die steps from two to one</strong>. That is a table decision; the default content does not make it for you.</p><h2>Ky&#333;ka Suigetsu remembers</h2><p>The hypnosis is keyed to what a creature <em>has seen</em>, not to the current fight. The module keeps a register per creature: whether it has seen a Shikai release, what it rolled, and which immunity window it is in. That memory outlives the encounter and travels between scenes, because canon's clause does.</p><p><strong>The blind are immune entirely.</strong> That is Aizen's only blind spot and it is worth remembering when you build encounters against one.</p><h2>What is invented</h2><p>Nine of the fifteen Severing Arts are the character's actual canon technique. The other six are extrapolations built on a principle canon does establish, and each says so at the top of its own description. Several Segunda Etapas and Ky&#333;ka Suigetsu's Bankai are likewise invented &mdash; Ulquiorra is explicitly the only Espada who reached a Segunda Etapa, and Aizen has no Bankai. Nothing is presented as something the manga contains.</p><h2>Reactions</h2><p>Eight abilities trigger on someone else's action. When one is available the module whispers the owner a card with a single button. <strong>Ignoring the card declines the reaction</strong> &mdash; nothing is spent, and nobody's turn is held up waiting.</p>",
+                "format": 1
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text"
+        }
+    ]
+}

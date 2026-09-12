@@ -1,0 +1,49 @@
+{
+    "folder": "12th",
+    "img": "icons/magic/symbols/runes-carved-stone-red.webp",
+    "name": "Kidō Mastery",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Your <strong>destruction</strong> kid&#333; deal an additional die of damage of their damage type.</p>"
+        },
+        "level": {
+            "value": 12
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "DamageDice",
+                "diceNumber": 1,
+                "label": "Kidō Mastery",
+                "predicate": [
+                    "item:trait:destruction"
+                ],
+                "selector": "spell-damage"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

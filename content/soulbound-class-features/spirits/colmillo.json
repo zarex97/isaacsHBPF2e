@@ -1,0 +1,48 @@
+{
+    "folder": "Spirits",
+    "img": "icons/creatures/abilities/wolf-howl-moon-grey-large.webp",
+    "name": "Colmillo",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>Canon gives Starrk no Segunda Etapa.</strong> The wolves themselves are canon &mdash; Starrk divides his soul and the fragments attack and detonate.</p><p>You divide your soul. <strong>Eight spirit wolves</strong> appear in unoccupied squares within 30 feet. They are <strong>not creatures</strong>: they have no statistics, take no actions, cannot be attacked, and do not flank. They are a resource you spend.</p><p>At the start of each of your turns, you regain 1 wolf, to a maximum of eight.</p><hr /><p><em>This is the closest the class comes to minions and it deliberately stops short, so it never touches the Summoner's or Necromancer's design space.</em></p>"
+        },
+        "level": {
+            "value": 13
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Colmillo"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-techniques.Item.Colmillo — Fang"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

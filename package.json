@@ -11,8 +11,9 @@
         "extract": "node build/extract-packs.mjs",
         "validate": "node build/validate.mjs",
         "check:roundtrip": "node build/check-roundtrip.mjs",
-        "test": "npm run validate && npm run test:riders && npm run build && npm run check:roundtrip",
-        "test:riders": "node build/test-riders.mjs"
+        "test": "npm run validate && npm run test:riders && npm run test:soulbound && npm run build && npm run check:roundtrip",
+        "test:riders": "node build/test-riders.mjs",
+        "test:soulbound": "node build/test-soulbound.mjs"
     },
     "author": "Isaac",
     "license": "MIT",

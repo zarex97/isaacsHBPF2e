@@ -1,0 +1,86 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "dc": "reiatsu",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "escapeDc": "reiatsu",
+                                    "slug": "grabbed",
+                                    "type": "condition"
+                                },
+                                "duration": {
+                                    "unit": "rounds",
+                                    "value": 1
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
+                    },
+                    "area": {
+                        "type": "emanation",
+                        "value": 20
+                    },
+                    "areaTargeting": {
+                        "affects": "enemies",
+                        "includesSelf": false
+                    },
+                    "event": "turn-end",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "img": "icons/magic/earth/dust-smoke-cloud-brown.webp",
+    "name": "Effect: Minami",
+    "system": {
+        "description": {
+            "value": "<p><em>Great Funeral Pyre of 1,500,000.</em> The ash of everything your flames have killed rises in a 20-foot emanation. Enemies that end their turn in it must succeed at a Reflex save or be <strong>grabbed</strong> by ash-figures (Escape against your Reiatsu DC).</p><p><em>The figures take no actions and are not creatures &mdash; this class has no minions.</em></p>"
+        },
+        "duration": {
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:zanka:minami",
+                "value": true
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

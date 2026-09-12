@@ -1,0 +1,77 @@
+{
+    "img": "icons/weapons/swords/sword-katana-black.webp",
+    "name": "Effect: Tensa Zangetsu",
+    "system": {
+        "description": {
+            "value": "<p>A smaller, blacker blade. +10 feet to all Speeds, Flash Step twice per round, and Getsuga Tenshō at one action.</p>"
+        },
+        "duration": {
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Tensa Zangetsu",
+                "selector": "speed",
+                "type": "status",
+                "value": 10
+            },
+            {
+                "key": "ItemAlteration",
+                "itemType": "feat",
+                "mode": "override",
+                "predicate": [
+                    "item:slug:flash-step"
+                ],
+                "property": "frequency-max",
+                "value": 2
+            },
+            {
+                "key": "ItemAlteration",
+                "itemType": "spell",
+                "mode": "override",
+                "predicate": [
+                    "item:slug:getsuga-tensho"
+                ],
+                "property": "time",
+                "value": "1"
+            },
+            {
+                "key": "ItemAlteration",
+                "itemType": "spell",
+                "mode": "override",
+                "predicate": [
+                    "item:slug:getsuga-tensho"
+                ],
+                "property": "area-size",
+                "value": 60
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

@@ -1,0 +1,46 @@
+{
+    "folder": "1st",
+    "img": "icons/magic/perception/eye-ringed-glow-angry-small-blue.webp",
+    "name": "Reader of Threads",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per round</p><hr /><p>You can Recall Knowledge about spirits, haunts, and undead using <strong>Spirit Lore</strong> as a <strong>free action</strong>, and you learn one extra piece of information on a success.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "concentrate",
+                "secret",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

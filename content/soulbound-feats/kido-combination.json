@@ -1,0 +1,52 @@
+{
+    "folder": "6th",
+    "img": "icons/magic/symbols/runes-carved-stone-purple.webp",
+    "name": "Kidō Combination",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per encounter</p><hr /><p>Immediately after using a <strong>destruction</strong> kid&#333;, use a <strong>binding</strong> kid&#333; against the same target for 1 fewer Reiatsu Point (minimum 0).</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "level": {
+            "value": 6
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:kido-combination",
+                "value": true
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

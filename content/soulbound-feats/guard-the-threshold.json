@@ -1,0 +1,45 @@
+{
+    "folder": "2nd",
+    "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+    "name": "Guard the Threshold",
+    "system": {
+        "actionType": {
+            "value": "reaction"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p><strong>Trigger</strong> An ally within 15 feet takes damage from an undead, spirit, or incorporeal creature.</p><hr /><p>Reduce that damage by <strong>2 + your level</strong>.</p><hr /><em>A Champion's reaction, exactly &mdash; but restricted to three creature types.</em>"
+        },
+        "level": {
+            "value": 2
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Guard the Threshold"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "concentrate",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

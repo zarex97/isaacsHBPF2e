@@ -1,4 +1,5 @@
 import { MODULE_ID } from "../sky/signs.mjs";
+import { bindReactionButtons } from "./reactions.mjs";
 import { Relay } from "./relay.mjs";
 import { Sources } from "./sources.mjs";
 
@@ -66,6 +67,7 @@ function bindCards(message, html) {
     if (html?.dataset) html.dataset.isaacsHbBound = "1";
     bindChoiceButtons(message, html);
     bindCounteractButtons(message, html);
+    bindReactionButtons(message, html, (payload) => Relay.request(payload));
 }
 
 /** The buttons on a "choose a sense" card. Clicking relays the pick; the GM applies it. */

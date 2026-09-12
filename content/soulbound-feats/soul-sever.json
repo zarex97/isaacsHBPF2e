@@ -1,0 +1,46 @@
+{
+    "folder": "12th",
+    "img": "icons/magic/holy/prayer-hands-glowing-yellow.webp",
+    "name": "Soul Sever",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>When you reduce a creature to 0 Hit Points with your spirit weapon, you immediately perform a <strong>Kons&#333;</strong> on it as a free action with no check, permanently preventing it from rising as undead.</p>"
+        },
+        "level": {
+            "value": 12
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:soul-sever",
+                "value": true
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

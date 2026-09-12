@@ -1,0 +1,52 @@
+{
+    "folder": "10th",
+    "img": "icons/magic/light/explosion-star-glow-blue.webp",
+    "name": "Perfected Technique",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per encounter</p><hr /><p>Use your <strong>Release Technique</strong> without spending a Reiatsu Point.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "level": {
+            "value": 10
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:perfected-technique",
+                "value": true
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}
