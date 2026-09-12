@@ -28,12 +28,12 @@ Six phases, each gated on `npm test` plus a live pass in world `pf` before the n
 | :-- | :-- | :-- |
 | 1 | Chassis | **Done, verified live** |
 | 2 | Lineages and kidō | **Done, verified live** |
-| 3 | Soul Reaper Spirits | Not started |
+| 3 | Soul Reaper Spirits | **Done, verified live** |
 | 4 | Hollow Spirits | Not started |
 | 5 | Quincy Spirits | Not started |
 | 6 | Feats and Final Release | Not started |
 
-**Counts after Phase 2:** 305 documents across 16 packs (78 of them Soulbound), 310 rider checks, 183
+**Counts after Phase 3:** 352 documents across 16 packs (125 of them Soulbound), 310 rider checks, 247
 Soulbound checks, round-trip clean.
 
 ---
@@ -245,7 +245,99 @@ effect's own text says exactly that.
 
 ---
 
-## 5. Corrections owed to the guide
+## 5. Phase 3 — the Soul Reaper Spirits
+
+The Spirit axis, and the five Soul Reaper Spirits with their full ladders: Senbonzakura, Zangetsu,
+Hyōrinmaru, Ryūjin Jakka and Kyōka Suigetsu.
+
+### 5.1 Verified live
+
+All five built in world `pf` and checked at 1st level: **20/20 each**, no failures, no stuck prompts.
+Hyōrinmaru was then taken to 13th, where **Daiguren Hyōrinmaru** landed with all three petal
+techniques — Sennen Hyōrō, Hyōryū Senbi and Zanhyō Ningyō — a fly Speed of 25 and cold resistance 13,
+its level.
+
+**The reiatsu pool is non-zero from 1st level for the first time.** Phase 1 predicted this and
+couldn't show it: a Release Technique is a costed focus effect, so the moment Spirits existed the pool
+stopped reading 0. Senbonzakura then cast at 1st for one point, at rank 1, as a 15-foot emanation for
+2d6, leaving its difficult terrain behind.
+
+**The charge pool holds**, with a properly-activated combat:
+
+| Step | Result |
+| :-- | :-- |
+| Three petal-flowers at the start | 3 |
+| Spend one | allowed, 2 left |
+| Spend again the same round | **refused** — "already spent this round" |
+| Next round, spend | allowed, 1 left |
+| Perfected's refresh | back to 3 |
+| Over-refresh | clamps at the maximum |
+
+**The mode switch keeps exactly one mode standing.** Gokei, then Senkei replacing it, then a mode the
+family does not have refused without disturbing what stood, then cleared to none.
+
+### 5.2 The Spirit axis took its fallback, and the probe is why that was cheap
+
+The design named a chained ChoiceSet filter as the preferred shape and a per-Lineage split as its
+fallback, and Task 1 Step 1 was "prove it before five Spirits depend on it". Good thing: a ChoiceSet
+stores its selection as a **UUID, not a tag**, so no predicate can join "this Spirit's Lineage" to
+"the Lineage you chose". There is no filter that expresses it.
+
+Three per-Lineage choosers instead — `Spirit (Soul Reaper)`, `Spirit (Hollow)`, `Spirit (Quincy)` —
+each granted by its own Lineage. Two extra documents, identical at the table, and structurally
+incapable of offering a Hollow a zanpakutō. Discovering this after five Spirits were built would have
+been a rework of every one.
+
+### 5.3 Authoring corrections the validator caught
+
+- **"The emanation increases to 20 feet at 9th level" is not heightening.** A focus effect heightens
+  per *rank*, and `heightening.at` grows only targets, areas, range and length. pf2e's own `area-size`
+  ItemAlteration is the lever, and it belongs on **Refined Release** — the feature that grants the
+  benefit. That is now the pattern for every Spirit's Refined widening.
+- **`bypass` is an array of entries**, in the shape Excalibur already proves.
+- **`damage-dice-faces` steps once per `upgrade` and refuses a value** unless the mode is `override`.
+  Two steps is two rules — which also says Zanka no Tachi's "two steps instead of one" out loud.
+- **`area-size` with a target size needs `override`**, not `upgrade`.
+
+### 5.4 Machinery added
+
+- **`modes.mjs`** — one of N named states, exactly one at a time. Senbonzakura Kageyoshi's Gokei and
+  Senkei today; Zanka no Tachi's four cardinal aspects in the same phase; Burner Finger's five fingers
+  in Phase 5. `nextMode()` is pure, because two aspects of Zanka no Tachi standing at once is a
+  resistance and an immunity the character should not have, with nothing on the sheet to say so.
+- **`charges.mjs`** — N of something, spent and regained on a schedule. Storage is an effect's
+  **counter badge**, because that is already how this module counts things: Scorpio's needles, Om's
+  stacks, and the rider engine's own `stack: true`. The per-round limit is the half that fails
+  quietly — three petals with no per-round check is three times the damage the Bankai is costed for.
+- **`hypnosis.mjs`** — the one register in the class, because Kyōka Suigetsu is keyed to an event in
+  the *observer's* past and no rule element can express a memory. It lives on the Soulbound, outlives
+  the encounter and travels between scenes, because canon's clause is about what a creature has seen.
+
+### 5.5 Deliberate, and staying that way
+
+**Ryūjin Jakka's Bankai damages your own party.** Guide §7A is explicit and canon agrees — Yamamoto's
+Bankai is a liability to everyone standing near it. Saying so in the targeting (`affects: "all"`,
+`includesSelf: false`) is what makes it actually happen rather than sit in prose. The variant for
+tables that dislike it — exempt allies, one die step instead of two — is written into the feature's own
+text, never into the default content.
+
+**Kyōka Suigetsu's Bankai is invented**, at length, in its own text. Canon gives Aizen none, and the
+honest place to say so is on the item somebody reads at the table rather than in a design document.
+
+### 5.6 A test-rig lesson worth keeping
+
+`game.combat` is the combat of the **viewed scene**, and a stale combat left over from an earlier test
+is what the charge ledger reads. A spend that should have been allowed came back refused, and the pool
+was innocent. Delete old combats before testing anything that keys on the round.
+
+The rig's prompt resolver is also now installable independently of `run()`. It used to be installed
+per run and cleared in a `finally` — correct when `run()` finishes, wrong when a scripted driver's
+protocol call times out, because the abandoned promise means the `finally` never fires and the next
+prompt blocks every subsequent await.
+
+---
+
+## 6. Corrections owed to the guide
 
 To be written into `Docs/soulbound-guide-v1.md` as **v1.4** in Phase 6, so the guide and the module
 never disagree.
@@ -270,7 +362,7 @@ never disagree.
 
 ---
 
-## 6. Environment notes
+## 7. Environment notes
 
 Three things cost real time in this phase and are worth not re-learning.
 

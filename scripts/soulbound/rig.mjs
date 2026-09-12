@@ -25,6 +25,34 @@ const CHECKPOINTS = [1, 5, 9, 11, 13, 17, 20];
 
 const promptProblems = [];
 
+/**
+ * A resolver that outlives one call.
+ *
+ * `run()` used to install its own and clear it in a `finally`. That is correct when `run()` finishes —
+ * and wrong when the caller is a scripted driver whose protocol call times out, because the abandoned
+ * promise means the `finally` never fires, the interval dies, and the next prompt sits on screen
+ * blocking every subsequent await. From the driver that looks like the content hanging.
+ *
+ * So the resolver is installable separately and, when one is already standing, `run()` leaves it alone.
+ */
+let standingResolver = null;
+
+export function installResolver(names = []) {
+    clearResolver();
+    standingResolver = installPromptResolver(chooserFor({
+        profile: names.find((n) => n.startsWith("Spirit Weapon")),
+        lineage: names.find((n) => ["Soul Reaper", "Hollow", "Quincy"].includes(n)),
+        spirit: names.find((n) => !n.startsWith("Spirit Weapon")
+            && !["Soul Reaper", "Hollow", "Quincy"].includes(n)),
+    }));
+    return standingResolver;
+}
+
+export function clearResolver() {
+    if (standingResolver) clearInterval(standingResolver);
+    standingResolver = null;
+}
+
 function installPromptResolver(choose) {
     return setInterval(() => {
         for (const app of foundry.applications.instances.values()) {
@@ -51,7 +79,7 @@ function installPromptResolver(choose) {
 }
 
 /** Pick a named spirit-weapon profile; refuse to guess at anything else. */
-function chooserFor({ profile, lineage, kido = [] }) {
+function chooserFor({ profile, lineage, spirit, kido = [] }) {
     const picked = [];
     return (app) => {
         const choices = app.choices ?? [];
@@ -64,6 +92,11 @@ function chooserFor({ profile, lineage, kido = [] }) {
         // The Lineage, by name.
         const wantedLineage = lineage ? byName(lineage) : null;
         if (wantedLineage) return wantedLineage;
+
+        // The Spirit, by name. Never defaulted: a wrong Spirit silently tests the wrong ladder while
+        // every number still looks plausible.
+        const wantedSpirit = spirit ? byName(spirit) : null;
+        if (wantedSpirit) return wantedSpirit;
 
         const looksLike = (fragment) => choices.some((c) => String(c.value ?? "").includes(fragment));
 
@@ -133,7 +166,7 @@ function hasFeature(actor, name) {
 
 /* -------------------------------------------------------------------------------------------- */
 
-async function assertAt(actor, level, lineage) {
+async function assertAt(actor, level, lineage, spirit) {
     at(level);
     const sys = actor.system;
 
@@ -201,23 +234,30 @@ async function assertAt(actor, level, lineage) {
     /* --- per-Lineage, guide §5 ------------------------------------------------------------------ */
 
     const knows = (name) => actor.itemTypes.spell.some((sp) => sp.name.startsWith(name));
+    // Count kido by their tier tag, not "every non-cantrip focus spell": a Spirit's Release Technique is
+    // also a costed focus effect, and counting it as a kido made every Soul Reaper look one over its
+    // ceiling the moment Spirits existed.
+    const costedKido = () => actor.itemTypes.spell.filter(
+        (sp) => (sp.system.traits.otherTags ?? []).includes("sb-tier-kido")
+            && !sp.traits.has("cantrip"),
+    ).length;
     const skillRank = (slug) => actor.system.skills?.[slug]?.rank ?? 0;
 
     if (lineage === "Soul Reaper") {
         if (level === 1) {
             expect("Society is trained", skillRank("society"), 1);
             expect("Shō is known and free", knows("Shō"), true);
-            expect("two chosen kidō at 1st", actor.itemTypes.spell.filter((sp) => !sp.traits.has("cantrip")).length, 2);
+            expect("two chosen kidō at 1st", costedKido(), 2);
         }
-        if (level === 5) expect("a third kidō at 5th", actor.itemTypes.spell.filter((sp) => !sp.traits.has("cantrip")).length, 3);
-        if (level === 9) expect("a fourth kidō at 9th", actor.itemTypes.spell.filter((sp) => !sp.traits.has("cantrip")).length, 4);
-        if (level === 17) expect("six chosen kidō by 17th — the ceiling guide §6.6 names", actor.itemTypes.spell.filter((sp) => !sp.traits.has("cantrip")).length, 6);
+        if (level === 5) expect("a third kidō at 5th", costedKido(), 3);
+        if (level === 9) expect("a fourth kidō at 9th", costedKido(), 4);
+        if (level === 17) expect("six chosen kidō by 17th — the ceiling guide §6.6 names", costedKido(), 6);
     }
 
     if (lineage === "Hollow") {
         if (level === 1) {
             expect("Athletics is trained", skillRank("athletics"), 1);
-            expect("Bala and Cero are known, and nothing else", [knows("Bala"), knows("Cero"), actor.itemTypes.spell.length], [true, true, 2]);
+            expect("Bala and Cero are known, and no other kidō", [knows("Bala"), knows("Cero"), costedKido()], [true, true, 1]);
             expect("Hierro resists physical at half level, minimum 1", actor.system.attributes.resistances?.find?.((r) => r.type === "physical")?.value ?? null, 1);
         }
         if (level === 11) expect("Hierro at 11th is half of 11, rounded down", actor.system.attributes.resistances?.find?.((r) => r.type === "physical")?.value ?? null, 5);
@@ -236,11 +276,32 @@ async function assertAt(actor, level, lineage) {
     if (lineage === "Quincy") {
         if (level === 1) {
             expect("Crafting is trained", skillRank("crafting"), 1);
-            expect("Heizen and Gritz are known, and nothing else", [knows("Heizen"), knows("Gritz"), actor.itemTypes.spell.length], [true, true, 2]);
+            expect("Heizen and Gritz are known, and no other kidō", [knows("Heizen"), knows("Gritz"), costedKido()], [true, true, 1]);
             expect("Blut is available as a free action", hasFeature(actor, "Blut"), true);
         }
         if (level === 5) expect("Seal the Art arrives at 5th", hasFeature(actor, "Seal the Art"), true);
         if (level === 15) expect("Sklaverei arrives at 15th", hasFeature(actor, "Sklaverei"), true);
+    }
+
+    /* --- per-Spirit, guide §7 -------------------------------------------------------------------- */
+
+    if (spirit) {
+        const has = (name) => actor.itemTypes.feat.some((f) => f.name === name)
+            || actor.itemTypes.spell.some((sp) => sp.name === name);
+
+        if (level === 1) {
+            expect(`${spirit} is on the sheet`, has(spirit), true);
+            expect("its Release Technique is known and costed", actor.itemTypes.spell
+                .some((sp) => (sp.system.traits.otherTags ?? []).includes("sb-tier-release")), true);
+            // The first proof that Phase 1's pool decision holds end to end: a Release Technique is a
+            // costed focus effect, so from 1st level the pool is no longer zero.
+            expect("and the reiatsu pool is finally non-zero", actor.system.resources.focus.max, 1);
+        }
+        if (level === 13) {
+            expect("the Full Release rung has arrived", actor.itemTypes.feat
+                .some((f) => f.system.level?.value === 13 && f.name !== "Full Release"
+                    && f.name !== "Weapon Mastery" && f.name !== "Spirit Weave"), true);
+        }
     }
 
     if (level === 20) {
@@ -253,12 +314,13 @@ async function assertAt(actor, level, lineage) {
 
 /* -------------------------------------------------------------------------------------------- */
 
-async function run({ profile = "Spirit Weapon (Blade)", lineage = "Soul Reaper", kido = [],
+async function run({ profile = "Spirit Weapon (Blade)", lineage = "Soul Reaper", spirit = null, kido = [],
                     name = null, levels = CHECKPOINTS } = {}) {
-    name ??= `ZZ Test — ${lineage}`;
+    name ??= `ZZ Test — ${spirit ?? lineage}`;
     results.length = 0;
     promptProblems.length = 0;
-    const resolver = installPromptResolver(chooserFor({ profile, lineage, kido }));
+    // Reuse a standing resolver if one was installed; only own one when nobody else does.
+    const owned = standingResolver ? null : installPromptResolver(chooserFor({ profile, lineage, spirit, kido }));
     try {
         const actor = await build(name, profile);
         current = null;
@@ -267,10 +329,10 @@ async function run({ profile = "Spirit Weapon (Blade)", lineage = "Soul Reaper",
             // No explicit prepareData() here. `update` already re-prepares, and calling it a second time
             // throws "Cannot redefine property: system" — pf2e's prepareBaseData installs `system` with
             // Object.defineProperty, which cannot be run twice on the same document.
-            await assertAt(actor, level, lineage);
+            await assertAt(actor, level, lineage, spirit);
         }
     } finally {
-        clearInterval(resolver);
+        if (owned) clearInterval(owned);
     }
 
     const failed = results.flatMap((r) => r.checks.filter((c) => !c.pass).map((c) => ({ level: r.level, ...c })));
@@ -281,4 +343,4 @@ async function run({ profile = "Spirit Weapon (Blade)", lineage = "Soul Reaper",
     return { total, failed, promptProblems: [...promptProblems], results };
 }
 
-export const SoulboundRig = { run, CHECKPOINTS };
+export const SoulboundRig = { run, installResolver, clearResolver, CHECKPOINTS };
