@@ -51,13 +51,37 @@ function installPromptResolver(choose) {
 }
 
 /** Pick a named spirit-weapon profile; refuse to guess at anything else. */
-function chooserFor({ profile }) {
+function chooserFor({ profile, lineage, kido = [] }) {
+    const picked = [];
     return (app) => {
         const choices = app.choices ?? [];
-        const wanted = choices.find((c) => c.label === profile || c.value === profile);
-        if (wanted) return wanted;
-        const isProfile = choices.some((c) => String(c.value ?? "").includes("soulbound-equipment"));
-        if (isProfile && choices.length > 0) return choices[0];
+        const byName = (name) => choices.find((c) => c.label === name || c.value === name);
+
+        // The spirit-weapon profile, by name.
+        const wantedProfile = profile ? byName(profile) : null;
+        if (wantedProfile) return wantedProfile;
+
+        // The Lineage, by name.
+        const wantedLineage = lineage ? byName(lineage) : null;
+        if (wantedLineage) return wantedLineage;
+
+        const looksLike = (fragment) => choices.some((c) => String(c.value ?? "").includes(fragment));
+
+        // A kido ChoiceSet: take the named ones in order, then anything not already taken, so six
+        // prompts never resolve to the same spell six times.
+        if (looksLike("soulbound-kido")) {
+            const wanted = kido.map(byName).filter(Boolean).find((c) => !picked.includes(c.value));
+            const choice = wanted ?? choices.find((c) => !picked.includes(c.value));
+            if (choice) {
+                picked.push(choice.value);
+                return choice;
+            }
+        }
+
+        if (looksLike("soulbound-equipment") && choices.length > 0) return choices[0];
+        if (looksLike("soulbound-class-features") && lineage === undefined && choices.length > 0) {
+            return choices[0];
+        }
         return undefined;
     };
 }
@@ -109,7 +133,7 @@ function hasFeature(actor, name) {
 
 /* -------------------------------------------------------------------------------------------- */
 
-async function assertAt(actor, level) {
+async function assertAt(actor, level, lineage) {
     at(level);
     const sys = actor.system;
 
@@ -174,6 +198,51 @@ async function assertAt(actor, level) {
             [shape.minutes, shape.emanation, shape.fatigue], [2, 20, false]);
     }
 
+    /* --- per-Lineage, guide §5 ------------------------------------------------------------------ */
+
+    const knows = (name) => actor.itemTypes.spell.some((sp) => sp.name.startsWith(name));
+    const skillRank = (slug) => actor.system.skills?.[slug]?.rank ?? 0;
+
+    if (lineage === "Soul Reaper") {
+        if (level === 1) {
+            expect("Society is trained", skillRank("society"), 1);
+            expect("Shō is known and free", knows("Shō"), true);
+            expect("two chosen kidō at 1st", actor.itemTypes.spell.filter((sp) => !sp.traits.has("cantrip")).length, 2);
+        }
+        if (level === 5) expect("a third kidō at 5th", actor.itemTypes.spell.filter((sp) => !sp.traits.has("cantrip")).length, 3);
+        if (level === 9) expect("a fourth kidō at 9th", actor.itemTypes.spell.filter((sp) => !sp.traits.has("cantrip")).length, 4);
+        if (level === 17) expect("six chosen kidō by 17th — the ceiling guide §6.6 names", actor.itemTypes.spell.filter((sp) => !sp.traits.has("cantrip")).length, 6);
+    }
+
+    if (lineage === "Hollow") {
+        if (level === 1) {
+            expect("Athletics is trained", skillRank("athletics"), 1);
+            expect("Bala and Cero are known, and nothing else", [knows("Bala"), knows("Cero"), actor.itemTypes.spell.length], [true, true, 2]);
+            expect("Hierro resists physical at half level, minimum 1", actor.system.attributes.resistances?.find?.((r) => r.type === "physical")?.value ?? null, 1);
+        }
+        if (level === 11) expect("Hierro at 11th is half of 11, rounded down", actor.system.attributes.resistances?.find?.((r) => r.type === "physical")?.value ?? null, 5);
+        // pf2e's FastHealing writes NOTHING to the sheet: it fires at turn-start and posts a healing
+        // roll. So the rule element itself is what there is to check, and its resolved value is the
+        // number that will actually be healed.
+        const fastHealing = (lvl) => {
+            const feature = actor.itemTypes.feat.find((f) => f.name === "Regeneración");
+            const rule = feature?.rules?.find((r) => r.key === "FastHealing");
+            return rule && !rule.ignored ? Number(rule.resolveValue(rule.value)) : null;
+        };
+        if (level === 5) expect("Regeneración heals 2 at 5th", fastHealing(5), 2);
+        if (level === 11) expect("Regeneración heals 4 at 11th", fastHealing(11), 4);
+    }
+
+    if (lineage === "Quincy") {
+        if (level === 1) {
+            expect("Crafting is trained", skillRank("crafting"), 1);
+            expect("Heizen and Gritz are known, and nothing else", [knows("Heizen"), knows("Gritz"), actor.itemTypes.spell.length], [true, true, 2]);
+            expect("Blut is available as a free action", hasFeature(actor, "Blut"), true);
+        }
+        if (level === 5) expect("Seal the Art arrives at 5th", hasFeature(actor, "Seal the Art"), true);
+        if (level === 15) expect("Sklaverei arrives at 15th", hasFeature(actor, "Sklaverei"), true);
+    }
+
     if (level === 20) {
         expect("Unsealed is on the sheet", hasFeature(actor, "Unsealed"), true);
         const full = actor.itemTypes.feat.find((f) => f.name === "Full Release");
@@ -184,18 +253,21 @@ async function assertAt(actor, level) {
 
 /* -------------------------------------------------------------------------------------------- */
 
-async function run({ profile = "Spirit Weapon (Blade)", name = "ZZ Test — Soulbound", levels = CHECKPOINTS } = {}) {
+async function run({ profile = "Spirit Weapon (Blade)", lineage = "Soul Reaper", kido = [],
+                    name = null, levels = CHECKPOINTS } = {}) {
+    name ??= `ZZ Test — ${lineage}`;
     results.length = 0;
     promptProblems.length = 0;
-    const resolver = installPromptResolver(chooserFor({ profile }));
+    const resolver = installPromptResolver(chooserFor({ profile, lineage, kido }));
     try {
         const actor = await build(name, profile);
+        current = null;
         for (const level of levels) {
             await actor.update({ "system.details.level.value": level });
             // No explicit prepareData() here. `update` already re-prepares, and calling it a second time
             // throws "Cannot redefine property: system" — pf2e's prepareBaseData installs `system` with
             // Object.defineProperty, which cannot be run twice on the same document.
-            await assertAt(actor, level);
+            await assertAt(actor, level, lineage);
         }
     } finally {
         clearInterval(resolver);

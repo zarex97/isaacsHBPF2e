@@ -643,26 +643,40 @@ check(
 const segunda = lineageDoc("segunda-piel");
 check("Segunda Piel extends Hierro to spirit damage (guide §5.2)", segunda.system.rules.find((r) => r.key === "Resistance")?.type, "spirit");
 
+// A ChoiceSet resolves once, when the item carrying it is created; a `predicate` decides whether it
+// applies at all rather than making it ask again later, and `reevaluateOnUpdate` is a GrantItem property.
+// Six level-gated ChoiceSets on one feature therefore asked all six questions at 1st level and never
+// asked the later four — a Soul Reaper stayed on two kidō forever. Each pickup is now its own feature.
 const kidoAdept = lineageDoc("kido-adept");
-const choices = kidoAdept.system.rules.filter((r) => r.key === "ChoiceSet");
-check("Kidō Adept chooses six kidō (guide §5.1)", choices.length, 6);
 check(
-    "every kidō ChoiceSet says itemType spell — queryCompendium defaults to feat",
-    choices.every((c) => c.choices.itemType === "spell"),
-    true,
+    "Kidō Adept grants six pickups and Shō, and asks nothing itself",
+    [
+        kidoAdept.system.rules.filter((r) => r.key === "ChoiceSet").length,
+        kidoAdept.system.rules.filter((r) => r.key === "GrantItem").length,
+    ],
+    [0, 7],
 );
 check(
-    "and none of them can offer a cantrip or another Lineage's fixed art",
-    choices.every((c) => JSON.stringify(c.choices.filter).includes("cantrip")
-        && JSON.stringify(c.choices.filter).includes("soulbound-kido-hollow")),
-    true,
-);
-check(
-    "the four later kidō are level-gated and re-evaluate as you level",
+    "the four later pickups are level-gated and re-evaluate as you level",
     kidoAdept.system.rules.filter((r) => r.key === "GrantItem" && r.reevaluateOnUpdate === true).length,
     4,
 );
 check("Shō is granted outright, not chosen", kidoAdept.system.rules.some((r) => r.key === "GrantItem" && String(r.uuid).includes("Shō")), true);
+
+for (const ordinal of ["1st", "2nd", "5th", "9th", "13th", "17th"]) {
+    const pickup = lineageDoc(`kido-learned-${ordinal}`);
+    const choice = pickup.system.rules.find((r) => r.key === "ChoiceSet");
+    check(`Kidō Learned (${ordinal}): asks exactly one question, for a spell`, [
+        pickup.system.rules.filter((r) => r.key === "ChoiceSet").length,
+        choice?.choices?.itemType,
+    ], [1, "spell"]);
+    check(
+        `Kidō Learned (${ordinal}): cannot offer a cantrip or another Lineage's fixed art`,
+        JSON.stringify(choice.choices.filter).includes("cantrip")
+            && JSON.stringify(choice.choices.filter).includes("soulbound-kido-hollow"),
+        true,
+    );
+}
 
 const cba = lineageDoc("cero-and-bala");
 check("A Hollow's two arts are granted, never chosen (guide §6.4)", [
