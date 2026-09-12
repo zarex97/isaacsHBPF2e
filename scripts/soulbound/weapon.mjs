@@ -45,7 +45,12 @@ export const SpiritWeapon = {
      * ends, and deleting it would take its runes with it.
      */
     async reconcile(actor) {
-        if (!this.isSoulbound(actor)) return;
+        // Deliberately NOT gated on `isSoulbound`. During character creation the class item, the
+        // Lineage, the Spirit and both weapons all land in one cascade, and `actor.class` is not yet
+        // readable when the weapons arrive — so the guard was false exactly when it mattered and the
+        // sealed profile stayed in hand. The spirit-weapon tag is only ever on this class's content, so
+        // it is guard enough on its own.
+        if (!actor?.itemTypes?.weapon) return;
         const spirit = actor.itemTypes.weapon.filter(
             (w) => (w.system?.traits?.otherTags ?? []).includes(SPIRIT_WEAPON_TAG),
         );
@@ -74,22 +79,47 @@ export const SpiritWeapon = {
      * **Reconciling**: whenever a spirit weapon arrives or leaves, work out which one is in your hands.
      */
     registerHooks() {
+        const touched = (item) => {
+            if (!game.user.isGM && item.actor?.isOwner !== true) return false;
+            if (item.type !== "weapon" || !item.actor) return false;
+            return (item.system?.traits?.otherTags ?? []).includes(SPIRIT_WEAPON_TAG);
+        };
+
         Hooks.on("createItem", async (item) => {
-            if (!game.user.isGM && item.actor?.isOwner !== true) return;
-            if (item.type !== "weapon") return;
-            if (!this.isSoulbound(item.actor)) return;
-            if (!(item.system?.traits?.otherTags ?? []).includes(SPIRIT_WEAPON_TAG)) return;
+            if (!touched(item)) return;
             if (!item.getFlag(MODULE_ID, "soulEtched")) await item.setFlag(MODULE_ID, "soulEtched", true);
-            await this.reconcile(item.actor);
+            queueReconcile(item.actor, (actor) => this.reconcile(actor));
         });
 
         // A released form ending takes its weapon with it, and the sealed profile comes back up.
-        Hooks.on("deleteItem", async (item) => {
-            if (!game.user.isGM && item.actor?.isOwner !== true) return;
-            if (item.type !== "weapon") return;
-            if (!this.isSoulbound(item.actor)) return;
-            if (!(item.system?.traits?.otherTags ?? []).includes(SPIRIT_WEAPON_TAG)) return;
-            await this.reconcile(item.actor);
+        Hooks.on("deleteItem", (item) => {
+            if (!touched(item)) return;
+            queueReconcile(item.actor, (actor) => this.reconcile(actor));
         });
     },
 };
+
+/** Actors with a reconcile already queued, so one cascade of grants settles once. */
+const queued = new Set();
+
+/**
+ * Reconcile after the current cascade finishes, not during it.
+ *
+ * Character creation grants the class, the Lineage, the Spirit, the sealed profile and the released
+ * form in one burst of `createItem` hooks. Reconciling on each one asks "is a replacement present?"
+ * while the answer is still changing — the sealed profile arrives first and is correctly left in hand,
+ * and nothing asks again once the claws land. Deferring to the end of the tick asks once, when the
+ * sheet is whole.
+ */
+function queueReconcile(actor, run) {
+    if (!actor || queued.has(actor.id)) return;
+    queued.add(actor.id);
+    setTimeout(async () => {
+        queued.delete(actor.id);
+        try {
+            await run(actor);
+        } catch (error) {
+            console.error("Isaac's Homebrew | the spirit weapon could not be reconciled", error);
+        }
+    }, 100);
+}

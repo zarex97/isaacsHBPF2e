@@ -1125,4 +1125,59 @@ check(
     5,
 );
 
+/* --- a released form replaces the weapon, it does not add a second ----------------------------- */
+
+const { SpiritWeapon: SW, PROFILE_TAG, SPIRIT_WEAPON_TAG } = await import("../scripts/soulbound/weapon.mjs");
+
+function armedWith(names) {
+    const weapons = names.map(([name, tags, carryType], i) => ({
+        id: `w${i}`, name,
+        system: { traits: { otherTags: tags }, equipped: { carryType } },
+    }));
+    return {
+        itemTypes: { weapon: weapons },
+        updates: [],
+        async updateEmbeddedDocuments(_type, updates) {
+            this.updates.push(...updates);
+            for (const u of updates) {
+                const w = weapons.find((x) => x.id === u._id);
+                if (w) w.system.equipped.carryType = u["system.equipped.carryType"];
+            }
+        },
+    };
+}
+
+const SEALED = [SPIRIT_WEAPON_TAG, PROFILE_TAG];
+const RELEASED = [SPIRIT_WEAPON_TAG];
+
+{
+    // The sealed profile beside a replacement: stow it. A player choosing between them is a choice the
+    // class never offered.
+    const actor = armedWith([["Blade", SEALED, "held"], ["Luz de la Luna", RELEASED, "held"]]);
+    await SW.reconcile(actor);
+    check("a replacement stows the sealed profile",
+        actor.itemTypes.weapon.map((w) => `${w.name}:${w.system.equipped.carryType}`),
+        ["Blade:stowed", "Luz de la Luna:held"]);
+}
+{
+    // The form ends and its weapon goes: the profile comes back up.
+    const actor = armedWith([["Blade", SEALED, "stowed"]]);
+    await SW.reconcile(actor);
+    check("and it is taken back up when the replacement is gone",
+        actor.itemTypes.weapon[0].system.equipped.carryType, "held");
+}
+{
+    // Zangetsu and Hyorinmaru ALTER the weapon rather than replacing it. Nothing to stow.
+    const actor = armedWith([["Blade", SEALED, "held"]]);
+    await SW.reconcile(actor);
+    check("a Spirit that only alters the weapon leaves it in hand", actor.updates.length, 0);
+}
+{
+    // The guard is the TAG, not isSoulbound: during character creation the class has not landed when
+    // the weapons arrive, and gating on it meant the guard was false exactly when it mattered.
+    const actor = armedWith([["Blade", SEALED, "held"], ["Claws", RELEASED, "held"]]);
+    await SW.reconcile(actor);
+    check("reconcile does not wait for the class item to land", actor.updates.length, 1);
+}
+
 report("Soulbound tests");
