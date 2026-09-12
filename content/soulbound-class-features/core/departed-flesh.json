@@ -1,0 +1,55 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/death/skull-humanoid-white.webp",
+    "name": "Departed Flesh",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>You're immune to disease, you don't need to eat or drink, and when you roll a success on a save against a poison effect you get a <strong>critical success</strong> instead. You still need to rest.</p>"
+        },
+        "level": {
+            "value": 3
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "Immunity",
+                "type": "disease"
+            },
+            {
+                "adjustment": {
+                    "success": "one-degree-better"
+                },
+                "key": "AdjustDegreeOfSuccess",
+                "label": "Departed Flesh",
+                "predicate": [
+                    "item:trait:poison"
+                ],
+                "selector": "fortitude"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

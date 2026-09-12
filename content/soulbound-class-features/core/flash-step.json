@@ -1,0 +1,46 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/movement/trail-streak-impact-blue.webp",
+    "name": "Flash Step",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per round</p><hr /><p>You step between one instant and the next. <strong>Stride</strong> up to your Speed. This movement doesn't trigger reactions.</p><p><em>Shunpo &middot; Sonido &middot; Hirenkyaku.</em></p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "level": {
+            "value": 3
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "move",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

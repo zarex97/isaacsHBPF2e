@@ -281,4 +281,43 @@ check("a 1st-level pool of 1 pays once per encounter and no more", [
     grantFor({ current: 0, max: 1, round: 2, roundStamp: 1, gained: 1, cap: 1 }),
 ], [1, 0]);
 
+/* ---------------------------------------------------------------------------------------------- */
+/*  The standalone chassis features                                                                 */
+/* ---------------------------------------------------------------------------------------------- */
+
+function featureDoc(name) {
+    return contentDoc(`soulbound-class-features/core/${name}.json`);
+}
+
+const flashStep = featureDoc("flash-step");
+check(
+    "Flash Step is one action, once per round (guide §4.5)",
+    [flashStep.system.actions.value, flashStep.system.frequency],
+    [1, { max: 1, per: "round", value: 1 }],
+);
+check("Flash Step is a move and reiatsu effect", [...flashStep.system.traits.value].sort(), ["move", "reiatsu", "soulbound"]);
+
+const spiritSense = featureDoc("spirit-sense");
+const sense = spiritSense.system.rules.find((r) => r.key === "Sense");
+check(
+    "Spirit Sense is pf2e's own spiritsense, imprecise, at 60 feet (guide §4.3)",
+    [sense?.selector, sense?.acuity, sense?.range],
+    ["spiritsense", "imprecise", 60],
+);
+
+const departed = featureDoc("departed-flesh");
+check(
+    "Departed Flesh: disease immunity, and a poison success becomes a critical success (guide §4.6)",
+    [
+        departed.system.rules.some((r) => r.key === "Immunity" && r.type === "disease"),
+        departed.system.rules.some((r) => r.key === "AdjustDegreeOfSuccess" && r.adjustment.success === "one-degree-better"),
+    ],
+    [true, true],
+);
+
+check("Konsō is a 10-minute exploration activity, not a combat action", [
+    featureDoc("konso").system.traits.value.includes("exploration"),
+    featureDoc("konso").system.actions.value,
+], [true, null]);
+
 report("Soulbound tests");

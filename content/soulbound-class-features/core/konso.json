@@ -1,0 +1,41 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/holy/prayer-hands-glowing-yellow.webp",
+    "name": "Konsō",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>Soul Burial.</strong> A 10-minute exploration activity.</p><hr /><p>Choose a haunt, spirit, or incorporeal undead of your level or lower that is not currently hostile (or has been reduced below half Hit Points and is willing, restrained, or bound). Attempt a Religion or Spirit Lore check against its DC.</p><p><strong>Critical Success</strong> The soul departs peacefully. A haunt is permanently neutralized; an undead is destroyed without violence. You learn one significant fact about its unfinished business.</p><p><strong>Success</strong> As critical success, but you learn nothing.</p><p><strong>Failure</strong> The rite fails; retry after 1 hour.</p><p><strong>Critical Failure</strong> The soul recoils, becomes hostile, and gains a +1 status bonus to attacks against you for 1 minute.</p><hr /><p><em>A Hollow's Kons&#333; is not a burial &mdash; it is an offer to eat the soul cleanly rather than let it degrade. A Quincy's is simply annihilation, which is the historical reason Soul Reapers and Quincy went to war. Consider making this a real table conversation rather than a reskin.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "concentrate",
+                "exploration",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "feat"
+}

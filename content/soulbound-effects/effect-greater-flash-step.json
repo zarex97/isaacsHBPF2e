@@ -1,0 +1,41 @@
+{
+    "img": "icons/magic/movement/trail-streak-impact-blue.webp",
+    "name": "Effect: Greater Flash Step",
+    "system": {
+        "description": {
+            "value": "<p>An afterimage stands where you were. The <strong>first attack made against you each round</strong> requires the attacker to succeed at a <strong>DC 5 flat check</strong> or the attack misses.</p><hr /><p><em>Not yet automated. Pathfinder settles an attack's outcome before a module can see it, so cancelling a hit after the fact is not something a rule element or a rider can do &mdash; it needs the attack interrupted on the way in. Roll the flat check at the table for now.</em></p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 11
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}
