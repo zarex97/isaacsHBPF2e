@@ -346,7 +346,7 @@ const DURATION_UNITS = new Set(["rounds", "minutes", "hours", "days", "unlimited
 const RIDER_TYPES = new Set([
     "condition", "effect", "prompt", "choice", "save", "damage", "persistent-damage", "death", "teleport",
     "strikes", "banish", "heal", "readout", "toggle", "counteract", "encasement", "escape",
-    "equip",
+    "equip", "reaction", "flat-check",
 ]);
 const RIDER_EVENTS = new Set([
     "save-rolled", "strike-resolved", "strike-received", "action-used", "damage-applied",
@@ -918,6 +918,34 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
                 && !(Number(apply.maxPerCast) > 0)) {
                 errors.push(`${at} maxPerCast must be a positive number or "origin.level"`);
             }
+            break;
+        case "flat-check":
+            if (!(Number(apply.dc) > 0)) {
+                errors.push(`${at} a flat check needs a positive dc — got "${apply.dc}"`);
+            }
+            for (const branch of ["onSuccess", "onFailure"]) {
+                if (apply[branch] === undefined) continue;
+                if (!Array.isArray(apply[branch])) {
+                    errors.push(`${at} ${branch} must be an array of riders`);
+                    continue;
+                }
+                apply[branch].forEach((inner, index) => {
+                    validateRider(inner, `${at}.${branch}[${index}]`, errors, { doc, depth: depth + 1 });
+                });
+            }
+            break;
+        case "reaction":
+            // A reaction that offers nothing is a card with a button that does nothing — the same silent
+            // shape as a grant whose uuid does not resolve.
+            if (!Array.isArray(apply.riders) || apply.riders.length === 0) {
+                errors.push(`${at} a reaction rider needs at least one nested rider in apply.riders`);
+            }
+            if (rider.self !== true) {
+                errors.push(`${at} a reaction rider must be \`self\`: it is offered to the ability's owner`);
+            }
+            (apply.riders ?? []).forEach((inner, index) => {
+                validateRider(inner, `${at}.riders[${index}]`, errors, { doc, depth: depth + 1 });
+            });
             break;
         case "readout":
             // A tracked readout asks about one creature named at grant time, not a range scan of the board —

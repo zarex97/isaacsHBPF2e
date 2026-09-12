@@ -1,0 +1,45 @@
+{
+    "folder": "Lineages",
+    "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+    "name": "Sealing",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>The Quincy talent that started a war: they do not out-fight a Soul Reaper, they <strong>switch them off</strong>. You gain the <strong>Seal the Art</strong> activity.</p>"
+        },
+        "level": {
+            "value": 5
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Seal the Art"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound",
+                "lineage"
+            ]
+        }
+    },
+    "type": "feat"
+}

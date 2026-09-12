@@ -1,0 +1,49 @@
+{
+    "folder": "Lineages",
+    "img": "icons/magic/light/beam-rays-blue-large.webp",
+    "name": "Heizen and Gritz",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>A Quincy's demon arts are <strong>Gint&#333;</strong> &mdash; small silver tubes of liquefied reiryoku, uncorked and spoken over, which is exactly what Kid&#333; is to a Soul Reaper.</p><p>You know <strong>two</strong> and they are always these: <strong>Heizen</strong>, your free cantrip, and <strong>Gritz</strong>. You cannot learn others, and no feat grants you more.</p><hr /><p><em>The third canon Gint&#333;, Sprenger, is not a kid&#333;: it needs five Seele Schneider planted in a pentacle, and it appears where canon puts it &mdash; at Ury&#363; Ishida's Final Release.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-kido.Item.Heizen"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-kido.Item.Gritz"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound",
+                "lineage"
+            ]
+        }
+    },
+    "type": "feat"
+}

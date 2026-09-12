@@ -51,5 +51,28 @@
             ]
         }
     },
-    "type": "spell"
+    "type": "spell",
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "label": "Raise the Splitting Void",
+                        "prompt": "Something is about to land. Put a wall of nothing in front of it?",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Splitting Void"
+                                }
+                            }
+                        ],
+                        "type": "reaction"
+                    },
+                    "event": "damage-applied",
+                    "self": true
+                }
+            ]
+        }
+    }
 }

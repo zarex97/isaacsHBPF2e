@@ -16,6 +16,7 @@ import { Banish, durationSeconds } from "./banish.mjs";
 import { OUTCOME_LABELS, collectRiders, itemFor, riderAt } from "./data.mjs";
 import { Encasement } from "./encasement.mjs";
 import { WEAPON_TAG, crossingBleed, equipArm, libraDice, libraPotency } from "./libra.mjs";
+import { offerReaction } from "./reactions.mjs";
 import { selectRiders } from "./select.mjs";
 
 /** pf2e's DegreeOfSuccess is an index, not a word. */
@@ -199,6 +200,69 @@ export async function applyChoice(payload) {
     if (work.prompts.length > 0) await postPrompts(work);
 }
 
+/**
+ * A reaction, come back from a click on its card.
+ *
+ * Mirrors `applyChoice`: the payload carries an address rather than rider data, so the GM re-reads what
+ * the ability actually does. The nested `riders` are applied against whoever the trigger was about — which
+ * for a defensive reaction is usually the reacting actor themselves, and for Antithesis is the creature
+ * that dealt the damage.
+ */
+export async function resolveReaction(payload) {
+    const context = await resolveContext(payload);
+    if (!context) return;
+
+    const item = await fromUuid(payload.riderItemUuid);
+    const rider = riderAt(item, payload.riderIndex);
+    const nested = rider?.apply?.riders ?? [];
+    if (nested.length === 0) return;
+
+    const origin = await fromUuid(payload.originUuid);
+    const originActor = origin?.actor ?? origin;
+    const target = payload.targetUuid ? await fromUuid(payload.targetUuid) : null;
+    const actor = target?.actor ?? originActor;
+
+    const work = {
+        ...context, originActor, actor, target, item,
+        outcome: payload.outcome ?? null,
+        adjustments: [], prompts: [], notes: [], choices: [], moves: [],
+    };
+    for (const [index, inner] of nested.entries()) {
+        await applyOne(inner, { ...work, riderIndex: [payload.riderIndex, "riders", index].flat() });
+    }
+    if (work.notes.length > 0) await postNotes(work);
+    if (work.prompts.length > 0) await postPrompts(work);
+}
+
+/**
+ * A flat check, rolled and announced.
+ *
+ * Three things in this module promise "succeed at a DC N flat check or the effect fails": Greater Flash
+ * Step's afterimage, Kyōka Suigetsu's displaced image, and Arrogante's decay. pf2e rolls flat checks for
+ * its own persistent damage but offers a module no way to demand one, so this rolls it.
+ *
+ * It reports rather than rewrites, and that distinction is the honest part: by the time a Strike has
+ * resolved, pf2e has already settled whether it hit, and nothing a module does afterwards un-hits it. What
+ * this removes is the *remembering* — the check happens, in public, at the moment it is owed.
+ */
+async function applyFlatCheck(rider, context) {
+    const dc = Number(rider.apply.dc) || 5;
+    const roll = await new Roll(rider.apply.formula ?? "1d20").evaluate();
+    const passed = roll.total >= dc;
+    const label = rider.apply.label ?? `DC ${dc} flat check`;
+
+    await roll.toMessage({
+        speaker: ChatMessage.getSpeaker({ actor: context.originActor ?? context.actor }),
+        flavor: `${label} — <strong>${passed ? "success" : "failure"}</strong> against DC ${dc}`,
+    });
+
+    const branch = passed ? rider.apply.onSuccess : rider.apply.onFailure;
+    for (const [index, inner] of (branch ?? []).entries()) {
+        await applyOne(inner, { ...context, riderIndex: [context.riderIndex, "riders", index].flat() });
+    }
+}
+
+
 async function applyOne(rider, context) {
     const apply = rider.apply ?? {};
     switch (apply.type) {
@@ -245,6 +309,10 @@ async function applyOne(rider, context) {
             return applyToggle(rider, context);
         case "counteract":
             return applyCounteract(rider, context);
+        case "reaction":
+            return offerReaction(rider, context);
+        case "flat-check":
+            return applyFlatCheck(rider, context);
         case "encasement":
             return Encasement.apply(rider, context);
         case "escape":

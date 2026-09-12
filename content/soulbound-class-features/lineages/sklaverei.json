@@ -1,0 +1,47 @@
+{
+    "folder": "Lineages",
+    "img": "icons/magic/control/energy-stream-link-blue.webp",
+    "name": "Sklaverei",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Absolute subordination of reishi. When you successfully counteract with <strong>Seal the Art</strong>, you regain 1 Reiatsu Point (ignoring Rising Pressure's per-encounter cap), and the target is <strong>off-guard</strong> until the end of its next turn.</p><p>On a critical success against a release state, the suppression lasts <strong>1 minute</strong> instead.</p>"
+        },
+        "level": {
+            "value": 15
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:sklaverei",
+                "value": true
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound",
+                "lineage"
+            ]
+        }
+    },
+    "type": "feat"
+}
