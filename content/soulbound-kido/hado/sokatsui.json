@@ -1,0 +1,100 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "direction": "away",
+                        "distance": 10,
+                        "type": "teleport"
+                    },
+                    "outcomes": [
+                        "failure",
+                        "criticalFailure"
+                    ]
+                }
+            ]
+        }
+    },
+    "folder": "Way of Destruction (Hadō)",
+    "img": "icons/magic/fire/beam-jet-stream-blue.webp",
+    "name": "Sōkatsui — Sundering Wave",
+    "system": {
+        "area": {
+            "type": "line",
+            "value": 30
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {
+            "0": {
+                "applyMod": false,
+                "category": null,
+                "formula": "2d4",
+                "kinds": [
+                    "damage"
+                ],
+                "materials": [],
+                "type": "spirit"
+            }
+        },
+        "defense": {
+            "save": {
+                "basic": true,
+                "statistic": "reflex"
+            }
+        },
+        "description": {
+            "value": "<p><em>Hadō #33. Blue fire poured along the ground in a widening wave.</em></p><p>Each creature in a 30-foot line takes @Damage[2d4[spirit]] damage with a basic Reflex save. A creature that fails is pushed <strong>10 feet</strong> away from you.</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d4.</p><hr /><p><em>The push is the reason the die is a d4 rather than a d6.</em></p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": {
+            "area": 0,
+            "damage": {
+                "0": "1d4"
+            },
+            "interval": 1,
+            "type": "interval"
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": ""
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "sb-tier-kido",
+                "soulbound-kido-hado"
+            ],
+            "rarity": "common",
+            "traditions": [],
+            "value": [
+                "destruction",
+                "focus",
+                "kido",
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "spell"
+}

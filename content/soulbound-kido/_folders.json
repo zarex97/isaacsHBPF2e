@@ -1,0 +1,27 @@
+[
+    {
+        "name": "Way of Destruction (Hadō)",
+        "sorting": "m",
+        "type": "Item"
+    },
+    {
+        "name": "Way of Binding (Bakudō)",
+        "sorting": "m",
+        "type": "Item"
+    },
+    {
+        "name": "Way of Mending (Kaidō)",
+        "sorting": "m",
+        "type": "Item"
+    },
+    {
+        "name": "Hollow Arts",
+        "sorting": "m",
+        "type": "Item"
+    },
+    {
+        "name": "Quincy Arts (Gintō)",
+        "sorting": "m",
+        "type": "Item"
+    }
+]
