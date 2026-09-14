@@ -126,9 +126,9 @@ character:
 | Q-04 | **Blut Vene** | 1 | Resistance to physical = half level, minimum 1 | ✅ | Blut Vene gives **physical resistance 10** at 20th — half level |
 | Q-05 | **Blut Arterie** | 1 | Strikes ignore resistance to **physical and spirit**; target's cover one step less; **no bonus to attack, damage or DC** | ☐ | |
 | Q-06 | **Heizen and Gritz** | 1 | Exactly these two; `Additional Kidō` is closed | ☐ | |
-| Q-07 | **Seal the Art** | 5 | 2 actions, 1 point, 30 ft; counteract with Reiatsu DC proficiency + key attribute, **counteract rank = half level rounded up** | ☐ | |
+| Q-07 | **Seal the Art** | 5 | 2 actions, 1 point, 30 ft; counteract with Reiatsu DC proficiency + key attribute, **counteract rank = half level rounded up** | ⚠️ | Live: the action posts, offers the suppressible effects, and rolls **Counteract — DC 16, critical success**. Its **1 Reiatsu Point is now actually spent** — nothing charged it before, because pf2e only deducts focus for a *spell* and this is an action |
 | Q-08 | Seal the Art — release states | 5 | A release state is **suppressed until the end of the target's next turn**, not ended, and can't be re-entered in that time | ☐ | |
-| Q-09 | **Sklaverei** | 15 | Successful counteract refunds 1 point **ignoring the cap**, target **off-guard** until end of its next turn; crit success vs. a release state suppresses for **1 minute** | ☐ | |
+| Q-09 | **Sklaverei** | 15 | Successful counteract refunds 1 point **ignoring the cap**, target **off-guard** until end of its next turn; crit success vs. a release state suppresses for **1 minute** | ✅ | **SB-20 fixed.** Live at 15th: a successful counteract left the target **off-guard** and refunded the point, so the pool went 2 → 2 — spent one, got one back, ignoring Rising Pressure's ceiling |
 
 ---
 
@@ -288,9 +288,9 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | # | Feat | What must happen | Status | Notes |
 | :-- | :-- | :-- | :-- | :-- |
 | F-01 | **Additional Kidō** **[SR]** | One more kidō; **up to three times**; Hollow/Quincy cannot take it | ☐ | |
-| F-02 | **Sheathed Draw** | On initiative, manifest **and** Release as a **single free action** | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-02 | **Sheathed Draw** | On initiative, manifest **and** Release as a **single free action** | ✅ | **SB-20 fixed.** Joined to the `combatStart` handler that already released Zangetsu: both clauses mean *you are in your released form when the fight begins*, and both spend the free first Release rather than a point |
 | F-03 | **Reader of Threads** | Recall Knowledge on spirits/haunts/undead with Spirit Lore as a **free action once per round**; +1 extra fact on a success | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
-| F-04 | **Zanjutsu Footwork** | Crit with the spirit weapon → **Step** as a free action | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-04 | **Zanjutsu Footwork** | Crit with the spirit weapon → **Step** as a free action | ✅ | **SB-20 fixed.** A critical hit with the spirit weapon now prompts the free Step. Direction is the player's, so it arrives at the right moment rather than moving them |
 | F-05 | **Pesquisa** **[H]** | Spirit Sense to **120 ft**; learn each detected creature's approximate level relative to yours | ☐ | |
 | F-06 | **Hirenkyaku Drill** **[Q]** | Flash Step at 1st, **once per encounter** until 3rd | ☐ | |
 | F-07 | **Twin Fang** | With twin or agile, the **second Strike each round** reduces MAP by 1 | ☐ | |
@@ -308,7 +308,7 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | F-14 | **Reiatsu Barrier** | 4 | Reaction when hit: spend 1 point for **resistance = your level** vs. that damage | ☐ | |
 | F-15 | **Chain Anchor** | 4 | Crit with the spirit weapon → target **can't Step away** until end of its next turn | ✅ | **SB-20 fixed.** A `strike-resolved` critical-success rider applying `Effect: Chain Anchor` for 1 round |
 | F-16 | **Deep Breath** | 4 | First **Steady the Breath** each day restores **2** points | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
-| F-17 | **Cero Doble** **[H]** | 4 | Cero may be a **30-ft cone**; crit fails **pushed 10 ft** away | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-17 | **Cero Doble** **[H]** | 4 | Cero may be a **30-ft cone**; crit fails **pushed 10 ft** away | ✅ | **SB-20 fixed.** A **toggleable** roll option on the sheet — pf2e's own answer to a cast-time choice — read by the `alternateArea` seam. Cero offers a 30-ft cone while it is on, with the 10-ft push on a critical failure, gated the same way |
 
 ### 6.3 — Sixth through twelfth
 
@@ -329,7 +329,7 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | F-30 | **Zanjutsu: Hakuda** **[SR]** | 8 | **1d6 fist**, agile, finesse, nonlethal; one unarmed Strike may be made as part of **any** Zanjutsu technique | ✅ | **SB-20 fixed.** A real `Strike` rule element. Live: **Hakuda, 1d6 bludgeoning, agile / finesse / nonlethal / unarmed**, with the agile MAP at −4/−8. It was a roll option nothing read |
 | F-31 | **Perfected Technique** | 10 | Once per encounter, Release Technique costs **nothing** | ✅ | **SB-20 fixed.** The `freeCast` machinery, as used by the Full Release's Unbound Technique. Live: `FreeCast.find` returns it for a Release Technique, frequency 1 per `PT10M` — pf2e has no *encounter* period, and `PT10M` is its stand-in |
 | F-32 | **Ghost Step** | 10 | Flash Step passes through creatures' spaces (not ending there) and **ignores difficult terrain** | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
-| F-33 | **Reishi Mastery** **[Q]** | 10 | Seal the Art counteract rank **+1**; **free on a critical success** | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-33 | **Reishi Mastery** **[Q]** | 10 | Seal the Art counteract rank **+1**; **free on a critical success** | ✅ | **SB-20 fixed.** `resolveCounteract` adds 1 to the counteract rank and charges no point on a critical success — which is why the cost had to move to *after* the roll |
 | F-34 | **Soul Sever** | 12 | Reducing a creature to 0 HP with the spirit weapon performs **Konsō** as a free action, no check, permanently preventing undeath | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
 | F-35 | **Kidō Mastery** | 12 | **Destruction** kidō deal **one additional die** of their damage type | ☐ | |
 | F-36 | **Segunda Piel Temprana** **[H]** | 12 | Each time you are **critically hit**, Hierro resists **spirit** for 1 round | ✅ | **SB-20 fixed.** A `strike-received` critical-success rider granting spirit resistance = half level for 1 round |
@@ -354,7 +354,7 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | F-46 | **Instant Full Release** | 14 | Full Release costs **1 action** | ✅ | **SB-17 fixed.** Live: adding the feat takes Full Release from **2 actions to 1**. Its `action-cost` alteration named a property pf2e has no handler for, so the feat's whole text did nothing |
 | F-47 | **Twin Pressure** | 14 | The Full Release emanation's Will save also applies to enemies that **enter** it | ✅ | **SB-20 fixed.** Live: with the feat the aura's events become `["enter", "turn-end"]`; without it, `["turn-end"]`. It could not have been written as content — the events list belongs to an effect the feat does not own — so it is stamped on where the aura is built |
-| F-48 | **Vollständig Endurance** **[Q]** | 14 | No fatigue when Vollständig ends; spend 1 point to extend by 1 round, **up to three times** | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-48 | **Vollständig Endurance** **[Q]** | 14 | No fatigue when Vollständig ends; spend 1 point to extend by 1 round, **up to three times** | ✅ | **SB-20 fixed.** Declares `soulbound:no-full-release-fatigue`, which the `deleteItem` fatigue path reads alongside Perfected Full Release |
 | F-49 | **Unbroken Chain** | 16 | While released, spend 1 point to stay at **1 HP** instead of 0; **once per day** | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
 | F-50 | **Reiatsu Flood** | 16 | Rising Pressure's **per-encounter cap +1** | ✅ | Always worked: `capFor()` in `rising-pressure.mjs` reads the feat **by slug**, which is why it was the one apparently-inert feat that was not |
 | F-51 | **Beyond the Blade** | 18 | Release Technique dice **+2 steps** (d6→d10, d8→d12) | ☐ | |
@@ -1078,3 +1078,41 @@ Perfected radius.
 
 **Live at 17th:** radius 20 without the feat and `["turn-end"]`; with it, `["enter", "turn-end"]`. In
 combat, the ghoul ended its turn inside and came out **frightened 2**.
+
+---
+
+## 23 — SB-20, second tranche
+
+| Feat | Lvl | How |
+| :-- | :-- | :-- |
+| **Sheathed Draw** | 1 | Joined to the `combatStart` handler that already released Zangetsu. Both clauses say *you are in your released form when the fight begins*, and both spend the free first Release rather than a point |
+| **Zanjutsu Footwork** | 1 | A critical hit with the spirit weapon prompts the free Step |
+| **Cero Doble** | 4 | A **toggleable** roll option — pf2e's own answer to a cast-time choice, since "may be shaped as" is a choice and not a rule — read by the `alternateArea` seam written for *Photon Burst*. Cero offers a 30-ft cone while it is on, with the 10-ft push on a critical failure gated the same way |
+| **Vollständig Endurance** | 14 | Declares `soulbound:no-full-release-fatigue`, read by the `deleteItem` fatigue path beside Perfected Full Release |
+| **Reishi Mastery** | 10 | +1 counteract rank, and no point on a critical success |
+
+### The Quincy counteract cluster
+
+Three clauses turn on one roll, and all three were roll options nothing read — so they are all in
+`resolveCounteract`, which is the only place that knows the outcome:
+
+- **Seal the Art costs 1 Reiatsu Point**, and *nothing spent it*. pf2e deducts focus for a **spell**;
+  Seal the Art is an `action`, so the cost was prose. It is charged now.
+- **Reishi Mastery** raises the counteract rank by 1 **and makes it free on a critical success** —
+  which is precisely why the charge has to wait for the roll rather than happen on the cast.
+- **Sklaverei** refunds a point on a success, ignoring Rising Pressure's ceiling, and leaves the target
+  **off-guard**.
+
+**Live at 15th**: the action posted, offered its suppressible effects, rolled *Counteract — DC 16,
+critical success*, left the victim **off-guard**, and the pool read **2 → 2** — one point spent, one
+refunded by Sklaverei.
+
+### SB-22, confirmed at the table
+
+With the fear aura ticking every round on a creature that keeps failing:
+
+| | before any tick | round 1 | round 2 | round 3 |
+| :-- | :-: | :-: | :-: | :-: |
+| frightened | 2 | 2 | 2 | 2 |
+
+It used to climb 2 → 4 → 6 → 8.

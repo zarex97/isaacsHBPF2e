@@ -30,9 +30,9 @@
         },
         "rules": [
             {
-                "key": "RollOption",
                 "domain": "all",
-                "option": "soulbound:vollstandig-endurance",
+                "key": "RollOption",
+                "option": "soulbound:no-full-release-fatigue",
                 "value": true
             }
         ],
