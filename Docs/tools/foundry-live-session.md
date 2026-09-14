@@ -112,7 +112,14 @@ game.shutDown();      // returns to /setup; a POST of {action:"shutdown"} to /ga
 
 …then retry the build a couple of times, because the lock clears a second or two after the world
 closes. Relaunching the world re-registers `module.json`'s homebrew traits, with no Foundry server
-restart needed.
+restart needed — which is the only way to pick up a new one, so a trait added to `pf2e-homebrew` will
+not exist until the world has been relaunched.
+
+**`check:roundtrip` reports hundreds of false differences after a session.** Every document comes back
+"differs at `folder`, `sort`, `ownership`" — 529 of them, with no content change behind any of them.
+Foundry normalises those fields into the LevelDB when a world loads an unlocked pack, so the check is
+comparing the content against a pack the *application* last wrote. A plain `npm run build` restores it.
+Rebuild before believing a round-trip failure that names fields nobody authored.
 
 ## 7. Test-actor gotchas
 
