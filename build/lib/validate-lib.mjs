@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { ROOT, rel } from "./pack.mjs";
+import { ROOT, rel, sluggify } from "./pack.mjs";
 
 const pf2e = JSON.parse(fs.readFileSync(path.join(ROOT, "build", "lib", "pf2e-traits.json"), "utf8"));
 /** pf2e's immunity/weakness/resistance dictionaries, snapshotted from a running 8.3.0. */
@@ -236,6 +236,10 @@ const EXTERNAL_SLUGS = new Set(["grapple"]);
  *
  * Note the failure is invisible from either side on its own. The slug looks right next to the name; the
  * name looks right next to the slug. Only holding the predicate against the built pack shows it.
+ *
+ * The same trap caught `self:effect:regeneracion-suppressed`, which is why both predicate forms are
+ * checked here: the Hollow's Regeneración could never be switched off, and guide §5.2 calls that
+ * clause the point of the Lineage.
  */
 function validateSlugPredicates(packs, errors) {
     const known = new Set(EXTERNAL_SLUGS);
@@ -244,17 +248,37 @@ function validateSlugPredicates(packs, errors) {
             if (doc.system?.slug) known.add(doc.system.slug);
         }
     }
+    // `self:effect:<x>` names an EFFECT, and pf2e publishes that option with the leading `effect-`
+    // stripped: an effect slugged `effect-regeneracion-suppressed` is tested as
+    // `self:effect:regeneracion-suppressed`. So the two forms are checked against two different sets.
+    const effects = new Set();
+    for (const { docs } of packs) {
+        for (const { doc } of docs) {
+            if (doc.type !== "effect") continue;
+            const slug = doc.system?.slug ?? sluggify(doc.name ?? "");
+            effects.add(slug.replace(/^effect-/, ""));
+        }
+    }
+
+    const forms = [
+        { pattern: /item:slug:([a-z0-9-]+)/g, label: "item:slug:", set: known },
+        { pattern: /self:effect:([a-z0-9-]+)/g, label: "self:effect:", set: effects },
+    ];
     for (const { docs } of packs) {
         for (const { file, doc } of docs) {
+            const json = JSON.stringify(doc);
             const seen = new Set();
-            for (const [, slug] of JSON.stringify(doc).matchAll(/item:slug:([a-z0-9-]+)/g)) {
-                if (known.has(slug) || seen.has(slug)) continue;
-                seen.add(slug);
-                errors.push(
-                    `${rel(file)}: predicate names \`item:slug:${slug}\`, which no document carries. `
-                    + "Check the built slug — sluggify drops accented letters rather than transliterating "
-                    + "them, so \"Getsuga Tenshō\" is `getsuga-tensh`.",
-                );
+            for (const { pattern, label, set } of forms) {
+                for (const [, slug] of json.matchAll(pattern)) {
+                    if (set.has(slug) || seen.has(label + slug)) continue;
+                    seen.add(label + slug);
+                    errors.push(
+                        `${rel(file)}: predicate names \`${label}${slug}\`, which no document carries. `
+                        + "Check the built slug — sluggify drops accented letters rather than transliterating "
+                        + "them, so \"Getsuga Tenshō\" is `getsuga-tensh` and \"Regeneración Suppressed\" is "
+                        + "`regeneraci-n-suppressed`. Pin `system.slug` when the name carries an accent.",
+                    );
+                }
             }
         }
     }

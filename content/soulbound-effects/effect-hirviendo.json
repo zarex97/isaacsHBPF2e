@@ -1,4 +1,24 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "text": "Hirviendo: once per round, when you hit with your spirit weapon you may <strong>push the target 5 feet</strong>.",
+                        "type": "prompt"
+                    },
+                    "event": "strike-resolved",
+                    "outcomes": [
+                        "success",
+                        "criticalSuccess"
+                    ],
+                    "predicate": [
+                        "item:tag:soulbound-spirit-weapon"
+                    ]
+                }
+            ]
+        }
+    },
     "img": "icons/magic/water/water-elemental-blue.webp",
     "name": "Effect: Hirviendo",
     "system": {
@@ -17,18 +37,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [
-            {
-                "key": "ItemAlteration",
-                "itemType": "spell",
-                "mode": "override",
-                "predicate": [
-                    "item:slug:la-gota"
-                ],
-                "property": "area-size",
-                "value": 60
-            }
-        ],
+        "rules": [],
         "start": {
             "initiative": null,
             "value": 0

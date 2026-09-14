@@ -1,0 +1,42 @@
+{
+    "img": "icons/magic/unholy/strike-body-life-soul-purple.webp",
+    "name": "Effect: Regeneración Suppressed",
+    "system": {
+        "description": {
+            "value": "<p>Spirit &mdash; or, before <strong>Segunda Piel</strong>, a holy or vitality effect &mdash; has closed the wound the wrong way. Your <strong>Regeneración</strong> does nothing until the end of your next turn.</p>"
+        },
+        "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 5
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "slug": "effect-regeneracion-suppressed",
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

@@ -27,21 +27,39 @@
         "rules": [
             {
                 "key": "FastHealing",
-                "type": "fast-healing",
                 "predicate": [
                     {
                         "not": "self:condition:dying"
                     },
                     {
                         "not": "self:effect:regeneracion-suppressed"
+                    },
+                    {
+                        "not": "soulbound:murcielago:high-speed-regeneration"
                     }
                 ],
+                "type": "fast-healing",
                 "value": "ternary(gte(@actor.level,17),6,ternary(gte(@actor.level,11),4,2))"
+            },
+            {
+                "key": "FastHealing",
+                "predicate": [
+                    {
+                        "not": "self:condition:dying"
+                    },
+                    {
+                        "not": "self:effect:regeneracion-suppressed"
+                    },
+                    "soulbound:murcielago:high-speed-regeneration"
+                ],
+                "type": "fast-healing",
+                "value": "2*(ternary(gte(@actor.level,17),6,ternary(gte(@actor.level,11),4,2)))"
             }
         ],
         "traits": {
             "otherTags": [
-                "soulbound-feature"
+                "soulbound-feature",
+                "soulbound-regeneracion"
             ],
             "rarity": "common",
             "value": [

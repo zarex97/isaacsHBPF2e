@@ -651,10 +651,14 @@ check("Regeneración is fast healing that scales 2 / 4 / 6 (guide §5.2)", typeo
 // `self:condition:dying:0` is never true, so a predicate written that way leaves fast healing permanently
 // OFF, which looks exactly like the feature not existing. `self:effect:<slug>` is pf2e's own spelling too
 // (see its `air-gate` class feature).
+// There are two FastHealing rules now — the ordinary rate and Murciélago's doubled one — so this asserts
+// the two switches are on the base rule rather than pinning the whole predicate, which the doubling
+// legitimately extends.
 check(
     "and it is off while dying and while suppressed, in pf2e's own spellings",
-    fh?.predicate,
-    [{ not: "self:condition:dying" }, { not: "self:effect:regeneracion-suppressed" }],
+    [{ not: "self:condition:dying" }, { not: "self:effect:regeneracion-suppressed" }]
+        .every((p) => fh?.predicate.some((q) => JSON.stringify(q) === JSON.stringify(p))),
+    true,
 );
 
 const segunda = lineageDoc("segunda-piel");
@@ -2172,5 +2176,111 @@ check("Shikake lasts a round on a failure and two on a critical failure (guide �
     [["failure", 1], ["criticalFailure", 2]]);
 check("and its Refined off-guard waits for Refined Release, spelled the way pf2e emits it",
     shikakeRiders.find((r) => r.apply.slug === "off-guard").predicate, ["feature:refined-release"]);
+
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  SB-24 … SB-26 — the Hollow clauses that were predicates pointing at nothing                     */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * SB-24. Regeneración's second off-switch was `{not: "self:effect:regeneracion-suppressed"}` — an
+ * effect **that did not exist and that nothing applied**, so a Hollow's fast healing could never be
+ * switched off. The guide calls that clause the point of the Lineage: *"Soul Reapers and Quincy exist
+ * to shut this down, and both can, from 1st level."*
+ *
+ * Which types close it depends on the character — **Segunda Piel** (15th) narrows it to spirit alone.
+ */
+const { suppressorsFor, typesOf, traitsOf } = await import("../scripts/soulbound/regeneracion.mjs");
+check("spirit and vitality damage suppress Regeneración, and a holy effect does",
+    suppressorsFor([]), { types: ["spirit", "vitality"], traits: ["holy"] });
+check("Segunda Piel narrows that to spirit alone",
+    suppressorsFor(["feature:segunda-piel"]), { types: ["spirit"], traits: [] });
+// `holy` is a TRAIT, not a damage type: pf2e's DAMAGE_TYPES has no such entry, so `5[holy]` parses as
+// untyped and a type check for it matches nothing. The two halves of the guide's "holy or vitality
+// effect" are therefore asked in two different places.
+check("holy is not among the damage types asked for",
+    suppressorsFor([]).types.includes("holy"), false);
+check("the effect the predicate names exists, and lasts to the end of your next turn",
+    contentDoc("soulbound-effects/effect-regeneracion-suppressed.json").system.duration,
+    { expiry: "turn-end", sustained: false, unit: "rounds", value: 1 });
+check("and its slug is pinned, because sluggify would make the option `regeneraci-n-suppressed`",
+    contentDoc("soulbound-effects/effect-regeneracion-suppressed.json").system.slug,
+    "effect-regeneracion-suppressed");
+check("the damage types come off the roll's instances",
+    typesOf({ instances: [{ type: "spirit" }, { type: "slashing" }] }), ["spirit", "slashing"]);
+check("the source's traits come off the damage roll options",
+    traitsOf({ rollOptions: new Set(["item:trait:holy", "item:slug:sacred-blade"]) }), ["holy"]);
+check("and off the item when a caller passes no options",
+    traitsOf({ item: { system: { traits: { value: ["holy", "divine"] } } } }), ["holy", "divine"]);
+check("the TARGET's own traits are never read — a holy Hollow does not suppress itself",
+    traitsOf({ rollOptions: new Set(["self:trait:holy"]) }), []);
+
+/**
+ * SB-25. "Your Regeneración fast healing **doubles**" was a roll option nothing read. The base rate is
+ * predicated off when the doubling applies and a doubled rule takes its place — two `FastHealing` rules
+ * at once would heal twice rather than once for double.
+ */
+const regenRules = contentDoc("soulbound-class-features/lineages/regeneracion.json").system.rules;
+check("Regeneración is one rate or the other, never both (guide §7B)",
+    regenRules.map((r) => [r.value.startsWith("2*"), r.predicate.some((p) =>
+        p === "soulbound:murcielago:high-speed-regeneration")]),
+    [[false, false], [true, true]]);
+
+/**
+ * SB-26. "You can still gain doomed, but it never increases past 1" was also a roll option nothing
+ * read. pf2e keeps the ceiling at `system.attributes.doomed.max`, so the cap is an `ActiveEffectLike`
+ * that lowers it — `downgrade`, so nothing else raising it wins by accident.
+ */
+const arrogante = contentDoc("soulbound-effects/effect-arrogante-resurreccion.json").system.rules;
+check("Arrogante caps doomed at 1 rather than describing it (guide §7B)",
+    arrogante.find((r) => r.key === "ActiveEffectLike"),
+    { key: "ActiveEffectLike", mode: "downgrade", path: "system.attributes.doomed.max", value: 1 });
+
+// Tiburón's Hirviendo changes La Gota's SHAPE, not just its size: "may be used as a 60-foot line
+// instead of a cone". An `area-size` override could only ever have widened the cone.
+check("La Gota becomes a 60-foot line while Hirviendo stands (guide §7B)",
+    contentDoc("soulbound-techniques/la-gota.json").flags["isaacs-hb-pf2e"].areaTargeting.alternateArea
+        .map((a) => [a.predicate, a.area.type, a.area.value]),
+    [[["self:effect:hirviendo"], "line", 60]]);
+
+
+/**
+ * Every `system.slug === "x"` in the scripts must name a document the build actually writes.
+ *
+ * `validateSlugPredicates` catches this for `item:slug:` in *content*. It said nothing about code — and
+ * the same trap caught the module's own: `sluggify` reduces anything outside `[a-z0-9]` to a separator,
+ * so "Regeneración" is built as **`regeneraci-n`**, and `slug === "regeneracion"` in
+ * `scripts/soulbound/regeneracion.mjs` matched nothing. The Hollow's fast healing could never be
+ * suppressed, which is the clause guide §5.2 calls the point of the Lineage.
+ *
+ * The fix there was a **tag** rather than an explicit slug: ASCII by construction, and it does not
+ * change the document's derived id the way `system.slug` would, which would break every existing
+ * character's link to it.
+ */
+const BUILT_SLUGS = (() => {
+    const slugs = new Set();
+    (function walk(dir) {
+        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+            const full = path.join(dir, entry.name);
+            if (entry.isDirectory()) { walk(full); continue; }
+            if (!entry.name.endsWith(".json") || entry.name === "_folders.json") continue;
+            const doc = JSON.parse(fs.readFileSync(full, "utf8"));
+            if (!doc?.name) continue;
+            slugs.add(doc.system?.slug ?? doc.name.toLowerCase()
+                .replace(/['’]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, ""));
+        }
+    })(path.join(ROOT, "content"));
+    return slugs;
+})();
+
+// pf2e owns these; they are conditions and system slugs, not our documents.
+const SYSTEM_SLUGS = new Set(["dying", "persistent-damage", "saint", "soulbound", "kido-focus"]);
+
+const unresolvedInScripts = [];
+for (const [, slug] of SCRIPTS.matchAll(/slug\s*===\s*["']([a-z0-9-]+)["']/g)) {
+    if (BUILT_SLUGS.has(slug) || SYSTEM_SLUGS.has(slug)) continue;
+    if (!unresolvedInScripts.includes(slug)) unresolvedInScripts.push(slug);
+}
+check("every slug the scripts compare against names a document the build writes", unresolvedInScripts, []);
 
 report("Soulbound tests");

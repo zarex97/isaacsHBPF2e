@@ -1,4 +1,23 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "text": "Segunda Etapa: you may make an <strong>additional claw Strike</strong> against the same target, at your current multiple attack penalty.",
+                        "type": "prompt"
+                    },
+                    "event": "strike-resolved",
+                    "outcomes": [
+                        "criticalSuccess"
+                    ],
+                    "predicate": [
+                        "item:tag:soulbound-pantera-claw"
+                    ]
+                }
+            ]
+        }
+    },
     "img": "icons/creatures/abilities/paw-print-pair-blue-large.webp",
     "name": "Effect: Pantera — Segunda Etapa",
     "system": {
@@ -26,8 +45,8 @@
                 "value": 10
             },
             {
-                "key": "ItemAlteration",
                 "itemType": "weapon",
+                "key": "ItemAlteration",
                 "mode": "add",
                 "predicate": [
                     "item:tag:soulbound-pantera-claw"
@@ -36,8 +55,8 @@
                 "value": "deadly-d10"
             },
             {
-                "key": "ItemAlteration",
                 "itemType": "spell",
+                "key": "ItemAlteration",
                 "mode": "override",
                 "predicate": [
                     "item:slug:garra-de-la-pantera"

@@ -12,7 +12,23 @@
                     "value": 1
                 },
                 "name": "Garra de la Pantera — shards"
-            }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "damageType": "bleed",
+                        "formula": "2d6",
+                        "type": "persistent-damage"
+                    },
+                    "note": "Segunda Etapa: embedded shards.",
+                    "outcomes": [
+                        "criticalFailure"
+                    ],
+                    "predicate": [
+                        "self:effect:pantera-segunda-etapa"
+                    ]
+                }
+            ]
         }
     },
     "img": "icons/creatures/abilities/paw-print-pair-blue.webp",
