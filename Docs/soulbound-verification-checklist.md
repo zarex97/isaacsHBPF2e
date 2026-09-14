@@ -175,30 +175,30 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | S-05 | Bankai — Sustain / move | 13 | Sustain once per round to move the second emanation up to 30 ft **or** switch mode | ✅ | New `Senbonzakura Kageyoshi — Sustain`, granted by the Bankai effect, once per round. Live: Gokei, Senkei and Neither, never two at once. **The second emanation it can move does not exist yet** — see §14 |
 | S-06 | Bankai — **Gokei** | 13 | Second emanation becomes a **10-ft burst** on one enemy; **double** damage; no cover or concealment against it | ❌ | `Effect: Gokei` sets a roll option and nothing reads it. The 10-foot burst, the doubled damage and the cover/concealment clause are unbuilt — they all rest on the second emanation |
 | S-07 | Bankai — **Senkei** | 13 | 20-ft cage around you and one enemy; neither can leave; your Strikes vs. it ignore **all** resistances; **one extra Strike each round at current MAP**; **you lose reach and cover-ignoring**; can't target anyone outside | ⚠️ | Senkei applies and **takes `reach-15` off the spirit weapon**, live. The cage, the resistance bypass, the extra Strike and the target restriction are prose on the card |
-| S-08 | **Zangetsu** — Shikai Form | 1 | Damage die +1 step; gains **two-handed d12** if not already two-handed; **begin every encounter already released, free and no action** | ☐ | |
+| S-08 | **Zangetsu** — Shikai Form | 1 | Damage die +1 step; gains **two-handed d12** if not already two-handed; **begin every encounter already released, free and no action** | ✅ | Live: sealed **1d8 / two-hand-d10** → released **1d10 / two-hand-d12**, so the die step carries the two-hand trait with it. `soulbound:release:never-sealed` is set and `combatStart` spends the free first Release for it |
 | S-09 | Zangetsu — **Getsuga Tenshō** | 1 | 2 actions, **30-ft line**, basic Reflex, 2d6 spirit; H(+1) +1d6 | ☐ | |
 | S-10 | Zangetsu — Refined **Kuroi Getsuga** | 9 | Line **60 ft**, **ignores resistance to spirit**, crit fail → **1d6 persistent spirit** | ☐ | |
-| S-11 | **Tensa Zangetsu** — Bankai | 13 | **No die step** (overrides Full Release); **+10 ft status** to all Speeds; **Flash Step twice per round** | ☐ | |
-| S-12 | Tensa Zangetsu — compressed Getsuga | 13 | Getsuga Tenshō becomes **1 action**, line **60 ft** (90 with Refined) | ☐ | |
-| S-13 | Tensa Zangetsu — free Step | 13 | First hit each round with the spirit weapon → **Step** as a free action | ☐ | |
-| S-14 | **Hyōrinmaru** — Shikai Form | 1 | Damage type becomes **cold** (spirit still selectable); **on a crit, −5 ft status** to target Speeds until end of your next turn | ☐ | |
+| S-11 | **Tensa Zangetsu** — Bankai | 13 | **No die step** (overrides Full Release); **+10 ft status** to all Speeds; **Flash Step twice per round** | ✅ | Live at L13: **no further die step** in Full Release (1d10 stays 1d10), **+10 status to Speeds** (25→35), **Flash Step frequency 2** |
+| S-12 | Tensa Zangetsu — compressed Getsuga | 13 | Getsuga Tenshō becomes **1 action**, line **60 ft** (90 with Refined) | ✅ | **SB-16 and SB-17 fixed.** Live at L13 in Tensa: Getsuga is **90 feet** (60 without Refined Release) and **1 action**. Both alterations were dead — one named a slug that does not exist, the other a property pf2e has no handler for |
+| S-13 | Tensa Zangetsu — free Step | 13 | First hit each round with the spirit weapon → **Step** as a free action | ⚠️ | A `strike-resolved` prompt on a hit with the spirit weapon now says you may Step. A Step's direction is the player's, so it is a prompt at the right moment rather than a move chosen for them; the once-per-round limit is on the card, not enforced |
+| S-14 | **Hyōrinmaru** — Shikai Form | 1 | Damage type becomes **cold** (spirit still selectable); **on a crit, −5 ft status** to target Speeds until end of your next turn | ✅ | Damage type becomes cold; a critical hit applies `Effect: Frosted Stride` through a `strike-resolved` rider |
 | S-15 | Hyōrinmaru — **Ryūsenka** | 1 | 2 actions, Strike; hit → +1d6 cold **and** Fortitude or **immobilized** until end of its next turn (Escape vs. Reiatsu DC); crit → +2d6 cold and **off-guard**; H(+2) +1d6 | ☐ | |
 | S-16 | Hyōrinmaru — Refined **Guncho Tsurara** | 9 | Ryūsenka may be a **ranged** Strike within 60 ft; the blade returns immediately | ☐ | |
-| S-17 | **Daiguren Hyōrinmaru** — Bankai | 13 | **Fly Speed** = Speed; **cold resistance = level** | ☐ | |
+| S-17 | **Daiguren Hyōrinmaru** — Bankai | 13 | **Fly Speed** = Speed; **cold resistance = level** | ✅ | `Resistance` cold = `@actor.level` and a fly Speed matching land Speed, both authored as rule elements |
 | S-18 | Bankai — petal-flowers | 13 | **Three charges**; **once per round** spend one | ☐ | |
 | S-19 | Petal — **Sennen Hyōrō** | 13 | **20-ft burst** within 60 ft, Reflex; fail 5d6 cold + **immobilized**; crit fail **restrained 1 minute**; H(+1) +1d6 | ☐ | |
 | S-20 | Petal — **Hyōryū Senbi** | 13 | **60-ft line**, basic Reflex, 5d6 cold; fail → **slowed 1** until end of its next turn; H(+1) +1d6 | ☐ | |
 | S-21 | Petal — **Zanhyō Ningyō** | 13 | Reaction when hit: reduce damage by **twice your level**; the doll shatters | ☐ | |
 | S-22 | Bankai — Perfected | 17 | **Restores one spent petal-flower at the start of each of your turns** | ☐ | |
-| S-23 | **Ryūjin Jakka** — Shikai Form | 1 | Damage type **fire**; weapon gains **deadly d8**; **fire resistance = half level** | ☐ | |
+| S-23 | **Ryūjin Jakka** — Shikai Form | 1 | Damage type **fire**; weapon gains **deadly d8**; **fire resistance = half level** | ✅ | Live at L13: **fire resistance 6** (half level), damage type fire, `deadly-d8` |
 | S-24 | Ryūjin Jakka — **Ennetsu Jigoku** | 1 | 2 actions, **15-ft emanation**, basic Reflex, 2d6 fire; fail → **1d4 persistent fire**; H(+1) +1d6, +1 persistent die every **other** increment | ☐ | |
 | S-25 | Ryūjin Jakka — Refined | 9 | Emanation **20 ft**; ground inside becomes **difficult terrain** until end of your next turn | ☐ | |
-| S-26 | **Zanka no Tachi** — Bankai | 13 | Die **+2 steps**; **you lose your fire resistance**; at the start of each of your turns every creature **other than you** within 30 ft — **allies included** — takes **1d6 fire, no save** | 🔧 | **SB-15 fixed**: the ambient 30-ft burn now reaches everyone but the caster — `affects: "all"`, as the guide's friendly-fire clause requires. Awaiting a live drive |
+| S-26 | **Zanka no Tachi** — Bankai | 13 | Die **+2 steps**; **you lose your fire resistance**; at the start of each of your turns every creature **other than you** within 30 ft — **allies included** — takes **1d6 fire, no save** | ✅ | Live: **two** die-step upgrades, and the fire resistance **disappears** under Zanka no Tachi — the Shikai's `Resistance` is predicated `{not: self:effect:zanka-no-tachi}`. The ambient 30-ft burn reaches everyone but the caster after **SB-15** |
 | S-27 | Aspect — **Higashi** | 13 | Strikes ignore **all** resistances and immunities; a creature you damage **can't regain HP** and its regeneration/fast healing is suppressed until end of your next turn | ☐ | |
-| S-28 | Aspect — **Nishi** | 13 | **Fire immunity**; **resistance to all = half level**; a creature that damages you with an unarmed attack, melee weapon or Grapple takes **4d6 fire** | ☐ | |
+| S-28 | Aspect — **Nishi** | 13 | **Fire immunity**; **resistance to all = half level**; a creature that damages you with an unarmed attack, melee weapon or Grapple takes **4d6 fire** | ✅ | Live: choosing **Nishi** grants fire immunity and **resistance to all damage 6** at L13, plus the 4d6 retributive rider |
 | S-29 | Aspect — **Minami** | 13 | **20-ft emanation**; enemy ending its turn there: Reflex or **grabbed** by ash-figures (Escape vs. Reiatsu DC); the figures are **not creatures** and take no actions | 🔧 | **SB-15 fixed**: Minami's 20-ft ash aura fans out now. Awaiting a live drive |
 | S-30 | Aspect — **Kita** | 13 | 2 actions, once per round, **60-ft line**, basic Reflex, **5d6 fire** that **cannot be reduced by fire resistance, Blut Vene or Hierro**; H(+1) +1d6 | ☐ | The only unresistable damage in the class |
-| S-31 | Aspect switching | 13 | **Sustain once per round** to change aspect; the chosen one lasts until another is chosen | ☐ | |
+| S-31 | Aspect switching | 13 | **Sustain once per round** to change aspect; the chosen one lasts until another is chosen | ✅ | New `Zanka no Tachi — Sustain`, once per round, granted by the Bankai effect. Live: the dialog offers exactly **Higashi / Nishi / Minami / Kita** and no way to stand in none of them — the guide says an aspect lasts until you select another — and picking Kita removes Nishi |
 | S-32 | **Kyōka Suigetsu** — Shikai **Kanzen Saimin** | 1 | On Release, and when a creature that can see first observes you released: Will vs. Reiatsu DC or **hypnotized 1 minute** | ☐ | |
 | S-33 | Kanzen Saimin — the lie | 1 | Hypnotized creature perceives you **5 ft** from where you stand; its attacks need a **DC 5 flat check**; you are **hidden** from it whenever not adjacent | ☐ | |
 | S-34 | Kanzen Saimin — save ladder | 1 | Crit success → immune 24 h · success → immune 10 min · crit fail → hypnotized 1 h **and auto-hypnotized once per encounter thereafter** · **blind creatures unaffected** | ☐ | |
@@ -352,7 +352,7 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 
 | # | Feat | Lvl | What must happen | Status | Notes |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| F-46 | **Instant Full Release** | 14 | Full Release costs **1 action** | ☐ | |
+| F-46 | **Instant Full Release** | 14 | Full Release costs **1 action** | ✅ | **SB-17 fixed.** Live: adding the feat takes Full Release from **2 actions to 1**. Its `action-cost` alteration named a property pf2e has no handler for, so the feat's whole text did nothing |
 | F-47 | **Twin Pressure** | 14 | The Full Release emanation's Will save also applies to enemies that **enter** it | ☐ | |
 | F-48 | **Vollständig Endurance** **[Q]** | 14 | No fatigue when Vollständig ends; spend 1 point to extend by 1 round, **up to three times** | ☐ | |
 | F-49 | **Unbroken Chain** | 16 | While released, spend 1 point to stay at **1 HP** instead of 0; **once per day** | ☐ | |
@@ -774,3 +774,60 @@ The **second emanation** — placed within 60 feet, moved up to 30 feet by the S
 into a 10-foot burst at double damage — does not exist. It needs a persistent placed region that ticks
 at the *caster's* turn start; `targeting/lingering.mjs` has regions and `tokenMoveIn`/`tokenTurnEnd`
 events, but not that trigger. Senkei's cage, resistance bypass and extra Strike are prose on the card.
+
+---
+
+## 15 — SB-16 and SB-17: two names that matched nothing
+
+Both found by driving Tensa Zangetsu, and both invisible from either side on its own.
+
+### SB-16 — `sluggify` drops accents, it does not transliterate them
+
+`build/lib/pack.mjs` reduces anything outside `[a-z0-9]` to a separator, so **"Getsuga Tenshō" is built
+as `getsuga-tensh`** — the macron vanishes rather than becoming an `o`. `Effect: Tensa Zangetsu`
+predicated two alterations on `item:slug:getsuga-tensho`, which reads perfectly next to the name and
+matches nothing. The two things that make Tensa the speed Bankai — the one-action Getsuga and its
+60-foot line — were both dead.
+
+`validateSlugPredicates` now holds every `item:slug:` in the content against the slugs the build
+actually writes, with an explicit allow-list for the ones pf2e owns (`grapple`, which `Effect: Nishi`
+correctly names). Proved by restoring the old spelling and watching the build fail.
+
+### SB-17 — there is no `ItemAlteration` for an action cost
+
+pf2e's handler map is closed: `ac-bonus`, `area-size`, `damage-dice-faces`, `frequency-max`,
+`range-increment` and twenty-odd more. Nothing for `time` or `actions`. An unknown property is rejected
+at schema validation, which from the content's side is silent — the rule is dropped and the item keeps
+its printed cost. **Two abilities were written as though the handler existed, and each is the whole
+text of its ability:**
+
+| | |
+| :-- | :-- |
+| `Effect: Tensa Zangetsu` | `{"property": "time", "value": "1"}` — *"Getsuga Tenshō becomes 1 action"* |
+| `Instant Full Release` (feat 14) | `{"property": "action-cost", "value": 1}` — *"Full Release takes 1 action instead of 2"* |
+
+`scripts/soulbound/action-cost.mjs` supplies the one capability pf2e lacks, declaratively:
+
+```json
+"flags": { "isaacs-hb-pf2e": { "actionCost": [{ "slug": "getsuga-tensh", "value": 1 }] } }
+```
+
+It runs inside the existing `prepareDerivedData` wrap — `wrap()` refuses two wrappers on one target by
+design, which is why it lives beside the pool correction — writes both `system.time.value` (spells) and
+`system.actions.value` (feats and actions), and never *raises* a cost. `validateAlterationProperties`
+rejects any `ItemAlteration` property pf2e does not have, and points at the flag. Also proved by
+planting one.
+
+### And a fourth test that was pinning a bug
+
+`test-soulbound` asserted `rules.some((r) => r.property === "time" && r.value === "1")` — the presence
+of the inert rule, called compression. That is now four checks found asserting the broken thing:
+`self:feature:refined-release`, the Bankai's damage at a path that survived the missing save,
+`item:slug:getsuga-tensho`, and this one. **A test written from the content rather than from the table
+locks in whatever the content happened to say.**
+
+### The Getsuga line, settled deterministically
+
+`add 30` raced Refined Release's `override 60` and lost — the override ran last, so the line never
+passed 60. It is two predicated overrides now: 60 without `feature:refined-release`, 90 with it. Live
+at 13th in Tensa: **90 feet, one action**.

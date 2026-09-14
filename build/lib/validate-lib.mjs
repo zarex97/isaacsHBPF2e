@@ -134,6 +134,95 @@ export function validate(packs, { errors }) {
     }
     validateAdvancementTable(packs, errors);
     validateActionsAreReachable(packs, errors);
+    validateSlugPredicates(packs, errors);
+    validateAlterationProperties(packs, errors);
+}
+
+/**
+ * The `ItemAlteration` properties pf2e actually has.
+ *
+ * Its handler map is closed and finite (`rules/rule-element/item-alteration/handlers.ts`), and an
+ * unknown property is rejected at schema validation — silently, from the content's point of view: the
+ * rule is dropped and the item keeps whatever it printed. Two abilities shipped that way, both of them
+ * trying to compress an action cost, which pf2e has no handler for at all:
+ *
+ *   Effect: Tensa Zangetsu   {"property": "time", "value": "1"}
+ *   Instant Full Release     {"property": "action-cost", "value": 1}
+ *
+ * The module supplies that one capability itself, through an `actionCost` flag — see
+ * `scripts/soulbound/action-cost.mjs`. Everything else must be a property pf2e will recognise.
+ */
+const ALTERATION_PROPERTIES = new Set([
+    "ac-bonus", "area-size", "badge-max", "badge-value", "check-penalty", "damage-dice-faces",
+    "damage-dice-number", "damage-type", "defense-passive", "description", "dex-cap",
+    "focus-point-cost", "hardness", "hp-max", "material-type", "materials", "pd-recovery-dc",
+    "persistent-damage", "property-runes", "range-increment", "range-max", "frequency-max",
+    "frequency-per", "other-tags", "runes-potency", "runes-resilient", "runes-striking",
+    "speed-penalty", "traits", "weapon-traits",
+]);
+
+function validateAlterationProperties(packs, errors) {
+    const walk = (node, onHit) => {
+        if (Array.isArray(node)) return node.forEach((v) => walk(v, onHit));
+        if (!node || typeof node !== "object") return;
+        if (node.key === "ItemAlteration" && typeof node.property === "string") onHit(node.property);
+        for (const value of Object.values(node)) walk(value, onHit);
+    };
+    for (const { docs } of packs) {
+        for (const { file, doc } of docs) {
+            walk(doc, (property) => {
+                if (ALTERATION_PROPERTIES.has(property)) return;
+                errors.push(
+                    `${rel(file)}: ItemAlteration property "${property}" is not one pf2e has, so the rule `
+                    + "is dropped at validation and the item keeps its printed value. For an action cost, "
+                    + "declare `flags.isaacs-hb-pf2e.actionCost` instead.",
+                );
+            });
+        }
+    }
+}
+
+/**
+ * Slugs pf2e owns, that a predicate may legitimately name without us shipping the item.
+ *
+ * Kept as an explicit list rather than a "give up if it is not ours" rule, because the whole point of
+ * this check is that an unrecognised slug is almost always a typo.
+ */
+const EXTERNAL_SLUGS = new Set(["grapple"]);
+
+/**
+ * Every `item:slug:<x>` must name something that exists.
+ *
+ * `Effect: Tensa Zangetsu` carried two alterations predicated on `item:slug:getsuga-tensho`, and the
+ * slug the build actually writes is **`getsuga-tensh`** — `sluggify` here reduces anything outside
+ * `[a-z0-9]` to a separator, so the macron in "Getsuga Tenshō" is dropped rather than transliterated.
+ * The predicate read perfectly and matched nothing, which cost Tensa Zangetsu both of the things that
+ * make it the speed Bankai: the one-action Getsuga and its 60-foot line.
+ *
+ * Note the failure is invisible from either side on its own. The slug looks right next to the name; the
+ * name looks right next to the slug. Only holding the predicate against the built pack shows it.
+ */
+function validateSlugPredicates(packs, errors) {
+    const known = new Set(EXTERNAL_SLUGS);
+    for (const { docs } of packs) {
+        for (const { doc } of docs) {
+            if (doc.system?.slug) known.add(doc.system.slug);
+        }
+    }
+    for (const { docs } of packs) {
+        for (const { file, doc } of docs) {
+            const seen = new Set();
+            for (const [, slug] of JSON.stringify(doc).matchAll(/item:slug:([a-z0-9-]+)/g)) {
+                if (known.has(slug) || seen.has(slug)) continue;
+                seen.add(slug);
+                errors.push(
+                    `${rel(file)}: predicate names \`item:slug:${slug}\`, which no document carries. `
+                    + "Check the built slug — sluggify drops accented letters rather than transliterating "
+                    + "them, so \"Getsuga Tenshō\" is `getsuga-tensh`.",
+                );
+            }
+        }
+    }
 }
 
 /**

@@ -84,11 +84,14 @@ async function switchMode(actor, item) {
     const family = declared?.family;
     if (!Array.isArray(family) || family.length === 0) return false;
 
-    // A family always offers the way back out. Senbonzakura Kageyoshi's base state — two emanations, no
-    // mode — is a real state the guide describes, and a switch that could only ever move between Gokei
-    // and Senkei would make it unreachable after the first Sustain.
-    const none = declared.none ?? "Neither";
-    const choice = await chooseOne(item.name, declared.prompt ?? "Which one?", [...family, none]);
+    // A family usually offers the way back out: Senbonzakura Kageyoshi's base state — two emanations, no
+    // mode — is a real state the guide describes, and a switch that could only move between Gokei and
+    // Senkei would make it unreachable after the first Sustain. Zanka no Tachi is the other shape —
+    // "select one cardinal aspect, which lasts until you select another", with no way to stand in none of
+    // them — and declares `none: false` to say so.
+    const none = declared.none === false ? null : (declared.none ?? "Neither");
+    const choice = await chooseOne(item.name, declared.prompt ?? "Which one?",
+        none ? [...family, none] : [...family]);
     if (!choice) return true; // declared, and declined — not "unhandled"
 
     if (choice === none) {

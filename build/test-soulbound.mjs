@@ -940,17 +940,19 @@ check(
     ],
     [1, 2],
 );
+// The Getsuga half asserted `property: "time"`, which pf2e has no handler for — so this check was
+// pinning an inert rule in place and calling it compression. The action cost is a module capability
+// now; the assertions for it are at the bottom of this file.
 check(
-    "Tensa Zangetsu compresses: Getsuga to 1 action, Flash Step to twice a round",
+    "Tensa Zangetsu compresses Flash Step to twice a round, and adds no die step",
     (() => {
         const rules = contentDoc("soulbound-effects/effect-tensa-zangetsu.json").system.rules;
         return [
-            rules.some((r) => r.property === "time" && r.value === "1"),
             rules.some((r) => r.property === "frequency-max" && r.value === 2),
             rules.some((r) => r.property === "damage-dice-faces"),
         ];
     })(),
-    [true, true, false],
+    [true, false],
 );
 
 const getsuga = techDoc("getsuga-tensho");
@@ -1725,5 +1727,69 @@ for (const [file, event, radius] of AURAS) {
     check("and it says who it catches, in one place or the other",
         Boolean(rider.areaTargeting?.affects ?? rider.area?.affects), true);
 }
+
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  SB-16 and SB-17 — two predicates and two properties that named nothing                          */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * SB-16. `sluggify` here reduces anything outside `[a-z0-9]` to a separator, so "Getsuga Tenshō" is
+ * built as **`getsuga-tensh`** — the macron is dropped, not transliterated. `Effect: Tensa Zangetsu`
+ * predicated on `getsuga-tensho`, which reads perfectly next to the name and matches nothing.
+ */
+const tensa = contentDoc("soulbound-effects/effect-tensa-zangetsu.json");
+const getsugaRules = tensa.system.rules.filter((r) => JSON.stringify(r.predicate ?? []).includes("getsuga"));
+check("Tensa Zangetsu names the slug the build actually writes",
+    getsugaRules.every((r) => r.predicate.includes("item:slug:getsuga-tensh")), true);
+
+/**
+ * And the line is two predicated overrides rather than an `add`: an `add` racing Refined Release's own
+ * `override` to 60 resolved to whichever ran last, and it was the override — so guide §7A's
+ * "60 feet (90 with Refined)" never reached 90.
+ */
+check("Getsuga's line is 60 without Refined Release and 90 with it (guide §7A)",
+    getsugaRules.filter((r) => r.property === "area-size")
+        .map((r) => [r.value, r.predicate.some((p) => typeof p === "object" && p.not === "feature:refined-release")])
+        .sort((a, b) => a[0] - b[0]),
+    [[60, true], [90, false]]);
+
+/**
+ * SB-17. pf2e's `ItemAlteration` handler map has no entry for an action cost, and an unknown property
+ * is dropped at schema validation — so `{"property": "time"}` on Tensa and `{"property":
+ * "action-cost"}` on Instant Full Release were both inert, and both are the whole point of their
+ * ability. The module supplies that one capability through an `actionCost` flag.
+ */
+const { applyActionCosts } = await import("../scripts/soulbound/action-cost.mjs");
+
+check("Tensa declares Getsuga at one action (guide §7A)",
+    tensa.flags["isaacs-hb-pf2e"].actionCost, [{ slug: "getsuga-tensh", value: 1 }]);
+check("Instant Full Release declares Full Release at one action (guide §8.5)",
+    contentDoc("soulbound-feats/instant-full-release.json").flags["isaacs-hb-pf2e"].actionCost,
+    [{ slug: "full-release", value: 1 }]);
+check("and neither still carries a property pf2e would throw away",
+    [...tensa.system.rules, ...contentDoc("soulbound-feats/instant-full-release.json").system.rules]
+        .some((r) => ["time", "action-cost"].includes(r.property)),
+    false);
+
+// The compression itself, on a stand-in actor: a spell carries its cost as a string, a feat as a number.
+const fakeActor = {
+    items: [
+        { flags: { "isaacs-hb-pf2e": { actionCost: [{ slug: "getsuga-tensh", value: 1 }] } }, system: {} },
+        { system: { slug: "getsuga-tensh", time: { value: "2" } } },
+        { system: { slug: "full-release", actions: { value: 2 } } },
+    ],
+};
+applyActionCosts(fakeActor);
+check("a two-action spell becomes one action, and an unrelated item is untouched",
+    [fakeActor.items[1].system.time.value, fakeActor.items[2].system.actions.value], ["1", 2]);
+
+const cheaper = { items: [
+    { flags: { "isaacs-hb-pf2e": { actionCost: [{ slug: "x", value: 2 }] } }, system: {} },
+    { system: { slug: "x", time: { value: "1" } } },
+] };
+applyActionCosts(cheaper);
+check("and a declaration never raises a cost that is already lower",
+    cheaper.items[1].system.time.value, "1");
 
 report("Soulbound tests");
