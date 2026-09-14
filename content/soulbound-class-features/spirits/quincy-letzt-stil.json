@@ -1,4 +1,12 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "releaseForm": {
+                "effect": "Effect: Quincy: Letzt Stil",
+                "rung": "full"
+            }
+        }
+    },
     "folder": "Spirits",
     "img": "icons/magic/light/explosion-star-large-blue.webp",
     "name": "Quincy: Letzt Stil",
@@ -24,12 +32,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [
-            {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Quincy: Letzt Stil"
-            }
-        ],
+        "rules": [],
         "traits": {
             "otherTags": [
                 "soulbound-feature"

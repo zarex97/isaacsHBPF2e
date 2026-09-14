@@ -1,4 +1,12 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "releaseForm": {
+                "effect": "Effect: Senbonzakura Kageyoshi",
+                "rung": "full"
+            }
+        }
+    },
     "folder": "Spirits",
     "img": "icons/magic/nature/leaf-petals-pink-red.webp",
     "name": "Senbonzakura Kageyoshi",
@@ -24,12 +32,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [
-            {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Senbonzakura Kageyoshi"
-            }
-        ],
+        "rules": [],
         "traits": {
             "otherTags": [
                 "soulbound-feature"

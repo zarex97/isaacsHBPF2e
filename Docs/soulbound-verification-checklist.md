@@ -79,14 +79,14 @@ character:
 | C-28 | **Flash Step** | 3 | 1 action, move + reiatsu, **once per round**, Stride up to Speed, doesn't trigger reactions | ☐ | |
 | C-29 | **Greater Flash Step** | 11 | Until your next turn, the first attack against you each round needs a **DC 5 flat check** | ☐ | |
 | C-30 | **Departed Flesh** | 3 | Immune to disease; no food/drink; success vs. poison becomes critical success | ☐ | |
-| C-31 | **Release** | 1 | 1 action, auditory/concentrate/reiatsu; **first Release each encounter is free**, re-releasing costs 1 point; lasts the encounter; can't Release while dismissed; **is not a stance** | ❌ | **SB-6.** The Release action has `rules: []` and no module hook; `Release.enter()` is called from nowhere. No release state is recorded, `Effect: Released` has `rules: []` and is never applied, and the free-first/1-point economy does not exist |
-| C-32 | **Refined Release** | 9 | The Spirit's Refined benefit turns on; base rank 5 | ⚠️ | Fires by **level**, not by Release. Area half proven live: Senbonzakura 15→20 ft at L9. But see **SB-7** — it adds +5 ft to *every* Release Technique |
-| C-33 | **Full Release** — cost | 13 | 2 actions, **once per day**, requires released form **and ≥1 Reiatsu Point** | ❌ | **SB-6.** The L13 feature grants `Effect: Full Release` unconditionally on levelling — no action, no cost, no requirement, no once-per-day |
-| C-34 | Full Release — die step | 13 | Spirit weapon damage die +1 step | ❌ | **SB-6.** `Effect: Full Release` has `rules: []` — no die step. Zangetsu and the two-step Spirits override this |
+| C-31 | **Release** | 1 | 1 action, auditory/concentrate/reiatsu; **first Release each encounter is free**, re-releasing costs 1 point; lasts the encounter; can't Release while dismissed; **is not a stance** | ✅ | **SB-6 fixed.** Driven live at L13: sealed actor has no form effect, Release applies `Effect: Released` + the Spirit's form, first Release each encounter is free, a second after re-sealing costs 1 point (3→2), and a third on an empty pool is **refused** |
+| C-32 | **Refined Release** | 9 | The Spirit's Refined benefit turns on; base rank 5 | ⚠️ | Fires by **level**, not by Release — correct, Refined is a level-9 feature. Area half proven live: Senbonzakura 15→20 ft at L9. But see **SB-7** |
+| C-33 | **Full Release** — cost | 13 | 2 actions, **once per day**, requires released form **and ≥1 Reiatsu Point** | ✅ | **SB-6 fixed.** The L13 feature no longer grants the effect; the action does, and it refuses when sealed or when the pool is empty. pf2e's own `frequency` still counts the daily use |
+| C-34 | Full Release — die step | 13 | Spirit weapon damage die +1 step | ✅ | **SB-6 fixed.** `Effect: Full Release` now carries the `damage-dice-faces` upgrade. Live: 1d8 / `two-hand-d10` → **1d10 / `two-hand-d12`**, and back when it ends. Predicated on `not soulbound:full-release:no-die-step`, which `Effect: Tensa Zangetsu` sets |
 | C-35 | Full Release — free technique | 13 | Release Technique costs nothing, **once per round** | ❌ | **SB-6.** No rules — the technique still costs a point and has no per-round limit |
-| C-36 | Full Release — pressure emanation | 13 | **15-ft emanation**; enemy ending its turn there: Will vs. Reiatsu DC or **frightened 1** (2 on crit fail); success = immune 10 min | ❌ | **SB-6.** No rules — no emanation, no Will save, no frightened |
-| C-37 | Full Release — end state | 13 | **Fatigued** until 10 minutes' rest; no second use that day | ❌ | **SB-6.** No rules — no fatigue, and nothing to end |
-| C-38 | **Perfected Full Release** | 17 | 2 minutes, **no fatigue**, emanation 20 ft | ❌ | **SB-6.** `fullReleaseShape(17)` returns the right numbers in code, but nothing consumes it |
+| C-36 | Full Release — pressure emanation | 13 | **15-ft emanation**; enemy ending its turn there: Will vs. Reiatsu DC or **frightened 1** (2 on crit fail); success = immune 10 min | ⚠️ | The emanation was authored all along — a `turn-end` rider, 15-ft emanation, Will vs. Reiatsu DC, frightened 1 / 2, `Effect: Steeled Against Pressure` on a success. It is now applied **only in a Full Release** instead of permanently from 13th. The save itself has not yet been driven against a live enemy |
+| C-37 | Full Release — end state | 13 | **Fatigued** until 10 minutes' rest; no second use that day | ✅ | **SB-6 fixed.** A `deleteItem` hook drops the rung and applies **fatigued** when `Effect: Full Release` goes, by timer or by hand. Verified live at L13 |
+| C-38 | **Perfected Full Release** | 17 | 2 minutes, **no fatigue**, emanation 20 ft | ✅ | **SB-6 fixed.** `fullReleaseShape` is now stamped onto the effect as it is created. Live at L17: duration **2 minutes**, rider emanation **20 ft**, and **no fatigue** when it ends |
 | C-39 | **Unsealed** | 19 | Full Release **twice per day**; immune to fear while in it; first crit each round with the spirit weapon refunds 1 point **ignoring the per-encounter cap** | ❌ | **SB-6.** Frequency does rise to 2/day on the feat, but there is no daily use to spend |
 | C-40 | Technique heightening | — | Every reiatsu effect auto-heightens to **half level rounded up**, no rank, Reiatsu DC + key attribute | ☐ | |
 
@@ -168,10 +168,10 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 
 | # | Spirit / rung | Lvl | What must happen | Status | Notes |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| S-01 | **Senbonzakura** — Shikai Form | 1 | Strikes gain **reach 15**, lose two-hand and twin, hands empty, **ignore cover** between you and target | ❌ | **SB-6.** `Senbonzakura — Shikai` grants `Effect: Senbonzakura — Shikai` at **level 1, unlimited duration, no predicate**. reach-15 and `soulbound:senbonzakura:scattered` are on while sealed. Also: the effect adds reach but never **removes** two-hand/twin as the guide requires, and cover-ignoring is a roll option nothing consumes |
+| S-01 | **Senbonzakura** — Shikai Form | 1 | Strikes gain **reach 15**, lose two-hand and twin, hands empty, **ignore cover** between you and target | ⚠️ | **SB-6 fixed for the gate.** `reach-15` is absent while sealed and arrives with Release. Still open: the form never **removes** two-hand/twin as the guide requires, and the cover-ignoring clause is a roll option nothing consumes |
 | S-02 | Senbonzakura — Release Technique | 1 | 2 actions, **15-ft emanation**, basic Reflex, 2d6 slashing; area is **difficult terrain for enemies** until start of your next turn; H(+1) +1d6 | ✅ | Cast live at rank 10: 20-ft emanation, basic Reflex **DC 37**, **11d6 slashing** (guide's 11d6 target), 1 Reiatsu Point spent, three enemies auto-targeted, lingering difficult-terrain rider authored |
 | S-03 | Senbonzakura — Refined | 9 | Emanation **20 ft**; crit fail → **off-guard** until start of your next turn | ⚠️ | Area 15→20 at L9 confirmed live. The off-guard-on-crit-fail rider is authored and predicated on `self:feature:refined-release` — not yet driven against a real save |
-| S-04 | **Senbonzakura Kageyoshi** — Bankai | 13 | Second **20-ft emanation** placed within 60 ft; at the start of each of your turns every enemy in **either** takes **5d6** slashing (basic Reflex) | ❌ | **SB-6.** `Senbonzakura Kageyoshi` grants `Effect: Senbonzakura Kageyoshi` unconditionally at L13, and that effect has `rules: []` |
+| S-04 | **Senbonzakura Kageyoshi** — Bankai | 13 | Second **20-ft emanation** placed within 60 ft; at the start of each of your turns every enemy in **either** takes **5d6** slashing (basic Reflex) | ⚠️ | **SB-6 fixed for the gate.** `Effect: Senbonzakura Kageyoshi` now arrives only with Full Release — it was firing its 5d6 `turn-start` emanation permanently from 13th. The emanation itself has not yet been driven |
 | S-05 | Bankai — Sustain / move | 13 | Sustain once per round to move the second emanation up to 30 ft **or** switch mode | ☐ | |
 | S-06 | Bankai — **Gokei** | 13 | Second emanation becomes a **10-ft burst** on one enemy; **double** damage; no cover or concealment against it | ☐ | |
 | S-07 | Bankai — **Senkei** | 13 | 20-ft cage around you and one enemy; neither can leave; your Strikes vs. it ignore **all** resistances; **one extra Strike each round at current MAP**; **you lose reach and cover-ignoring**; can't target anyone outside | ☐ | |
@@ -443,36 +443,42 @@ The repeatable setup is `Docs/tools/foundry-live-session.md` and `build/live-ses
 | **SB-9** | S-02 | cosmetic | A Refined technique's card still quotes its pre-Refined area |
 | **SB-1** | C-19 | not reproduced | The reported Reiatsu cap of 2 |
 
-### SB-6 — the release ladder is inert *(blocker)*
+### SB-6 — the release ladder is never entered *(blocker)*
 
 The class's spine, and the thing all fifteen Spirits hang off.
 
-- **`Release`** (`content/soulbound-class-features/actions/release.json`) has `rules: []` and no module
-  flags. It is a chat card and nothing else.
-- **`Release.enter()` / `Release.exit()`** in `scripts/soulbound/release.mjs` are called from
-  **nowhere**. The only hook the module registers for them is `deleteCombat`, which calls `exit`. The
-  state is never entered, only left.
-- **`Effect: Released`** exists in the pack with `rules: []` and is never applied to anybody.
-- Because nothing gates on a release state, each Spirit's Released Form is granted **permanently, at
-  1st level, with unlimited duration** instead. `Senbonzakura — Shikai` has exactly one rule,
-  `GrantItem → Effect: Senbonzakura — Shikai`, and that effect's `ItemAlteration` adds `reach-15` to
-  the spirit weapon **with no predicate at all**. A sealed 1st-level Senbonzakura has 15-foot reach.
-- The same pattern grants **`Effect: Full Release` unconditionally at 13th** and **`Effect:
-  Senbonzakura Kageyoshi` unconditionally at 13th**. Both effects have `rules: []` — so the Bankai is
-  permanently "on" and does nothing at all.
+**The effects themselves are authored, and well.** `Effect: Full Release` carries the whole fear
+emanation as a rider — 15-foot emanation, `turn-end`, Will save at the Reiatsu DC, frightened 1,
+frightened 2 on a critical failure, and `Effect: Steeled Against Pressure` on a success for the
+10-minute immunity. `Effect: Senbonzakura Kageyoshi` carries the Bankai's 5d6 `turn-start` emanation.
+`Effect: Greater Flash Step` carries the DC 5 flat check. None of that is missing.
+
+**What is missing is the gate.**
+
+- **`Release`** (`content/soulbound-class-features/actions/release.json`) had `rules: []` and no module
+  flags. It was a chat card and nothing else.
+- **`Release.enter()`** in `scripts/soulbound/release.mjs` was called from **nowhere**. The only hook
+  registered for the ladder was `deleteCombat`, which calls `exit`. The state was never entered, only
+  left. `Blut.set()`, and every function in `modes.mjs`, `charges.mjs` and `hypnosis.mjs`, had the same
+  problem: written, unit-tested, exported on the module API, and never called.
+- So each Spirit's Released Form was granted **permanently, at 1st level, with unlimited duration**
+  instead. `Senbonzakura — Shikai` had one rule, `GrantItem → Effect: Senbonzakura — Shikai`, and that
+  effect's `ItemAlteration` adds `reach-15` with no predicate at all. **A sealed 1st-level
+  Senbonzakura had 15-foot reach.**
+- The same pattern granted `Effect: Full Release` and `Effect: Senbonzakura Kageyoshi` unconditionally
+  at 13th. This is worse than doing nothing: `turn-start` and `turn-end` riders fire from
+  `pf2e.startTurn` / `pf2e.endTurn` for any item on the actor, so **a 13th-level Soulbound was dealing
+  the Bankai's 5d6 emanation at the start of every turn and projecting the fear aura at the end of
+  every enemy turn — permanently, for free, with no Full Release ever declared.**
 - A `grep` across `content/soulbound-*` finds **no predicate anywhere** referencing a release state.
-- `Modes`, `Charges` and `Hypnosis` — the state machines for Gokei/Senkei, Zanka no Tachi's four
-  aspects, Hyōrinmaru's petal-flowers and Kyōka Suigetsu's hypnosis — register **no hooks at all** and
-  are reachable only from `game.modules.get("isaacs-hb-pf2e").api`.
+
+Genuinely unwritten, beyond the gate: Full Release's **damage-die step**, its **"the Release Technique
+costs nothing, once per round"** clause, and the **fatigue** when it ends.
 
 **Why the rig missed it.** `rig.mjs` asserts that items *arrive* — `hasFeature(actor, "Full Release")`,
 `full.system.frequency.max === 1`. Arriving is exactly what these do. The rig never performs an action.
 
-**The fix is a design decision, not a patch**, because it sets the pattern for all fifteen Spirits: the
-Released-Form effects have to move off the class features and onto the `Release` action (a `riders`
-entry with `event: "action-used"` — the machinery `Pressure Flare` and `Seal the Art` already use),
-`Effect: Released` and `Effect: Full Release` need their rules written, and every Release Technique
-needs a requirement predicated on the state. **Worth agreeing the shape before building it.**
+**Fix, decided 14 Sep 2026: wire it properly.** In progress — see §12.
 
 ### SB-7 — Refined Release widens the wrong things
 
@@ -579,3 +585,59 @@ The world's own `quincy` (level 20, The Miracle) reads `max 3, cap 3` both befor
 
 **Recurrence guard, regardless:** the rig asserts `focus.cap` and never `focus.max`, which is why a bug
 in exactly this place could ship. C-19 stays ⚠️ until the rig asserts `max` as well.
+
+---
+
+## 12 — SB-6, in progress
+
+**Decided 14 Sep 2026: wire it properly.**
+
+### Done and verified live
+
+- **`scripts/soulbound/actions.mjs`** — the missing bridge. One `createChatMessage` listener, guarded by
+  the riders pipeline's own `isAbilityUse`, routing a used item to a handler **by slug**. `Release` and
+  `Full Release` are wired; `Blut`, the mode switches and the charge spends are the same shape and are
+  next.
+- **`Release.release()` / `Release.fullRelease()`** — the two actions, with the requirements the sheet
+  cannot express: sealed-or-not, the free-first-per-encounter ledger, the 1-point cost afterwards, and
+  a refusal when the pool cannot pay.
+- **`formEffectsFor()`** — content declares what it wears, code never learns fifteen names:
+
+  ```json
+  "flags": { "isaacs-hb-pf2e": { "releaseForm": {
+      "rung": "released", "effect": "Effect: Senbonzakura — Shikai" } } }
+  ```
+
+  All **thirty** Spirit form features converted (15 at 1st, 15 at 13th); each lost its unconditional
+  `GrantItem` and gained the flag. Their other grants — a Bankai's extra Techniques, Zangetsu's
+  `never-sealed` roll option — are untouched.
+- **`applyFullReleaseShape()`** — `fullReleaseShape(level)` is now stamped onto the effect as it is
+  created, so 17th level gets 2 minutes and a 20-foot emanation from the one pure function the rig
+  already asserts against. The emanation lives in rider flags, where an `ItemAlteration` cannot reach.
+- **`Effect: Full Release`** gained the **damage-die step** it never had, predicated on
+  `not soulbound:full-release:no-die-step`, which **`Effect: Tensa Zangetsu`** now sets — guide §7A's
+  "your damage die does **not** increase".
+- **Fatigue on end**, via `deleteItem`, suppressed by `Perfected Full Release` read off the sheet.
+- **Zangetsu is never sealed** — `combatStart` releases any actor carrying
+  `soulbound:release:never-sealed`, spending the free first Release rather than a point.
+
+The live trace, on a fresh 13th-level Senbonzakura:
+
+| | state | spirit weapon | effects |
+| :-- | :-- | :-- | :-- |
+| sealed | `sealed` | 1d8, two-hand-d10 — **no reach-15** | — |
+| after **Release** | `released` | **reach-15** | Released, Senbonzakura — Shikai |
+| after **Full Release** | `full` | **1d10**, two-hand-**d12** | + Full Release, Senbonzakura Kageyoshi |
+| when it ends | `released` | back to 1d8 | **fatigued** |
+
+At 17th: 2 minutes, 20-foot emanation, **no fatigue**. Re-sealing and Releasing again costs 1 point
+(3→2); a third Release on an empty pool is refused and the character stays sealed.
+
+### Still open under SB-6
+
+| | |
+| :-- | :-- |
+| C-35 | "Your Release Technique costs no Reiatsu Points, but only once per round" is still unwritten |
+| — | Release Techniques are not yet **gated** on being released (guide §4.7 says they need it) |
+| — | `Blut.set()`, `Modes`, `Charges` and `Hypnosis` still have no caller — same bridge, more handlers |
+| C-36 | The fear emanation is applied at the right time now, but its save has not been driven live |

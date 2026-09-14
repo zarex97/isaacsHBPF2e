@@ -79,7 +79,26 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [],
+        "rules": [
+            {
+                "domain": "all",
+                "key": "RollOption",
+                "option": "soulbound:full-release",
+                "value": true
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "mode": "upgrade",
+                "predicate": [
+                    "item:tag:soulbound-spirit-weapon",
+                    {
+                        "not": "soulbound:full-release:no-die-step"
+                    }
+                ],
+                "property": "damage-dice-faces"
+            }
+        ],
         "start": {
             "initiative": null,
             "value": 0

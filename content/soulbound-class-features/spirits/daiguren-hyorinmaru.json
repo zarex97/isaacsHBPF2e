@@ -1,4 +1,12 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "releaseForm": {
+                "effect": "Effect: Daiguren Hyōrinmaru",
+                "rung": "full"
+            }
+        }
+    },
     "folder": "Spirits",
     "img": "icons/magic/water/snowflake-ice-swirl-blue.webp",
     "name": "Daiguren Hyōrinmaru",
@@ -25,10 +33,6 @@
             "title": "Isaac's Homebrew: The Soulbound"
         },
         "rules": [
-            {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Daiguren Hyōrinmaru"
-            },
             {
                 "key": "GrantItem",
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-techniques.Item.Sennen Hyōrō"

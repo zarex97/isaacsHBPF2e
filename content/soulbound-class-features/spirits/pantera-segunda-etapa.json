@@ -1,4 +1,12 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "releaseForm": {
+                "effect": "Effect: Pantera — Segunda Etapa",
+                "rung": "full"
+            }
+        }
+    },
     "folder": "Spirits",
     "img": "icons/creatures/abilities/paw-print-pair-blue-large.webp",
     "name": "Pantera — Segunda Etapa",
@@ -24,12 +32,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [
-            {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Pantera — Segunda Etapa"
-            }
-        ],
+        "rules": [],
         "traits": {
             "otherTags": [
                 "soulbound-feature"
