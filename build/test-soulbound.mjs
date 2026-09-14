@@ -348,10 +348,20 @@ check("Released Form grants the Release action and is not itself one", releaseAc
 
 const pressure = contentDoc("soulbound-effects/effect-full-release.json");
 const emanation = pressure.flags["isaacs-hb-pf2e"].riders[0];
+// It used to be a `turn-end` **area rider**, which fires when the CASTER's turn ends and sweeps whoever
+// is standing there then. The guide says "an enemy that ends ITS turn in the emanation" — a per-creature
+// trigger — and pf2e has an `Aura` for exactly that. Making it one is also what makes `Twin Pressure`
+// expressible: that feat adds "enter" to the events list and nothing else.
+const pressureAura = pressure.system.rules.find((r) => r.key === "Aura" && r.slug === "soulbound-pressure");
 check(
-    "the pressure emanation is a turn-end area rider on the Reiatsu DC (guide §4.8)",
-    [emanation.event, emanation.area.value, emanation.apply.type, emanation.apply.statistic, emanation.apply.dc],
-    ["turn-end", 15, "save", "will", "reiatsu"],
+    "the pressure emanation is a real aura, caught per creature at the end of ITS turn (guide §4.8)",
+    [pressureAura?.radius, pressureAura?.effects[0].affects, pressureAura?.effects[0].events],
+    [15, "enemies", ["turn-end"]],
+);
+check(
+    "and its save is an aura-tick rider on the Reiatsu DC",
+    [emanation.event, emanation.apply.type, emanation.apply.statistic, emanation.apply.dc],
+    ["aura-tick", "save", "will", "reiatsu"],
 );
 check(
     "a creature that succeeds is made immune for 10 minutes rather than asked again",
@@ -1712,8 +1722,10 @@ check("Thunderbolt Form's aura is a basic Reflex too (guide §7C)",
  * These pin the shape of the content rather than the engine, because the engine change is one line and
  * the thing that will drift is a seventh aura authored to the same pattern.
  */
+// Effect: Full Release is no longer in this list: its emanation was promoted to a real pf2e `Aura`,
+// which catches per creature at the end of ITS turn rather than sweeping at the caster's. The five
+// below are still area riders and still have to say who they catch.
 const AURAS = [
-    ["soulbound-effects/effect-full-release.json", "turn-end", 15],
     ["soulbound-effects/effect-senbonzakura-kageyoshi.json", "turn-start", 20],
     ["soulbound-effects/effect-zanka-no-tachi.json", "turn-start", 30],
     ["soulbound-effects/effect-minami.json", "turn-end", 20],
@@ -1946,6 +1958,64 @@ check("Zanjutsu: Hakuda grants a 1d6 agile finesse nonlethal fist (guide §8.3)"
 // Rising Tide can only be known where the grant happens, which is why it sat unread.
 check("Rising Tide is paid out by Rising Pressure itself",
     fs.readFileSync(path.join(ROOT, "scripts/soulbound/rising-pressure.mjs"), "utf8").includes("rising-tide"),
+    true);
+
+
+/**
+ * `Twin Pressure` (feat 14) could not have been written as content at all: the events list belongs to
+ * an effect the feat does not own. It is stamped onto `Effect: Full Release` as that effect is created,
+ * beside the Perfected radius — the same answer as `applyFullReleaseShape` gives the duration.
+ */
+check("Twin Pressure is applied where the aura is built, not from the feat",
+    fs.readFileSync(path.join(ROOT, "scripts/soulbound/release.mjs"), "utf8").includes("twin-pressure"),
+    true);
+check("and the aura's default trigger is turn-end alone",
+    pressureAura.effects[0].events, ["turn-end"]);
+
+
+/**
+ * SB-22. `Actor#increaseCondition` is additive — `Math.clamp(currentValue + addend, 1, max)` — and the
+ * Full Release aura, ticking each round, walked a creature to **frightened 8** from a class whose
+ * highest printed value is 2.
+ *
+ * Sixty durationless condition riders exist across both classes and **fifty-seven** read as "become X":
+ * stunned 2, prone, blinded, doomed 1. The three that genuinely accumulate — two Pisces skies and an
+ * Aquarius one — all declare a `max`, so `max` is the signal, and no content file had to change.
+ */
+const conditionRiders = [];
+(function walk(dir) {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) { walk(full); continue; }
+        if (!entry.name.endsWith(".json") || entry.name === "_folders.json") continue;
+        const doc = JSON.parse(fs.readFileSync(full, "utf8"));
+        const visit = (riders) => {
+            if (!Array.isArray(riders)) return;
+            for (const r of riders) {
+                const ap = r?.apply;
+                if (!ap || typeof ap !== "object") continue;
+                if (ap.type === "condition" && !r.duration) {
+                    conditionRiders.push({ name: doc.name, slug: ap.slug, value: ap.value, max: ap.max });
+                }
+                for (const key of ["riders", "onHit", "onAllHit", "options"]) visit(ap[key]);
+            }
+        };
+        visit(doc.flags?.["isaacs-hb-pf2e"]?.riders);
+    }
+})(path.join(ROOT, "content"));
+
+check("only the riders that declare a `max` accumulate; every other one means \"become X\"",
+    conditionRiders.filter((r) => r.max).map((r) => `${r.name}: ${r.slug} ${r.value}/${r.max}`).sort(),
+    ["Sky: Ascendant (Aquarius): slowed 1/4",
+     "Sky: Ascendant (Pisces): enfeebled 1/4",
+     "Sky: Zenith (Pisces): enfeebled 1/4"]);
+
+check("the Full Release aura's frightened is not one of them",
+    conditionRiders.filter((r) => r.slug === "frightened").every((r) => !r.max), true);
+
+check("and the engine sets rather than adds when no max is declared",
+    fs.readFileSync(path.join(ROOT, "scripts/riders/apply.mjs"), "utf8")
+        .includes("set to at least the value, never above what is already there"),
     true);
 
 report("Soulbound tests");

@@ -40,21 +40,13 @@
                         "statistic": "will",
                         "type": "save"
                     },
-                    "area": {
-                        "type": "emanation",
-                        "value": 15
-                    },
-                    "areaTargeting": {
-                        "affects": "enemies",
-                        "includesSelf": false
-                    },
-                    "event": "turn-end",
+                    "event": "aura-tick",
+                    "note": "Crushing spiritual pressure. The Aura above decides who is caught and when.",
                     "predicate": [
                         {
                             "not": "rider:target:effect:steeled-against-pressure"
                         }
-                    ],
-                    "self": true
+                    ]
                 }
             ]
         }
@@ -101,6 +93,26 @@
             {
                 "key": "GrantItem",
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Unbound Technique"
+            },
+            {
+                "effects": [
+                    {
+                        "affects": "enemies",
+                        "events": [
+                            "turn-end"
+                        ],
+                        "removeOnExit": false,
+                        "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Aura Tick"
+                    }
+                ],
+                "key": "Aura",
+                "radius": 15,
+                "slug": "soulbound-pressure",
+                "traits": [
+                    "emotion",
+                    "fear",
+                    "mental"
+                ]
             }
         ],
         "start": {

@@ -84,7 +84,7 @@ character:
 | C-33 | **Full Release** — cost | 13 | 2 actions, **once per day**, requires released form **and ≥1 Reiatsu Point** | ✅ | **SB-6 fixed.** The L13 feature no longer grants the effect; the action does, and it refuses when sealed or when the pool is empty. pf2e's own `frequency` still counts the daily use |
 | C-34 | Full Release — die step | 13 | Spirit weapon damage die +1 step | ✅ | **SB-6 fixed.** `Effect: Full Release` now carries the `damage-dice-faces` upgrade. Live: 1d8 / `two-hand-d10` → **1d10 / `two-hand-d12`**, and back when it ends. Predicated on `not soulbound:full-release:no-die-step`, which `Effect: Tensa Zangetsu` sets |
 | C-35 | Full Release — free technique | 13 | Release Technique costs nothing, **once per round** | ✅ | **SB-6 fixed.** `Unbound Technique` — an action granted by `Effect: Full Release`, frequency 1/round. Live: the card reads *"Unbound Technique paid for Senbonzakura — no Focus Point spent. 0 left"*, the pool does not move, and the next use is refused |
-| C-36 | Full Release — pressure emanation | 13 | **15-ft emanation**; enemy ending its turn there: Will vs. Reiatsu DC or **frightened 1** (2 on crit fail); success = immune 10 min | ✅ | **SB-15 fixed.** Driven live at 13th: four enemies each rolled Will at **DC 27** at the end of their turns, frightened landed, and later saves in the same round show *Frightened 1 −1* and *Frightened 2 −2* applying. The caster is untouched |
+| C-36 | Full Release — pressure emanation | 13 | **15-ft emanation**; enemy ending its turn there: Will vs. Reiatsu DC or **frightened 1** (2 on crit fail); success = immune 10 min | ✅ | **SB-15 and SB-22 fixed, and promoted to a real aura.** It was a `turn-end` *area rider*, which sweeps whoever stands there when the **caster's** turn ends; the guide says an enemy that ends **its** turn in it. It is a pf2e `Aura` now, radius 15 (20 Perfected), enemies only. Live: the ghoul ended its turn and came out **frightened 2** |
 | C-37 | Full Release — end state | 13 | **Fatigued** until 10 minutes' rest; no second use that day | ✅ | **SB-6 fixed.** A `deleteItem` hook drops the rung and applies **fatigued** when `Effect: Full Release` goes, by timer or by hand. Verified live at L13 |
 | C-38 | **Perfected Full Release** | 17 | 2 minutes, **no fatigue**, emanation 20 ft | ✅ | **SB-6 fixed.** `fullReleaseShape` is now stamped onto the effect as it is created. Live at L17: duration **2 minutes**, rider emanation **20 ft**, and **no fatigue** when it ends |
 | C-39 | **Unsealed** | 19 | Full Release **twice per day**; immune to fear while in it; first crit each round with the spirit weapon refunds 1 point **ignoring the per-encounter cap** | ❌ | **SB-6.** Frequency does rise to 2/day on the feat, but there is no daily use to spend |
@@ -353,7 +353,7 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | # | Feat | Lvl | What must happen | Status | Notes |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | F-46 | **Instant Full Release** | 14 | Full Release costs **1 action** | ✅ | **SB-17 fixed.** Live: adding the feat takes Full Release from **2 actions to 1**. Its `action-cost` alteration named a property pf2e has no handler for, so the feat's whole text did nothing |
-| F-47 | **Twin Pressure** | 14 | The Full Release emanation's Will save also applies to enemies that **enter** it | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-47 | **Twin Pressure** | 14 | The Full Release emanation's Will save also applies to enemies that **enter** it | ✅ | **SB-20 fixed.** Live: with the feat the aura's events become `["enter", "turn-end"]`; without it, `["turn-end"]`. It could not have been written as content — the events list belongs to an effect the feat does not own — so it is stamped on where the aura is built |
 | F-48 | **Vollständig Endurance** **[Q]** | 14 | No fatigue when Vollständig ends; spend 1 point to extend by 1 round, **up to three times** | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
 | F-49 | **Unbroken Chain** | 16 | While released, spend 1 point to stay at **1 HP** instead of 0; **once per day** | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
 | F-50 | **Reiatsu Flood** | 16 | Rising Pressure's **per-encounter cap +1** | ✅ | Always worked: `capFor()` in `rising-pressure.mjs` reads the feat **by slug**, which is why it was the one apparently-inert feat that was not |
@@ -1033,3 +1033,48 @@ Three decisions worth stating, because none of them is in the JSON:
 - **The register is keyed by actor UUID**, so two tokens of one linked actor share a window. For a
   linked actor that is the same creature, which is right; it is written down here because it is a
   choice, not an accident.
+
+---
+
+## 21 — SB-22: "become frightened 1" was adding one every round
+
+The Full Release aura ticked each round and walked a creature to **frightened 8**, from a class whose
+highest printed value is 2.
+
+`Actor#increaseCondition` is additive:
+
+```ts
+const addend = value ?? 1;
+return Math.clamp(currentValue + addend, 1, max);
+```
+
+and every durationless condition rider went through it. **Sixty** such riders exist across both
+classes, and **fifty-seven** read as *become X* — stunned 2, prone, blinded, doomed 1, frightened 1.
+The three that genuinely accumulate (two Pisces skies and an Aquarius one) all declare a **`max`**,
+which is the existing signal for "cumulative to N" — so that is what now distinguishes them, and **no
+content file had to change**.
+
+A durationless condition rider now sets the condition to at least its value and never above what is
+already there; one that declares a `max` still accumulates as before. This is a shared-engine change
+and it touches the Saint too, in the same direction: *stunned 2* applied twice is stunned 2, not
+stunned 4.
+
+## 22 — The pressure emanation is an aura now
+
+Fixing `Twin Pressure` meant fixing something underneath it. The Full Release's fear emanation was a
+`turn-end` **area rider**, which fires when the **caster's** turn ends and sweeps whoever is standing
+in the area at that moment. The guide says:
+
+> An enemy that **ends its turn** in the emanation must succeed at a Will save…
+
+— a per-creature trigger, which is what pf2e's `Aura` rule element is for. It is one now: radius 15
+(20 with Perfected Full Release), `affects: "enemies"`, granting the module's own `Effect: Aura Tick`,
+with the save carried by an `aura-tick` rider.
+
+That also makes **`Twin Pressure`** a single word — `events: ["enter", "turn-end"]` — where before it
+was a `RollOption` nothing read and could not have been written as content at all, because the events
+list belongs to an effect the feat does not own. It is stamped on where the aura is built, beside the
+Perfected radius.
+
+**Live at 17th:** radius 20 without the feat and `["turn-end"]`; with it, `["enter", "turn-end"]`. In
+combat, the ghoul ended its turn inside and came out **frightened 2**.

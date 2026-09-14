@@ -99,13 +99,31 @@ export function fullReleaseShape(level) {
  * near-identical effects and predicate between them, the one effect is adjusted as it is created, from
  * the same pure function the rig already asserts against. One source of truth for three tiers.
  */
-function applyFullReleaseShape(source, level) {
+function applyFullReleaseShape(source, level, actor = null) {
     const shape = fullReleaseShape(level);
     if (shape.minutes === 0) return source;
 
     source.system.duration = { ...source.system.duration, unit: "minutes", value: shape.minutes };
     for (const rider of source.flags?.[MODULE_ID]?.riders ?? []) {
         if (rider.area?.type === "emanation") rider.area.value = shape.emanation;
+    }
+
+    /**
+     * The pressure emanation is a pf2e `Aura`, so its radius and its trigger live in a rule element.
+     *
+     * Perfected Full Release widens it to 20 feet, and `Twin Pressure` (feat 14) is a single word:
+     *
+     * > While in a Full Release, the emanation's Will save also applies to enemies that **enter** it,
+     * > not only those who end their turn in it. — guide §8.5
+     *
+     * That feat had a `RollOption` nothing read, and could not have been written as content: the events
+     * list belongs to an effect the feat does not own.
+     */
+    const twinPressure = actor?.itemTypes?.feat?.some((f) => f.system?.slug === "twin-pressure");
+    for (const rule of source.system?.rules ?? []) {
+        if (rule.key !== "Aura" || rule.slug !== "soulbound-pressure") continue;
+        rule.radius = shape.emanation;
+        if (twinPressure) rule.effects = rule.effects.map((e) => ({ ...e, events: ["enter", "turn-end"] }));
     }
     return source;
 }
@@ -139,7 +157,7 @@ export const Release = {
             // it poisons the cached pack for the rest of the session. Clone before anything touches it.
             if (doc) sources.push(foundry.utils.deepClone(doc.toObject()));
         }
-        if (state === "full") for (const source of sources) applyFullReleaseShape(source, actor.level);
+        if (state === "full") for (const source of sources) applyFullReleaseShape(source, actor.level, actor);
         if (sources.length > 0) await actor.createEmbeddedDocuments("Item", sources);
         await actor.setFlag(MODULE_ID, "releaseState", state);
 
