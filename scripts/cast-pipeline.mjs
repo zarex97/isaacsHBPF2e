@@ -1,4 +1,5 @@
 import { FreeCast } from "./economy/free-cast.mjs";
+import { Charges } from "./soulbound/charges.mjs";
 import { Release } from "./soulbound/release.mjs";
 import { wrap } from "./lib/wrap.mjs";
 import { configFor } from "./targeting/config.mjs";
@@ -50,6 +51,9 @@ export const CastPipeline = {
         // Before the allowance is spent, not after: `Release.beforeCast` reads the same frequency that
         // `FreeCast` decrements, and the Soulbound's once-per-round cap is a refusal rather than a price.
         if (!Release.beforeCast(spell)) return false;
+        // A Technique that spends from a charge pool is refused when the pool is empty, rather than cast
+        // and then quietly not charged. Hyōrinmaru's three petal-flowers are the case.
+        if (!(await Charges.beforeCast(spell))) return false;
         await FreeCast.beforeCast(spell, options);
         return true;
     },

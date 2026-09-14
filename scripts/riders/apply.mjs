@@ -285,6 +285,8 @@ async function applyOne(rider, context) {
             return;
         case "save":
             return applySave(rider, context);
+        case "charge":
+            return applyCharge(rider, context);
         case "damage":
             return applyDamageRider(rider, context);
         case "death":
@@ -1582,6 +1584,28 @@ export function basicLadder(spec) {
             outcomes: [outcome],
             apply: multiplier === 1 ? { ...apply } : { ...apply, multiplier },
         }));
+    });
+}
+
+/**
+ * Spend from a charge pool.
+ *
+ * The other half of `Charges.beforeCast`. A Technique that is *cast* is refused before it resolves if
+ * the pool is empty; a Technique that is a **reaction** never passes through `cast` at all —
+ * Zanhyō Ningyō is triggered by damage landing on you — so its spend rides on the prompt being
+ * accepted, as a rider beside the one that summons the doll.
+ *
+ * Always spends from the ORIGIN's pool, not the target's: the petal-flowers are the Bankai's, and a
+ * rider resolving against an enemy must not look for a pool on them.
+ */
+async function applyCharge(rider, context) {
+    const { Charges } = await import("../soulbound/charges.mjs");
+    const actor = context.originActor;
+    const { effect, spend = 1, perRound = 1 } = rider.apply;
+    if (!actor || !effect) return;
+    await Charges.spend(actor, effect, {
+        spending: Number(spend),
+        perRound: perRound === null ? Infinity : Number(perRound),
     });
 }
 

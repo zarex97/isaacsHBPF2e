@@ -1792,4 +1792,58 @@ applyActionCosts(cheaper);
 check("and a declaration never raises a cost that is already lower",
     cheaper.items[1].system.time.value, "1");
 
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  Charge pools — the third machine with no caller                                                 */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * `charges.mjs` could spend and refresh a pool since Phase 3, and nothing ever called it. The counter
+ * badges were authored — Hyōrinmaru's three petal-flowers, Los Lobos' eight wolves — and simply never
+ * moved: all three petal Techniques were usable every round, for ever, which is three times the damage
+ * the Bankai is costed for with nothing on the sheet to show it.
+ *
+ * Two entry points now, matching the two ways an ability reaches the table. A Technique that is **cast**
+ * is refused before it resolves (`Charges.beforeCast`, in the cast pipeline beside the release gate); a
+ * Technique that is a **reaction** never passes through `cast`, so its spend is a `charge` rider on the
+ * prompt being accepted.
+ */
+const { Charges } = await import("../scripts/soulbound/charges.mjs");
+
+const pool = contentDoc("soulbound-effects/effect-daiguren-hyorinmaru.json");
+check("the petal-flowers are a counter of three (guide §7A)",
+    [pool.system.badge.type, pool.system.badge.value, pool.system.badge.max], ["counter", 3, 3]);
+check("and they only come back once Perfected Full Release is on the sheet",
+    pool.flags["isaacs-hb-pf2e"].chargeRefresh,
+    { regain: 1, requires: "feature:perfected-full-release" });
+
+// Los Lobos regains a wolf every turn from 13th, with no Perfected clause at all — the same machine,
+// a different schedule, said in content rather than in code.
+check("Los Lobos' wolves regain one a turn from 13th, unconditionally (guide §7B)",
+    contentDoc("soulbound-effects/effect-colmillo.json").flags["isaacs-hb-pf2e"].chargeRefresh,
+    { regain: 1 });
+
+for (const slug of ["sennen-hyoro", "hyoryu-senbi"]) {
+    check(`${slug} spends one petal-flower, once per round`,
+        Charges.declarationOn(techDoc(slug)), { effect: "Effect: Daiguren Hyōrinmaru", spending: 1, perRound: 1 });
+}
+check("Zanhyō Ningyō is a reaction, so its spend rides on the prompt instead",
+    techDoc("zanhyo-ningyo").flags["isaacs-hb-pf2e"].riders[0].apply.riders
+        .some((r) => r.apply.type === "charge" && r.apply.effect === "Effect: Daiguren Hyōrinmaru"),
+    true);
+check("and it is still a reaction, not a cast", techDoc("zanhyo-ningyo").system.time.value, "reaction");
+
+
+/**
+ * SB-18. `Effect: Daiguren Hyōrinmaru` declared `min: 0` for its three petal-flowers and carried
+ * `labels: ["1","2","3"]` beside it. pf2e nulls the minimum of a labelled counter, treats it as 1, and
+ * **deletes the effect** when a change would take the value below it — so spending the third petal did
+ * not empty the pool, it deleted the Bankai, taking the fly Speed, the cold resistance and the host of
+ * all three petal Techniques with it. Reproduced live: the effect was simply gone.
+ */
+check("the petal-flowers can be spent down to none without deleting the Bankai",
+    [pool.system.badge.min, pool.system.badge.labels], [0, undefined]);
+check("Los Lobos' wolves were already right, and stay right",
+    contentDoc("soulbound-effects/effect-colmillo.json").system.badge.min, 0);
+
 report("Soulbound tests");

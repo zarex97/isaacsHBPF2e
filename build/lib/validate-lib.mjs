@@ -136,6 +136,41 @@ export function validate(packs, { errors }) {
     validateActionsAreReachable(packs, errors);
     validateSlugPredicates(packs, errors);
     validateAlterationProperties(packs, errors);
+    validateCounterBadges(packs, errors);
+}
+
+/**
+ * A counter badge that is meant to reach zero must not carry `labels`.
+ *
+ * pf2e's `EffectPF2e#_preUpdate` nulls `min` and `max` the moment a counter has labels, then treats the
+ * minimum as **1** and — this is the part that bites — **deletes the effect** when a change would take
+ * the value below it:
+ *
+ *     const minValue = badgeWithoutOperators.min ?? 1;
+ *     if (this.actor && currentValue < minValue) { await this.actor.deleteEmbeddedDocuments(...); }
+ *
+ * `Effect: Daiguren Hyōrinmaru` declared `min: 0` for its three petal-flowers and carried
+ * `labels: ["1","2","3"]` beside it. Spending the third petal did not empty the pool, it **deleted the
+ * Bankai** — the fly Speed, the cold resistance and the host of all three petal Techniques with it.
+ *
+ * So `min: 0` and `labels` together are always a contradiction, and this says which one the author meant
+ * rather than guessing. A labelled counter with `min: 1` is a different thing and is left alone: those
+ * name their states, and zero of them is not a state.
+ */
+function validateCounterBadges(packs, errors) {
+    for (const { docs } of packs) {
+        for (const { file, doc } of docs) {
+            const badge = doc.system?.badge;
+            if (badge?.type !== "counter") continue;
+            if (badge.min === 0 && Array.isArray(badge.labels) && badge.labels.length > 0) {
+                errors.push(
+                    `${rel(file)}: a counter badge with \`min: 0\` must not carry \`labels\` — pf2e nulls `
+                    + "the minimum for a labelled counter, treats it as 1, and DELETES the effect when the "
+                    + "value would go below it. Drop the labels, or say `min: 1`.",
+                );
+            }
+        }
+    }
 }
 
 /**
@@ -435,7 +470,7 @@ const DURATION_UNITS = new Set(["rounds", "minutes", "hours", "days", "unlimited
 const RIDER_TYPES = new Set([
     "condition", "effect", "prompt", "choice", "save", "damage", "persistent-damage", "death", "teleport",
     "strikes", "banish", "heal", "readout", "toggle", "counteract", "encasement", "escape",
-    "equip", "reaction", "flat-check",
+    "equip", "reaction", "flat-check", "charge",
 ]);
 const RIDER_EVENTS = new Set([
     "save-rolled", "strike-resolved", "strike-received", "action-used", "damage-applied",
@@ -943,6 +978,16 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
             break;
         case "prompt":
             if (!apply.text) errors.push(`${at} prompt riders need text — it is the only thing they do`);
+            break;
+        case "charge":
+            // Hyōrinmaru's petal-flowers, Los Lobos' wolves, Gerard's Miracle points: a pool held as a
+            // counter badge on an effect, named here because only the item knows which pool it draws on.
+            if (typeof apply.effect !== "string" || !apply.effect.startsWith("Effect: ")) {
+                errors.push(`${at} charge riders name the charge-bearing effect — got "${apply.effect}"`);
+            }
+            if (apply.spend !== undefined && !(Number(apply.spend) > 0)) {
+                errors.push(`${at} a charge rider spends at least one — got "${apply.spend}"`);
+            }
             break;
         case "strikes":
             // A volley visits every confirmed target in order, so it must be a `self` rider — a per-target

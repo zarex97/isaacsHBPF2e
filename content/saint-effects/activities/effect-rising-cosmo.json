@@ -10,7 +10,7 @@
                 "+3"
             ],
             "max": 3,
-            "min": 0,
+            "min": 1,
             "type": "counter",
             "value": 1
         },

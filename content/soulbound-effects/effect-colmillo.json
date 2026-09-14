@@ -1,7 +1,20 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "chargeRefresh": {
+                "regain": 1
+            }
+        }
+    },
     "img": "icons/creatures/abilities/wolf-howl-moon-grey-large.webp",
     "name": "Effect: Colmillo",
     "system": {
+        "badge": {
+            "max": 8,
+            "min": 0,
+            "type": "counter",
+            "value": 8
+        },
         "description": {
             "value": "<p>Eight spirit wolves stand in the squares around you. The badge counts them; you regain one at the start of each of your turns.</p>"
         },
@@ -33,12 +46,6 @@
             "value": [
                 "soulbound"
             ]
-        },
-        "badge": {
-            "max": 8,
-            "min": 0,
-            "type": "counter",
-            "value": 8
         }
     },
     "type": "effect"
