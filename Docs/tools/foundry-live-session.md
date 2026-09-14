@@ -81,9 +81,26 @@ await api.rig.run({ lineage: "Soul Reaper", spirit: "Senbonzakura" });
 api.rig.clearResolver();
 ```
 
-**Always install the ChoiceSet resolver before creating or levelling a Soulbound.** The class opens a
-`PickAThingPrompt` for the spirit-weapon profile, the Lineage, the Spirit and every chosen kidō, and
-each one blocks the levelling `await` indefinitely.
+**Always install the ChoiceSet resolver before creating or levelling a Soulbound, and keep it installed
+for as long as you keep changing the level.** The class opens a `PickAThingPrompt` for the spirit-weapon
+profile, the Lineage, the Spirit and every chosen kidō, and each one blocks the levelling `await`
+indefinitely. `rig.run` cleans up its own resolver, so a later `actor.update({level: 9})` outside it hits
+"Kidō Learned (9th)" with nobody answering and the job simply stops — with no error, which reads exactly
+like a hang. If one is already standing:
+
+```js
+[...foundry.applications.instances.values()]
+    .find(a => a.constructor.name === "PickAThingPrompt")
+    ?.element.querySelector("button[data-choice]")?.click();
+```
+
+**Reset the release ledger before measuring anything that Releases repeatedly.** The first Release each
+encounter is free and the next costs a Reiatsu Point, so after a dozen scripted cycles `release()` starts
+returning `false` on an empty pool — correct behaviour that reads as a broken ladder:
+
+```js
+await actor.update({ "flags.isaacs-hb-pf2e.releaseLedger": { encounter: null, releases: 0 } });
+```
 
 ## 6. Rebuilding content mid-session
 
