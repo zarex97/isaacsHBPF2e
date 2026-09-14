@@ -49,6 +49,30 @@
             {
                 "key": "GrantItem",
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Don the Other Face"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    "soulbound-borrowed:soul-reaper"
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-kido.Item.Shō — Thrust"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    "soulbound-borrowed:hollow"
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-kido.Item.Bala"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    "soulbound-borrowed:quincy"
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-kido.Item.Heizen"
             }
         ],
         "traits": {

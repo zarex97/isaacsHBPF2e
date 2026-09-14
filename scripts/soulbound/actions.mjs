@@ -55,6 +55,42 @@ const HANDLERS = {
     "full-release": async (actor) => Release.fullRelease(actor),
 
     /**
+     * **Steady the Breath** — the class's own name for Refocus (guide §4.2), and the only way
+     * `Deep Breath` (feat 4) can be expressed.
+     *
+     * > You regain 2 Reiatsu Points instead of 1 the first time you use Steady the Breath each day.
+     *
+     * pf2e's Refocus emits nothing a module can hook, so the alternative was sniffing focus changes in
+     * `preUpdateActor` — which misfires on every other restore there is. Giving the class its own named
+     * action is both truer to the guide and the only place that can count "the first time each day".
+     */
+    "steady-the-breath": async (actor) => {
+        const pool = actor.system?.resources?.focus;
+        if (!pool) return;
+        if ((pool.value ?? 0) >= (pool.max ?? 0)) {
+            ui.notifications.info(`${actor.name}'s reiatsu is already full.`);
+            return;
+        }
+
+        const feat = actor.itemTypes.feat.find((f) => f.flags?.[MODULE_ID]?.deepBreath);
+        const today = new Date(game.time.worldTime * 1000).toDateString();
+        const ledger = actor.getFlag(MODULE_ID, "steadyTheBreath") ?? {};
+        const first = feat && ledger.day !== today;
+        const restore = first ? Number(feat.flags[MODULE_ID].deepBreath.restores ?? 2) : 1;
+
+        const value = Math.min(pool.max ?? 0, (pool.value ?? 0) + restore);
+        await actor.update({
+            "system.resources.focus.value": value,
+            [`flags.${MODULE_ID}.steadyTheBreath`]: { day: feat ? today : ledger.day ?? null },
+        });
+        ui.notifications.info(
+            first
+                ? `${actor.name} steadies the breath and regains ${restore} Reiatsu Points (Deep Breath).`
+                : `${actor.name} steadies the breath and regains 1 Reiatsu Point.`,
+        );
+    },
+
+    /**
      * Blut — guide §5.3. Two reishi systems, never both, chosen fresh each round.
      *
      * Not routed through the generic mode switch below, because `Blut.set` carries the one exception the

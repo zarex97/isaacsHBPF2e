@@ -30,10 +30,34 @@
         },
         "rules": [
             {
-                "key": "RollOption",
                 "domain": "all",
+                "key": "RollOption",
                 "option": "soulbound:second-nature",
                 "value": true
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    "soulbound-borrowed:soul-reaper"
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Soul Reaper's Discipline"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    "soulbound-borrowed:hollow"
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Hollow's Mask"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    "soulbound-borrowed:quincy"
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Quincy's Discipline"
             }
         ],
         "traits": {

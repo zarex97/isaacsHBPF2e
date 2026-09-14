@@ -289,7 +289,7 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | :-- | :-- | :-- | :-- | :-- |
 | F-01 | **Additional Kidō** **[SR]** | One more kidō; **up to three times**; Hollow/Quincy cannot take it | ☐ | |
 | F-02 | **Sheathed Draw** | On initiative, manifest **and** Release as a **single free action** | ✅ | **SB-20 fixed.** Joined to the `combatStart` handler that already released Zangetsu: both clauses mean *you are in your released form when the fight begins*, and both spend the free first Release rather than a point |
-| F-03 | **Reader of Threads** | Recall Knowledge on spirits/haunts/undead with Spirit Lore as a **free action once per round**; +1 extra fact on a success | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-03 | **Reader of Threads** | Recall Knowledge on spirits/haunts/undead with Spirit Lore as a **free action once per round**; +1 extra fact on a success | ✅ | **SB-20 fixed.** A free action once per round on the sheet, plus a `Note` on the Spirit Lore and Religion check that says you learn one more thing on a success |
 | F-04 | **Zanjutsu Footwork** | Crit with the spirit weapon → **Step** as a free action | ✅ | **SB-20 fixed.** A critical hit with the spirit weapon now prompts the free Step. Direction is the player's, so it arrives at the right moment rather than moving them |
 | F-05 | **Pesquisa** **[H]** | Spirit Sense to **120 ft**; learn each detected creature's approximate level relative to yours | ☐ | |
 | F-06 | **Hirenkyaku Drill** **[Q]** | Flash Step at 1st, **once per encounter** until 3rd | ☐ | |
@@ -301,39 +301,39 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | F-08 | **Pressure Flare** | 2 | 1 action, enemies within 15 ft: Will vs. Reiatsu DC or **frightened 1**; **once per encounter, no cost** | ☐ | |
 | F-09 | **Guard the Threshold** | 2 | Reaction: ally within 15 ft damaged by an **undead, spirit or incorporeal** creature → reduce by **2 + your level** | ☐ | |
-| F-10 | **Kidō Focus** | 2 | Spend **1 extra action** on a kidō → target takes **−1 circumstance** to its save | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
-| F-11 | **Rapid Bala** **[H]** | 2 | Spend 1 extra action to use **Bala** again; both apply and raise MAP normally | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-10 | **Kidō Focus** | 2 | Spend **1 extra action** on a kidō → target takes **−1 circumstance** to its save | ✅ | **SB-20 fixed.** A **toggleable** roll option, read by `runSave` — the module rolls these saves itself, so this is the only place a −1 circumstance could land. Restricted to kidō |
+| F-11 | **Rapid Bala** **[H]** | 2 | Spend 1 extra action to use **Bala** again; both apply and raise MAP normally | ✅ | **SB-20 fixed.** A two-action activity, which is how pf2e writes `Double Shot` — the action cost *is* the mechanism for an action-economy feat |
 | F-12 | **Gintō Reserve** **[Q]** | 2 | **3 Gintō** at daily preparations; each is a free action to use **Gritz** for **no** Reiatsu Point; unspent are lost at next preparations | ☐ | |
-| F-13 | **Shunpo Strike** | 4 | 2 actions: Flash Step then Strike; **doesn't count against Flash Step's frequency** | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-13 | **Shunpo Strike** | 4 | 2 actions: Flash Step then Strike; **doesn't count against Flash Step's frequency** | ✅ | A two-action activity. "Doesn't count against Flash Step's frequency" is automatic: it is a separate item, so using it never decrements Flash Step's |
 | F-14 | **Reiatsu Barrier** | 4 | Reaction when hit: spend 1 point for **resistance = your level** vs. that damage | ☐ | |
 | F-15 | **Chain Anchor** | 4 | Crit with the spirit weapon → target **can't Step away** until end of its next turn | ✅ | **SB-20 fixed.** A `strike-resolved` critical-success rider applying `Effect: Chain Anchor` for 1 round |
-| F-16 | **Deep Breath** | 4 | First **Steady the Breath** each day restores **2** points | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-16 | **Deep Breath** | 4 | First **Steady the Breath** each day restores **2** points | ✅ | **SB-20 fixed.** New **Steady the Breath** action — the class's own name for Refocus. Live: 1 point normally, **2** on the first of the day with the feat, **1** again the same day |
 | F-17 | **Cero Doble** **[H]** | 4 | Cero may be a **30-ft cone**; crit fails **pushed 10 ft** away | ✅ | **SB-20 fixed.** A **toggleable** roll option on the sheet — pf2e's own answer to a cast-time choice — read by the `alternateArea` seam. Cero offers a 30-ft cone while it is on, with the 10-ft push on a critical failure, gated the same way |
 
 ### 6.3 — Sixth through twelfth
 
 | # | Feat | Lvl | What must happen | Status | Notes |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| F-18 | **Kidō Combination** | 6 | Free action right after a **destruction** kidō: a **binding** kidō at the same target for **1 fewer point (min 0)**; once per encounter | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-18 | **Kidō Combination** | 6 | Free action right after a **destruction** kidō: a **binding** kidō at the same target for **1 fewer point (min 0)**; once per encounter | ✅ | **SB-20 fixed.** The `freeCast` machinery predicated on `soulbound-kido-bakudo`, once per fight — "1 fewer Reiatsu Point (minimum 0)" for a binding kidō is exactly a free cast |
 | F-19 | **Reactive Strike** | 6 | pf2e's published `Reactive Strike` reaction, automating as-is | ☐ | |
 | F-20 | **Cut the Cord** | 6 | Strikes ignore the **first 5 points** of resistance to spirit | ☐ | |
-| F-21 | **Borrowed Nature** | 6 | Permanent second Lineage choice; learn its **free cantrip** at no cost; gain **Don the Other Face** | ☐ | |
-| F-22 | Don the Other Face | 6 | 1 action, 1 point, **once per encounter**, 1 minute, **−1 status to Will** while on | ☐ | |
-| F-23 | Aspect — **Soul Reaper's Discipline** | 6 | Learn **one** kidō permanently; while the Face is on **every kidō you know costs nothing** | ☐ | |
-| F-24 | Aspect — **Hollow's Mask** | 6 | Temp HP = **level**; physical resistance = **quarter level** (min 1); **+5 ft status** Speeds | ☐ | |
-| F-25 | Aspect — **Quincy's Discipline** | 6 | **Blut** free action once per round, Vene at **quarter** level; ranged Strikes **ignore cover** | ☐ | |
+| F-21 | **Borrowed Nature** | 6 | Permanent second Lineage choice; learn its **free cantrip** at no cost; gain **Don the Other Face** | ✅ | **SB-23 fixed.** It promised the borrowed Lineage's free cantrip and granted nothing; three predicated `GrantItem` rules now hand over Shō, Bala or Heizen |
+| F-22 | Don the Other Face | 6 | 1 action, 1 point, **once per encounter**, 1 minute, **−1 status to Will** while on | ✅ | **SB-23 fixed.** `Don the Other Face` was **once per round**; the guide says once per encounter. It applies the Aspect through the action bridge now, chosen by `soulbound-borrowed:<lineage>` |
+| F-23 | Aspect — **Soul Reaper's Discipline** | 6 | Learn **one** kidō permanently; while the Face is on **every kidō you know costs nothing** | ✅ | The Aspect makes every kidō free while worn — the `freeCast` machinery again — and Deeper Crossing adds a die to destruction kidō |
+| F-24 | Aspect — **Hollow's Mask** | 6 | Temp HP = **level**; physical resistance = **quarter level** (min 1); **+5 ft status** Speeds | ✅ | Temp HP = level, physical resistance = quarter level, +5 ft; all three double under Deeper Crossing |
+| F-25 | Aspect — **Quincy's Discipline** | 6 | **Blut** free action once per round, Vene at **quarter** level; ranged Strikes **ignore cover** | ✅ | Grants **Blut**, and `Effect: Blut Vene` now resists at a **quarter** of your level for a borrower, half once Deeper Crossing deepens it, and half for a real Quincy |
 | F-26 | **Blut Discipline** **[Q]** | 6 | Switch Blut as a free action **twice** per round | ☐ | |
-| F-27 | **Descorrer** **[H]** | 6 | Once per hour, Garganta: you + up to 5 allies teleport up to **500 ft** to a seen or visited place | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-27 | **Descorrer** **[H]** | 6 | Once per hour, Garganta: you + up to 5 allies teleport up to **500 ft** to a seen or visited place | ✅ | A two-action activity with a **once-per-hour** frequency, which is the whole of what pf2e can enforce about a Garganta |
 | F-28 | **Rising Tide** | 8 | The first Rising Pressure grant each round also gives **temp HP = half level (min 2)**, until start of your next turn, not stacking with itself | ✅ | **SB-20 fixed.** Paid out by `Rising Pressure` itself — *"the first time each round that Rising Pressure grants you a point"* is a moment only that function knows, which is why the feat sat unread. Temp HP = half level, minimum 2 |
 | F-29 | **Pressure Crush** | 8 | 2 actions, 1 point, **20-ft emanation**, Fortitude; failure → **clumsy 1** and **−5 ft status** Speeds for **1 minute** | ☐ | |
 | F-30 | **Zanjutsu: Hakuda** **[SR]** | 8 | **1d6 fist**, agile, finesse, nonlethal; one unarmed Strike may be made as part of **any** Zanjutsu technique | ✅ | **SB-20 fixed.** A real `Strike` rule element. Live: **Hakuda, 1d6 bludgeoning, agile / finesse / nonlethal / unarmed**, with the agile MAP at −4/−8. It was a roll option nothing read |
 | F-31 | **Perfected Technique** | 10 | Once per encounter, Release Technique costs **nothing** | ✅ | **SB-20 fixed.** The `freeCast` machinery, as used by the Full Release's Unbound Technique. Live: `FreeCast.find` returns it for a Release Technique, frequency 1 per `PT10M` — pf2e has no *encounter* period, and `PT10M` is its stand-in |
-| F-32 | **Ghost Step** | 10 | Flash Step passes through creatures' spaces (not ending there) and **ignores difficult terrain** | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-32 | **Ghost Step** | 10 | Flash Step passes through creatures' spaces (not ending there) and **ignores difficult terrain** | ✅ | **SB-20 fixed.** A prompt on Flash Step itself, so the permission arrives at the moment it applies |
 | F-33 | **Reishi Mastery** **[Q]** | 10 | Seal the Art counteract rank **+1**; **free on a critical success** | ✅ | **SB-20 fixed.** `resolveCounteract` adds 1 to the counteract rank and charges no point on a critical success — which is why the cost had to move to *after* the roll |
-| F-34 | **Soul Sever** | 12 | Reducing a creature to 0 HP with the spirit weapon performs **Konsō** as a free action, no check, permanently preventing undeath | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-34 | **Soul Sever** | 12 | Reducing a creature to 0 HP with the spirit weapon performs **Konsō** as a free action, no check, permanently preventing undeath | ✅ | **SB-20 fixed.** A prompt when your damage takes something to zero, predicated on `rider:target:hp-zero` |
 | F-35 | **Kidō Mastery** | 12 | **Destruction** kidō deal **one additional die** of their damage type | ☐ | |
 | F-36 | **Segunda Piel Temprana** **[H]** | 12 | Each time you are **critically hit**, Hierro resists **spirit** for 1 round | ✅ | **SB-20 fixed.** A `strike-received` critical-success rider granting spirit resistance = half level for 1 round |
-| F-37 | **Deeper Crossing** | 12 | Don the Other Face **twice per encounter**; Aspect deepens (2nd kidō + 1 extra destruction die · temp HP 2× level, resistance half level, +10 ft · Vene half level + **one Seal the Art per encounter**) | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-37 | **Deeper Crossing** | 12 | Don the Other Face **twice per encounter**; Aspect deepens (2nd kidō + 1 extra destruction die · temp HP 2× level, resistance half level, +10 ft · Vene half level + **one Seal the Art per encounter**) | ✅ | **SB-20 fixed.** Raises `Don the Other Face` to twice per encounter by `ItemAlteration`, and the three Aspect effects now scale on `soulbound:deeper-crossing` — Hollow's Mask goes to twice level in temp HP, half-level resistance and +10 feet |
 
 ### 6.4 — Zanjutsu techniques **[SR]** (guide §8.4)
 
@@ -355,10 +355,10 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | F-46 | **Instant Full Release** | 14 | Full Release costs **1 action** | ✅ | **SB-17 fixed.** Live: adding the feat takes Full Release from **2 actions to 1**. Its `action-cost` alteration named a property pf2e has no handler for, so the feat's whole text did nothing |
 | F-47 | **Twin Pressure** | 14 | The Full Release emanation's Will save also applies to enemies that **enter** it | ✅ | **SB-20 fixed.** Live: with the feat the aura's events become `["enter", "turn-end"]`; without it, `["turn-end"]`. It could not have been written as content — the events list belongs to an effect the feat does not own — so it is stamped on where the aura is built |
 | F-48 | **Vollständig Endurance** **[Q]** | 14 | No fatigue when Vollständig ends; spend 1 point to extend by 1 round, **up to three times** | ✅ | **SB-20 fixed.** Declares `soulbound:no-full-release-fatigue`, which the `deleteItem` fatigue path reads alongside Perfected Full Release |
-| F-49 | **Unbroken Chain** | 16 | While released, spend 1 point to stay at **1 HP** instead of 0; **once per day** | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-49 | **Unbroken Chain** | 16 | While released, spend 1 point to stay at **1 HP** instead of 0; **once per day** | ✅ | **SB-20 fixed.** Live: dropping to 0 HP while released left the character at **1 HP**, spent a point (2→1) and used the day's charge; a second drop the same day went through to 0. `preUpdateActor` is the only place it can live — by `updateActor` the hit points are already zero and dying is already being applied |
 | F-50 | **Reiatsu Flood** | 16 | Rising Pressure's **per-encounter cap +1** | ✅ | Always worked: `capFor()` in `rising-pressure.mjs` reads the feat **by slug**, which is why it was the one apparently-inert feat that was not |
 | F-51 | **Beyond the Blade** | 18 | Release Technique dice **+2 steps** (d6→d10, d8→d12) | ☐ | |
-| F-52 | **Second Nature** | 18 | The **6th-level** Aspect is always on — no action, no point, no duration, **no Will penalty**; Donning still upgrades to the 12th-level numbers twice per encounter | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-52 | **Second Nature** | 18 | The **6th-level** Aspect is always on — no action, no point, no duration, **no Will penalty**; Donning still upgrades to the 12th-level numbers twice per encounter | ✅ | **SB-20 fixed.** Three `GrantItem` rules predicated on the Lineage chosen by Borrowed Nature, so the Aspect is simply worn — and the −1 Will penalty on all three Aspects is predicated `{not: soulbound:second-nature}`, which is the guide's *"and no Will penalty"* |
 | F-53 | **Final Release** | 20 | 3 actions, **once per week**, requires released form | ☐ | See §7 |
 
 ---
@@ -1116,3 +1116,71 @@ With the fear aura ticking every round on a creature that keeps failing:
 | frightened | 2 | 2 | 2 | 2 |
 
 It used to climb 2 → 4 → 6 → 8.
+
+---
+
+## 24 — SB-20 closed: all forty-seven feats do something
+
+The audit that opened this — 23 of 47 with no mechanism — now returns **zero**, and
+`build/test-soulbound.mjs` carries the standing guard so the number cannot drift back. A feat counts as
+mechanical when any of these holds:
+
+- a rule that is not merely a flat `RollOption`, **including a toggleable one** — pf2e's own way of
+  putting a cast-time choice on the sheet (`Cero Doble`, `Kidō Focus`);
+- a module flag the engine acts on;
+- an **activity with an action cost or a frequency**, which is the whole mechanism for an
+  action-economy feat — pf2e writes `Double Shot` exactly this way (`Rapid Bala`, `Shunpo Strike`,
+  `Descorrer`, `Reader of Threads`);
+- something that reads it, by slug or by the option it sets (`Reiatsu Flood`, `Unbroken Chain`).
+
+### The last tranche
+
+| Feat | Lvl | How |
+| :-- | :-- | :-- |
+| **Reader of Threads** | 1 | a `Note` on Spirit Lore and Religion: one more fact on a success |
+| **Kidō Focus** | 2 | a toggle, read by `runSave` — the module rolls these saves itself, so it is the only place a −1 circumstance can land |
+| **Rapid Bala** | 2 | a two-action activity |
+| **Deep Breath** | 4 | a new **Steady the Breath** action, and the ledger that counts the first of the day |
+| **Shunpo Strike** | 4 | a two-action activity; "outside Flash Step's frequency" is automatic, being a separate item |
+| **Descorrer** | 6 | a two-action activity, once per hour |
+| **Kidō Combination** | 6 | `freeCast` on binding kidō, once a fight — "1 fewer point (minimum 0)" *is* a free cast |
+| **Ghost Step** | 10 | a prompt on Flash Step, at the moment it applies |
+| **Deeper Crossing** | 12 | `frequency-max` 2 on Don the Other Face, and the Aspects scale on its option |
+| **Soul Sever** | 12 | a prompt when your damage takes something to zero |
+| **Unbroken Chain** | 16 | `preUpdateActor`, rewriting the incoming hit points |
+| **Second Nature** | 18 | three predicated grants, so the Aspect is simply worn |
+
+### SB-23 — the Borrowed Nature family was inert too
+
+Not feats, so the feat audit missed them:
+
+- **`Borrowed Nature`** promised the borrowed Lineage's free cantrip and granted **nothing**. Three
+  predicated `GrantItem` rules now hand over Shō, Bala or Heizen.
+- **`Don the Other Face`** had `rules: []` — it applied no Aspect at all — and a frequency of **once
+  per round** where the guide says once per encounter. It goes through the action bridge now, choosing
+  by `soulbound-borrowed:<lineage>`.
+- **`Effect: Soul Reaper's Discipline`** and **`Effect: Quincy's Discipline`** carried a roll option and
+  a −1 Will penalty and nothing else. The first now makes every kidō free while worn; the second grants
+  Blut, and `Effect: Blut Vene` resists at a **quarter** of your level for a borrower, half once
+  deepened, half for a real Quincy.
+- The −1 Will penalty on all three Aspects is predicated `{not: soulbound:second-nature}` — the guide's
+  *"no action, no Reiatsu Point, no duration, and **no Will penalty**"*.
+
+### Driven live
+
+| | |
+| :-- | :-- |
+| Steady the Breath, no feat | 1 point |
+| first of the day, with Deep Breath | **2** |
+| again the same day | 1 |
+| Unbroken Chain, dropping to 0 while released | **1 HP**, pool 2 → 1, the day's use spent |
+| dropping to 0 again the same day | 0 HP — refused |
+
+### A migration limit worth knowing
+
+`repairAll()` refreshes authored **flags** on owned items, not `system.rules`, and it cannot invent
+grants that did not exist when a character was made. So a *new* grant on a class feature — **Steady the
+Breath** is the first — does not reach a character built before it. Re-adding the class feature, or
+re-levelling, picks it up. Deliberately not automated: re-granting by diffing pack rules against owned
+items is exactly the wholesale-rules-replacement that produces *"already has item"* on every update
+for ever.

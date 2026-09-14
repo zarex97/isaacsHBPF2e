@@ -16,6 +16,7 @@ import { SkyTrackerApp } from "./sky/tracker-app.mjs";
 import { SkyTracker } from "./sky/tracker.mjs";
 import { Blut } from "./soulbound/blut.mjs";
 import { SoulboundActions } from "./soulbound/actions.mjs";
+import { UnbrokenChain } from "./soulbound/unbroken-chain.mjs";
 import { Charges } from "./soulbound/charges.mjs";
 import { Hypnosis } from "./soulbound/hypnosis.mjs";
 import { Modes } from "./soulbound/modes.mjs";
@@ -78,6 +79,7 @@ Hooks.once("init", () => {
     start("Severance", () => Severance.registerHooks());
     start("Blut", () => Blut.registerHooks());
     start("charge pools", () => Charges.registerHooks());
+    start("Unbroken Chain", () => UnbrokenChain.registerHooks());
     // The bridge from a used action to the state machine behind it. Without this the release
     // ladder is inert: `Release.enter()` has no other caller anywhere in the module.
     start("the Soulbound action bridge", () => SoulboundActions.registerHooks());
@@ -124,6 +126,7 @@ Hooks.once("init", () => {
         soulboundActions: SoulboundActions,
         modes: Modes,
         charges: Charges,
+        unbrokenChain: UnbrokenChain,
         hypnosis: Hypnosis,
         rig: SoulboundRig,
         open: () => new SkyTrackerApp().render(true),
