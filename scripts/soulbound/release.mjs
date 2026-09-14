@@ -475,6 +475,16 @@ export const Release = {
             ui.notifications.info(`${actor.name} is already released.`);
             return false;
         }
+        // Guide §7C: when Letzt Stil ends "you lose Schrift Form, Release Technique, Licht Regen,
+        // Vollständig and your entire pool until 24 hours of rest". The effect that says so zeroed the
+        // pool and published `soulbound:letzt-stil-spent`, which nothing read — so a spent Quincy could
+        // simply Release again and put the whole Schrift back on, which is the opposite of a cost.
+        if (actor.getRollOptions?.().includes("soulbound:letzt-stil-spent")) {
+            ui.notifications.warn(
+                `${actor.name} has spent Letzt Stil: no Schrift Form until 24 hours of rest.`,
+            );
+            return false;
+        }
 
         const cost = releaseCost({ releasesThisEncounter: this.releasesThisEncounter(actor) });
         const pool = actor.system?.resources?.focus;

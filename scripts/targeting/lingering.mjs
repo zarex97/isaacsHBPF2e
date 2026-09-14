@@ -1,3 +1,4 @@
+import { testPredicate } from "../lib/roll-options.mjs";
 import { growByStep, inflictPersistent, runSave } from "../riders/apply.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 
@@ -47,19 +48,43 @@ export const Lingering = {
      * confirmed rather than a second one.
      */
     async create(config, regions, originToken) {
-        const spec = config.item?.flags?.[MODULE_ID]?.[FLAG];
+        const specs = Lingering.specsFor(config.item);
         const placed = [regions].flat().filter((region) => region);
-        if (!spec || placed.length === 0 || !canvas?.scene) return null;
+        if (specs.length === 0 || placed.length === 0 || !canvas?.scene) return null;
 
         // Every placement leaves its own patch behind, not just the first. Gemini and Cancer place one area
         // each, so this was a single region for two Cloths; *Lightning Crown* erupts three pillars and gains
         // more per heightening step, and each of them stands on its own square for its own round.
         const created = [];
         for (const region of placed) {
-            const one = await Lingering.createOne(spec, config, region, originToken);
-            if (one) created.push(one);
+            for (const spec of specs) {
+                const one = await Lingering.createOne(spec, config, region, originToken);
+                if (one) created.push(one);
+            }
         }
         return created.length > 0 ? created[0] : null;
+    },
+
+    /**
+     * The patches this Technique leaves, after its predicates.
+     *
+     * **`lingering` may be a list**, and each entry may be predicated. Both halves were needed at once:
+     * *Burner Finger Five* leaves difficult terrain always and, at Refined Release, ground that is also
+     * *burning* for a round longer — two patches with different durations, which one spec cannot say.
+     *
+     * The predicate was already being authored before anything read it. `La Gota` and `Ennetsu Jigoku`
+     * each gate their patch on `feature:refined-release`, and both laid it at every level, because
+     * `create` took the flag whole and never looked at the field. It reads perfectly and did nothing —
+     * which is the shape of nearly every defect this campaign has turned up.
+     */
+    specsFor(item) {
+        const declared = item?.flags?.[MODULE_ID]?.[FLAG];
+        if (!declared) return [];
+        const options = new Set([
+            ...(item.actor?.getRollOptions?.() ?? []),
+            ...(item.getRollOptions?.("item") ?? []),
+        ]);
+        return [declared].flat().filter((spec) => spec && testPredicate(spec.predicate, options));
     },
 
     async createOne(spec, config, region, originToken) {

@@ -124,7 +124,7 @@ character:
 | Q-02 | **Heilig Bogen** | 1 | Spirit Bow profile available; no ammunition; die −1 step in a dead-reishi zone | ☐ | |
 | Q-03 | **Blut** — economy | 1 | Free action, **once per round**, choose Vene **or** Arterie, lasts until start of next turn, **never both** | ✅ | Live on a 20th-level Quincy: the Blut action prompts Vene/Arterie, and choosing one removes the other |
 | Q-04 | **Blut Vene** | 1 | Resistance to physical = half level, minimum 1 | ✅ | Blut Vene gives **physical resistance 10** at 20th — half level |
-| Q-05 | **Blut Arterie** | 1 | Strikes ignore resistance to **physical and spirit**; target's cover one step less; **no bonus to attack, damage or DC** | ☐ | |
+| Q-05 | **Blut Arterie** | 1 | Strikes ignore resistance to **physical and spirit**; target's cover one step less; **no bonus to attack, damage or DC** | ✅ | **SB-36 fixed.** Live: the bypass selects on a Strike and not a spell, for physical and spirit; cover is pierced one step by a shared ephemeral effect |
 | Q-06 | **Heizen and Gritz** | 1 | Exactly these two; `Additional Kidō` is closed | ☐ | |
 | Q-07 | **Seal the Art** | 5 | 2 actions, 1 point, 30 ft; counteract with Reiatsu DC proficiency + key attribute, **counteract rank = half level rounded up** | ⚠️ | Live: the action posts, offers the suppressible effects, and rolls **Counteract — DC 16, critical success**. Its **1 Reiatsu Point is now actually spent** — nothing charged it before, because pf2e only deducts focus for a *spell* and this is an action |
 | Q-08 | Seal the Art — release states | 5 | A release state is **suppressed until the end of the target's next turn**, not ended, and can't be re-entered in that time | ☐ | |
@@ -242,42 +242,42 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 
 | # | Spirit / rung | Lvl | What must happen | Status | Notes |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| S-65 | **Antithesis** — Schrift Form | 1 | Spirit Bow profile granted if absent, die **+1 step**, range increment **100 ft**; gains **Seele Schneider** 1d8 S finesse melee whose Strikes **ignore resistance to slashing** | ☐ | |
+| S-65 | **Antithesis** — Schrift Form | 1 | Spirit Bow profile granted if absent, die **+1 step**, range increment **100 ft**; gains **Seele Schneider** 1d8 S finesse melee whose Strikes **ignore resistance to slashing** | ✅ | **SB-37 fixed.** Live: the Spirit Bow is granted when absent, at **range increment 100** and a die step up; Seele Schneider bypasses slashing resistance |
 | S-66 | Antithesis — Release Technique | 1 | **Reaction**; trigger: you or an ally within 30 ft takes damage from a creature you can see. The **triggering creature takes 2d6 spirit**, and the damaged target gains **resistance = your level** against that damage; H(+2) +1d6 | ☐ | |
-| S-67 | Antithesis — Refined **Licht Regen** | 9 | 2 actions, **30-ft cone**, basic Reflex, **6d6** piercing; crit fail → **off-guard** until start of your next turn; base rank 5, H(+1) +1d6 | ☐ | |
-| S-68 | **Quincy: Letzt Stil** — Vollständig | 13 | Die **+2 steps**; Strikes ignore **all** resistance to physical and spirit and treat cover one step less, **stacking with Blut Vene** (the one exception to Blut exclusivity) | ☐ | |
-| S-69 | Letzt Stil — Licht Regen | 13 | Becomes a **60-ft cone**; **once per round free** | ☐ | |
-| S-70 | Letzt Stil — **the cost** | 13 | When it ends you lose **Schrift Form, Release Technique, Licht Regen, Vollständig and your entire pool** until **24 hours of rest** | ☐ | |
+| S-67 | Antithesis — Refined **Licht Regen** | 9 | 2 actions, **30-ft cone**, basic Reflex, **6d6** piercing; crit fail → **off-guard** until start of your next turn; base rank 5, H(+1) +1d6 | ✅ | **SB-37**: authored correctly all along and granted by nothing. Live: a 9th-level Antithesis now knows `licht-regen` |
+| S-68 | **Quincy: Letzt Stil** — Vollständig | 13 | Die **+2 steps**; Strikes ignore **all** resistance to physical and spirit and treat cover one step less, **stacking with Blut Vene** (the one exception to Blut exclusivity) | 🔧 | Cover one step less added, sharing `Effect: Cover Pierced` with Blut Arterie. Awaiting a live drive |
+| S-69 | Letzt Stil — Licht Regen | 13 | Becomes a **60-ft cone**; **once per round free** | 🔧 | `freeCast` once per round added. Awaiting a live drive |
+| S-70 | Letzt Stil — **the cost** | 13 | When it ends you lose **Schrift Form, Release Technique, Licht Regen, Vollständig and your entire pool** until **24 hours of rest** | ✅ | **Fixed.** Live: sealed and spent, `release()` refuses and the state stays sealed; delete the effect and it works again. `focus.cap` reads 0 while spent |
 | S-71 | **The Heat** — Schrift Form | 1 | Damage type **fire**; **deadly d8**; **fire resistance = half level** | ☐ | |
 | S-72 | The Heat — **Burner Finger** | 1 | 2 actions, choose **One–Five**, all for the same single point | ☐ | |
 | S-73 | Burner Finger **One** | 1 | 60 ft, one creature, ranged spell attack, **3d6** fire doubled on crit; H(+1) +1d6 | ☐ | |
 | S-74 | Burner Finger **Two** | 1 | 60 ft, **two** creatures, **2d6** each; H(+1) +1d6 | ☐ | |
 | S-75 | Burner Finger **Three** | 1 | **30-ft line**, basic Reflex, 2d6 fire; H(+1) +1d6 | ☐ | |
-| S-76 | Burner Finger **Four** | 1 | **15-ft emanation**, basic Reflex, 2d6 fire; failures take **1d4 persistent fire**; H(+1) +1d6 | ☐ | |
-| S-77 | Burner Finger **Five** | 1 | **30-ft cone**, basic Reflex, 2d6 fire; ground **difficult terrain** until start of your next turn; H(+1) +1d6 | ☐ | |
-| S-78 | The Heat — Refined **Deeper Burn** | 9 | **All five** options treat your rank as **one higher**; **Five**'s terrain keeps burning until end of your next turn, dealing **2d6 fire** to a creature entering or ending its turn there | ☐ | |
-| S-79 | **Deus Ex Machina** — Vollständig | 13 | **Fly Speed** = Speed; **fire immunity**; Burner Finger **Five** becomes a **60-ft cone** | ☐ | |
+| S-76 | Burner Finger **Four** | 1 | **15-ft emanation**, basic Reflex, 2d6 fire; failures take **1d4 persistent fire**; H(+1) +1d6 | 🔧 | 1d4 persistent fire on a failure, declared on the Four overlay alone (SB-41) |
+| S-77 | Burner Finger **Five** | 1 | **30-ft cone**, basic Reflex, 2d6 fire; ground **difficult terrain** until start of your next turn; H(+1) +1d6 | 🔧 | Difficult terrain for 1 round, on the Five overlay alone |
+| S-78 | The Heat — Refined **Deeper Burn** | 9 | **All five** options treat your rank as **one higher**; **Five**'s terrain keeps burning until end of your next turn, dealing **2d6 fire** to a creature entering or ending its turn there | 🔧 | **SB-40**: `lingering` is now a predicated list, so Five's ground burns for 2d6 a round longer at Refined; Deeper Burn adds a die to Burner Finger only |
+| S-79 | **Deus Ex Machina** — Vollständig | 13 | **Fly Speed** = Speed; **fire immunity**; Burner Finger **Five** becomes a **60-ft cone** | ✅ | Live: Deus Ex Machina gives **fire immunity and fly 25**; Burner Finger Five widens to a 60-ft cone via `alternateArea` |
 | S-80 | Deus Ex Machina — persistent | 13 | Once per round, a creature you damage with fire takes **2d6 persistent fire** whose flat check is **DC 20**, not 15 | ☐ | |
 | S-81 | **The Balance** — Schrift Form | 1 | Weapon becomes **Freund Schild** 1d8 S, versatile P, **parry**; **+1 circumstance AC while you have ≥1 Reiatsu Point** | ☐ | The bonus must switch **off** at 0 points |
 | S-82 | The Balance — Release Technique | 1 | **Reaction**; trigger: you take damage from a creature or effect you can perceive. Reduce it by **twice your level**, then one enemy within 60 ft takes **2d6 spirit** and a **−1 status penalty to saves** until end of its next turn; H(+2) +1d6 | ☐ | |
-| S-83 | The Balance — Refined | 9 | Penalty applies to **AC and saves**; if the trigger would drop you to 0 HP you stay at **1 HP** — **once per day** | ☐ | |
+| S-83 | The Balance — Refined | 9 | Penalty applies to **AC and saves**; if the trigger would drop you to 0 HP you stay at **1 HP** — **once per day** | 🔧 | **Fixed**: a second `Effect: The Balance — Held (Refined)` carrying the AC penalty, chosen on the Quincy's side because the effect lands on the enemy |
 | S-84 | **The Balance, at Night** — Vollständig | 13 | Reduction rises to **three times your level** | ☐ | |
 | S-85 | At Night — ally redirect | 13 | Once per round an ally's damage within 60 ft may be redirected to you and reduced **as a free action without spending your reaction**, even if your reaction is spent | ☐ | |
 | S-86 | At Night — **Sight of the Balance** | 13 | At the start of each of your turns choose an enemy within 60 ft: **−2 status** to its next save, and the next ally attacking it gains **+1 status** to that attack | ☐ | |
 | S-87 | **The Thunderbolt** — Schrift Form | 1 | Weapon becomes 1d8 S, versatile P, damage type **electricity**; **electricity resistance = half level**; **Flash Step ignores difficult terrain and may pass through creatures** (not end there) | ☐ | |
 | S-88 | The Thunderbolt — **Galvano Blast** | 1 | 2 actions, **60-ft line**, basic Reflex, 2d6 electricity; fail **stunned 1**, crit fail **stunned 2**; **incapacitation**; H(+1) +1d6 | ☐ | |
-| S-89 | The Thunderbolt — Refined **Galvano Javelin** | 9 | 90 ft, ranged spell attack, **6d6** electricity doubled on crit, **stunned 1 on a hit** (incapacitation); base rank 5, H(+1) +1d6 | ☐ | |
-| S-90 | **Thunderbolt Form** — Vollständig | 13 | **Fly Speed** = Speed; **electricity immunity**; **10-ft emanation** dealing **3d6** electricity (basic Reflex) to a creature ending its turn there | 🔧 | **SB-14 and SB-15 fixed** in content: a 10-ft `turn-end` aura, now a real basic Reflex that doubles on a critical failure and fans out to enemies. Awaiting a live drive on a Thunderbolt Quincy |
-| S-91 | Thunderbolt Form — arc | 13 | Once per round on a spirit-weapon hit, one other creature within 15 ft of the target takes **3d6** electricity (basic Reflex) | ☐ | |
-| S-92 | **The Miracle** — Schrift Form | 1 | Weapon becomes **1d12 slashing, two-handed, forceful, shove**; **max HP + your level**; **+1 circumstance** to saves vs. effects that would reduce you to 0 HP | ☐ | |
+| S-89 | The Thunderbolt — Refined **Galvano Javelin** | 9 | 90 ft, ranged spell attack, **6d6** electricity doubled on crit, **stunned 1 on a hit** (incapacitation); base rank 5, H(+1) +1d6 | ✅ | **SB-37**: complete and unreachable. Live: a 9th-level Thunderbolt now knows `galvano-javelin` |
+| S-90 | **Thunderbolt Form** — Vollständig | 13 | **Fly Speed** = Speed; **electricity immunity**; **10-ft emanation** dealing **3d6** electricity (basic Reflex) to a creature ending its turn there | ✅ | Live: Thunderbolt Form gives **electricity immunity and fly 25** |
+| S-91 | Thunderbolt Form — arc | 13 | Once per round on a spirit-weapon hit, one other creature within 15 ft of the target takes **3d6** electricity (basic Reflex) | 🔧 | The arc is a `strike-resolved` prompt on a spirit-weapon hit |
+| S-92 | **The Miracle** — Schrift Form | 1 | Weapon becomes **1d12 slashing, two-handed, forceful, shove**; **max HP + your level**; **+1 circumstance** to saves vs. effects that would reduce you to 0 HP | 🔧 | +1 circumstance on a toggled save, since no roll option says *this would drop me* |
 | S-93 | The Miracle — **The Miracle** | 1 | **Free action**, trigger: you take damage from an enemy, **once per round**. Gain **2 Miracle points** (max 10) | ☐ | |
-| S-94 | Miracle points — resistance | 1 | **Resistance to all damage = current Miracle points** | ☐ | |
-| S-95 | Miracle points — spend | 1 | Free action at the start of your turn: spend any number; **+1d6** weapon damage per point until end of turn | ☐ | |
+| S-94 | Miracle points — resistance | 1 | **Resistance to all damage = current Miracle points** | ✅ | Live: resistance to all damage reads **2** with 2 Miracle points — the badge itself |
+| S-95 | Miracle points — spend | 1 | Free action at the start of your turn: spend any number; **+1d6** weapon damage per point until end of turn | 🔧 | The spend is a `turn-start` prompt; the +1d6 per point is the player's to apply |
 | S-96 | Miracle points — cost and reset | 1 | Costs a Reiatsu Point **only the first time each encounter**; points are **lost when the encounter ends** | ☐ | |
-| S-97 | The Miracle — Refined **Blitz of the Hero** | 9 | Max Miracle points **15**; spending grants **+5 ft status** to Speeds per point, **max +20 ft**, until end of turn | ☐ | |
+| S-97 | The Miracle — Refined **Blitz of the Hero** | 9 | Max Miracle points **15**; spending grants **+5 ft status** to Speeds per point, **max +20 ft**, until end of turn | ✅ | **Fixed.** Live: the ceiling reads **10 at 1st, 15 at Refined** |
 | S-98 | **Bailar de Valquiria** — Vollständig | 13 | **Fast healing = current Miracle points** | ☐ | |
-| S-99 | Bailar — the refusal to die | 13 | Reduced to 0 HP with ≥5 Miracle points → stay at **1 HP**, lose 5 points, weapon die **+1 step for the rest of the encounter**; repeatable while points last | ☐ | |
-| S-100 | Bailar — uncapped | 13 | Miracle points **no longer capped**, still only **2 per round** | ☐ | |
+| S-99 | Bailar — the refusal to die | 13 | Reduced to 0 HP with ≥5 Miracle points → stay at **1 HP**, lose 5 points, weapon die **+1 step for the rest of the encounter**; repeatable while points last | ✅ | **SB-39 fixed.** Live: 7 points, a killing blow, and it stands at **1 HP with 2 points left** |
+| S-100 | Bailar — uncapped | 13 | Miracle points **no longer capped**, still only **2 per round** | ✅ | **Fixed.** Live: uncapped under Bailar |
 
 ---
 
@@ -1526,3 +1526,131 @@ Reverting one commit to recover seven icon names rolled back that commit's **who
 guards, the trait registration and the repair went with it, and the loss only surfaced when a validator
 that had been proven working an hour earlier failed to fire. `git checkout HEAD -- <path>` is the tool
 for taking back part of a commit; `git revert` has no such thing as partial.
+
+---
+
+## §29 — the Quincy pass
+
+### SB-36 — Blut Arterie was one roll option and nothing else
+
+> **Blut Arterie** — your Strikes ignore resistance to physical and spirit, and the target's cover is one
+> step less. It gives **no bonus to attack, damage or DC**. — guide §5.3, Q-05
+
+`Effect: Blut Arterie` contained a single `RollOption` publishing `soulbound:blut-arterie`, which nothing
+read. Every Quincy in the world has had this since the class shipped, and none of it did anything.
+
+The resistance half is a `bypass` entry, predicated `item:type:weapon` so it reaches Strikes and not
+Techniques — `bypassEntriesOn` already scans every item on an actor, so an effect can carry one.
+
+Cover needed more thought. pf2e models cover as an **effect on the target** with a circumstance AC bonus,
+and its own precedent for piercing it — `Effect: Alchemist Goggles` — is an `EphemeralEffect` applied to
+the target for the roll, suppressing the `cover` modifier. Suppressing is too much here: "one step less"
+is not "none". So `Effect: Cover Pierced` carries three `AdjustModifier` rules in `subtract` mode, and
+because the effect lands **on the target** it can read that target's own `self:cover-level:*` options:
+
+| the target has | subtract | leaving |
+| :-- | :-- | :-- |
+| greater (+4) | 2 | standard |
+| standard (+2) | 1 | lesser |
+| lesser (+1) | 1 | none |
+
+One effect, shared with **Letzt Stil**, which gives the same clause at 13th (S-68).
+
+**Live:** the bypass selects on a Strike and not on a spell, for physical and spirit, with the cover rule
+attached.
+
+### SB-37 — two Techniques nobody could ever have
+
+`Licht Regen` and `Galvano Javelin` were authored completely, down to the `incapacitation` trait, and
+**nothing granted them**. Each Spirit granted its 1st-level Technique and its 13th-level Vollständig and
+skipped the 9th entirely.
+
+This corrects §27, which called them "complete". They were complete and unreachable, which is worse than
+incomplete, because every check that looks at the document passes.
+
+The same audit found the **fifteen Severing Arts** in the same state — authored, and granted by nothing,
+since `Effect: Severance` never named them. Each Spirit now grants its own, predicated on
+`soulbound:severance` with `reevaluateOnUpdate`, so the Art exists only inside those ten rounds.
+
+`validateActionsAreReachable` had said this about **actions** since the Saint's Om went missing from a
+Virgo's sheet. It now says it about **Techniques** too. (Kidō are excluded: those are chosen, not
+granted.)
+
+**Live:** a 9th-level Antithesis now knows `licht-regen`; a 9th-level Thunderbolt knows `galvano-javelin`.
+
+### SB-38 — a spirit weapon per Release, kept
+
+pf2e **detaches** a physical grantee when its granter is deleted, and does so deliberately:
+
+```
+this.onDeleteActions?.granter ??
+    (setHasElement(PHYSICAL_ITEM_TYPES, grantee.type) ? "detach" : "cascade")
+```
+
+— you do not want a granted sword vanishing out of a character's inventory. A spirit weapon is the exact
+opposite case: it exists only while the form is worn, and the form is deleted and re-created on **every**
+Release. So each Release left another copy. Nine form effects, one for every Spirit that grants a weapon;
+a Miracle Quincy driven through five Releases was carrying five Swords and Shields.
+
+All nine now say `onDeleteActions.granter: "cascade"`, and a validator requires it.
+
+**Live:** three Release-and-seal cycles, and the weapons come and go cleanly each time.
+
+### SB-39 — the refusal to die, generalised at last
+
+`unbroken-chain.mjs` said in its own docstring:
+
+> *`The Miracle`'s Vollständig has the same shape at a different price … so this is written to read its
+> conditions from the feat rather than to know one feat's name. A second refusal-to-die declares itself
+> and needs no code here.*
+
+It then matched one hard-coded slug. Fine while exactly one ability refused to die; wrong the moment
+**Bailar de Valquiria** (five Miracle points, repeatable — S-99) and **The Balance**'s Refined clause did
+too. The price is now declared on the item, and the resource may be the reiatsu pool *or* a counter badge
+on an effect. Declarations are taken cheapest first, so a character carrying both spends the Reiatsu
+Point before the five Miracle points.
+
+**Live:** a 13th-level Miracle in Bailar with 7 points, taken to 0 HP, stood at **1 Hit Point with 2
+points left**.
+
+### SB-40 — `lingering` had a predicate nothing read
+
+Two Techniques gate their patch of ground on `feature:refined-release` — `La Gota`'s Cascada and
+`Ennetsu Jigoku`'s embers — and both laid it at **every** level, because `Lingering.create` took the flag
+whole and never looked at the field. The predicate is now honoured, and `lingering` may be a **list**,
+which is what *Burner Finger Five* needed: difficult ground always, and ground that is also *burning* for
+a round longer at Refined Release. One spec cannot say two durations.
+
+### SB-41 — spell overlays were validated by nothing
+
+A spell **variant** is a first-class item at cast time — pf2e builds it with
+`mergeObject(source, overlay, { overwrite: true })`, so an overlay's flags replace the base's and the
+rider engine reads them like any other item's. Nothing checked them. A rider with an invented apply type
+sat inside `Burner Finger Four` and validation passed without a word.
+
+That mattered immediately, because the five fingers are exactly where the per-option clauses belong:
+Four's persistent fire and Five's terrain must not be inherited by the other three.
+
+### Two things that were correct and looked broken
+
+- **`fullRelease` refused at 13th** for all five Quincy — because a freshly created actor has
+  `focus.value: 0` and a Full Release costs a point. Correct behaviour, empty pool.
+- **A count-based test broke** on every Spirit at once when the Severing Arts were granted. Three of them
+  asserted `GrantItem.length === 3`. A count is a number to edit rather than a claim to check, so they
+  now assert what each grant *is*: a form from 1st, a Vollständig gated to 13th, a Severing Art behind
+  Severance.
+
+### Where the Quincy pass stands
+
+| Row | | Row | |
+| :-- | :-- | :-- | :-- |
+| Q-05 Blut Arterie | fixed, live | S-83 Balance Refined (AC) | fixed |
+| S-65 bow, die, range 100 | fixed, live | S-84/85/86 at Night | fixed |
+| S-67 Licht Regen | reachable, live | S-89 Galvano Javelin | reachable, live |
+| S-68 Letzt Stil cover | fixed | S-91 Thunderbolt arc | fixed |
+| S-69 free Licht Regen | fixed | S-92 Miracle save | fixed |
+| S-70 the cost | fixed, live | S-95/97/100 Miracle points | fixed, live |
+| S-76/77/78/79 Burner Finger | fixed | S-99 refusal to die | fixed, live |
+
+Still open: the **Severance pass** proper (R-01..R-26) — the fifteen Arts are now reachable, but their
+Waning dice, the lockout after round 7, and the price when Severance ends are unverified.

@@ -22,6 +22,10 @@
         "rules": [
             {
                 "key": "GrantItem",
+                "onDeleteActions": {
+                    "grantee": null,
+                    "granter": "cascade"
+                },
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-equipment.Item.Freund Schild"
             },
             {

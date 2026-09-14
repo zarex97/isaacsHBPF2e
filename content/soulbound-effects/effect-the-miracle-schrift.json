@@ -22,6 +22,10 @@
         "rules": [
             {
                 "key": "GrantItem",
+                "onDeleteActions": {
+                    "grantee": null,
+                    "granter": "cascade"
+                },
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-equipment.Item.The Miracle — Sword and Shield"
             },
             {
@@ -30,6 +34,48 @@
                 "selector": "hp",
                 "type": "untyped",
                 "value": "@actor.level"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "The Miracle",
+                "predicate": [
+                    "soulbound:the-miracle:lethal-save"
+                ],
+                "selector": "saving-throw",
+                "type": "circumstance",
+                "value": 1
+            },
+            {
+                "domain": "saving-throw",
+                "key": "RollOption",
+                "label": "The Miracle: this effect would reduce me to 0 HP",
+                "option": "soulbound:the-miracle:lethal-save",
+                "toggleable": true
+            },
+            {
+                "itemType": "effect",
+                "key": "ItemAlteration",
+                "mode": "override",
+                "predicate": [
+                    "item:slug:effect-miracle-points",
+                    "feature:refined-release",
+                    {
+                        "not": "self:effect:bailar-de-valquiria"
+                    }
+                ],
+                "property": "badge-max",
+                "value": 15
+            },
+            {
+                "itemType": "effect",
+                "key": "ItemAlteration",
+                "mode": "override",
+                "predicate": [
+                    "item:slug:effect-miracle-points",
+                    "self:effect:bailar-de-valquiria"
+                ],
+                "property": "badge-max",
+                "value": 999
             }
         ],
         "start": {

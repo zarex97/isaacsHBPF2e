@@ -1,4 +1,18 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "text": "<strong>Sight of the Balance.</strong> Choose an enemy within 60 feet: it takes a <strong>&minus;2 status penalty</strong> to its next save, and the next ally to attack it gains <strong>+1 status</strong> to that attack.",
+                        "type": "prompt"
+                    },
+                    "event": "turn-start",
+                    "self": true
+                }
+            ]
+        }
+    },
     "img": "modules/isaacs-hb-pf2e/icons/heater-crystal-white.svg",
     "name": "Effect: The Balance, at Night",
     "system": {
@@ -19,10 +33,16 @@
         },
         "rules": [
             {
-                "key": "RollOption",
                 "domain": "all",
+                "key": "RollOption",
                 "option": "soulbound:the-balance:at-night",
                 "value": true
+            },
+            {
+                "key": "Note",
+                "selector": "all",
+                "text": "Your Release Technique reduces the triggering damage by <strong>three times your level</strong>, not twice. Once per round you may redirect an ally's damage within 60 feet to yourself and reduce it the same way, as a <strong>free action that does not spend your reaction</strong>.",
+                "title": "The Balance, at Night"
             }
         ],
         "start": {

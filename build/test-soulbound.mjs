@@ -30,7 +30,10 @@ function runValidate(packName, doc) {
         [{ def: { name: packName, type: "Item" }, docs: [{ file: `content/${packName}/x.json`, doc }] }],
         { errors },
     );
-    return errors;
+    // Reachability is a whole-module question — "does anything grant this" — and a one-document
+    // synthetic pack can never answer it. These fixtures exist to test the FAMILY rules, so the
+    // cross-document checks are dropped here and proved against the real packs by `npm run validate`.
+    return errors.filter((e) => !/nothing grants the/.test(e));
 }
 
 check(
@@ -822,7 +825,9 @@ check("Senbonzakura is a Soul Reaper Spirit the chooser can find", [
     senbon.system.traits.otherTags.includes("soulbound-lineage-soul-reaper"),
 ], [true, true]);
 check("and it grants a Shikai, a Release Technique and a Bankai at 13th",
-    senbon.system.rules.filter((r) => r.key === "GrantItem").length, 3);
+    ["Shikai", "soulbound-techniques", "Kageyoshi"].map((needle) =>
+        senbon.system.rules.some((r) => r.key === "GrantItem" && r.uuid.includes(needle))),
+    [true, true, true]);
 check("the Bankai is level-gated", senbon.system.rules.some((r) => r.key === "GrantItem" && r.reevaluateOnUpdate === true), true);
 
 const senbonTech = techDoc("senbonzakura");
@@ -893,7 +898,9 @@ check("and never falls below nothing", afterRefresh({ held: 0, max: 3, regain: -
 
 const hyorin = spiritDoc("hyorinmaru");
 check("Hyōrinmaru grants a Shikai, Ryūsenka and a Bankai at 13th",
-    hyorin.system.rules.filter((r) => r.key === "GrantItem").length, 3);
+    ["Shikai", "Ryūsenka", "Daiguren"].map((needle) =>
+        hyorin.system.rules.some((r) => r.key === "GrantItem" && r.uuid.includes(needle))),
+    [true, true, true]);
 
 const daiguren = contentDoc("soulbound-effects/effect-daiguren-hyorinmaru.json");
 check(
@@ -1035,7 +1042,9 @@ check("someone already hypnotized is not asked twice", shouldRoll({ ...observer,
 
 const kyoka = spiritDoc("kyoka-suigetsu");
 check("Kyōka Suigetsu grants a Shikai, Shikake and a Full Release at 13th",
-    kyoka.system.rules.filter((r) => r.key === "GrantItem").length, 3);
+    ["Kanzen Saimin", "Shikake", "Sōten Kisshun"].map((needle) =>
+        kyoka.system.rules.some((r) => r.key === "GrantItem" && r.uuid.includes(needle))),
+    [true, true, true]);
 
 const hypnotized = contentDoc("soulbound-effects/effect-hypnotized.json");
 check(
@@ -1059,10 +1068,15 @@ check(
 // All five Soul Reaper Spirits, each with its full ladder.
 for (const name of ["senbonzakura", "zangetsu", "hyorinmaru", "ryujin-jakka", "kyoka-suigetsu"]) {
     const doc = spiritDoc(name);
-    check(`${name}: three rungs granted, the Full Release gated to 13th`, [
-        doc.system.rules.filter((r) => r.key === "GrantItem").length,
-        doc.system.rules.some((r) => r.key === "GrantItem" && JSON.stringify(r.predicate ?? []).includes("13")),
-    ], [3, true]);
+    // By what each grant is, not how many there are. The count said three until the Severing Art turned
+    // out to be granted by nobody at all, and a count is a number to edit rather than a claim to check.
+    const grants = doc.system.rules.filter((r) => r.key === "GrantItem");
+    const gated = (needle) => grants.some((r) => JSON.stringify(r.predicate ?? []).includes(needle));
+    check(`${name}: a form from 1st, a Full Release gated to 13th, and a Severing Art behind Severance`, [
+        grants.some((r) => !r.predicate?.length),
+        gated("13"),
+        gated("soulbound:severance"),
+    ], [true, true, true]);
 }
 
 /* ---------------------------------------------------------------------------------------------- */
@@ -1076,10 +1090,13 @@ for (const name of HOLLOW_SPIRITS) {
         doc.system.traits.otherTags.includes("soulbound-spirit"),
         doc.system.traits.otherTags.includes("soulbound-lineage-hollow"),
     ], [true, true]);
-    check(`${name}: three rungs, the Segunda Etapa gated to 13th`, [
-        doc.system.rules.filter((r) => r.key === "GrantItem").length,
-        doc.system.rules.some((r) => r.key === "GrantItem" && JSON.stringify(r.predicate ?? []).includes("13")),
-    ], [3, true]);
+    const grants = doc.system.rules.filter((r) => r.key === "GrantItem");
+    const gated = (needle) => grants.some((r) => JSON.stringify(r.predicate ?? []).includes(needle));
+    check(`${name}: a form from 1st, a Segunda Etapa gated to 13th, and a Severing Art`, [
+        grants.some((r) => !r.predicate?.length),
+        gated("13"),
+        gated("soulbound:severance"),
+    ], [true, true, true]);
 }
 
 // pf2e's Resistance takes an `exceptions` list, so guide §7B's "all damage except spirit" is exactly
@@ -1218,10 +1235,18 @@ for (const name of QUINCY_SPIRITS) {
         doc.system.traits.otherTags.includes("soulbound-spirit"),
         doc.system.traits.otherTags.includes("soulbound-lineage-quincy"),
     ], [true, true]);
-    check(`${name}: three rungs, the Vollständig gated to 13th`, [
-        doc.system.rules.filter((r) => r.key === "GrantItem").length,
-        doc.system.rules.some((r) => r.key === "GrantItem" && JSON.stringify(r.predicate ?? []).includes("13")),
-    ], [3, true]);
+    // Asserted by what each grant IS rather than by counting them — the count was 3 until the 9th-level
+    // Technique and the Severing Art turned out to be granted by nobody, and a count would have had to
+    // be edited rather than consulted. Every Spirit grants a Schrift Form, a Technique it can use from
+    // 1st, a Vollständig at 13th, and a Severing Art that exists only inside Severance.
+    const grants = doc.system.rules.filter((r) => r.key === "GrantItem");
+    const gated = (needle) => grants.some((r) => JSON.stringify(r.predicate ?? []).includes(needle));
+    check(`${name}: a Schrift Form, and a Vollständig gated to 13th`, [
+        grants.some((r) => !r.predicate?.length),
+        gated("13"),
+    ], [true, true]);
+    check(`${name}: and a Severing Art that only Severance can reach`,
+        gated("soulbound:severance"), true);
 }
 
 // Guide §7C is explicit that these carry incapacitation: stunned on a failed basic save at rank 1 is
@@ -1261,11 +1286,19 @@ check(
     Object.keys(burner.system.overlays).length,
     4,
 );
+// Ordered by each overlay's `sort`, which is what pf2e itself orders variants by — the object's key
+// order is incidental, and a re-serialisation that sorted the keys once turned a player's "Three" into
+// the emanation without touching a single value.
+const fingers = Object.values(burner.system.overlays).sort((a, b) => a.sort - b.sort);
 check(
     "the base is the ranged attack; the others are line, emanation and cone",
-    [burner.system.defense, ...Object.values(burner.system.overlays).map((o) => o.system.area?.type ?? "none")],
+    [burner.system.area, ...fingers.map((f) => f.system?.area?.type ?? "none")],
     [null, "none", "line", "emanation", "cone"],
 );
+check("and the guide's own numbering survives it",
+    fingers.map((f) => f.name),
+    ["Burner Finger Two", "Burner Finger Three", "Burner Finger Four", "Burner Finger Five"]);
+
 
 // The AC bonus must read the POOL, not a roll option nothing sets.
 const balanceSchrift = contentDoc("soulbound-effects/effect-the-balance-schrift.json");
@@ -2347,5 +2380,48 @@ check("nor is a ChoiceSet, whose selection lives there too",
 check("a stateful rule anywhere in either version protects the whole array",
     rulesAreSafeToRefresh(map1, [...map4, { key: "GrantItem", uuid: "y" }]), false);
 check("and a missing side is never refreshed", rulesAreSafeToRefresh(map1, undefined), false);
+
+
+/**
+ * SB-35. `unbroken-chain.mjs` said in its own docstring that it read its conditions from the feat "so a
+ * second refusal-to-die declares itself and needs no code here" — and then matched one hard-coded slug.
+ * Fine while exactly one ability refused to die; wrong the moment Bailar de Valquiria (5 Miracle points,
+ * repeatable) and The Balance's Refined clause did too.
+ */
+const { shouldCatch: refuses, poolOf, declarationsOn } =
+    await import("../scripts/soulbound/unbroken-chain.mjs");
+const at0 = { next: 0, current: 20, released: true, points: 5 };
+check("a blow that would drop you is caught", refuses({ ...at0 }), true);
+check("a blow that leaves you standing is not", refuses({ ...at0, next: 3 }), false);
+check("nor is one landing on someone already down", refuses({ ...at0, current: 0 }), false);
+check("a price you cannot pay is no refusal", refuses({ ...at0, points: 4, cost: 5 }), false);
+check("and one you can is", refuses({ ...at0, points: 5, cost: 5 }), true);
+check("Unbroken Chain needs the release state", refuses({ ...at0, released: false }), false);
+check("Bailar does not — it is already a Vollständig",
+    refuses({ ...at0, released: false, requiresRelease: false }), true);
+check("a spent daily use ends it", refuses({ ...at0, usesLeft: 0 }), false);
+
+check("the reiatsu pool is the default resource",
+    poolOf({ system: { resources: { focus: { value: 3 } } } }).value, 3);
+check("and a counter badge is the other",
+    poolOf({ itemTypes: { effect: [{ system: { slug: "effect-miracle-points", badge: { type: "counter", value: 7 } } }] } },
+           "effect-miracle-points").value, 7);
+check("a resource that is not there pays nothing",
+    poolOf({ itemTypes: { effect: [] } }, "effect-miracle-points").value, 0);
+
+// Cheapest first, so a Soulbound carrying both spends the Reiatsu Point before the five Miracle points.
+check("declarations come back cheapest first",
+    declarationsOn({ items: [
+        { flags: { "isaacs-hb-pf2e": { refuseDeath: { label: "Bailar", cost: 5 } } } },
+        { flags: { "isaacs-hb-pf2e": { refuseDeath: { label: "Unbroken Chain", cost: 1 } } } },
+    ] }).map((d) => d.declared.label),
+    ["Unbroken Chain", "Bailar"]);
+
+check("Unbroken Chain declares its own price now",
+    contentDoc("soulbound-feats/unbroken-chain.json").flags["isaacs-hb-pf2e"].refuseDeath,
+    { cost: 1, frequency: true, label: "Unbroken Chain", requires: "released", resource: "focus" });
+check("and Bailar declares a different one",
+    contentDoc("soulbound-effects/effect-bailar-de-valquiria.json").flags["isaacs-hb-pf2e"].refuseDeath,
+    { cost: 5, label: "Bailar de Valquiria", resource: "effect-miracle-points" });
 
 report("Soulbound tests");

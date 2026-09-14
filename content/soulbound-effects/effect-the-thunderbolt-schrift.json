@@ -22,6 +22,10 @@
         "rules": [
             {
                 "key": "GrantItem",
+                "onDeleteActions": {
+                    "grantee": null,
+                    "granter": "cascade"
+                },
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-equipment.Item.The Thunderbolt — Arcing Sword"
             },
             {
@@ -30,8 +34,8 @@
                 "value": "max(1,floor(@actor.level/2))"
             },
             {
-                "key": "RollOption",
                 "domain": "all",
+                "key": "RollOption",
                 "option": "soulbound:thunderbolt:flash-step-teleport",
                 "value": true
             }
