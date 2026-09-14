@@ -28,10 +28,16 @@
                 "value": 0
             },
             {
-                "key": "RollOption",
                 "domain": "all",
+                "key": "RollOption",
                 "option": "soulbound:letzt-stil-spent",
                 "value": true
+            },
+            {
+                "key": "Note",
+                "selector": "all",
+                "text": "Your <strong>Schrift Form, Release Technique, Licht Regen and Vollständig</strong> are gone, and your reiatsu pool is empty, until you rest for <strong>24 hours</strong>.",
+                "title": "Letzt Stil — Spent"
             }
         ],
         "start": {

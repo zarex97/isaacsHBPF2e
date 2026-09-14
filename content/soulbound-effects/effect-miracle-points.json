@@ -1,7 +1,27 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "text": "<strong>Spend Miracle points</strong> (free action). Each point spent gives your spirit weapon's Strikes <strong>+1d6</strong> damage of its type until the end of your turn. With <strong>Blitz of the Hero</strong> each point also gives <strong>+5 feet status</strong> to your Speeds, to a maximum of +20 feet.",
+                        "type": "prompt"
+                    },
+                    "event": "turn-start",
+                    "self": true
+                }
+            ]
+        }
+    },
     "img": "icons/magic/holy/angel-winged-humanoid-blue.webp",
     "name": "Effect: Miracle Points",
     "system": {
+        "badge": {
+            "max": 10,
+            "min": 0,
+            "type": "counter",
+            "value": 2
+        },
         "description": {
             "value": "<p>Every wound has been counted and kept. The badge is your <strong>Miracle points</strong>: you have <strong>resistance to all damage equal to the number you hold</strong>, and you may spend any number at the start of your turn for <strong>+1d6</strong> damage each until the end of it.</p>"
         },
@@ -32,6 +52,7 @@
                 "value": "@item.badge.value"
             }
         ],
+        "slug": "effect-miracle-points",
         "start": {
             "initiative": null,
             "value": 0
@@ -47,12 +68,6 @@
             "value": [
                 "soulbound"
             ]
-        },
-        "badge": {
-            "max": 10,
-            "min": 0,
-            "type": "counter",
-            "value": 2
         }
     },
     "type": "effect"

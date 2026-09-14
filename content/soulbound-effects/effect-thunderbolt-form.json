@@ -29,6 +29,20 @@
                     },
                     "event": "turn-end",
                     "self": true
+                },
+                {
+                    "apply": {
+                        "text": "<strong>Arc</strong> (once per round). One other creature within 15 feet of the target takes @Damage[3d6[electricity]] damage with a basic Reflex save against your Reiatsu DC.",
+                        "type": "prompt"
+                    },
+                    "event": "strike-resolved",
+                    "outcomes": [
+                        "success",
+                        "criticalSuccess"
+                    ],
+                    "predicate": [
+                        "item:tag:soulbound-spirit-weapon"
+                    ]
                 }
             ]
         }

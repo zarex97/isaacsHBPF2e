@@ -39,16 +39,40 @@
         "rules": [
             {
                 "key": "GrantItem",
+                "onDeleteActions": {
+                    "grantee": null,
+                    "granter": "cascade"
+                },
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-equipment.Item.Seele Schneider"
             },
             {
-                "key": "ItemAlteration",
                 "itemType": "weapon",
+                "key": "ItemAlteration",
                 "mode": "upgrade",
                 "predicate": [
                     "item:tag:soulbound-weapon-profile"
                 ],
                 "property": "damage-dice-faces"
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "mode": "override",
+                "predicate": [
+                    "item:tag:soulbound-weapon-profile",
+                    "item:ranged"
+                ],
+                "property": "range-increment",
+                "value": 100
+            },
+            {
+                "allowDuplicate": false,
+                "key": "GrantItem",
+                "onDeleteActions": {
+                    "grantee": null,
+                    "granter": "cascade"
+                },
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-equipment.Item.Spirit Weapon (Spirit Bow)"
             }
         ],
         "start": {

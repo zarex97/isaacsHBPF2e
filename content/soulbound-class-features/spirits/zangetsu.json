@@ -45,6 +45,14 @@
                 ],
                 "reevaluateOnUpdate": true,
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Tensa Zangetsu"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    "soulbound:severance"
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-techniques.Item.Mugetsu"
             }
         ],
         "traits": {

@@ -1,4 +1,15 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "refuseDeath": {
+                "cost": 1,
+                "frequency": true,
+                "label": "Unbroken Chain",
+                "requires": "released",
+                "resource": "focus"
+            }
+        }
+    },
     "folder": "16th",
     "img": "icons/magic/control/debuff-chains-ropes-red.webp",
     "name": "Unbroken Chain",

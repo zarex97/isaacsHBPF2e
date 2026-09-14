@@ -45,6 +45,27 @@
                 ],
                 "reevaluateOnUpdate": true,
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Quincy: Letzt Stil"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            9
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-techniques.Item.Licht Regen"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    "soulbound:severance"
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-techniques.Item.Sprenger"
             }
         ],
         "traits": {

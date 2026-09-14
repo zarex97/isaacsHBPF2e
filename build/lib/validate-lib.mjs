@@ -137,6 +137,7 @@ export function validate(packs, { errors }) {
     validateHomebrewTraits(packs, errors);
     validateMultipleAttackPenalties(packs, errors);
     validateReevaluatedGrants(packs, errors);
+    validateGrantedWeaponsCascade(packs, errors);
     validateIconsExist(packs, errors);
     validateSlugPredicates(packs, errors);
     validateAlterationProperties(packs, errors);
@@ -221,6 +222,37 @@ function validateAlterationProperties(packs, errors) {
     }
 }
 
+
+/**
+ * A form effect that grants a weapon must take it away again.
+ *
+ * pf2e detaches a **physical** grantee when its granter is deleted — deliberately, so that a granted
+ * sword does not vanish out of a character's inventory:
+ *
+ *     this.onDeleteActions?.granter ??
+ *         (setHasElement(PHYSICAL_ITEM_TYPES, grantee.type) ? "detach" : "cascade")
+ *
+ * A spirit weapon is the opposite case. It exists only while the form is worn, and the form is deleted
+ * and re-created on every Release — so the default left another copy behind each time. A Miracle Quincy
+ * driven through five Releases was carrying five Swords and Shields.
+ */
+function validateGrantedWeaponsCascade(packs, errors) {
+    for (const { docs } of packs) {
+        for (const { file, doc } of docs) {
+            if (doc.type !== "effect") continue;
+            for (const rule of doc.system?.rules ?? []) {
+                if (rule.key !== "GrantItem") continue;
+                if (!String(rule.uuid ?? "").includes("soulbound-equipment")) continue;
+                if (rule.onDeleteActions?.granter === "cascade") continue;
+                errors.push(
+                    `${rel(file)}: grants a weapon without \`onDeleteActions.granter: "cascade"\`. pf2e `
+                    + "detaches a physical grantee by default, so taking the form off leaves the weapon "
+                    + "behind and the next Release adds another copy.",
+                );
+            }
+        }
+    }
+}
 
 /**
  * Every icon the module points at must exist.
@@ -458,20 +490,28 @@ function validateActionsAreReachable(packs, errors) {
     // document ID, not the name, or every action looks orphaned.
     const actions = new Map();
     const granted = new Set();
-    for (const { docs } of packs) {
+    for (const { def, docs } of packs) {
         for (const { file, doc } of docs) {
-            if (doc.type === "action") actions.set(doc._id, { name: doc.name, file });
+            if (doc.type === "action") actions.set(doc._id, { name: doc.name, file, kind: "action" });
+            // A **Technique** is exactly as invisible when nothing grants it, and until now nothing
+            // said so: `Licht Regen` and `Galvano Javelin` were authored down to the incapacitation
+            // trait, sat in the pack, and reached no character — their Spirits granted the 1st-level
+            // Technique and the 13th-level Vollständig and skipped the 9th. The fifteen Severing Arts
+            // were unreachable the same way. Kidō are excluded: those are chosen, not granted.
+            if (doc.type === "spell" && def.name.endsWith("-techniques")) {
+                actions.set(doc._id, { name: doc.name, file, kind: "Technique" });
+            }
             for (const rule of doc.system?.rules ?? []) {
                 if (rule.key !== "GrantItem" || typeof rule.uuid !== "string") continue;
                 granted.add(rule.uuid.split(".").at(-1));
             }
         }
     }
-    for (const [id, { name, file }] of actions) {
+    for (const [id, { name, file, kind }] of actions) {
         if (!granted.has(id)) {
             errors.push(
-                `${rel(file)}: nothing grants the action "${name}", so no character will ever see it — ` +
-                    `add a GrantItem on the feature or sky effect that provides it`,
+                `${rel(file)}: nothing grants the ${kind} "${name}", so no character will ever see it — ` +
+                    `add a GrantItem on the feature, Spirit or sky effect that provides it`,
             );
         }
     }
@@ -564,15 +604,18 @@ function validateItem(doc, where, errors, family) {
     if (doc.type === "effect") validateEffect(doc, where, errors);
     if (doc.type === "class") validateClass(doc, where, errors, family);
 
-    validateAreaTargeting(doc, where, errors);
-    validateRiders(doc, where, errors);
-    validateCounterThresholds(doc, where, errors);
-    validateBypass(doc, where, errors);
-    validateFreeCast(doc, where, errors);
-    validateFrequency(doc, where, errors);
-    validateLingering(doc, where, errors);
-    validateAstral(doc, where, errors);
-    validateSouls(doc, where, errors);
+    validateFlagBlocks(doc, where, errors);
+
+    // A spell **variant** is a first-class item at cast time: pf2e builds it with
+    // `mergeObject(source, overlay, { overwrite: true })`, so an overlay's flags replace the base's and
+    // are read by the rider engine exactly like any other item's. They were not checked at all — a rider
+    // with an invented apply type sat in `Burner Finger Four` and validation passed without a word,
+    // which is precisely the silence this whole validator exists to break.
+    for (const [id, overlay] of Object.entries(doc.system?.overlays ?? {})) {
+        if (!overlay?.flags) continue;
+        validateFlagBlocks({ ...overlay, type: doc.type, system: { ...system, ...overlay.system } },
+                           `${where} [overlay ${id}]`, errors);
+    }
 
     if (MUST_BE_INCAPACITATION.has(system.slug) && !(traits ?? []).includes("incapacitation")) {
         errors.push(
@@ -593,6 +636,21 @@ const AFFECTS = new Set(["all", "allies", "enemies"]);
  * at runtime, only a Technique that quietly goes back to manual targeting — which is indistinguishable
  * from the feature being off, and so gets diagnosed as "the module is broken".
  */
+/**
+ * The module's own flag blocks, checked wherever they appear — on an item, or inside a spell overlay.
+ */
+function validateFlagBlocks(doc, where, errors) {
+    validateAreaTargeting(doc, where, errors);
+    validateRiders(doc, where, errors);
+    validateCounterThresholds(doc, where, errors);
+    validateBypass(doc, where, errors);
+    validateFreeCast(doc, where, errors);
+    validateFrequency(doc, where, errors);
+    validateLingering(doc, where, errors);
+    validateAstral(doc, where, errors);
+    validateSouls(doc, where, errors);
+}
+
 function validateAreaTargeting(doc, where, errors) {
     const flag = doc.flags?.["isaacs-hb-pf2e"]?.areaTargeting;
     if (!flag) return;
@@ -769,9 +827,18 @@ function validateFrequency(doc, where, errors) {
  * deals it, having it in both places would deal it twice.
  */
 function validateLingering(doc, where, errors) {
-    const flag = doc.flags?.["isaacs-hb-pf2e"]?.lingering;
-    if (flag === undefined) return;
-    const at = `${where}: lingering`;
+    const declared = doc.flags?.["isaacs-hb-pf2e"]?.lingering;
+    if (declared === undefined) return;
+    // `lingering` may be one patch or a list of predicated ones — Burner Finger Five leaves difficult
+    // ground always and burning ground at Refined Release, which is two patches, not one.
+    const specs = [declared].flat();
+    specs.forEach((flag, index) => {
+        const at = specs.length > 1 ? `${where}: lingering[${index}]` : `${where}: lingering`;
+        validateOneLingering(flag, at, errors, doc);
+    });
+}
+
+function validateOneLingering(flag, at, errors, doc) {
 
     if (!(Number(flag.duration?.value) > 0)) {
         errors.push(`${at} needs a duration — an area with no expiry is never swept off the map`);
@@ -1026,6 +1093,15 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
         errors.push(`${at} is a save rider, but this spell has no save for it to key off`);
     }
 
+    // A key the engine does not read is the whole failure mode this validator exists for. `once` is real
+    // on an effect apply (`apply.once`) and means nothing at the rider level, where it reads just as
+    // naturally — so say so rather than letting it sit there looking implemented.
+    if (rider.once !== undefined) {
+        errors.push(
+            `${at} has a top-level \`once\`, which nothing reads. Only \`apply.once\` exists, and only `
+            + "for an effect apply; a per-round limit on anything else belongs in the card's text.",
+        );
+    }
     if (rider.outcomes !== undefined) {
         if (!Array.isArray(rider.outcomes) || rider.outcomes.length === 0) {
             errors.push(`${at} outcomes must be a non-empty array, or absent to mean "any outcome"`);

@@ -11,7 +11,13 @@
                         ]
                     }
                 }
-            ]
+            ],
+            "freeCast": {
+                "label": "Quincy: Letzt Stil",
+                "predicate": [
+                    "item:slug:licht-regen"
+                ]
+            }
         }
     },
     "img": "modules/isaacs-hb-pf2e/icons/explosion-star-large-blue.svg",
@@ -24,6 +30,11 @@
             "unit": "minutes",
             "value": 1
         },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
         "level": {
             "value": 13
         },
@@ -34,8 +45,8 @@
         },
         "rules": [
             {
-                "key": "ItemAlteration",
                 "itemType": "weapon",
+                "key": "ItemAlteration",
                 "mode": "upgrade",
                 "predicate": [
                     "item:tag:soulbound-spirit-weapon"
@@ -43,8 +54,8 @@
                 "property": "damage-dice-faces"
             },
             {
-                "key": "ItemAlteration",
                 "itemType": "weapon",
+                "key": "ItemAlteration",
                 "mode": "upgrade",
                 "predicate": [
                     "item:tag:soulbound-spirit-weapon"
@@ -52,8 +63,8 @@
                 "property": "damage-dice-faces"
             },
             {
-                "key": "ItemAlteration",
                 "itemType": "spell",
+                "key": "ItemAlteration",
                 "mode": "override",
                 "predicate": [
                     "item:slug:licht-regen"
@@ -62,10 +73,17 @@
                 "value": 60
             },
             {
-                "key": "RollOption",
                 "domain": "all",
+                "key": "RollOption",
                 "option": "soulbound:blut-both",
                 "value": true
+            },
+            {
+                "key": "EphemeralEffect",
+                "selectors": [
+                    "strike-attack-roll"
+                ],
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Cover Pierced"
             }
         ],
         "start": {

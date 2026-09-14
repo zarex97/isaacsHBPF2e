@@ -1,18 +1,16 @@
 {
     "img": "icons/equipment/shield/heater-crystal-blue.webp",
-    "name": "Effect: The Balance — Schrift",
+    "name": "Effect: The Balance — Held (Refined)",
     "system": {
         "description": {
-            "value": "<p>Freund Schild in your hands, and fortune on your side while the pool holds.</p>"
+            "value": "<p>Misfortune has been handed to you. You take a &minus;1 status penalty to <strong>AC and saving throws</strong>.</p>"
         },
         "duration": {
-            "expiry": null,
-            "sustained": false,
-            "unit": "unlimited",
-            "value": -1
+            "unit": "rounds",
+            "value": 1
         },
         "level": {
-            "value": 1
+            "value": 9
         },
         "publication": {
             "license": "ORC",
@@ -21,29 +19,25 @@
         },
         "rules": [
             {
-                "key": "GrantItem",
-                "onDeleteActions": {
-                    "grantee": null,
-                    "granter": "cascade"
-                },
-                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-equipment.Item.Freund Schild"
+                "key": "FlatModifier",
+                "label": "The Balance",
+                "selector": [
+                    "fortitude",
+                    "reflex",
+                    "will"
+                ],
+                "type": "status",
+                "value": -1
             },
             {
                 "key": "FlatModifier",
                 "label": "The Balance",
-                "predicate": [
-                    {
-                        "gte": [
-                            "self:resource:focus:value",
-                            1
-                        ]
-                    }
-                ],
                 "selector": "ac",
-                "type": "circumstance",
-                "value": 1
+                "type": "status",
+                "value": -1
             }
         ],
+        "slug": "effect-the-balance-held-refined",
         "start": {
             "initiative": null,
             "value": 0
