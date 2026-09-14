@@ -37,13 +37,24 @@ const promptProblems = [];
  */
 let standingResolver = null;
 
+/** The fifteen, by name, so the resolver can tell a Spirit from a Zanjutsu technique. */
+const SPIRITS = [
+    "Senbonzakura", "Zangetsu", "Hyōrinmaru", "Ryūjin Jakka", "Kyōka Suigetsu",
+    "Pantera", "Murciélago", "Arrogante", "Los Lobos", "Tiburón",
+    "Antithesis", "The Heat", "The Balance", "The Thunderbolt", "The Miracle",
+];
+
 export function installResolver(names = []) {
     clearResolver();
+    const lineages = ["Soul Reaper", "Hollow", "Quincy"];
     standingResolver = installPromptResolver(chooserFor({
         profile: names.find((n) => n.startsWith("Spirit Weapon")),
-        lineage: names.find((n) => ["Soul Reaper", "Hollow", "Quincy"].includes(n)),
-        spirit: names.find((n) => !n.startsWith("Spirit Weapon")
-            && !["Soul Reaper", "Hollow", "Quincy"].includes(n)),
+        lineage: names.find((n) => lineages.includes(n)),
+        spirit: names.find((n) => SPIRITS.includes(n)),
+        // Anything left over is the Zanjutsu pick. Before this existed, a name the resolver did not
+        // recognise was treated as the Spirit, and a Soul Reaper run blocked at 5th level.
+        zanjutsu: names.find((n) => !n.startsWith("Spirit Weapon")
+            && !lineages.includes(n) && !SPIRITS.includes(n)) ?? null,
     }));
     return standingResolver;
 }
@@ -54,9 +65,15 @@ export function clearResolver() {
 }
 
 function installPromptResolver(choose) {
+    // `close()` is async and the app lingers in `foundry.applications.instances` for a tick or two
+    // afterwards, so an un-guarded loop answers the same prompt several times. That is harmless to the
+    // run — the promise resolves once — but it makes the transcript read as though every ChoiceSet fired
+    // three times, which is a full hour of chasing a bug that is not there.
+    const answered = new Set();
     return setInterval(() => {
         for (const app of foundry.applications.instances.values()) {
             if (app.constructor.name !== "PickAThingPrompt") continue;
+            if (answered.has(app.id)) continue;
 
             // An empty ChoiceSet cannot be answered by anyone, ever: the dialog has no buttons and the
             // await behind it never returns, which from a scripted driver reads as a protocol timeout
@@ -65,6 +82,7 @@ function installPromptResolver(choose) {
             // pf2e's queryCompendium defaults itemType to "feat", and the profiles are weapons.
             if ((app.choices ?? []).length === 0) {
                 promptProblems.push(`empty ChoiceSet: "${app.prompt ?? app.item?.name ?? "unnamed"}" offered no choices`);
+                answered.add(app.id);
                 app.close();
                 continue;
             }
@@ -72,6 +90,7 @@ function installPromptResolver(choose) {
             const picked = choose(app);
             // undefined means "I do not know what this is" — leave it open rather than guess.
             if (picked === undefined) continue;
+            answered.add(app.id);
             app.selection = picked;
             app.close();
         }
@@ -79,7 +98,7 @@ function installPromptResolver(choose) {
 }
 
 /** Pick a named spirit-weapon profile; refuse to guess at anything else. */
-function chooserFor({ profile, lineage, spirit, kido = [] }) {
+function chooserFor({ profile, lineage, spirit, kido = [], zanjutsu = null }) {
     const picked = [];
     return (app) => {
         const choices = app.choices ?? [];
@@ -109,6 +128,14 @@ function chooserFor({ profile, lineage, spirit, kido = [] }) {
                 picked.push(choice.value);
                 return choice;
             }
+        }
+
+        // Zanjutsu's free 5th-level technique. Without this the run BLOCKS at 5th level for every Soul
+        // Reaper — the prompt is neither a kidō nor a Spirit, the chooser returned undefined, and the
+        // levelling await never came back. It looked exactly like a protocol timeout.
+        if (looksLike("soulbound-techniques") && choices.length > 0) {
+            const choice = zanjutsu ? byName(zanjutsu) ?? choices[0] : choices[0];
+            return choice;
         }
 
         if (looksLike("soulbound-equipment") && choices.length > 0) return choices[0];
@@ -183,6 +210,10 @@ async function assertAt(actor, level, lineage, spirit) {
         // pf2e derives focus.max from the focus effects known and clamps it to `cap`. Phase 1 has no
         // Techniques, so max is legitimately 0; the ceiling is what the class feature actually sets.
         expect("the reiatsu ceiling is 1", sys.resources.focus.cap, 1);
+        // `cap` is the ceiling; `max` is the pool a player actually spends, and pf2e derives it from the
+        // number of non-cantrip focus effects known. Asserting only `cap` is how a Quincy could sit on a
+        // pool of 2 at 20th level while every rig check passed. Assert both, always.
+        expect("and the pool itself matches the ceiling", sys.resources.focus.max, sys.resources.focus.cap);
         expect("a Reiatsu spellcasting entry exists, and exactly one",
             actor.itemTypes.spellcastingEntry.filter((e) => e.system.proficiency?.slug === "soulbound").length, 1);
         expect("a spirit weapon is on the sheet",
@@ -197,6 +228,7 @@ async function assertAt(actor, level, lineage, spirit) {
         expect("weapons are expert", sys.proficiencies.attacks.martial.rank, 2);
         expect("Perception is expert (Alertness)", sys.perception.rank, 2);
         expect("the reiatsu ceiling is 2", sys.resources.focus.cap, 2);
+        expect("and the pool itself is 2", sys.resources.focus.max, 2);
     }
 
     if (level === 9) {
@@ -206,6 +238,7 @@ async function assertAt(actor, level, lineage, spirit) {
 
     if (level === 11) {
         expect("the reiatsu ceiling is 3", sys.resources.focus.cap, 3);
+        expect("and the pool itself is 3", sys.resources.focus.max, 3);
         expect("Fortitude is master (Juggernaut)", sys.saves.fortitude.rank, 3);
         expect("Greater Flash Step is on the sheet", hasFeature(actor, "Greater Flash Step"), true);
     }
@@ -309,18 +342,19 @@ async function assertAt(actor, level, lineage, spirit) {
         const full = actor.itemTypes.feat.find((f) => f.name === "Full Release");
         expect("Unsealed raises Full Release to twice per day", full?.system.frequency?.max, 2);
         expect("the reiatsu ceiling still stops at 3 — the pool does not grow past 11th", sys.resources.focus.cap, 3);
+        expect("and the pool itself is still 3, whatever the Lineage knows", sys.resources.focus.max, 3);
     }
 }
 
 /* -------------------------------------------------------------------------------------------- */
 
 async function run({ profile = "Spirit Weapon (Blade)", lineage = "Soul Reaper", spirit = null, kido = [],
-                    name = null, levels = CHECKPOINTS } = {}) {
+                    zanjutsu = null, name = null, levels = CHECKPOINTS } = {}) {
     name ??= `ZZ Test — ${spirit ?? lineage}`;
     results.length = 0;
     promptProblems.length = 0;
     // Reuse a standing resolver if one was installed; only own one when nobody else does.
-    const owned = standingResolver ? null : installPromptResolver(chooserFor({ profile, lineage, spirit, kido }));
+    const owned = standingResolver ? null : installPromptResolver(chooserFor({ profile, lineage, spirit, kido, zanjutsu }));
     try {
         const actor = await build(name, profile);
         current = null;
