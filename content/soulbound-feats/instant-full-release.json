@@ -1,4 +1,14 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "actionCost": [
+                {
+                    "slug": "full-release",
+                    "value": 1
+                }
+            ]
+        }
+    },
     "folder": "14th",
     "img": "icons/magic/light/explosion-star-large-blue.webp",
     "name": "Instant Full Release",
@@ -24,18 +34,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [
-            {
-                "key": "ItemAlteration",
-                "itemType": "feat",
-                "mode": "override",
-                "predicate": [
-                    "item:slug:full-release"
-                ],
-                "property": "action-cost",
-                "value": 1
-            }
-        ],
+        "rules": [],
         "traits": {
             "otherTags": [
                 "soulbound-feat"

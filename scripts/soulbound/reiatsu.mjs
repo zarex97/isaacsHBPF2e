@@ -1,4 +1,5 @@
 import { classSlugOf } from "../lib/class-dc.mjs";
+import { applyActionCosts } from "./action-cost.mjs";
 import { wrap } from "../lib/wrap.mjs";
 
 const MODULE_ID = "isaacs-hb-pf2e";
@@ -198,6 +199,10 @@ export const Reiatsu = {
                             focus.max = focus.cap ?? focus.max;
                             focus.value = Math.min(focus.value ?? 0, focus.max);
                         }
+                        // pf2e has no alteration for an action cost, and two abilities need one. This is
+                        // the one place a second wrapper on `prepareDerivedData` would have gone, and
+                        // `wrap()` refuses two on the same target by design — so it lives here.
+                        applyActionCosts(this);
                     }
                 } catch (error) {
                     console.error("Isaac's Homebrew | the reiatsu pool could not be sized", error);

@@ -1,0 +1,52 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "modeSwitch": {
+                "family": [
+                    "Higashi",
+                    "Nishi",
+                    "Minami",
+                    "Kita"
+                ],
+                "none": false,
+                "prompt": "Turn the blade. <strong>Higashi</strong> ignores every resistance and stops healing; <strong>Nishi</strong> wreathes you in heat; <strong>Minami</strong> raises the ash; <strong>Kita</strong> readies the unresistable line."
+            }
+        }
+    },
+    "folder": "Actions",
+    "img": "icons/magic/fire/flame-burning-campfire-orange.webp",
+    "name": "Zanka no Tachi — Sustain",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per round</p><hr /><p>Select one cardinal aspect. It lasts until you select another.</p><ul><li><strong>Higashi: Kyokujitsujin</strong> &mdash; your Strikes ignore all resistances and immunities, and a creature damaged by your spirit weapon can't regain Hit Points and has its regeneration and fast healing suppressed until the end of your next turn.</li><li><strong>Nishi: Zanjitsu Gokui</strong> &mdash; fire immunity, resistance to all damage equal to half your level, and a creature that damages you with an unarmed attack, a melee weapon or a Grapple takes <strong>4d6</strong> fire.</li><li><strong>Minami: Kaka Jūmanokushi Daisōjin</strong> &mdash; a 20-foot emanation of ash. An enemy that ends its turn in it must succeed at a Reflex save or be <strong>grabbed</strong>.</li><li><strong>Kita: Tenchi Kaijin</strong> &mdash; readies the 60-foot line whose damage cannot be reduced by fire resistance, Blut Vene or Hierro.</li></ul>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "concentrate",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "action"
+}
