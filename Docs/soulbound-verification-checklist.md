@@ -171,10 +171,10 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | S-01 | **Senbonzakura** — Shikai Form | 1 | Strikes gain **reach 15**, lose two-hand and twin, hands empty, **ignore cover** between you and target | ⚠️ | **SB-6 fixed for the gate.** `reach-15` is absent while sealed and arrives with Release. Still open: the form never **removes** two-hand/twin as the guide requires, and the cover-ignoring clause is a roll option nothing consumes |
 | S-02 | Senbonzakura — Release Technique | 1 | 2 actions, **15-ft emanation**, basic Reflex, 2d6 slashing; area is **difficult terrain for enemies** until start of your next turn; H(+1) +1d6 | ✅ | Cast live at rank 10: 20-ft emanation, basic Reflex **DC 37**, **11d6 slashing** (guide's 11d6 target), 1 Reiatsu Point spent, three enemies auto-targeted, lingering difficult-terrain rider authored |
 | S-03 | Senbonzakura — Refined | 9 | Emanation **20 ft**; crit fail → **off-guard** until start of your next turn | ✅ | Area 15→20 at L9, live. **SB-12 fixed**: the off-guard rider was predicated on `self:feature:refined-release`, an option pf2e never emits, so it could not once have fired. Six Refined riders were wrong the same way |
-| S-04 | **Senbonzakura Kageyoshi** — Bankai | 13 | Second **20-ft emanation** placed within 60 ft; at the start of each of your turns every enemy in **either** takes **5d6** slashing (basic Reflex) | ✅ | **SB-13 and SB-15 fixed.** Live: four enemies each roll a **basic Reflex at DC 27** at the caster's turn start — success `5d6 × 0.5 = 10`, failure `5d6 = 25`, critical failure `5d6 × 2 = 28`. It had **no save at all** before, and hit only the caster |
-| S-05 | Bankai — Sustain / move | 13 | Sustain once per round to move the second emanation up to 30 ft **or** switch mode | ✅ | New `Senbonzakura Kageyoshi — Sustain`, granted by the Bankai effect, once per round. Live: Gokei, Senkei and Neither, never two at once. **The second emanation it can move does not exist yet** — see §14 |
-| S-06 | Bankai — **Gokei** | 13 | Second emanation becomes a **10-ft burst** on one enemy; **double** damage; no cover or concealment against it | ❌ | `Effect: Gokei` sets a roll option and nothing reads it. The 10-foot burst, the doubled damage and the cover/concealment clause are unbuilt — they all rest on the second emanation |
-| S-07 | Bankai — **Senkei** | 13 | 20-ft cage around you and one enemy; neither can leave; your Strikes vs. it ignore **all** resistances; **one extra Strike each round at current MAP**; **you lose reach and cover-ignoring**; can't target anyone outside | ⚠️ | Senkei applies and **takes `reach-15` off the spirit weapon**, live. The cage, the resistance bypass, the extra Strike and the target restriction are prose on the card |
+| S-04 | **Senbonzakura Kageyoshi** — Bankai | 13 | Second **20-ft emanation** placed within 60 ft; at the start of each of your turns every enemy in **either** takes **5d6** slashing (basic Reflex) | ✅ | **Finished.** Two emanations in **one** rider, so a creature in both is caught once — guide §7A says *in either*. Live on a clean combat: unplaced, only the enemy beside the caster took 5d6; with the second sent 90 feet away, that enemy **and** the two at the far end were caught, each once |
+| S-05 | Bankai — Sustain / move | 13 | Sustain once per round to move the second emanation up to 30 ft **or** switch mode | ✅ | **Finished.** The Sustain offers **Send them** (places or moves the second emanation, within 60 ft) alongside Gokei, Senkei and Neither — one action, once per round, exactly as the guide gives them |
+| S-06 | Bankai — **Gokei** | 13 | Second emanation becomes a **10-ft burst** on one enemy; **double** damage; no cover or concealment against it | ✅ | **Finished.** Gokei reshapes the second area into a **10-foot burst** at **double** damage rather than adding a third. Live: `5d6 × 2 = 36` and `× 2 = 26` on the two at the anchor, and nobody else |
+| S-07 | Bankai — **Senkei** | 13 | 20-ft cage around you and one enemy; neither can leave; your Strikes vs. it ignore **all** resistances; **one extra Strike each round at current MAP**; **you lose reach and cover-ignoring**; can't target anyone outside | ✅ | **Finished.** Senkei takes `reach-15` back off the spirit weapon, and a `bypass` makes your Strikes **ignore all resistances**. The cage's movement restriction and the extra Strike arrive as a turn-start prompt — neither is a number pf2e can enforce |
 | S-08 | **Zangetsu** — Shikai Form | 1 | Damage die +1 step; gains **two-handed d12** if not already two-handed; **begin every encounter already released, free and no action** | ✅ | Live: sealed **1d8 / two-hand-d10** → released **1d10 / two-hand-d12**, so the die step carries the two-hand trait with it. `soulbound:release:never-sealed` is set and `combatStart` spends the free first Release for it |
 | S-09 | Zangetsu — **Getsuga Tenshō** | 1 | 2 actions, **30-ft line**, basic Reflex, 2d6 spirit; H(+1) +1d6 | ☐ | |
 | S-10 | Zangetsu — Refined **Kuroi Getsuga** | 9 | Line **60 ft**, **ignores resistance to spirit**, crit fail → **1d6 persistent spirit** | ☐ | |
@@ -202,7 +202,7 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | S-32 | **Kyōka Suigetsu** — Shikai **Kanzen Saimin** | 1 | On Release, and when a creature that can see first observes you released: Will vs. Reiatsu DC or **hypnotized 1 minute** | ✅ | **SB-21 fixed.** Live at 13th: Releasing rolled **Will vs DC 27** for every enemy that could see, and the mirror landed on the failures |
 | S-33 | Kanzen Saimin — the lie | 1 | Hypnotized creature perceives you **5 ft** from where you stand; its attacks need a **DC 5 flat check**; you are **hidden** from it whenever not adjacent | ✅ | `Effect: Hypnotized` carries the flat check as a `strike-resolved` rider on the hypnotized creature, so it rolls when *it* attacks |
 | S-34 | Kanzen Saimin — save ladder | 1 | Crit success → immune 24 h · success → immune 10 min · crit fail → hypnotized 1 h **and auto-hypnotized once per encounter thereafter** · **blind creatures unaffected** | ✅ | Live, all four degrees: failure → hypnotized **1 minute**; critical failure → **1 hour** and `permanentVictim: true` in the register — the *seen it once, falls to it forever* clause; success → `immuneUntil` set ten minutes out; a blinded creature never rolls |
-| S-35 | Kyōka Suigetsu — **Shikake** | 1 | 2 actions, 30 ft, Will. Fail: target treats a chosen creature in its reach **as you**, and **you as an ally**, until end of its next turn. Crit fail: 2 rounds. Illusion/mental/visual | ⚠️ | Shikake is authored with its Will save and both failure tiers, and its Refined off-guard rider was repaired by **SB-12**. Not yet driven |
+| S-35 | Kyōka Suigetsu — **Shikake** | 1 | 2 actions, 30 ft, Will. Fail: target treats a chosen creature in its reach **as you**, and **you as an ally**, until end of its next turn. Crit fail: 2 rounds. Illusion/mental/visual | ✅ | Driven: authored correctly all along — `Effect: Shikake` for 1 round on a failure, 2 on a critical failure, and the Refined off-guard predicated on `feature:refined-release`, which **SB-12** repaired |
 | S-36 | Kyōka Suigetsu — Refined | 9 | Shikai flat check rises to **DC 6**; Shikake's failure also makes the target **off-guard to the misidentified creature** | ✅ | Live: the flat check was stamped at **DC 6** because the caster had Refined Release. The effect lives on the *observer*, where no predicate can see the hypnotist's features, so the DC is stamped on at creation |
 | S-37 | **Kanzen Saimin: Sōten Kisshun** — Full Release | 13 | All enemies within **60 ft** who can see you re-attempt the Shikai save, **including the previously immune**; only a **critical hit** ends it; Sustain once per round to force one hypnotized creature to save or be **confused** until the end of its turn | ✅ | Live: the Full Release sets `soulbound:kyoka:total`, and the sweep re-rolled **7 saves including the 4 who were immune** — guide §7A's *"including those who previously succeeded or became immune"* |
 
@@ -1184,3 +1184,51 @@ Breath** is the first — does not reach a character built before it. Re-adding 
 re-levelling, picks it up. Deliberately not automated: re-granting by diffing pack rules against owned
 items is exactly the wholesale-rules-replacement that produces *"already has item"* on every update
 for ever.
+
+---
+
+## 25 — Senbonzakura finished, and the Soul Reapers with it
+
+### The second emanation
+
+The Bankai is the only ability in either class with an area that is **placed and then stays there**,
+ticking from wherever it was last sent. Two small engine additions carry it:
+
+- **An area may name an `anchor`** — a key under the caster's `areaAnchors` flag holding the point it
+  was placed at. Everything else is centred on the caster, which is why `shapeFromArea` took the
+  origin's centre for both the anchor and the direction.
+- **A rider may carry several shapes at once.** Written as two riders they were two separate turn
+  events, and a creature standing in both rolled twice and took damage twice; guide §7A says *"each
+  enemy in **either** emanation"*. One rider with two shapes goes into a single Region, and
+  `catchTokens` returns each token once.
+
+**Gokei** then reshapes the second shape rather than adding a third: a 10-foot burst at double damage,
+selected by predicate. **Senkei** takes the reach back and carries a `bypass` for every resistance.
+
+**The Sustain does all three jobs** — "Sustain once per round to move the second emanation up to 30
+feet, **or** to switch modes" — so *Send them* is one more button beside Gokei, Senkei and Neither.
+
+### Driven live on a clean combat
+
+| | what was caught |
+| :-- | :-- |
+| unplaced | only the enemy beside the caster, `5d6 = 20` |
+| second emanation sent 90 ft away | that enemy **and** the two at the far end, each once |
+| Gokei | the two at the anchor only, `5d6 × 2 = 36` and `× 2 = 26` |
+
+### A fixture lesson, and a guard that was reverted
+
+Before that clean run, the same test showed each creature rolling **twice** per turn, and
+`pf2e.startTurn` firing twice for the caster every cycle. I added a de-duplication guard to
+`Sources.onTurn` on the strength of it — and then found that `game.combat.round` and `.turn` read
+*stale* inside the hook, rounds advanced 8 → 9 → 10 while `current.turn` stayed 0, and
+`current.combatantId` never moved off the caster.
+
+That combat had been created, deleted and stepped through dozens of times across the session. On a
+**freshly created** combat the order is exactly `["Ghoul Soldier", "ZZ SR — TechGate"]`, one start each
+per cycle, and every creature rolls once. **The guard was reverted**: it was built on an observation
+that turned out to be damage to the test fixture, not behaviour of the system, and shipping it would
+have silently suppressed real ticks.
+
+**For next time:** delete stale combats before measuring anything that keys off turn order, and check
+`combat.current.combatantId` actually advances before trusting a turn-based count.

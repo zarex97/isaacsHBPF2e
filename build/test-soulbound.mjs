@@ -867,7 +867,7 @@ check(
     "the Bankai ticks at the start of your turn against enemies in the emanation",
     (() => {
         const r = contentDoc("soulbound-effects/effect-senbonzakura-kageyoshi.json").flags["isaacs-hb-pf2e"].riders[0];
-        return [r.event, r.apply.riders[0].apply.formula, r.area.value, r.areaTargeting.affects];
+        return [r.event, r.apply.riders[0].apply.formula, [r.area].flat()[0].value, r.areaTargeting.affects];
     })(),
     ["turn-start", "5d6", 20, "enemies"],
 );
@@ -1698,7 +1698,8 @@ check("and a condition is not scaled by a degree of success at all",
 const kageyoshi = contentDoc("soulbound-effects/effect-senbonzakura-kageyoshi.json");
 const kageRider = kageyoshi.flags["isaacs-hb-pf2e"].riders[0];
 check("Senbonzakura Kageyoshi's emanation is a basic Reflex, not free damage (guide §7A)",
-    [kageRider.apply.type, kageRider.apply.statistic, kageRider.apply.basic, kageRider.area],
+    [kageRider.apply.type, kageRider.apply.statistic, kageRider.apply.basic,
+     [kageRider.area].flat()[0]],
     ["save", "reflex", true, { type: "emanation", value: 20 }]);
 check("and it still deals 5d6 slashing rising a die a rank",
     [kageRider.apply.riders[0].apply.formula, kageRider.apply.riders[0].apply.perStep],
@@ -1734,8 +1735,10 @@ const AURAS = [
 ];
 for (const [file, event, radius] of AURAS) {
     const rider = contentDoc(file).flags["isaacs-hb-pf2e"].riders[0];
+    // A rider may carry several shapes; the first is the one centred on the caster.
+    const first = [rider.area].flat()[0];
     check(`${file.split("/").pop()} is a ${radius}-foot ${event} aura`,
-        [rider.event, rider.area?.type, rider.area?.value], [event, "emanation", radius]);
+        [rider.event, first?.type, first?.value], [event, "emanation", radius]);
     check("and it says who it catches, in one place or the other",
         Boolean(rider.areaTargeting?.affects ?? rider.area?.affects), true);
 }
@@ -2113,5 +2116,61 @@ for (const file of fs.readdirSync(path.join(ROOT, "content", "soulbound-feats"))
     if (!read) inertFeats.push(doc.name);
 }
 check("every Soulbound feat has a mechanism behind it", inertFeats, []);
+
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  Senbonzakura Kageyoshi, finished                                                                */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * The Bankai's second emanation is the only area in either class that is **placed and then stays
+ * there**, ticking at the start of each of the caster's turns from wherever it was last sent. Every
+ * other area is centred on the caster, which is why `shapeFromArea` took the origin's centre for both
+ * the anchor and the direction — so an area may now name an `anchor`, a key under the caster's
+ * `areaAnchors` flag holding the point.
+ *
+ * Gokei then reshapes that second area rather than adding a third: a 10-foot burst at double damage.
+ */
+const kage = contentDoc("soulbound-effects/effect-senbonzakura-kageyoshi.json")
+    .flags["isaacs-hb-pf2e"].riders;
+// Both shapes ride ONE rider, so a creature standing in both is caught once — the guide says "each
+// enemy in **either** emanation", and two riders made that two turn events and two lots of damage.
+check("the Bankai ticks from two places at once, as one event (guide §7A)",
+    kage.map((r) => [r.event, [r.area].flat().map((a) => `${a.type} ${a.value} ${a.anchor ?? "on you"}`)]),
+    [["turn-start", ["emanation 20 on you", "emanation 20 senbonzakura-second"]],
+     ["turn-start", ["emanation 20 on you", "burst 10 senbonzakura-second"]]]);
+check("and all three are a basic Reflex for 5d6 slashing, a die a rank",
+    kage.every((r) => r.apply.basic === true && r.apply.statistic === "reflex"
+        && r.apply.riders[0].apply.formula === "5d6" && r.apply.riders[0].apply.perStep === "1d6"),
+    true);
+check("Gokei reshapes the second area and doubles it, rather than adding a third",
+    kage.map((r) => [JSON.stringify(r.predicate), r.apply.riders[0].apply.multiplier ?? 1]),
+    [[JSON.stringify([{ not: "soulbound:senbonzakura:gokei" }]), 1],
+     [JSON.stringify(["soulbound:senbonzakura:gokei"]), 2]]);
+
+// One Sustain, three things it can do — the guide gives them all the same action.
+const sustain = contentDoc("soulbound-class-features/actions/senbonzakura-kageyoshi-sustain.json");
+check("the Sustain can send the blades as well as switch modes, once per round",
+    [sustain.flags["isaacs-hb-pf2e"].modeSwitch.place.anchor,
+     sustain.flags["isaacs-hb-pf2e"].modeSwitch.place.range,
+     sustain.system.frequency],
+    ["senbonzakura-second", 60, { max: 1, per: "round", value: 1 }]);
+
+// Senkei abandons defence: it takes the reach back and ignores every resistance.
+const senkei = contentDoc("soulbound-effects/effect-senkei.json");
+check("Senkei's Strikes ignore all resistances (guide §7A)",
+    senkei.flags["isaacs-hb-pf2e"].bypass[0].resistance.types, "all");
+check("and it still takes back the reach the Shikai granted",
+    senkei.system.rules.some((r) => r.key === "ItemAlteration" && r.mode === "remove" && r.value === "reach-15"),
+    true);
+
+// Shikake was authored correctly all along; SB-12 repaired the predicate that gated its Refined half.
+const shikakeRiders = contentDoc("soulbound-techniques/shikake.json").flags["isaacs-hb-pf2e"].riders;
+check("Shikake lasts a round on a failure and two on a critical failure (guide §7A)",
+    shikakeRiders.filter((r) => r.apply.type === "effect")
+        .map((r) => [r.outcomes[0], r.duration.value]),
+    [["failure", 1], ["criticalFailure", 2]]);
+check("and its Refined off-guard waits for Refined Release, spelled the way pf2e emits it",
+    shikakeRiders.find((r) => r.apply.slug === "off-guard").predicate, ["feature:refined-release"]);
 
 report("Soulbound tests");

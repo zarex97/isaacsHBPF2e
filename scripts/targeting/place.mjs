@@ -121,6 +121,10 @@ export function shapeFromArea(area, originToken, point) {
         case "square":
             return { type: "rectangle", width: distance, height: distance, x, y };
         case "emanation": {
+            // An emanation normally spreads from the caster's own space, so it needs their token. An
+            // *anchored* one — Senbonzakura Kageyoshi's second emanation — is centred on a remembered
+            // point instead, and is simply a circle of the same radius around it.
+            if (area.anchor) return { type: "circle", radius: distance, x, y };
             const source = originToken?.document?._source;
             if (!source) return null;
             const base = {

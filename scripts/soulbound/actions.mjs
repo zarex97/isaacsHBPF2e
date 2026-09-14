@@ -126,9 +126,17 @@ async function switchMode(actor, item) {
     // "select one cardinal aspect, which lasts until you select another", with no way to stand in none of
     // them — and declares `none: false` to say so.
     const none = declared.none === false ? null : (declared.none ?? "Neither");
+    // One Sustain, two things it can do: "Sustain once per round to move the second emanation up to 30
+    // feet, **or** to switch modes" (guide §7A). So placing is one more button on the same dialog.
+    const place = declared.place?.anchor ? (declared.place.label ?? "Place it") : null;
     const choice = await chooseOne(item.name, declared.prompt ?? "Which one?",
-        none ? [...family, none] : [...family]);
+        [...family, ...(place ? [place] : []), ...(none ? [none] : [])]);
     if (!choice) return true; // declared, and declined — not "unhandled"
+
+    if (choice === place) {
+        await placeAnchor(actor, declared.place);
+        return true;
+    }
 
     if (choice === none) {
         await Modes.clear(actor, family);
@@ -138,6 +146,38 @@ async function switchMode(actor, item) {
     const set = await Modes.set(actor, choice, family);
     if (set) ui.notifications.info(`${actor.name}: ${set}.`);
     return true;
+}
+
+/**
+ * Remember where an area was sent.
+ *
+ * Senbonzakura Kageyoshi's second emanation is the only area in either class that is **placed and then
+ * stays there**, ticking at the start of each of the caster's turns from wherever it was last put. The
+ * point is kept on the caster under `areaAnchors`, and a rider naming that anchor builds its shape
+ * around it — see `targetsFor`.
+ *
+ * The placement itself is pf2e's, through the module's own `placeArea`, so it snaps and previews like
+ * every other aimed area and can be cancelled without costing the Sustain.
+ */
+async function placeAnchor(actor, declared) {
+    const { placeArea, discardArea } = await import("../targeting/place.mjs");
+    const originToken = actor.getActiveTokens(true, true).at(0);
+    if (!originToken?.object) {
+        ui.notifications.warn(`${actor.name} needs a token on the scene to send the blades from.`);
+        return;
+    }
+    const config = { item: { actor, name: "Senbonzakura Kageyoshi", system: {} },
+                     area: declared.area, anchor: null, affects: "enemies" };
+    const placed = await placeArea(config, originToken.object);
+    if (!placed?.length) return;
+
+    const shape = placed[0].shapes?.at?.(0);
+    const point = shape ? { x: shape.x, y: shape.y } : null;
+    await discardArea(placed);
+    if (!point) return;
+
+    await actor.setFlag(MODULE_ID, `areaAnchors.${declared.anchor}`, point);
+    ui.notifications.info(`${actor.name} sends the blades.`);
 }
 
 /** The item behind a chat message, whether it was posted from a sheet or by a macro. */
