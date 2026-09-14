@@ -1,4 +1,14 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "attributeCaps": [
+                {
+                    "path": "attributes.doomed.max",
+                    "value": 1
+                }
+            ]
+        }
+    },
     "img": "icons/magic/death/skull-crowned-white.webp",
     "name": "Effect: Arrogante — Resurrección",
     "system": {
@@ -31,12 +41,6 @@
             {
                 "key": "Immunity",
                 "type": "poison"
-            },
-            {
-                "key": "ActiveEffectLike",
-                "mode": "downgrade",
-                "path": "system.attributes.doomed.max",
-                "value": 1
             }
         ],
         "start": {

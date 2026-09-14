@@ -393,9 +393,17 @@ async function targetsFor(rider, context) {
     const anchors = context.originActor?.getFlag?.(MODULE_ID, "areaAnchors") ?? {};
     const shapes = [];
     for (const area of areas) {
-        const centre = area.anchor
-            ? anchors[area.anchor] && { x: anchors[area.anchor].x, y: anchors[area.anchor].y }
-            : originToken.object.center;
+        // `anchor: "target"` centres the shape on the creature that was struck, not on the caster.
+        //
+        // Murciélago's Refined Cero Oscuras "gains a 5-foot burst at the target dealing half damage to
+        // others" — the only sensible centre is the thing it hit, and every rider area until now could
+        // only be centred on the caster or on a point placed by hand. A splash is a common enough shape
+        // that this belongs in the engine rather than in one Spirit.
+        const centre = area.anchor === "target"
+            ? context.target?.object?.center
+            : area.anchor
+                ? anchors[area.anchor] && { x: anchors[area.anchor].x, y: anchors[area.anchor].y }
+                : originToken.object.center;
         // An anchored area that has never been placed has nowhere to be, which is the right answer
         // before the blades have been sent anywhere.
         if (!centre) continue;

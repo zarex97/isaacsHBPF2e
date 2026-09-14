@@ -4,7 +4,17 @@
             "areaTargeting": {
                 "affects": "enemies",
                 "includesSelf": false
-            }
+            },
+            "areaTargetingShapes": [
+                {
+                    "type": "cone",
+                    "value": 60
+                },
+                {
+                    "type": "line",
+                    "value": 120
+                }
+            ]
         }
     },
     "img": "icons/magic/fire/projectile-bolt-salvo-red.webp",
@@ -54,6 +64,23 @@
         "level": {
             "value": 1
         },
+        "overlays": {
+            "cerometralletaline": {
+                "_id": "cerometralletaline",
+                "name": "Cero Metralleta (line)",
+                "overlayType": "override",
+                "sort": 1,
+                "system": {
+                    "area": {
+                        "type": "line",
+                        "value": 120
+                    },
+                    "range": {
+                        "value": "120 feet"
+                    }
+                }
+            }
+        },
         "publication": {
             "license": "ORC",
             "remaster": true,
@@ -83,23 +110,6 @@
                 "reiatsu",
                 "soulbound"
             ]
-        },
-        "overlays": {
-            "cerometralletaline": {
-                "_id": "cerometralletaline",
-                "name": "Cero Metralleta (line)",
-                "overlayType": "override",
-                "sort": 1,
-                "system": {
-                    "area": {
-                        "type": "line",
-                        "value": 120
-                    },
-                    "range": {
-                        "value": "120 feet"
-                    }
-                }
-            }
         }
     },
     "type": "spell"
