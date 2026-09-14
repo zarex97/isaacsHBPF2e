@@ -1232,3 +1232,83 @@ have silently suppressed real ticks.
 
 **For next time:** delete stale combats before measuring anything that keys off turn order, and check
 `combat.current.combatantId` actually advances before trusting a turn-based count.
+
+---
+
+## §26 — the Hollow's Regeneración: three bugs stacked in one clause
+
+Guide §5.2 puts the whole point of the Lineage in one sentence, and then says so out loud:
+
+> It is deactivated while you have the dying condition, and suppressed until the end of your next turn
+> whenever you take spirit damage or damage from a holy or vitality effect.
+>
+> *That last clause is the point: Soul Reapers and Quincy exist to shut this down, and both can, from
+> 1st level.*
+
+Nothing in that clause worked. Three separate defects, each of which hid the next.
+
+### SB-24 — the predicate named an effect that did not exist
+
+`Regeneración` was predicated `{not: "self:effect:regeneracion-suppressed"}`, and **nothing in the module
+ever applied such an effect** — no content document, no script. The predicate read perfectly and was
+never false, so a Hollow's fast healing could not be switched off by anything.
+
+Fixed by creating the effect and `scripts/soulbound/regeneracion.mjs`, called from the `applyDamage` wrap
+in `riders/sources.mjs` — the only place the damage **type** still exists. By the time hit points have
+changed, all that is left is a number.
+
+### SB-25 — the doubling was an option nobody read
+
+`soulbound:murcielago:high-speed-regeneration` was published by Segunda Etapa and read by nothing. Split
+into two predicated `FastHealing` rules, base and `2*(…)`, mutually exclusive so it can never heal twice.
+
+**Confirmed live at 17th:** `6* / 12` plain, `6 / 12*` with the option, `6 / 12` (both off) while dying.
+
+### SB-26 — `holy` is a trait, not a damage type
+
+The repair to SB-24 asked for `holy` among the damage **types**. There is no `holy` in pf2e's
+`DAMAGE_TYPES` — the remaster made it a *trait* — so `5[holy]` parses as **untyped** and a type check for
+it can never match. The guide's wording is exact and was read too quickly: "damage from a **holy or
+vitality effect**" is one type and one property of the effect.
+
+`suppressorsFor` now returns `{types, traits}` and `traitsOf` reads `item:trait:` / `origin:item:trait:`
+from the roll options — **never `self:trait:`**, which is the *target's* traits: a Hollow that happened to
+be holy would otherwise suppress its own regeneration on every hit it took.
+
+| At the table | spirit | vitality | holy (trait) | holy on *self* | slashing |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| 11th | suppressed | suppressed | suppressed | — | — |
+| 15th, **Segunda Piel** | suppressed | — | — | — | — |
+
+### The thread running through all three
+
+**Two of these three were the same bug as SB-16, in two new places.** `sluggify` reduces anything outside
+`[a-z0-9]` to a separator, so "Regeneración" builds as `regeneraci-n`:
+
+- in **code** — `scripts/soulbound/regeneracion.mjs` compared `system.slug === "regeneracion"` and matched
+  nothing. Now matched on an authored **tag** (`soulbound-regeneracion`), which is ASCII by construction
+  and, unlike an explicit slug, does not change the document's derived id and break every existing
+  character's link to it.
+- in **content** — the new effect was named "Effect: Regeneración Suppressed", so pf2e published
+  `self:effect:regeneraci-n-suppressed` while the predicate asked for `regeneracion-suppressed`. Its
+  `system.slug` is now pinned.
+
+Both guards are now in place, because an accented name will keep happening:
+
+- `validateSlugPredicates` checks **`self:effect:<x>`** as well as `item:slug:<x>`, against the built
+  effect slugs with the leading `effect-` stripped the way pf2e strips it.
+- `test-soulbound` checks that every `system.slug === "…"` comparison **in the scripts** names a document
+  the build actually writes.
+
+Both were confirmed to fail on the un-fixed content before being accepted.
+
+### Note on a bad probe
+
+The first live reading of this was `fastHealing: []` at every level, reported as "no fast healing at all".
+That was wrong. **`FastHealingRuleElement` writes nothing to the actor** — it has no
+`beforePrepareData`/`afterPrepareData` at all, only an `onUpdateEncounter` that posts a chat card at the
+start of the turn. `system.attributes.fastHealing` is a property pf2e does not maintain, so reading it
+proves nothing either way. The rule instances on `actor.rules` are the thing to inspect.
+
+Likewise `{(5[spirit])}` parses as **untyped** — the inner parentheses strip the annotation. The correct
+damage formula is `{5[spirit]}`.

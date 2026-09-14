@@ -3,6 +3,17 @@
         "isaacs-hb-pf2e": {
             "areaTargeting": {
                 "affects": "enemies",
+                "alternateArea": [
+                    {
+                        "area": {
+                            "type": "line",
+                            "value": 60
+                        },
+                        "predicate": [
+                            "self:effect:hirviendo"
+                        ]
+                    }
+                ],
                 "includesSelf": false
             },
             "lingering": {
