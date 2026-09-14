@@ -1,0 +1,48 @@
+{
+    "folder": null,
+    "img": "icons/magic/unholy/strike-body-explode-disintegrate.webp",
+    "name": "Effect: Respira — Cannot Heal",
+    "system": {
+        "badge": null,
+        "description": {
+            "value": "<p>The miasma has stopped this creature knitting itself back together. It <strong>cannot regain Hit Points</strong> until the end of its next turn.</p>"
+        },
+        "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 9
+        },
+        "publication": {
+            "license": "OGL",
+            "remaster": true,
+            "title": "Isaac's Homebrew"
+        },
+        "rules": [
+            {
+                "key": "Note",
+                "selector": "all",
+                "text": "This creature cannot regain Hit Points until the end of its next turn.",
+                "title": "Respira"
+            }
+        ],
+        "slug": "effect-respira-cannot-heal",
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "void"
+            ]
+        }
+    },
+    "type": "effect"
+}

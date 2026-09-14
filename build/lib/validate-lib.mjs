@@ -134,6 +134,7 @@ export function validate(packs, { errors }) {
     }
     validateAdvancementTable(packs, errors);
     validateActionsAreReachable(packs, errors);
+    validateReevaluatedGrants(packs, errors);
     validateSlugPredicates(packs, errors);
     validateAlterationProperties(packs, errors);
     validateCounterBadges(packs, errors);
@@ -213,6 +214,40 @@ function validateAlterationProperties(packs, errors) {
                     + "declare `flags.isaacs-hb-pf2e.actionCost` instead.",
                 );
             });
+        }
+    }
+}
+
+
+/**
+ * A predicated `GrantItem` must say `reevaluateOnUpdate`.
+ *
+ * Without it pf2e tests the predicate **once**, when the granting item is created, and never looks
+ * again — `preUpdateActor` returns immediately unless the flag is set. A grant gated on something that
+ * becomes true later therefore never happens at all.
+ *
+ * `Effect: Los Lobos — Resurrección` granted its Refined Sustain on `feature:refined-release` and a
+ * 9th-level Tercera Espada released with no Sustain on the sheet. Seventy-one of the module's other
+ * seventy-three predicated grants already carried the flag; it is the convention, and the one other
+ * that did not — `Effect: Om` — is `inMemoryOnly` and is rebuilt every preparation instead.
+ */
+function validateReevaluatedGrants(packs, errors) {
+    for (const { docs } of packs) {
+        for (const { file, doc } of docs) {
+            for (const rule of doc.system?.rules ?? []) {
+                if (rule.key !== "GrantItem") continue;
+                if (!Array.isArray(rule.predicate) || rule.predicate.length === 0) continue;
+                if (rule.reevaluateOnUpdate === true) continue;
+                // An `inMemoryOnly` grant is rebuilt by `onApplyActiveEffects` on every data
+                // preparation, which is more often than an actor update — pf2e's `preUpdateActor`
+                // returns early for these on purpose. `Effect: Om` is the module's one such grant.
+                if (rule.inMemoryOnly === true) continue;
+                errors.push(
+                    `${rel(file)}: GrantItem is predicated but does not set \`reevaluateOnUpdate\`, so `
+                    + "pf2e tests the predicate once at creation and never again — a grant gated on "
+                    + "something that becomes true later never happens at all.",
+                );
+            }
         }
     }
 }

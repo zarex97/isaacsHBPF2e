@@ -170,14 +170,14 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | S-01 | **Senbonzakura** — Shikai Form | 1 | Strikes gain **reach 15**, lose two-hand and twin, hands empty, **ignore cover** between you and target | ⚠️ | **SB-6 fixed for the gate.** `reach-15` is absent while sealed and arrives with Release. Still open: the form never **removes** two-hand/twin as the guide requires, and the cover-ignoring clause is a roll option nothing consumes |
 | S-02 | Senbonzakura — Release Technique | 1 | 2 actions, **15-ft emanation**, basic Reflex, 2d6 slashing; area is **difficult terrain for enemies** until start of your next turn; H(+1) +1d6 | ✅ | Cast live at rank 10: 20-ft emanation, basic Reflex **DC 37**, **11d6 slashing** (guide's 11d6 target), 1 Reiatsu Point spent, three enemies auto-targeted, lingering difficult-terrain rider authored |
-| S-03 | Senbonzakura — Refined | 9 | Emanation **20 ft**; crit fail → **off-guard** until start of your next turn | ✅ | Area 15→20 at L9, live. **SB-12 fixed**: the off-guard rider was predicated on `self:feature:refined-release`, an option pf2e never emits, so it could not once have fired. Six Refined riders were wrong the same way |
+| S-03 | Senbonzakura — Refined | 9 | Emanation **20 ft**; crit fail → **off-guard** until start of your next turn | ✅ | Refined widening added: 20-ft emanation via `alternateArea` on `feature:refined-release` (SB-28) |
 | S-04 | **Senbonzakura Kageyoshi** — Bankai | 13 | Second **20-ft emanation** placed within 60 ft; at the start of each of your turns every enemy in **either** takes **5d6** slashing (basic Reflex) | ✅ | **Finished.** Two emanations in **one** rider, so a creature in both is caught once — guide §7A says *in either*. Live on a clean combat: unplaced, only the enemy beside the caster took 5d6; with the second sent 90 feet away, that enemy **and** the two at the far end were caught, each once |
 | S-05 | Bankai — Sustain / move | 13 | Sustain once per round to move the second emanation up to 30 ft **or** switch mode | ✅ | **Finished.** The Sustain offers **Send them** (places or moves the second emanation, within 60 ft) alongside Gokei, Senkei and Neither — one action, once per round, exactly as the guide gives them |
 | S-06 | Bankai — **Gokei** | 13 | Second emanation becomes a **10-ft burst** on one enemy; **double** damage; no cover or concealment against it | ✅ | **Finished.** Gokei reshapes the second area into a **10-foot burst** at **double** damage rather than adding a third. Live: `5d6 × 2 = 36` and `× 2 = 26` on the two at the anchor, and nobody else |
 | S-07 | Bankai — **Senkei** | 13 | 20-ft cage around you and one enemy; neither can leave; your Strikes vs. it ignore **all** resistances; **one extra Strike each round at current MAP**; **you lose reach and cover-ignoring**; can't target anyone outside | ✅ | **Finished.** Senkei takes `reach-15` back off the spirit weapon, and a `bypass` makes your Strikes **ignore all resistances**. The cage's movement restriction and the extra Strike arrive as a turn-start prompt — neither is a number pf2e can enforce |
 | S-08 | **Zangetsu** — Shikai Form | 1 | Damage die +1 step; gains **two-handed d12** if not already two-handed; **begin every encounter already released, free and no action** | ✅ | Live: sealed **1d8 / two-hand-d10** → released **1d10 / two-hand-d12**, so the die step carries the two-hand trait with it. `soulbound:release:never-sealed` is set and `combatStart` spends the free first Release for it |
 | S-09 | Zangetsu — **Getsuga Tenshō** | 1 | 2 actions, **30-ft line**, basic Reflex, 2d6 spirit; H(+1) +1d6 | ☐ | |
-| S-10 | Zangetsu — Refined **Kuroi Getsuga** | 9 | Line **60 ft**, **ignores resistance to spirit**, crit fail → **1d6 persistent spirit** | ☐ | |
+| S-10 | Zangetsu — Refined **Kuroi Getsuga** | 9 | Line **60 ft**, **ignores resistance to spirit**, crit fail → **1d6 persistent spirit** | ✅ | Refined widening added: 60-ft line (SB-28) |
 | S-11 | **Tensa Zangetsu** — Bankai | 13 | **No die step** (overrides Full Release); **+10 ft status** to all Speeds; **Flash Step twice per round** | ✅ | Live at L13: **no further die step** in Full Release (1d10 stays 1d10), **+10 status to Speeds** (25→35), **Flash Step frequency 2** |
 | S-12 | Tensa Zangetsu — compressed Getsuga | 13 | Getsuga Tenshō becomes **1 action**, line **60 ft** (90 with Refined) | ✅ | **SB-16 and SB-17 fixed.** Live at L13 in Tensa: Getsuga is **90 feet** (60 without Refined Release) and **1 action**. Both alterations were dead — one named a slug that does not exist, the other a property pf2e has no handler for |
 | S-13 | Tensa Zangetsu — free Step | 13 | First hit each round with the spirit weapon → **Step** as a free action | ⚠️ | A `strike-resolved` prompt on a hit with the spirit weapon now says you may Step. A Step's direction is the player's, so it is a prompt at the right moment rather than a move chosen for them; the once-per-round limit is on the card, not enforced |
@@ -192,7 +192,7 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | S-22 | Bankai — Perfected | 17 | **Restores one spent petal-flower at the start of each of your turns** | ✅ | Live: a turn start at 13th gives nothing back; at 17th the pool climbs 1 → 2 → 3 and stops at three. Declared on the effect (`chargeRefresh`), not written into code |
 | S-23 | **Ryūjin Jakka** — Shikai Form | 1 | Damage type **fire**; weapon gains **deadly d8**; **fire resistance = half level** | ✅ | Live at L13: **fire resistance 6** (half level), damage type fire, `deadly-d8` |
 | S-24 | Ryūjin Jakka — **Ennetsu Jigoku** | 1 | 2 actions, **15-ft emanation**, basic Reflex, 2d6 fire; fail → **1d4 persistent fire**; H(+1) +1d6, +1 persistent die every **other** increment | ☐ | |
-| S-25 | Ryūjin Jakka — Refined | 9 | Emanation **20 ft**; ground inside becomes **difficult terrain** until end of your next turn | ☐ | |
+| S-25 | Ryūjin Jakka — Refined | 9 | Emanation **20 ft**; ground inside becomes **difficult terrain** until end of your next turn | ✅ | Refined widening added: 20-ft emanation (SB-28) |
 | S-26 | **Zanka no Tachi** — Bankai | 13 | Die **+2 steps**; **you lose your fire resistance**; at the start of each of your turns every creature **other than you** within 30 ft — **allies included** — takes **1d6 fire, no save** | ✅ | Live: **two** die-step upgrades, and the fire resistance **disappears** under Zanka no Tachi — the Shikai's `Resistance` is predicated `{not: self:effect:zanka-no-tachi}`. The ambient 30-ft burn reaches everyone but the caster after **SB-15** |
 | S-27 | Aspect — **Higashi** | 13 | Strikes ignore **all** resistances and immunities; a creature you damage **can't regain HP** and its regeneration/fast healing is suppressed until end of your next turn | ☐ | |
 | S-28 | Aspect — **Nishi** | 13 | **Fire immunity**; **resistance to all = half level**; a creature that damages you with an unarmed attack, melee weapon or Grapple takes **4d6 fire** | ✅ | Live: choosing **Nishi** grants fire immunity and **resistance to all damage 6** at L13, plus the 4d6 retributive rider |
@@ -212,7 +212,7 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | S-38 | **Pantera** — Resurrección Form | 1 | Two **claw** unarmed attacks 1d8 S, agile, finesse, brawling; **Speed +10 ft, stacking with Sonido** (40 ft total at 1st) | ☐ | v1.4 §7 |
 | S-39 | Pantera — **Garra de la Pantera** | 1 | 2 actions, **30-ft cone**, basic Reflex, 2d6 piercing; area **difficult terrain for enemies** until start of your next turn; H(+1) +1d6 | ☐ | |
-| S-40 | Pantera — Refined | 9 | Claws become **1d10**; after Garra you may **Step** as a free action | ☐ | |
+| S-40 | Pantera — Refined | 9 | Claws become **1d10**; after Garra you may **Step** as a free action | ✅ | **SB-28 fixed.** Live: claws read **1d8 at 1st and 1d10 at 9th**. Step after Garra is a `self` prompt rider |
 | S-41 | **Pantera — Segunda Etapa** | 13 | Speed **+10 more**; claws gain **deadly d10**; once per round a claw crit grants an extra claw Strike at current MAP | ☐ | |
 | S-42 | Segunda Etapa — Garra upgrade | 13 | Cone **60 ft**; crit fail → **2d6 persistent bleed** | ☐ | |
 | S-43 | **Murciélago** — Resurrección Form | 1 | **Fly Speed** = Speed; weapon becomes **Luz de la Luna** 1d10 P, versatile S, **reach**, re-forms in hand instantly | ☐ | |
@@ -220,20 +220,20 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | S-45 | Murciélago — Refined | 9 | Crit → target **off-guard** until start of your next turn; gains a **5-ft burst** at the target dealing **half** damage to others (basic Reflex) | ☐ | |
 | S-46 | **Murciélago — Segunda Etapa** | 13 | Fly **+20 ft**; **resistance to all except spirit = half level**; **Regeneración doubles** and restores lost limbs | ☐ | |
 | S-47 | Segunda Etapa — **Lanza del Relámpago** | 13 | 2 actions, once per round, 120 ft; ranged spell attack **5d6 electricity** (doubled on crit); **whether or not you hit**, a **15-ft burst** for **5d6 fire**, basic Reflex; H(+1) +1d6 to both | ☐ | |
-| S-48 | **Arrogante** — Resurrección Form | 1 | Weapon becomes **Gran Caída** 1d12 S, two-handed, sweep, forceful; immune to disease, poison, and **doomed never rises past 1** | ☐ | |
+| S-48 | **Arrogante** — Resurrección Form | 1 | Weapon becomes **Gran Caída** 1d12 S, two-handed, sweep, forceful; immune to disease, poison, and **doomed never rises past 1** | ✅ | **SB-27 fixed.** Live: `doomed.max` reads **1** at 1st and 9th, while Pantera and Los Lobos in the same world read 4 |
 | S-49 | Arrogante — **Respira** | 1 | 2 actions, **15-ft emanation**, basic Fortitude, 2d6 void; fail → **enfeebled 1** 1 min; crit fail → **enfeebled 2 + clumsy 1**; **lingers**: 1d6 void, no save, to an enemy entering or ending its turn there until start of your next turn; H(+1) +1d6, lingering +1d6 every **other** increment | ☐ | |
-| S-50 | Arrogante — Refined | 9 | Emanation **20 ft**; objects and unattended structures **broken** (already-broken destroyed); crit fail also **can't regain HP** until end of its next turn | ☐ | |
+| S-50 | Arrogante — Refined | 9 | Emanation **20 ft**; objects and unattended structures **broken** (already-broken destroyed); crit fail also **can't regain HP** until end of its next turn | 🔧 | **SB-28 fixed**: 20-ft emanation, `Effect: Respira — Cannot Heal` on a critical failure, broken objects as a Note. Awaiting a live drive |
 | S-51 | **Respira Absoluta** — Segunda Etapa | 13 | Respira becomes **permanent and free**: a **20-ft emanation**; enemies ending their turn take **3d6 void** (basic Fortitude), **enfeebled 1** 1 round on a failure | 🔧 | **SB-15 fixed**: Respira Absoluta's 20-ft aura fans out now. Awaiting a live drive |
 | S-52 | Respira Absoluta — decay | 13 | A creature in the emanation targeting you with an attack or spell must make a **DC 5 flat check** or it has **no effect**; on a success it's temp-immune for 1 minute | ☐ | |
 | S-53 | **Los Lobos** — Resurrección Form | 1 | Weapon splits into **two pistols**: 1d6 P, agile, range 60, reload 0, no ammunition, both wieldable; **Speed +5 ft** | ☐ | |
-| S-54 | Los Lobos — **Cero Metralleta** | 1 | 2 actions, **60-ft cone** *or* **120-ft line**, basic Reflex, 2d6 force; H(+1) +1d6 | ☐ | |
-| S-55 | Los Lobos — Refined | 9 | **Sustain** at the start of your next turn to fire again in a **different direction** with **no** Reiatsu cost | ☐ | |
+| S-54 | Los Lobos — **Cero Metralleta** | 1 | 2 actions, **60-ft cone** *or* **120-ft line**, basic Reflex, 2d6 force; H(+1) +1d6 | ✅ | **SB-28 fixed.** Live: the spell offers **60-ft cone / 120-ft line** through `areaTargetingShapes`, which no content had used before |
+| S-55 | Los Lobos — Refined | 9 | **Sustain** at the start of your next turn to fire again in a **different direction** with **no** Reiatsu cost | ✅ | **SB-28/SB-29 fixed.** Live: absent at 1st, and at 9th `Cero Metralleta — Sustain` arrives as **1 action, 1/round** |
 | S-56 | **Colmillo** — Segunda Etapa | 13 | **Eight wolves** appear within 30 ft; they are **not creatures** — no statistics, no actions, cannot be attacked, do not flank | ☐ | |
 | S-57 | Colmillo — the action | 13 | 1 action, requires ≥1 wolf; expend any number; each moves to a point within 60 ft and detonates in a **10-ft burst** for **3d6** force (basic Reflex); **a creature in more than one burst takes only the highest**; H(+1) +1d6 | ⚠️ | `Effect: Colmillo` holds eight wolves as a counter with `min: 0`, which was already right. The spend is not yet declared on the technique |
 | S-58 | Colmillo — regrowth | 13 | **+1 wolf at the start of each of your turns**, max eight | ✅ | Live machinery: `chargeRefresh` on `Effect: Colmillo` regains one a turn with no Perfected clause, exactly as guide §7B gives Los Lobos |
 | S-59 | **Tiburón** — Resurrección Form | 1 | Weapon becomes 1d12 S, two-handed, sweep; **swim Speed** = Speed; breathe water; create water freely | ☐ | |
 | S-60 | Tiburón — **La Gota** | 1 | 2 actions, **30-ft cone**, basic Reflex, 2d6 slashing; failures **pushed 10 ft** away; H(+1) +1d6 | ☐ | |
-| S-61 | Tiburón — Refined **Cascada** | 9 | Cone **40 ft**; crit fail → **prone**; area becomes **difficult terrain** until start of your next turn | ☐ | |
+| S-61 | Tiburón — Refined **Cascada** | 9 | Cone **40 ft**; crit fail → **prone**; area becomes **difficult terrain** until start of your next turn | 🔧 | Refined 40-ft cone added ahead of the Hirviendo line, order pinned by a test (SB-28). Awaiting a live drive |
 | S-62 | **Hirviendo** — Segunda Etapa | 13 | **20-ft emanation** of water, difficult terrain for enemies; once per round a spirit-weapon hit **pushes 5 ft**; La Gota may be a **60-ft line** | ☐ | |
 | S-63 | Segunda Etapa — **Trident** | 13 | 2 actions, once per round, **three** ranged Strikes at one creature within 60 ft, **MAP does not increase until all three are made** | ☐ | |
 | S-64 | Segunda Etapa — **Hirviendo** (free action) | 13 | Once per round: **all water and ice** in the emanation — including other creatures' water/cold terrain — is **destroyed**; each enemy there takes **2d6 fire** | ☐ | |
@@ -1312,3 +1312,113 @@ proves nothing either way. The rule instances on `actor.rules` are the thing to 
 
 Likewise `{(5[spirit])}` parses as **untyped** — the inner parentheses strip the annotation. The correct
 damage formula is `{5[spirit]}`.
+
+---
+
+## §27 — the Refined Release rung was missing from nine Spirits out of fifteen
+
+Every Spirit has three rungs: the Released Form at 1st, **Refined Release at 9th**, and the Full Release
+at 13th. The 1st and 13th rungs were authored everywhere. The 9th was authored in six Spirits and
+**absent in nine**, and — separately — *not one* of the five Refined clauses that widen an area existed.
+
+### SB-28 — the widenings
+
+Five Techniques whose Refined rung enlarges the area sat at their printed size with nothing to change it:
+
+| Row | Technique | printed | Refined |
+| :-- | :-- | :-- | :-- |
+| S-03 | Senbonzakura | 15-ft emanation | **20 ft** |
+| S-10 | Getsuga Tenshō | 30-ft line | **60 ft** |
+| S-25 | Ennetsu Jigoku | 15-ft emanation | **20 ft** |
+| S-50 | Respira | 15-ft emanation | **20 ft** |
+| S-61 | La Gota | 30-ft cone | **40 ft** |
+
+All five now carry an `alternateArea` predicated on `feature:refined-release`. **The order is
+load-bearing** — `alternateArea` is first-match-wins — so La Gota keeps its Hirviendo 60-foot line ahead
+of the Refined cone: at 13th both predicates pass, and the Full Release shape has to win. A test pins
+that order rather than just the contents.
+
+### The rest of the rung
+
+| Row | What was missing | How it is done now |
+| :-- | :-- | :-- |
+| S-40 | Pantera's claws never became 1d10 | `ItemAlteration` `damage-dice-faces`, `override: 10`, on the Resurrección effect. pf2e requires a **null** value for `upgrade`/`downgrade` — those step one die size — and only `override` takes a number, which is also the guide's literal "become 1d10" |
+| S-40 | no Step after Garra | a `self: true` prompt rider |
+| S-50 | crit fail could still heal | `Effect: Respira — Cannot Heal`, expiring at the end of the target's next turn |
+| S-50 | broken objects and structures | a `Note`, because it is the GM's call on scenery and pretending otherwise would be worse |
+| S-54 | Cero Metralleta had only its cone | `areaTargetingShapes` — which had existed since the Saint's *Photon Burst* and **no content had ever used it** |
+| S-55 | no Refined Sustain at all | a granted 1-action `Cero Metralleta — Sustain`, once per round, that **casts** rather than merely permitting a cast |
+
+On S-55: leaving the player to Sustain *and then* cast would charge them the Technique's printed two
+actions on top of the Sustain's one — three actions for what guide §7B gives as one. So it routes through
+the action to state bridge and casts with `consume: false`, the same seam `FreeCast` uses. Aiming is
+untouched, so "a different direction" stays the caster's to choose, and both shapes are offered again.
+
+### SB-27 — Arrogante's doomed cap could never have worked
+
+> immune to disease, poison, and **doomed never rises past 1** — guide §7B
+
+First a roll option nothing read; then, as the repair, an `ActiveEffectLike` lowering
+`system.attributes.doomed.max`. **That was also inert**, and for a reason no amount of care with the rule
+element could have fixed:
+
+```
+this.prepareSynthetics();                       // every ActiveEffectLike applies here
+…
+attributes.doomed.max = attributes.dying.max;   // and is overwritten here, unconditionally
+```
+
+— `CreaturePF2e#prepareDerivedData`. No priority, mode or ordering wins against a plain assignment
+further down the same method. The only seam later than it is a wrapper on `prepareDerivedData`, which the
+module already owns for the reiatsu pool, so the cap is declared on the item like `actionCost`:
+
+```json
+"flags": { "isaacs-hb-pf2e": { "attributeCaps": [{ "path": "attributes.doomed.max", "value": 1 }] } }
+```
+
+It only ever **lowers** a ceiling. **Live:** Arrogante reads `doomed.max 1` at 1st and 9th while Pantera
+and Los Lobos, in the same world, still read 4.
+
+### SB-29 — a predicated `GrantItem` needs `reevaluateOnUpdate`, and still lands a turn late
+
+`preUpdateActor` returns immediately unless the flag is set, so without it the predicate is tested **once**
+at creation and never again. Seventy-one of the module's seventy-three predicated grants already said so;
+the Los Lobos Sustain was one of the two that did not. The other, `Effect: Om`, is `inMemoryOnly` — those
+are rebuilt every data preparation, and pf2e excludes them from `reevaluateOnUpdate` on purpose. A
+validator now requires the flag and exempts that case.
+
+Worth knowing even with the flag set: `preUpdateActor` tests against the **pre-update** roll options, so a
+grant gated on 9th level does not appear on the update that reaches 9th — it appears on the next one. The
+reliable path is the one the release ladder already takes: the form effect is **deleted and re-created**
+on each Release, and `preCreate` evaluates the predicate against current options.
+
+**Live:** at 1st, no Sustain. At 9th, `Cero Metralleta — Sustain`, 1 action, 1/round.
+
+### SB-30 — `Release.exit(actor)` with no rung silently did nothing
+
+`exit(actor, state)` built its name set from `EFFECTS[state]`; called without a rung that set was empty,
+so it deleted nothing and left the release flag untouched — indistinguishable from a Release that had
+failed to clear, and it cost a long detour here. It now defaults to the state the actor is actually in.
+
+### Three things the console said along the way
+
+Not chased yet, recorded so they are not lost:
+
+- **`Bala`** — "Multiple Attack Penalty rules element failed to validate: value must resolve to less than
+  or equal to zero", on *every* Soulbound actor in the world. The rule is being dropped.
+- **`Flash Step`** and **`Full Release`** — "element-validation failure at `system.traits.value`:
+  `reiatsu` is not a valid choice".
+- Several module items point at icon paths Foundry rejects (`leaf-petals-pink.webp`,
+  `rose-thorned-red.webp`, `eye-ringed-glow-angry-purple.webp`, `explosion-star-large-blue.webp`).
+
+### A note on probes, again
+
+Three readings in this pass were wrong before the content was:
+
+- `system.attributes.speed` does not exist in this version — speeds are at **`system.movement.speeds`**,
+  and the wrong path reads as "this character has no speeds".
+- Techniques are **spells**, not actions or feats; looking for them in `itemTypes.action` finds nothing
+  and reads as "the Technique was never granted".
+- `release()` returning false after a dozen scripted release cycles is the **encounter ledger** doing its
+  job — the second Release in an encounter costs a Reiatsu Point, and the pool was empty. Reset
+  `flags.isaacs-hb-pf2e.releaseLedger` before measuring anything that releases repeatedly.

@@ -180,7 +180,12 @@ export const Release = {
         }
     },
 
-    async exit(actor, state) {
+    async exit(actor, state = this.stateOf(actor)) {
+        // Defaulting to the state the actor is actually in matters: `exit(actor)` with no rung used to
+        // build an empty name set, delete nothing, and leave the release flag untouched — silently, and
+        // looking exactly like a Release that had failed to clear. Whatever you are in is the sensible
+        // thing to leave.
+        if (!state || state === "sealed") return;
         const names = new Set([EFFECTS[state], ...formEffectsFor(actor, state)].filter(Boolean));
         // Matched on the authored name rather than on a sourceId, for the same reason `enter` looks the
         // effect up by name: the id is assigned at build time and code has no way to know it.

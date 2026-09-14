@@ -91,6 +91,29 @@ const HANDLERS = {
     },
 
     /**
+     * **Cero Metralleta — Sustain** (Los Lobos, Refined Release) — guide §7B.
+     *
+     * > Sustain at the start of your next turn to fire again in a different direction with no Reiatsu
+     * > cost.
+     *
+     * The Sustain **is** the second shot, so it casts rather than merely permitting a cast: leaving the
+     * player to Sustain and then cast would charge them the Technique's printed two actions on top of the
+     * Sustain's one, which is three actions for what the guide gives as one.
+     *
+     * `consume: false` is the "no Reiatsu cost" — the same seam `FreeCast` uses, and the reason the point
+     * never has to be spent and refunded. Aiming is untouched: the cast goes through the ordinary
+     * pipeline, so the two shapes are offered again and "a different direction" is the caster's to choose.
+     */
+    "cero-metralleta-sustain": async (actor) => {
+        const spell = actor.itemTypes.spell.find((s) => s.system?.slug === "cero-metralleta");
+        if (!spell) {
+            ui.notifications.warn(`${actor.name} has no Cero Metralleta to sustain.`);
+            return;
+        }
+        await spell.spellcasting?.cast(spell, { message: true, consume: false });
+    },
+
+    /**
      * Blut — guide §5.3. Two reishi systems, never both, chosen fresh each round.
      *
      * Not routed through the generic mode switch below, because `Blut.set` carries the one exception the

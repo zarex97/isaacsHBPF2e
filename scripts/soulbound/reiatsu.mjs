@@ -1,5 +1,6 @@
 import { classSlugOf } from "../lib/class-dc.mjs";
 import { applyActionCosts } from "./action-cost.mjs";
+import { applyAttributeCaps } from "./attribute-caps.mjs";
 import { wrap } from "../lib/wrap.mjs";
 
 const MODULE_ID = "isaacs-hb-pf2e";
@@ -192,6 +193,11 @@ export const Reiatsu = {
                     // something about the actor's level, not about their class, so computing it for
                     // everyone costs a key and is correct at the only time it is hard to be correct.
                     this.rollOptions.all[`soulbound:kido-rank:${Reiatsu.kidoRank(this.level)}`] = true;
+
+                    // Later than `prepareSynthetics`, which is the whole point: pf2e assigns
+                    // `doomed.max = dying.max` after every rule element has run, so no ActiveEffectLike
+                    // can cap it. Driven by an item flag, so it costs nothing on an actor without one.
+                    applyAttributeCaps(this);
 
                     if (classSlugOf(this) === "soulbound") {
                         const focus = this.system?.resources?.focus;

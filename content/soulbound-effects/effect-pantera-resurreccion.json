@@ -30,6 +30,17 @@
                 "selector": "speed",
                 "type": "untyped",
                 "value": 10
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "mode": "override",
+                "predicate": [
+                    "item:tag:soulbound-pantera-claw",
+                    "feature:refined-release"
+                ],
+                "property": "damage-dice-faces",
+                "value": 10
             }
         ],
         "start": {

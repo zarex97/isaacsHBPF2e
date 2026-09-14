@@ -2227,21 +2227,43 @@ check("Regeneración is one rate or the other, never both (guide §7B)",
     [[false, false], [true, true]]);
 
 /**
- * SB-26. "You can still gain doomed, but it never increases past 1" was also a roll option nothing
- * read. pf2e keeps the ceiling at `system.attributes.doomed.max`, so the cap is an `ActiveEffectLike`
- * that lowers it — `downgrade`, so nothing else raising it wins by accident.
+ * SB-27. "You can still gain doomed, but it never increases past 1" was first a roll option nothing
+ * read, and then — the repair — an `ActiveEffectLike` lowering `system.attributes.doomed.max`. That
+ * read perfectly and **also did nothing**, because pf2e assigns the value after every rule element:
+ *
+ *     this.prepareSynthetics();                     // every ActiveEffectLike applies here
+ *     attributes.doomed.max = attributes.dying.max; // and is overwritten here, unconditionally
+ *
+ * No priority or mode wins against a plain assignment further down the same method, so the cap is
+ * declared on the item and applied in the module's own `prepareDerivedData` wrapper, which is later.
  */
-const arrogante = contentDoc("soulbound-effects/effect-arrogante-resurreccion.json").system.rules;
-check("Arrogante caps doomed at 1 rather than describing it (guide §7B)",
-    arrogante.find((r) => r.key === "ActiveEffectLike"),
-    { key: "ActiveEffectLike", mode: "downgrade", path: "system.attributes.doomed.max", value: 1 });
+const arrogante = contentDoc("soulbound-effects/effect-arrogante-resurreccion.json");
+check("Arrogante caps doomed at 1 where pf2e cannot overwrite it (guide §7B)",
+    arrogante.flags["isaacs-hb-pf2e"].attributeCaps,
+    [{ path: "attributes.doomed.max", value: 1 }]);
+check("and the ActiveEffectLike that could never work is gone",
+    arrogante.system.rules.some((r) => r.path === "system.attributes.doomed.max"), false);
+
+const { applyAttributeCaps } = await import("../scripts/soulbound/attribute-caps.mjs");
+const capped = (caps, current) => {
+    const actor = { system: { attributes: { doomed: { max: current } } },
+                    items: [{ flags: { "isaacs-hb-pf2e": { attributeCaps: caps } } }] };
+    applyAttributeCaps(actor);
+    return actor.system.attributes.doomed.max;
+};
+check("a cap lowers the ceiling", capped([{ path: "attributes.doomed.max", value: 1 }], 4), 1);
+check("and never raises it — two items asking for different ceilings agree on the lower",
+    capped([{ path: "attributes.doomed.max", value: 3 }], 1), 1);
+check("an actor with no declaration is untouched", capped([], 4), 4);
 
 // Tiburón's Hirviendo changes La Gota's SHAPE, not just its size: "may be used as a 60-foot line
 // instead of a cone". An `area-size` override could only ever have widened the cone.
-check("La Gota becomes a 60-foot line while Hirviendo stands (guide §7B)",
+// `alternateArea` is FIRST MATCH WINS, so the order is load-bearing: at 13th both predicates pass, and
+// a Hirviendo Tiburón must throw the 60-foot line, not the Refined 40-foot cone.
+check("La Gota widens at Refined and becomes a line under Hirviendo, in that order (guide §7B)",
     contentDoc("soulbound-techniques/la-gota.json").flags["isaacs-hb-pf2e"].areaTargeting.alternateArea
         .map((a) => [a.predicate, a.area.type, a.area.value]),
-    [[["self:effect:hirviendo"], "line", 60]]);
+    [[["self:effect:hirviendo"], "line", 60], [["feature:refined-release"], "cone", 40]]);
 
 
 /**

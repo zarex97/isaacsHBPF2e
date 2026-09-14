@@ -12,6 +12,15 @@
                         "predicate": [
                             "self:effect:hirviendo"
                         ]
+                    },
+                    {
+                        "area": {
+                            "type": "cone",
+                            "value": 40
+                        },
+                        "predicate": [
+                            "feature:refined-release"
+                        ]
                     }
                 ],
                 "includesSelf": false
