@@ -22,7 +22,7 @@
             ]
         }
     },
-    "img": "icons/magic/fire/barrier-wall-flame-ring-orange.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/barrier-wall-flame-ring-orange.svg",
     "name": "Effect: Nishi",
     "system": {
         "description": {

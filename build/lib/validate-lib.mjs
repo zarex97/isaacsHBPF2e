@@ -137,6 +137,7 @@ export function validate(packs, { errors }) {
     validateHomebrewTraits(packs, errors);
     validateMultipleAttackPenalties(packs, errors);
     validateReevaluatedGrants(packs, errors);
+    validateIconsExist(packs, errors);
     validateSlugPredicates(packs, errors);
     validateAlterationProperties(packs, errors);
     validateCounterBadges(packs, errors);
@@ -220,6 +221,34 @@ function validateAlterationProperties(packs, errors) {
     }
 }
 
+
+/**
+ * Every icon the module points at must exist.
+ *
+ * All of this module's art used to reference Foundry's own library, and **eighty-nine of those paths
+ * were invented** — `leaf-petals-pink.webp`, `wolf-howl-moon-grey.webp`, `sword-katana-black.webp`.
+ * They read exactly like real files. Only seven ever produced a console error, because Foundry
+ * validates an icon at the moment something renders it, so the other eighty-two sat on a silent
+ * fallback and nobody could tell the difference from a deliberate choice.
+ *
+ * The art now ships with the module, which is what makes this checkable at all: a path under
+ * `modules/isaacs-hb-pf2e/` is a file in this repository. Paths into Foundry's own library are left
+ * alone, because someone else's install is not ours to assume.
+ */
+function validateIconsExist(packs, errors) {
+    const prefix = "modules/isaacs-hb-pf2e/";
+    for (const { docs } of packs) {
+        for (const { file, doc } of docs) {
+            const img = doc.img;
+            if (typeof img !== "string" || !img.startsWith(prefix)) continue;
+            if (fs.existsSync(path.join(ROOT, img.slice(prefix.length)))) continue;
+            errors.push(
+                `${rel(file)}: img "${img}" does not exist. Run \`npm run icons\` — the art is drawn `
+                + "from the filenames, so a new name is a new icon.",
+            );
+        }
+    }
+}
 
 /**
  * A homebrew trait must be registered for the **item type** that uses it.

@@ -1,6 +1,6 @@
 {
     "folder": "Level 1",
-    "img": "icons/containers/chest/chest-reinforced-steel-gold.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/chest-reinforced-steel-gold.svg",
     "name": "Pandora Box",
     "system": {
         "actionType": {

@@ -1,6 +1,6 @@
 {
     "folder": "4th",
-    "img": "icons/magic/defensive/barrier-shield-dome-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/barrier-shield-dome-blue.svg",
     "name": "Reiatsu Barrier",
     "system": {
         "actionType": {

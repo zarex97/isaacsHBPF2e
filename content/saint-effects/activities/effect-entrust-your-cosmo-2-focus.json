@@ -1,6 +1,6 @@
 {
     "folder": "Activities",
-    "img": "icons/magic/light/hand-sparks-glow-orange.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/hand-sparks-glow-orange.svg",
     "name": "Effect: Entrust Your Cosmo (2 Focus)",
     "system": {
         "description": {

@@ -75,7 +75,7 @@
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Deepening Reserve (11th)"
             },
             "depar": {
-                "img": "icons/magic/death/skull-humanoid-white.webp",
+                "img": "modules/isaacs-hb-pf2e/icons/skull-humanoid-white.svg",
                 "level": 3,
                 "name": "Departed Flesh",
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Departed Flesh"
@@ -99,7 +99,7 @@
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Greater Flash Step"
             },
             "fullr": {
-                "img": "icons/magic/light/explosion-star-blue-large.webp",
+                "img": "modules/isaacs-hb-pf2e/icons/explosion-star-large-blue.svg",
                 "level": 13,
                 "name": "Full Release",
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Full Release"
@@ -135,7 +135,7 @@
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Lineage"
             },
             "perfr": {
-                "img": "icons/magic/light/explosion-star-large-purple.webp",
+                "img": "modules/isaacs-hb-pf2e/icons/explosion-star-large-purple.svg",
                 "level": 17,
                 "name": "Perfected Full Release",
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Perfected Full Release"
@@ -171,7 +171,7 @@
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Released Form"
             },
             "rispr": {
-                "img": "icons/magic/air/wind-vortex-blue.webp",
+                "img": "modules/isaacs-hb-pf2e/icons/wind-vortex-blue.svg",
                 "level": 1,
                 "name": "Rising Pressure",
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Rising Pressure"

@@ -1,6 +1,6 @@
 {
     "folder": "Borrowed Nature",
-    "img": "icons/magic/symbols/runes-triangle-purple.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/runes-triangle-purple.svg",
     "name": "Deeper Crossing",
     "system": {
         "actionType": {

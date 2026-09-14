@@ -27,7 +27,7 @@
         }
     },
     "folder": "Sky: Ascendant",
-    "img": "icons/weapons/swords/greatsword-crossguard-gold.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/greatsword-crossguard-gold.svg",
     "name": "Sky: Ascendant (Capricorn)",
     "system": {
         "description": {

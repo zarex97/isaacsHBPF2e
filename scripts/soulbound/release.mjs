@@ -255,11 +255,12 @@ export const Release = {
         for (const name of packs) {
             const pack = game.packs.get(`${MODULE_ID}.${name}`);
             if (!pack) continue;
-            for (const entry of await pack.getIndex({ fields: ["flags", "system.rules"] })) {
+            for (const entry of await pack.getIndex({ fields: ["flags", "system.rules", "img"] })) {
                 const flags = entry.flags?.[MODULE_ID];
                 const rules = entry.system?.rules;
-                if (!flags && !rules?.length) continue;
-                const record = { flags: flags ?? null, rules: rules ?? null };
+                const img = entry.img ?? null;
+                if (!flags && !rules?.length && !img) continue;
+                const record = { flags: flags ?? null, rules: rules ?? null, img };
                 authored.set(`Compendium.${MODULE_ID}.${name}.Item.${entry._id}`, record);
                 authored.set(`name:${entry.name}`, record);
             }
@@ -312,6 +313,16 @@ export const Release = {
                     updates.push({ _id: item.id, [`flags.${MODULE_ID}`]: packFlags });
                     refreshed.push(item.name);
                 }
+            }
+
+            // The icon, which is pure presentation and carries no state at all. The module's art used
+            // to point at ninety invented paths in Foundry's library; it now ships with the module, and
+            // without this a character built yesterday keeps a sheet full of broken images.
+            if (record.img && item.img !== record.img) {
+                const existing = updates.find((u) => u._id === item.id);
+                if (existing) existing.img = record.img;
+                else updates.push({ _id: item.id, img: record.img });
+                if (!refreshed.includes(item.name)) refreshed.push(item.name);
             }
 
             // And the rules, but only where nothing in them carries grant-time state — see

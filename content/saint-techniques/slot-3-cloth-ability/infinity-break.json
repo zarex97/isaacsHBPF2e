@@ -8,7 +8,7 @@
         }
     },
     "folder": "3rd — Cloth Ability (L11)",
-    "img": "icons/weapons/ammunition/arrow-head-glowing-yellow.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/arrow-head-glowing-yellow.svg",
     "name": "Infinity Break",
     "system": {
         "area": {

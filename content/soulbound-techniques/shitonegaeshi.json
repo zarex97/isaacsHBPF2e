@@ -20,7 +20,7 @@
             ]
         }
     },
-    "img": "icons/skills/melee/blade-tips-triple-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/blade-tips-triple-blue.svg",
     "name": "Shitonegaeshi",
     "system": {
         "cost": {

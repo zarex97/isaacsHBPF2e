@@ -8,7 +8,7 @@
         }
     },
     "folder": "Spirits",
-    "img": "icons/magic/fire/blade-two-handed-glowing-orange.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/blade-two-handed-glowing-orange.svg",
     "name": "Ryūjin Jakka — Shikai",
     "system": {
         "actionType": {

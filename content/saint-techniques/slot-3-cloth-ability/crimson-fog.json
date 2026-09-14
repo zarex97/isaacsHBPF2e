@@ -15,7 +15,7 @@
         }
     },
     "folder": "3rd — Cloth Ability (L11)",
-    "img": "icons/magic/nature/vines-thorned-curled-glow-red.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/vines-thorned-curled-glow-red.svg",
     "name": "Crimson Fog",
     "system": {
         "area": {

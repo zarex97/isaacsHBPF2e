@@ -1,6 +1,6 @@
 {
     "folder": "Lineages",
-    "img": "icons/magic/death/skull-horned-white.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/skull-horned-white.svg",
     "name": "Hollow",
     "system": {
         "actionType": {

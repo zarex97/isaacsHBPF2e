@@ -1,5 +1,5 @@
 {
-    "img": "icons/equipment/chest/breastplate-layered-steel-gold.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/breastplate-layered-steel-gold.svg",
     "name": "Saint",
     "system": {
         "ancestryFeatLevels": {
@@ -80,7 +80,7 @@
                 "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Cloth Mastery"
             },
             "clothx": {
-                "img": "icons/equipment/chest/breastplate-layered-steel-gold.webp",
+                "img": "modules/isaacs-hb-pf2e/icons/breastplate-layered-steel-gold.svg",
                 "level": 17,
                 "name": "Cloth Attunement",
                 "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Cloth Attunement"
@@ -98,7 +98,7 @@
                 "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Cosmo Strike"
             },
             "cosmoxx": {
-                "img": "icons/magic/light/explosion-star-glow-orange-purple.webp",
+                "img": "modules/isaacs-hb-pf2e/icons/explosion-star-glow-orange-purple.svg",
                 "level": 9,
                 "name": "Cosmo Expertise",
                 "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Cosmo Expertise"
@@ -182,19 +182,19 @@
                 "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Sixth Sense"
             },
             "skyre": {
-                "img": "icons/tools/navigation/telescope-blue.webp",
+                "img": "modules/isaacs-hb-pf2e/icons/telescope-blue.svg",
                 "level": 5,
                 "name": "Sky-Reading",
                 "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Sky-Reading"
             },
             "thecl": {
-                "img": "icons/equipment/chest/breastplate-layered-steel-gold.webp",
+                "img": "modules/isaacs-hb-pf2e/icons/breastplate-layered-steel-gold.svg",
                 "level": 1,
                 "name": "The Cloth",
                 "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.The Cloth"
             },
             "third": {
-                "img": "icons/equipment/chest/breastplate-collared-steel-gold.webp",
+                "img": "modules/isaacs-hb-pf2e/icons/breastplate-collared-steel-gold.svg",
                 "level": 11,
                 "name": "Third Technique (Cloth Ability)",
                 "uuid": "Compendium.isaacs-hb-pf2e.saint-class-features.Item.Third Technique (Cloth Ability)"

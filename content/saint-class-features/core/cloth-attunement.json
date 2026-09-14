@@ -1,6 +1,6 @@
 {
     "folder": "Core",
-    "img": "icons/equipment/chest/breastplate-layered-steel-gold.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/breastplate-layered-steel-gold.svg",
     "name": "Cloth Attunement",
     "system": {
         "actionType": {

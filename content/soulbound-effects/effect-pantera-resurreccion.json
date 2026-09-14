@@ -1,5 +1,5 @@
 {
-    "img": "icons/creatures/abilities/paw-print-pair-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/paw-print-pair-blue.svg",
     "name": "Effect: Pantera — Resurrección",
     "system": {
         "description": {

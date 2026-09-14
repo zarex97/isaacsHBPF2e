@@ -197,7 +197,7 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | S-27 | Aspect — **Higashi** | 13 | Strikes ignore **all** resistances and immunities; a creature you damage **can't regain HP** and its regeneration/fast healing is suppressed until end of your next turn | ☐ | |
 | S-28 | Aspect — **Nishi** | 13 | **Fire immunity**; **resistance to all = half level**; a creature that damages you with an unarmed attack, melee weapon or Grapple takes **4d6 fire** | ✅ | Live: choosing **Nishi** grants fire immunity and **resistance to all damage 6** at L13, plus the 4d6 retributive rider |
 | S-29 | Aspect — **Minami** | 13 | **20-ft emanation**; enemy ending its turn there: Reflex or **grabbed** by ash-figures (Escape vs. Reiatsu DC); the figures are **not creatures** and take no actions | 🔧 | **SB-15 fixed**: Minami's 20-ft ash aura fans out now. Awaiting a live drive |
-| S-30 | Aspect — **Kita** | 13 | 2 actions, once per round, **60-ft line**, basic Reflex, **5d6 fire** that **cannot be reduced by fire resistance, Blut Vene or Hierro**; H(+1) +1d6 | ☐ | The only unresistable damage in the class |
+| S-30 | Aspect — **Kita** | 13 | 2 actions, once per round, **60-ft line**, basic Reflex, **5d6 fire** that **cannot be reduced by fire resistance, Blut Vene or Hierro**; H(+1) +1d6 | ✅ | Settled with the author: **stays `affects: \"enemies\"`**, unlike Zanka no Tachi's ambient burn |
 | S-31 | Aspect switching | 13 | **Sustain once per round** to change aspect; the chosen one lasts until another is chosen | ✅ | New `Zanka no Tachi — Sustain`, once per round, granted by the Bankai effect. Live: the dialog offers exactly **Higashi / Nishi / Minami / Kita** and no way to stand in none of them — the guide says an aspect lasts until you select another — and picking Kita removes Nishi |
 | S-32 | **Kyōka Suigetsu** — Shikai **Kanzen Saimin** | 1 | On Release, and when a creature that can see first observes you released: Will vs. Reiatsu DC or **hypnotized 1 minute** | ✅ | **SB-21 fixed.** Live at 13th: Releasing rolled **Will vs DC 27** for every enemy that could see, and the mirror landed on the failures |
 | S-33 | Kanzen Saimin — the lie | 1 | Hypnotized creature perceives you **5 ft** from where you stand; its attacks need a **DC 5 flat check**; you are **hidden** from it whenever not adjacent | ✅ | `Effect: Hypnotized` carries the flat check as a `strike-resolved` rider on the hypnotized creature, so it rolls when *it* attacks |
@@ -1435,3 +1435,94 @@ Three readings in this pass were wrong before the content was:
 - `release()` returning false after a dozen scripted release cycles is the **encounter ledger** doing its
   job — the second Release in an encounter costs a Reiatsu Point, and the pool was empty. Reset
   `flags.isaacs-hb-pf2e.releaseLedger` before measuring anything that releases repeatedly.
+
+---
+
+## §28 — Bala's agile clause, and the console it was hiding in
+
+### SB-31 — a MultipleAttackPenalty is a penalty, not a discount
+
+> Bala counts as **agile** for the purpose of your multiple attack penalty (−4/−8 rather than −5/−10).
+> — guide §6.4
+
+Authored as `value: 1`, which reads perfectly as "reduce the penalty by one". pf2e reads the value as
+the **penalty itself**:
+
+```
+if (value < 0) { penalties.push({ label, penalty: value, predicate }); }
+else if (value !== 0) { this.failValidation("value: must resolve to less than or equal to zero"); }
+```
+
+and `calculateMAPs` turns a synthetic into `{map1: penalty, map2: penalty * 2}`. So "counts as agile" is
+**−4**, and the rule as written was dropped on every data preparation, on every Soulbound in the world.
+`Twin Fang` was wrong in exactly the same way and had never said so out loud, because it only warns for a
+character who has taken the feat.
+
+A second defect sat underneath it. **A MAP synthetic lives on the actor, keyed by domain** — not on the
+item that declared it — so the unpredicated rule would have made *every* spell attack the character ever
+makes agile, a Murciélago's Cero Oscuras included. Bala's is now scoped to `item:slug:bala`.
+
+**Live:** Bala reads −4/−8; Cero and Cero Oscuras read −5/−10.
+
+### SB-32 — a corrected pack reaches nobody who already exists
+
+Fixing the content fixed no existing character, because an owned item is a **copy**. `repair` had always
+refused to touch `system.rules`, and for a good reason it states plainly: pf2e writes a `flag` onto a
+`GrantItem` at grant time and a `selection` onto a `ChoiceSet` when the player answers it, both *inside*
+that array, so replacing it wholesale throws that state away.
+
+But that reason only covers rules which carry such state. `rulesAreSafeToRefresh` is the narrow version:
+refresh the array only when neither the owned nor the packed version contains a `GrantItem` or a
+`ChoiceSet`. `img` is refreshed unconditionally, being pure presentation.
+
+**Live:** `repairAll` cleared all eight stale actors, `arrancar` and `quincy` among them.
+
+### SB-33 — `reiatsu` was registered for spells only
+
+`pf2e-homebrew` registers traits per category, and pf2e validates an item's traits against the one
+category matching its **type**. `reiatsu` was declared under `spellTraits` — true of the sixty-two kidō,
+and silent about the eleven feats and four actions that also carry it, from which pf2e stripped it. The
+same was true of `cosmo` on one Saint action.
+
+The categories are not independent: `classTraits` reaches feats, actions, spells and effects;
+`featTraits` reaches feats, actions and effects; `spellTraits` reaches spells alone. That last line is the
+whole trap, and a validator now models the propagation rather than guessing it.
+
+### SB-34 — eighty-nine of the module's ninety-six icons did not exist
+
+Chasing the last warnings out of the console turned up something much larger. Every `img` in both classes
+pointed into Foundry's icon library, and **eighty-nine of those paths were invented**:
+`leaf-petals-pink.webp`, `wolf-howl-moon-grey.webp`, `sword-katana-black.webp`. They read exactly like
+real files. Only seven had ever warned, because Foundry validates an icon at the moment something renders
+it — the other eighty-two sat on a silent fallback, indistinguishable from a deliberate choice.
+
+The names were the right instinct even though the files were not: each one says precisely what it wants
+to be. So rather than remap two hundred and forty items onto whatever Foundry happens to ship — where a
+wolf becomes a purple wolf and petals become maple leaves — **the names were kept and the art was drawn
+to match them**. `build/make-icons.mjs` reads both halves of each filename:
+
+```
+wolf-howl-moon-grey              ->  glyph `wolf`,             palette `grey`
+blade-two-handed-glowing-orange  ->  glyph `blade-two-handed`, palette `orange`
+```
+
+so the ninety-six stay coherent by construction and adding one is a filename rather than a drawing. They
+ship with the module as SVG, which is also what makes them checkable: a path under
+`modules/isaacs-hb-pf2e/` is a file in this repository, and a validator now requires it to be there.
+Paths into Foundry's own library are left alone, because someone else's install is not ours to assume.
+
+Two bugs surfaced in the drawing itself, both worth naming because neither looked like arithmetic:
+
+- **The generator silently did nothing.** Its entry guard compared `import.meta.url` against
+  `` `file://${process.argv[1]}` ``, which is not the URL Node produces on Windows — it escapes the drive
+  letter. The script exited 0 and wrote no files. `pathToFileURL` is the only correct way to ask.
+- **A black figure on gold wings.** `shade(hex, 1.35)` took a channel past 255, and
+  `(0xdc * 1.35).toString(16)` is *three* hex digits, which makes the colour string one character too
+  long — so the browser discarded it and painted black. It was the colour arithmetic, not the drawing.
+
+### A note on `git revert --no-commit`
+
+Reverting one commit to recover seven icon names rolled back that commit's **whole tree** — the MAP
+guards, the trait registration and the repair went with it, and the loss only surfaced when a validator
+that had been proven working an hour earlier failed to fire. `git checkout HEAD -- <path>` is the tool
+for taking back part of a commit; `git revert` has no such thing as partial.

@@ -8,7 +8,7 @@
         }
     },
     "folder": "Spirits",
-    "img": "icons/weapons/swords/sword-katana-black.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/sword-katana-black.svg",
     "name": "Tensa Zangetsu",
     "system": {
         "actionType": {

@@ -7,7 +7,7 @@
         }
     },
     "folder": "4th",
-    "img": "icons/magic/air/wind-vortex-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/wind-vortex-blue.svg",
     "name": "Deep Breath",
     "system": {
         "actionType": {

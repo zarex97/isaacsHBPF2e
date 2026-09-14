@@ -1,5 +1,5 @@
 {
-    "img": "icons/magic/death/skull-energy-light-white-dim.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/skull-energy-light-white-dim.svg",
     "name": "Effect: Severed",
     "system": {
         "description": {

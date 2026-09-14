@@ -84,7 +84,7 @@
             ]
         }
     },
-    "img": "icons/magic/nature/leaf-glow-triple-orange-purple.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/leaf-petals-pink-red.svg",
     "name": "Effect: Senbonzakura Kageyoshi",
     "system": {
         "description": {

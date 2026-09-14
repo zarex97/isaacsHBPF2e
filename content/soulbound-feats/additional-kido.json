@@ -1,6 +1,6 @@
 {
     "folder": "1st",
-    "img": "icons/magic/symbols/runes-carved-stone-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/runes-carved-stone-blue.svg",
     "name": "Additional Kidō",
     "system": {
         "actionType": {

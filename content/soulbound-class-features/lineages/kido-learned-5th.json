@@ -1,6 +1,6 @@
 {
     "folder": "Lineages",
-    "img": "icons/magic/symbols/runes-carved-stone-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/runes-carved-stone-blue.svg",
     "name": "Kidō Learned (5th)",
     "system": {
         "actionType": {

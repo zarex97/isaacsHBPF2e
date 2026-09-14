@@ -1,5 +1,5 @@
 {
-    "img": "icons/equipment/chest/breastplate-layered-steel-gold.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/breastplate-layered-steel-gold.svg",
     "name": "Gold Cloth",
     "system": {
         "acBonus": 4,

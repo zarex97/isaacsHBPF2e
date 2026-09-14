@@ -39,7 +39,7 @@
             ]
         }
     },
-    "img": "icons/magic/earth/dust-smoke-cloud-brown.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/dust-smoke-cloud-brown.svg",
     "name": "Effect: Minami",
     "system": {
         "description": {

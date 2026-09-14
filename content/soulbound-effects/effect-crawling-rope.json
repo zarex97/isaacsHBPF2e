@@ -1,5 +1,5 @@
 {
-    "img": "icons/magic/control/debuff-chains-ropes-yellow.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/debuff-chains-ropes-yellow.svg",
     "name": "Effect: Crawling Rope",
     "system": {
         "description": {

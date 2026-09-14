@@ -15,7 +15,7 @@
         }
     },
     "folder": "3rd — Cloth Ability (L11)",
-    "img": "icons/creatures/abilities/bull-horns-glowing-red.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/bull-horns-glowing-red.svg",
     "name": "Titan's Stance",
     "system": {
         "area": null,

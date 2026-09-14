@@ -1,5 +1,5 @@
 {
-    "img": "icons/magic/fire/projectile-fireball-smoke-strong-red.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/projectile-fireball-smoke-strong-red.svg",
     "name": "Effect: The Heat — Schrift",
     "system": {
         "description": {

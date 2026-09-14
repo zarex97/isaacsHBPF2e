@@ -51,7 +51,7 @@
         }
     },
     "folder": "4th — Ultimate (L16)",
-    "img": "icons/creatures/abilities/bull-horns-gold.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/bull-horns-gold.svg",
     "name": "Titan's Break: The Golden Horn",
     "system": {
         "area": {

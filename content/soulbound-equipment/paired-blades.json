@@ -1,5 +1,5 @@
 {
-    "img": "icons/weapons/swords/swords-short-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/swords-short-blue.svg",
     "name": "Spirit Weapon (Paired Blades)",
     "system": {
         "baseItem": "shortsword",

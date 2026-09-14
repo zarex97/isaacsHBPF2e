@@ -1,6 +1,6 @@
 {
     "folder": "Activities",
-    "img": "icons/magic/air/wind-stream-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/wind-stream-blue.svg",
     "name": "Effect: Aiolos's Wings (Shared)",
     "system": {
         "description": {
