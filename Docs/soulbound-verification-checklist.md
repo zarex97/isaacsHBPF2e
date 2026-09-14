@@ -55,7 +55,7 @@ character:
 | C-04 | Reflex | 1→15 | Expert at 1, **Master at 15** (Evasion) | ✅ | 2→3 at L15 |
 | C-05 | Will | 1→3 | Trained at 1, **Expert at 3** (Iron Will), **never Master** | ✅ | 1→2 at L3, still 2 at L20 |
 | C-06 | Reiatsu DC | 1→9→17 | Trained / **Expert at 9** / **Master at 17**, never Legendary | ✅ | 1→2 at L9→3 at L17, never 4 |
-| C-07 | Attacks | 1→5→13 | Simple + martial + unarmed trained; martial **Expert at 5**, **Master at 13** | ❌ | **SB-10.** Martial is right, but **simple and unarmed advance with it** (E@5, M@13). Guide §2's ledger buys them Trained-only (10 pts each) and §10.1 lists only martial advancing — 320 BCS points off budget |
+| C-07 | Attacks | 1→5→13 | Simple + martial + unarmed trained; martial **Expert at 5**, **Master at 13** | ✅ | Martial is Expert at 5 and Master at 13. Simple and unarmed advance with it, which **is** what the ledger buys — see the withdrawal of SB-10 |
 | C-08 | Crit specialization | 5 | Weapon Expertise grants critical specialization | ☐ | |
 | C-09 | Weapon specialization | 7→15 | +2 / +3 / +4, greater at 15 | ☐ | |
 | C-10 | Defenses | 1→13 | Light + unarmoured trained; **Expert at 13** (Spirit Weave); medium never | ✅ | 1→2 at L13; medium stays 0 at every level |
@@ -438,7 +438,7 @@ The repeatable setup is `Docs/tools/foundry-live-session.md` and `build/live-ses
 | **SB-2** | SR-03 | major | The kidō choice has no duplicate guard |
 | **SB-3** | SR-02, SR-03 | major | The kidō choice has no level gate |
 | **SB-4** | SR-04 | major | The Zanjutsu free-technique choice has no level gate |
-| **SB-10** | C-07 | author's call | Simple and unarmed proficiencies advance with martial |
+| ~~SB-10~~ | C-07 | **withdrawn** | Simple and unarmed advancing with martial is what §2's own convention prices |
 | **SB-8** | K-18 | minor | Kidō and Techniques post as **Arcane** |
 | **SB-9** | S-02 | cosmetic | A Refined technique's card still quotes its pre-Refined area |
 | **SB-1** | C-19 | not reproduced | The reported Reiatsu cap of 2 |
@@ -518,17 +518,19 @@ Driven live on fresh Soul Reapers:
 - **SB-4.** At **level 5**, "Which sword art did you drill first?" offers all six Zanjutsu techniques.
   A test character took **Zanjutsu: Kendō**, a 14th-level technique, as its free 5th-level pick.
 
-### SB-10 — simple and unarmed proficiency *(a call for the author, not a bug)*
+### ~~SB-10~~ — simple and unarmed proficiency *(withdrawn)*
 
-Observed across L1–20: `simple` and `unarmed` track `martial` exactly — Expert at 5, Master at 13.
-Guide §2's ledger buys `Attack — Unarmed T@1 = 10` and `Attack — Simple T@1 = 10`, and §10.1's
-comparison lists only "Martial E@5 → M@13". Advancing all three to Master costs **320 more BCS points**
-than the 2100 the ledger balances to.
+I raised this as a 320-point overrun and I was wrong. §2's costing note says it outright:
 
-It is also what every published martial does, and holding simple at Trained would make
-`Zanjutsu: Hakuda`'s fist and `Shō`'s attribute-adding filler feel odd. **Two honest options:** change
-the module to match the ledger, or change the ledger to match PF2e convention and find the 320 points
-elsewhere. This one is yours to decide.
+> *Weapon and armour groups follow the sheet's convention — the **highest** group pays the
+> Expert/Master steps, every additional group costs a flat 10.*
+
+`Attack — Martial T@1 / E@5 / M@13 = 170` is the paying line; `Attack — Simple = 10` and
+`Attack — Unarmed = 10` are the two additional groups at the flat rate, and under BCS's convention
+they advance alongside the one that paid. §3.1's "Trained in simple weapons, martial weapons, unarmed
+attacks" lists *initial* proficiencies, and §3.2's "weapon expertise (martial expert)" names the
+highest group, not the only one that moves. The module is right and the ledger balances at 2100 as
+written. Nothing to change.
 
 ### SB-8 / SB-9 — presentation
 
