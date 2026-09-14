@@ -7,7 +7,16 @@
                     "Senkei"
                 ],
                 "none": "Neither",
-                "prompt": "Sustain the blades. Amass them around one creature (<strong>Gokei</strong>), condense them into a cage around you and one enemy (<strong>Senkei</strong>), or let them keep scattering."
+                "place": {
+                    "anchor": "senbonzakura-second",
+                    "area": {
+                        "type": "emanation",
+                        "value": 20
+                    },
+                    "label": "Send them",
+                    "range": 60
+                },
+                "prompt": "Sustain the blades. <strong>Send them</strong> places the second emanation, or moves it up to 30 feet; <strong>Gokei</strong> amasses them around one creature; <strong>Senkei</strong> condenses them into a cage around you and one enemy; or let them keep scattering."
             }
         }
     },

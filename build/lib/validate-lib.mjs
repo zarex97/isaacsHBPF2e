@@ -854,14 +854,23 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
     }
 
     if (rider.area !== undefined) {
-        if (!AREA_SHAPES.has(rider.area.type)) {
-            errors.push(`${at} area.type "${rider.area.type}" is not an effect-area shape`);
-        }
-        if (!(Number(rider.area.value) > 0)) {
-            errors.push(`${at} area.value must be a positive number of feet`);
-        }
-        if (rider.area.affects !== undefined && !AFFECTS.has(rider.area.affects)) {
-            errors.push(`${at} area.affects must be all/allies/enemies — got "${rider.area.affects}"`);
+        // A rider may carry several shapes at once. Senbonzakura Kageyoshi is two emanations, and the
+        // guide says "each enemy in **either**" — one rider with two shapes means a creature standing in
+        // both is caught once, where two riders made it two separate turn events and hit it twice.
+        const shapes = [rider.area].flat();
+        for (const area of shapes) {
+            if (!AREA_SHAPES.has(area.type)) {
+                errors.push(`${at} area.type "${area.type}" is not an effect-area shape`);
+            }
+            if (!(Number(area.value) > 0)) {
+                errors.push(`${at} area.value must be a positive number of feet`);
+            }
+            if (area.affects !== undefined && !AFFECTS.has(area.affects)) {
+                errors.push(`${at} area.affects must be all/allies/enemies — got "${area.affects}"`);
+            }
+            if (area.anchor !== undefined && !/^[a-z0-9-]+$/.test(String(area.anchor))) {
+                errors.push(`${at} area.anchor must be a slug naming a remembered point — got "${area.anchor}"`);
+            }
         }
         if (!["turn-start", "turn-end"].includes(event)) {
             errors.push(

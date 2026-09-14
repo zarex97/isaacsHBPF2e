@@ -19,16 +19,66 @@
                         "statistic": "reflex",
                         "type": "save"
                     },
-                    "area": {
-                        "type": "emanation",
-                        "value": 20
-                    },
+                    "area": [
+                        {
+                            "type": "emanation",
+                            "value": 20
+                        },
+                        {
+                            "anchor": "senbonzakura-second",
+                            "type": "emanation",
+                            "value": 20
+                        }
+                    ],
                     "areaTargeting": {
                         "affects": "enemies",
                         "includesSelf": false
                     },
                     "event": "turn-start",
-                    "note": "Two rows of a thousand blades. Basic Reflex against your Reiatsu DC.",
+                    "predicate": [
+                        {
+                            "not": "soulbound:senbonzakura:gokei"
+                        }
+                    ],
+                    "self": true
+                },
+                {
+                    "apply": {
+                        "basic": true,
+                        "dc": "reiatsu",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "slashing",
+                                    "formula": "5d6",
+                                    "multiplier": 2,
+                                    "perStep": "1d6",
+                                    "type": "damage"
+                                }
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
+                    },
+                    "area": [
+                        {
+                            "type": "emanation",
+                            "value": 20
+                        },
+                        {
+                            "anchor": "senbonzakura-second",
+                            "type": "burst",
+                            "value": 10
+                        }
+                    ],
+                    "areaTargeting": {
+                        "affects": "enemies",
+                        "includesSelf": false
+                    },
+                    "event": "turn-start",
+                    "predicate": [
+                        "soulbound:senbonzakura:gokei"
+                    ],
                     "self": true
                 }
             ]

@@ -367,11 +367,45 @@ async function targetsFor(rider, context) {
         return [];
     }
 
-    const shape = shapeFromArea(rider.area, originToken.object, originToken.object.center);
-    if (!shape) return [];
+    /**
+     * An area that is somewhere else.
+     *
+     * Almost every area rider is centred on the caster, and `shapeFromArea` takes the origin token's
+     * centre for both the anchor and the direction. Senbonzakura Kageyoshi is the exception the guide
+     * builds a whole Bankai around:
+     *
+     * > You gain a **second 20-foot emanation** centred on a point within 60 feet … you can Sustain once
+     * > per round to move the second emanation up to 30 feet. — guide §7A
+     *
+     * So an area may name an **anchor**: a key under the origin's `areaAnchors` flag holding the point it
+     * was last placed at. Nothing remembered means nothing to tick, which is the right answer before the
+     * blades have been sent anywhere.
+     */
+    /**
+     * One rider, one or more shapes — and a creature caught by two of them is caught **once**.
+     *
+     * Senbonzakura Kageyoshi is two emanations at once, and guide §7A says "each enemy in **either**
+     * emanation takes 5d6", not once per emanation. Written as two riders they were two separate turn
+     * events, and a creature standing in both rolled twice and took damage twice. Written as one rider
+     * with two shapes they go into a single Region, and `catchTokens` returns each token once.
+     */
+    const areas = [rider.area].flat().filter(Boolean);
+    const anchors = context.originActor?.getFlag?.(MODULE_ID, "areaAnchors") ?? {};
+    const shapes = [];
+    for (const area of areas) {
+        const centre = area.anchor
+            ? anchors[area.anchor] && { x: anchors[area.anchor].x, y: anchors[area.anchor].y }
+            : originToken.object.center;
+        // An anchored area that has never been placed has nowhere to be, which is the right answer
+        // before the blades have been sent anywhere.
+        if (!centre) continue;
+        const shape = shapeFromArea(area, originToken.object, centre);
+        if (shape) shapes.push(shape);
+    }
+    if (shapes.length === 0) return [];
 
     const region = new CONFIG.Region.documentClass(
-        { name: "Rider area", shapes: [shape], flags: { pf2e: { areaShape: rider.area.type } } },
+        { name: "Rider area", shapes, flags: { pf2e: { areaShape: areas[0].type } } },
         { parent: canvas.scene },
     );
     // `catchTokens` reads the origin actor off `config.item`, so hand it something item-shaped. The aura
@@ -380,7 +414,7 @@ async function targetsFor(rider, context) {
     // are in the content — the sibling is the one an item uses for cast-time targeting, so it is what an
     // author reaches for — and reading only the first meant `affects: "enemies"` on all six Soulbound
     // auras was decoration. The sibling wins where both are present; it is the more specific statement.
-    const aiming = { ...(rider.area ?? {}), ...(rider.areaTargeting ?? {}) };
+    const aiming = { ...(areas[0] ?? {}), ...(rider.areaTargeting ?? {}) };
     const config = {
         item: { actor: context.originActor, name: context.originActor?.name ?? "", system: {} },
         affects: aiming.affects ?? "enemies",

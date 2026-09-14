@@ -1,4 +1,26 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "bypass": [
+                {
+                    "resistance": {
+                        "max": null,
+                        "types": "all"
+                    }
+                }
+            ],
+            "riders": [
+                {
+                    "apply": {
+                        "text": "Senkei: you may make <strong>one extra Strike</strong> this round against the caged enemy, at your current multiple attack penalty. You cannot target anyone outside the cage, and neither of you can leave it.",
+                        "type": "prompt"
+                    },
+                    "event": "turn-start",
+                    "self": true
+                }
+            ]
+        }
+    },
     "img": "icons/magic/nature/leaf-petals-white.webp",
     "name": "Effect: Senkei",
     "system": {
@@ -19,14 +41,14 @@
         },
         "rules": [
             {
-                "key": "RollOption",
                 "domain": "all",
+                "key": "RollOption",
                 "option": "soulbound:senbonzakura:senkei",
                 "value": true
             },
             {
-                "key": "ItemAlteration",
                 "itemType": "weapon",
+                "key": "ItemAlteration",
                 "mode": "remove",
                 "predicate": [
                     "item:tag:soulbound-spirit-weapon"
