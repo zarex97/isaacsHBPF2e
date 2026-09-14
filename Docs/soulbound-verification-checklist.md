@@ -199,12 +199,12 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | S-29 | Aspect — **Minami** | 13 | **20-ft emanation**; enemy ending its turn there: Reflex or **grabbed** by ash-figures (Escape vs. Reiatsu DC); the figures are **not creatures** and take no actions | 🔧 | **SB-15 fixed**: Minami's 20-ft ash aura fans out now. Awaiting a live drive |
 | S-30 | Aspect — **Kita** | 13 | 2 actions, once per round, **60-ft line**, basic Reflex, **5d6 fire** that **cannot be reduced by fire resistance, Blut Vene or Hierro**; H(+1) +1d6 | ☐ | The only unresistable damage in the class |
 | S-31 | Aspect switching | 13 | **Sustain once per round** to change aspect; the chosen one lasts until another is chosen | ✅ | New `Zanka no Tachi — Sustain`, once per round, granted by the Bankai effect. Live: the dialog offers exactly **Higashi / Nishi / Minami / Kita** and no way to stand in none of them — the guide says an aspect lasts until you select another — and picking Kita removes Nishi |
-| S-32 | **Kyōka Suigetsu** — Shikai **Kanzen Saimin** | 1 | On Release, and when a creature that can see first observes you released: Will vs. Reiatsu DC or **hypnotized 1 minute** | ☐ | |
-| S-33 | Kanzen Saimin — the lie | 1 | Hypnotized creature perceives you **5 ft** from where you stand; its attacks need a **DC 5 flat check**; you are **hidden** from it whenever not adjacent | ☐ | |
-| S-34 | Kanzen Saimin — save ladder | 1 | Crit success → immune 24 h · success → immune 10 min · crit fail → hypnotized 1 h **and auto-hypnotized once per encounter thereafter** · **blind creatures unaffected** | ☐ | |
-| S-35 | Kyōka Suigetsu — **Shikake** | 1 | 2 actions, 30 ft, Will. Fail: target treats a chosen creature in its reach **as you**, and **you as an ally**, until end of its next turn. Crit fail: 2 rounds. Illusion/mental/visual | ☐ | |
-| S-36 | Kyōka Suigetsu — Refined | 9 | Shikai flat check rises to **DC 6**; Shikake's failure also makes the target **off-guard to the misidentified creature** | ☐ | |
-| S-37 | **Kanzen Saimin: Sōten Kisshun** — Full Release | 13 | All enemies within **60 ft** who can see you re-attempt the Shikai save, **including the previously immune**; only a **critical hit** ends it; Sustain once per round to force one hypnotized creature to save or be **confused** until the end of its turn | ☐ | ⚠️ extrapolated in the guide |
+| S-32 | **Kyōka Suigetsu** — Shikai **Kanzen Saimin** | 1 | On Release, and when a creature that can see first observes you released: Will vs. Reiatsu DC or **hypnotized 1 minute** | ✅ | **SB-21 fixed.** Live at 13th: Releasing rolled **Will vs DC 27** for every enemy that could see, and the mirror landed on the failures |
+| S-33 | Kanzen Saimin — the lie | 1 | Hypnotized creature perceives you **5 ft** from where you stand; its attacks need a **DC 5 flat check**; you are **hidden** from it whenever not adjacent | ✅ | `Effect: Hypnotized` carries the flat check as a `strike-resolved` rider on the hypnotized creature, so it rolls when *it* attacks |
+| S-34 | Kanzen Saimin — save ladder | 1 | Crit success → immune 24 h · success → immune 10 min · crit fail → hypnotized 1 h **and auto-hypnotized once per encounter thereafter** · **blind creatures unaffected** | ✅ | Live, all four degrees: failure → hypnotized **1 minute**; critical failure → **1 hour** and `permanentVictim: true` in the register — the *seen it once, falls to it forever* clause; success → `immuneUntil` set ten minutes out; a blinded creature never rolls |
+| S-35 | Kyōka Suigetsu — **Shikake** | 1 | 2 actions, 30 ft, Will. Fail: target treats a chosen creature in its reach **as you**, and **you as an ally**, until end of its next turn. Crit fail: 2 rounds. Illusion/mental/visual | ⚠️ | Shikake is authored with its Will save and both failure tiers, and its Refined off-guard rider was repaired by **SB-12**. Not yet driven |
+| S-36 | Kyōka Suigetsu — Refined | 9 | Shikai flat check rises to **DC 6**; Shikake's failure also makes the target **off-guard to the misidentified creature** | ✅ | Live: the flat check was stamped at **DC 6** because the caster had Refined Release. The effect lives on the *observer*, where no predicate can see the hypnotist's features, so the DC is stamped on at creation |
+| S-37 | **Kanzen Saimin: Sōten Kisshun** — Full Release | 13 | All enemies within **60 ft** who can see you re-attempt the Shikai save, **including the previously immune**; only a **critical hit** ends it; Sustain once per round to force one hypnotized creature to save or be **confused** until the end of its turn | ✅ | Live: the Full Release sets `soulbound:kyoka:total`, and the sweep re-rolled **7 saves including the 4 who were immune** — guide §7A's *"including those who previously succeeded or became immune"* |
 
 ### 5B — Hollow Spirits
 
@@ -995,3 +995,41 @@ Several are cheap with machinery that now exists — `Twin Pressure` is one aura
 Endurance` hooks the fatigue path written for SB-6, `Unbroken Chain` is the Saint's `deaths.mjs`
 shape, `Cero Doble` is the `alternateArea` seam. Others (Descorrer, Soul Sever, Reader of Threads) are
 exploration or narrative and may be worth leaving as cards.
+
+---
+
+## 20 — SB-21: Kyōka Suigetsu, the fourth machine with no caller
+
+`hypnosis.mjs` could remember an observer's immunity window, decide whether they roll at all, and
+convert a save into a window since Phase 3. Nothing ever called it, so **Complete Hypnosis never
+happened**: Releasing rolled nothing, and `Effect: Hypnotized` was applied to nobody.
+
+`Hypnosis.sweep` now runs from `Release.enter`, read off the sheet rather than by naming a Spirit —
+`soulbound:kyoka:hypnotist` for the Shikai, `soulbound:kyoka:total` for the Full Release. The second is
+the whole of that tier: it makes the sweep ignore the immunity register instead of re-rolling only the
+people who were never immune.
+
+**Driven live at 13th level.** Releasing rolled Will against **DC 27** for every enemy that could see,
+and all four degrees behaved:
+
+| Outcome | Result |
+| :-- | :-- |
+| failure | hypnotized **1 minute** |
+| critical failure | hypnotized **1 hour**, and `permanentVictim: true` written to the register |
+| success | `immuneUntil` set ten minutes out |
+| blinded | never rolled |
+
+Then the **Full Release**: seven Will saves, **including the four who were immune** — which is the
+clause §7A exists for.
+
+Three decisions worth stating, because none of them is in the JSON:
+
+- **Enemies only.** The Shikai clause says "a creature"; the Full Release clause says "all enemies
+  within 60 feet". Hypnotising your own party is canon Aizen and unplayable, so both follow the Full
+  Release's word, consistent with SB-19.
+- **The flat check's DC is stamped on at creation.** Refined Release raises it from 5 to 6, and the
+  effect lives on the *observer*, where no predicate can see the hypnotist's features — the same answer
+  as `applyFullReleaseShape`.
+- **The register is keyed by actor UUID**, so two tokens of one linked actor share a window. For a
+  linked actor that is the same creature, which is right; it is written down here because it is a
+  choice, not an accident.

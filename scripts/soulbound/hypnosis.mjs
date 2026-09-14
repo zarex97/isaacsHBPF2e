@@ -2,6 +2,7 @@ import { Reiatsu } from "./reiatsu.mjs";
 
 const MODULE_ID = "isaacs-hb-pf2e";
 const EFFECTS_PACK = `${MODULE_ID}.soulbound-effects`;
+const EFFECT = "Effect: Hypnotized";
 
 /**
  * Kyōka Suigetsu's Complete Hypnosis.
@@ -62,6 +63,97 @@ export function shouldRoll({ canSee, immuneUntil, now, alreadyHypnotized, perman
 }
 
 export const Hypnosis = {
+    /**
+     * Roll the hypnosis for every creature that can see you — guide §7A.
+     *
+     * > When you Release, and when a creature that can see first observes you while released, that
+     * > creature must succeed at a **Will save** against your Reiatsu DC or be **hypnotized** for
+     * > 1 minute.
+     *
+     * This is the fourth machine in the class that was written, tested and never called. The register
+     * above could remember an observer's window since Phase 3; nothing ever asked it to.
+     *
+     * Three decisions worth stating, because none of them is in the JSON:
+     *
+     *  - **Enemies only.** The guide's Shikai clause says "a creature", and its Full Release clause says
+     *    "all enemies within 60 feet". Hypnotising your own party is canon Aizen and unplayable at a
+     *    table, so both follow the Full Release's word — and SB-19's ruling that this class does not
+     *    catch its own side.
+     *  - **The flat check's DC is stamped on at creation.** Refined Release raises it from 5 to 6, and
+     *    the effect lives on the *observer*, where no predicate can see the hypnotist's features. Same
+     *    answer as `applyFullReleaseShape`: adjust the source as it is created.
+     *  - **A creature with no sight never rolls.** `shouldRoll` already says so; this supplies the
+     *    answer from pf2e's own senses rather than assuming everything can see.
+     */
+    async sweep(actor, { range = null, includeImmune = false } = {}) {
+        if (!Reiatsu.isSoulbound(actor)) return [];
+        const statistic = actor.getStatistic?.("soulbound");
+        const dc = statistic?.dc?.value;
+        const origin = actor.getActiveTokens(true, true).at(0);
+        if (!dc || !origin) return [];
+
+        const refined = (actor.getRollOptions?.() ?? []).includes("feature:refined-release");
+        const now = game.time.worldTime;
+        const results = [];
+
+        for (const token of canvas.tokens?.placeables ?? []) {
+            const observer = token.actor;
+            if (!observer || token.document.id === origin.id) continue;
+            if (observer.alliance === actor.alliance) continue;
+            if (range !== null && canvas.grid.measurePath(
+                [{ x: origin.object.center.x, y: origin.object.center.y },
+                 { x: token.center.x, y: token.center.y }]).distance > range) continue;
+
+            const uuid = observer.uuid;
+            const entry = this.entryFor(actor, uuid);
+            const canSee = !observer.hasCondition?.("blinded");
+            const decision = shouldRoll({
+                canSee,
+                immuneUntil: includeImmune ? null : entry.immuneUntil,
+                now,
+                alreadyHypnotized: observer.itemTypes.effect.some((e) => e.name === EFFECT),
+                permanentVictim: entry.permanentVictim,
+            });
+
+            if (decision.autoHypnotize) {
+                await this.hypnotize(observer, { refined, seconds: 3600 });
+                results.push({ observer: observer.name, outcome: "auto" });
+                continue;
+            }
+            if (!decision.roll) {
+                results.push({ observer: observer.name, outcome: canSee ? "immune" : "blind" });
+                continue;
+            }
+
+            const roll = await observer.getStatistic("will")?.roll({
+                dc: { value: dc }, skipDialog: true, origin: actor,
+                extraRollOptions: [`${MODULE_ID}:kanzen-saimin`],
+            });
+            const outcome = ["criticalFailure", "failure", "success", "criticalSuccess"][roll?.degreeOfSuccess ?? -1];
+            if (!outcome) continue;
+            await this.remember(actor, uuid, outcome);
+            if (outcome === "failure") await this.hypnotize(observer, { refined, seconds: 60 });
+            if (outcome === "criticalFailure") await this.hypnotize(observer, { refined, seconds: 3600 });
+            results.push({ observer: observer.name, outcome });
+        }
+        return results;
+    },
+
+    /** Put the mirror on one observer, with the flat check the hypnotist's Refined Release sets. */
+    async hypnotize(observer, { refined = false, seconds = 60 } = {}) {
+        const doc = await this.packedEffect(EFFECT);
+        if (!doc) return null;
+        const source = foundry.utils.deepClone(doc.toObject());
+        source.system.duration = seconds >= 3600
+            ? { ...source.system.duration, unit: "hours", value: Math.round(seconds / 3600) }
+            : { ...source.system.duration, unit: "minutes", value: Math.max(1, Math.round(seconds / 60)) };
+        for (const rider of source.flags?.[MODULE_ID]?.riders ?? []) {
+            if (rider.apply?.type === "flat-check") rider.apply.dc = refined ? 6 : 5;
+        }
+        const [created] = await observer.createEmbeddedDocuments("Item", [source]);
+        return created ?? null;
+    },
+
     register(actor) {
         return actor?.getFlag(MODULE_ID, "hypnosis") ?? {};
     },
