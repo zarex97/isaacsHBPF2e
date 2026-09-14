@@ -1,3 +1,4 @@
+import { Hypnosis } from "./hypnosis.mjs";
 import { Reiatsu } from "./reiatsu.mjs";
 
 const MODULE_ID = "isaacs-hb-pf2e";
@@ -141,6 +142,24 @@ export const Release = {
         if (state === "full") for (const source of sources) applyFullReleaseShape(source, actor.level);
         if (sources.length > 0) await actor.createEmbeddedDocuments("Item", sources);
         await actor.setFlag(MODULE_ID, "releaseState", state);
+
+        /**
+         * Kyōka Suigetsu hypnotises on Release, and again on the Full Release — guide §7A.
+         *
+         * > When you Release … that creature must succeed at a Will save against your Reiatsu DC or be
+         * > hypnotized for 1 minute.
+         * > [Sōten Kisshun] All enemies within 60 feet who can see you must attempt the Shikai save,
+         * > **including those who previously succeeded or became immune.**
+         *
+         * Read off the sheet — `soulbound:kyoka:hypnotist` and `soulbound:kyoka:total` — so no Spirit is
+         * named here. `soulbound:kyoka:total` is what makes the Full Release ignore the immunity register
+         * rather than re-rolling only the people who were never immune, which is the whole of that tier.
+         */
+        const options = actor.getRollOptions?.() ?? [];
+        if (options.includes("soulbound:kyoka:hypnotist")) {
+            const total = options.includes("soulbound:kyoka:total");
+            await Hypnosis.sweep(actor, { range: total ? 60 : null, includeImmune: total });
+        }
     },
 
     async exit(actor, state) {
