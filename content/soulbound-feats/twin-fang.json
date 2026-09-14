@@ -38,7 +38,7 @@
                     "item:tag:soulbound-spirit-weapon"
                 ],
                 "selector": "strike-attack-roll",
-                "value": 1
+                "value": -4
             }
         ],
         "traits": {
