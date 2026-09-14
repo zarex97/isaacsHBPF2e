@@ -13,7 +13,7 @@
                 },
                 "name": "Cascada — standing water",
                 "predicate": [
-                    "self:feature:refined-release"
+                    "feature:refined-release"
                 ]
             },
             "riders": [
@@ -37,7 +37,7 @@
                         "criticalFailure"
                     ],
                     "predicate": [
-                        "self:feature:refined-release"
+                        "feature:refined-release"
                     ]
                 }
             ]

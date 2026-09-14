@@ -27,7 +27,7 @@
                         "criticalFailure"
                     ],
                     "predicate": [
-                        "self:feature:refined-release"
+                        "feature:refined-release"
                     ]
                 }
             ]

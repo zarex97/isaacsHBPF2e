@@ -1270,7 +1270,12 @@ const scriptUuids = [];
 })(path.join(ROOT, "scripts"));
 check("no script holds a compendium uuid by name", scriptUuids, []);
 
-// The regression guard. `item:time:N` looks plausible enough to be written again by hand.
+// The regression guard. `item:time:N` looks plausible enough to be written again by hand — and so is
+// `self:feature:<slug>`, which shipped on **six** Refined riders and could never once have been true.
+// pf2e emits `feature:<slug>` for a feature, and `self:` only ever prefixes effects and a few actor
+// facts; there is no `self:feature:` anywhere in the system. The predicate reads perfectly, matches
+// nothing, and the only symptom is a rider that quietly never fires.
+const DEAD_OPTIONS = ["item:time:", "self:feature:"];
 const retired = [];
 for (const [file, doc] of (() => {
     const found = [];
@@ -1284,9 +1289,11 @@ for (const [file, doc] of (() => {
     walk(path.join(ROOT, "content"));
     return found;
 })()) {
-    if (doc.includes("item:time:")) retired.push(path.relative(ROOT, file));
+    for (const dead of DEAD_OPTIONS) {
+        if (doc.includes(dead)) retired.push(`${path.relative(ROOT, file)} (${dead})`);
+    }
 }
-check("no content predicates the roll option pf2e never emits", retired, []);
+check("no content predicates a roll option pf2e never emits", retired, []);
 
 /* -------------------------------------------------------------------------------------------- */
 /*  Leo, Virgo and Scorpio                                                                       */
