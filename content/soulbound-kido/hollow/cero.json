@@ -1,4 +1,12 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "includesSelf": false
+            }
+        }
+    },
     "folder": "Hollow Arts",
     "img": "icons/magic/fire/beam-jet-stream-red.webp",
     "name": "Cero",

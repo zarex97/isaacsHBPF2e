@@ -108,3 +108,46 @@ restart needed.
 | `TokenDocument#x` is the **animated** position in v14 | Read `_source.x` for real coordinates |
 | `toObject()` on a **compendium** document returns `rules` by reference | Editing it poisons the cached pack for the session. `foundry.utils.deepClone` it |
 | `item.toMessage()` bypasses `spellcastingEntry.cast` | A *spell* posted that way skips area targeting; an *action* does not |
+
+## 8. Driving an area Technique
+
+**An emanation needs no click.** It is centred on the caster's own space, so `placeArea` builds it and
+returns; all you answer is the "Confirm targets" `DialogV2`:
+
+```js
+const dlg = [...foundry.applications.instances.values()]
+    .find(a => a.constructor.name === "DialogV2" && /Confirm targets/i.test(a.title ?? ""));
+dlg?.element.querySelector('button[data-action="confirm"]')?.click();
+```
+
+**A line, a cone or a placed burst is aimed, and resolves on a real canvas click.** Three things were
+tried, and only the last one works:
+
+| Attempt | Result |
+| :-- | :-- |
+| `canvas.animatePan` to the target, then synthetic pointer events | The pan is **refused while a placement is standing**, so the click lands wherever the view already was |
+| Compute the screen point *after* the placement starts, then synthetic pointer events | `canvas.mousePosition` lands **exactly** on the target — the aim is right — but `pointerdown` does **not** confirm the placement |
+| Stub `canvas.regions.placeRegion` to return the region immediately | Turns `AreaTargeting.run`'s re-aim loop into an **infinite** one: the loop `continue`s whenever the range check fails, and with an instant stub it never yields |
+
+So a script does not aim. It casts against targets picked by hand, through the module's own setting:
+
+```js
+globalThis.__castOn = async (spell, tokens) => {
+    const was = game.settings.get("isaacs-hb-pf2e", "areaTargeting");
+    await game.settings.set("isaacs-hb-pf2e", "areaTargeting", false);   // configFor returns null
+    try {
+        [...game.user.targets].forEach(t => t.setTarget(false, { releaseOthers: false }));
+        for (const t of tokens) t.setTarget(true, { user: game.user, releaseOthers: false });
+        await spell.spellcasting.cast(spell, { message: true });
+        await new Promise(r => setTimeout(r, 2500));
+    } finally { await game.settings.set("isaacs-hb-pf2e", "areaTargeting", was); }
+};
+```
+
+That splits the work honestly: **area targeting itself is proven on emanations**, which need no click,
+and everything downstream of it — the Reiatsu cost, the charge spend, the save, the riders, the
+damage — is proven this way on every shape.
+
+**If a placement does get stuck**, Escape usually clears it; reloading the page always does. A stuck
+placement makes the *next* cast look broken, so check `canvas.regions.preview.children.length` before
+believing a failure.

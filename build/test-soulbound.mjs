@@ -1846,4 +1846,59 @@ check("the petal-flowers can be spent down to none without deleting the Bankai",
 check("Los Lobos' wolves were already right, and stay right",
     contentDoc("soulbound-effects/effect-colmillo.json").system.badge.min, 0);
 
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  SB-19 — who an area catches                                                                     */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * `configFor` defaults `affects` to **`"all"`** when an item carries no `areaTargeting` flag, and 24 of
+ * the class's 33 area effects carried none — so every kidō line and burst, Getsuga Tenshō, Galvano
+ * Blast, both of Hyōrinmaru's petal areas and **thirteen of the fifteen Severing Arts** caught the
+ * caster's own party.
+ *
+ * The guide settles it in one sentence, about Zanka no Tachi:
+ *
+ * > **Design note.** This is the most complex Bankai in the class and **the only one that damages your
+ * > own party.**
+ *
+ * So exactly one area in the class affects everyone — Zanka no Tachi's ambient burn, which was already
+ * authored `affects: "all"` — and every other one is enemies-only.
+ */
+const SOULBOUND_AREA_DIRS = ["soulbound-techniques", "soulbound-kido"];
+const areaItems = [];
+(function walk(dir) {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) walk(full);
+        else if (entry.name.endsWith(".json") && entry.name !== "_folders.json") {
+            const doc = JSON.parse(fs.readFileSync(full, "utf8"));
+            if (doc.system?.area) areaItems.push({ name: doc.name, doc });
+        }
+    }
+})(path.join(ROOT, "content", SOULBOUND_AREA_DIRS[0]));
+(function walk(dir) {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) walk(full);
+        else if (entry.name.endsWith(".json") && entry.name !== "_folders.json") {
+            const doc = JSON.parse(fs.readFileSync(full, "utf8"));
+            if (doc.system?.area) areaItems.push({ name: doc.name, doc });
+        }
+    }
+})(path.join(ROOT, "content", SOULBOUND_AREA_DIRS[1]));
+
+check("every Soulbound area says who it catches, rather than defaulting to everyone",
+    areaItems.filter((i) => !i.doc.flags?.["isaacs-hb-pf2e"]?.areaTargeting?.affects).map((i) => i.name),
+    []);
+check("and none of them catches allies — Zanka no Tachi's ambient burn is the class's only friendly fire",
+    areaItems.filter((i) => i.doc.flags["isaacs-hb-pf2e"].areaTargeting.affects !== "enemies").map((i) => i.name),
+    []);
+check("Zanka no Tachi's ambient burn still reaches everyone but the caster (guide §7A design note)",
+    (() => {
+        const r = contentDoc("soulbound-effects/effect-zanka-no-tachi.json").flags["isaacs-hb-pf2e"].riders[0];
+        return [r.areaTargeting.affects, r.areaTargeting.includesSelf];
+    })(),
+    ["all", false]);
+
 report("Soulbound tests");
