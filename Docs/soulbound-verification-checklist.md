@@ -288,9 +288,9 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | # | Feat | What must happen | Status | Notes |
 | :-- | :-- | :-- | :-- | :-- |
 | F-01 | **Additional Kidō** **[SR]** | One more kidō; **up to three times**; Hollow/Quincy cannot take it | ☐ | |
-| F-02 | **Sheathed Draw** | On initiative, manifest **and** Release as a **single free action** | ☐ | |
-| F-03 | **Reader of Threads** | Recall Knowledge on spirits/haunts/undead with Spirit Lore as a **free action once per round**; +1 extra fact on a success | ☐ | |
-| F-04 | **Zanjutsu Footwork** | Crit with the spirit weapon → **Step** as a free action | ☐ | |
+| F-02 | **Sheathed Draw** | On initiative, manifest **and** Release as a **single free action** | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-03 | **Reader of Threads** | Recall Knowledge on spirits/haunts/undead with Spirit Lore as a **free action once per round**; +1 extra fact on a success | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-04 | **Zanjutsu Footwork** | Crit with the spirit weapon → **Step** as a free action | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
 | F-05 | **Pesquisa** **[H]** | Spirit Sense to **120 ft**; learn each detected creature's approximate level relative to yours | ☐ | |
 | F-06 | **Hirenkyaku Drill** **[Q]** | Flash Step at 1st, **once per encounter** until 3rd | ☐ | |
 | F-07 | **Twin Fang** | With twin or agile, the **second Strike each round** reduces MAP by 1 | ☐ | |
@@ -301,20 +301,20 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | F-08 | **Pressure Flare** | 2 | 1 action, enemies within 15 ft: Will vs. Reiatsu DC or **frightened 1**; **once per encounter, no cost** | ☐ | |
 | F-09 | **Guard the Threshold** | 2 | Reaction: ally within 15 ft damaged by an **undead, spirit or incorporeal** creature → reduce by **2 + your level** | ☐ | |
-| F-10 | **Kidō Focus** | 2 | Spend **1 extra action** on a kidō → target takes **−1 circumstance** to its save | ☐ | |
-| F-11 | **Rapid Bala** **[H]** | 2 | Spend 1 extra action to use **Bala** again; both apply and raise MAP normally | ☐ | |
+| F-10 | **Kidō Focus** | 2 | Spend **1 extra action** on a kidō → target takes **−1 circumstance** to its save | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-11 | **Rapid Bala** **[H]** | 2 | Spend 1 extra action to use **Bala** again; both apply and raise MAP normally | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
 | F-12 | **Gintō Reserve** **[Q]** | 2 | **3 Gintō** at daily preparations; each is a free action to use **Gritz** for **no** Reiatsu Point; unspent are lost at next preparations | ☐ | |
-| F-13 | **Shunpo Strike** | 4 | 2 actions: Flash Step then Strike; **doesn't count against Flash Step's frequency** | ☐ | |
+| F-13 | **Shunpo Strike** | 4 | 2 actions: Flash Step then Strike; **doesn't count against Flash Step's frequency** | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
 | F-14 | **Reiatsu Barrier** | 4 | Reaction when hit: spend 1 point for **resistance = your level** vs. that damage | ☐ | |
-| F-15 | **Chain Anchor** | 4 | Crit with the spirit weapon → target **can't Step away** until end of its next turn | ☐ | |
-| F-16 | **Deep Breath** | 4 | First **Steady the Breath** each day restores **2** points | ☐ | |
-| F-17 | **Cero Doble** **[H]** | 4 | Cero may be a **30-ft cone**; crit fails **pushed 10 ft** away | ☐ | |
+| F-15 | **Chain Anchor** | 4 | Crit with the spirit weapon → target **can't Step away** until end of its next turn | ✅ | **SB-20 fixed.** A `strike-resolved` critical-success rider applying `Effect: Chain Anchor` for 1 round |
+| F-16 | **Deep Breath** | 4 | First **Steady the Breath** each day restores **2** points | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-17 | **Cero Doble** **[H]** | 4 | Cero may be a **30-ft cone**; crit fails **pushed 10 ft** away | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
 
 ### 6.3 — Sixth through twelfth
 
 | # | Feat | Lvl | What must happen | Status | Notes |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| F-18 | **Kidō Combination** | 6 | Free action right after a **destruction** kidō: a **binding** kidō at the same target for **1 fewer point (min 0)**; once per encounter | ☐ | |
+| F-18 | **Kidō Combination** | 6 | Free action right after a **destruction** kidō: a **binding** kidō at the same target for **1 fewer point (min 0)**; once per encounter | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
 | F-19 | **Reactive Strike** | 6 | pf2e's published `Reactive Strike` reaction, automating as-is | ☐ | |
 | F-20 | **Cut the Cord** | 6 | Strikes ignore the **first 5 points** of resistance to spirit | ☐ | |
 | F-21 | **Borrowed Nature** | 6 | Permanent second Lineage choice; learn its **free cantrip** at no cost; gain **Don the Other Face** | ☐ | |
@@ -323,17 +323,17 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | F-24 | Aspect — **Hollow's Mask** | 6 | Temp HP = **level**; physical resistance = **quarter level** (min 1); **+5 ft status** Speeds | ☐ | |
 | F-25 | Aspect — **Quincy's Discipline** | 6 | **Blut** free action once per round, Vene at **quarter** level; ranged Strikes **ignore cover** | ☐ | |
 | F-26 | **Blut Discipline** **[Q]** | 6 | Switch Blut as a free action **twice** per round | ☐ | |
-| F-27 | **Descorrer** **[H]** | 6 | Once per hour, Garganta: you + up to 5 allies teleport up to **500 ft** to a seen or visited place | ☐ | |
-| F-28 | **Rising Tide** | 8 | The first Rising Pressure grant each round also gives **temp HP = half level (min 2)**, until start of your next turn, not stacking with itself | ☐ | |
+| F-27 | **Descorrer** **[H]** | 6 | Once per hour, Garganta: you + up to 5 allies teleport up to **500 ft** to a seen or visited place | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-28 | **Rising Tide** | 8 | The first Rising Pressure grant each round also gives **temp HP = half level (min 2)**, until start of your next turn, not stacking with itself | ✅ | **SB-20 fixed.** Paid out by `Rising Pressure` itself — *"the first time each round that Rising Pressure grants you a point"* is a moment only that function knows, which is why the feat sat unread. Temp HP = half level, minimum 2 |
 | F-29 | **Pressure Crush** | 8 | 2 actions, 1 point, **20-ft emanation**, Fortitude; failure → **clumsy 1** and **−5 ft status** Speeds for **1 minute** | ☐ | |
-| F-30 | **Zanjutsu: Hakuda** **[SR]** | 8 | **1d6 fist**, agile, finesse, nonlethal; one unarmed Strike may be made as part of **any** Zanjutsu technique | ☐ | |
-| F-31 | **Perfected Technique** | 10 | Once per encounter, Release Technique costs **nothing** | ☐ | |
-| F-32 | **Ghost Step** | 10 | Flash Step passes through creatures' spaces (not ending there) and **ignores difficult terrain** | ☐ | |
-| F-33 | **Reishi Mastery** **[Q]** | 10 | Seal the Art counteract rank **+1**; **free on a critical success** | ☐ | |
-| F-34 | **Soul Sever** | 12 | Reducing a creature to 0 HP with the spirit weapon performs **Konsō** as a free action, no check, permanently preventing undeath | ☐ | |
+| F-30 | **Zanjutsu: Hakuda** **[SR]** | 8 | **1d6 fist**, agile, finesse, nonlethal; one unarmed Strike may be made as part of **any** Zanjutsu technique | ✅ | **SB-20 fixed.** A real `Strike` rule element. Live: **Hakuda, 1d6 bludgeoning, agile / finesse / nonlethal / unarmed**, with the agile MAP at −4/−8. It was a roll option nothing read |
+| F-31 | **Perfected Technique** | 10 | Once per encounter, Release Technique costs **nothing** | ✅ | **SB-20 fixed.** The `freeCast` machinery, as used by the Full Release's Unbound Technique. Live: `FreeCast.find` returns it for a Release Technique, frequency 1 per `PT10M` — pf2e has no *encounter* period, and `PT10M` is its stand-in |
+| F-32 | **Ghost Step** | 10 | Flash Step passes through creatures' spaces (not ending there) and **ignores difficult terrain** | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-33 | **Reishi Mastery** **[Q]** | 10 | Seal the Art counteract rank **+1**; **free on a critical success** | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-34 | **Soul Sever** | 12 | Reducing a creature to 0 HP with the spirit weapon performs **Konsō** as a free action, no check, permanently preventing undeath | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
 | F-35 | **Kidō Mastery** | 12 | **Destruction** kidō deal **one additional die** of their damage type | ☐ | |
-| F-36 | **Segunda Piel Temprana** **[H]** | 12 | Each time you are **critically hit**, Hierro resists **spirit** for 1 round | ☐ | |
-| F-37 | **Deeper Crossing** | 12 | Don the Other Face **twice per encounter**; Aspect deepens (2nd kidō + 1 extra destruction die · temp HP 2× level, resistance half level, +10 ft · Vene half level + **one Seal the Art per encounter**) | ☐ | |
+| F-36 | **Segunda Piel Temprana** **[H]** | 12 | Each time you are **critically hit**, Hierro resists **spirit** for 1 round | ✅ | **SB-20 fixed.** A `strike-received` critical-success rider granting spirit resistance = half level for 1 round |
+| F-37 | **Deeper Crossing** | 12 | Don the Other Face **twice per encounter**; Aspect deepens (2nd kidō + 1 extra destruction die · temp HP 2× level, resistance half level, +10 ft · Vene half level + **one Seal the Art per encounter**) | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
 
 ### 6.4 — Zanjutsu techniques **[SR]** (guide §8.4)
 
@@ -353,12 +353,12 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | # | Feat | Lvl | What must happen | Status | Notes |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | F-46 | **Instant Full Release** | 14 | Full Release costs **1 action** | ✅ | **SB-17 fixed.** Live: adding the feat takes Full Release from **2 actions to 1**. Its `action-cost` alteration named a property pf2e has no handler for, so the feat's whole text did nothing |
-| F-47 | **Twin Pressure** | 14 | The Full Release emanation's Will save also applies to enemies that **enter** it | ☐ | |
-| F-48 | **Vollständig Endurance** **[Q]** | 14 | No fatigue when Vollständig ends; spend 1 point to extend by 1 round, **up to three times** | ☐ | |
-| F-49 | **Unbroken Chain** | 16 | While released, spend 1 point to stay at **1 HP** instead of 0; **once per day** | ☐ | |
-| F-50 | **Reiatsu Flood** | 16 | Rising Pressure's **per-encounter cap +1** | ☐ | `capFor()` already reads the feat — confirm it pays out a 4th point |
+| F-47 | **Twin Pressure** | 14 | The Full Release emanation's Will save also applies to enemies that **enter** it | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-48 | **Vollständig Endurance** **[Q]** | 14 | No fatigue when Vollständig ends; spend 1 point to extend by 1 round, **up to three times** | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-49 | **Unbroken Chain** | 16 | While released, spend 1 point to stay at **1 HP** instead of 0; **once per day** | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
+| F-50 | **Reiatsu Flood** | 16 | Rising Pressure's **per-encounter cap +1** | ✅ | Always worked: `capFor()` in `rising-pressure.mjs` reads the feat **by slug**, which is why it was the one apparently-inert feat that was not |
 | F-51 | **Beyond the Blade** | 18 | Release Technique dice **+2 steps** (d6→d10, d8→d12) | ☐ | |
-| F-52 | **Second Nature** | 18 | The **6th-level** Aspect is always on — no action, no point, no duration, **no Will penalty**; Donning still upgrades to the 12th-level numbers twice per encounter | ☐ | |
+| F-52 | **Second Nature** | 18 | The **6th-level** Aspect is always on — no action, no point, no duration, **no Will penalty**; Donning still upgrades to the 12th-level numbers twice per encounter | ❌ | **SB-20.** Set a roll option nothing reads, or nothing at all — the ability does not happen |
 | F-53 | **Final Release** | 20 | 3 actions, **once per week**, requires released form | ☐ | See §7 |
 
 ---
@@ -938,3 +938,60 @@ emanations; everything downstream of it is proven on every shape.
 **one petal and one Reiatsu Point**, and a second cast in the same round is **refused and costs
 nothing** — the refusal lands before the point is spent, which is the whole reason the check sits
 where it does.
+
+---
+
+## 19 — SB-20: twenty-three of forty-seven feats do nothing
+
+Audited statically across all 47 Soulbound feats. A feat counts as having a mechanism when it carries a
+rule that is not merely a `RollOption`, a module flag the engine acts on, or a slug the scripts read.
+
+**Twenty-three had none of the three.** The usual shape is a single `RollOption` naming the feat —
+`soulbound:ghost-step`, `soulbound:soul-sever`, `soulbound:twin-pressure` — which reads like a hook and
+is one nothing is attached to. Across the whole class, **45 of 49 roll options are set and never read.**
+
+`Reiatsu Flood` was the one apparent exception that turned out to work: `capFor()` in
+`rising-pressure.mjs` reads it **by slug**, not by its roll option.
+
+### Fixed in this pass
+
+| Feat | Lvl | How |
+| :-- | :-- | :-- |
+| **Perfected Technique** | 10 | The `freeCast` flag, the same machinery as the Full Release's Unbound Technique. pf2e has no *encounter* frequency period — the list is turn/round/PT1M/PT10M/PT1H/PT24H/day/P1W/P1M/P1Y — so `PT10M` is the stand-in |
+| **Zanjutsu: Hakuda** | 8 | A real `Strike`. Live: **1d6 bludgeoning, agile / finesse / nonlethal / unarmed**, MAP −4/−8 |
+| **Chain Anchor** | 4 | `strike-resolved` critical-success rider → `Effect: Chain Anchor` |
+| **Segunda Piel Temprana** | 12 | `strike-received` critical-success rider → spirit resistance = half level for a round |
+| **Rising Tide** | 8 | Paid out inside `Rising Pressure`'s own grant — the only place that knows "the first time each round that Rising Pressure grants you a point" |
+
+**A trap worth naming:** `fist: true` on a `Strike` means *replace the character's basic fist*, and it
+**ignores the rule's `damage` field entirely** — Cosmo Strike has to alter the fist's die separately,
+by its fixed id. Hakuda is a new attack the guide grants, so it is a plain `Strike` that declares its
+own damage. Written with `fist: true`, it produced no strike at all and the fist stayed 1d4.
+
+### Still inert — eighteen feats
+
+| Lvl | Feat | What it needs |
+| :-- | :-- | :-- |
+| 1 | Reader of Threads | a free-action Recall Knowledge, once per round |
+| 1 | Sheathed Draw | manifest **and** Release as one free action on initiative |
+| 1 | Zanjutsu Footwork | a free Step on a critical hit |
+| 2 | Kidō Focus | spend an extra action for −1 circumstance to the save |
+| 2 | Rapid Bala | a second Bala for one more action |
+| 4 | Cero Doble | Cero as a 30-ft cone, with a push — the `alternateArea` seam already exists for *Photon Burst* |
+| 4 | Deep Breath | the first Steady the Breath each day restores 2 |
+| 4 | Shunpo Strike | Flash Step then Strike, outside Flash Step's frequency |
+| 6 | Descorrer | a once-per-hour Garganta for you and five allies |
+| 6 | Kidō Combination | a binding kidō for one fewer point after a destruction kidō |
+| 10 | Ghost Step | Flash Step through creatures and difficult terrain |
+| 10 | Reishi Mastery | Seal the Art's counteract rank +1, free on a critical success |
+| 12 | Deeper Crossing | the deepened Aspect, twice per encounter |
+| 12 | Soul Sever | a free Konsō on a kill |
+| 14 | Twin Pressure | the Full Release aura triggering on **enter** as well as turn-end |
+| 14 | Vollständig Endurance | no fatigue, and 1 point to extend by a round, three times |
+| 16 | Unbroken Chain | stay at 1 HP for a point, once per day |
+| 18 | Second Nature | the 6th-level Aspect, always on |
+
+Several are cheap with machinery that now exists — `Twin Pressure` is one aura event, `Vollständig
+Endurance` hooks the fatigue path written for SB-6, `Unbroken Chain` is the Saint's `deaths.mjs`
+shape, `Cero Doble` is the `alternateArea` seam. Others (Descorrer, Soul Sever, Reader of Threads) are
+exploration or narrative and may be worth leaving as cards.

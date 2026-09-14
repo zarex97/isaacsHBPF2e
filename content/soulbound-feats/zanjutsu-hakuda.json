@@ -30,10 +30,25 @@
         },
         "rules": [
             {
-                "key": "RollOption",
-                "domain": "all",
-                "option": "soulbound:hakuda",
-                "value": true
+                "baseType": "fist",
+                "category": "unarmed",
+                "damage": {
+                    "base": {
+                        "damageType": "bludgeoning",
+                        "dice": 1,
+                        "die": "d6"
+                    }
+                },
+                "group": "brawling",
+                "img": "icons/skills/melee/unarmed-punch-fist-blue.webp",
+                "key": "Strike",
+                "label": "Hakuda",
+                "traits": [
+                    "agile",
+                    "finesse",
+                    "nonlethal",
+                    "unarmed"
+                ]
             }
         ],
         "traits": {

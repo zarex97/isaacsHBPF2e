@@ -1,0 +1,47 @@
+{
+    "img": "icons/magic/defensive/shield-barrier-flaming-diamond-white.webp",
+    "name": "Effect: Segunda Piel (Early)",
+    "system": {
+        "description": {
+            "value": "<p>Your Hierro closes over the wound. Its resistance applies to <strong>spirit</strong> damage as well as physical until the end of your next turn.</p>"
+        },
+        "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 12
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "Resistance",
+                "type": "spirit",
+                "value": "max(1,floor(@actor.level/2))"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

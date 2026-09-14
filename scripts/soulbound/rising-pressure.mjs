@@ -72,11 +72,35 @@ async function tryGrant(actor) {
     });
     if (grant === 0) return;
 
-    await actor.update({
+    const updates = {
         "system.resources.focus.value": (focus.value ?? 0) + grant,
         [`flags.${MODULE_ID}.risingPressure`]: { round, gained: (ledger.gained ?? 0) + grant },
-    });
-    ui.notifications.info(`${actor.name} regains 1 Reiatsu Point (Rising Pressure).`);
+    };
+
+    /**
+     * `Rising Tide` (feat 8) rides on the same grant.
+     *
+     * > The first time each round that **Rising Pressure** grants you a Reiatsu Point, you also gain
+     * > temporary Hit Points equal to half your level (minimum 2). They last until the start of your
+     * > next turn and don't stack with themselves. — guide §8.3
+     *
+     * "The first time each round that Rising Pressure grants you a point" is exactly the moment this
+     * function is in, and nowhere else can know it — which is why the feat sat here as an unread roll
+     * option. Temporary hit points do not stack in pf2e: a lower value is simply not applied, so
+     * "don't stack with themselves" needs no guard beyond writing the same number again.
+     */
+    const risingTide = actor.itemTypes?.feat?.some((f) => f.system?.slug === "rising-tide");
+    const temp = risingTide ? Math.max(2, Math.floor(actor.level / 2)) : 0;
+    if (temp > (actor.system?.attributes?.hp?.temp ?? 0)) {
+        updates["system.attributes.hp.temp"] = temp;
+    }
+
+    await actor.update(updates);
+    ui.notifications.info(
+        temp > 0
+            ? `${actor.name} regains 1 Reiatsu Point (Rising Pressure) and ${temp} temporary Hit Points (Rising Tide).`
+            : `${actor.name} regains 1 Reiatsu Point (Rising Pressure).`,
+    );
 }
 
 export const RisingPressure = {

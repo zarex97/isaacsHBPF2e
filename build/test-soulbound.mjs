@@ -1901,4 +1901,51 @@ check("Zanka no Tachi's ambient burn still reaches everyone but the caster (guid
     })(),
     ["all", false]);
 
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  SB-20 — the feat layer                                                                          */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * Twenty-three of the class's forty-seven feats had no mechanism behind them at all: a `RollOption`
+ * nothing reads, or an empty `rules` array. `Reiatsu Flood` was the single exception among those that
+ * looked inert — `rising-pressure.mjs` reads it by slug.
+ *
+ * A feat passes this check when it has a rule that is not just a `RollOption`, a module flag that the
+ * engine acts on, or a slug the scripts read. The list below is the ones fixed so far; the rest are
+ * enumerated in the checklist so the count cannot drift silently.
+ */
+const MECHANICAL_FLAGS = ["riders", "areaTargeting", "actionCost", "chargeSpend", "chargeRefresh",
+    "bypass", "lingering", "overlap", "freeCast", "releaseForm", "modeSwitch"];
+
+function featHasMechanism(slug) {
+    const doc = contentDoc(`soulbound-feats/${slug}.json`);
+    const rules = doc.system.rules ?? [];
+    const flags = Object.keys(doc.flags?.["isaacs-hb-pf2e"] ?? {});
+    return rules.some((r) => r.key !== "RollOption") || flags.some((f) => MECHANICAL_FLAGS.includes(f));
+}
+
+for (const slug of ["perfected-technique", "zanjutsu-hakuda", "chain-anchor", "segunda-piel-temprana"]) {
+    check(`${slug} does something`, featHasMechanism(slug), true);
+}
+
+// Perfected Technique rides the same allowance machinery as the Full Release's Unbound Technique.
+// pf2e has no "encounter" frequency period — its list is turn/round/PT1M/PT10M/PT1H/PT24H/day/P1W/P1M/P1Y
+// — so PT10M is the stand-in for once a fight, and is named here so the choice is not mistaken for a bug.
+const perfected = contentDoc("soulbound-feats/perfected-technique.json");
+check("Perfected Technique frees one Release Technique, once a fight (guide §8.3)",
+    [perfected.system.frequency, perfected.flags["isaacs-hb-pf2e"].freeCast.predicate],
+    [{ max: 1, per: "PT10M", value: 1 }, ["item:tag:sb-tier-release"]]);
+
+// Zanjutsu: Hakuda is a real unarmed attack, not a roll option describing one.
+const hakuda = contentDoc("soulbound-feats/zanjutsu-hakuda.json").system.rules[0];
+check("Zanjutsu: Hakuda grants a 1d6 agile finesse nonlethal fist (guide §8.3)",
+    [hakuda.key, hakuda.damage.base.dice + hakuda.damage.base.die, hakuda.traits.sort()],
+    ["Strike", "1d6", ["agile", "finesse", "nonlethal", "unarmed"]]);
+
+// Rising Tide can only be known where the grant happens, which is why it sat unread.
+check("Rising Tide is paid out by Rising Pressure itself",
+    fs.readFileSync(path.join(ROOT, "scripts/soulbound/rising-pressure.mjs"), "utf8").includes("rising-tide"),
+    true);
+
 report("Soulbound tests");
