@@ -1,12 +1,17 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
+            "chargeSpend": {
+                "effect": "Effect: Daiguren Hyōrinmaru",
+                "perRound": 1,
+                "spend": 1
+            },
             "riders": [
                 {
                     "apply": {
-                        "value": 1,
                         "slug": "slowed",
-                        "type": "condition"
+                        "type": "condition",
+                        "value": 1
                     },
                     "duration": {
                         "unit": "rounds",

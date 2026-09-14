@@ -185,11 +185,11 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | S-15 | Hyōrinmaru — **Ryūsenka** | 1 | 2 actions, Strike; hit → +1d6 cold **and** Fortitude or **immobilized** until end of its next turn (Escape vs. Reiatsu DC); crit → +2d6 cold and **off-guard**; H(+2) +1d6 | ☐ | |
 | S-16 | Hyōrinmaru — Refined **Guncho Tsurara** | 9 | Ryūsenka may be a **ranged** Strike within 60 ft; the blade returns immediately | ☐ | |
 | S-17 | **Daiguren Hyōrinmaru** — Bankai | 13 | **Fly Speed** = Speed; **cold resistance = level** | ✅ | `Resistance` cold = `@actor.level` and a fly Speed matching land Speed, both authored as rule elements |
-| S-18 | Bankai — petal-flowers | 13 | **Three charges**; **once per round** spend one | ☐ | |
-| S-19 | Petal — **Sennen Hyōrō** | 13 | **20-ft burst** within 60 ft, Reflex; fail 5d6 cold + **immobilized**; crit fail **restrained 1 minute**; H(+1) +1d6 | ☐ | |
-| S-20 | Petal — **Hyōryū Senbi** | 13 | **60-ft line**, basic Reflex, 5d6 cold; fail → **slowed 1** until end of its next turn; H(+1) +1d6 | ☐ | |
-| S-21 | Petal — **Zanhyō Ningyō** | 13 | Reaction when hit: reduce damage by **twice your level**; the doll shatters | ☐ | |
-| S-22 | Bankai — Perfected | 17 | **Restores one spent petal-flower at the start of each of your turns** | ☐ | |
+| S-18 | Bankai — petal-flowers | 13 | **Three charges**; **once per round** spend one | ✅ | **SB-18 fixed.** Live: three petals spend one at a time down to **zero** and the Bankai survives; a fourth is refused *"not enough charges"*; a second in the same round is refused *"already spent this round"*. Before, spending the third **deleted the whole Bankai** |
+| S-19 | Petal — **Sennen Hyōrō** | 13 | **20-ft burst** within 60 ft, Reflex; fail 5d6 cold + **immobilized**; crit fail **restrained 1 minute**; H(+1) +1d6 | ⚠️ | Authored: 20-ft burst within 60 ft, basic Reflex, 5d6 cold, immobilized on a failure and restrained on a critical failure with an Escape DC. It spends a petal correctly; the cast itself needs an aimed placement the scripted harness cannot click |
+| S-20 | Petal — **Hyōryū Senbi** | 13 | **60-ft line**, basic Reflex, 5d6 cold; fail → **slowed 1** until end of its next turn; H(+1) +1d6 | ⚠️ | Authored: 60-ft line, basic Reflex, 5d6 cold, slowed 1 on a failure. Spends a petal; same aimed-placement limit on driving it |
+| S-21 | Petal — **Zanhyō Ningyō** | 13 | Reaction when hit: reduce damage by **twice your level**; the doll shatters | ⚠️ | Authored as a `damage-applied` reaction whose prompt now also spends a petal, granting `Effect: Remnant Ice Doll` — resistance to all damage `@actor.level*2`, which is the guide's twice-your-level reduction |
+| S-22 | Bankai — Perfected | 17 | **Restores one spent petal-flower at the start of each of your turns** | ✅ | Live: a turn start at 13th gives nothing back; at 17th the pool climbs 1 → 2 → 3 and stops at three. Declared on the effect (`chargeRefresh`), not written into code |
 | S-23 | **Ryūjin Jakka** — Shikai Form | 1 | Damage type **fire**; weapon gains **deadly d8**; **fire resistance = half level** | ✅ | Live at L13: **fire resistance 6** (half level), damage type fire, `deadly-d8` |
 | S-24 | Ryūjin Jakka — **Ennetsu Jigoku** | 1 | 2 actions, **15-ft emanation**, basic Reflex, 2d6 fire; fail → **1d4 persistent fire**; H(+1) +1d6, +1 persistent die every **other** increment | ☐ | |
 | S-25 | Ryūjin Jakka — Refined | 9 | Emanation **20 ft**; ground inside becomes **difficult terrain** until end of your next turn | ☐ | |
@@ -229,8 +229,8 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | S-54 | Los Lobos — **Cero Metralleta** | 1 | 2 actions, **60-ft cone** *or* **120-ft line**, basic Reflex, 2d6 force; H(+1) +1d6 | ☐ | |
 | S-55 | Los Lobos — Refined | 9 | **Sustain** at the start of your next turn to fire again in a **different direction** with **no** Reiatsu cost | ☐ | |
 | S-56 | **Colmillo** — Segunda Etapa | 13 | **Eight wolves** appear within 30 ft; they are **not creatures** — no statistics, no actions, cannot be attacked, do not flank | ☐ | |
-| S-57 | Colmillo — the action | 13 | 1 action, requires ≥1 wolf; expend any number; each moves to a point within 60 ft and detonates in a **10-ft burst** for **3d6** force (basic Reflex); **a creature in more than one burst takes only the highest**; H(+1) +1d6 | ☐ | |
-| S-58 | Colmillo — regrowth | 13 | **+1 wolf at the start of each of your turns**, max eight | ☐ | |
+| S-57 | Colmillo — the action | 13 | 1 action, requires ≥1 wolf; expend any number; each moves to a point within 60 ft and detonates in a **10-ft burst** for **3d6** force (basic Reflex); **a creature in more than one burst takes only the highest**; H(+1) +1d6 | ⚠️ | `Effect: Colmillo` holds eight wolves as a counter with `min: 0`, which was already right. The spend is not yet declared on the technique |
+| S-58 | Colmillo — regrowth | 13 | **+1 wolf at the start of each of your turns**, max eight | ✅ | Live machinery: `chargeRefresh` on `Effect: Colmillo` regains one a turn with no Perfected clause, exactly as guide §7B gives Los Lobos |
 | S-59 | **Tiburón** — Resurrección Form | 1 | Weapon becomes 1d12 S, two-handed, sweep; **swim Speed** = Speed; breathe water; create water freely | ☐ | |
 | S-60 | Tiburón — **La Gota** | 1 | 2 actions, **30-ft cone**, basic Reflex, 2d6 slashing; failures **pushed 10 ft** away; H(+1) +1d6 | ☐ | |
 | S-61 | Tiburón — Refined **Cascada** | 9 | Cone **40 ft**; crit fail → **prone**; area becomes **difficult terrain** until start of your next turn | ☐ | |
@@ -831,3 +831,68 @@ locks in whatever the content happened to say.**
 `add 30` raced Refined Release's `override 60` and lost — the override ran last, so the line never
 passed 60. It is two predicated overrides now: 60 without `feature:refined-release`, 90 with it. Live
 at 13th in Tensa: **90 feet, one action**.
+
+---
+
+## 16 — SB-18: the charge pool, and the badge that deleted the Bankai
+
+`charges.mjs` — the third machine written, unit-tested, exported on the API and never called. The
+counter badges were authored and simply never moved, so **all three petal Techniques were usable every
+round, for ever**: three times the damage the Bankai is costed for, with nothing on the sheet to show
+it.
+
+### Two entry points, because there are two ways an ability reaches the table
+
+A Technique that is **cast** is refused before it resolves — `Charges.beforeCast`, in the cast pipeline
+beside the release gate, so an empty pool stops the cast rather than letting it through uncharged. A
+Technique that is a **reaction** never passes through `cast` at all — Zanhyō Ningyō is triggered by
+damage landing on you — so its spend is a new `charge` rider on the prompt being accepted.
+
+Both read the same `Charges.spend`. The pool, the rate and the schedule are all declared in content:
+
+```json
+"chargeSpend":   { "effect": "Effect: Daiguren Hyōrinmaru", "spend": 1, "perRound": 1 }
+"chargeRefresh": { "regain": 1, "requires": "feature:perfected-full-release" }
+```
+
+which is what lets Los Lobos regain a wolf every turn from 13th with no Perfected clause at all — the
+same machine, a different schedule, said in content rather than in code.
+
+### SB-18 — a labelled counter cannot reach zero, and deletes its effect trying
+
+`Effect: Daiguren Hyōrinmaru` declared `min: 0` for its three petal-flowers and carried
+`labels: ["1","2","3"]` beside it. pf2e's `EffectPF2e#_preUpdate`:
+
+```ts
+if (changed.system.badge.labels) { changed.system.badge.min = null; changed.system.badge.max = null; }
+const minValue = badgeWithoutOperators.min ?? 1;
+if (this.actor && currentValue < minValue) { await this.actor.deleteEmbeddedDocuments("Item", [this.id]); }
+```
+
+Labels null the minimum, the minimum then defaults to **1**, and going below it **deletes the effect**.
+So spending the third petal did not empty the pool — it deleted the Bankai, taking the fly Speed, the
+cold resistance and the host of all three petal Techniques with it. Reproduced live: the effect was
+simply gone, and the next read threw.
+
+`validateCounterBadges` now rejects `min: 0` beside `labels` as the contradiction it is. It found a
+second one the moment it was written — **`Effect: Rising Cosmo`** on the Saint side, harmless only
+because nothing ever decrements it; its minimum is 1, since +1/+2/+3 has no zeroth state.
+
+### Driven live, end to end
+
+| | |
+| :-- | :-- |
+| fresh Bankai | 3 petals, `min: 0` |
+| spend ×3 | 2 → 1 → **0**, and the Bankai survives |
+| a fourth | refused — *"not enough charges"* |
+| two in one round | second refused — *"already spent this round"* |
+| turn start at 13th | nothing back |
+| turn starts at 17th | 1 → 2 → 3, then stops |
+
+### A harness limit worth recording
+
+An **aimed** area — a line or a burst placed at a point — resolves on a real canvas click, so
+`spellcasting.cast()` from a script simply never returns for Hyōryū Senbi or Sennen Hyōrō. An
+emanation is auto-centred and only wants the "Confirm targets" dialog, which is why Senbonzakura drove
+cleanly. The charge half was verified through `Charges.beforeCast` directly; aiming a placement without
+a mouse needs the synthetic-pointer route in `Docs/tools/foundry-live-session.md`.

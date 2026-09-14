@@ -77,6 +77,7 @@ Hooks.once("init", () => {
     start("the release ladder", () => Release.registerHooks());
     start("Severance", () => Severance.registerHooks());
     start("Blut", () => Blut.registerHooks());
+    start("charge pools", () => Charges.registerHooks());
     // The bridge from a used action to the state machine behind it. Without this the release
     // ladder is inert: `Release.enter()` has no other caller anywhere in the module.
     start("the Soulbound action bridge", () => SoulboundActions.registerHooks());

@@ -12,6 +12,14 @@
                                     "type": "effect",
                                     "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Remnant Ice Doll"
                                 }
+                            },
+                            {
+                                "apply": {
+                                    "effect": "Effect: Daiguren Hyōrinmaru",
+                                    "perRound": 1,
+                                    "spend": 1,
+                                    "type": "charge"
+                                }
                             }
                         ],
                         "type": "reaction"
