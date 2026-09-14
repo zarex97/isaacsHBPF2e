@@ -4,6 +4,7 @@
             "riders": [
                 {
                     "apply": {
+                        "basic": true,
                         "dc": "reiatsu",
                         "riders": [
                             {
@@ -11,24 +12,8 @@
                                     "damageType": "electricity",
                                     "formula": "3d6",
                                     "perStep": "1d6",
-                                    "multiplier": 0.5,
                                     "type": "damage"
-                                },
-                                "outcomes": [
-                                    "success"
-                                ]
-                            },
-                            {
-                                "apply": {
-                                    "damageType": "electricity",
-                                    "formula": "3d6",
-                                    "perStep": "1d6",
-                                    "type": "damage"
-                                },
-                                "outcomes": [
-                                    "failure",
-                                    "criticalFailure"
-                                ]
+                                }
                             }
                         ],
                         "statistic": "reflex",

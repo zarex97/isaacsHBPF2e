@@ -84,7 +84,7 @@ character:
 | C-33 | **Full Release** — cost | 13 | 2 actions, **once per day**, requires released form **and ≥1 Reiatsu Point** | ✅ | **SB-6 fixed.** The L13 feature no longer grants the effect; the action does, and it refuses when sealed or when the pool is empty. pf2e's own `frequency` still counts the daily use |
 | C-34 | Full Release — die step | 13 | Spirit weapon damage die +1 step | ✅ | **SB-6 fixed.** `Effect: Full Release` now carries the `damage-dice-faces` upgrade. Live: 1d8 / `two-hand-d10` → **1d10 / `two-hand-d12`**, and back when it ends. Predicated on `not soulbound:full-release:no-die-step`, which `Effect: Tensa Zangetsu` sets |
 | C-35 | Full Release — free technique | 13 | Release Technique costs nothing, **once per round** | ✅ | **SB-6 fixed.** `Unbound Technique` — an action granted by `Effect: Full Release`, frequency 1/round. Live: the card reads *"Unbound Technique paid for Senbonzakura — no Focus Point spent. 0 left"*, the pool does not move, and the next use is refused |
-| C-36 | Full Release — pressure emanation | 13 | **15-ft emanation**; enemy ending its turn there: Will vs. Reiatsu DC or **frightened 1** (2 on crit fail); success = immune 10 min | ⚠️ | The emanation was authored all along — a `turn-end` rider, 15-ft emanation, Will vs. Reiatsu DC, frightened 1 / 2, `Effect: Steeled Against Pressure` on a success. It is now applied **only in a Full Release** instead of permanently from 13th. The save itself has not yet been driven against a live enemy |
+| C-36 | Full Release — pressure emanation | 13 | **15-ft emanation**; enemy ending its turn there: Will vs. Reiatsu DC or **frightened 1** (2 on crit fail); success = immune 10 min | ✅ | **SB-15 fixed.** Driven live at 13th: four enemies each rolled Will at **DC 27** at the end of their turns, frightened landed, and later saves in the same round show *Frightened 1 −1* and *Frightened 2 −2* applying. The caster is untouched |
 | C-37 | Full Release — end state | 13 | **Fatigued** until 10 minutes' rest; no second use that day | ✅ | **SB-6 fixed.** A `deleteItem` hook drops the rung and applies **fatigued** when `Effect: Full Release` goes, by timer or by hand. Verified live at L13 |
 | C-38 | **Perfected Full Release** | 17 | 2 minutes, **no fatigue**, emanation 20 ft | ✅ | **SB-6 fixed.** `fullReleaseShape` is now stamped onto the effect as it is created. Live at L17: duration **2 minutes**, rider emanation **20 ft**, and **no fatigue** when it ends |
 | C-39 | **Unsealed** | 19 | Full Release **twice per day**; immune to fear while in it; first crit each round with the spirit weapon refunds 1 point **ignoring the per-encounter cap** | ❌ | **SB-6.** Frequency does rise to 2/day on the feat, but there is no daily use to spend |
@@ -171,10 +171,10 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | S-01 | **Senbonzakura** — Shikai Form | 1 | Strikes gain **reach 15**, lose two-hand and twin, hands empty, **ignore cover** between you and target | ⚠️ | **SB-6 fixed for the gate.** `reach-15` is absent while sealed and arrives with Release. Still open: the form never **removes** two-hand/twin as the guide requires, and the cover-ignoring clause is a roll option nothing consumes |
 | S-02 | Senbonzakura — Release Technique | 1 | 2 actions, **15-ft emanation**, basic Reflex, 2d6 slashing; area is **difficult terrain for enemies** until start of your next turn; H(+1) +1d6 | ✅ | Cast live at rank 10: 20-ft emanation, basic Reflex **DC 37**, **11d6 slashing** (guide's 11d6 target), 1 Reiatsu Point spent, three enemies auto-targeted, lingering difficult-terrain rider authored |
 | S-03 | Senbonzakura — Refined | 9 | Emanation **20 ft**; crit fail → **off-guard** until start of your next turn | ✅ | Area 15→20 at L9, live. **SB-12 fixed**: the off-guard rider was predicated on `self:feature:refined-release`, an option pf2e never emits, so it could not once have fired. Six Refined riders were wrong the same way |
-| S-04 | **Senbonzakura Kageyoshi** — Bankai | 13 | Second **20-ft emanation** placed within 60 ft; at the start of each of your turns every enemy in **either** takes **5d6** slashing (basic Reflex) | ⚠️ | **SB-6 fixed for the gate.** `Effect: Senbonzakura Kageyoshi` now arrives only with Full Release — it was firing its 5d6 `turn-start` emanation permanently from 13th. The emanation itself has not yet been driven |
-| S-05 | Bankai — Sustain / move | 13 | Sustain once per round to move the second emanation up to 30 ft **or** switch mode | ✅ | New `Senbonzakura Kageyoshi — Sustain`, granted by the Bankai effect, once per round. Live: Gokei, Senkei and Neither, never two at once |
-| S-06 | Bankai — **Gokei** | 13 | Second emanation becomes a **10-ft burst** on one enemy; **double** damage; no cover or concealment against it | ☐ | |
-| S-07 | Bankai — **Senkei** | 13 | 20-ft cage around you and one enemy; neither can leave; your Strikes vs. it ignore **all** resistances; **one extra Strike each round at current MAP**; **you lose reach and cover-ignoring**; can't target anyone outside | ⚠️ | Senkei applies and **takes `reach-15` off the spirit weapon**, live, exactly as the guide requires. The cage, the extra Strike and the target restriction are prose on the card, not yet automated |
+| S-04 | **Senbonzakura Kageyoshi** — Bankai | 13 | Second **20-ft emanation** placed within 60 ft; at the start of each of your turns every enemy in **either** takes **5d6** slashing (basic Reflex) | ✅ | **SB-13 and SB-15 fixed.** Live: four enemies each roll a **basic Reflex at DC 27** at the caster's turn start — success `5d6 × 0.5 = 10`, failure `5d6 = 25`, critical failure `5d6 × 2 = 28`. It had **no save at all** before, and hit only the caster |
+| S-05 | Bankai — Sustain / move | 13 | Sustain once per round to move the second emanation up to 30 ft **or** switch mode | ✅ | New `Senbonzakura Kageyoshi — Sustain`, granted by the Bankai effect, once per round. Live: Gokei, Senkei and Neither, never two at once. **The second emanation it can move does not exist yet** — see §14 |
+| S-06 | Bankai — **Gokei** | 13 | Second emanation becomes a **10-ft burst** on one enemy; **double** damage; no cover or concealment against it | ❌ | `Effect: Gokei` sets a roll option and nothing reads it. The 10-foot burst, the doubled damage and the cover/concealment clause are unbuilt — they all rest on the second emanation |
+| S-07 | Bankai — **Senkei** | 13 | 20-ft cage around you and one enemy; neither can leave; your Strikes vs. it ignore **all** resistances; **one extra Strike each round at current MAP**; **you lose reach and cover-ignoring**; can't target anyone outside | ⚠️ | Senkei applies and **takes `reach-15` off the spirit weapon**, live. The cage, the resistance bypass, the extra Strike and the target restriction are prose on the card |
 | S-08 | **Zangetsu** — Shikai Form | 1 | Damage die +1 step; gains **two-handed d12** if not already two-handed; **begin every encounter already released, free and no action** | ☐ | |
 | S-09 | Zangetsu — **Getsuga Tenshō** | 1 | 2 actions, **30-ft line**, basic Reflex, 2d6 spirit; H(+1) +1d6 | ☐ | |
 | S-10 | Zangetsu — Refined **Kuroi Getsuga** | 9 | Line **60 ft**, **ignores resistance to spirit**, crit fail → **1d6 persistent spirit** | ☐ | |
@@ -193,10 +193,10 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | S-23 | **Ryūjin Jakka** — Shikai Form | 1 | Damage type **fire**; weapon gains **deadly d8**; **fire resistance = half level** | ☐ | |
 | S-24 | Ryūjin Jakka — **Ennetsu Jigoku** | 1 | 2 actions, **15-ft emanation**, basic Reflex, 2d6 fire; fail → **1d4 persistent fire**; H(+1) +1d6, +1 persistent die every **other** increment | ☐ | |
 | S-25 | Ryūjin Jakka — Refined | 9 | Emanation **20 ft**; ground inside becomes **difficult terrain** until end of your next turn | ☐ | |
-| S-26 | **Zanka no Tachi** — Bankai | 13 | Die **+2 steps**; **you lose your fire resistance**; at the start of each of your turns every creature **other than you** within 30 ft — **allies included** — takes **1d6 fire, no save** | ☐ | |
+| S-26 | **Zanka no Tachi** — Bankai | 13 | Die **+2 steps**; **you lose your fire resistance**; at the start of each of your turns every creature **other than you** within 30 ft — **allies included** — takes **1d6 fire, no save** | 🔧 | **SB-15 fixed**: the ambient 30-ft burn now reaches everyone but the caster — `affects: "all"`, as the guide's friendly-fire clause requires. Awaiting a live drive |
 | S-27 | Aspect — **Higashi** | 13 | Strikes ignore **all** resistances and immunities; a creature you damage **can't regain HP** and its regeneration/fast healing is suppressed until end of your next turn | ☐ | |
 | S-28 | Aspect — **Nishi** | 13 | **Fire immunity**; **resistance to all = half level**; a creature that damages you with an unarmed attack, melee weapon or Grapple takes **4d6 fire** | ☐ | |
-| S-29 | Aspect — **Minami** | 13 | **20-ft emanation**; enemy ending its turn there: Reflex or **grabbed** by ash-figures (Escape vs. Reiatsu DC); the figures are **not creatures** and take no actions | ☐ | |
+| S-29 | Aspect — **Minami** | 13 | **20-ft emanation**; enemy ending its turn there: Reflex or **grabbed** by ash-figures (Escape vs. Reiatsu DC); the figures are **not creatures** and take no actions | 🔧 | **SB-15 fixed**: Minami's 20-ft ash aura fans out now. Awaiting a live drive |
 | S-30 | Aspect — **Kita** | 13 | 2 actions, once per round, **60-ft line**, basic Reflex, **5d6 fire** that **cannot be reduced by fire resistance, Blut Vene or Hierro**; H(+1) +1d6 | ☐ | The only unresistable damage in the class |
 | S-31 | Aspect switching | 13 | **Sustain once per round** to change aspect; the chosen one lasts until another is chosen | ☐ | |
 | S-32 | **Kyōka Suigetsu** — Shikai **Kanzen Saimin** | 1 | On Release, and when a creature that can see first observes you released: Will vs. Reiatsu DC or **hypnotized 1 minute** | ☐ | |
@@ -223,7 +223,7 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | S-48 | **Arrogante** — Resurrección Form | 1 | Weapon becomes **Gran Caída** 1d12 S, two-handed, sweep, forceful; immune to disease, poison, and **doomed never rises past 1** | ☐ | |
 | S-49 | Arrogante — **Respira** | 1 | 2 actions, **15-ft emanation**, basic Fortitude, 2d6 void; fail → **enfeebled 1** 1 min; crit fail → **enfeebled 2 + clumsy 1**; **lingers**: 1d6 void, no save, to an enemy entering or ending its turn there until start of your next turn; H(+1) +1d6, lingering +1d6 every **other** increment | ☐ | |
 | S-50 | Arrogante — Refined | 9 | Emanation **20 ft**; objects and unattended structures **broken** (already-broken destroyed); crit fail also **can't regain HP** until end of its next turn | ☐ | |
-| S-51 | **Respira Absoluta** — Segunda Etapa | 13 | Respira becomes **permanent and free**: a **20-ft emanation**; enemies ending their turn take **3d6 void** (basic Fortitude), **enfeebled 1** 1 round on a failure | ☐ | |
+| S-51 | **Respira Absoluta** — Segunda Etapa | 13 | Respira becomes **permanent and free**: a **20-ft emanation**; enemies ending their turn take **3d6 void** (basic Fortitude), **enfeebled 1** 1 round on a failure | 🔧 | **SB-15 fixed**: Respira Absoluta's 20-ft aura fans out now. Awaiting a live drive |
 | S-52 | Respira Absoluta — decay | 13 | A creature in the emanation targeting you with an attack or spell must make a **DC 5 flat check** or it has **no effect**; on a success it's temp-immune for 1 minute | ☐ | |
 | S-53 | **Los Lobos** — Resurrección Form | 1 | Weapon splits into **two pistols**: 1d6 P, agile, range 60, reload 0, no ammunition, both wieldable; **Speed +5 ft** | ☐ | |
 | S-54 | Los Lobos — **Cero Metralleta** | 1 | 2 actions, **60-ft cone** *or* **120-ft line**, basic Reflex, 2d6 force; H(+1) +1d6 | ☐ | |
@@ -267,7 +267,7 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | S-87 | **The Thunderbolt** — Schrift Form | 1 | Weapon becomes 1d8 S, versatile P, damage type **electricity**; **electricity resistance = half level**; **Flash Step ignores difficult terrain and may pass through creatures** (not end there) | ☐ | |
 | S-88 | The Thunderbolt — **Galvano Blast** | 1 | 2 actions, **60-ft line**, basic Reflex, 2d6 electricity; fail **stunned 1**, crit fail **stunned 2**; **incapacitation**; H(+1) +1d6 | ☐ | |
 | S-89 | The Thunderbolt — Refined **Galvano Javelin** | 9 | 90 ft, ranged spell attack, **6d6** electricity doubled on crit, **stunned 1 on a hit** (incapacitation); base rank 5, H(+1) +1d6 | ☐ | |
-| S-90 | **Thunderbolt Form** — Vollständig | 13 | **Fly Speed** = Speed; **electricity immunity**; **10-ft emanation** dealing **3d6** electricity (basic Reflex) to a creature ending its turn there | ☐ | |
+| S-90 | **Thunderbolt Form** — Vollständig | 13 | **Fly Speed** = Speed; **electricity immunity**; **10-ft emanation** dealing **3d6** electricity (basic Reflex) to a creature ending its turn there | 🔧 | **SB-14 and SB-15 fixed** in content: a 10-ft `turn-end` aura, now a real basic Reflex that doubles on a critical failure and fans out to enemies. Awaiting a live drive on a Thunderbolt Quincy |
 | S-91 | Thunderbolt Form — arc | 13 | Once per round on a spirit-weapon hit, one other creature within 15 ft of the target takes **3d6** electricity (basic Reflex) | ☐ | |
 | S-92 | **The Miracle** — Schrift Form | 1 | Weapon becomes **1d12 slashing, two-handed, forceful, shove**; **max HP + your level**; **+1 circumstance** to saves vs. effects that would reduce you to 0 HP | ☐ | |
 | S-93 | The Miracle — **The Miracle** | 1 | **Free action**, trigger: you take damage from an enemy, **once per round**. Gain **2 Miracle points** (max 10) | ☐ | |
@@ -697,3 +697,80 @@ that used to be granted outright.
 
 Run live on world `pf`: `quincy` and `arrancar` each lost a permanently-worn Schrift/Resurrección, a
 Vollständig/Segunda Etapa, an `Effect: Full Release` and an afterimage, and kept everything else.
+
+---
+
+## 14 — SB-13, SB-14, SB-15: the auras
+
+Three findings from driving Senbonzakura's Bankai through a real combat round. The third is the one
+that mattered.
+
+### SB-15 — six auras never left the caster *(blocker)*
+
+`targetsFor` in `scripts/riders/apply.mjs` checked `rider.self` **before** `rider.area`:
+
+```js
+if (rider.self) return context.originToken ? [context.originToken] : [];
+if (!rider.area) return context.target ? [context.target] : [];
+```
+
+A `turn-start` / `turn-end` / `aura-tick` rider is dispatched once with the origin's own token as the
+target, and the area is what fans it out from there. Every Soulbound aura also says `self: true` —
+which reads perfectly, *this aura is mine* — so the short-circuit returned the caster and the area was
+never built at all. Driven live, a 13th-level Senbonzakura **rolled its own Reflex save against its own
+DC and took its own 5d6**, while the ghoul standing five feet away took nothing.
+
+All six of the class's auras were dead this way, and each is the point of its tier:
+
+| | |
+| :-- | :-- |
+| `Effect: Senbonzakura Kageyoshi` | the Bankai's 20-ft turn-start emanation |
+| `Effect: Full Release` | the 15-ft fear emanation, every Spirit's 13th level |
+| `Effect: Zanka no Tachi` | Yamamoto's ambient 30-ft burn |
+| `Effect: Minami` | the ash that grabs |
+| `Effect: Respira Absoluta` | Baraggan's permanent aging aura |
+| `Effect: Thunderbolt Form` | Candice's live current |
+
+A second, quieter half: the fan-out read `rider.area.affects` and `rider.area.includesSelf`, but all six
+write those in a sibling **`areaTargeting`** object — the spelling an item uses for cast-time targeting,
+and so the one an author reaches for. Even without the short-circuit, every `affects: "enemies"` in the
+class was decoration. Both spellings are read now, the sibling winning as the more specific.
+
+The three Saint auras (the Pisces skies, Scorpio's Zenith) were authored the other way and always
+worked, which is why nothing ever looked wrong.
+
+**After the fix**, same combat, same round: four enemies each roll a basic Reflex at DC 27 for the
+Bankai and a Will save at DC 27 for the fear aura, frightened lands, later saves in the round show
+*Frightened 1 −1* and *Frightened 2 −2* applying — and the caster's hit points do not move.
+
+### SB-13 — the Bankai's emanation had no save
+
+Guide §7A: *"each enemy in either emanation takes 5d6 slashing damage (basic Reflex)"*. The rider was a
+bare `damage` apply. Full damage, no roll, every turn.
+
+### SB-14 — no self-rolled basic save doubled on a critical failure
+
+A basic save is four degrees: nothing, half, full, **double**. pf2e applies that ladder for a *spell's*
+own save; a rider that rolls its own save has to carry it, and every one in the content carried it by
+hand. Not one doubled. Written out three times per ability, the missing fourth line is invisible.
+
+`basic: true` on a save rider now expands each nested damage rider that does not name its own outcomes
+into the ladder:
+
+```json
+{ "apply": { "type": "save", "statistic": "reflex", "dc": "reiatsu", "basic": true,
+             "riders": [{ "apply": { "type": "damage", "formula": "5d6", "perStep": "1d6",
+                                     "damageType": "slashing" } }] } }
+```
+
+A damage rider that *does* name outcomes is left alone — an ability off the basic ladder is a real
+thing and says so — and conditions are never scaled. The validator rejects `basic: true` when every
+damage rider already names its outcomes, which is what a hand-written ladder with the flag bolted on
+looks like.
+
+### Still open on Senbonzakura
+
+The **second emanation** — placed within 60 feet, moved up to 30 feet by the Sustain, reshaped by Gokei
+into a 10-foot burst at double damage — does not exist. It needs a persistent placed region that ticks
+at the *caster's* turn start; `targeting/lingering.mjs` has regions and `tokenMoveIn`/`tokenTurnEnd`
+events, but not that trigger. Senkei's cage, resistance bypass and extra Strike are prose on the card.

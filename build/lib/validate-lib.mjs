@@ -1095,10 +1095,26 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
             if (!isClassDC(apply.dc)) {
                 errors.push(`${at} save dc must be one of ${[...CLASS_DC_NAMES].join("/")} or a whole number — got "${apply.dc}"`);
             }
+            if (apply.basic !== undefined && typeof apply.basic !== "boolean") {
+                errors.push(`${at} basic must be true or false — got "${apply.basic}"`);
+            }
             const nested = apply.riders;
             if (!Array.isArray(nested) || nested.length === 0) {
                 errors.push(`${at} a save rider with no riders of its own does nothing`);
             } else {
+                // `basic: true` expands damage riders that do NOT name their own outcomes into the four
+                // degrees. If every damage rider already names them, the flag is a claim the data does not
+                // support — the likeliest reading being that someone wrote the ladder by hand and then
+                // added the flag, which is how a hand-written ladder missing its critical failure survives.
+                if (apply.basic === true) {
+                    const damage = nested.filter((inner) => inner?.apply?.type === "damage");
+                    if (damage.length > 0 && damage.every((inner) => inner.outcomes)) {
+                        errors.push(
+                            `${at} basic: true, but every damage rider names its own outcomes — the flag `
+                            + "does nothing. Drop the outcomes and let it expand, or drop the flag.",
+                        );
+                    }
+                }
                 nested.forEach((inner, j) =>
                     validateRider(inner, `${at}.apply.riders[${j}]`, errors, { doc, depth: depth + 1 }),
                 );
