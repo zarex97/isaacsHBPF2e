@@ -1202,12 +1202,35 @@ async function applyCondition(rider, context) {
     const value = Number(rider.apply.value) || null;
 
     if (!rider.duration) {
-        const params = {};
-        if (value) params.value = value;
         // "cumulative to enfeebled 4" — the cap belongs on the increment, not on a predicate that would
-        // have to be rewritten every time the ceiling moves.
-        if (Number(rider.apply.max)) params.max = Number(rider.apply.max);
-        await context.actor.increaseCondition(slug, params);
+        // have to be rewritten every time the ceiling moves. `max` is also the *declaration* that this
+        // rider is meant to accumulate at all.
+        const max = Number(rider.apply.max);
+        if (max) {
+            await context.actor.increaseCondition(slug, value ? { value, max } : { max });
+            return;
+        }
+
+        /**
+         * "Become frightened 1" sets the value; it does not add to it.
+         *
+         * `Actor#increaseCondition` is additive — `Math.clamp(currentValue + addend, 1, max)` — so a
+         * Full Release aura ticking each round walked one creature to **frightened 8**, from a class
+         * whose highest printed value is 2. Sixty durationless condition riders exist across both
+         * classes and **fifty-seven** of them read as "become X": stunned 2, prone, blinded, doomed 1.
+         * The three that genuinely accumulate all declare a `max`, which is why that is the signal.
+         *
+         * So: set to at least the value, never above what is already there. An unvalued condition —
+         * prone, blinded — is simply applied if absent, which `increaseCondition` already does.
+         */
+        const existing = context.actor.itemTypes.condition.find((c) => c.slug === slug && c.active);
+        if (!existing) {
+            await context.actor.increaseCondition(slug, value ? { value } : {});
+            return;
+        }
+        const current = existing._source.system.value.value;
+        if (current === null || !value || value <= current) return;
+        await game.pf2e.ConditionManager.updateConditionValue(existing.id, context.actor, value);
         return;
     }
 
