@@ -13,7 +13,7 @@
                 },
                 "name": "Ennetsu Jigoku — embers",
                 "predicate": [
-                    "self:feature:refined-release"
+                    "feature:refined-release"
                 ]
             },
             "riders": [

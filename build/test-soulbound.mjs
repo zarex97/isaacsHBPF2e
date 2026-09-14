@@ -956,10 +956,12 @@ check(
     [getsuga.system.area, getsuga.system.damage["0"].formula, getsuga.system.damage["0"].type],
     [{ type: "line", value: 30 }, "2d6", "spirit"],
 );
+// `feature:<slug>`, not `self:feature:<slug>`. pf2e has no `self:feature:` option at all, and this
+// assertion was pinning the broken spelling in place on six Refined riders at once.
 check(
     "and Kuroi Getsuga's spirit-resistance bypass waits for Refined Release",
     getsuga.flags["isaacs-hb-pf2e"].bypass[0].predicate,
-    ["self:feature:refined-release"],
+    ["feature:refined-release"],
 );
 
 const zanka = contentDoc("soulbound-effects/effect-zanka-no-tachi.json");

@@ -154,6 +154,146 @@ export const Release = {
         }
     },
 
+    /* --- repairing characters built before the ladder worked ------------------------------------- */
+
+    /**
+     * Every Released Form a Spirit can wear, read from the compendium rather than from a sheet.
+     *
+     * A legacy character's *owned* features are copies taken when they were granted, so they carry the
+     * rules the pack had then — a `GrantItem` for the form effect — and none of the `releaseForm` flag
+     * the pack carries now. Repair therefore cannot start from the actor; it has to start from the pack.
+     */
+    async declaredForms() {
+        const pack = game.packs.get(`${MODULE_ID}.soulbound-class-features`);
+        if (!pack) return new Map();
+        const forms = new Map();
+        for (const entry of await pack.getIndex({ fields: ["flags"] })) {
+            const declared = entry.flags?.[MODULE_ID]?.releaseForm;
+            if (declared?.effect) forms.set(entry.name, declared);
+        }
+        return forms;
+    },
+
+    /**
+     * Every authored module flag in the Soulbound packs, keyed by compendium uuid and by name.
+     *
+     * Keyed both ways because `_stats.compendiumSource` is the reliable address and a name is the only
+     * one some older grants left behind.
+     */
+    async authoredFlags() {
+        const packs = [
+            "soulbound-class-features", "soulbound-techniques", "soulbound-kido",
+            "soulbound-feats", "soulbound-effects", "soulbound-equipment", "soulbound-class",
+        ];
+        const authored = new Map();
+        for (const name of packs) {
+            const pack = game.packs.get(`${MODULE_ID}.${name}`);
+            if (!pack) continue;
+            for (const entry of await pack.getIndex({ fields: ["flags"] })) {
+                const flags = entry.flags?.[MODULE_ID];
+                if (!flags || Object.keys(flags).length === 0) continue;
+                authored.set(`Compendium.${MODULE_ID}.${name}.Item.${entry._id}`, flags);
+                authored.set(`name:${entry.name}`, flags);
+            }
+        }
+        return authored;
+    },
+
+    /**
+     * Bring a character built before the release ladder worked into line with one that was not.
+     *
+     * Two things are wrong with such a sheet, and neither heals on its own:
+     *
+     *  1. It is **wearing** its Released Form, and from 13th its Full Release and its Bankai, because
+     *     those were granted outright by the class features. Worse than cosmetic: the Bankai's
+     *     `turn-start` emanation and the Full Release fear aura fire every round from those effects.
+     *  2. Its owned features do **not** declare a `releaseForm`, so even after the effects are removed,
+     *     Releasing would put nothing on — the character would be strictly worse than before.
+     *
+     * Both are fixed here, and deliberately without touching `system.rules` on an owned item: replacing
+     * that array wipes the `flag` pf2e writes onto a `GrantItem` at grant time, and the result is
+     * "<Actor> already has <Item>" on every actor update, for ever. The stale `GrantItem` left behind is
+     * inert — it has no `reevaluateOnUpdate`, so it only ever ran once, when the feature landed.
+     */
+    async repair(actor) {
+        if (!Reiatsu.isSoulbound(actor)) return null;
+        const forms = await this.declaredForms();
+
+        // 1. Re-read every authored module flag from the packs.
+        //
+        // An owned item is a COPY taken when it was granted, so a character built last week is still
+        // carrying last week's rider flags — which is how a fixed predicate stays broken on every sheet
+        // that already exists. Only the module's own flag subtree is replaced, never `system.rules`:
+        // replacing that array wipes the `flag` pf2e writes onto a `GrantItem` at grant time, and the
+        // result is "<Actor> already has <Item>" on every actor update, for ever. Nothing stores runtime
+        // state under this namespace on an item — the ledgers all live on the actor — so the pack is
+        // safely the source of truth here.
+        const authored = await this.authoredFlags();
+        const updates = [];
+        const refreshed = [];
+        for (const item of actor.items) {
+            const source = item._stats?.compendiumSource;
+            const packFlags = (source && authored.get(source)) ?? authored.get(`name:${item.name}`);
+            if (!packFlags) continue;
+            const current = item.flags?.[MODULE_ID] ?? {};
+            if (JSON.stringify(current) === JSON.stringify(packFlags)) continue;
+            updates.push({ _id: item.id, [`flags.${MODULE_ID}`]: packFlags });
+            refreshed.push(item.name);
+        }
+
+        // 2. Teach the owned features what they wear, matching the pack by name.
+        for (const item of [...actor.itemTypes.feat, ...actor.itemTypes.action]) {
+            const declared = forms.get(item.name);
+            if (!declared) continue;
+            if (item.flags?.[MODULE_ID]?.releaseForm?.effect === declared.effect) continue;
+            const existing = updates.find((u) => u._id === item.id);
+            if (existing) existing[`flags.${MODULE_ID}`].releaseForm = declared;
+            else updates.push({ _id: item.id, [`flags.${MODULE_ID}.releaseForm`]: declared });
+        }
+        if (updates.length > 0) await actor.updateEmbeddedDocuments("Item", updates);
+
+        // 2. Take off anything the character has not actually Released into.
+        const state = this.stateOf(actor);
+        const allowed = new Set(
+            state === "sealed"
+                ? []
+                : state === "released"
+                    ? [EFFECTS.released, ...formEffectsFor(actor, "released")]
+                    : [EFFECTS.released, EFFECTS.full,
+                       ...formEffectsFor(actor, "released"), ...formEffectsFor(actor, "full")],
+        );
+        const wearable = new Set([...forms.values()].map((f) => f.effect));
+        wearable.add(EFFECTS.full);
+        // Greater Flash Step wore the same way: granted outright at 11th, where the guide gives it "until
+        // the start of your next turn" after you Flash Step. Flash Step applies it now, so a legacy sheet
+        // is carrying an afterimage it never made.
+        wearable.add("Effect: Greater Flash Step");
+        const unearned = actor.itemTypes.effect.filter(
+            (e) => wearable.has(e.name) && !allowed.has(e.name),
+        );
+        if (unearned.length > 0) {
+            await actor.deleteEmbeddedDocuments("Item", unearned.map((e) => e.id));
+        }
+
+        return {
+            actor: actor.name,
+            refreshed,
+            taught: updates.length,
+            removed: unearned.map((e) => e.name),
+        };
+    },
+
+    /** Every Soulbound in the world. Safe to run more than once. */
+    async repairAll() {
+        const report = [];
+        for (const actor of game.actors) {
+            const result = await this.repair(actor);
+            if (result) report.push(result);
+        }
+        console.log("Isaac's Homebrew | release-ladder repair", report);
+        return report;
+    },
+
     /* --- what a Technique needs before it may be used -------------------------------------------- */
 
     /**

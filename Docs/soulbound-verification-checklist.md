@@ -77,13 +77,13 @@ character:
 | C-26 | **Spirit Sense** | 1 | Undead/haunts/spirits/incorporeal within **60 ft** are **hidden**, not undetected, through thin barriers; see and target incorporeal normally | ☐ | |
 | C-27 | **Konsō** | 1 | 10-minute exploration activity, Religion or Spirit Lore vs. its DC, four outcomes | ☐ | |
 | C-28 | **Flash Step** | 3 | 1 action, move + reiatsu, **once per round**, Stride up to Speed, doesn't trigger reactions | ☐ | |
-| C-29 | **Greater Flash Step** | 11 | Until your next turn, the first attack against you each round needs a **DC 5 flat check** | ☐ | |
+| C-29 | **Greater Flash Step** | 11 | Until your next turn, the first attack against you each round needs a **DC 5 flat check** | ✅ | **SB-11 fixed.** The afterimage was granted outright at 11th and worn for ever. `Flash Step` now applies it, predicated on `feature:greater-flash-step`. Live: no afterimage at L3, one at L13 lasting 1 round to turn-start |
 | C-30 | **Departed Flesh** | 3 | Immune to disease; no food/drink; success vs. poison becomes critical success | ☐ | |
 | C-31 | **Release** | 1 | 1 action, auditory/concentrate/reiatsu; **first Release each encounter is free**, re-releasing costs 1 point; lasts the encounter; can't Release while dismissed; **is not a stance** | ✅ | **SB-6 fixed.** Driven live at L13: sealed actor has no form effect, Release applies `Effect: Released` + the Spirit's form, first Release each encounter is free, a second after re-sealing costs 1 point (3→2), and a third on an empty pool is **refused** |
-| C-32 | **Refined Release** | 9 | The Spirit's Refined benefit turns on; base rank 5 | ⚠️ | Fires by **level**, not by Release — correct, Refined is a level-9 feature. Area half proven live: Senbonzakura 15→20 ft at L9. But see **SB-7** |
+| C-32 | **Refined Release** | 9 | The Spirit's Refined benefit turns on; base rank 5 | ✅ | Senbonzakura 15→20 ft at L9, live. **SB-7 fixed**: the size now travels with the technique as an `sb-refined-area-<n>` tag, so Getsuga is 60, La Gota 40, and the three whose Refined is not a widening gain nothing |
 | C-33 | **Full Release** — cost | 13 | 2 actions, **once per day**, requires released form **and ≥1 Reiatsu Point** | ✅ | **SB-6 fixed.** The L13 feature no longer grants the effect; the action does, and it refuses when sealed or when the pool is empty. pf2e's own `frequency` still counts the daily use |
 | C-34 | Full Release — die step | 13 | Spirit weapon damage die +1 step | ✅ | **SB-6 fixed.** `Effect: Full Release` now carries the `damage-dice-faces` upgrade. Live: 1d8 / `two-hand-d10` → **1d10 / `two-hand-d12`**, and back when it ends. Predicated on `not soulbound:full-release:no-die-step`, which `Effect: Tensa Zangetsu` sets |
-| C-35 | Full Release — free technique | 13 | Release Technique costs nothing, **once per round** | ❌ | **SB-6.** No rules — the technique still costs a point and has no per-round limit |
+| C-35 | Full Release — free technique | 13 | Release Technique costs nothing, **once per round** | ✅ | **SB-6 fixed.** `Unbound Technique` — an action granted by `Effect: Full Release`, frequency 1/round. Live: the card reads *"Unbound Technique paid for Senbonzakura — no Focus Point spent. 0 left"*, the pool does not move, and the next use is refused |
 | C-36 | Full Release — pressure emanation | 13 | **15-ft emanation**; enemy ending its turn there: Will vs. Reiatsu DC or **frightened 1** (2 on crit fail); success = immune 10 min | ⚠️ | The emanation was authored all along — a `turn-end` rider, 15-ft emanation, Will vs. Reiatsu DC, frightened 1 / 2, `Effect: Steeled Against Pressure` on a success. It is now applied **only in a Full Release** instead of permanently from 13th. The save itself has not yet been driven against a live enemy |
 | C-37 | Full Release — end state | 13 | **Fatigued** until 10 minutes' rest; no second use that day | ✅ | **SB-6 fixed.** A `deleteItem` hook drops the rung and applies **fatigued** when `Effect: Full Release` goes, by timer or by hand. Verified live at L13 |
 | C-38 | **Perfected Full Release** | 17 | 2 minutes, **no fatigue**, emanation 20 ft | ✅ | **SB-6 fixed.** `fullReleaseShape` is now stamped onto the effect as it is created. Live at L17: duration **2 minutes**, rider emanation **20 ft**, and **no fatigue** when it ends |
@@ -97,9 +97,9 @@ character:
 | # | Item | Lvl | What must happen | Status | Notes |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | SR-01 | Granted skill | 1 | **Society** trained | ✅ | Society trained at L1 |
-| SR-02 | **Kidō Adept** | 1 | **Two** chosen kidō at 1st, on top of free **Shō** | ✅ | Two `Kidō Learned` features at L1, plus Shō free — but see SB-2/SB-3 for what they offer |
-| SR-03 | Kidō Adept — ladder | 5/9/13/17 | One more chosen kidō at each; **six chosen** in total | ❌ | **SB-2** and **SB-3**. Six features arrive on schedule, but the ChoiceSet has no level gate (Kurohitsugi, a 15th-level kidō, is offered at 1st) and no duplicate guard — a live test picked **Sai — Restrain three times** and the sheet kept all three |
-| SR-04 | **Zanjutsu** | 5 | Access to the Zanjutsu feat family **plus one technique free** | ❌ | **SB-4.** One technique is granted, but the ChoiceSet offers all six regardless of level: a 5th-level character was granted **Zanjutsu: Kendō**, a 14th-level technique |
+| SR-02 | **Kidō Adept** | 1 | **Two** chosen kidō at 1st, on top of free **Shō** | ✅ | Two `Kidō Learned` at L1 plus Shō. **SB-3 fixed**: the L1 prompt offers exactly the seven rank-1 kidō |
+| SR-03 | Kidō Adept — ladder | 5/9/13/17 | One more chosen kidō at each; **six chosen** in total | ✅ | **SB-2 and SB-3 fixed.** Live: Rikujōkōrō appears at 7th, Kin and Sōren at 9th, Kurohitsugi at 15th, and six prompts produce **six distinct** kidō — a repeat is refused |
+| SR-04 | **Zanjutsu** | 5 | Access to the Zanjutsu feat family **plus one technique free** | ✅ | **SB-4 fixed.** The 5th-level prompt offers only **Hitotsume: Nadegiri** and **Sōkotsu** |
 | SR-05 | **Zanjutsu Mastery** — dice | 15 | Zanjutsu technique dice +1 step (d6→d8, d8→d10) | ☐ | |
 | SR-06 | Zanjutsu Mastery — refund | 15 | Once per round, a crit with the spirit weapon refunds 1 point, **ignoring the per-encounter cap** | ☐ | |
 | SR-07 | Release ladder naming | — | Shikai → Bankai | ☐ | |
@@ -122,8 +122,8 @@ character:
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | Q-01 | Granted skill | 1 | **Crafting** trained | ☐ | |
 | Q-02 | **Heilig Bogen** | 1 | Spirit Bow profile available; no ammunition; die −1 step in a dead-reishi zone | ☐ | |
-| Q-03 | **Blut** — economy | 1 | Free action, **once per round**, choose Vene **or** Arterie, lasts until start of next turn, **never both** | ☐ | |
-| Q-04 | **Blut Vene** | 1 | Resistance to physical = half level, minimum 1 | ☐ | |
+| Q-03 | **Blut** — economy | 1 | Free action, **once per round**, choose Vene **or** Arterie, lasts until start of next turn, **never both** | ✅ | Live on a 20th-level Quincy: the Blut action prompts Vene/Arterie, and choosing one removes the other |
+| Q-04 | **Blut Vene** | 1 | Resistance to physical = half level, minimum 1 | ✅ | Blut Vene gives **physical resistance 10** at 20th — half level |
 | Q-05 | **Blut Arterie** | 1 | Strikes ignore resistance to **physical and spirit**; target's cover one step less; **no bonus to attack, damage or DC** | ☐ | |
 | Q-06 | **Heizen and Gritz** | 1 | Exactly these two; `Additional Kidō` is closed | ☐ | |
 | Q-07 | **Seal the Art** | 5 | 2 actions, 1 point, 30 ft; counteract with Reiatsu DC proficiency + key attribute, **counteract rank = half level rounded up** | ☐ | |
@@ -153,7 +153,7 @@ character:
 | K-15 | **Heizen** *(cantrip)* | 1 | 1 | **15-ft line**, basic Reflex, **1d6** force, no attribute modifier; H(+2) +1d6; costs nothing | ☐ | |
 | K-16 | **Gritz** | 2 | 1 | 30 ft, Reflex. Fail: **immobilized 1 round**. Crit fail: **restrained 1 minute**, save at end of each of its turns | ☐ | |
 | K-17 | Cost discipline | — | Every costed kidō costs **exactly 1** Reiatsu Point; every cantrip costs **0** | ☐ | Guide §1.4: no 2-point effects anywhere |
-| K-18 | Not spells | — | Kidō use the **Reiatsu DC**, can't be counteracted as spells, can't be slot-heightened | ⚠️ | **SB-8.** Kidō and Techniques post with the **Arcane** tradition on the chat card. Guide §6 says they are not spells and have no tradition; the Reiatsu entry is created with `tradition: {value: ""}`, which pf2e renders as Arcane |
+| K-18 | Not spells | — | Kidō use the **Reiatsu DC**, can't be counteracted as spells, can't be slot-heightened | ✅ | **SB-8 fixed.** The Reiatsu entry's tradition is overridden to `null`, so a Technique's traits no longer include **arcane** and `spell:trait:arcane` is gone. The Saint's Cosmo picks a real tradition and is untouched |
 | K-19 | Traits | — | Every kidō carries **kidō** + **reiatsu** + one of **destruction / binding / mending** | ☐ | |
 | K-20 | Lineage lock | — | `Additional Kidō` is **Soul Reaper only**; a Hollow/Quincy can never exceed two | ☐ | |
 
@@ -170,11 +170,11 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | S-01 | **Senbonzakura** — Shikai Form | 1 | Strikes gain **reach 15**, lose two-hand and twin, hands empty, **ignore cover** between you and target | ⚠️ | **SB-6 fixed for the gate.** `reach-15` is absent while sealed and arrives with Release. Still open: the form never **removes** two-hand/twin as the guide requires, and the cover-ignoring clause is a roll option nothing consumes |
 | S-02 | Senbonzakura — Release Technique | 1 | 2 actions, **15-ft emanation**, basic Reflex, 2d6 slashing; area is **difficult terrain for enemies** until start of your next turn; H(+1) +1d6 | ✅ | Cast live at rank 10: 20-ft emanation, basic Reflex **DC 37**, **11d6 slashing** (guide's 11d6 target), 1 Reiatsu Point spent, three enemies auto-targeted, lingering difficult-terrain rider authored |
-| S-03 | Senbonzakura — Refined | 9 | Emanation **20 ft**; crit fail → **off-guard** until start of your next turn | ⚠️ | Area 15→20 at L9 confirmed live. The off-guard-on-crit-fail rider is authored and predicated on `self:feature:refined-release` — not yet driven against a real save |
+| S-03 | Senbonzakura — Refined | 9 | Emanation **20 ft**; crit fail → **off-guard** until start of your next turn | ✅ | Area 15→20 at L9, live. **SB-12 fixed**: the off-guard rider was predicated on `self:feature:refined-release`, an option pf2e never emits, so it could not once have fired. Six Refined riders were wrong the same way |
 | S-04 | **Senbonzakura Kageyoshi** — Bankai | 13 | Second **20-ft emanation** placed within 60 ft; at the start of each of your turns every enemy in **either** takes **5d6** slashing (basic Reflex) | ⚠️ | **SB-6 fixed for the gate.** `Effect: Senbonzakura Kageyoshi` now arrives only with Full Release — it was firing its 5d6 `turn-start` emanation permanently from 13th. The emanation itself has not yet been driven |
-| S-05 | Bankai — Sustain / move | 13 | Sustain once per round to move the second emanation up to 30 ft **or** switch mode | ☐ | |
+| S-05 | Bankai — Sustain / move | 13 | Sustain once per round to move the second emanation up to 30 ft **or** switch mode | ✅ | New `Senbonzakura Kageyoshi — Sustain`, granted by the Bankai effect, once per round. Live: Gokei, Senkei and Neither, never two at once |
 | S-06 | Bankai — **Gokei** | 13 | Second emanation becomes a **10-ft burst** on one enemy; **double** damage; no cover or concealment against it | ☐ | |
-| S-07 | Bankai — **Senkei** | 13 | 20-ft cage around you and one enemy; neither can leave; your Strikes vs. it ignore **all** resistances; **one extra Strike each round at current MAP**; **you lose reach and cover-ignoring**; can't target anyone outside | ☐ | |
+| S-07 | Bankai — **Senkei** | 13 | 20-ft cage around you and one enemy; neither can leave; your Strikes vs. it ignore **all** resistances; **one extra Strike each round at current MAP**; **you lose reach and cover-ignoring**; can't target anyone outside | ⚠️ | Senkei applies and **takes `reach-15` off the spirit weapon**, live, exactly as the guide requires. The cage, the extra Strike and the target restriction are prose on the card, not yet automated |
 | S-08 | **Zangetsu** — Shikai Form | 1 | Damage die +1 step; gains **two-handed d12** if not already two-handed; **begin every encounter already released, free and no action** | ☐ | |
 | S-09 | Zangetsu — **Getsuga Tenshō** | 1 | 2 actions, **30-ft line**, basic Reflex, 2d6 spirit; H(+1) +1d6 | ☐ | |
 | S-10 | Zangetsu — Refined **Kuroi Getsuga** | 9 | Line **60 ft**, **ignores resistance to spirit**, crit fail → **1d6 persistent spirit** | ☐ | |
@@ -403,7 +403,7 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | X-01 | No technique or kidō anywhere costs more than **1 Reiatsu Point** | ☐ | |
 | X-02 | Release is **not a stance** and does not conflict with stance actions | ☐ | |
 | X-03 | Every area/save effect targets correctly and posts per-target rows | ☐ | Needs `pf2e-toolbelt` Target Helper |
-| X-04 | Every "at 9th level" widening is granted by **Refined Release**, not by a heightening line | ❌ | **SB-7.** `Refined Release` is one blanket `ItemAlteration` adding **+5 to `area-size` on every `sb-tier-release` item**. Right for Senbonzakura, Ennetsu Jigoku and Respira; wrong for Getsuga Tenshō (should be 30→**60** line), La Gota (30→**40** cone) and Garra de la Pantera, Cero Metralleta and Galvano Blast (whose Refined benefits are **not** area increases at all) |
+| X-04 | Every "at 9th level" widening is granted by **Refined Release**, not by a heightening line | ✅ | **SB-7 fixed.** One `sb-refined-area-<n>` tag per technique whose Refined benefit changes its area; no tag means no change, which the blanket `+5` could not express |
 | X-05 | Two-Lineage stacking (Borrowed Nature) never grants a borrowed **Release**, Release Technique, Full Release or Severing Art | ☐ | |
 | X-06 | Image paths on every Soulbound document resolve | ☐ | 37 broken paths were left outstanding on the Saint side |
 | X-07 | `npm test` green: validate + riders + soulbound + build + round-trip | ☐ | |
@@ -643,3 +643,57 @@ At 17th: 2 minutes, 20-foot emanation, **no fatigue**. Re-sealing and Releasing 
 | — | Release Techniques are not yet **gated** on being released (guide §4.7 says they need it) |
 | — | `Blut.set()`, `Modes`, `Charges` and `Hypnosis` still have no caller — same bridge, more handlers |
 | C-36 | The fear emanation is applied at the right time now, but its save has not been driven live |
+
+---
+
+## 13 — SB-11 and SB-12, found while fixing SB-6
+
+Both are the same shape as SB-6 and neither was in the original sweep.
+
+### SB-11 — Greater Flash Step was worn, not earned
+
+`Greater Flash Step` (11th, passive) had one rule: `GrantItem → Effect: Greater Flash Step`. The effect
+is authored correctly — a `strike-received` rider that offers the DC 5 flat check — but the guide gives
+it *"until the start of your next turn"* **after you Flash Step**, and it was simply always on. Every
+Soulbound in the world was carrying one.
+
+`Flash Step` now applies it, as an `action-used` rider predicated on `feature:greater-flash-step`, so
+the 11th-level feature turns it on rather than wearing it. Live: no afterimage at 3rd, one at 13th
+lasting one round to turn-start.
+
+### SB-12 — six Refined riders predicated on an option that does not exist
+
+`Senbonzakura`, `Ennetsu Jigoku`, `Getsuga Tenshō`, `La Gota`, `Cero Oscuras` and `Shikake` all gate
+their Refined benefit on **`self:feature:refined-release`**. pf2e emits `feature:<slug>` for a feature
+and uses `self:` only for effects and a handful of actor facts; there is no `self:feature:` anywhere in
+the system. Read against a real 13th-level Soul Reaper:
+
+```
+feature:refined-release            ← exists
+self:feature:refined-release       ← does not, and never did
+```
+
+So every one of those Refined benefits was inert. **A test was pinning it in place** — `test-soulbound`
+asserted the broken spelling as the expected value, which is why 382 green checks said nothing about
+it. The guard in `test-riders` that fails the build on `item:time:` now fails on `self:feature:` too,
+and was proved to fail by planting one.
+
+### The migration nobody would have run
+
+Fixing a pack does not fix a character. **An owned item is a copy taken when it was granted**, so every
+Soulbound already in the world kept the old rider flags, the old predicates, and the Released Forms
+that used to be granted outright.
+
+`api.release.repairAll()` brings them into line:
+
+1. **Re-reads every authored module flag from the packs** onto owned items, matched by
+   `_stats.compendiumSource` and falling back to name. Only the module's own flag subtree is replaced —
+   never `system.rules`, because that wipes the `flag` pf2e writes onto a `GrantItem` at grant time and
+   produces *"already has item"* on every actor update for ever.
+2. **Teaches each form feature what it wears**, so a legacy character that is stripped of its
+   permanently-worn form can still Release into it.
+3. **Takes off anything not actually Released into**, respecting the character's current state — a
+   character standing in a Full Release keeps everything.
+
+Run live on world `pf`: `quincy` and `arrancar` each lost a permanently-worn Schrift/Resurrección, a
+Vollständig/Segunda Etapa, an `Effect: Full Release` and an afterimage, and kept everything else.

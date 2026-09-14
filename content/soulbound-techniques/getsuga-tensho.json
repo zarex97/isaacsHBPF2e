@@ -4,7 +4,7 @@
             "bypass": [
                 {
                     "predicate": [
-                        "self:feature:refined-release"
+                        "feature:refined-release"
                     ],
                     "resistance": {
                         "max": null,
@@ -25,7 +25,7 @@
                         "criticalFailure"
                     ],
                     "predicate": [
-                        "self:feature:refined-release"
+                        "feature:refined-release"
                     ]
                 }
             ]
