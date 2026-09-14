@@ -19,30 +19,75 @@
         },
         "rules": [
             {
-                "key": "RollOption",
                 "domain": "all",
+                "key": "RollOption",
                 "option": "soulbound:aspect:hollow",
                 "value": true
             },
             {
                 "key": "TempHP",
+                "predicate": [
+                    {
+                        "not": "soulbound:deeper-crossing"
+                    }
+                ],
                 "value": "@actor.level"
             },
             {
                 "key": "Resistance",
+                "predicate": [
+                    {
+                        "not": "soulbound:deeper-crossing"
+                    }
+                ],
                 "type": "physical",
                 "value": "max(1,floor(@actor.level/4))"
             },
             {
                 "key": "FlatModifier",
                 "label": "Hollow's Mask",
+                "predicate": [
+                    {
+                        "not": "soulbound:deeper-crossing"
+                    }
+                ],
                 "selector": "speed",
                 "type": "untyped",
                 "value": 5
             },
             {
+                "key": "TempHP",
+                "predicate": [
+                    "soulbound:deeper-crossing"
+                ],
+                "value": "@actor.level*2"
+            },
+            {
+                "key": "Resistance",
+                "predicate": [
+                    "soulbound:deeper-crossing"
+                ],
+                "type": "physical",
+                "value": "max(1,floor(@actor.level/2))"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Hollow's Mask",
+                "predicate": [
+                    "soulbound:deeper-crossing"
+                ],
+                "selector": "speed",
+                "type": "untyped",
+                "value": 10
+            },
+            {
                 "key": "FlatModifier",
                 "label": "Borrowed Nature",
+                "predicate": [
+                    {
+                        "not": "soulbound:second-nature"
+                    }
+                ],
                 "selector": "will",
                 "type": "status",
                 "value": -1

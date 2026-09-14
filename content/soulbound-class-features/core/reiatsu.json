@@ -31,6 +31,10 @@
                 "path": "system.resources.focus.cap",
                 "priority": 10,
                 "value": 1
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Steady the Breath"
             }
         ],
         "traits": {

@@ -1,4 +1,21 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "text": "Ghost Step: this Flash Step ignores difficult terrain, and may pass through creatures' spaces — though it cannot end there.",
+                        "type": "prompt"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        "item:slug:flash-step"
+                    ],
+                    "self": true
+                }
+            ]
+        }
+    },
     "folder": "10th",
     "img": "icons/magic/movement/trail-streak-impact-blue.webp",
     "name": "Ghost Step",
@@ -24,14 +41,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [
-            {
-                "key": "RollOption",
-                "domain": "all",
-                "option": "soulbound:ghost-step",
-                "value": true
-            }
-        ],
+        "rules": [],
         "traits": {
             "otherTags": [
                 "soulbound-feat"

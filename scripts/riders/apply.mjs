@@ -1693,11 +1693,25 @@ export async function runSave(spec, context) {
     const value = resolveDC(dc, context);
     if (!value) return;
 
+    /**
+     * `Kidō Focus` (feat 2): "spend 1 additional action to give the target a −1 circumstance penalty to
+     * its save."
+     *
+     * The extra action is a choice, so the feat is a **toggle** on the caster's sheet, and this is the
+     * only place the penalty can land — the save is rolled by the module, not by pf2e, so no rule
+     * element on either side would ever see it. Restricted to kidō, which is what the feat says.
+     */
+    const originOptions = context.originActor?.getRollOptions?.() ?? [];
+    const kidoFocus = originOptions.includes("soulbound:kido-focus")
+        && (context.item?.system?.traits?.otherTags ?? []).includes("sb-tier-kido");
     const roll = await statistic.roll({
         dc: { value },
         skipDialog: true,
         item: context.item ?? null,
         origin: context.originActor ?? null,
+        modifiers: kidoFocus
+            ? [new game.pf2e.Modifier({ slug: "kido-focus", label: "Kidō Focus", modifier: -1, type: "circumstance" })]
+            : [],
         extraRollOptions: [`${MODULE_ID}:rider-save`],
     });
     const outcome = DEGREES[roll?.degreeOfSuccess ?? -1];

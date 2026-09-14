@@ -1,0 +1,33 @@
+{
+    "folder": "Actions",
+    "img": "icons/magic/light/explosion-star-glow-blue.webp",
+    "name": "Steady the Breath",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "interaction",
+        "description": {
+            "value": "<p><strong>Steady the Breath</strong> is the Refocus activity: you meditate, or you argue with your sword, or you eat something. Ten minutes restores <strong>1 Reiatsu Point</strong>.</p><p>With <strong>Deep Breath</strong>, the <strong>first</strong> Steady the Breath each day restores <strong>2</strong> instead.</p>"
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "concentrate",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "action"
+}

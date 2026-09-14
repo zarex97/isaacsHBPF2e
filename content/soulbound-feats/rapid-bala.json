@@ -4,10 +4,10 @@
     "name": "Rapid Bala",
     "system": {
         "actionType": {
-            "value": "passive"
+            "value": "action"
         },
         "actions": {
-            "value": null
+            "value": 2
         },
         "category": "class",
         "description": {
@@ -28,14 +28,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [
-            {
-                "key": "RollOption",
-                "domain": "all",
-                "option": "soulbound:rapid-bala",
-                "value": true
-            }
-        ],
+        "rules": [],
         "traits": {
             "otherTags": [
                 "soulbound-feat",

@@ -2060,4 +2060,58 @@ check("Seal the Art's Reiatsu Point is charged where the outcome is known",
     applySource.includes("soulbound:reishi-mastery") && applySource.includes("soulbound:sklaverei"),
     true);
 
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  SB-20, closed: every feat does something                                                        */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * Twenty-three of forty-seven feats had no mechanism at all. This is the standing guard that says so
+ * for every one of them, so the number cannot drift back.
+ *
+ * A feat counts as mechanical when any of these is true:
+ *
+ *  - it carries a rule that is not merely a flat `RollOption` — including a **toggleable** one, which
+ *    is pf2e's own way of putting a cast-time choice on the sheet (Cero Doble, Kidō Focus);
+ *  - it carries a module flag the engine acts on;
+ *  - it is an **activity** with an action cost or a frequency, which is the whole mechanism for an
+ *    action-economy feat — pf2e writes `Double Shot` exactly this way (Rapid Bala, Shunpo Strike,
+ *    Descorrer, Reader of Threads);
+ *  - something reads it, by slug or by the option it sets (Reiatsu Flood, Unbroken Chain).
+ */
+const SCRIPTS = (() => {
+    let text = "";
+    (function walk(dir) {
+        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+            const full = path.join(dir, entry.name);
+            if (entry.isDirectory()) walk(full);
+            else if (entry.name.endsWith(".mjs")) text += fs.readFileSync(full, "utf8");
+        }
+    })(path.join(ROOT, "scripts"));
+    return text;
+})();
+
+const ENGINE_FLAGS = ["riders", "areaTargeting", "actionCost", "chargeSpend", "chargeRefresh", "bypass",
+    "lingering", "overlap", "freeCast", "releaseForm", "modeSwitch", "deepBreath"];
+
+const inertFeats = [];
+for (const file of fs.readdirSync(path.join(ROOT, "content", "soulbound-feats"))) {
+    //  is a bare array, not a document.
+    if (!file.endsWith(".json") || file === "_folders.json") continue;
+    const doc = contentDoc(`soulbound-feats/${file}`);
+    const rules = doc.system.rules ?? [];
+    const flags = Object.keys(doc.flags?.["isaacs-hb-pf2e"] ?? {});
+    if (rules.some((r) => r.key !== "RollOption" || r.toggleable)) continue;
+    if (flags.some((f) => ENGINE_FLAGS.includes(f))) continue;
+    const actionType = doc.system.actionType?.value;
+    if (["action", "reaction", "free"].includes(actionType)
+        && (doc.system.frequency || doc.system.actions?.value)) continue;
+    const slug = doc.system.slug ?? file.replace(/\.json$/, "");
+    const options = rules.filter((r) => r.key === "RollOption").map((r) => r.option);
+    const read = SCRIPTS.includes(`"${slug}"`) || SCRIPTS.includes(`feature:${slug}`)
+        || options.some((o) => SCRIPTS.includes(o));
+    if (!read) inertFeats.push(doc.name);
+}
+check("every Soulbound feat has a mechanism behind it", inertFeats, []);
+
 report("Soulbound tests");

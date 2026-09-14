@@ -22,6 +22,31 @@
         "rules": [
             {
                 "key": "Resistance",
+                "predicate": [
+                    {
+                        "not": "soulbound:aspect:quincy"
+                    }
+                ],
+                "type": "physical",
+                "value": "max(1,floor(@actor.level/2))"
+            },
+            {
+                "key": "Resistance",
+                "predicate": [
+                    "soulbound:aspect:quincy",
+                    {
+                        "not": "soulbound:deeper-crossing"
+                    }
+                ],
+                "type": "physical",
+                "value": "max(1,floor(@actor.level/4))"
+            },
+            {
+                "key": "Resistance",
+                "predicate": [
+                    "soulbound:aspect:quincy",
+                    "soulbound:deeper-crossing"
+                ],
                 "type": "physical",
                 "value": "max(1,floor(@actor.level/2))"
             }
