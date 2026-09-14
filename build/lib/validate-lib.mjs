@@ -134,6 +134,8 @@ export function validate(packs, { errors }) {
     }
     validateAdvancementTable(packs, errors);
     validateActionsAreReachable(packs, errors);
+    validateHomebrewTraits(packs, errors);
+    validateMultipleAttackPenalties(packs, errors);
     validateReevaluatedGrants(packs, errors);
     validateSlugPredicates(packs, errors);
     validateAlterationProperties(packs, errors);
@@ -218,6 +220,103 @@ function validateAlterationProperties(packs, errors) {
     }
 }
 
+
+/**
+ * A homebrew trait must be registered for the **item type** that uses it.
+ *
+ * `pf2e-homebrew` registers traits per category — `spellTraits`, `featTraits`, `actionTraits`,
+ * `weaponTraits` — and pf2e validates an item's traits against the one category matching its type. A
+ * trait registered only as a spell trait is therefore **stripped** from a feat that carries it, with a
+ * warning per item per data preparation and no other sign.
+ *
+ * `reiatsu` was registered only under `spellTraits` while four actions and eleven feats carried it,
+ * `Full Release` and `Blut` among them; `cosmo` was the same on one Saint action. The visible cost is
+ * small — those items are not searchable by their own class's trait — but the warning is identical in
+ * shape to the ones that do matter, and a console full of harmless warnings is where a real one hides.
+ */
+/**
+ * Which item types each homebrew category actually reaches, read off `CONFIG.PF2E` in a live world
+ * rather than guessed. Registering a trait under one category populates several of pf2e's lists:
+ *
+ *     classTraits  -> featTraits, actionTraits, spellTraits, effectTraits, classTraits
+ *     featTraits   -> featTraits, actionTraits, effectTraits
+ *     spellTraits  -> spellTraits ONLY
+ *
+ * That last line is the trap. `reiatsu` was registered as a spell trait, which is true of the sixty-two
+ * kidō — and says nothing about the eleven feats and four actions that also carry it.
+ */
+const TRAIT_CATEGORY_COVERS = {
+    classTraits: ["class", "feat", "action", "spell", "effect"],
+    featTraits: ["feat", "action", "effect"],
+    actionTraits: ["action", "effect"],
+    spellTraits: ["spell"],
+    weaponTraits: ["weapon"],
+    equipmentTraits: ["equipment", "weapon", "armor", "consumable"],
+};
+
+function validateHomebrewTraits(packs, errors) {
+    const homebrew = JSON.parse(fs.readFileSync(path.join(ROOT, "module.json"), "utf8"))
+        ?.flags?.["isaacs-hb-pf2e"]?.["pf2e-homebrew"] ?? {};
+    const known = new Set(Object.values(homebrew).flatMap((block) => Object.keys(block ?? {})));
+
+    /** Every item type a trait is registered for, across all the categories that name it. */
+    const reaches = new Map();
+    for (const [category, block] of Object.entries(homebrew)) {
+        for (const trait of Object.keys(block ?? {})) {
+            const types = reaches.get(trait) ?? new Set();
+            for (const type of TRAIT_CATEGORY_COVERS[category] ?? []) types.add(type);
+            reaches.set(trait, types);
+        }
+    }
+
+    for (const { docs } of packs) {
+        for (const { file, doc } of docs) {
+            for (const trait of doc.system?.traits?.value ?? []) {
+                // Only our own traits are checked; pf2e's own list is its business.
+                if (!known.has(trait)) continue;
+                if (reaches.get(trait)?.has(doc.type)) continue;
+                errors.push(
+                    `${rel(file)}: homebrew trait "${trait}" is not registered for ${doc.type}s in `
+                    + "module.json, so pf2e strips it from this item at load. Registering under "
+                    + "`spellTraits` alone covers spells and nothing else.",
+                );
+            }
+        }
+    }
+}
+
+/**
+ * A `MultipleAttackPenalty` supplies a **replacement penalty**, so its value must be negative.
+ *
+ * pf2e reads the value as the penalty itself and rejects anything above zero outright:
+ *
+ *     if (value < 0) { penalties.push({ label, penalty: value, predicate }); }
+ *     else if (value !== 0) { this.failValidation("value: must resolve to less than or equal to zero"); }
+ *
+ * `calculateMAPs` then turns that into `{ map1: penalty, map2: penalty * 2 }` — so "counts as agile" is
+ * **-4**, not the 1 that reads so naturally as "reduce the penalty by one". Both of the module's MAP
+ * rules were written the second way: *Bala* said so on every Soulbound in the world, once per data
+ * preparation, and *Twin Fang* said it only for characters who had taken the feat.
+ *
+ * The check is a whole-number one on purpose. A fractional or string value would resolve at runtime and
+ * cannot be judged here; a positive literal never can be right.
+ */
+function validateMultipleAttackPenalties(packs, errors) {
+    for (const { docs } of packs) {
+        for (const { file, doc } of docs) {
+            for (const rule of doc.system?.rules ?? []) {
+                if (rule.key !== "MultipleAttackPenalty") continue;
+                const value = Number(rule.value);
+                if (!Number.isFinite(value) || value < 0) continue;
+                errors.push(
+                    `${rel(file)}: MultipleAttackPenalty value ${rule.value} must be negative — pf2e reads `
+                    + "it as the penalty itself and drops the rule otherwise. \"Counts as agile\" is -4, "
+                    + "which becomes -4/-8; it is not a reduction of the usual -5.",
+                );
+            }
+        }
+    }
+}
 
 /**
  * A predicated `GrantItem` must say `reevaluateOnUpdate`.

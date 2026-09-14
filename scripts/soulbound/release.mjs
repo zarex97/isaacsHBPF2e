@@ -63,6 +63,30 @@ export function formEffectsFor(actor, rung) {
  * like Rising Pressure's and those two are the only places in the class where an encounter is a unit of
  * accounting. Outside an encounter there is nothing to be the first of, so it is free.
  */
+/**
+ * May an owned item's `system.rules` be replaced with the pack's?
+ *
+ * Usually **no**, and `repair` says why: pf2e writes a `flag` onto a `GrantItem` at grant time and a
+ * `selection` onto a `ChoiceSet` when the player answers it. Both live *inside* the rules array, so
+ * overwriting it wholesale throws that state away — the grant becomes "<Actor> already has <Item>" on
+ * every actor update for ever, and the choice is silently un-made.
+ *
+ * But that reason only covers rules that *carry* grant-time state. An owned item whose rules are all
+ * plain synthetics — a `MultipleAttackPenalty`, a `FlatModifier`, a `Resistance` — has nothing to lose,
+ * and is exactly the case that otherwise stays broken for ever on a character who already exists.
+ *
+ * Which is not hypothetical: *Bala*'s MAP rule said `value: 1` where pf2e demands a negative penalty, so
+ * every Soulbound in the world logged a validation failure once per data preparation and threw the rule
+ * away. Fixing the pack fixed nobody who had already been built.
+ */
+const STATEFUL_RULES = new Set(["GrantItem", "ChoiceSet"]);
+
+export function rulesAreSafeToRefresh(owned, packed) {
+    if (!Array.isArray(owned) || !Array.isArray(packed)) return false;
+    if (JSON.stringify(owned) === JSON.stringify(packed)) return false;   // nothing to do
+    return ![...owned, ...packed].some((rule) => STATEFUL_RULES.has(rule?.key));
+}
+
 export function releaseCost({ releasesThisEncounter }) {
     return (releasesThisEncounter ?? 0) === 0 ? 0 : 1;
 }
@@ -231,11 +255,13 @@ export const Release = {
         for (const name of packs) {
             const pack = game.packs.get(`${MODULE_ID}.${name}`);
             if (!pack) continue;
-            for (const entry of await pack.getIndex({ fields: ["flags"] })) {
+            for (const entry of await pack.getIndex({ fields: ["flags", "system.rules"] })) {
                 const flags = entry.flags?.[MODULE_ID];
-                if (!flags || Object.keys(flags).length === 0) continue;
-                authored.set(`Compendium.${MODULE_ID}.${name}.Item.${entry._id}`, flags);
-                authored.set(`name:${entry.name}`, flags);
+                const rules = entry.system?.rules;
+                if (!flags && !rules?.length) continue;
+                const record = { flags: flags ?? null, rules: rules ?? null };
+                authored.set(`Compendium.${MODULE_ID}.${name}.Item.${entry._id}`, record);
+                authored.set(`name:${entry.name}`, record);
             }
         }
         return authored;
@@ -273,14 +299,30 @@ export const Release = {
         const authored = await this.authoredFlags();
         const updates = [];
         const refreshed = [];
+        const rewritten = [];
         for (const item of actor.items) {
             const source = item._stats?.compendiumSource;
-            const packFlags = (source && authored.get(source)) ?? authored.get(`name:${item.name}`);
-            if (!packFlags) continue;
-            const current = item.flags?.[MODULE_ID] ?? {};
-            if (JSON.stringify(current) === JSON.stringify(packFlags)) continue;
-            updates.push({ _id: item.id, [`flags.${MODULE_ID}`]: packFlags });
-            refreshed.push(item.name);
+            const record = (source && authored.get(source)) ?? authored.get(`name:${item.name}`);
+            if (!record) continue;
+
+            const packFlags = record.flags;
+            if (packFlags) {
+                const current = item.flags?.[MODULE_ID] ?? {};
+                if (JSON.stringify(current) !== JSON.stringify(packFlags)) {
+                    updates.push({ _id: item.id, [`flags.${MODULE_ID}`]: packFlags });
+                    refreshed.push(item.name);
+                }
+            }
+
+            // And the rules, but only where nothing in them carries grant-time state — see
+            // `rulesAreSafeToRefresh`. This is the half that reaches a character who already exists:
+            // a corrected rule in the pack does nothing for a sheet holding a copy of the old one.
+            if (rulesAreSafeToRefresh(item.system?.rules, record.rules)) {
+                const existing = updates.find((u) => u._id === item.id);
+                if (existing) existing["system.rules"] = record.rules;
+                else updates.push({ _id: item.id, "system.rules": record.rules });
+                rewritten.push(item.name);
+            }
         }
 
         // 2. Teach the owned features what they wear, matching the pack by name.
@@ -320,6 +362,7 @@ export const Release = {
         return {
             actor: actor.name,
             refreshed,
+            rewritten,
             taught: updates.length,
             removed: unearned.map((e) => e.name),
         };

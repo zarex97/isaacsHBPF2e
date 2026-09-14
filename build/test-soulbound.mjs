@@ -576,12 +576,13 @@ check(
     [true, null, true],
 );
 // `agile` is a WEAPON trait — pf2e reads it off a weapon when computing a Strike's MAP and would never
-// look for it on a spell, so authoring it here would validate and do nothing.
+// look for it on a spell, so authoring it here would validate and do nothing. That much was right. The
+// rule that replaced it then carried `value: 1`, which pf2e rejects outright — see SB-31 below.
 check(
     "Bala's agile clause is a MultipleAttackPenalty rule, not an inert weapon trait",
     [
         bala.system.traits.value.includes("agile"),
-        bala.system.rules.some((r) => r.key === "MultipleAttackPenalty" && r.value === 1),
+        bala.system.rules.some((r) => r.key === "MultipleAttackPenalty" && r.value < 0),
     ],
     [false, true],
 );
@@ -2304,5 +2305,47 @@ for (const [, slug] of SCRIPTS.matchAll(/slug\s*===\s*["']([a-z0-9-]+)["']/g)) {
     if (!unresolvedInScripts.includes(slug)) unresolvedInScripts.push(slug);
 }
 check("every slug the scripts compare against names a document the build writes", unresolvedInScripts, []);
+
+
+/**
+ * SB-31. "Bala counts as agile for the purpose of your multiple attack penalty (-4/-8 rather than
+ * -5/-10)" was authored as `value: 1` — a reduction of one. pf2e reads the value as the **penalty
+ * itself**, rejects anything above zero, and drops the rule; the warning was in every Soulbound's
+ * console, once per data preparation, for as long as the class has existed.
+ *
+ * A MAP synthetic lives on the ACTOR keyed by domain, not on the item that declared it, so an
+ * unpredicated one on `spell-attack` would have made every spell attack the character makes agile —
+ * a Murciélago's Cero Oscuras included.
+ */
+const balaMap = contentDoc("soulbound-kido/hollow/bala.json").system.rules
+    .find((r) => r.key === "MultipleAttackPenalty");
+check("Bala's agile MAP is the penalty itself, not a reduction of it", balaMap.value, -4);
+check("and it is scoped to Bala, because the synthetic is actor-wide",
+    balaMap.predicate, ["item:slug:bala"]);
+check("Bala's selector is a real spell-attack check domain", balaMap.selector, "spell-attack");
+
+// Twin Fang was wrong the same way, and silently: it only warns for a character who took the feat.
+const twinMap = contentDoc("soulbound-feats/twin-fang.json").system.rules
+    .find((r) => r.key === "MultipleAttackPenalty");
+check("Twin Fang's MAP is negative too", twinMap.value, -4);
+check("and stays scoped to the spirit weapon", twinMap.predicate.at(-1), "item:tag:soulbound-spirit-weapon");
+
+
+// A corrected rule in the pack reaches nobody who already exists: an owned item is a COPY. `repair`
+// refuses to replace `system.rules` wholesale for a good reason — pf2e writes a `flag` onto a GrantItem
+// at grant time and a `selection` onto a ChoiceSet when the player answers it, both INSIDE that array —
+// but that reason only covers rules which carry such state.
+const { rulesAreSafeToRefresh } = await import("../scripts/soulbound/release.mjs");
+const map1 = [{ key: "MultipleAttackPenalty", value: 1 }];
+const map4 = [{ key: "MultipleAttackPenalty", value: -4 }];
+check("a stale stateless rule is refreshed", rulesAreSafeToRefresh(map1, map4), true);
+check("an identical one is left alone", rulesAreSafeToRefresh(map4, map4), false);
+check("a GrantItem is never overwritten — its grant-time flag lives in the array",
+    rulesAreSafeToRefresh([{ key: "GrantItem", uuid: "x" }], [{ key: "GrantItem", uuid: "y" }]), false);
+check("nor is a ChoiceSet, whose selection lives there too",
+    rulesAreSafeToRefresh([{ key: "ChoiceSet", selection: "a" }], [{ key: "ChoiceSet" }]), false);
+check("a stateful rule anywhere in either version protects the whole array",
+    rulesAreSafeToRefresh(map1, [...map4, { key: "GrantItem", uuid: "y" }]), false);
+check("and a missing side is never refreshed", rulesAreSafeToRefresh(map1, undefined), false);
 
 report("Soulbound tests");

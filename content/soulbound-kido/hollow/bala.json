@@ -51,8 +51,11 @@
             {
                 "key": "MultipleAttackPenalty",
                 "label": "Bala (agile)",
+                "predicate": [
+                    "item:slug:bala"
+                ],
                 "selector": "spell-attack",
-                "value": 1
+                "value": -4
             }
         ],
         "target": {
