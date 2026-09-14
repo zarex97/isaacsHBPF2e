@@ -141,6 +141,42 @@ export const Reiatsu = {
      * The class features set `cap` to 1 / 2 / 3 by level (migration 889 strips an AE-like on `max`, but
      * leaves `cap` alone), so the correction is one line: a Soulbound's maximum is its ceiling.
      */
+    /**
+     * Kidō are not spells, and should not be posting to chat as **Arcane**.
+     *
+     * > Kidō are **not spells**. They use your Reiatsu DC, they can't be counteracted as spells, and you
+     * > can't heighten them with slots. — guide §6
+     *
+     * The entry is created with `tradition: { value: "" }`, which reads as "none" and is not. pf2e's
+     * `SpellcastingEntryPF2e#tradition` getter is
+     *
+     *     const defaultTradition = this.system.prepared.value === "items" ? null : "arcane";
+     *
+     * so **every** entry that is not an item-based one falls back to arcane, and the tradition is then
+     * unioned into each spell's traits — three separate places in `item/spell/document.ts` — and emitted
+     * as `spell:trait:arcane`. That is not only a wrong word on a card: anything keyed on the arcane
+     * tradition finds a kidō, which is exactly the counteracting §6 says cannot happen.
+     *
+     * There is no data value for "no tradition" on a focus entry, so the getter is overridden for this
+     * class's entry alone. The Saint's Cosmo is untouched: it chooses a real tradition in a setting.
+     */
+    untraditionEntry() {
+        const proto = CONFIG.PF2E?.Item?.documentClasses?.spellcastingEntry?.prototype;
+        const descriptor = proto && Object.getOwnPropertyDescriptor(proto, "tradition");
+        if (!descriptor?.get) {
+            console.warn("Isaac's Homebrew | no `tradition` getter to override; kidō will read as arcane");
+            return;
+        }
+        const original = descriptor.get;
+        Object.defineProperty(proto, "tradition", {
+            ...descriptor,
+            get() {
+                if (this.system?.proficiency?.slug === "soulbound") return null;
+                return original.call(this);
+            },
+        });
+    },
+
     install() {
         wrap(
             "CONFIG.PF2E.Actor.documentClasses.character.prototype.prepareDerivedData",
@@ -170,6 +206,8 @@ export const Reiatsu = {
             },
             { feature: "the reiatsu pool" },
         );
+
+        this.untraditionEntry();
 
         // Actors are prepared during `setupGame`, which runs BEFORE the `setup` hook this wrap installs
         // from — so every Soulbound in the world loads with the pool pf2e derived and only picks up the
