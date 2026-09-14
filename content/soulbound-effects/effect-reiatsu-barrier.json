@@ -1,5 +1,5 @@
 {
-    "img": "icons/magic/defensive/barrier-shield-dome-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/barrier-shield-dome-blue.svg",
     "name": "Effect: Reiatsu Barrier",
     "system": {
         "description": {

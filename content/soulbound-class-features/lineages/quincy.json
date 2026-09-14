@@ -1,6 +1,6 @@
 {
     "folder": "Lineages",
-    "img": "icons/weapons/bows/bow-recurve-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/bow-recurve-blue.svg",
     "name": "Quincy",
     "system": {
         "actionType": {

@@ -14,7 +14,7 @@
             ]
         }
     },
-    "img": "icons/weapons/polearms/trident-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/trident-blue.svg",
     "name": "Trident",
     "system": {
         "cost": {

@@ -20,7 +20,7 @@
             ]
         }
     },
-    "img": "icons/magic/lightning/bolt-strike-forked-white.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/bolt-strike-forked-white.svg",
     "name": "Electrocution",
     "system": {
         "area": {

@@ -61,7 +61,7 @@
         }
     },
     "folder": "3rd — Cloth Ability (L11)",
-    "img": "icons/weapons/swords/swords-crossed-yellow.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/swords-crossed-yellow.svg",
     "name": "Double Excalibur",
     "system": {
         "area": null,

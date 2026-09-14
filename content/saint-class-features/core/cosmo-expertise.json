@@ -1,6 +1,6 @@
 {
     "folder": "Core",
-    "img": "icons/magic/light/explosion-star-glow-orange-purple.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/explosion-star-glow-orange-purple.svg",
     "name": "Cosmo Expertise",
     "system": {
         "actionType": {

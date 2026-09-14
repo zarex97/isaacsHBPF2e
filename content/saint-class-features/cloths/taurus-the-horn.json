@@ -10,7 +10,7 @@
         }
     },
     "folder": "Gold Cloths",
-    "img": "icons/creatures/abilities/bull-horns-brown.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/bull-horns-brown.svg",
     "name": "Taurus — the Horn",
     "system": {
         "actionType": {

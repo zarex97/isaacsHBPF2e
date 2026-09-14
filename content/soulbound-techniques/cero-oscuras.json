@@ -56,7 +56,7 @@
             ]
         }
     },
-    "img": "icons/creatures/abilities/wing-bat-membrane-green.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/wing-bat-membrane-green.svg",
     "name": "Cero Oscuras",
     "system": {
         "cost": {

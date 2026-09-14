@@ -29,7 +29,7 @@
             ]
         }
     },
-    "img": "icons/magic/water/snowflake-ice-swirl-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/snowflake-ice-swirl-blue.svg",
     "name": "Hyōryū Senbi",
     "system": {
         "area": {

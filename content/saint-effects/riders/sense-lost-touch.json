@@ -1,6 +1,6 @@
 {
     "folder": "Riders",
-    "img": "icons/magic/control/hand-magic-glow-pink.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/hand-magic-glow-pink.svg",
     "name": "Effect: Sense Lost (Touch)",
     "system": {
         "description": {

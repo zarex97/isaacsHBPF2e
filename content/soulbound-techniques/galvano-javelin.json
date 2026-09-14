@@ -17,7 +17,7 @@
             ]
         }
     },
-    "img": "icons/magic/lightning/bolt-strike-white.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/bolt-strike-white.svg",
     "name": "Galvano Javelin",
     "system": {
         "cost": {

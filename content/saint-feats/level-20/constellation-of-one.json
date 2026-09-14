@@ -1,6 +1,6 @@
 {
     "folder": "Level 20",
-    "img": "icons/magic/light/star-sparkles-yellow.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/star-sparkles-yellow.svg",
     "name": "Constellation of One",
     "system": {
         "actionType": {

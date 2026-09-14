@@ -1,6 +1,6 @@
 {
     "folder": "Activities",
-    "img": "icons/magic/air/wind-vortex-swirl-gold.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/wind-vortex-swirl-gold.svg",
     "name": "Effect: Aiolos's Wings",
     "system": {
         "description": {

@@ -1,5 +1,5 @@
 {
-    "img": "icons/equipment/shield/heater-crystal-white.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/heater-crystal-white.svg",
     "name": "Effect: The Balance, at Night",
     "system": {
         "description": {

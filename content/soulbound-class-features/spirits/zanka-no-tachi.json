@@ -8,7 +8,7 @@
         }
     },
     "folder": "Spirits",
-    "img": "icons/magic/fire/blade-two-handed-blackened-orange.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/blade-two-handed-blackened-orange.svg",
     "name": "Zanka no Tachi",
     "system": {
         "actionType": {

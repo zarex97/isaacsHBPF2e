@@ -8,7 +8,7 @@
         }
     },
     "folder": "Spirits",
-    "img": "icons/creatures/abilities/wolf-howl-moon-grey-large.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/wolf-howl-moon-grey-large.svg",
     "name": "Colmillo",
     "system": {
         "actionType": {

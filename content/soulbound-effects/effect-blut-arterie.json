@@ -1,5 +1,5 @@
 {
-    "img": "icons/magic/control/energy-stream-link-red.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/energy-stream-link-red.svg",
     "name": "Effect: Blut Arterie",
     "system": {
         "description": {

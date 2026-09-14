@@ -17,7 +17,7 @@
             ]
         }
     },
-    "img": "icons/magic/fire/projectile-bolt-salvo-red.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/projectile-bolt-salvo-red.svg",
     "name": "Cero Metralleta",
     "system": {
         "area": {

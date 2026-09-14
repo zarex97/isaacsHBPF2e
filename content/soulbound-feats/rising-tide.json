@@ -1,6 +1,6 @@
 {
     "folder": "8th",
-    "img": "icons/magic/air/wind-vortex-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/wind-vortex-blue.svg",
     "name": "Rising Tide",
     "system": {
         "actionType": {

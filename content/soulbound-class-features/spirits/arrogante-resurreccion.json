@@ -8,7 +8,7 @@
         }
     },
     "folder": "Spirits",
-    "img": "icons/magic/death/skull-crowned-white.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/skull-crowned-white.svg",
     "name": "Arrogante — Resurrección",
     "system": {
         "actionType": {

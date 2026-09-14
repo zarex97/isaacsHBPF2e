@@ -1,29 +1,30 @@
 {
-    "name": "isaacs-hb-pf2e",
-    "version": "0.4.1",
-    "description": "Isaac's homebrew content for the Pathfinder 2e system on Foundry VTT: The Saint.",
-    "private": true,
-    "type": "module",
-    "scripts": {
-        "build": "node build/build-packs.mjs",
-        "watch": "node build/watch.mjs",
-        "link:foundry": "node build/link-foundry.mjs",
-        "live": "node build/live-session.mjs",
-        "live:status": "node build/live-session.mjs --status",
-        "extract": "node build/extract-packs.mjs",
-        "validate": "node build/validate.mjs",
-        "check:roundtrip": "node build/check-roundtrip.mjs",
-        "test": "npm run validate && npm run test:riders && npm run test:soulbound && npm run build && npm run check:roundtrip",
-        "test:riders": "node build/test-riders.mjs",
-        "test:soulbound": "node build/test-soulbound.mjs"
-    },
-    "author": "Isaac",
-    "license": "MIT",
-    "engines": {
-        "node": ">=22.0.0"
-    },
-    "devDependencies": {
-        "@foundryvtt/foundryvtt-cli": "^3.0.4",
-        "classic-level": "^3.0.0"
-    }
+  "name": "isaacs-hb-pf2e",
+  "version": "0.4.1",
+  "description": "Isaac's homebrew content for the Pathfinder 2e system on Foundry VTT: The Saint.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build/make-icons.mjs && node build/build-packs.mjs",
+    "watch": "node build/watch.mjs",
+    "link:foundry": "node build/link-foundry.mjs",
+    "live": "node build/live-session.mjs",
+    "live:status": "node build/live-session.mjs --status",
+    "extract": "node build/extract-packs.mjs",
+    "validate": "node build/validate.mjs",
+    "check:roundtrip": "node build/check-roundtrip.mjs",
+    "test": "npm run validate && npm run test:riders && npm run test:soulbound && npm run build && npm run check:roundtrip",
+    "test:riders": "node build/test-riders.mjs",
+    "test:soulbound": "node build/test-soulbound.mjs",
+    "icons": "node build/make-icons.mjs"
+  },
+  "author": "Isaac",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "devDependencies": {
+    "@foundryvtt/foundryvtt-cli": "^3.0.4",
+    "classic-level": "^3.0.0"
+  }
 }

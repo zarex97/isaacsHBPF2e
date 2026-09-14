@@ -8,7 +8,7 @@
         }
     },
     "folder": "Spirits",
-    "img": "icons/magic/water/water-elemental-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/water-elemental-blue.svg",
     "name": "Hirviendo",
     "system": {
         "actionType": {

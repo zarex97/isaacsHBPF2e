@@ -51,7 +51,7 @@
             ]
         }
     },
-    "img": "icons/magic/light/explosion-star-blue-large.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/explosion-star-large-blue.svg",
     "name": "Effect: Full Release",
     "system": {
         "description": {

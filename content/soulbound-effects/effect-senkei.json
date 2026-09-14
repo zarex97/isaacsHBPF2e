@@ -21,7 +21,7 @@
             ]
         }
     },
-    "img": "icons/magic/nature/plant-glowing-white-purple.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/leaf-petals-white.svg",
     "name": "Effect: Senkei",
     "system": {
         "description": {

@@ -1,6 +1,6 @@
 {
     "folder": "Level 6",
-    "img": "icons/magic/fire/explosion-flame-blue-orange.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/explosion-flame-blue-orange.svg",
     "name": "Burning Cosmo",
     "system": {
         "actionType": {

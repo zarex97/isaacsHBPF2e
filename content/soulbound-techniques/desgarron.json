@@ -20,7 +20,7 @@
             ]
         }
     },
-    "img": "icons/creatures/abilities/paw-print-pair-blue-large.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/paw-print-pair-blue-large.svg",
     "name": "Desgarrón",
     "system": {
         "area": {

@@ -13,7 +13,7 @@
         }
     },
     "folder": "Level 16",
-    "img": "icons/magic/water/snowflake-ice-purple-white.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/snowflake-ice-purple-white.svg",
     "name": "Atomic Dissolution",
     "system": {
         "actionType": {

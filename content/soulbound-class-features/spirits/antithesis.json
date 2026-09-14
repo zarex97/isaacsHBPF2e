@@ -1,6 +1,6 @@
 {
     "folder": "Spirits",
-    "img": "icons/weapons/bows/bow-recurve-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/bow-recurve-blue.svg",
     "name": "Antithesis",
     "system": {
         "actionType": {

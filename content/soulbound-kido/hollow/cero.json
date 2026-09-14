@@ -35,7 +35,7 @@
         }
     },
     "folder": "Hollow Arts",
-    "img": "icons/magic/fire/beam-jet-stream-red.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/beam-jet-stream-red.svg",
     "name": "Cero",
     "system": {
         "area": {

@@ -23,7 +23,7 @@
             ]
         }
     },
-    "img": "icons/magic/death/projectile-dark-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/projectile-dark-blue.svg",
     "name": "Mugetsu",
     "system": {
         "area": {

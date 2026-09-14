@@ -39,7 +39,7 @@
             ]
         }
     },
-    "img": "icons/magic/death/skull-crowned-white-purple.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/skull-crowned-white-purple.svg",
     "name": "La Hora Final",
     "system": {
         "area": {

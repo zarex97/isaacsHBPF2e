@@ -1,6 +1,6 @@
 {
     "folder": "Spirits",
-    "img": "icons/creatures/abilities/wolf-howl-moon-grey.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/wolf-howl-moon-grey.svg",
     "name": "Los Lobos",
     "system": {
         "actionType": {

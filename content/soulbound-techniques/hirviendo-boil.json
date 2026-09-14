@@ -7,7 +7,7 @@
             }
         }
     },
-    "img": "icons/magic/fire/flame-burning-water-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/flame-burning-water-blue.svg",
     "name": "Hirviendo — Boil",
     "system": {
         "area": {
