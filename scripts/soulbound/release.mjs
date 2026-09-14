@@ -247,10 +247,13 @@ export const Release = {
      * one some older grants left behind.
      */
     async authoredFlags() {
-        const packs = [
-            "soulbound-class-features", "soulbound-techniques", "soulbound-kido",
-            "soulbound-feats", "soulbound-effects", "soulbound-equipment", "soulbound-class",
-        ];
+        // Every Item pack the module ships, the Saint's included. The list used to name only the
+        // Soulbound's seven, which was right while this repaired the release ladder and wrong the moment
+        // it also began refreshing icons and stateless rules: a Pisces Saint sat with three broken
+        // images that the sweep walked straight past.
+        const packs = game.packs
+            .filter((pack) => pack.metadata.packageName === MODULE_ID && pack.metadata.type === "Item")
+            .map((pack) => pack.metadata.name);
         const authored = new Map();
         for (const name of packs) {
             const pack = game.packs.get(`${MODULE_ID}.${name}`);
@@ -285,8 +288,18 @@ export const Release = {
      * inert — it has no `reevaluateOnUpdate`, so it only ever ran once, when the feature landed.
      */
     async repair(actor) {
-        if (!Reiatsu.isSoulbound(actor)) return null;
-        const forms = await this.declaredForms();
+        // Gated on **carrying the module's items**, not on being a Soulbound.
+        //
+        // Half of what this does — refreshing flags, stateless rules and icons from the packs — is about
+        // module content wherever it sits, and a Saint was every bit as stuck with a sheet of broken
+        // images as a Soul Reaper was. The release-ladder half below still only applies to a Soulbound,
+        // and says so; `declaredForms` simply finds nothing for anyone else.
+        const mine = actor?.items?.some?.((item) =>
+            typeof item._stats?.compendiumSource === "string"
+            && item._stats.compendiumSource.startsWith(`Compendium.${MODULE_ID}.`));
+        if (!mine) return null;
+        const soulbound = Reiatsu.isSoulbound(actor);
+        const forms = soulbound ? await this.declaredForms() : new Map();
 
         // 1. Re-read every authored module flag from the packs.
         //
@@ -347,7 +360,11 @@ export const Release = {
         }
         if (updates.length > 0) await actor.updateEmbeddedDocuments("Item", updates);
 
-        // 2. Take off anything the character has not actually Released into.
+        // 2. Take off anything the character has not actually Released into. Soulbound only: nobody else
+        // has a release state, and `stateOf` would answer "sealed" for a Saint and strip nothing.
+        if (!soulbound) {
+            return { actor: actor.name, refreshed, rewritten, taught: updates.length, removed: [] };
+        }
         const state = this.stateOf(actor);
         const allowed = new Set(
             state === "sealed"
