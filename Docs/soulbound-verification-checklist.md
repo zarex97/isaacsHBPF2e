@@ -1315,11 +1315,24 @@ damage formula is `{5[spirit]}`.
 
 ---
 
-## §27 — the Refined Release rung was missing from nine Spirits out of fifteen
+## §27 — the Refined Release rung, audited Spirit by Spirit
 
 Every Spirit has three rungs: the Released Form at 1st, **Refined Release at 9th**, and the Full Release
-at 13th. The 1st and 13th rungs were authored everywhere. The 9th was authored in six Spirits and
-**absent in nine**, and — separately — *not one* of the five Refined clauses that widen an area existed.
+at 13th. The 1st and 13th were authored everywhere. The 9th was not.
+
+**A first pass counted this wrong and the number is worth correcting rather than quietly dropping.**
+Grepping the content for `feature:refined-release` returned six files and suggested nine Spirits had no
+Refined rung at all. That over-counted: two of the "missing" rungs are 9th-level *unlocks* delivered as
+rank-5 spells rather than alterations of a lower Technique, and both were complete —
+
+- **S-67 Licht Regen** — 30-foot cone, 6d6 piercing, basic Reflex, critical failure off-guard, H(+1) +1d6
+- **S-89 Galvano Javelin** — 90 feet, 6d6 electricity doubled on a critical hit, stunned 1 on a hit, and
+  the `incapacitation` trait actually present
+
+— so a predicate was never the right thing to look for in their case. The honest count is **seven Spirits
+whose Refined rung had no mechanics at all** (Pantera, Arrogante, Los Lobos, Hyōrinmaru, The Heat, The
+Balance, The Miracle), plus six sub-clauses missing from Spirits that otherwise had the rung: *not one* of
+the five Refined area widenings existed, and Murciélago's splash burst did not either.
 
 ### SB-28 — the widenings
 

@@ -45,14 +45,34 @@
         },
         "rules": [
             {
-                "key": "ItemAlteration",
                 "itemType": "weapon",
+                "key": "ItemAlteration",
                 "mode": "override",
                 "predicate": [
                     "item:tag:soulbound-spirit-weapon"
                 ],
                 "property": "damage-type",
                 "value": "cold"
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "mode": "add",
+                "predicate": [
+                    "item:tag:soulbound-spirit-weapon",
+                    "feature:refined-release"
+                ],
+                "property": "traits",
+                "value": "thrown-60"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    "feature:refined-release"
+                ],
+                "selector": "all",
+                "text": "Thrown on its chain, the blade <strong>returns to your hand immediately</strong>; it is never left on the ground.",
+                "title": "Guncho Tsurara"
             }
         ],
         "start": {

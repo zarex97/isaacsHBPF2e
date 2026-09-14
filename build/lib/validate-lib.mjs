@@ -931,10 +931,16 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
                 errors.push(`${at} area.anchor must be a slug naming a remembered point — got "${area.anchor}"`);
             }
         }
-        if (!["turn-start", "turn-end"].includes(event)) {
+        // A **splash** is the exception, and it is why `anchor: "target"` exists: Cero Oscuras' Refined
+        // burst opens at the creature it just hit, which is only knowable once the Strike has resolved.
+        // Any other area on a strike event is still the old mistake — an `action-used` rider lands on
+        // the targets the caster confirmed, so it needs no area of its own.
+        const splash = event === "strike-resolved" && shapes.every((area) => area.anchor === "target");
+        if (!["turn-start", "turn-end"].includes(event) && !splash) {
             errors.push(
-                `${at} has an area, which only makes sense on a turn event — got "${event}". An ` +
-                    `action-used rider lands on the targets the caster confirmed, so it needs no area.`,
+                `${at} has an area, which only makes sense on a turn event or as a target-anchored ` +
+                    `splash on "strike-resolved" — got "${event}". An action-used rider lands on the ` +
+                    `targets the caster confirmed, so it needs no area.`,
             );
         }
     }

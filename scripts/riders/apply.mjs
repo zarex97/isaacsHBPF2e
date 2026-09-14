@@ -434,7 +434,14 @@ async function targetsFor(rider, context) {
     };
 
     const { caught } = catchTokens(region, config, originToken.object);
-    return caught.filter((entry) => entry.checked).map((entry) => entry.token.document);
+    let tokens = caught.filter((entry) => entry.checked).map((entry) => entry.token.document);
+    // A splash is damage to everyone **else**. Cero Oscuras' Refined burst deals "half damage to other
+    // creatures in it" — the creature it hit is the centre of the burst, not a second victim of it — so
+    // an area anchored on the target can say to leave the target out.
+    if (areas.some((area) => area.anchor === "target" && area.excludeAnchor !== false) && context.target) {
+        tokens = tokens.filter((token) => token.id !== context.target.id);
+    }
+    return tokens;
 }
 
 /* ------------------------------------------------------------------------------------------------ */
