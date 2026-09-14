@@ -4,10 +4,20 @@
             "riders": [
                 {
                     "apply": {
-                        "damageType": "slashing",
-                        "formula": "5d6",
-                        "perStep": "1d6",
-                        "type": "damage"
+                        "basic": true,
+                        "dc": "reiatsu",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "slashing",
+                                    "formula": "5d6",
+                                    "perStep": "1d6",
+                                    "type": "damage"
+                                }
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
                     },
                     "area": {
                         "type": "emanation",
@@ -18,6 +28,7 @@
                         "includesSelf": false
                     },
                     "event": "turn-start",
+                    "note": "Two rows of a thousand blades. Basic Reflex against your Reiatsu DC.",
                     "self": true
                 }
             ]

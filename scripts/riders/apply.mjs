@@ -342,7 +342,17 @@ async function applyOne(rider, context) {
  * targeting uses, so "enemies within 10 feet" means the same thing in both places.
  */
 async function targetsFor(rider, context) {
-    if (rider.self) return context.originToken ? [context.originToken] : [];
+    // `self` before `area` was the order for a year, and it silently emptied six auras.
+    //
+    // A `turn-start` / `turn-end` / `aura-tick` rider is dispatched once, with the origin's own token as
+    // the target, and the area is what fans it out from there. Every Soulbound aura also says
+    // `self: true` — which reads correctly, "this aura is mine" — and that short-circuit meant the
+    // Bankai's emanation, the Full Release fear aura, Zanka no Tachi's ambient burn, Minami's ash,
+    // Respira Absoluta and Thunderbolt Form all resolved against **the caster and nobody else**. Driven
+    // live, a 13th-level Senbonzakura rolled its own Reflex save at its own DC and took its own 5d6.
+    //
+    // So an area always fans out. `self` keeps its meaning where there is no area: fire once, at me.
+    if (rider.self && !rider.area) return context.originToken ? [context.originToken] : [];
     if (!rider.area) return context.target ? [context.target] : [];
 
     const originToken = context.originToken;
@@ -364,14 +374,19 @@ async function targetsFor(rider, context) {
     );
     // `catchTokens` reads the origin actor off `config.item`, so hand it something item-shaped. The aura
     // belongs to the Cloth, not to any one Technique, so there is no real item to give it.
+    // Who the area catches may be written inside `area` or in a sibling `areaTargeting`. Both spellings
+    // are in the content — the sibling is the one an item uses for cast-time targeting, so it is what an
+    // author reaches for — and reading only the first meant `affects: "enemies"` on all six Soulbound
+    // auras was decoration. The sibling wins where both are present; it is the more specific statement.
+    const aiming = { ...(rider.area ?? {}), ...(rider.areaTargeting ?? {}) };
     const config = {
         item: { actor: context.originActor, name: context.originActor?.name ?? "", system: {} },
-        affects: rider.area.affects ?? "enemies",
-        includesSelf: rider.area.includesSelf === true,
-        includesNeutral: rider.area.includesNeutral === true,
-        requireLineOfEffect: rider.area.requireLineOfEffect !== false,
+        affects: aiming.affects ?? "enemies",
+        includesSelf: aiming.includesSelf === true,
+        includesNeutral: aiming.includesNeutral === true,
+        requireLineOfEffect: aiming.requireLineOfEffect !== false,
         predicate: [],
-        maxTargets: Number(rider.area.maxTargets) || 0,
+        maxTargets: Number(aiming.maxTargets) || 0,
     };
 
     const { caught } = catchTokens(region, config, originToken.object);
@@ -1534,6 +1549,42 @@ async function applyDeath(rider, context) {
  * — so the save is rolled here against the Saint's own DC, and the nested riders are chosen by its result
  * exactly the way the outer ones were chosen by the event's.
  */
+/**
+ * A basic save's four degrees, written once instead of three times per ability.
+ *
+ * > **basic Reflex** — critical success: no damage · success: half · failure: full · critical failure:
+ * > double.
+ *
+ * A self-rolled save — a `turn-start` aura tick, a `turn-end` emanation — is not a spell's own save, so
+ * pf2e never applies that ladder for it: the rider has to carry it. Every one of them in the content
+ * carried it by hand, and **not one doubled on a critical failure**; most did not halve on a success
+ * either. Written out three times per ability, the missing fourth line is invisible.
+ *
+ * So `basic: true` on a save rider expands each nested **damage** rider that does not name its own
+ * outcomes into the ladder. A damage rider that *does* name outcomes is left exactly as written — an
+ * ability whose damage does not follow the basic ladder is a real thing and says so — and non-damage
+ * riders are untouched, because "restrained on a critical failure" is not scaled by anything.
+ */
+export function basicLadder(spec) {
+    const riders = spec?.riders ?? [];
+    if (spec?.basic !== true) return riders;
+
+    const LADDER = [
+        ["success", 0.5],
+        ["failure", 1],
+        ["criticalFailure", 2],
+    ];
+    return riders.flatMap((rider) => {
+        const apply = rider?.apply;
+        if (apply?.type !== "damage" || rider.outcomes) return [rider];
+        return LADDER.map(([outcome, multiplier]) => ({
+            ...rider,
+            outcomes: [outcome],
+            apply: multiplier === 1 ? { ...apply } : { ...apply, multiplier },
+        }));
+    });
+}
+
 async function applySave(rider, context) {
     return runSave(rider.apply, context);
 }
@@ -1568,7 +1619,7 @@ export async function runSave(spec, context) {
     const outcome = DEGREES[roll?.degreeOfSuccess ?? -1];
     if (!outcome) return;
 
-    const nested = (spec.riders ?? []).map((r, index) => ({ rider: r, item: context.item, index }));
+    const nested = basicLadder(spec).map((r, index) => ({ rider: r, item: context.item, index }));
     const options = riderOptions({
         originActor: context.originActor,
         targetActor: context.actor,

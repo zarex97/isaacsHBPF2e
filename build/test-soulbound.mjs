@@ -850,11 +850,14 @@ check(
         .some((r) => r.key === "ItemAlteration" && r.mode === "remove" && r.value === "reach-15"),
     true,
 );
+// The damage moved a level down when the emanation gained the basic Reflex it always should have had:
+// `apply` is the save now, and the dice are the save's nested rider. The assertion used to read
+// `r.apply.formula` and would have gone on passing if the save were removed again.
 check(
     "the Bankai ticks at the start of your turn against enemies in the emanation",
     (() => {
         const r = contentDoc("soulbound-effects/effect-senbonzakura-kageyoshi.json").flags["isaacs-hb-pf2e"].riders[0];
-        return [r.event, r.apply.formula, r.area.value, r.areaTargeting.affects];
+        return [r.event, r.apply.riders[0].apply.formula, r.area.value, r.areaTargeting.affects];
     })(),
     ["turn-start", "5d6", 20, "enemies"],
 );
@@ -1649,5 +1652,78 @@ check("and it arrives with the Full Release, not with the 13th level",
     ),
     true,
 );
+
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  A basic save's four degrees                                                                     */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * SB-13/SB-14. A self-rolled save — an aura tick, a turn-start emanation — is not a spell's own save,
+ * so pf2e never applies the basic ladder for it. Every one of them in the content carried the ladder by
+ * hand, and **not one doubled on a critical failure**. Written out three times per ability, the missing
+ * fourth line is invisible; `basic: true` writes it once.
+ */
+const { basicLadder } = await import("../scripts/riders/apply.mjs");
+
+const damageOnly = { basic: true, riders: [{ apply: { type: "damage", formula: "5d6", damageType: "slashing" } }] };
+check("a basic save halves on a success, doubles on a critical failure, and pays nothing on a critical success",
+    basicLadder(damageOnly).map((r) => [r.outcomes[0], r.apply.multiplier ?? 1]),
+    [["success", 0.5], ["failure", 1], ["criticalFailure", 2]]);
+
+check("without the flag the riders are left exactly as written",
+    basicLadder({ riders: [{ apply: { type: "damage", formula: "1d6" } }] }).length, 1);
+
+check("a damage rider that names its own outcomes is not expanded — an ability off the ladder says so",
+    basicLadder({ basic: true, riders: [{ outcomes: ["failure"], apply: { type: "damage", formula: "1d6" } }] }).length,
+    1);
+
+check("and a condition is not scaled by a degree of success at all",
+    basicLadder({ basic: true, riders: [{ apply: { type: "condition", slug: "off-guard" } }] })[0].outcomes,
+    undefined);
+
+// The two the guide calls basic, now saying so in one word each.
+const kageyoshi = contentDoc("soulbound-effects/effect-senbonzakura-kageyoshi.json");
+const kageRider = kageyoshi.flags["isaacs-hb-pf2e"].riders[0];
+check("Senbonzakura Kageyoshi's emanation is a basic Reflex, not free damage (guide §7A)",
+    [kageRider.apply.type, kageRider.apply.statistic, kageRider.apply.basic, kageRider.area],
+    ["save", "reflex", true, { type: "emanation", value: 20 }]);
+check("and it still deals 5d6 slashing rising a die a rank",
+    [kageRider.apply.riders[0].apply.formula, kageRider.apply.riders[0].apply.perStep],
+    ["5d6", "1d6"]);
+
+const thunder = contentDoc("soulbound-effects/effect-thunderbolt-form.json");
+check("Thunderbolt Form's aura is a basic Reflex too (guide §7C)",
+    thunder.flags["isaacs-hb-pf2e"].riders[0].apply.basic, true);
+
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  SB-15 — an aura that never left the caster                                                      */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * `targetsFor` checked `rider.self` before `rider.area`, so a rider with both resolved to the origin's
+ * own token and the area was never built. Every Soulbound aura says `self: true` — it reads correctly,
+ * "this aura is mine" — so all six emptied: driven live, a 13th-level Senbonzakura rolled its own
+ * Reflex save against its own DC and took its own 5d6 while the ghoul beside it took nothing.
+ *
+ * These pin the shape of the content rather than the engine, because the engine change is one line and
+ * the thing that will drift is a seventh aura authored to the same pattern.
+ */
+const AURAS = [
+    ["soulbound-effects/effect-full-release.json", "turn-end", 15],
+    ["soulbound-effects/effect-senbonzakura-kageyoshi.json", "turn-start", 20],
+    ["soulbound-effects/effect-zanka-no-tachi.json", "turn-start", 30],
+    ["soulbound-effects/effect-minami.json", "turn-end", 20],
+    ["soulbound-effects/effect-respira-absoluta.json", "turn-end", 20],
+    ["soulbound-effects/effect-thunderbolt-form.json", "turn-end", 10],
+];
+for (const [file, event, radius] of AURAS) {
+    const rider = contentDoc(file).flags["isaacs-hb-pf2e"].riders[0];
+    check(`${file.split("/").pop()} is a ${radius}-foot ${event} aura`,
+        [rider.event, rider.area?.type, rider.area?.value], [event, "emanation", radius]);
+    check("and it says who it catches, in one place or the other",
+        Boolean(rider.areaTargeting?.affects ?? rider.area?.affects), true);
+}
 
 report("Soulbound tests");
