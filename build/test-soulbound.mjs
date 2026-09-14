@@ -826,11 +826,16 @@ check(
 // "The emanation increases to 20 feet" is a 9th-level benefit, and a focus effect heightens per RANK —
 // "at 9th level" is not a rank step. pf2e's own `area-size` alteration is the lever, applied by the
 // feature that grants the benefit.
+//
+// It used to be ONE alteration adding a flat 5 feet to every `sb-tier-release` item, which this test
+// asserted. That was the bug: Getsuga Tenshō's line goes 30 → 60 and La Gota's cone 30 → 40, and three
+// more Spirits' Refined benefit is not a widening at all. The size travels with the technique now; the
+// fuller invariants are at the bottom of this file.
 const refined = featureDoc("refined-release");
 check(
-    "Refined Release widens a Release Technique's area by 5 feet",
+    "Refined Release sets an area outright rather than nudging every Technique by 5 feet",
     refined.system.rules.find((r) => r.key === "ItemAlteration"),
-    { itemType: "spell", key: "ItemAlteration", mode: "add", predicate: ["item:tag:sb-tier-release"], property: "area-size", value: 5 },
+    { itemType: "spell", key: "ItemAlteration", mode: "override", predicate: ["item:tag:sb-refined-area-20"], property: "area-size", value: 20 },
 );
 
 const { nextMode } = await import("../scripts/soulbound/modes.mjs");
@@ -1441,5 +1446,183 @@ check(
     sealNow.system.description.value.includes("not yet distinguished"),
     false,
 );
+
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  The release ladder, and the two ways it went wrong                                              */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * SB-6. Every Spirit's Released Form used to be granted by its class feature, unconditionally, at the
+ * level the feature arrives. A sealed 1st-level Senbonzakura therefore had 15-foot reach, and from 13th
+ * the Bankai's `turn-start` emanation and the Full Release fear aura fired every round for free.
+ *
+ * The form effects are now applied by the Release and Full Release actions and declared, not granted:
+ * `flags["isaacs-hb-pf2e"].releaseForm = { rung, effect }`. These checks are the wall that keeps a new
+ * Spirit from being authored the old way — the old way passes the validator and looks completely normal.
+ */
+const spiritFiles = fs
+    .readdirSync(path.join(ROOT, "content", "soulbound-class-features", "spirits"))
+    .filter((f) => f.endsWith(".json"));
+
+const formFeatures = spiritFiles
+    .map((f) => ({ file: f, doc: spiritDoc(f.replace(/\.json$/, "")) }))
+    .filter(({ doc }) => doc.flags?.["isaacs-hb-pf2e"]?.releaseForm);
+
+check("every rung of every Spirit declares the form it wears — fifteen at 1st, fifteen at 13th", [
+    formFeatures.filter(({ doc }) => doc.flags["isaacs-hb-pf2e"].releaseForm.rung === "released").length,
+    formFeatures.filter(({ doc }) => doc.flags["isaacs-hb-pf2e"].releaseForm.rung === "full").length,
+], [15, 15]);
+
+const grantsAnEffect = spiritFiles.filter((f) => {
+    const doc = spiritDoc(f.replace(/\.json$/, ""));
+    return (doc.system.rules ?? []).some(
+        (r) => r.key === "GrantItem" && String(r.uuid ?? "").includes("soulbound-effects"),
+    );
+});
+check(
+    "and no Spirit feature grants a Released Form outright — that is what made every form permanent",
+    grantsAnEffect,
+    [],
+);
+
+check(
+    "Full Release stops granting its own effect too; the action applies it",
+    (featureDoc("full-release").system.rules ?? []).some(
+        (r) => r.key === "GrantItem" && String(r.uuid ?? "").includes("Effect: Full Release"),
+    ),
+    false,
+);
+
+const fullReleaseEffect = contentDoc("soulbound-effects/effect-full-release.json");
+check(
+    "Effect: Full Release carries the damage-die step guide §4.8 promises and it never had",
+    (fullReleaseEffect.system.rules ?? []).some(
+        (r) => r.key === "ItemAlteration" && r.property === "damage-dice-faces" && r.mode === "upgrade",
+    ),
+    true,
+);
+check(
+    "Tensa Zangetsu opts out of it, because guide §7A says its die does NOT increase",
+    (contentDoc("soulbound-effects/effect-tensa-zangetsu.json").system.rules ?? []).some(
+        (r) => r.key === "RollOption" && r.option === "soulbound:full-release:no-die-step",
+    ),
+    true,
+);
+
+/**
+ * SB-7. `Refined Release` used to be one blanket `+5 to area-size` on every `sb-tier-release` item.
+ * That is right for the three Spirits whose Refined benefit is "the emanation increases to 20 feet",
+ * wrong for the two whose widening is a different number, and simply false for the three whose Refined
+ * benefit is not a widening at all — they were being handed area the guide never gives them.
+ *
+ * The size now travels with the technique as an `sb-refined-area-<n>` tag, and Refined Release carries
+ * one override per distinct size. A technique with no tag gets no area change, which is the default the
+ * blanket rule could not express.
+ */
+const refinedRules = featureDoc("refined-release").system.rules;
+check(
+    "Refined Release no longer widens every Release Technique by a flat 5 feet",
+    refinedRules.some((r) => r.mode === "add" && r.property === "area-size"),
+    false,
+);
+
+const refinedSizes = new Set(
+    refinedRules
+        .filter((r) => r.property === "area-size" && r.mode === "override")
+        .map((r) => r.value),
+);
+
+const REFINED_AREA = {
+    // guide §7A–7C, one row per Release Technique whose Refined benefit changes its area
+    senbonzakura: 20, "ennetsu-jigoku": 20, respira: 20,
+    "getsuga-tensho": 60, "la-gota": 40,
+};
+// The Refined benefits that are NOT area increases. Listed rather than inferred, because "this one
+// gains nothing" is exactly the case the blanket rule got wrong and silence would get wrong again.
+const REFINED_NO_AREA = ["garra-de-la-pantera", "cero-metralleta", "galvano-blast"];
+
+for (const [slug, size] of Object.entries(REFINED_AREA)) {
+    const tags = techDoc(slug).system.traits.otherTags ?? [];
+    check(`${slug}'s Refined area is ${size} feet`, tags.includes(`sb-refined-area-${size}`), true);
+    check(`and Refined Release has a rule that can deliver ${size}`, refinedSizes.has(size), true);
+}
+for (const slug of REFINED_NO_AREA) {
+    const tags = techDoc(slug).system.traits.otherTags ?? [];
+    check(
+        `${slug}'s Refined benefit is not a widening, so it carries no area tag`,
+        tags.some((t) => t.startsWith("sb-refined-area-")),
+        false,
+    );
+}
+
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  The choice prompts, and the two ways they were unbounded                                        */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * SB-3. `Kidō Learned` offered all eleven Soul Reaper kidō at **every** level — a 1st-level character
+ * was shown Kurohitsugi, which guide §6.1 prints as 15th.
+ *
+ * The gate is the guide's own sentence rather than a table of levels: a kidō has no rank of its own and
+ * auto-heightens to half your level rounded up, so you can learn one when your auto-heighten rank
+ * reaches its base rank. `Reiatsu.kidoRank` publishes that as `soulbound:kido-rank:<n>` and the filters
+ * compare against it, which is also the only form that can gate `Additional Kidō` — a feat takeable at
+ * any level, where a static exclusion list is no use at all.
+ */
+check("a kidō is learnable when your auto-heighten rank reaches its base rank (guide §6)", [
+    Reiatsu.kidoRank(1), Reiatsu.kidoRank(7), Reiatsu.kidoRank(9), Reiatsu.kidoRank(13), Reiatsu.kidoRank(15),
+], [1, 4, 5, 7, 8]);
+
+// The four gated kidō, at the base rank the guide's printed level implies.
+for (const [slug, rank, level] of [
+    ["rikujokoro", 4, "7th"], ["soren-sokatsui", 5, "9th"], ["kin", 5, "9th"], ["kurohitsugi", 8, "15th"],
+]) {
+    const doc = contentDoc(
+        `soulbound-kido/${["rikujokoro", "kin"].includes(slug) ? "bakudo" : "hado"}/${slug}.json`,
+    );
+    check(`${slug} is base rank ${rank}, so it arrives at ${level}`, doc.system.level.value, rank);
+}
+
+const GATE = { lte: ["item:level", "soulbound:kido-rank"] };
+const kidoChoosers = [
+    ...["1st", "2nd", "5th", "9th", "13th", "17th"].map((n) => ({
+        label: `Kidō Learned (${n})`,
+        doc: lineageDoc(`kido-learned-${n}`),
+    })),
+    { label: "Additional Kidō", doc: contentDoc("soulbound-feats/additional-kido.json") },
+];
+for (const { label, doc } of kidoChoosers) {
+    const choice = doc.system.rules.find((r) => r.key === "ChoiceSet");
+    check(
+        `${label} will not offer a kidō above your auto-heighten rank`,
+        (choice?.choices?.filter ?? []).some((f) => JSON.stringify(f) === JSON.stringify(GATE)),
+        true,
+    );
+    // SB-2. Two slots could pick the same kidō and both landed: a live 20th-level Soul Reaper finished
+    // holding Kurohitsugi twice, knowing five where guide §5.1 promises six.
+    const grant = doc.system.rules.find((r) => r.key === "GrantItem");
+    check(`${label} refuses a kidō you already know`, grant?.allowDuplicate, false);
+}
+
+/**
+ * SB-4. Zanjutsu's free 5th-level technique offered all six, and a live 5th-level character was granted
+ * `Zanjutsu: Kendō` — a 14th-level technique. Unlike `Additional Kidō` this grant lands at exactly one
+ * level, so the gate is static: the two 5th-level sword arts are the rank-2 ones.
+ */
+const zanChoice = lineageDoc("zanjutsu").system.rules.find((r) => r.key === "ChoiceSet");
+check(
+    "Zanjutsu's free technique is a 5th-level pick, so it offers only 5th-level sword arts",
+    (zanChoice?.choices?.filter ?? []).some((f) => JSON.stringify(f) === JSON.stringify({ lte: ["item:level", 2] })),
+    true,
+);
+check("Sōkotsu and Hitotsume: Nadegiri are the rank-2 pair that gate lets through", [
+    techDoc("sokotsu").system.level.value, techDoc("hitotsume-nadegiri").system.level.value,
+], [2, 2]);
+check("and the four it excludes are all above it", [
+    techDoc("shitonegaeshi").system.level.value, techDoc("nadegiri").system.level.value,
+    techDoc("ikkotsu").system.level.value, techDoc("zanjutsu-kendo").system.level.value,
+].every((r) => r > 2), true);
 
 report("Soulbound tests");

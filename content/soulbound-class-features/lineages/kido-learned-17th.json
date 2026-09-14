@@ -38,6 +38,12 @@
                         },
                         {
                             "not": "item:tag:soulbound-kido-quincy"
+                        },
+                        {
+                            "lte": [
+                                "item:level",
+                                "soulbound:kido-rank"
+                            ]
                         }
                     ],
                     "itemType": "spell"
@@ -47,6 +53,7 @@
                 "prompt": "Choose a kidō"
             },
             {
+                "allowDuplicate": false,
                 "key": "GrantItem",
                 "uuid": "{item|flags.system.rulesSelections.kido6}"
             }

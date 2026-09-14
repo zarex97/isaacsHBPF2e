@@ -1,6 +1,21 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "includesSelf": false
+            },
+            "lingering": {
+                "difficultTerrain": 2,
+                "duration": {
+                    "unit": "rounds",
+                    "value": 1
+                },
+                "name": "Cascada — standing water",
+                "predicate": [
+                    "self:feature:refined-release"
+                ]
+            },
             "riders": [
                 {
                     "apply": {
@@ -25,22 +40,7 @@
                         "self:feature:refined-release"
                     ]
                 }
-            ],
-            "areaTargeting": {
-                "affects": "enemies",
-                "includesSelf": false
-            },
-            "lingering": {
-                "difficultTerrain": 2,
-                "duration": {
-                    "unit": "rounds",
-                    "value": 1
-                },
-                "name": "Cascada — standing water",
-                "predicate": [
-                    "self:feature:refined-release"
-                ]
-            }
+            ]
         }
     },
     "img": "icons/creatures/fish/fish-shark-swimming.webp",
@@ -108,6 +108,7 @@
         },
         "traits": {
             "otherTags": [
+                "sb-refined-area-40",
                 "sb-tier-release"
             ],
             "rarity": "common",

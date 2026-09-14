@@ -1,50 +1,6 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
-            "riders": [
-                {
-                    "apply": {
-                        "value": 1,
-                        "slug": "enfeebled",
-                        "type": "condition"
-                    },
-                    "duration": {
-                        "unit": "minutes",
-                        "value": 1
-                    },
-                    "outcomes": [
-                        "failure"
-                    ]
-                },
-                {
-                    "apply": {
-                        "value": 2,
-                        "slug": "enfeebled",
-                        "type": "condition"
-                    },
-                    "duration": {
-                        "unit": "minutes",
-                        "value": 1
-                    },
-                    "outcomes": [
-                        "criticalFailure"
-                    ]
-                },
-                {
-                    "apply": {
-                        "value": 1,
-                        "slug": "clumsy",
-                        "type": "condition"
-                    },
-                    "duration": {
-                        "unit": "minutes",
-                        "value": 1
-                    },
-                    "outcomes": [
-                        "criticalFailure"
-                    ]
-                }
-            ],
             "areaTargeting": {
                 "affects": "enemies",
                 "includesSelf": false
@@ -60,7 +16,51 @@
                     "value": 1
                 },
                 "name": "Respira — miasma"
-            }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "slug": "enfeebled",
+                        "type": "condition",
+                        "value": 1
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "failure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "slug": "enfeebled",
+                        "type": "condition",
+                        "value": 2
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "slug": "clumsy",
+                        "type": "condition",
+                        "value": 1
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                }
+            ]
         }
     },
     "img": "icons/magic/death/skull-crowned-white.webp",
@@ -128,6 +128,7 @@
         },
         "traits": {
             "otherTags": [
+                "sb-refined-area-20",
                 "sb-tier-release"
             ],
             "rarity": "common",

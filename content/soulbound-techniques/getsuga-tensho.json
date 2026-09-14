@@ -1,6 +1,19 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
+            "bypass": [
+                {
+                    "predicate": [
+                        "self:feature:refined-release"
+                    ],
+                    "resistance": {
+                        "max": null,
+                        "types": [
+                            "spirit"
+                        ]
+                    }
+                }
+            ],
             "riders": [
                 {
                     "apply": {
@@ -14,19 +27,6 @@
                     "predicate": [
                         "self:feature:refined-release"
                     ]
-                }
-            ],
-            "bypass": [
-                {
-                    "predicate": [
-                        "self:feature:refined-release"
-                    ],
-                    "resistance": {
-                        "max": null,
-                        "types": [
-                            "spirit"
-                        ]
-                    }
                 }
             ]
         }
@@ -96,6 +96,7 @@
         },
         "traits": {
             "otherTags": [
+                "sb-refined-area-60",
                 "sb-tier-release"
             ],
             "rarity": "common",
