@@ -1,4 +1,12 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "includesSelf": false
+            }
+        }
+    },
     "img": "icons/magic/holy/angel-winged-humanoid-golden.webp",
     "name": "Apotheosis",
     "system": {

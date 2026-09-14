@@ -1,4 +1,12 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "includesSelf": false
+            }
+        }
+    },
     "img": "icons/creatures/abilities/wing-bat-membrane-green-large.webp",
     "name": "Cero Oscuras: Ceniza",
     "system": {

@@ -1,4 +1,12 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "includesSelf": false
+            }
+        }
+    },
     "folder": "Way of Destruction (Hadō)",
     "img": "icons/magic/fire/explosion-fireball-medium-red.webp",
     "name": "Shakkahō — Crimson Bloom",

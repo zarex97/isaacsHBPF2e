@@ -1,12 +1,16 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "includesSelf": false
+            },
             "riders": [
                 {
                     "apply": {
-                        "value": 2,
                         "slug": "stunned",
-                        "type": "condition"
+                        "type": "condition",
+                        "value": 2
                     },
                     "outcomes": [
                         "failure",

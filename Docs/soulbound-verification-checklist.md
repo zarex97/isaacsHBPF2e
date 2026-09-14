@@ -186,8 +186,8 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | S-16 | Hyōrinmaru — Refined **Guncho Tsurara** | 9 | Ryūsenka may be a **ranged** Strike within 60 ft; the blade returns immediately | ☐ | |
 | S-17 | **Daiguren Hyōrinmaru** — Bankai | 13 | **Fly Speed** = Speed; **cold resistance = level** | ✅ | `Resistance` cold = `@actor.level` and a fly Speed matching land Speed, both authored as rule elements |
 | S-18 | Bankai — petal-flowers | 13 | **Three charges**; **once per round** spend one | ✅ | **SB-18 fixed.** Live: three petals spend one at a time down to **zero** and the Bankai survives; a fourth is refused *"not enough charges"*; a second in the same round is refused *"already spent this round"*. Before, spending the third **deleted the whole Bankai** |
-| S-19 | Petal — **Sennen Hyōrō** | 13 | **20-ft burst** within 60 ft, Reflex; fail 5d6 cold + **immobilized**; crit fail **restrained 1 minute**; H(+1) +1d6 | ⚠️ | Authored: 20-ft burst within 60 ft, basic Reflex, 5d6 cold, immobilized on a failure and restrained on a critical failure with an Escape DC. It spends a petal correctly; the cast itself needs an aimed placement the scripted harness cannot click |
-| S-20 | Petal — **Hyōryū Senbi** | 13 | **60-ft line**, basic Reflex, 5d6 cold; fail → **slowed 1** until end of its next turn; H(+1) +1d6 | ⚠️ | Authored: 60-ft line, basic Reflex, 5d6 cold, slowed 1 on a failure. Spends a petal; same aimed-placement limit on driving it |
+| S-19 | Petal — **Sennen Hyōrō** | 13 | **20-ft burst** within 60 ft, Reflex; fail 5d6 cold + **immobilized**; crit fail **restrained 1 minute**; H(+1) +1d6 | ⚠️ | Authored: 20-ft burst within 60 ft, basic Reflex, 5d6 cold, immobilized on a failure and restrained on a critical failure. Shares the petal pool proven on S-20; its own riders not yet driven |
+| S-20 | Petal — **Hyōryū Senbi** | 13 | **60-ft line**, basic Reflex, 5d6 cold; fail → **slowed 1** until end of its next turn; H(+1) +1d6 | ✅ | Driven live: the card posts a **60-foot line, basic Reflex**, the cast spends **one petal and one Reiatsu Point**, and a second cast in the same round is **refused and costs nothing** — the refusal lands before the point is spent |
 | S-21 | Petal — **Zanhyō Ningyō** | 13 | Reaction when hit: reduce damage by **twice your level**; the doll shatters | ⚠️ | Authored as a `damage-applied` reaction whose prompt now also spends a petal, granting `Effect: Remnant Ice Doll` — resistance to all damage `@actor.level*2`, which is the guide's twice-your-level reduction |
 | S-22 | Bankai — Perfected | 17 | **Restores one spent petal-flower at the start of each of your turns** | ✅ | Live: a turn start at 13th gives nothing back; at 17th the pool climbs 1 → 2 → 3 and stops at three. Declared on the effect (`chargeRefresh`), not written into code |
 | S-23 | **Ryūjin Jakka** — Shikai Form | 1 | Damage type **fire**; weapon gains **deadly d8**; **fire resistance = half level** | ✅ | Live at L13: **fire resistance 6** (half level), damage type fire, `deadly-d8` |
@@ -896,3 +896,45 @@ An **aimed** area — a line or a burst placed at a point — resolves on a real
 emanation is auto-centred and only wants the "Confirm targets" dialog, which is why Senbonzakura drove
 cleanly. The charge half was verified through `Charges.beforeCast` directly; aiming a placement without
 a mouse needs the synthetic-pointer route in `Docs/tools/foundry-live-session.md`.
+
+---
+
+## 17 — SB-19: twenty-four areas that caught your own party
+
+`configFor` defaults `affects` to **`"all"`** when an item carries no `areaTargeting` flag, and **24 of
+the class's 33 area effects carried none.** Every kidō line and burst, Getsuga Tenshō, Galvano Blast,
+both of Hyōrinmaru's petal areas — and **thirteen of the fifteen Severing Arts** — caught the caster's
+own party.
+
+The guide settles it in one sentence, in the design note on Zanka no Tachi:
+
+> **Design note.** This is the most complex Bankai in the class and **the only one that damages your
+> own party.** That is deliberate and canon — Yamamoto's Bankai is a liability to everyone standing
+> near it.
+
+So exactly one area in the class affects everyone: Zanka no Tachi's ambient burn, which was already
+authored `affects: "all", includesSelf: false`. Every other area is now `enemies` and says so, and a
+test fails the build if a new one does not.
+
+**One judgement call, flagged for the author.** `Kita: Tenchi Kaijin` is Zanka no Tachi's own 60-foot
+line, so it could be read as sharing the Bankai's friendly fire. It is set to **enemies**, because the
+guide attaches the allies-included clause specifically to the ambient heat ("each creature other than
+you within 30 feet — allies included") and says nothing of the kind about Kita. Say the word and it
+becomes `all`.
+
+## 18 — Driving an aimed area
+
+An **emanation** needs no click and drove cleanly all along. A **line, cone or placed burst** resolves
+on a real canvas click, and three routes were tried before one worked — the full account, including
+the two that look like they work and do not, is in `Docs/tools/foundry-live-session.md` §8.
+
+The short version: a synthetic `pointermove` **does** put `canvas.mousePosition` exactly on the target,
+and a synthetic `pointerdown` **does not** confirm the placement; stubbing `placeRegion` turns the
+module's re-aim loop into an infinite one. So scripts cast against hand-picked targets with the
+module's own `areaTargeting` setting turned off for the duration. Area targeting is proven on
+emanations; everything downstream of it is proven on every shape.
+
+**Hyōryū Senbi, driven that way:** the card posts a 60-foot line at basic Reflex, the cast spends
+**one petal and one Reiatsu Point**, and a second cast in the same round is **refused and costs
+nothing** — the refusal lands before the point is spent, which is the whole reason the check sits
+where it does.

@@ -1,6 +1,10 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "includesSelf": false
+            },
             "bypass": [
                 {
                     "immunity": {
