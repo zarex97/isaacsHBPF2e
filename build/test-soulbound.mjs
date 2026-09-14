@@ -1934,7 +1934,10 @@ function featHasMechanism(slug) {
     const doc = contentDoc(`soulbound-feats/${slug}.json`);
     const rules = doc.system.rules ?? [];
     const flags = Object.keys(doc.flags?.["isaacs-hb-pf2e"] ?? {});
-    return rules.some((r) => r.key !== "RollOption") || flags.some((f) => MECHANICAL_FLAGS.includes(f));
+    // A *toggleable* RollOption is a mechanism: it is pf2e's own way of putting a cast-time choice on
+    // the sheet, and Cero Doble's cone is read off one. A plain RollOption is not.
+    return rules.some((r) => r.key !== "RollOption" || r.toggleable)
+        || flags.some((f) => MECHANICAL_FLAGS.includes(f));
 }
 
 for (const slug of ["perfected-technique", "zanjutsu-hakuda", "chain-anchor", "segunda-piel-temprana"]) {
@@ -2016,6 +2019,45 @@ check("the Full Release aura's frightened is not one of them",
 check("and the engine sets rather than adds when no max is declared",
     fs.readFileSync(path.join(ROOT, "scripts/riders/apply.mjs"), "utf8")
         .includes("set to at least the value, never above what is already there"),
+    true);
+
+
+/**
+ * A second tranche of SB-20, all of it hooking machinery that already existed.
+ */
+for (const slug of ["cero-doble", "zanjutsu-footwork"]) {
+    check(`${slug} does something`, featHasMechanism(slug), true);
+}
+
+// "May be shaped as a 30-foot cone" is a choice, not a rule, so it is a toggle on the sheet — pf2e's
+// own answer for a cast-time choice — read by the `alternateArea` seam written for Photon Burst.
+const ceroDoble = contentDoc("soulbound-feats/cero-doble.json").system.rules[0];
+check("Cero Doble is a toggle the player flips, not an automatic reshape (guide §8.2)",
+    [ceroDoble.key, ceroDoble.toggleable, ceroDoble.option],
+    ["RollOption", true, "soulbound:cero-doble"]);
+const ceroKido = contentDoc("soulbound-kido/hollow/cero.json").flags["isaacs-hb-pf2e"];
+check("and Cero offers the cone only while that toggle is on",
+    ceroKido.areaTargeting.alternateArea.map((a) => [a.predicate, a.area.type, a.area.value]),
+    [[["soulbound:cero-doble"], "cone", 30]]);
+check("with the 10-foot push on a critical failure, gated the same way",
+    ceroKido.riders.some((r) => r.apply.type === "teleport" && r.apply.distance === 10
+        && r.predicate.includes("soulbound:cero-doble")),
+    true);
+
+// Two clauses put you in your released form the moment a fight begins, and they are one event.
+const releaseSource = fs.readFileSync(path.join(ROOT, "scripts/soulbound/release.mjs"), "utf8");
+check("Sheathed Draw releases you when the fight starts (guide §8.1)",
+    releaseSource.includes("sheathed-draw"), true);
+check("Vollständig Endurance suppresses the Full Release fatigue (guide §8.5)",
+    releaseSource.includes("soulbound:no-full-release-fatigue"), true);
+check("and the feat declares that option",
+    contentDoc("soulbound-feats/vollstandig-endurance.json").system.rules[0].option,
+    "soulbound:no-full-release-fatigue");
+
+// The Quincy counteract cluster: three clauses that all turn on one roll.
+const applySource = fs.readFileSync(path.join(ROOT, "scripts/riders/apply.mjs"), "utf8");
+check("Seal the Art's Reiatsu Point is charged where the outcome is known",
+    applySource.includes("soulbound:reishi-mastery") && applySource.includes("soulbound:sklaverei"),
     true);
 
 report("Soulbound tests");

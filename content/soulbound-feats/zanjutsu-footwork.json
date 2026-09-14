@@ -1,4 +1,24 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "text": "Zanjutsu Footwork: you may <strong>Step</strong> as a free action.",
+                        "type": "prompt"
+                    },
+                    "event": "strike-resolved",
+                    "note": "A Step's direction is the player's, so this arrives at the right moment rather than moving them.",
+                    "outcomes": [
+                        "criticalSuccess"
+                    ],
+                    "predicate": [
+                        "item:tag:soulbound-spirit-weapon"
+                    ]
+                }
+            ]
+        }
+    },
     "folder": "1st",
     "img": "icons/skills/movement/feet-winged-boots-brown.webp",
     "name": "Zanjutsu Footwork",
@@ -24,14 +44,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [
-            {
-                "key": "RollOption",
-                "domain": "all",
-                "option": "soulbound:zanjutsu-footwork",
-                "value": true
-            }
-        ],
+        "rules": [],
         "traits": {
             "otherTags": [
                 "soulbound-feat"

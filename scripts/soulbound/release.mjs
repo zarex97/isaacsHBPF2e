@@ -479,9 +479,12 @@ export const Release = {
             if (!Reiatsu.isSoulbound(actor)) return;
 
             await this.exit(actor, "full");
+            // Two things suppress the fatigue: Perfected Full Release at 17th, and `Vollständig
+            // Endurance` (feat 14) — "when your Vollständig ends you are not fatigued". The feat is read
+            // through a roll option rather than by slug so a later Spirit can grant the same relief.
             const perfected = actor.itemTypes.feat.some(
                 (f) => f.system?.slug === "perfected-full-release",
-            );
+            ) || (actor.getRollOptions?.() ?? []).includes("soulbound:no-full-release-fatigue");
             if (!perfected) {
                 await actor.increaseCondition("fatigued");
                 ui.notifications.info(`${actor.name}'s Full Release ends. Fatigued until 10 minutes' rest.`);
@@ -503,8 +506,13 @@ export const Release = {
             for (const combatant of combat.combatants) {
                 const actor = combatant.actor;
                 if (!Reiatsu.isSoulbound(actor)) continue;
-                const never = (actor.getRollOptions?.(["all"]) ?? [])
-                    .includes("soulbound:release:never-sealed");
+                const options = actor.getRollOptions?.(["all"]) ?? [];
+                // Two clauses put you in your released form the moment a fight begins, and they are the
+                // same event: Zangetsu is never sealed at all (guide §7A), and `Sheathed Draw` (feat 1)
+                // is "when you roll initiative, manifest your spirit weapon and Release as a single free
+                // action". Both spend the free first Release rather than a point.
+                const never = options.includes("soulbound:release:never-sealed")
+                    || actor.itemTypes.feat.some((f) => f.system?.slug === "sheathed-draw");
                 if (!never || this.stateOf(actor) !== "sealed") continue;
                 await this.enter(actor, "released");
                 await actor.setFlag(MODULE_ID, "releaseLedger", { encounter: combat.id, releases: 1 });

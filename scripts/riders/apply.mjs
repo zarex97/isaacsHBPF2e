@@ -1014,7 +1014,25 @@ export async function resolveCounteract(payload) {
         extraRollOptions: [`${MODULE_ID}:counteract`],
     });
     const outcome = DEGREES[roll?.degreeOfSuccess ?? -1];
-    const ourRank = Math.max(1, Number(item?.rank) || Math.ceil((actor.level ?? 1) / 2));
+
+    /**
+     * The Quincy's counteract cluster — guide §5.3, §8.3 and §5.3's 15th-level Mastery.
+     *
+     * Three clauses that all turn on the same roll, and all three were roll options nothing read:
+     *
+     *  - **Seal the Art** costs 1 Reiatsu Point. Nothing spent it: the action is an `action` item, and
+     *    pf2e only deducts focus for a *spell*. So it is charged here, where the outcome is known.
+     *  - **Reishi Mastery** (feat 10) raises the counteract rank by 1 **and makes it free on a critical
+     *    success** — which is why the charge has to wait for the roll rather than happen on the cast.
+     *  - **Sklaverei** (15th) refunds a point on a successful counteract, ignoring Rising Pressure's
+     *    per-encounter cap, and leaves the target **off-guard** until the end of its next turn.
+     *
+     * Read from roll options rather than by slug so a Borrowed Nature dip that grants `Seal the Art`
+     * behaves the same way.
+     */
+    const options = actor.getRollOptions?.() ?? [];
+    const mastery = options.includes("soulbound:reishi-mastery");
+    const ourRank = Math.max(1, Number(item?.rank) || Math.ceil((actor.level ?? 1) / 2)) + (mastery ? 1 : 0);
     const reach = { criticalSuccess: 3, success: 1, failure: -1, criticalFailure: -Infinity }[outcome] ?? -Infinity;
     const counteracted = targetRank <= ourRank + reach;
 
@@ -1034,6 +1052,25 @@ export async function resolveCounteract(payload) {
         await effect.update({ disabled: true, [`flags.${MODULE_ID}.suppressedUntil`]: "end-of-next-turn" });
     } else if (counteracted) {
         await effect.delete();
+    }
+
+    if (classSlugOf(actor) === "soulbound") {
+        const pool = actor.system?.resources?.focus;
+        const free = mastery && outcome === "criticalSuccess";
+        let value = pool?.value ?? 0;
+
+        if (!free) value = Math.max(0, value - 1);
+        // Sklaverei's refund ignores the per-encounter ceiling, so it is written straight to the pool
+        // rather than routed through Rising Pressure's ledger.
+        if (counteracted && options.includes("soulbound:sklaverei")) {
+            value = Math.min(pool?.max ?? value, value + 1);
+        }
+        if (value !== (pool?.value ?? 0)) {
+            await actor.update({ "system.resources.focus.value": value });
+        }
+        if (counteracted && options.includes("soulbound:sklaverei") && effect.actor) {
+            await effect.actor.increaseCondition("off-guard");
+        }
     }
 
     await ChatMessage.create({

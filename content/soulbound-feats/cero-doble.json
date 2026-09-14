@@ -30,10 +30,12 @@
         },
         "rules": [
             {
-                "key": "RollOption",
                 "domain": "all",
+                "key": "RollOption",
+                "label": "Cero Doble — shape it as a 30-foot cone",
                 "option": "soulbound:cero-doble",
-                "value": true
+                "toggleable": true,
+                "value": false
             }
         ],
         "traits": {
