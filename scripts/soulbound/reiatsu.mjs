@@ -63,6 +63,28 @@ export const Reiatsu = {
         return item?.type === "spell" && (item.system?.traits?.value ?? []).includes("reiatsu");
     },
 
+    /**
+     * The highest base rank of kidō this character may learn — guide §6, read the honest way.
+     *
+     * A kidō has **no rank of its own**: it "auto-heightens to half your level rounded up, like every
+     * other focus effect". So the level at which a kidō becomes learnable is the level at which your
+     * auto-heighten rank reaches its base rank, and that single sentence reproduces every level the
+     * guide prints, exactly:
+     *
+     *   Byakurai, Sai, Danku, Kaidō …  base rank 1 → 1st
+     *   Rikujōkōrō                      base rank 4 → 7th
+     *   Sōren Sōkatsui, Kin             base rank 5 → 9th
+     *   Kurohitsugi                     base rank 8 → 15th
+     *
+     * It is published as a roll option rather than written into six ChoiceSet filters as a list of
+     * exclusions, because `Additional Kidō` can be taken at any level and a static list cannot gate it.
+     * Content then says `{"lte": ["item:level", "soulbound:kido-rank"]}` and never mentions a level at
+     * all. Before this existed, a **1st-level** Soul Reaper was offered **Kurohitsugi**.
+     */
+    kidoRank(level) {
+        return Math.max(1, Math.ceil((Number(level) || 1) / 2));
+    },
+
     /** The key attribute chosen at 1st level; the entry's DC follows it. */
     attributeFor(actor) {
         return actor.classDCs?.soulbound?.attribute ?? actor.class?.system?.keyAbility?.selected ?? "str";
@@ -125,6 +147,15 @@ export const Reiatsu = {
             function (wrapped, ...args) {
                 const result = wrapped(...args);
                 try {
+                    // Published for EVERY character, not only a Soulbound, and that is deliberate.
+                    // The first two kidō are chosen while the class item is still being created, so at
+                    // the moment their ChoiceSets run the actor has no class yet — gate on the class and
+                    // the option is absent, the `lte` compares against NaN, and the prompt opens with
+                    // **no choices at all**, which blocks character creation outright. The option says
+                    // something about the actor's level, not about their class, so computing it for
+                    // everyone costs a key and is correct at the only time it is hard to be correct.
+                    this.rollOptions.all[`soulbound:kido-rank:${Reiatsu.kidoRank(this.level)}`] = true;
+
                     if (classSlugOf(this) === "soulbound") {
                         const focus = this.system?.resources?.focus;
                         if (focus) {

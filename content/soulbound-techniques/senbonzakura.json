@@ -1,6 +1,18 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "includesSelf": false
+            },
+            "lingering": {
+                "difficultTerrain": 2,
+                "duration": {
+                    "unit": "rounds",
+                    "value": 1
+                },
+                "name": "Senbonzakura — petals"
+            },
             "riders": [
                 {
                     "apply": {
@@ -18,19 +30,7 @@
                         "self:feature:refined-release"
                     ]
                 }
-            ],
-            "areaTargeting": {
-                "affects": "enemies",
-                "includesSelf": false
-            },
-            "lingering": {
-                "difficultTerrain": 2,
-                "duration": {
-                    "unit": "rounds",
-                    "value": 1
-                },
-                "name": "Senbonzakura — petals"
-            }
+            ]
         }
     },
     "img": "icons/magic/nature/leaf-petals-pink.webp",
@@ -98,6 +98,7 @@
         },
         "traits": {
             "otherTags": [
+                "sb-refined-area-20",
                 "sb-tier-release"
             ],
             "rarity": "common",

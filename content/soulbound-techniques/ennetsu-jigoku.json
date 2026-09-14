@@ -1,20 +1,6 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
-            "riders": [
-                {
-                    "apply": {
-                        "damageType": "fire",
-                        "formula": "1d4",
-                        "perStep": "1d4",
-                        "type": "persistent-damage"
-                    },
-                    "outcomes": [
-                        "failure",
-                        "criticalFailure"
-                    ]
-                }
-            ],
             "areaTargeting": {
                 "affects": "enemies",
                 "includesSelf": false
@@ -29,7 +15,21 @@
                 "predicate": [
                     "self:feature:refined-release"
                 ]
-            }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "damageType": "fire",
+                        "formula": "1d4",
+                        "perStep": "1d4",
+                        "type": "persistent-damage"
+                    },
+                    "outcomes": [
+                        "failure",
+                        "criticalFailure"
+                    ]
+                }
+            ]
         }
     },
     "img": "icons/magic/fire/blade-two-handed-glowing-orange.webp",
@@ -97,6 +97,7 @@
         },
         "traits": {
             "otherTags": [
+                "sb-refined-area-20",
                 "sb-tier-release"
             ],
             "rarity": "common",

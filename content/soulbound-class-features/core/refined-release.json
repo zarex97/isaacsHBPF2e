@@ -28,12 +28,32 @@
             {
                 "itemType": "spell",
                 "key": "ItemAlteration",
-                "mode": "add",
+                "mode": "override",
                 "predicate": [
-                    "item:tag:sb-tier-release"
+                    "item:tag:sb-refined-area-20"
                 ],
                 "property": "area-size",
-                "value": 5
+                "value": 20
+            },
+            {
+                "itemType": "spell",
+                "key": "ItemAlteration",
+                "mode": "override",
+                "predicate": [
+                    "item:tag:sb-refined-area-40"
+                ],
+                "property": "area-size",
+                "value": 40
+            },
+            {
+                "itemType": "spell",
+                "key": "ItemAlteration",
+                "mode": "override",
+                "predicate": [
+                    "item:tag:sb-refined-area-60"
+                ],
+                "property": "area-size",
+                "value": 60
             }
         ],
         "traits": {
