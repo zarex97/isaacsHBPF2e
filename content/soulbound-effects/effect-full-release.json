@@ -97,6 +97,10 @@
                     }
                 ],
                 "property": "damage-dice-faces"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Unbound Technique"
             }
         ],
         "start": {

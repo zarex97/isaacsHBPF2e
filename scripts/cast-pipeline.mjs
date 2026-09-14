@@ -1,4 +1,5 @@
 import { FreeCast } from "./economy/free-cast.mjs";
+import { Release } from "./soulbound/release.mjs";
 import { wrap } from "./lib/wrap.mjs";
 import { configFor } from "./targeting/config.mjs";
 import { AreaTargeting } from "./targeting/index.mjs";
@@ -46,6 +47,9 @@ export const CastPipeline = {
     /** Resolves false when the cast should not go ahead. Mutates `options` — the system gets the same object. */
     async beforeCast(spell, options) {
         if (!(await AreaTargeting.run(spell, options))) return false;
+        // Before the allowance is spent, not after: `Release.beforeCast` reads the same frequency that
+        // `FreeCast` decrements, and the Soulbound's once-per-round cap is a refusal rather than a price.
+        if (!Release.beforeCast(spell)) return false;
         await FreeCast.beforeCast(spell, options);
         return true;
     },

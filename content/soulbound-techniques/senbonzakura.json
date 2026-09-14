@@ -63,7 +63,7 @@
             }
         },
         "description": {
-            "value": "<p><em>Byakuya Kuchiki's Release Technique.</em></p><p>Each creature in a 15-foot emanation takes @Damage[2d6[slashing]] damage with a basic Reflex save. The area is <strong>difficult terrain</strong> for enemies until the start of your next turn.</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d6.</p><p><strong>Refined (9th)</strong> The emanation increases to <strong>20 feet</strong>, and creatures that critically fail are <strong>off-guard</strong> until the start of your next turn.</p>"
+            "value": "<p><em>Byakuya Kuchiki's Release Technique.</em></p><p>Each creature in the emanation takes @Damage[2d6[slashing]] damage with a basic Reflex save. The area is <strong>difficult terrain</strong> for enemies until the start of your next turn.</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d6.</p><p><strong>Refined (9th)</strong> The emanation increases to <strong>20 feet</strong>, and creatures that critically fail are <strong>off-guard</strong> until the start of your next turn.</p>"
         },
         "duration": {
             "sustained": false,

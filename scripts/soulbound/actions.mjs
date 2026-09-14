@@ -1,4 +1,6 @@
 import { isAbilityUse } from "../riders/data.mjs";
+import { Blut } from "./blut.mjs";
+import { Modes } from "./modes.mjs";
 import { Reiatsu } from "./reiatsu.mjs";
 import { Release } from "./release.mjs";
 
@@ -25,11 +27,79 @@ const MODULE_ID = "isaacs-hb-pf2e";
  * content does not silently unplug it.
  */
 
+/**
+ * Ask which of several things the actor is doing.
+ *
+ * Every one of these is a choice the player makes at the moment they act — Vene or Arterie, Gokei or
+ * Senkei, which of Zanka no Tachi's four cardinal aspects — so it is a dialog and not a setting. Returns
+ * null when it is dismissed, and the caller does nothing.
+ */
+async function chooseOne(title, prompt, options) {
+    const buttons = options.map((option) => ({
+        action: option,
+        label: option,
+        callback: () => option,
+    }));
+    return foundry.applications.api.DialogV2.wait({
+        window: { title },
+        content: `<p>${prompt}</p>`,
+        buttons,
+        rejectClose: false,
+        close: () => null,
+    }).catch(() => null);
+}
+
 /** Slug → what to do with it. Kept as a table so adding a rung is one line, not a branch. */
 const HANDLERS = {
     release: async (actor) => Release.release(actor),
     "full-release": async (actor) => Release.fullRelease(actor),
+
+    /**
+     * Blut — guide §5.3. Two reishi systems, never both, chosen fresh each round.
+     *
+     * Not routed through the generic mode switch below, because `Blut.set` carries the one exception the
+     * class has: an actor with `soulbound:blut-both` — Uryū in Letzt Stil — keeps whichever form is
+     * already standing instead of swapping it out.
+     */
+    blut: async (actor) => {
+        const choice = await chooseOne("Blut", "Which system do you run?", ["Vene", "Arterie"]);
+        if (!choice) return;
+        await Blut.set(actor, choice.toLowerCase());
+        ui.notifications.info(`${actor.name}: Blut ${choice}.`);
+    },
 };
+
+/**
+ * A mode switch declared by the item rather than known here.
+ *
+ *     "flags": { "isaacs-hb-pf2e": { "modeSwitch": {
+ *         "family": ["Gokei", "Senkei"], "prompt": "Which way do the blades go?" } } }
+ *
+ * Three abilities want this and want it identically — Senbonzakura Kageyoshi's two modes, Zanka no
+ * Tachi's four cardinal aspects, and Burner Finger's five fingers — and `modes.mjs` has been able to do
+ * it since Phase 3. What it never had was anything that called it.
+ */
+async function switchMode(actor, item) {
+    const declared = item.flags?.[MODULE_ID]?.modeSwitch;
+    const family = declared?.family;
+    if (!Array.isArray(family) || family.length === 0) return false;
+
+    // A family always offers the way back out. Senbonzakura Kageyoshi's base state — two emanations, no
+    // mode — is a real state the guide describes, and a switch that could only ever move between Gokei
+    // and Senkei would make it unreachable after the first Sustain.
+    const none = declared.none ?? "Neither";
+    const choice = await chooseOne(item.name, declared.prompt ?? "Which one?", [...family, none]);
+    if (!choice) return true; // declared, and declined — not "unhandled"
+
+    if (choice === none) {
+        await Modes.clear(actor, family);
+        ui.notifications.info(`${actor.name}: back to ${none.toLowerCase()}.`);
+        return true;
+    }
+    const set = await Modes.set(actor, choice, family);
+    if (set) ui.notifications.info(`${actor.name}: ${set}.`);
+    return true;
+}
 
 /** The item behind a chat message, whether it was posted from a sheet or by a macro. */
 function itemOf(message) {
@@ -56,10 +126,10 @@ export const SoulboundActions = {
 
             const slug = item.system?.slug ?? game.pf2e.system.sluggify(item.name);
             const handler = HANDLERS[slug];
-            if (!handler) return;
 
             try {
-                await handler(actor, item, message);
+                if (handler) await handler(actor, item, message);
+                else await switchMode(actor, item);
             } catch (error) {
                 console.error(`Isaac's Homebrew | "${slug}" could not be resolved`, error);
             }

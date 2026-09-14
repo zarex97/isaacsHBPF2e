@@ -1625,4 +1625,27 @@ check("and the four it excludes are all above it", [
     techDoc("ikkotsu").system.level.value, techDoc("zanjutsu-kendo").system.level.value,
 ].every((r) => r > 2), true);
 
+
+/**
+ * C-35. "Your Release Technique costs no Reiatsu Points, but you can use it only once per round"
+ * (guide §4.8) was the one clause of Full Release with nothing behind it at all.
+ *
+ * Both halves ride on one ledger. `Unbound Technique` is an `action` — the only item types pf2e
+ * recharges a frequency on are `action` and `feat`, so an effect cannot hold the allowance itself —
+ * granted by `Effect: Full Release`, so it exists exactly as long as the state does. `FreeCast` spends
+ * it to pay for the Technique; `Release.beforeCast` reads the same value and refuses a second use.
+ */
+const unbound = contentDoc("soulbound-class-features/actions/unbound-technique.json");
+check("the Full Release allowance is an action, because pf2e only recharges those and feats",
+    unbound.type, "action");
+check("and it is once per round", unbound.system.frequency, { max: 1, per: "round", value: 1 });
+check("it pays for a Release Technique and nothing else",
+    unbound.flags["isaacs-hb-pf2e"].freeCast.predicate, ["item:tag:sb-tier-release"]);
+check("and it arrives with the Full Release, not with the 13th level",
+    fullReleaseEffect.system.rules.some(
+        (r) => r.key === "GrantItem" && String(r.uuid).endsWith("Unbound Technique"),
+    ),
+    true,
+);
+
 report("Soulbound tests");

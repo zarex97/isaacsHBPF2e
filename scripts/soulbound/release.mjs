@@ -154,6 +154,52 @@ export const Release = {
         }
     },
 
+    /* --- what a Technique needs before it may be used -------------------------------------------- */
+
+    /**
+     * The two requirements a Technique carries that a pf2e sheet cannot state.
+     *
+     * > A **Release Technique** — a signature effect costing 1 Reiatsu Point, **usable only while
+     * > released**. — guide §4.7
+     * > Each [Zanjutsu technique] costs 1 Reiatsu Point … and **requires your spirit weapon to be
+     * > Released**. — guide §8.4
+     * > [In a Full Release] your Release Technique costs no Reiatsu Points, **but you can use it only
+     * > once per round**. — guide §4.8
+     *
+     * The once-per-round cap shares its ledger with the free cast rather than keeping a second one:
+     * `Unbound Technique` is granted by `Effect: Full Release`, carries `frequency 1/round`, and pf2e
+     * recharges it on round change by itself. When its charge is gone the Technique is not merely
+     * chargeable again — it is spent for the round, which is what the guide says.
+     *
+     * Returns false to stop the cast.
+     */
+    beforeCast(spell) {
+        const actor = spell?.actor;
+        if (!Reiatsu.isSoulbound(actor)) return true;
+        const tags = spell.system?.traits?.otherTags ?? [];
+        const isRelease = tags.includes("sb-tier-release");
+        const isZanjutsu = tags.includes("sb-tier-zanjutsu");
+        if (!isRelease && !isZanjutsu) return true;
+
+        if (this.stateOf(actor) === "sealed") {
+            ui.notifications.warn(
+                `${spell.name} needs your spirit weapon released. Use Release first.`,
+            );
+            return false;
+        }
+
+        if (isRelease && this.stateOf(actor) === "full") {
+            const allowance = actor.itemTypes.action.find((a) => a.system?.slug === "unbound-technique");
+            if (allowance && (allowance.system.frequency?.value ?? 0) <= 0) {
+                ui.notifications.warn(
+                    `${spell.name} is once per round while you are in a Full Release, and it has been used.`,
+                );
+                return false;
+            }
+        }
+        return true;
+    },
+
     /* --- the two actions ------------------------------------------------------------------------ */
 
     /** How many times this actor has Released in the encounter standing now. */
