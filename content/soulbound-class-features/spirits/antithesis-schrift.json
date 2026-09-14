@@ -1,4 +1,12 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "releaseForm": {
+                "effect": "Effect: Antithesis — Schrift",
+                "rung": "released"
+            }
+        }
+    },
     "folder": "Spirits",
     "img": "icons/weapons/bows/bow-recurve-blue.webp",
     "name": "Antithesis — Schrift",
@@ -24,12 +32,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [
-            {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Antithesis — Schrift"
-            }
-        ],
+        "rules": [],
         "traits": {
             "otherTags": [
                 "soulbound-feature"

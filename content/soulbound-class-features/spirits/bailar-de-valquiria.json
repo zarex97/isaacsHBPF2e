@@ -1,4 +1,12 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "releaseForm": {
+                "effect": "Effect: Bailar de Valquiria",
+                "rung": "full"
+            }
+        }
+    },
     "folder": "Spirits",
     "img": "icons/magic/holy/angel-winged-humanoid-golden.webp",
     "name": "Bailar de Valquiria",
@@ -24,12 +32,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [
-            {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Bailar de Valquiria"
-            }
-        ],
+        "rules": [],
         "traits": {
             "otherTags": [
                 "soulbound-feature"

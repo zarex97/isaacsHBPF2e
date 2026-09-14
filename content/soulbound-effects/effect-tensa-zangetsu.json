@@ -19,6 +19,12 @@
         },
         "rules": [
             {
+                "domain": "all",
+                "key": "RollOption",
+                "option": "soulbound:full-release:no-die-step",
+                "value": true
+            },
+            {
                 "key": "FlatModifier",
                 "label": "Tensa Zangetsu",
                 "selector": "speed",
@@ -26,8 +32,8 @@
                 "value": 10
             },
             {
-                "key": "ItemAlteration",
                 "itemType": "feat",
+                "key": "ItemAlteration",
                 "mode": "override",
                 "predicate": [
                     "item:slug:flash-step"
@@ -36,8 +42,8 @@
                 "value": 2
             },
             {
-                "key": "ItemAlteration",
                 "itemType": "spell",
+                "key": "ItemAlteration",
                 "mode": "override",
                 "predicate": [
                     "item:slug:getsuga-tensho"
@@ -46,8 +52,8 @@
                 "value": "1"
             },
             {
-                "key": "ItemAlteration",
                 "itemType": "spell",
+                "key": "ItemAlteration",
                 "mode": "override",
                 "predicate": [
                     "item:slug:getsuga-tensho"

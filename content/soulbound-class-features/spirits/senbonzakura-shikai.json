@@ -1,4 +1,12 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "releaseForm": {
+                "effect": "Effect: Senbonzakura — Shikai",
+                "rung": "released"
+            }
+        }
+    },
     "folder": "Spirits",
     "img": "icons/magic/nature/leaf-petals-pink.webp",
     "name": "Senbonzakura — Shikai",
@@ -24,12 +32,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [
-            {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Senbonzakura — Shikai"
-            }
-        ],
+        "rules": [],
         "traits": {
             "otherTags": [
                 "soulbound-feature"

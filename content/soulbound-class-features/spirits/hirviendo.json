@@ -1,4 +1,12 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "releaseForm": {
+                "effect": "Effect: Hirviendo",
+                "rung": "full"
+            }
+        }
+    },
     "folder": "Spirits",
     "img": "icons/magic/water/water-elemental-blue.webp",
     "name": "Hirviendo",
@@ -25,10 +33,6 @@
             "title": "Isaac's Homebrew: The Soulbound"
         },
         "rules": [
-            {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Hirviendo"
-            },
             {
                 "key": "GrantItem",
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-techniques.Item.Trident"

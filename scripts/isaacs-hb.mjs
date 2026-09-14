@@ -15,6 +15,7 @@ import { MODULE_ID, adjacentSigns } from "./sky/signs.mjs";
 import { SkyTrackerApp } from "./sky/tracker-app.mjs";
 import { SkyTracker } from "./sky/tracker.mjs";
 import { Blut } from "./soulbound/blut.mjs";
+import { SoulboundActions } from "./soulbound/actions.mjs";
 import { Charges } from "./soulbound/charges.mjs";
 import { Hypnosis } from "./soulbound/hypnosis.mjs";
 import { Modes } from "./soulbound/modes.mjs";
@@ -76,6 +77,9 @@ Hooks.once("init", () => {
     start("the release ladder", () => Release.registerHooks());
     start("Severance", () => Severance.registerHooks());
     start("Blut", () => Blut.registerHooks());
+    // The bridge from a used action to the state machine behind it. Without this the release
+    // ladder is inert: `Release.enter()` has no other caller anywhere in the module.
+    start("the Soulbound action bridge", () => SoulboundActions.registerHooks());
     start("the sky tracker window", () => SkyTrackerApp.registerHooks());
 
     start("the sky tracker's settings menu", () => {
@@ -116,6 +120,7 @@ Hooks.once("init", () => {
         release: Release,
         severance: Severance,
         blut: Blut,
+        soulboundActions: SoulboundActions,
         modes: Modes,
         charges: Charges,
         hypnosis: Hypnosis,

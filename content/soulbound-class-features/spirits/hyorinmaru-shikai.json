@@ -1,4 +1,12 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "releaseForm": {
+                "effect": "Effect: Hyōrinmaru — Shikai",
+                "rung": "released"
+            }
+        }
+    },
     "folder": "Spirits",
     "img": "icons/magic/water/snowflake-ice-blue-white.webp",
     "name": "Hyōrinmaru — Shikai",
@@ -24,12 +32,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [
-            {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Hyōrinmaru — Shikai"
-            }
-        ],
+        "rules": [],
         "traits": {
             "otherTags": [
                 "soulbound-feature"
