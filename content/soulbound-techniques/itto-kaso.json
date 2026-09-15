@@ -20,6 +20,28 @@
                         ]
                     }
                 }
+            ],
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Wound That Will Not Close"
+                    },
+                    "outcomes": [
+                        "failure",
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "damageType": "untyped",
+                        "fractionOfCurrentHp": 0.5,
+                        "type": "damage"
+                    },
+                    "event": "action-used",
+                    "note": "R-15: paid once, after the Art resolves, and reduced by nothing.",
+                    "self": true
+                }
             ]
         }
     },

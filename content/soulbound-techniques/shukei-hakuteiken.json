@@ -12,6 +12,19 @@
                         "types": "all"
                     }
                 }
+            ],
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Wound That Will Not Close"
+                    },
+                    "event": "strike-resolved",
+                    "outcomes": [
+                        "success",
+                        "criticalSuccess"
+                    ]
+                }
             ]
         }
     },

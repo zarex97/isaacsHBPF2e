@@ -2475,4 +2475,40 @@ check("Severance pays for the Release Technique and every kidō, without a count
     contentDoc("soulbound-effects/effect-severance.json").flags["isaacs-hb-pf2e"].freeCast.unlimited,
     true);
 
+
+/**
+ * SB-46. Four Severing Art clauses that were prose: the wound that will not close (R-11, R-14),
+ * Ittō Kasō's price (R-15), Hyōten Hyakkasō's flat check (R-13) and Apotheosis (R-26).
+ */
+check("Shūkei: Hakuteiken and Ittō Kasō share the wound that will not close",
+    ["shukei-hakuteiken", "itto-kaso"].map((n) =>
+        (techDoc(n).flags["isaacs-hb-pf2e"].riders ?? []).some((r) =>
+            /Wound That Will Not Close/.test(r.apply?.uuid ?? ""))),
+    [true, true]);
+check("and that effect suppresses regeneration by the option Regeneración already tests",
+    contentDoc("soulbound-effects/effect-wound-that-will-not-close.json").system.rules
+        .some((r) => r.key === "RollOption" && r.option === "self:effect:regeneracion-suppressed"),
+    true);
+
+// R-15: the number is not known until it lands, and nothing may reduce it.
+const price = (techDoc("itto-kaso").flags["isaacs-hb-pf2e"].riders ?? [])
+    .find((r) => r.apply?.fractionOfCurrentHp !== undefined);
+check("Ittō Kasō costs half your current hit points, to yourself",
+    [price?.apply.fractionOfCurrentHp, price?.self], [0.5, true]);
+
+// R-13: the engine has no "no flat check" mode, so the DC is one no d20 reaches — and it says so.
+check("Hyōten Hyakkasō's persistent cold cannot be shaken off",
+    (techDoc("hyoten-hyakkaso").flags["isaacs-hb-pf2e"].riders ?? [])
+        .find((r) => r.apply?.type === "persistent-damage")?.apply.dc > 20,
+    true);
+
+const apo = contentDoc("soulbound-effects/effect-apotheosis.json");
+check("Apotheosis gives temporary hit points equal to twice your level",
+    apo.system.rules.find((r) => r.key === "TempHP")?.value, "2 * @actor.level");
+check("and detonates again at the start of your next turn for half the Waning dice",
+    [apo.flags["isaacs-hb-pf2e"].riders[0].event,
+     apo.flags["isaacs-hb-pf2e"].riders[0].apply.riders[0].apply.formula,
+     apo.flags["isaacs-hb-pf2e"].riders[0].apply.riders[0].apply.multiplier],
+    ["turn-start", "origin.severance.dice", 0.5]);
+
 report("Soulbound tests");

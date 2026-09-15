@@ -1,6 +1,11 @@
 import { classSlugOf, classStatisticOf } from "../lib/class-dc.mjs";
 import { describeActor, describeDamage, riderOptions, testPredicate } from "../lib/roll-options.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
+
+/** The Waning dice for an actor, read lazily so this module does not import the ladder. */
+function SeveranceDice(actor) {
+    return game.modules.get(MODULE_ID)?.api?.severance?.dice?.(actor) ?? 0;
+}
 import { catchTokens } from "../targeting/catch.mjs";
 import { shapeFromArea } from "../targeting/place.mjs";
 import {
@@ -1579,6 +1584,28 @@ async function applyDamageRider(rider, context) {
     const multiplier = Number(rider.apply.multiplier);
     const expression = Number.isFinite(multiplier) && multiplier !== 1 ? `(${scaled}) * ${multiplier}` : scaled;
 
+    // Damage measured as a share of what the target still has, rather than as dice.
+    //
+    // *Ittō Kasō*'s price is "damage equal to **half your current Hit Points**, unpreventable,
+    // unreducible, unresistable and unredirectable, applied **after** the Art resolves" (R-15) — the
+    // drawback that pays for its extra dice and its immunity-piercing fire. There is no formula for it:
+    // the number is not known until the moment it lands, and none of the usual reductions may touch it.
+    const share = Number(rider.apply.fractionOfCurrentHp);
+    if (Number.isFinite(share) && share > 0) {
+        const current = context.actor?.hitPoints?.value ?? 0;
+        const amount = Math.floor(current * share);
+        if (amount <= 0) return;
+        const bare = await new DamageRoll(`(${amount})[${damageType}]`).evaluate();
+        await bare.toMessage(
+            { speaker: ChatMessage.getSpeaker({ actor: context.originActor }),
+              flavor: `${context.item?.name ?? "Rider"} — ${context.actor.name} (unpreventable)` },
+            { rollMode: game.settings.get("core", "rollMode") },
+        );
+        // `skipIWR` is the "unresistable" half, and it is the whole point of the clause.
+        await context.actor.applyDamage({ damage: bare, token: context.target, skipIWR: true, final: true });
+        return;
+    }
+
     const roll = await new DamageRoll(`(${expression})[${damageType}]`).evaluate();
     const name = context.item?.name ?? context.originActor?.name ?? "Rider";
     await roll.toMessage(
@@ -1957,6 +1984,15 @@ function resolveFromOrigin(expression, context) {
     const match = /^origin\.statistic\.([\w-]+)\.rank$/.exec(String(expression));
     if (match) return originActor?.getStatistic?.(match[1])?.rank ?? null;
     if (expression === "origin.level") return originActor?.level ?? null;
+
+    // The Waning dice as they stand *now*. Apotheosis "detonates again at the start of your next turn
+    // for half the Waning dice" (R-26), and by then the round has turned — so the second blast is worth
+    // what the table says in the round it actually lands, not what the first one rolled. Reading it
+    // here is the only way to ask that question at the moment it is asked.
+    if (expression === "origin.severance.dice") {
+        const dice = SeveranceDice(originActor);
+        return dice > 0 ? `${dice}d6` : null;
+    }
     // How far the Technique itself has heightened, sky included — the growth a Strike inherits when the
     // Technique says "each Strike's damage increases by 1d6".
     if (expression === "origin.item.steps") {
