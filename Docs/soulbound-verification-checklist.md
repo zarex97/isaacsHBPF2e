@@ -367,16 +367,16 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 
 | # | Item | What must happen | Status | Notes |
 | :-- | :-- | :-- | :-- | :-- |
-| R-01 | **Severance** — duration | **10 rounds**, identical for all fifteen Spirits | ☐ | |
-| R-02 | Severance — rider | Spirit-weapon Strikes deal an extra **4d6 spirit** | ☐ | |
-| R-03 | Severance — immunities | Immune to **fear and death effects**, and to **frightened** and **doomed** | ☐ | |
-| R-04 | Severance — free everything | **No pool**; Release Technique and every kidō cost **nothing** with **no frequency limit** | ☐ | |
-| R-05 | Severance — borrowed Full Release | Grants the Spirit's Full Release ability **and its 20-ft emanation**, without spending the daily use and **without fatigue** | ☐ | |
-| R-06 | Severance — movement | Speed **+20 ft**; Flash Step **twice per round** | ☐ | |
-| R-07 | **Waning** | Severing Art dice = **22 − 2 × round**, rounds 1–7 (20/18/16/14/12/10/8 d6) | ☐ | |
-| R-08 | Waning — lockout | The Art **cannot be used** in rounds **8, 9, 10** | ☐ | |
-| R-09 | The Art ends Severance | Using it is 2 actions, costs nothing, and **ends Severance whether you want it to or not** | ☐ | |
-| R-10 | **The price** | When Severance ends by either route you lose **Released Form, Release Technique, Full Release and your whole pool** until **a week of downtime**; you keep HP, proficiencies, skills, Lineage features and feats | ☐ | |
+| R-01 | **Severance** — duration | **10 rounds**, identical for all fifteen Spirits | ✅ | Live: `Effect: Severance` runs 10 rounds and the eleventh ends it |
+| R-02 | Severance — rider | Spirit-weapon Strikes deal an extra **4d6 spirit** | ✅ | Live: the 4d6 spirit rider is on spirit-weapon Strikes |
+| R-03 | Severance — immunities | Immune to **fear and death effects**, and to **frightened** and **doomed** | ✅ | Live: immune to death-effects, fear-effects, frightened and doomed |
+| R-04 | Severance — free everything | **No pool**; Release Technique and every kidō cost **nothing** with **no frequency limit** | 🔧 | **SB-45 fixed**: `freeCast` gained an `unlimited` allowance — it had refused any item with no frequency to decrement, which is every effect. Frequency caps overridden too |
+| R-05 | Severance — borrowed Full Release | Grants the Spirit's Full Release ability **and its 20-ft emanation**, without spending the daily use and **without fatigue** | 🔧 | **SB-45 fixed**: `soulbound:no-full-release-fatigue` is published at last; the module already read it |
+| R-06 | Severance — movement | Speed **+20 ft**; Flash Step **twice per round** | ✅ | Live: Speed **45** at 25 base, and Flash Step frequency **2** |
+| R-07 | **Waning** | Severing Art dice = **22 − 2 × round**, rounds 1–7 (20/18/16/14/12/10/8 d6) | ✅ | **SB-42 fixed.** Live, round by round: **20/18/16/14/12/10/8**. The table was pure, exported, unit-tested and called by nothing; every Art was authored at a flat 20d6 |
+| R-08 | Waning — lockout | The Art **cannot be used** in rounds **8, 9, 10** | ✅ | **SB-43 fixed.** Live: rounds 8, 9 and 10 give **0**, and the cast is refused rather than rolled |
+| R-09 | The Art ends Severance | Using it is 2 actions, costs nothing, and **ends Severance whether you want it to or not** | ✅ | **SB-43 fixed.** Live: casting Mugetsu ends Severance — after the cast reaches the table, never before |
+| R-10 | **The price** | When Severance ends by either route you lose **Released Form, Release Technique, Full Release and your whole pool** until **a week of downtime**; you keep HP, proficiencies, skills, Lineage features and feats | ✅ | **SB-45 fixed.** Live: the release state goes to **sealed**, the cap to **0**, the Art off the sheet, and a fresh Release is refused |
 | R-11 | **Shūkei: Hakuteiken** (Senbonzakura) | One creature in reach, Strike, Waning dice as **slashing**; ignores **all** resistance and immunity; on a hit target **can't regain HP** and regen/fast healing suppressed **1 minute** | ☐ | |
 | R-12 | **Mugetsu** (Zangetsu) | **60-ft cone**, basic Reflex, **spirit**; ignores **all** resistance and immunity to spirit | ☐ | |
 | R-13 | **Hyōten Hyakkasō** (Hyōrinmaru) | **30-ft emanation**, basic Fortitude, **cold**; failures **restrained** (Escape vs. Reiatsu DC) and **4d6 persistent cold with no flat check** while restrained | ☐ | |
@@ -1654,3 +1654,85 @@ Four's persistent fire and Five's terrain must not be inherited by the other thr
 
 Still open: the **Severance pass** proper (R-01..R-26) — the fifteen Arts are now reachable, but their
 Waning dice, the lockout after round 7, and the price when Severance ends are unverified.
+
+---
+
+## §30 — Severance, and the Waning table that was connected to nothing
+
+### SB-42 — every Severing Art always rolled twenty dice
+
+Guide §9 builds the capstone around a decision:
+
+> **The tension is the point.** The longer you survive in Severance, the more the general state has given
+> you, and the less your ending is worth. Round one is 70 damage and none of the buff. Round seven is 28
+> damage and six rounds of a 4d6 rider, doubled Flash Step, and free kidō. There is no dominant line,
+> which is what makes it a decision instead of a script.
+
+`waningDice(round)` implemented that table exactly, was exported, and was unit-tested. **Nothing called
+it.** All fifteen Arts were authored at a flat `20d6` — the round-one value — so the decision did not
+exist: a Soulbound sat through nine rounds of the general state and still ended the fight for seventy
+points. §9.0.1 is explicit that the decay *is* the balance lever, and the lever was not attached.
+
+The dice are now stamped in `prepareDerivedData`, not at cast time, so the **card is honest**: a player in
+round three sees 16d6 on the Art before deciding whether to spend their one shot. That costs a
+re-preparation when the round turns, which the clock hook now does for exactly the actors in a Severance.
+
+Ittō Kasō is "the Waning dice **+2d6**" (R-14), so the extra survives the rewrite rather than being
+overwritten by it.
+
+**Live, one round at a time:** 20 / 18 / 16 / 14 / 12 / 10 / 8 across rounds one to seven, then **0** in
+rounds eight, nine and ten.
+
+### SB-43 — the Art never ended Severance, and could be used after it decayed
+
+R-08 and R-09 lived only in the prose. `waningDice` returned 0 for round eight and nobody asked, so the
+Art stayed on the sheet and rolled its printed twenty dice in round ten; and using it ended nothing.
+
+Both now sit in the cast pipeline beside the other three gates. `Severance.beforeCast` refuses an Art
+outside a Severance or past the seventh round; `afterCast` ends it — **after the cast has actually
+reached the table**, never before, because ending the capstone on an attempt the caster backed out of
+would take it away for nothing.
+
+### SB-44 — `game.combat` is the viewed encounter, not the actor's
+
+The first live drive reported "round 10" for a Severance that had just begun. `Severance.begin` stamped
+its flag from `game.combat?.round ?? 1`, and **`game.combat` is `game.combats.viewed`** — the encounter
+belonging to whichever scene the *client* happens to be looking at. It came back empty, the fallback
+wrote 1, and every subsequent round read from round one for the rest of the fight.
+
+`encounterFor(actor)` asks the combatant for its own encounter instead. No view can change that answer.
+
+The round is also stamped **on the source document** now rather than set afterwards: a `setFlag` on a
+freshly created embedded item is a second write, and anything reading in between — including a
+`prepareDerivedData` triggered by the creation itself — misses it. The Waning table reads this flag on
+every preparation.
+
+### SB-45 — three more clauses that were prose
+
+- **R-04** "your Release Technique and every kidō cost nothing and have **no frequency limit**". `freeCast`
+  refused any item whose `system.frequency.value` was absent or zero — which is every effect that is not
+  itself a once-per-day feat — so an allowance with no ceiling could not be expressed at all. It now
+  takes `unlimited: true`, and there is nothing to decrement.
+- **R-05** the borrowed Full Release, at its 20-foot shape and **without fatigue**. The module already had
+  `soulbound:no-full-release-fatigue` and `Effect: Severance` never published it.
+- **R-10** the price. `Effect: Severed` zeroed the pool and published `soulbound:severed`, which nothing
+  read — so a severed character could Release again and put the whole form back on, which is the opposite
+  of a cost. `release()` now refuses while severed, and `Severance.end` takes the Released Form **off**,
+  which is the first item on R-10's list and the one the effect had never touched.
+
+`end` also nudges the actor so the Art leaves the sheet. It is granted by the **Spirit feature**,
+predicated on `soulbound:severance`, so deleting the Severance effect does not cascade it away and pf2e
+only re-tests a predicated grant on an actor *update* — the Art otherwise sat there after the state was
+over, inviting a use that `beforeCast` would then refuse.
+
+**Live, the whole arc:** Severance begins at round 1 with speed 45, immunity to death and fear effects and
+to frightened and doomed, Flash Step twice per round, and Mugetsu on the sheet. Round 2 shows 18d6.
+Casting it leaves **Severance gone, Severed applied, the release state sealed, the reiatsu cap 0, the Art
+off the sheet**, and a fresh Release refused.
+
+### A note on the harness
+
+The ChoiceSet resolver had been answering nothing this whole campaign. It clicked
+`button[data-choice]`, which looks exactly right and matches **nothing** — the choices are Svelte-rendered
+buttons carrying no dataset at all. A job waiting on a prompt hung precisely as though no resolver had
+been installed, which is how it went unnoticed. The selector is `button.select-button`.

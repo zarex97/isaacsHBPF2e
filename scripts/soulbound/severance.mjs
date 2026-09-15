@@ -91,12 +91,25 @@ export const Severance = {
         return actor?.itemTypes?.effect?.find((e) => e.name === SEVERANCE) ?? null;
     },
 
+    /**
+     * The encounter this actor is actually in.
+     *
+     * **Not `game.combat`**, which is `game.combats.viewed` — the encounter belonging to the scene the
+     * *client* happens to be looking at. Beginning a Severance while viewing another scene stamped the
+     * flag from a fallback and every round of the Waning table read from round one for the rest of the
+     * fight. The combatant knows its own encounter and no view can change that.
+     */
+    encounterFor(actor) {
+        return actor?.combatant?.encounter ?? actor?.combatant?.combat ?? game.combat ?? null;
+    },
+
     /** Which round of Severance this actor is in, or 0 if they are not in one. */
     round(actor) {
         const effect = this.effectOn(actor);
         if (!effect) return 0;
         const began = effect.getFlag(MODULE_ID, "severanceBegan");
-        return roundOfSeverance({ began, now: game.combat?.round ?? began });
+        const now = this.encounterFor(actor)?.round;
+        return roundOfSeverance({ began, now: Number.isInteger(now) ? now : began });
     },
 
     /** The dice a Severing Art would roll right now. 0 means it refuses. */
@@ -145,8 +158,14 @@ export const Severance = {
         if (!Reiatsu.isSoulbound(actor)) return null;
         const doc = await packed(SEVERANCE);
         if (!doc) return null;
-        const [made] = await actor.createEmbeddedDocuments("Item", [foundry.utils.deepClone(doc.toObject())]);
-        await made?.setFlag(MODULE_ID, "severanceBegan", game.combat?.round ?? 1);
+        // Stamped on the source rather than set afterwards: a `setFlag` on a freshly created embedded
+        // document is a second write that anything reading in between — a `prepareDerivedData` triggered
+        // by the creation itself — will miss, and the Waning table reads this on every preparation.
+        const source = foundry.utils.deepClone(doc.toObject());
+        const round = this.encounterFor(actor)?.round;
+        foundry.utils.setProperty(source, `flags.${MODULE_ID}.severanceBegan`,
+                                  Number.isInteger(round) && round > 0 ? round : 1);
+        const [made] = await actor.createEmbeddedDocuments("Item", [source]);
         return made;
     },
 
@@ -161,15 +180,32 @@ export const Severance = {
         const held = actor.itemTypes.effect.filter((e) => e.name === SEVERANCE);
         if (held.length > 0) await actor.deleteEmbeddedDocuments("Item", held.map((e) => e.id));
 
+        // R-10 is a list, and the Released Form is the first thing on it: "you lose your Released Form,
+        // your Release Technique, your Full Release and your entire reiatsu pool". Zeroing the pool and
+        // refusing a fresh Release left the character still standing in the form they had just severed.
+        //
+        // Imported here rather than at the top: `release` imports `reiatsu`, which imports this module
+        // for the Waning table, and a static import would close that ring at evaluation time.
+        const { Release } = await import("./release.mjs");
+        await Release.exit(actor, "full");
+        await Release.exit(actor, "released");
+
         const doc = await packed(SPENT);
         if (doc) await actor.createEmbeddedDocuments("Item", [foundry.utils.deepClone(doc.toObject())]);
+
+        // The Severing Art is granted by the **Spirit feature**, predicated on `soulbound:severance` —
+        // so deleting the Severance effect does not cascade it away, and pf2e only re-tests a predicated
+        // grant on an actor *update*. Without this nudge the Art sits on the sheet after Severance is
+        // over, which invites using something `beforeCast` will then refuse. Touching the level is the
+        // smallest update that re-evaluates every grant without changing anything.
+        await actor.update({ "system.details.level.value": actor.system.details.level.value });
     },
 
     registerHooks() {
         // The clock. Severance lasts ten rounds; the eleventh ends it whether or not the Art was used.
         Hooks.on("combatTurnChange", async () => {
             if (!game.user.isGM) return;
-            for (const combatant of game.combat?.combatants ?? []) {
+            for (const combatant of game.combats?.contents?.flatMap((c) => c.combatants.contents) ?? []) {
                 const actor = combatant.actor;
                 if (!Reiatsu.isSoulbound(actor)) continue;
                 if (!this.effectOn(actor)) continue;
