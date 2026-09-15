@@ -91,8 +91,12 @@ like a hang. If one is already standing:
 ```js
 [...foundry.applications.instances.values()]
     .find(a => a.constructor.name === "PickAThingPrompt")
-    ?.element.querySelector("button[data-choice]")?.click();
+    ?.element.querySelector("button.select-button")?.click();
 ```
+
+**The selector is `button.select-button`.** `button[data-choice]` looks right and matches nothing — the
+choices are Svelte-rendered buttons carrying no dataset at all, so a resolver written against
+`data-choice` silently answers nothing and the job hangs exactly as though no resolver were installed.
 
 **Reset the release ledger before measuring anything that Releases repeatedly.** The first Release each
 encounter is free and the next costs a Reiatsu Point, so after a dozen scripted cycles `release()` starts

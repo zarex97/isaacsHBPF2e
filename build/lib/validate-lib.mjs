@@ -966,6 +966,8 @@ function validateFreeCast(doc, where, errors) {
     if (flag.predicate !== undefined && !Array.isArray(flag.predicate)) {
         errors.push(`${where}: freeCast.predicate must be an array`);
     }
+    // An unlimited allowance has nothing to spend by design — see `FreeCast.find`.
+    if (flag.unlimited === true) return;
     const frequency = doc.system?.frequency;
     if (!frequency || !(Number(frequency.max) > 0)) {
         errors.push(

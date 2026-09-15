@@ -1,6 +1,7 @@
 import { FreeCast } from "./economy/free-cast.mjs";
 import { Charges } from "./soulbound/charges.mjs";
 import { Release } from "./soulbound/release.mjs";
+import { Severance } from "./soulbound/severance.mjs";
 import { wrap } from "./lib/wrap.mjs";
 import { configFor } from "./targeting/config.mjs";
 import { AreaTargeting } from "./targeting/index.mjs";
@@ -24,7 +25,12 @@ export const CastPipeline = {
             "CONFIG.PF2E.Item.documentClasses.spellcastingEntry.prototype.cast",
             async function (wrapped, spell, options = {}) {
                 if (!(await CastPipeline.beforeCast(spell, options))) return;
-                return wrapped(spell, options);
+                const result = await wrapped(spell, options);
+                // After the Art has actually reached the table, never before: guide §9 says using it
+                // "immediately ends Severance whether you want it to or not", and ending it on an
+                // attempt that was cancelled would take the capstone away for nothing.
+                await Severance.afterCast(spell);
+                return result;
             },
             { feature: "area targeting and free casts", type: "MIXED" },
         );
@@ -51,6 +57,8 @@ export const CastPipeline = {
         // Before the allowance is spent, not after: `Release.beforeCast` reads the same frequency that
         // `FreeCast` decrements, and the Soulbound's once-per-round cap is a refusal rather than a price.
         if (!Release.beforeCast(spell)) return false;
+        // A Severing Art outside Severance, or after the seventh round, is refused rather than rolled.
+        if (!Severance.beforeCast(spell)) return false;
         // A Technique that spends from a charge pool is refused when the pool is empty, rather than cast
         // and then quietly not charged. Hyōrinmaru's three petal-flowers are the case.
         if (!(await Charges.beforeCast(spell))) return false;

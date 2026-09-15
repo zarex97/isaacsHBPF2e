@@ -1,6 +1,7 @@
 import { classSlugOf } from "../lib/class-dc.mjs";
 import { applyActionCosts } from "./action-cost.mjs";
 import { applyAttributeCaps } from "./attribute-caps.mjs";
+import { Severance, applyWaning } from "./severance.mjs";
 import { wrap } from "../lib/wrap.mjs";
 
 const MODULE_ID = "isaacs-hb-pf2e";
@@ -209,6 +210,10 @@ export const Reiatsu = {
                         // the one place a second wrapper on `prepareDerivedData` would have gone, and
                         // `wrap()` refuses two on the same target by design — so it lives here.
                         applyActionCosts(this);
+                        // The Severing Art's dice decay by round, and the card should say so before a
+                        // player decides whether to spend their one shot — see `applyWaning`.
+                        const round = Severance.round(this);
+                        if (round > 0) applyWaning(this, round);
                     }
                 } catch (error) {
                     console.error("Isaac's Homebrew | the reiatsu pool could not be sized", error);

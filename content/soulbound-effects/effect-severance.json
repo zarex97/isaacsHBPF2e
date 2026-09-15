@@ -1,4 +1,20 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "freeCast": {
+                "label": "Severance",
+                "predicate": [
+                    {
+                        "or": [
+                            "item:tag:sb-tier-release",
+                            "item:tag:sb-tier-kido"
+                        ]
+                    }
+                ],
+                "unlimited": true
+            }
+        }
+    },
     "img": "icons/magic/death/skull-energy-light-white.webp",
     "name": "Effect: Severance",
     "system": {
@@ -19,8 +35,8 @@
         },
         "rules": [
             {
-                "key": "RollOption",
                 "domain": "all",
+                "key": "RollOption",
                 "option": "soulbound:severance",
                 "value": true
             },
@@ -59,14 +75,35 @@
                 "selector": "strike-damage"
             },
             {
-                "key": "ItemAlteration",
                 "itemType": "feat",
+                "key": "ItemAlteration",
                 "mode": "override",
                 "predicate": [
                     "item:slug:flash-step"
                 ],
                 "property": "frequency-max",
                 "value": 2
+            },
+            {
+                "itemType": "spell",
+                "key": "ItemAlteration",
+                "mode": "override",
+                "predicate": [
+                    {
+                        "or": [
+                            "item:tag:sb-tier-release",
+                            "item:tag:sb-tier-kido"
+                        ]
+                    }
+                ],
+                "property": "frequency-max",
+                "value": 99
+            },
+            {
+                "domain": "all",
+                "key": "RollOption",
+                "option": "soulbound:no-full-release-fatigue",
+                "value": true
             }
         ],
         "start": {

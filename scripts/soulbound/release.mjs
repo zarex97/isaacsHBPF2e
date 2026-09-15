@@ -475,14 +475,20 @@ export const Release = {
             ui.notifications.info(`${actor.name} is already released.`);
             return false;
         }
-        // Guide §7C: when Letzt Stil ends "you lose Schrift Form, Release Technique, Licht Regen,
-        // Vollständig and your entire pool until 24 hours of rest". The effect that says so zeroed the
-        // pool and published `soulbound:letzt-stil-spent`, which nothing read — so a spent Quincy could
-        // simply Release again and put the whole Schrift back on, which is the opposite of a cost.
-        if (actor.getRollOptions?.().includes("soulbound:letzt-stil-spent")) {
-            ui.notifications.warn(
-                `${actor.name} has spent Letzt Stil: no Schrift Form until 24 hours of rest.`,
-            );
+        // Two costs end the same way: the form simply cannot be put back on.
+        //
+        // Guide §7C — when Letzt Stil ends "you lose Schrift Form, Release Technique, Licht Regen,
+        // Vollständig and your entire pool until 24 hours of rest"; and guide §9, R-10 — when Severance
+        // ends by either route you lose "your Released Form, your Release Technique, your Full Release
+        // and your entire reiatsu pool" until a week of downtime. Both effects zeroed the pool and
+        // published a roll option that nothing read, so the character could simply Release again and put
+        // everything back, which is the opposite of a cost.
+        const spent = [
+            ["soulbound:letzt-stil-spent", "has spent Letzt Stil: no Schrift Form until 24 hours of rest"],
+            ["soulbound:severed", "is Severed: no Released Form until a week of downtime"],
+        ].find(([option]) => actor.getRollOptions?.().includes(option));
+        if (spent) {
+            ui.notifications.warn(`${actor.name} ${spent[1]}.`);
             return false;
         }
 
