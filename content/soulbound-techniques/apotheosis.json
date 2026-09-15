@@ -4,7 +4,17 @@
             "areaTargeting": {
                 "affects": "enemies",
                 "includesSelf": false
-            }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Apotheosis"
+                    },
+                    "event": "action-used",
+                    "self": true
+                }
+            ]
         }
     },
     "img": "modules/isaacs-hb-pf2e/icons/angel-winged-humanoid-golden.svg",

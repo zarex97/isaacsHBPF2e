@@ -24,9 +24,11 @@
                 {
                     "apply": {
                         "damageType": "cold",
+                        "dc": 50,
                         "formula": "4d6",
                         "type": "persistent-damage"
                     },
+                    "note": "No flat check: the ice does not stop while it holds you.",
                     "outcomes": [
                         "failure",
                         "criticalFailure"

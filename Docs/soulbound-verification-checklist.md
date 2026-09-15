@@ -377,22 +377,22 @@ Four rungs each: **Form** (1st) · **Release Technique** (1st) · **Refined** (9
 | R-08 | Waning — lockout | The Art **cannot be used** in rounds **8, 9, 10** | ✅ | **SB-43 fixed.** Live: rounds 8, 9 and 10 give **0**, and the cast is refused rather than rolled |
 | R-09 | The Art ends Severance | Using it is 2 actions, costs nothing, and **ends Severance whether you want it to or not** | ✅ | **SB-43 fixed.** Live: casting Mugetsu ends Severance — after the cast reaches the table, never before |
 | R-10 | **The price** | When Severance ends by either route you lose **Released Form, Release Technique, Full Release and your whole pool** until **a week of downtime**; you keep HP, proficiencies, skills, Lineage features and feats | ✅ | **SB-45 fixed.** Live: the release state goes to **sealed**, the cap to **0**, the Art off the sheet, and a fresh Release is refused |
-| R-11 | **Shūkei: Hakuteiken** (Senbonzakura) | One creature in reach, Strike, Waning dice as **slashing**; ignores **all** resistance and immunity; on a hit target **can't regain HP** and regen/fast healing suppressed **1 minute** | ☐ | |
-| R-12 | **Mugetsu** (Zangetsu) | **60-ft cone**, basic Reflex, **spirit**; ignores **all** resistance and immunity to spirit | ☐ | |
-| R-13 | **Hyōten Hyakkasō** (Hyōrinmaru) | **30-ft emanation**, basic Fortitude, **cold**; failures **restrained** (Escape vs. Reiatsu DC) and **4d6 persistent cold with no flat check** while restrained | ☐ | |
-| R-14 | **Ittō Kasō** (Ryūjin Jakka) | **20-ft burst** within 60 ft, basic Reflex, **fire**, Waning dice **+2d6**; ignores fire resistance **and immunity**; failures **can't regain HP 1 minute**, regen/fast healing suppressed; a creature dropped to 0 is **cremated** (10th-rank effect to return) | ☐ | |
-| R-15 | Ittō Kasō — **self-cost** | You take damage equal to **half your current HP**, **unpreventable, unreducible, unresistable, unredirectable**, applied **after** the Art resolves | ☐ | |
-| R-16 | **Kanzen Saimin: Owari** (Kyōka Suigetsu) | **60-ft emanation**, basic Will, **mental**; failures **confused 1 minute**; crit fail also perceives **its own allies as you** for that minute and **damage cannot shake it loose** | ☐ | |
-| R-17 | **Desgarrón** (Pantera) | **60-ft cone**, basic Reflex, **slashing**; failures **4d6 persistent bleed** | ☐ | |
-| R-18 | **Cero Oscuras: Ceniza** (Murciélago) | **120-ft line**, basic Reflex, **spirit**; a creature dropped to 0 **crumbles to ash** (10th-rank effect to return) | ☐ | |
-| R-19 | **La Hora Final** (Arrogante) | **30-ft emanation**, basic Fortitude, **void**; failures **enfeebled 3** 1 minute and **drained 1** for 24 hours | ☐ | |
-| R-20 | **Aullido** (Los Lobos) | **40-ft burst** within 120 ft, basic Reflex, **force**; requires ≥1 wolf; expends **all** wolves and **none regrow this encounter**; with **five or more** spent, crit fails also **prone + stunned 1** | ☐ | |
-| R-21 | **Ola Azul** (Tiburón) | **60-ft line**, basic Reflex, **slashing**; failures pushed **30 ft** and **prone**; crit fails pushed **60 ft** | ☐ | |
-| R-22 | **Sprenger** (Antithesis) | **20-ft burst** within 60 ft, basic Reflex, **force**; crit fails **restrained 1 minute** (Escape vs. Reiatsu DC) | ☐ | |
-| R-23 | **Burning Full Fingers** (The Heat) | **60-ft cone**, basic Reflex, **fire**; failures **4d6 persistent fire** with a **DC 20** flat check | ☐ | |
-| R-24 | **The Reckoning** (The Balance) | One creature within 60 ft, basic Fortitude, **spirit**; ignores **all** resistance and immunity; target **doomed 1**, or **doomed 2** if you used your Release Technique **≥3 times this encounter** | ☐ | |
-| R-25 | **Electrocution** (The Thunderbolt) | **30-ft emanation**, basic Reflex, **electricity**; failures **stunned 2** (**incapacitation**) | ☐ | |
-| R-26 | **Apotheosis** (The Miracle) | **30-ft emanation**, basic Fortitude, **force**; you gain temp HP = **twice your level**; **at the start of your next turn it detonates again for half the Waning dice** | ☐ | |
+| R-11 | **Shūkei: Hakuteiken** (Senbonzakura) | One creature in reach, Strike, Waning dice as **slashing**; ignores **all** resistance and immunity; on a hit target **can't regain HP** and regen/fast healing suppressed **1 minute** | 🔧 | Shape, Strike and the ignore-all bypass were right; **SB-46** adds the wound that will not close |
+| R-12 | **Mugetsu** (Zangetsu) | **60-ft cone**, basic Reflex, **spirit**; ignores **all** resistance and immunity to spirit | ✅ | 60-ft cone, basic Reflex, spirit, and a `bypass` ignoring all resistance and immunity to spirit |
+| R-13 | **Hyōten Hyakkasō** (Hyōrinmaru) | **30-ft emanation**, basic Fortitude, **cold**; failures **restrained** (Escape vs. Reiatsu DC) and **4d6 persistent cold with no flat check** while restrained | 🔧 | Restrained at an Escape vs. Reiatsu DC and 4d6 persistent cold were right; the flat check is now one no d20 reaches |
+| R-14 | **Ittō Kasō** (Ryūjin Jakka) | **20-ft burst** within 60 ft, basic Reflex, **fire**, Waning dice **+2d6**; ignores fire resistance **and immunity**; failures **can't regain HP 1 minute**, regen/fast healing suppressed; a creature dropped to 0 is **cremated** (10th-rank effect to return) | 🔧 | **SB-46**: +2d6, the fire bypass and the wound that will not close |
+| R-15 | Ittō Kasō — **self-cost** | You take damage equal to **half your current HP**, **unpreventable, unreducible, unresistable, unredirectable**, applied **after** the Art resolves | ✅ | **SB-47 fixed.** Live: a 20th-level Ryūjin Jakka at **200 → 100**. Needed a new `fractionOfCurrentHp` damage form applied with `skipIWR`, and `event: action-used` so it is paid once rather than per victim |
+| R-16 | **Kanzen Saimin: Owari** (Kyōka Suigetsu) | **60-ft emanation**, basic Will, **mental**; failures **confused 1 minute**; crit fail also perceives **its own allies as you** for that minute and **damage cannot shake it loose** | ⚠️ | Confused 1 minute is applied; the critical-failure clause — perceiving its own allies as you — is prose |
+| R-17 | **Desgarrón** (Pantera) | **60-ft cone**, basic Reflex, **slashing**; failures **4d6 persistent bleed** | ✅ | 60-ft cone, basic Reflex, slashing, 4d6 persistent bleed on a failure |
+| R-18 | **Cero Oscuras: Ceniza** (Murciélago) | **120-ft line**, basic Reflex, **spirit**; a creature dropped to 0 **crumbles to ash** (10th-rank effect to return) | ⚠️ | 120-ft line, basic Reflex, spirit — all correct; *crumbles to ash* is left to the table |
+| R-19 | **La Hora Final** (Arrogante) | **30-ft emanation**, basic Fortitude, **void**; failures **enfeebled 3** 1 minute and **drained 1** for 24 hours | ✅ | Enfeebled 3 for a minute and drained 1 for 24 hours, exactly |
+| R-20 | **Aullido** (Los Lobos) | **40-ft burst** within 120 ft, basic Reflex, **force**; requires ≥1 wolf; expends **all** wolves and **none regrow this encounter**; with **five or more** spent, crit fails also **prone + stunned 1** | ⚠️ | 40-ft burst and the prone-and-stunned clause exist; the wolf requirement, the expenditure and the five-or-more gate are not automated |
+| R-21 | **Ola Azul** (Tiburón) | **60-ft line**, basic Reflex, **slashing**; failures pushed **30 ft** and **prone**; crit fails pushed **60 ft** | ✅ | Pushed 30 on a failure, 60 on a critical failure, prone on both |
+| R-22 | **Sprenger** (Antithesis) | **20-ft burst** within 60 ft, basic Reflex, **force**; crit fails **restrained 1 minute** (Escape vs. Reiatsu DC) | ✅ | 20-ft burst, basic Reflex, force; restrained a minute on a critical failure |
+| R-23 | **Burning Full Fingers** (The Heat) | **60-ft cone**, basic Reflex, **fire**; failures **4d6 persistent fire** with a **DC 20** flat check | ✅ | 60-ft cone, 4d6 persistent fire at a **DC 20** flat check |
+| R-24 | **The Reckoning** (The Balance) | One creature within 60 ft, basic Fortitude, **spirit**; ignores **all** resistance and immunity; target **doomed 1**, or **doomed 2** if you used your Release Technique **≥3 times this encounter** | ⚠️ | Doomed 1 is applied; the escalation to 2 needs an encounter-scoped count of Release Technique uses that nothing keeps |
+| R-25 | **Electrocution** (The Thunderbolt) | **30-ft emanation**, basic Reflex, **electricity**; failures **stunned 2** (**incapacitation**) | ✅ | 30-ft emanation, stunned 2, and the `incapacitation` trait actually present |
+| R-26 | **Apotheosis** (The Miracle) | **30-ft emanation**, basic Fortitude, **force**; you gain temp HP = **twice your level**; **at the start of your next turn it detonates again for half the Waning dice** | 🔧 | **Fixed**: temp HP = twice your level via `TempHP`, and a `turn-start` re-detonation for half, reading `origin.severance.dice` so it is worth what the round it lands in says |
 
 ---
 
@@ -1736,3 +1736,84 @@ The ChoiceSet resolver had been answering nothing this whole campaign. It clicke
 `button[data-choice]`, which looks exactly right and matches **nothing** — the choices are Svelte-rendered
 buttons carrying no dataset at all. A job waiting on a prompt hung precisely as though no resolver had
 been installed, which is how it went unnoticed. The selector is `button.select-button`.
+
+---
+
+## §31 — the fifteen Arts, clause by clause
+
+Most of R-11..R-26 was authored and correct: every shape, damage type and save matches the guide, and
+the conditions that were there carried the right values — Hyōten Hyakkasō's restrained at an Escape
+against the Reiatsu DC, La Hora Final's enfeebled 3 for a minute and drained 1 for a day, Burning Full
+Fingers' persistent fire at a **DC 20** flat check, Ola Azul's 30- and 60-foot pushes, Electrocution's
+stunned 2 with the `incapacitation` trait. Four clauses were not.
+
+### SB-46 — the wound that will not close (R-11, R-14)
+
+Shūkei: Hakuteiken and Ittō Kasō both stop a target healing, for a minute. Neither said so in anything
+but prose. One shared effect now does it, and its second half publishes
+`self:effect:regeneracion-suppressed` — the option the Hollow's `Regeneración` already predicates on —
+so a Hollow caught by either Art stops regenerating rather than merely being told it has.
+
+### R-13 — persistent cold "with no flat check"
+
+The engine has no "no check" mode and pf2e's persistent damage always offers one. A DC no d20 can reach
+is the honest encoding: it is visible on the sheet rather than implied, and it says so on the card.
+
+### R-26 — Apotheosis
+
+Temporary Hit Points equal to twice your level, and a second detonation at the start of your next turn
+for **half the Waning dice**. Both live on an effect the caster wears: `TempHP` is a rule element, and
+the re-detonation is a `turn-start` rider carrying the same 30-foot emanation.
+
+"Half" is `multiplier: 0.5`, which halves the **total** — `10d6` would be a different distribution from
+half of 20d6 — and the dice come from a new resolvable, `origin.severance.dice`. That one matters: by the
+time the second blast lands the round has turned, so it is worth what the table says in the round it
+actually goes off, not what the first one rolled.
+
+### SB-47 — R-15, and a trap I walked into twice
+
+Ittō Kasō's price is the drawback that pays for its extra dice and its immunity-piercing fire:
+
+> You take damage equal to **half your current Hit Points**, unpreventable, unreducible, unresistable,
+> unredirectable, applied **after** the Art resolves.
+
+There was no way to express it. `hpFraction` on a death rider is a *threshold*, not an amount; every
+damage rider wants a formula, and this number is not known until it lands. `fractionOfCurrentHp` is the
+new form, applied with `skipIWR` and `final` — which is the whole "unresistable" clause.
+
+Then it did not fire, and the reason is worth keeping:
+
+**A rider with no `event` defaults to `save-rolled`.** For "for each creature that fails its save, you
+regain 3 Hit Points" — Sekishiki Kisōen — that is exactly right. For a cost paid once it is doubly wrong:
+charged once per creature who rolled, and *not at all* against an empty cone. The same trap had already
+caught Pantera's free Step (S-40), authored earlier in this same campaign, which would have been offered
+once per creature the cone caught.
+
+`event: "action-used"` fires on the cast itself, once. A validator now refuses a top-level `self` rider
+that has **neither an event nor outcomes**, since that combination can only mean the author expected it
+to happen once and it will not. Nested riders are exempt: they run inside their parent's pass and have no
+event of their own.
+
+**Live:** a 20th-level Ryūjin Jakka at 200 Hit Points casts Ittō Kasō in round one — **200 → 100**, and
+Severance ends.
+
+### Still prose
+
+Four clauses are described and not automated, and are listed here rather than left to be rediscovered:
+
+- **R-16** Kanzen Saimin: Owari's critical failure — the victim perceives *its own allies* as you, and
+  damage cannot shake it loose. The confusion itself is applied; this rewrite of who-looks-like-whom has
+  no mechanical handle short of retargeting another creature's attacks.
+- **R-18** Cero Oscuras: Ceniza — a creature dropped to 0 crumbles to ash and needs a 10th-rank effect to
+  return. What happens to a corpse is the table's, not the module's.
+- **R-20** Aullido's wolves — requires at least one, expends all of them, none regrow this encounter, and
+  the prone-and-stunned clause applies only when five or more were spent. The `chargeSpend` machinery
+  could carry this; it does not yet.
+- **R-24** The Reckoning's escalation to doomed 2 "if you used your Release Technique three or more times
+  this encounter" — an encounter-scoped counter nothing keeps.
+
+### A harness note
+
+The first drive of this section built a **Soul Reaper carrying Arrogante's Severing Art**. A ChoiceSet
+auto-clicker was running alongside the rig's own resolver, answered first, and took whatever was at the
+top of each list. Only one of the two may be installed at a time.

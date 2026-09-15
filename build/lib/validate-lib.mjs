@@ -1095,6 +1095,21 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
         errors.push(`${at} is a save rider, but this spell has no save for it to key off`);
     }
 
+    // A `self` rider with no event AND no outcomes fires once per creature caught.
+    //
+    // The default event is `save-rolled`, which is right for "for each creature that fails, you regain 3
+    // Hit Points" — Sekishiki Kisōen says exactly that, and carries `outcomes` to prove it. It is wrong
+    // for anything that happens once: Ittō Kasō's price would have been charged per victim and not at
+    // all against an empty cone, and Garra's free Step would have been offered once per creature. A
+    // rider that means "you, once" wants `event: "action-used"`, which fires on the cast itself.
+    // Top level only: a nested rider runs inside its parent's pass and has no event of its own.
+    if (depth === 0 && rider.self === true && rider.event === undefined && rider.outcomes === undefined) {
+        errors.push(
+            `${at} is a \`self\` rider with neither an event nor outcomes, so it defaults to `
+            + "`save-rolled` and fires once per creature caught — and not at all if none was. For "
+            + "something that happens once to the caster, say `event: \"action-used\"`.",
+        );
+    }
     // A key the engine does not read is the whole failure mode this validator exists for. `once` is real
     // on an effect apply (`apply.once`) and means nothing at the rider level, where it reads just as
     // naturally — so say so rather than letting it sit there looking implemented.
@@ -1469,12 +1484,20 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
                     }
                 }
             } else {
+                // A share of the target's current hit points is not dice and needs no formula.
+                const share = Number(apply.fractionOfCurrentHp);
+                if (apply.fractionOfCurrentHp !== undefined && !(share > 0 && share <= 1)) {
+                    errors.push(`${at} fractionOfCurrentHp must be above 0 and at most 1 — got "${apply.fractionOfCurrentHp}"`);
+                }
+                if (share > 0) return;
                 const isResolvable = typeof apply.formula === "string" && apply.formula.startsWith("origin.");
                 if (!isResolvable && !FLAT_OR_DICE.test(String(apply.formula ?? ""))) {
                     errors.push(`${at} ${apply.type} needs a formula like "4d6" — got "${apply.formula}"`);
                 }
                 const known = /^origin\.technique\..+\.damage(\+\d+d\d+)?$/.test(apply.formula)
                     || apply.formula === "origin.libra.bleed"
+                    // The Waning dice as they stand when the rider fires, not when it was authored.
+                    || apply.formula === "origin.severance.dice"
                     || /^origin\.libra\.dice\.d\d+$/.test(apply.formula);
                 if (isResolvable && !known) {
                     errors.push(`${at} unrecognised resolvable formula "${apply.formula}"`);

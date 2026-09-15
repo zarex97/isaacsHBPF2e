@@ -33,6 +33,7 @@
                         "text": "Refined Release: you may <strong>Step</strong> as a free action.",
                         "type": "prompt"
                     },
+                    "event": "action-used",
                     "note": "Refined: the cat moves after it swipes.",
                     "predicate": [
                         "feature:refined-release"
