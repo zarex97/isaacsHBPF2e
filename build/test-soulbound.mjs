@@ -2424,4 +2424,55 @@ check("and Bailar declares a different one",
     contentDoc("soulbound-effects/effect-bailar-de-valquiria.json").flags["isaacs-hb-pf2e"].refuseDeath,
     { cost: 5, label: "Bailar de Valquiria", resource: "effect-miracle-points" });
 
+
+/**
+ * SB-42. The Waning table was pure, exported, unit-tested — and connected to nothing. All fifteen
+ * Severing Arts were authored at a flat `20d6`, the round-one value, so a Soulbound could sit through
+ * nine rounds of a 4d6 rider, doubled Flash Step and free kidō and still end the fight for seventy
+ * points. Guide §9 is explicit that the decay IS the balance lever.
+ */
+const { applyWaning, isSeveringArt, waningDice: waning } =
+    await import("../scripts/soulbound/severance.mjs");
+
+check("the table runs 20 down to 8 across rounds one to seven",
+    [1, 2, 3, 4, 5, 6, 7].map(waning), [20, 18, 16, 14, 12, 10, 8]);
+check("and refuses outside it — the Art is gone, not cheap",
+    [0, 8, 9, 10].map(waning), [0, 0, 0, 0]);
+
+const art = (formula) => ({
+    system: { traits: { otherTags: ["sb-tier-severing"] }, damage: { 0: { formula } } },
+});
+const notArt = { system: { traits: { otherTags: [] }, damage: { 0: { formula: "20d6" } } } };
+
+const stamped = (round, formula) => {
+    const item = art(formula);
+    applyWaning({ itemTypes: { spell: [item] } }, round);
+    return item.system.damage[0].formula;
+};
+check("round three stamps sixteen dice", stamped(3, "20d6"), "16d6");
+check("round seven stamps eight", stamped(7, "20d6"), "8d6");
+check("round eight leaves nothing to roll", stamped(8, "20d6"), "0");
+// Ittō Kasō is "the Waning dice **+2d6**" (R-14): the extra survives the rewrite.
+check("an Art with an extra keeps it", stamped(3, "20d6 + 2d6"), "16d6 + 2d6");
+
+const other = { itemTypes: { spell: [notArt] } };
+applyWaning(other, 3);
+check("and a Technique that is not an Art is untouched", notArt.system.damage[0].formula, "20d6");
+
+check("the tag is the only thing that identifies an Art",
+    [isSeveringArt(art("20d6")), isSeveringArt(notArt)], [true, false]);
+
+// Every one of the fifteen carries it, or the stamp would skip it in silence.
+for (const name of ["mugetsu", "shukei-hakuteiken", "hyoten-hyakkaso", "itto-kaso",
+                    "kanzen-saimin-owari", "desgarron", "cero-oscuras-ceniza", "la-hora-final",
+                    "aullido", "ola-azul", "sprenger", "burning-full-fingers", "the-reckoning",
+                    "electrocution", "apotheosis"]) {
+    check(`${name} is tagged as a Severing Art`,
+        techDoc(name).system.traits.otherTags.includes("sb-tier-severing"), true);
+}
+
+check("Severance pays for the Release Technique and every kidō, without a counter",
+    contentDoc("soulbound-effects/effect-severance.json").flags["isaacs-hb-pf2e"].freeCast.unlimited,
+    true);
+
 report("Soulbound tests");

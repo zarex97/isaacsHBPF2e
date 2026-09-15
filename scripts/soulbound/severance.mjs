@@ -43,6 +43,39 @@ export function roundOfSeverance({ began, now }) {
     return Math.max(1, now - began + 1);
 }
 
+/** The tag every Severing Art carries, and the only thing that identifies one. */
+export const ART_TAG = "sb-tier-severing";
+
+/** Is this item a Severing Art? */
+export function isSeveringArt(item) {
+    return (item?.system?.traits?.otherTags ?? []).includes(ART_TAG);
+}
+
+/**
+ * Stamp the Waning dice onto every Severing Art the actor is carrying.
+ *
+ * **The whole table was inert.** `waningDice` was pure, exported and unit-tested; the fifteen Arts were
+ * authored at a flat `20d6`, which is the round-one value, and nothing ever connected the two. A
+ * twentieth-level Soulbound could sit through nine rounds of a 4d6 rider, doubled Flash Step and free
+ * kidō and still end the fight for seventy points of damage — which removes the decision the capstone
+ * is built around. Guide §9 is explicit that the decay *is* the balance lever.
+ *
+ * Done in `prepareDerivedData` rather than at cast time so the **card is honest**: a player in round
+ * three sees 16d6 on the Art before deciding whether to spend it. That costs a re-preparation whenever
+ * the round advances, which `registerHooks` does for exactly the actors in a Severance.
+ */
+export function applyWaning(actor, round) {
+    const dice = waningDice(round);
+    for (const item of actor.itemTypes?.spell ?? []) {
+        if (!isSeveringArt(item)) continue;
+        const part = item.system?.damage?.["0"];
+        if (!part?.formula) continue;
+        // Ittō Kasō is "the Waning dice **+2d6**" (R-14), so the extra is kept rather than overwritten.
+        const extra = /\+\s*(\d+d\d+)/.exec(part.formula)?.[1];
+        part.formula = dice === 0 ? "0" : `${dice}d6${extra ? ` + ${extra}` : ""}`;
+    }
+}
+
 async function packed(name) {
     const pack = game.packs.get(EFFECTS_PACK);
     const entry = pack ? (await pack.getIndex()).find((e) => e.name === name) : null;
@@ -69,6 +102,43 @@ export const Severance = {
     /** The dice a Severing Art would roll right now. 0 means it refuses. */
     dice(actor) {
         return waningDice(this.round(actor));
+    },
+
+    /**
+     * Refuse an Art that has decayed past use, and end Severance when one is used.
+     *
+     * Guide §9: using the Art "is two actions, costs nothing, and immediately ends Severance whether you
+     * want it to or not", and after the seventh round it cannot be used at all. Both halves lived only
+     * in the prose — `waningDice` returned 0 for round 8 and nothing asked it, so the Art stayed on the
+     * sheet and rolled its printed twenty dice in round ten.
+     */
+    beforeCast(spell) {
+        if (!isSeveringArt(spell)) return true;
+        const actor = spell?.actor;
+        if (!actor) return true;
+        if (!this.effectOn(actor)) {
+            ui.notifications.warn(`${spell.name} can only be used during Severance.`);
+            return false;
+        }
+        if (this.dice(actor) === 0) {
+            ui.notifications.warn(
+                `${spell.name} has decayed past use — a Severing Art cannot be used after the seventh round.`,
+            );
+            return false;
+        }
+        return true;
+    },
+
+    /** Called after the Art has actually reached the table. */
+    async afterCast(spell) {
+        if (!isSeveringArt(spell)) return;
+        const actor = spell?.actor;
+        if (!actor || !this.effectOn(actor)) return;
+        await this.end(actor);
+        ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<p><strong>${spell.name}</strong> ends Severance.</p>`,
+        });
     },
 
     async begin(actor) {
@@ -103,7 +173,10 @@ export const Severance = {
                 const actor = combatant.actor;
                 if (!Reiatsu.isSoulbound(actor)) continue;
                 if (!this.effectOn(actor)) continue;
-                if (this.round(actor) > 10) await this.end(actor);
+                if (this.round(actor) > 10) { await this.end(actor); continue; }
+                // The Waning dice are a function of the round, and nothing else re-prepares an actor
+                // when the round turns — so the Art on the sheet would keep round one's twenty dice.
+                actor.reset();
             }
         });
     },
