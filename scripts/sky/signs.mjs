@@ -30,16 +30,21 @@ export function signOf(id) {
 /**
  * Aspects, and the weights used when rolling a day.
  *
- * `exalted` has weight 0 on purpose. The class guide is emphatic that a Zenith is scheduled, not rolled —
- * 1 in 260 means it would otherwise never actually happen at the table, and that scene is the whole class.
- * The only way to an Exalted sky is the GM's Schedule Zenith control.
+ * Reweighted for the Stargazer (guide v3 §8.2) at the module owner's direction. The old spread was
+ * 50/20/15/15/0 — half of all days were Quiet, and a sky that does nothing five days in ten is a
+ * subsystem nobody at the table ever notices. The sky is now active on four days in five.
+ *
+ * `exalted` is no longer weight 0, which is a real change to the SAINT and not only to the Stargazer:
+ * a Zenith can now happen by chance. A Saint's own sign rises 1 day in 13 and 1 day in 10 is Exalted,
+ * so an unscheduled Zenith lands roughly once every 130 days of game time rather than never.
+ * `scheduleZenith` is unchanged and is still how you put one on a specific day.
  */
 export const ASPECTS = [
-    { id: "none", label: "Quiet", weight: 50, hint: "The sky is unremarkable." },
-    { id: "benefic", label: "Benefic", weight: 20, hint: "The sky is kind." },
-    { id: "retrograde", label: "Retrograde", weight: 15, hint: "The sky drags." },
-    { id: "malefic", label: "Malefic", weight: 15, hint: "The sky is hostile." },
-    { id: "exalted", label: "Exalted", weight: 0, hint: "A Zenith. Scheduled by the GM, never rolled." },
+    { id: "none", label: "Quiet", weight: 20, hint: "The sky is unremarkable." },
+    { id: "benefic", label: "Benefic", weight: 30, hint: "The sky is kind." },
+    { id: "retrograde", label: "Retrograde", weight: 10, hint: "The sky drags." },
+    { id: "malefic", label: "Malefic", weight: 30, hint: "The sky is hostile." },
+    { id: "exalted", label: "Exalted", weight: 10, hint: "A Zenith." },
 ];
 
 export const ASPECT_IDS = ASPECTS.map((a) => a.id);

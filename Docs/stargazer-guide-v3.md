@@ -1,11 +1,21 @@
-# The Stargazer — PF2e Class Guide, **Version 2**
+# The Stargazer — PF2e Class Guide, **Version 3**
 
 ### *The diviner, the luck-handler, and the one who has already seen how this ends*
 
-*The complete, self-contained class. One chassis, **four Paths**, fourteen Auguries, the full feat
+*The complete, self-contained class. One chassis, **four Paths**, sixteen Auguries, the full feat
 spine, and the three tiers of the rewind. Companion to **The Saint** (Gold Cloth guide v4), **The
-Soulbound** (guide v1.4) and **The Breath Slayer** (guide v5), and costed on the same **2100-point**
-budget.*
+Soulbound** (guide v1.4) and **The Breath Slayer** (guide v5).*
+
+> ### This class is deliberately over budget: **2860 points, not 2100.**
+>
+> v3 was commissioned as a **buff**, and the owner's instruction was explicit: *"I don't care if it
+> exceeds the budget."* So it does, by **+760**. The BCS total is still computed and reported
+> throughout — not as a constraint but as a **measuring stick**, because "how far above the curve, and
+> in which subtotals" is a far more useful thing to know than "legal / illegal." The overage is
+> itemised in **§2.4** and the dials are in **§2.5**.
+>
+> Every other class in this module totals 2100. This one is **36% above** it, and §9 is the honest
+> account of what that buys and where it lands against the Bard.
 
 **Sources folded in:** the v1 draft supplied by the repository owner (`006b1f2b-stargazer-bcs-guide1.md`);
 **BCS 1.4** (`Docs/homebrewing/BCS 1.4 (current) _ Balanced Core System.xlsx`) for every point value,
@@ -15,7 +25,42 @@ for every mechanical anchor; and **this module's own shipped Sky implementation*
 
 ---
 
-## 0 — What changed from v1, and why
+## 0A — What changed in v3
+
+v3 is a commissioned buff, not a correction. Four things were asked for. All four are in, and the
+budget consequences are in §2.4–2.5 rather than hidden in a reshuffle.
+
+1. **Perception now matches the Investigator exactly** — Trained and Expert at 1st, **Master at 7th,
+   Legendary at 13th**. That is 360 points, up from 170. It also takes the class **off the
+   Caster-Specialist profile**: Legendary Perception belongs to the Ranger, the Investigator and the
+   Gunslinger, and no caster of any kind has it. §2.3 flags it rather than pretending otherwise. It
+   is, to be fair, the single most thematically defensible thing to break the profile for — this
+   class *looks at things* for a living.
+2. **Will escalates to Legendary at 17th again**, as v1 had it: Expert at 1st, Master at 11th,
+   Legendary at 17th. 360 points, up from 170. BCS line 69 still says the Bard's version is likely an
+   error; v3 copies it knowingly. Combined with Legendary Perception it makes the Stargazer very close
+   to unbreakable by mental effects from 17th on, which is the correct end state for a seer.
+3. **Two self-defence options**, because 8 HP and Reflex Trained until 13th was never survivable:
+   - ***Death Foretold*** (§5.2) — an Augury available from **1st level**. You show a creature the
+     hour of its own death. Will save; frightened 1/2, and **frightened 3 and stunned 1** on a
+     critical failure. It heightens to **five creatures**, which is exactly how *fear* heightens.
+   - ***The Last Thing You See*** (§4.8) — a **reaction at 5th level**, triggered when something
+     damages you, applying the same fear ladder to whatever hit you. This is the class's first
+     genuine "stop touching me" button.
+   - *Borrowed Second* now targets **you** as well as an ally, which turns it into an escape.
+4. **Everything reaches more targets.** Fortune's Thread goes **1 → 2 creatures at 5th → 3 at 17th**;
+   *Chart the Course* names **two** creatures from 11th; *Twin Fates* affects **two**; and **ten of
+   the sixteen Auguries gained multi-target heightening**, which is free on the ledger because
+   heightening is what a focus spell is supposed to do (§5.1).
+
+**Net effect on power:** large, and concentrated at two places — 5th level, where the class stops being
+a liability in melee range, and 13th–17th, where the luck engine reaches **Courageous Anthem parity**
+on throughput while keeping the entire information half of the class. §9 is rewritten around that and
+no longer says "it is not a Bard," because from 5th on that is no longer true in the way it was.
+
+---
+
+## 0B — What changed in v2, and why
 
 v1 was a good class pitch with a ledger that did not survive contact with the spreadsheet. Nine things
 changed. Six are corrections; three are design.
@@ -33,7 +78,7 @@ changed. Six are corrections; three are design.
    and are flagged as homebrew where they need more.
 3. **The benchmark table in v1's Part 9 was wrong in every row.** It guessed "Investigator ~500,
    Bard ~200, Wizard ~600" for bespoke class features. The real figures, read out of `CLASSDATA`,
-   are **Investigator 180, Bard −160, Wizard 90**. §2.4 prints the real table for all 23 classes.
+   are **Investigator 180, Bard −160, Wizard 90**. §2.6 prints the real table for all 23 classes.
    The correction cuts both ways and is the reason v2 exists — see below.
 4. **v1's feature prices were roughly double the published rate.** v1 charged 110 for Fortune's
    Thread. The sheet charges **70 for Courageous Anthem** (party-wide, at-will, +1 status to attack
@@ -64,9 +109,10 @@ changed. Six are corrections; three are design.
    ladder (360). The trade is point-neutral, moves the saves onto the Caster-Specialist profile
    *exactly*, and buys five free cantrips on the way. §2.2.
 
-**Net effect on power:** the class is meaningfully stronger than v1 in rounds 2 and 3 of a fight, very
-slightly weaker at 17th+ (no Legendary Will), and identical on the ledger. It is still not a Bard.
-§9 is the honest accounting of that.
+**Net effect on power (as of v2):** the class was meaningfully stronger than v1 in rounds 2 and 3 of a
+fight, very slightly weaker at 17th+ (no Legendary Will), and identical on the ledger at 2100. v2's
+conclusion was "it is still not a Bard." **v3 overturns both halves of that** — the ledger and the
+conclusion — and §0A above is what changed.
 
 ---
 
@@ -118,15 +164,25 @@ Investigator's Intelligence turf and makes Perception — a rank the class cares
 *If you prefer Intelligence* (astronomy as mathematics rather than as patience), swap the granted
 Occultism for Arcana; the ledger is unchanged.
 
-**The profile is Caster-Specialist, and for once it is exact.** 8 HP, light armour to Expert at 13,
-simple weapons to Expert at 11, Fortitude Expert at 9, Reflex Expert at 13, Will Master at 11,
-Perception Master at 11. Every one of those is the Caster-Specialist recommendation or its only
-published data point. v1 deviated on two lines (Perception Master at 7, Will Legendary at 17); v2
-deviates on none.
+**The profile is Caster-Specialist everywhere except its two senses.** 8 HP, light armour to Expert
+at 13, simple weapons to Expert at 11, Fortitude Expert at 9, Reflex Expert at 13 — every one of those
+is the Caster-Specialist recommendation exactly, and v3 does not touch them.
+
+The two deliberate breaks are **Perception** and **Will**, both raised in v3 at the owner's direction:
+
+- **Perception to Legendary at 13th**, matching the Investigator line for line. **No caster of any
+  kind has Legendary Perception** — it belongs to the Ranger, the Investigator and the Gunslinger, and
+  BCS line 36 caps the Caster-Specialist at Expert at 11. This is off-profile and stays off-profile;
+  it is not defended by the sheet, it is defended by the concept.
+- **Will to Legendary at 17th**, the Bard's line, which BCS line 69 flags as probably an error. Copied
+  knowingly.
+
+Everything else about the chassis is orthodox. The class is a Caster-Specialist that can see and
+cannot be talked to.
 
 ---
 
-## 2 — The point ledger (2100 exactly)
+## 2 — The point ledger (2860, and why)
 
 ### 2.1 The values used
 
@@ -143,18 +199,18 @@ Plus two rules that do real work below: **line 140** (5 free cantrips for a cast
 **line 137** (Core Skill: Trained at 1, Expert at 3, Master at 7, Legendary at 15, 5 points each
 increase, plus a skill feat at each).
 
-### 2.2 Chassis — 1080
+### 2.2 Chassis — 1460
 
 | Line | Value | Points |
 |---|---|---|
 | HP | 8 | 80 |
 | Class feat at 1st | TRUE | 10 |
 | **Spell DC** ("Stargazer DC") | T@1 / E@7 / M@15 / L@19 | 10 + 50 + 110 + 190 = **360** |
-| **Perception** | T@1 / E@1 / M@11 | 10 + 50 + 110 = **170** |
+| **Perception** | T@1 / E@1 / M@7 / **L@13** | 10 + 50 + 110 + 190 = **360** |
 | Fortitude | T@1 / E@9 | 10 + 50 = 60 |
 | Reflex | T@1 / E@13 | 10 + 50 = 60 |
-| Will | T@1 / E@1 / M@11 | 10 + 50 + 110 = 170 |
-| **Saves total** | | **290** |
+| Will | T@1 / E@1 / M@11 / **L@17** | 10 + 50 + 110 + 190 = 360 |
+| **Saves total** | | **480** |
 | **Attack** | Unarmed T@1, Simple T@1, Expert @11 | 10 + 10 + 50 = **70** |
 | **Defense** | Unarmored T@1, Light T@1, Expert @13 | 10 + 10 + 50 = **70** |
 | Weapon Specialization | *none* | 0 |
@@ -162,75 +218,138 @@ increase, plus a skill feat at each).
 | Spell slots | *none* | 0 |
 | Skills | 4 initial increases (20) + 2 granted (10) | **30** |
 | Shield Block | FALSE | 0 |
-| **CHASSIS** | | **1080** |
+| **CHASSIS** | | **1460** |
 
 Legality, checked line by line against the design-guide sheet:
 
 - **Line 18** — Caster-Specialist Spell DC is a *set* progression, T1/E7/M15/L19. Taken exactly. ✅
 - **Line 25** — cantrip slots require a Spell DC. Taken. ✅
 - **Line 24** — casters should get Legendary Spell DC unless Martial-Casters. Taken. ✅
-- **Line 36** — Caster-Specialist Perception: Master at 11 is the published data point. Taken. ✅
-  (v1's Master at 7 was outside the profile.)
+- **Line 36** — Caster-Specialist Perception caps at Expert at 11. **Broken on purpose: Master at 7,
+  Legendary at 13, the Investigator's line.** ❌ *by request, §0A item 1*
 - **Line 64** — at least one save starts Expert (Will), at least one starts Trained (Fort, Reflex). ✅
 - **Line 65** — saves starting Trained must reach Expert and may not reach Master. Fort E@9,
   Reflex E@13. ✅
 - **Line 66** — a save starting Expert must reach Master, earliest 7th. Will M@11. ✅
-- **Line 69** — Bard's Legendary Will is likely an error and should not be copied. Not copied. ✅
-- **Lines 55–57** — Caster-Specialist recommendations are Fort E@9, Reflex E@13, Will M@11. All three
-  taken exactly. ✅
+- **Line 67** — Legendary in a save must be at least 3 feature steps after Master. M@11 → L@17. ✅
+- **Line 69** — Bard's Legendary Will is likely an error and should not be copied. **Copied anyway.**
+  ❌ *by request, §0A item 2*
+- **Lines 55–57** — Caster-Specialist recommendations are Fort E@9, Reflex E@13, Will M@11. Fortitude
+  and Reflex taken exactly; Will continues past the recommendation to Legendary. ⚠
 - **Line 92 / 116** — Caster-Specialist recommendation is Light armour E@13 and Simple weapons E@11.
   Both taken. ✅
 - **Line 100** — Trained in Unarmored minimum. ✅
 - **Line 135** — 4 additional + 2 granted = 6 initial trained skills, above the 4 floor. ✅
-- **Line 134** — initial skills are the tuning knob, set last. Used in §2.5. ✅
+- **Line 134** — initial skills are the tuning knob, set last. Used in §2.7. ✅
 
-### 2.3 Features — 1020
+### 2.3 Features — 1400
 
 | Level | Feature | Points | Anchor in the sheet |
 |---|---|---|---|
 | 1 | **Star Chart** (focus pool, Auguries) | 10 | Champion's *Lay on Hands* grant, 10 |
-| 1 | First Augury | 10 | granted focus spell, 10 |
+| 1 | First Augury | 30 | §5.1 — repriced from 10 in v3 |
 | 1 | **Fortune's Thread** | 70 | *Inspire Courage* 70; *Champion's Reaction* 50 |
-| 1 | **Chart the Course** | 50 | *Implement's Empowerment* 50; *Clarity of Focus* 50 |
+| 1 | **Chart the Course** (names 2 creatures from 11th) | 70 | *Implement's Empowerment* 50, +20 for the second name |
 | 1 | **Night Vigil** | 50 | *Counter Performance* 50 |
 | 1 | **Portent** | 30 | *Devise a Stratagem* 30 |
 | 1 | **Stargazer's Path** (initial) | 50 | Thaumaturge *Initiate Benefit* 50 |
 | 3 | **Astronomy Lore** — Core Skill (3 × 5) + 3 core skill feats (3 × 5) | 30 | line 137 |
 | 5 | Path ability | 30 | *Divine Ally* 30 |
-| 5 | **Widen the Sky** | 30 | *Divine Ally* 30 |
-| 5 | Augury | 10 | |
-| 7 | **Second Star** (2nd Focus Point) | 30 | judgment call — §2.6 |
-| 7 | Augury | 10 | |
+| 5 | **Widen the Sky** (2 creatures, any combination) | 50 | *Clarity of Focus* 50 |
+| 5 | **The Last Thing You See** | 70 | *Champion's Reaction* 50; *Inspire Courage* 70 |
+| 5 | Augury | 30 | §5.1 |
+| 7 | **Second Star** (2nd Focus Point) | 30 | judgment call — §2.8 |
+| 7 | Augury | 30 | §5.1 |
 | 9 | **Surer Thread** (±1 → ±2) | 10 | *Investigator Expertise* 10 |
-| 9 | Augury | 10 | |
+| 9 | Augury | 30 | §5.1 |
 | 11 | **Unmake the Moment** | 110 | *Exalt* 110; *Reflow Elements* 110 |
-| 11 | Augury | 10 | |
+| 11 | Augury | 30 | §5.1 |
 | 13 | **Constellation Mastery** | 50 | *Clarity of Focus* 50 |
 | 13 | Path ability | 70 | *Implement Paragon* 70 |
-| 13 | Augury | 10 | |
-| 15 | **Twin Fates** | 50 | |
-| 15 | Augury | 10 | |
+| 13 | Augury | 30 | §5.1 |
+| 15 | **Twin Fates** (2 creatures) | 70 | |
+| 15 | Augury | 30 | §5.1 |
+| 17 | **Threefold Thread** (Fortune's Thread reaches 3) | 70 | *Implement Paragon* 70 |
 | 17 | Path ability | 70 | *Implement Paragon* 70 |
-| 17 | Augury | 10 | |
+| 17 | Augury | 30 | §5.1 |
 | 19 | **Rewrite the Ending** | 190 | ***Hero's Defiance* 190** — verified, not assumed |
-| 19 | Augury | 10 | |
-| | **FEATURES** | **1020** | |
+| 19 | Augury | 30 | §5.1 |
+| | **FEATURES** | **1400** | |
 
-Per-level: 270 + 30 + 70 + 40 + 20 + 120 + 130 + 60 + 80 + 200 = **1020**.
+Per-level: 310 + 30 + 180 + 60 + 40 + 140 + 150 + 100 + 170 + 220 = **1400**.
 
-### **TOTAL: 1080 + 1020 = 2100** ✅
+### **TOTAL: 1460 + 1400 = 2860**
 
-Broken out the way `CLASSTOTALS` groups it: **class abilities 700**, **subclass abilities 220**,
-**focus spells 100**.
+Broken out the way `CLASSTOTALS` groups it: **class abilities 900**, **subclass abilities 220**,
+**focus spells 280**.
 
-### 2.4 Where 920 of bespoke spending actually sits
+### 2.4 The overage, itemised
+
+| Change | Cost |
+|---|---|
+| Perception 170 → 360 (Investigator line, Legendary at 13) | **+190** |
+| Will 170 → 360 (Legendary at 17) | **+190** |
+| *The Last Thing You See* — the self-defence reaction | **+70** |
+| *Threefold Thread* — Fortune's Thread reaches three | **+70** |
+| *Widen the Sky* repriced (two creatures, any combination, not one-and-one) | **+20** |
+| *Chart the Course* repriced (names two creatures from 11th) | **+20** |
+| *Twin Fates* repriced (two creatures) | **+20** |
+| **Auguries repriced 10 → 30 each**, nine known | **+180** |
+| Multi-target heightening on every Augury | **0** — §5.1 |
+| ***Death Foretold***, ***The Hour Is Not Come***, self-targeting *Borrowed Second* | **0** — they join a pool now paid for at the higher rate |
+| | **+760** |
+
+Half the overage is the two proficiency lines. The other half is the kit: **+200** of new and repriced
+features, plus **+180** of Augury repricing — which is not extra power *on top of* §5.2 but the honest
+bill **for** it.
+
+**What 2860 means at the table.** It is **36% above** every published class. That is not "dual-class
+strong" — the sheet's own `DualClass Calculator` puts a dual-class character at roughly double — but
+it is comfortably *a single class with a free archetype already paid for, and then some*.
+
+Expect a Stargazer to pull clearly ahead of the party's other support at four points:
+
+| Level | What lands | Why it shows |
+|---|---|---|
+| **1** | *Death Foretold* | A 1st-level focus spell that frightens **five** creatures. Nothing else at 1st does that. |
+| **5** | *The Last Thing You See* + two-target Threads | The class stops being a liability inside 30 feet. |
+| **13** | Legendary Perception | It acts first in every encounter and finds everything. |
+| **17** | Legendary Will + *Threefold Thread* | Effectively unbreakable mentally, moving three d20s a round for free. |
+
+If the rest of your table is published-class PCs, tell them the number. If the rest of your table is
+this module's other homebrew — the Saint, the Soulbound, the Breath Slayer, all at 2100 — **the
+Stargazer is now the strongest character in the party**, and that should be a decision rather than a
+discovery in session twelve.
+
+### 2.5 The dials, if you ever want them
+
+Budget is not a constraint here, so this is not a menu of trims — it is a map of where the power
+actually sits, in case something misbehaves in play. Pull from the top.
+
+| Dial | Worth | What removing it costs you |
+|---|---|---|
+| ***The Hour Is Not Come*** | 30 | The strongest single Augury: a reactive *"you were not going to die today."* **Watch this one first.** |
+| *Threefold Thread* (17th) | 70 | Fortune's Thread stops at two creatures. The biggest late-game cut available. |
+| *Guiding Star*'s 10th-rank tier | 0 | +2 to five allies is *Courageous Anthem* and then some. Cap it at +1 and it is merely excellent. |
+| *Coiling Doubt*'s 1-minute critical failure | 0 | Three creatures rolling twice-take-lower for a minute ends boss fights. Cap the crit failure at 3 rounds as well. |
+| *Death Foretold*'s crit-failure line | 0 | Frightened 3 **and** stunned 1 **and** fleeing is three riders on one outcome. Drop fleeing first. |
+| Malefic's sky weight (§8.2) | 0 | Move 10 of it to Quiet if the world feels oppressive. Costs the class nothing. |
+| Perception Legendary → Master@7 | 190 | Undoes half of §0A item 1. |
+| Will Legendary → Master@11 | 190 | Undoes §0A item 2. |
+
+The one thing **not** to cut is the Spell DC line. Dropping to a Class DC saves 190 and takes the five
+cantrips with it, re-creating the dead-turn problem v2 existed to fix (§1.2) — and v3's Auguries, fear
+effects and *The Last Thing You See* all key off that DC, so it is worth considerably *more* now than
+it was.
+
+### 2.6 Where 1120 of bespoke spending actually sits
 
 This is the table v1 got wrong. Class abilities + subclass abilities, read out of `CLASSDATA`:
 
 | Class | Bespoke | | Class | Bespoke | | Class | Bespoke |
 |---|---|---|---|---|---|---|---|
-| Summoner | 1040 | | Swashbuckler | 380 | | Sorcerer | 190 |
-| **Stargazer** | **920** | | Barbarian | 370 | | Investigator | 180 |
+| **Stargazer (v3)** | **1120** | | Swashbuckler | 380 | | Sorcerer | 190 |
+| Summoner | 1040 | | Barbarian | 370 | | Investigator | 180 |
 | Monk | 800 | | Fighter | 310 | | Witch | 170 |
 | Alchemist | 760 | | Gunslinger | 210 | | Oracle | 130 |
 | Inventor | 730 | | Magus | 190 | | Psychic | 130 |
@@ -242,16 +361,19 @@ The pattern is not "good classes spend little." It is **classes that buy spell s
 left, and classes that don't buy slots spend it all on bespoke features.** Cleric spends 20 because
 it spent 1000 on casting. Summoner spends 1040 because its eidolon *is* the class.
 
-The Stargazer buys no slots, so 920 is the expected shape, and it sits between Alchemist and Monk.
-That is the defence of the number. What the number does **not** defend is the *distribution* — see §9.
+The Stargazer buys no slots, so a large bespoke figure is the expected shape. At **1120** it is now
+the highest in the game, just past the Summoner's 1040 — but note that the Summoner reaches 1040 while
+*also* buying 90 points of casting, and the Stargazer's extra 200 over v2 is the v3 kit (§2.4). The
+number is defensible in shape and high in magnitude. What it does **not** defend is the
+*distribution* — see §9.
 
-### 2.5 The tuning knob
+### 2.7 The tuning knob
 
 Initial skills were set last, per line 134. Four additional increases plus Occultism and Astronomy
 Lore lands the total on 2100 with nothing left over. If a later change needs 5 points, the fifth
 initial skill increase is where it comes from; if it needs to free 5, the fourth is where it goes.
 
-### 2.6 The three judgment calls
+### 2.8 The three judgment calls
 
 Flag these if you post the build for review. Each has a stated fallback that keeps the total at 2100.
 
@@ -285,19 +407,19 @@ unarmoured defence and light armour Trained · **Stargazer DC Trained** (Wisdom)
 | 2 | Stargazer feat, skill feat |
 | 3 | **Astronomy Lore** (Core Skill: Expert) + core skill feat, general feat, skill increase |
 | 4 | Stargazer feat, skill feat |
-| 5 | Ability boosts, ancestry feat, **Widen the Sky**, **Path ability**, new Augury, skill increase |
+| 5 | Ability boosts, ancestry feat, **Widen the Sky**, **The Last Thing You See**, **Path ability**, new Augury, skill increase |
 | 6 | Stargazer feat, skill feat |
-| 7 | **Expert Stargazer** (Stargazer DC expert), **Second Star**, Astronomy Lore → **Master** + core skill feat, new Augury, general feat, skill increase |
+| 7 | **Expert Stargazer** (Stargazer DC expert), **Vigilant Senses** (Perception master), **Second Star**, Astronomy Lore → **Master** + core skill feat, new Augury, general feat, skill increase |
 | 8 | Stargazer feat, skill feat |
 | 9 | **Surer Thread**, **Great Fortitude**, new Augury, ancestry feat, skill increase |
 | 10 | Ability boosts, Stargazer feat, skill feat |
-| 11 | **Unmake the Moment**, **Resolve** (Will master), **Vigilant Senses** (Perception master), **Weapon Expertise**, new Augury, general feat, skill increase |
+| 11 | **Unmake the Moment**, **Resolve** (Will master), **Weapon Expertise**, new Augury, general feat, skill increase |
 | 12 | Stargazer feat, skill feat |
-| 13 | **Constellation Mastery**, **Path ability**, **Lightning Reflexes**, **Armor Expertise**, new Augury, ancestry feat, skill increase |
+| 13 | **Constellation Mastery**, **Incredible Senses** (Perception legendary), **Path ability**, **Lightning Reflexes**, **Armor Expertise**, new Augury, ancestry feat, skill increase |
 | 14 | Stargazer feat, skill feat |
 | 15 | Ability boosts, **Master Stargazer** (Stargazer DC master), **Twin Fates**, Astronomy Lore → **Legendary** + core skill feat, new Augury, general feat, skill increase |
 | 16 | Stargazer feat, skill feat |
-| 17 | **Path ability**, new Augury, ancestry feat, skill increase |
+| 17 | **Threefold Thread**, **Greater Resolve** (Will legendary), **Path ability**, new Augury, ancestry feat, skill increase |
 | 18 | Stargazer feat, skill feat |
 | 19 | **Legendary Stargazer** (Stargazer DC legendary), **Rewrite the Ending**, new Augury, general feat, skill increase |
 | 20 | Ability boosts, Stargazer feat, skill feat |
@@ -349,10 +471,11 @@ listens reduce the day's negative aspect by one step for the rest of the day: **
 Retrograde**, **Retrograde → no effect**. Positive aspects are unchanged; you cannot improve a good
 sky, only survive a bad one.
 
-*Forewarned is this class's party function, and it is worth nothing on 70% of days.* Half of all days
-are Quiet and a fifth are Benefic (§8.2). On the 30% of days that are Retrograde or Malefic, the
-party simply does not have a bad day, and will not know what that was worth until the session you are
-not there.
+*Forewarned is this class's party function, and after v3's reweighting it is live on **40% of days**
+(§8.2) — 30% Malefic and 10% Retrograde. On those days the party simply does not have a bad day, and
+will not know what that was worth until the session you are not there. Thirty percent of all days are
+Malefic, which is the **−2** tier, so this is not a rounding error: it is the single largest thing the
+class does for four other people.
 
 **GM override.** The GM may declare the day's sign and aspect instead of rolling, whenever the story
 wants it. That is the feature, not a cheat — it is the omen-telegraphing tool the class exists to
@@ -397,9 +520,10 @@ them; see §12.2.
 ### 4.4 Chart the Course (1st)
 
 > **Chart the Course** ✦ **[one action]** (concentrate, prediction)
-> **Effect** Name one creature within 60 feet that you can see. Until the start of your next turn,
-> the first time that creature rolls a d20, you may use **Fortune's Thread** on that roll **without
-> spending your reaction**. You can have only one Chart the Course active at a time.
+> **Effect** Name one creature within 60 feet that you can see — **two creatures from 11th level**.
+> Until the start of your next turn, the first time a named creature rolls a d20, you may use
+> **Fortune's Thread** on that roll **without spending your reaction**. If you named two creatures you
+> may do this once for each of them. You can have only one Chart the Course active at a time.
 
 This is the action the class was missing. It converts your turn into your identity rather than into a
 Strike you are bad at: spend one action, and the round has two Threads in it instead of one.
@@ -445,20 +569,52 @@ discretion — Recall Knowledge about *anything that has been foretold*.
 ### 4.7 Widen the Sky (5th)
 
 Fortune's Thread's range increases to **60 feet**, and when you use it you may affect **two creatures**
-with the same reaction: one Guide and one Snarl. Both must be within range and you must be able to see
-both. It is still a single reaction, and Snarl's restriction to attack rolls, skill checks and
-Perception still applies.
+with the same reaction, in **any combination** — two Guides, two Snarls, or one of each. Both must be
+within range and you must be able to see both. It is still a single reaction, and Snarl's restriction
+to attack rolls, skill checks and Perception still applies.
 
-### 4.8 Second Star (7th)
+*(v2 allowed only one Guide and one Snarl, which meant the buff half was dead whenever there was no
+enemy roll to spoil. Two of the same is what makes this a real widening.)*
+
+### 4.8 The Last Thing You See (5th)
+
+> **The Last Thing You See** ⤾ **[reaction]** (concentrate, emotion, fear, illusion, mental,
+> prediction, visual)
+> **Trigger** A creature within 30 feet that you can see deals damage to you.
+> **Effect** You show it the hour of its own death — not a threat, a **date**. It attempts a Will save
+> against your Stargazer DC.
+>
+> **Critical Success** It is unaffected and is temporarily immune for 10 minutes.
+> **Success** Frightened 1.
+> **Failure** Frightened 2.
+> **Critical Failure** Frightened 3 and **stunned 1**.
+
+This is the class's first genuine "stop touching me" button, and it exists because 8 Hit Points, light
+armour and Reflex Trained until 13th is not a survivable combination without one. Frightened is a
+status penalty to **every check and DC** the creature has, so a failure here is worth more than a
+Snarl and it lasts past your next turn.
+
+**It competes with Fortune's Thread, and that is the design.** You have one reaction. Every round you
+choose between bending somebody else's luck and making the thing that just hit you regret it. That
+tension is the same one a Champion lives with, and it is the main brake on how much v3's buffs
+actually stack in a single round.
+
+*If you want it to stop competing:* the 10th-level feat **Two Warnings** grants a second reaction each
+round, usable only for Fortune's Thread, this, and *The Hour Is Not Come*.
+
+**Before 5th level**, the self-defence answer is the ***Death Foretold*** Augury (§5.2), which is
+available from 1st, costs a Focus Point, and puts the same ladder on up to five creatures at once.
+
+### 4.9 Second Star (7th)
 
 Your focus pool increases to **2 Focus Points**. (The third, as for every published class, comes from
 a class feat — *Conjunction*, 8th.)
 
-### 4.9 Surer Thread (9th)
+### 4.10 Surer Thread (9th)
 
 Fortune's Thread's bonus and penalty increase to **±2**.
 
-### 4.10 Unmake the Moment (11th)
+### 4.11 Unmake the Moment (11th)
 
 > **Unmake the Moment** ✦ **[free action]** (prediction)
 > **Frequency** once per day (recharges on your next Night Vigil)
@@ -482,7 +638,7 @@ your ally dies immediately after your turn, you wait a full round to undo it and
 that round comes back too, including the enemy's crit on you. Deciding whether that trade is worth it
 is the whole feature.
 
-### 4.11 Constellation Mastery (13th)
+### 4.12 Constellation Mastery (13th)
 
 You no longer read the sky. You argue with it.
 
@@ -501,18 +657,27 @@ You no longer read the sky. You argue with it.
 > looks at it"* (`tracker.mjs`) and a diviner cannot re-ask for a better answer. Trade the Day gets
 > the same power at the table without breaking that invariant, and it is a better story.
 
-### 4.12 Twin Fates (15th)
+### 4.13 Twin Fates (15th)
 
 Once per 10 minutes, when you use Fortune's Thread, you may instead make it a true **fortune** or
-**misfortune** effect: the target rolls twice and takes the higher result (Guide) or the lower result
-(Snarl). This replaces the bonus or penalty for that use, and Snarl's restriction to attack rolls,
-skill checks and Perception still applies.
+**misfortune** effect for **up to two of its targets**: each rolls twice and takes the higher result
+(Guide) or the lower result (Snarl). This replaces the bonus or penalty for those targets, and Snarl's
+restriction to attack rolls, skill checks and Perception still applies.
 
 Remember the stacking rule as printed: *"If a fortune effect and a misfortune effect would apply to
 the same roll, the two cancel each other out."* Using Twin Fates on a roll an enemy has already made
 misfortunate does nothing for either of you.
 
-### 4.13 Rewrite the Ending (19th)
+### 4.14 Threefold Thread (17th)
+
+Fortune's Thread affects **three creatures** with a single reaction, in any combination of Guide and
+Snarl. *Twin Fates* still affects two.
+
+At this point the class's core reaction is, once per round and for no action, moving three separate
+d20s by two each, chosen after you know what every one of them is for. §9.3 works out what that is
+worth against the Bard, and the answer is "about the same, and aimed."
+
+### 4.15 Rewrite the Ending (19th)
 
 See §10.3. It gets its own section.
 
@@ -520,107 +685,175 @@ See §10.3. It gets its own section.
 
 ## 5 — The Auguries
 
-### 5.1 The rule that keeps them at 10 points each
+### 5.1 How strong an Augury is allowed to be
 
-The sheet prices a granted focus spell at **10** for Champion, Druid, Sorcerer, Magus and Oracle — and
-at **50 and 70** for the Bard's, and **10 / 50 / 90** for the Psychic's. The difference is power. So:
+v2 capped Auguries at 10 points each and wrote them as "single-target, one-round-to-one-minute
+nudges." **That cap is gone in v3, and the reason is structural, not generosity.**
 
-> **No Augury may be worth more than 10 points.** Concretely, that means an Augury may not be a
-> party-wide buff (*Inspire Courage*, 70), may not substitute your check for everyone's saving throw
-> (*Counter Performance*, 50), and may not deal damage on the scale of an attack cantrip. An Augury
-> is a single-target, one-round-to-one-minute nudge. If a design idea is stronger than that, it is a
-> class feat or a Path ability, not an Augury.
+An Augury is not a spell you choose when you need it. Nine of them you know permanently, but the
+tenth — the **Augury of the Day** — is handed to you by a d13 you do not control, and you find out
+which one at dawn. A grant you cannot plan around has to be worth having on the day it lands, or the
+whole Augury-of-the-Day mechanic is a daily reminder that the sky does not care about your build.
+*Perfect Ledger* being a small Recall Knowledge trick is fine when you chose it. It is a wasted day
+when it is all Virgo gave you.
 
-Every entry below was written to that ceiling, and the two that pushed against it (*Hunted by the
-Sky*, *Shell of Hours*) are flagged in place.
+So the new ceiling is the honest one:
 
-All Auguries: `prediction`, `focus`, occult; rank = half your level rounded up; DC = Stargazer DC.
+> **An Augury should be as strong as a good focus spell of its rank.** The benchmarks are *Lay on
+> Hands*, *Inspire Courage*, *Dirge of Doom* and *Moonbeam* — focus spells that are routinely
+> *better* than a slot spell of the same rank, because that is what focus spells are. An Augury may
+> buff several allies, may deal damage, may heal, and may impose real conditions.
+
+**Priced at 30 each**, up from 10 — between the Bard's *Counter Performance* (50) and the sheet's
+common granted-focus-spell rate (10), and matching the middle rung of the Psychic's 10 / 50 / 90
+ladder. Nine known Auguries is **270**, up from 90; that is +180 of the v3 overage (§2.4).
+
+**Multi-target heightening is free** and always was. A focus spell heightens automatically with your
+level, and widening is the normal way spells scale — *fear* itself goes from one creature to five at
+rank 3. Reaching more targets is not a separate purchase.
+
+All Auguries: `prediction`, `focus`, occult; rank = **half your level rounded up**; DC = Stargazer DC.
+"Heightened (+2)" steps therefore land every 4 character levels.
 
 ### 5.2 The list
 
-***First Blood*** ✦✦ (concentrate, prediction) — 1 ally within 30 feet, or yourself.
-Cast during exploration. The next time the target rolls initiative within the hour, they gain a **+2
-status bonus** to that roll and are **not off-guard** during the first round of the encounter.
-**Heightened (5th)** 2 allies. **(9th)** 4 allies.
-*Anchor:* the initiative half of *foresight* (rank 9, +2 status to initiative, not off-guard when
-flanked), for one encounter instead of an hour, on one target.
+Sixteen. You know **nine** permanently by 19th level and are handed a tenth most mornings.
 
-***Iron Auspice*** ✦✦ (concentrate, prediction) — 1 ally within 30 feet, 1 minute.
-+1 status bonus to Fortitude saves, to Athletics checks to Shove, Trip and Grapple, and to checks to
-resist forced movement. The target also gains **temporary Hit Points equal to twice your level**,
-which last for the duration.
+---
 
-***Two Roads*** ✦ (concentrate, fortune, prediction) — 1 ally within 30 feet.
-Before the end of your next turn, the first skill check the target attempts is rolled **twice**; they
-take the higher result.
+***Death Foretold*** ✦✦ (concentrate, emotion, fear, illusion, mental, prediction, visual)
+**Targets** up to 5 creatures within 30 feet · **Saving Throw** Will
+You show each of them the hour of its own death, in detail, with the date.
+**Critical Success** Unaffected. **Success** Frightened 1. **Failure** Frightened 2.
+**Critical Failure** Frightened 3, **stunned 1**, and fleeing for 1 round.
+**Heightened (4th)** A creature that fails also takes **2d6 mental damage**, doubled on a critical
+failure. **(+2)** +2d6.
+*Anchor:* *fear*, which reaches 5 creatures at rank 3 with the same frightened ladder. This trades
+*fear*'s crit-failure fleeing for stunned 1 **and** keeps fleeing, and adds damage from rank 4 — which
+is roughly where a focus spell should sit against a rank-1 slot spell heightened to the same rank.
+**This is the class's answer to being touched, and it is available at 1st level.**
 
-***Shell of Hours*** ✦✦ (concentrate, healing, prediction) — 1 ally within 30 feet, 1 minute.
-+2 status bonus to saves against disease and poison and to recovery checks. **Once** during the
-duration, the first time the target would be reduced to 0 Hit Points, they are reduced to **1 Hit
-Point** instead and the Augury ends.
-*Flagged:* the death-cheat is the strongest thing on this list. It is once per casting, costs a focus
-point, and does nothing about the next hit. If it plays too strong, delete the temporary reprieve and
-raise the save bonus to +2 against all Fortitude saves.
+***The Hour Is Not Come*** ✦ **[reaction]** (concentrate, healing, prediction)
+**Trigger** You or an ally within 30 feet is reduced to 0 Hit Points.
+**Effect** It was not going to happen today. The target is reduced to **1 Hit Point** instead, gains
+**temporary Hit Points equal to your level**, and does not gain the wounded condition from this
+instance. A creature cannot benefit from this Augury again for 10 minutes.
+**Heightened (5th)** The target also regains **2d8** Hit Points. **(+2)** +2d8.
+*The single most valuable thing on this list, and the one to watch in play. It is a reaction, so it
+competes with Fortune's Thread and* The Last Thing You See*, and it costs a Focus Point — the class
+has two of those until 8th level.*
 
-***Crown of Fire*** ✦✦ (concentrate, prediction) — 1 ally within 30 feet, 1 minute.
-+2 status bonus to Intimidation and Performance checks. The target can **Demoralize at 60 feet**, and
-does not take the usual penalty for a target that does not share a language.
+***Guiding Star*** ✦✦ (concentrate, prediction)
+**Targets** 2 allies within 60 feet · **Duration** until the start of your next turn
+Each gains a **+1 status bonus to attack rolls, damage rolls, Perception checks and skill checks**.
+**Heightened (4th)** 3 allies. **(7th)** 4 allies. **(10th)** 5 allies, and the bonus is **+2**.
+*This is deliberately* Courageous Anthem *with a target cap and a Focus Point attached, and from 10th
+it is better than Courageous Anthem for four rounds a day. It is the flagship and it is priced as one.*
 
-***Perfect Ledger*** ✦ (concentrate, prediction) — yourself or 1 ally within 30 feet.
-The target's next **Recall Knowledge** this turn is a **free action** and gains a +2 circumstance
-bonus. On a success, they learn one additional piece of information beyond what the GM would normally
-give.
+***First Blood*** ✦✦ (concentrate, prediction)
+**Targets** up to 5 allies within 30 feet · cast during exploration
+The next time each rolls initiative within the hour, it gains a **+2 status bonus** to that roll, is
+**not off-guard** during the first round, and its **first Strike of the encounter that hits deals an
+extra 1d6 spirit damage**.
+**Heightened (+2)** +1d6.
+*Anchor:* the initiative half of *foresight* (rank 9), spread across the party for one encounter.
 
-***Fixed Point*** ✦✦✦ (concentrate, prediction) — 30-foot emanation, up to 4 creatures you choose.
-Name attack rolls, saving throws, or skill checks. Until the end of your next turn, the **first roll of
-that type** made by each chosen creature is treated as a **10** on the die, before modifiers.
-*Yes, this is strange. It is a prophecy class; strange is the point.* It is also the most interesting
-button on the sheet, because it is the only one whose correct use requires knowing whether your party
-is behind or ahead of the curve.
+***Iron Auspice*** ✦✦ (concentrate, prediction)
+**Targets** 2 allies within 30 feet · **Duration** 1 minute
++2 status bonus to Fortitude saves, to Athletics checks to Shove, Trip and Grapple, and to checks to
+resist forced movement. Each target gains **temporary Hit Points equal to three times your level**,
+and **once** during the duration treats a critical failure on a Fortitude save as a failure.
+**Heightened (+2)** +1 ally.
 
-***Coiling Doubt*** ✦✦ (concentrate, misfortune, prediction) — 1 creature within 30 feet, Will save.
-**Failure** The first time the target attempts an **attack roll or skill check** before the end of
-your next turn, it rolls twice and takes the lower result. **Critical Failure** As failure, and it is
-stupefied 1 for 1 round.
-*Anchor:* *Ill Omen* (rank 1, two actions, same scope, same misfortune shape).
+***Two Roads*** ✦ (concentrate, fortune, prediction)
+**Targets** 2 allies within 30 feet
+Before the end of your next turn, the first **skill check** each attempts is rolled **twice**; each
+takes the higher result.
+**Heightened (5th)** 3 allies, and it applies to **saving throws** as well. **(9th)** 4 allies.
 
-***Hunted by the Sky*** ✦✦ (concentrate, prediction) — 1 creature within 60 feet, 1 minute.
-The target cannot be concealed or hidden from you. You and allies who can see you gain a +1 circumstance
-bonus to Seek and to Perception checks to find it, and your **Snarl** against it is **−2** (−3 once you
-have *Surer Thread*).
-*Flagged:* v1 let Snarl against this target ignore the reaction cost, which doubled the class's core
-engine for a minute for one focus point. Cut. The deeper penalty is the replacement.
+***Shell of Hours*** ✦✦ (concentrate, healing, prediction)
+**Targets** 2 allies within 30 feet · **Duration** 1 minute
+Each regains **2d8 Hit Points** immediately and gains a +2 status bonus to saves against disease and
+poison and to recovery checks. **Once** during the duration, the first time a target would be reduced
+to 0 Hit Points it is reduced to **1 Hit Point** instead and the Augury ends for that target.
+**Heightened (+2)** +2d8 and +1 ally.
+*The class's only real healing, and it is deliberately behind* Lay on Hands *on raw output — 10d8 at
+rank 10 against Lay on Hands' 60 — because it hits two targets and carries the reprieve.*
 
-***Alms of Fate*** ✦ (concentrate, fortune, prediction) — 1 ally within 30 feet.
-On the target's next damaging effect before the end of your next turn, they **reroll all 1s** on the
-damage dice and must keep the new results.
+***Crown of Fire*** ✦✦ (concentrate, prediction)
+**Targets** 2 allies within 30 feet · **Duration** 1 minute
++2 status bonus to Intimidation and Performance. Each target can **Demoralize at 60 feet** with no
+auditory or visual requirement and no penalty for a shared-language failure. Once per round, when a
+target critically succeeds at any check, one ally within 30 feet of it gains a **+1 status bonus** to
+their next roll.
+**Heightened (+2)** +1 ally.
 
-***Poured Knowing*** ✦✦ (concentrate, prediction) — 1 ally within 30 feet, 1 minute.
-The target's next **counteract check** during the duration uses your Stargazer DC and proficiency rank
-if they are higher than their own, and treats its counteract rank as **1 higher**.
+***Perfect Ledger*** ✦ (concentrate, prediction)
+**Targets** you and up to 2 allies within 30 feet
+Each target's next **Recall Knowledge** this turn is a **free action**, gains a +2 circumstance bonus,
+and on a success reveals one additional piece of information. On a critical success it also reveals the
+creature's **lowest saving throw** and all of its **weaknesses**.
+**Heightened (5th)** Every Recall Knowledge each target makes this turn is a free action.
 
-***Deep Dream*** ✦✦ (concentrate, prediction) — 1 ally within 30 feet, 1 minute.
-+1 status bonus to Will saves and to Perception checks to disbelieve illusions. **Once** during the
-duration, if the target critically fails a Will save, they get a failure instead.
+***Fixed Point*** ✦✦✦ (concentrate, prediction)
+**Area** 30-foot emanation · **Targets** up to 6 creatures you choose
+Name attack rolls, saving throws, or skill checks. Until the end of your next turn, the **first roll
+of that type** made by each chosen creature is treated as a **10** on the die, before modifiers.
+**Heightened (6th)** Name two roll types.
+*Still the strangest button on the sheet, and still the one whose correct use requires knowing whether
+your party is ahead of the curve or behind it. Naming saving throws and pointing it at four enemies is
+not always the right answer.*
 
-***Guiding Star*** ✦✦ (concentrate, prediction) — 1 ally within 60 feet, until the start of your next
-turn.
-+1 status bonus to attack rolls, Perception checks and skill checks. **Heightened (5th)** 2 allies.
-**(9th)** 3 allies.
-*This is single-target Courageous Anthem with a wider scope and a focus point attached, which is the
-most an Augury may be. It is the closest the class comes to being a Bard, and it costs a resource the
-Bard does not spend.*
+***Coiling Doubt*** ✦✦ (concentrate, misfortune, prediction)
+**Targets** up to 3 creatures within 30 feet · **Saving Throw** Will
+**Critical Success** Unaffected. **Success** The next attack roll or skill check the target attempts
+is rolled twice, taking the lower. **Failure** As success, but the first attack roll or skill check
+each round for **3 rounds**. **Critical Failure** As failure for **1 minute**, and the target is
+**stupefied 2**.
+*Anchor:* *ill omen*, whose critical failure is exactly "every time during the duration, roll twice
+take the worse," on one target. This spreads it across three and adds the stupefied rider.
 
-***Borrowed Second*** ✦✦ (concentrate, prediction) — 1 willing ally within 30 feet.
-The target immediately **Steps** or **Strides up to half their Speed** as a free action, and gains a
-+1 circumstance bonus to AC until the start of your next turn.
+***Hunted by the Sky*** ✦✦ (concentrate, prediction)
+**Targets** 1 creature within 60 feet · **Duration** 1 minute
+The target cannot be concealed or hidden from you. You and your allies gain a +1 circumstance bonus to
+Seek and to Perception checks to find it, and the **first attack made against it each round** gains a
++1 circumstance bonus. Your **Snarl** against it is **−3**, or **−4** once you have *Surer Thread*.
+**Heightened (6th)** 2 creatures.
+
+***Alms of Fate*** ✦ (concentrate, fortune, prediction)
+**Targets** 2 allies within 30 feet
+On each target's next damaging effect before the end of your next turn, they **reroll all 1s and 2s**
+on the damage dice and must keep the new results.
+**Heightened (5th)** 3 allies. **(9th)** Each target also **maximises one damage die** of their choice.
+
+***Poured Knowing*** ✦✦ (concentrate, prediction)
+**Targets** 2 allies within 30 feet · **Duration** 1 minute
++2 status bonus to Arcana, Nature, Occultism, Religion and Society. Each target's **counteract checks**
+during the duration use your Stargazer DC and proficiency rank if higher than their own, and count
+their counteract rank as **1 higher**.
+**Heightened (+2)** +1 ally.
+
+***Deep Dream*** ✦✦ (concentrate, prediction)
+**Targets** 2 allies within 30 feet · **Duration** 1 minute
++2 status bonus to Will saves and to Perception checks to disbelieve illusions. **Once** during the
+duration, a critical failure on a Will save becomes a failure. While the Augury lasts, a target is
+never off-guard merely for being unaware of a creature at the start of an encounter.
+**Heightened (+2)** +1 ally.
+
+***Borrowed Second*** ✦✦ (concentrate, prediction)
+**Targets** you and/or 1 willing ally within 30 feet
+Each target immediately **Steps** or **Strides up to its Speed** as a free action and gains a +1
+circumstance bonus to AC until the start of your next turn.
+**Heightened (5th)** 3 targets. **(9th)** 5 targets.
+*Targeting yourself is new in v3, and it is the class's escape action.*
+
+---
 
 ### 5.3 Which sign grants which
 
-The twelve signs each hand you one Augury for the day. There is deliberately no separate list of
-twelve more spells: nineteen bespoke focus spells is not a class, it is a compendium, and every one of
-them would need balancing. Two Auguries (*Guiding Star*, *Borrowed Second*) belong to no sign and are
-only ever learned permanently.
+Twelve signs, twelve Auguries. Four Auguries (*Guiding Star*, *Borrowed Second*, *Death Foretold*,
+*The Hour Is Not Come*) belong to no sign and can only be learned permanently — the two self-defence
+options among them, deliberately, so that surviving is never something the sky has to hand you.
 
 | Sign | Augury of the Day | | Sign | Augury of the Day |
 |---|---|---|---|---|
@@ -632,9 +865,8 @@ only ever learned permanently.
 | ♍ Virgo | *Perfect Ledger* | | ♓ Pisces | *Deep Dream* |
 | | | | ✦ Starless | *none — see Night Vigil* |
 
-You know **9** Auguries permanently, chosen freely from all fourteen, and gain a tenth on most days
-from the sky. Nothing stops you learning an Augury you will also sometimes be handed; on those days
-you simply have a spare.
+Nothing stops you learning an Augury the sky will also sometimes hand you; on those days you have a
+spare Focus Point's worth of nothing, which is the price of a guarantee.
 
 ---
 
@@ -689,7 +921,7 @@ interchangeable within the budget.
 ### 6.4 The Broken Thread — *I have already lost you once*
 
 The original pitch's Path. Note that *Unmake the Moment* is **not** here any more — every Stargazer
-gets the one-round rewind at 11th (§4.10). This Path is what happens when you do it better than
+gets the one-round rewind at 11th (§4.11). This Path is what happens when you do it better than
 everyone else.
 
 - **1st — Deja Vu (50).** ✦ **[free action]**, once per 10 minutes. **Trigger** You fail, but do not
@@ -771,6 +1003,10 @@ at 1, 2, 4, 6, 8, 10, 12, 14, 16, 18 and 20.
   minute.
 - **Unspent Thread** — If you have not used your reaction by the start of your turn, your first *Chart
   the Course* that turn is a **free action**.
+- **Two Warnings** — You gain a **second reaction** each round, usable only for **Fortune's Thread**,
+  ***The Last Thing You See***, or ***The Hour Is Not Come***. This is the feat that resolves the
+  class's central action-economy squeeze (§9.4), and it is deliberately a 10th-level purchase rather
+  than a class feature.
 
 ### 12th level
 
@@ -838,20 +1074,19 @@ Four hard conflicts, all resolved in the code's favour:
    collides head-on with the Saint's use of the word: in the Saint guide and in the shipped effect
    items (`Sky: Ascendant (Leo)`), *ascendant* means **your sign is up**, which is a different axis
    entirely. **v1's "Ascendant" aspect is renamed Benefic throughout.**
-2. **The odds.** v1 gave every day an aspect: 45 / 5 / 45 / 5 on a d100, with no neutral result. The
-   code weights them **Quiet 50, Benefic 20, Retrograde 15, Malefic 15, Exalted 0**. Half of all days
-   are quiet. This matters for the class: Forewarned is worth nothing on 70% of days (§4.2).
-3. **Exalted is never rolled.** `signs.mjs` sets its weight to **0** on purpose, with the comment:
-   *"a Zenith is scheduled, not rolled — 1 in 260 means it would otherwise never actually happen at
-   the table, and that scene is the whole class."* v1's 4.6%-per-day Exalted is gone.
+2. **The odds.** v1 gave every day an aspect on a flat 45 / 5 / 45 / 5 d100 split. The code used
+   weights, and v3 **changes those weights** — see §8.2 and the note below.
+3. **Exalted used to be unrollable.** `signs.mjs` set its weight to **0** on purpose. **v3 changes
+   that too**, and it is the one edit in this document that reaches into an already-played class.
+   See §8.2.
 4. **The future is fixed.** The tracker pre-rolls **seven days** and stores them, so that the Saint's
    *Read the Constellation* has an answer that cannot be re-asked for a better one. v1's Constellation
-   Mastery rerolled the day's aspect, which breaks that. Replaced by **Trade the Day** (§4.11).
+   Mastery rerolled the day's aspect, which breaks that. Replaced by **Trade the Day** (§4.12).
 
 A fifth, softer conflict: the module **announces the sky publicly in chat by default**
 (`announceSky`, default `true`), and v1 insisted the sky must be secret. §8.4 resolves it.
 
-### 8.2 The loop, as shipped
+### 8.2 The loop, and v3's reweighting
 
 Each dawn the GM advances the day. The next pre-rolled entry becomes today, and a new day is rolled
 onto the end of the queue.
@@ -862,22 +1097,45 @@ onto the end of the queue.
 |---|---|---|---|---|---|---|
 | ♏ **Scorpio** | ♐ **Sagittarius** | ♑ **Capricorn** | ♒ **Aquarius** | ♓ **Pisces** | ✦ **Starless** | |
 
-**The aspect** — rolled by weight:
+**The aspect** — rolled by weight. **These weights changed in v3**, at the module owner's direction,
+and `scripts/sky/signs.mjs` has been updated to match:
 
-| Aspect | Weight | Chance | Meaning |
+| Aspect | v2 weight | **v3 weight** | Meaning |
 |---|---|---|---|
-| **Quiet** (`none`) | 50 | **50%** | The sky is unremarkable. Nothing happens. |
-| **Benefic** | 20 | **20%** | The sky is kind. **+1** to the sign's domain. |
-| **Retrograde** | 15 | **15%** | The sky drags. **−1** to the sign's domain. |
-| **Malefic** | 15 | **15%** | The sky is hostile. **−2** to the sign's domain. |
-| **Exalted** | 0 | **scheduled only** | A Zenith. **+2** to the domain. The GM pins it. |
+| **Quiet** (`none`) | 50 | **20** | The sky is unremarkable. Nothing happens. |
+| **Benefic** | 20 | **30** | The sky is kind. **+1** to the sign's domain. |
+| **Retrograde** | 15 | **10** | The sky drags. **−1** to the sign's domain. |
+| **Malefic** | 15 | **30** | The sky is hostile. **−2** to the sign's domain. |
+| **Exalted** | 0 | **10** | A Zenith. **+2** to the domain. |
 
 All bonuses and penalties are **circumstance**, so they never stack with themselves and only one sign
 is ever up. The worst a character can be is −2 in one narrow domain, which is inside PF2e's tolerance.
 
-Resulting day-to-day feel: **a specific sign with a live aspect comes up about 3.8% of the time** —
-roughly one day a month per sign. That is rare enough that "the Scorpio day" is a thing people
-remember, and common enough that the system is not decoration.
+**What the reweighting does.** The sky was quiet half the time and is now quiet one day in five. It is
+**hostile 40% of days** (30 Malefic + 10 Retrograde) and **kind 40%** (30 Benefic + 10 Exalted). Two
+consequences follow:
+
+- **Forewarned matters far more.** v2's Night Vigil bought a party-wide mitigation that was worth
+  nothing on 70% of days. It is now live on **40%** of them, and the 30% that are *Malefic* are the
+  −2 tier, which is the one worth being warned about. This is the largest indirect buff in v3 and it
+  did not cost a point.
+- **Malefic at 30% is a lot of −2.** A specific sign now comes up hostile about **2.3% of days each**,
+  but *some* sign is hostile 40% of the time, and every creature in the world is inside it. If your
+  table finds the sky oppressive, Malefic is the dial — move 10 points of its weight to Quiet before
+  touching anything else.
+
+> ### ⚠ The Exalted change reaches the Saint
+>
+> Exalted was weight **0** on purpose: `signs.mjs` said *"a Zenith is scheduled, not rolled — 1 in 260
+> means it would otherwise never actually happen at the table."* At weight **10**, a Zenith can now
+> happen by chance. For a **Saint**, whose own sign rises 1 day in 13, an unscheduled Zenith now lands
+> roughly **once every 130 days of game time** instead of never — and a Zenith is the day a Gold Saint
+> is *"~100% stronger"* (Saint guide v4 §1.2).
+>
+> That is a real buff to an already-implemented, already-played class, delivered as a side effect of a
+> Stargazer change. It is probably fine — 1 in 130 days is still rare — but it should be a decision.
+> **`scheduleZenith` is untouched**, so pinning a Zenith to a specific session still works and is still
+> the right way to run an arc climax; you should not want the boss fight's timing decided by a d10.
 
 ### 8.3 The domains
 
@@ -984,45 +1242,46 @@ feat — tell the Saint's player before they spend the feat.
 
 ---
 
-## 9 — Balanced against PF2e's support classes
+## 9 — Measured against PF2e's support classes
 
-The grand total being 2100 proves nothing. Every class in the sheet totals 2100, including the ones
-nobody plays. This section is the part the spreadsheet cannot do.
+v2's version of this section concluded "it is not a Bard." **After v3 that is no longer true**, and
+this section is rewritten rather than patched. The class is now above the published curve by design
+(§2.4); what follows is where it lands, not whether it is legal.
 
 ### 9.1 The subtotal comparison
 
 Read out of `CLASSDATA`. These are the real numbers, not estimates.
 
-| Subtotal | **Stargazer** | Bard | Cloistered Cleric | Oracle | Investigator | Thaumaturge | Kineticist |
-|---|---|---|---|---|---|---|---|
-| DC | **360** | 360 | 360 | 360 | 170 | 170 | 360 |
-| Perception | **170** | 170 | 60 | 60 | 360 | 170 | 60 |
-| Saves | **290** | 480 | 290 | 480 | 590 | 590 | 590 |
-| Skills | **30** | 30 | 20 | 25 | 120 | 70 | 20 |
-| Attack | **70** | 200 | 200 | 140 | 410 | 410 | 140 |
-| Defense | **70** | 70 | 60 | 70 | 180 | 190 | 180 |
-| Spell slots | **0** | 460 | 460 | 460 | 0 | 0 | 0 |
-| Learned spells | **0** | 280 | 540 | 270 | 0 | 0 | 0 |
-| Focus spells | **100** | 120 | 0 | 20 | 0 | 0 | 0 |
-| Class abilities | **700** | −160 | 20 | 40 | 160 | 70 | 440 |
-| Subclass abilities | **220** | 0 | 0 | 90 | 20 | 340 | 220 |
-| HP + 1st feat | **90** | 90 | 90 | 80 | 90 | 90 | 90 |
+| Subtotal | **Stargazer v3** | *(v2)* | Bard | Cloistered Cleric | Oracle | Investigator | Thaumaturge | Kineticist |
+|---|---|---|---|---|---|---|---|---|
+| DC | **360** | 360 | 360 | 360 | 360 | 170 | 170 | 360 |
+| Perception | **360** | *170* | 170 | 60 | 60 | 360 | 170 | 60 |
+| Saves | **480** | *290* | 480 | 290 | 480 | 590 | 590 | 590 |
+| Skills | **30** | 30 | 30 | 20 | 25 | 120 | 70 | 20 |
+| Attack | **70** | 70 | 200 | 200 | 140 | 410 | 410 | 140 |
+| Defense | **70** | 70 | 70 | 60 | 70 | 180 | 190 | 180 |
+| Spell slots | **0** | 0 | 460 | 460 | 460 | 0 | 0 | 0 |
+| Learned spells | **0** | 0 | 280 | 540 | 270 | 0 | 0 | 0 |
+| Focus spells | **280** | *100* | 120 | 0 | 20 | 0 | 0 | 0 |
+| Class abilities | **900** | *700* | −160 | 20 | 40 | 160 | 70 | 440 |
+| Subclass abilities | **220** | 220 | 0 | 0 | 90 | 20 | 340 | 220 |
+| HP + 1st feat | **90** | 90 | 90 | 90 | 80 | 90 | 90 | 90 |
+| **TOTAL** | **2860** | *2100* | 2100 | 2100 | 2100 | 2100 | 2100 | 2100 |
 
-**Where the Stargazer is the outlier:**
+Three lines are now the highest or equal-highest in the game:
 
-- **Attack 70 is half the lowest figure in the sheet.** No published class pays less than **140**
-  (Wizard, Druid, Oracle, Psychic, Summoner and Kineticist are all tied there); Bard and Cleric pay
-  200. The Stargazer buys simple weapons to Expert at 11 and stops — no critical specialization, no weapon specialization, ever. It is the worst weapon user in
-  Pathfinder and that is deliberate.
-- **Saves 290** is exactly the figure paid by the Cloistered Cleric, Druid, Wizard, Witch and
-  Sorcerer — the straight-caster save line. It is 190 below the Bard and Oracle, which is exactly
-  the Legendary Will that paid for the casting line (§0 item 9).
-- **Class + subclass abilities 920** is the second-highest in the game after the Summoner's 1040.
-  That is what a class with no spell slots looks like; §2.4 has the full distribution.
+- **Perception 360**, tied with the Investigator, the Ranger and the Gunslinger — and the only caster
+  of any description to have it.
+- **Focus spells 280**, the highest in the sheet, ahead of the Psychic's 150 and the Bard's 120. That
+  is the §5.1 repricing, and it is the correct place for this class's spending: no slots, so the focus
+  list *is* the spell list.
+- **Class abilities 900**, second only to nothing — the Kineticist's 440 is the nearest published
+  figure.
 
-### 9.2 What +1 is actually worth
+**Attack 70 is still half the sheet's floor**, and still the point: no published class pays less than
+140. The Stargazer remains the worst weapon user in Pathfinder.
 
-A concrete case, because "+1 doesn't sound like much" and it is not true.
+### 9.2 What ±1 and ±2 are actually worth
 
 A martial with a +12 attack bonus swinging at AC 20 hits on an 8 (65%) and crits on an 18 (15%).
 In units of average damage **D**:
@@ -1033,127 +1292,106 @@ In units of average damage **D**:
 | **Guide (+1)** | 50% | 20% | **0.90 D** — **+12.5%** |
 | **Surer Thread (+2)** | 50% | 25% | **1.00 D** — **+25%** |
 
-The bonus is worth double what it looks like, because in PF2e a +1 moves the *critical* threshold as
-well as the hit threshold. **Snarl** is the mirror: −1 on an incoming attack is about **−12.5%**
-expected damage on that attack, −25% at 9th level, which is squarely in Champion-reaction territory.
+A +1 is worth double what it looks like, because in PF2e it moves the *critical* threshold as well as
+the hit threshold. **Snarl** is the mirror: −2 on an incoming attack is about **−25%** expected damage
+from it.
 
-That is for **one roll**. Hold that number.
-
-### 9.3 Support output per round
+### 9.3 Support output per round — and where v3 crosses the Bard
 
 | Class | Action cost | What the party gets, every round, at will |
 |---|---|---|
-| **Bard** — Courageous Anthem | 1 action | +1 status to attack rolls **and damage rolls** and saves vs fear, **every ally in 60 ft** |
-| **Cleric** — Bless | 2 actions, then 1 to sustain | +1 status to attack rolls in a growing emanation; plus the healing font, which is the real feature |
-| **Commander** — a tactic | 1 action | a squadmate gains a **reaction** to Strike, Stride, or manoeuvre; plus a passive +1 status Will vs fear banner |
-| **Champion** — the reaction | 1 reaction | damage reduction and a retaliation on **one** incoming attack |
-| **Stargazer** — Fortune's Thread | **0 actions (reaction)** | **±1 / ±2 circumstance on one chosen d20** |
-| **Stargazer** — + Chart the Course | 1 action | a **second** ±1 / ±2, on a roll you named in advance |
+| **Bard** — Courageous Anthem | 1 action | +1 status to attack **and damage** rolls and saves vs fear, **every ally in 60 ft** |
+| **Cleric** — Bless | 2 actions, then 1 to sustain | +1 status to attack rolls in a growing emanation; plus the healing font |
+| **Commander** — a tactic | 1 action | a squadmate gains a **reaction** to Strike, Stride or manoeuvre |
+| **Champion** — the reaction | 1 reaction | damage reduction and a retaliation on one incoming attack |
+| **Stargazer 1–4** | 0 actions | ±1 on **one** chosen d20 |
+| **Stargazer 5–16** | 0 actions | ±1/±2 on **two** chosen d20s, any combination |
+| **Stargazer 17+** | 0 actions | **±2 on three** chosen d20s |
+| **Stargazer** — + Chart the Course | 1 action | one or two **more**, on creatures named in advance |
 
-Put §9.2's number through that table. A four-person party makes six or seven d20 rolls a round that a
-Bard's Anthem touches, plus every damage roll. The Stargazer touches **one**, or two if it spends an
-action.
+**The 17th-level line is the one that matters.** Three rolls at ±2 is three lots of §9.2's 25%, or
+**0.75 attacks' worth of expected damage swing per round, for no action**. Courageous Anthem across a
+four-person party touching six attacks at +1 is **0.75 attacks' worth**, plus roughly +1 damage per
+hit.
 
-**So Courageous Anthem is roughly six to eight times the raw throughput of Fortune's Thread, and the
-Bard also has 740 points of spell slots the Stargazer does not have.** That is the honest headline,
-and it is the right answer: this class was never going to out-support the Bard, and if the ledger had
-said it did, the ledger would have been wrong.
+So at 17th the Stargazer's reaction is **approximately Courageous Anthem's throughput, minus the
+damage rider, plus three things Anthem cannot do**: it costs no action, it is chosen *after* you know
+what each roll is for, and any of the three can be pointed at an enemy instead. At 5th–16th it is
+roughly two thirds of Anthem. At 1st–4th it is a sixth.
 
-### 9.4 What the Stargazer has that they don't
+That is the honest shape of the buff: **the class crosses from "excellent second support" to "peer of
+the Bard on the buff line" at 5th, and to "ahead of it on the luck line" at 17th** — while keeping
+Legendary Perception, Legendary Will, Legendary Astronomy Lore, the daily forecast and both rewinds,
+none of which the Bard has any version of.
 
-Four things, and they are the case for the class:
+### 9.4 What it still does not have
 
-1. **It costs no action.** Every other line in that table spends the supporter's turn. Fortune's
-   Thread spends a reaction the Stargazer had no other use for. On a round where the Bard sings, the
-   Bard has two actions left; the Stargazer has three, and a Thread.
-2. **It is aimed after the fact.** Courageous Anthem is committed at the start of the round and
-   spreads itself across whatever happens. Fortune's Thread is spent *after you know what the roll is
-   for*. A +1 on the boss's recovery check, or on the Rogue's one chance to Disable the trap, or on
-   the save that decides whether the party's Fighter spends the fight confused, is worth far more than
-   a +1 averaged across six attacks. This is the class's real edge and it is not visible in a
-   throughput table.
-3. **It stacks with all of them.** Circumstance bonuses do not collide with the status bonuses that
-   Bard, Cleric and Commander hand out. A party with a Bard **and** a Stargazer is genuinely additive.
-   *(One exception worth knowing: Fortune's Thread does* not *stack with **Aid**, because Aid is also
-   a circumstance bonus. Take the higher. If somebody in your party Aids regularly, Guide is dead
-   weight on that roll — Snarl an enemy instead.)*
-4. **It can point at the enemy.** Nothing in the printed support list debuffs at will with no resource
-   and no save. *Bane* needs two actions, a sustain, and a Will save to land −1 on attack rolls only.
-   Snarl is −1 with no save at 1st level. This is the single strongest thing on the sheet and it is
-   why Snarl cannot touch saving throws (§4.3).
+This has not changed and it is what keeps the class from being simply better than a Bard:
 
-And then there is the whole out-of-combat half of the class, which does not appear in any of these
-tables: a daily forecast, a 1st-level information monopoly, Legendary Astronomy Lore by 15th, and two
-rewinds. §9.6.
+- **No spell slots.** No *heroism*, no *haste*, no *slow*, no *fly*, no *revivify*, no battlefield
+  control, no answer to a problem that is not a d20 roll. This is the big one and it is 740 points of
+  Bard the Stargazer will never have.
+- **Healing is two Auguries deep.** *Shell of Hours* and *The Hour Is Not Come* are real now, but they
+  are Focus Points — two per encounter until 8th level, three after — against a Cleric's font. A
+  Stargazer is not a healer; it is a class that can occasionally refuse one death.
+- **No damage** beyond a cantrip, and the worst attack progression in the game.
+- **One reaction.** Fortune's Thread, *The Last Thing You See* and *The Hour Is Not Come* all want it,
+  every round. §4.8 — this is the main structural brake on how much of v3 actually stacks in a single
+  round, and it is why the class did not need a further nerf elsewhere.
 
 ### 9.5 The verdict, stated plainly
 
-**The Stargazer is a secondary support and an information class. It cannot be a party's only
-support.** It has:
-
-- **no healing** of any kind (the closest thing is *Shell of Hours*, once per casting, and it heals
-  nobody);
-- **no spell slots**, so no *heroism*, no *haste*, no *slow*, no battlefield control, no revivification;
-- **no party-wide buff** at any level except the Weaver's 17th-level *Tapestry*, once per 10 minutes;
-- **no damage** beyond a cantrip, and the worst attack progression in the game.
-
-A party of Fighter / Rogue / Wizard / Stargazer will be fine. A party of Fighter / Rogue / Fighter /
-Stargazer will have no way to heal between fights and will find that out at about 5th level. Say this
-during session zero; it is a class property, not a trap.
-
-**Against the specific benchmark classes:**
+**The Stargazer is now a first-rank support and the best information class in the game, and it is
+above the published power curve.** Against the specific benchmarks:
 
 | | Verdict |
 |---|---|
-| vs **Bard** | Strictly less support throughput, strictly less versatility, no slots. Wins on information, on action economy, and on being able to debuff. **Not a replacement. An excellent second.** |
-| vs **Cleric** | Not comparable. The Cleric's font is the most valuable single class feature in the game for party durability and the Stargazer has no answer to it. |
-| vs **Commander** | Closest in feel — both hand out small numerical edges from range at low action cost. The Commander gives **actions** (a reaction to Strike), which is worth more than ±1. The Stargazer gives **certainty**, which the Commander has none of. Roughly even in combat; the Stargazer wins the other 23 hours. |
-| vs **Investigator** | The direct rival for the "information, low combat" niche, and the Stargazer wins it decisively out of combat — Legendary Astronomy Lore, daily forecast, *Perfect Recall*. The Investigator wins in combat by a mile: Devise a Stratagem, Master weapons, Greater Weapon Specialization, 410 points of attack to the Stargazer's 70. |
-| vs **Thaumaturge / Kineticist** | The structural relatives — no slots, everything in bespoke features. Both are far more durable (590 saves to the Stargazer's 290) and both can actually fight. The Stargazer trades all of that for reach and foresight. |
+| vs **Bard** | Comparable on the buff line from 5th and ahead of it from 17th; far behind on versatility, because 740 points of spell slots answer problems that ±2 cannot. Wins outright on information, action economy and debuffing. **v2 said "not a replacement." v3 is a replacement — for the buffing half of a Bard's job, not the spellcasting half.** |
+| vs **Cleric** | Still not comparable. The font is the most valuable durability feature in the game and two healing Auguries are not it. |
+| vs **Commander** | The Stargazer is now ahead. A tactic grants an ally a reaction — worth more than a single ±2 — but the Commander gets one tactic per action, and the Stargazer gets three ±2s per *reaction* plus the entire out-of-combat half. |
+| vs **Investigator** | No contest any more. The Stargazer matches its Perception exactly, beats it on out-of-combat information, and vastly outperforms it as a support. The Investigator keeps in-combat weapon damage and nothing else. |
+| vs **Thaumaturge / Kineticist** | Still far more durable than the Stargazer (590 saves against 480) and still able to fight. The Stargazer has overtaken both on utility. |
+
+**It can still not be a party's only support**, for the reasons in §9.4 — but a party of Fighter /
+Rogue / Cleric / Stargazer is now comfortably stronger than the same party with a Bard in the slot,
+and you should expect that to show.
 
 ### 9.6 The part no table measures
 
-Balance conversations about this class will keep landing on ±1 and missing the actual power, which is
-**a 1st-level character who knows, every single morning, and for free, what the next three days hold.**
+Balance conversations about this class keep landing on ±2 and missing the actual power, which is **a
+1st-level character who knows, every morning and for free, what the next three days hold.**
 
-In a published adventure path that is mostly colour. In a campaign with a GM who uses it, it is the
-strongest thing in this document — stronger than the rewind, because it is every day and it never
-runs out. The class is priced as if that were worth 50 points. It might be worth 50 points or it might
-be worth the whole budget, entirely depending on whether your GM answers questions.
+v3 made that worse in a way the ledger does not see: the sky reweighting (§8.2) means 40% of days now
+carry a live negative aspect instead of 30%, and 30% of days are the −2 tier. Night Vigil's Forewarned
+was priced at 50 when it was live on three days in ten. It is now live on four, and the bad days are
+worse. **It was not repriced.** If anything in this class is underpriced, it is this, and it is the
+one number only play can settle.
 
-**The BCS cannot price this and neither can I.** It is the one number in this guide that only play can
-settle, and it is why §12 exists.
+### 9.7 Where to look first if it misbehaves
 
-### 9.7 Where it might still be too strong
-
-Watch these four, in order of likelihood:
-
-1. **Snarl against a crit-fishing enemy.** A −2 circumstance penalty applied every round to the one
-   attack that matters, for free, forever, is a lot of mitigation across a twenty-level campaign.
-   The lever if it misbehaves: cap Snarl at −1 and leave Guide at ±2.
-2. **The Weaver's *Tapestry* (17th).** Every ally in 60 feet, one reaction, once per 10 minutes. That
-   is a full Courageous Anthem in a reaction. It is priced at 70 and probably wants to be 110. If you
-   are running a Weaver past 17th, watch it first.
-3. **Fortune's Thread plus Twin Fates plus the Herald's *Sentence Passed*.** The Herald can strip a
-   creature's fortune effects and its natural 20s for a minute while Snarling it every round. Against
-   a single boss, that stacks into real lockdown. It is a 13th-level feature doing 13th-level things,
-   but check it.
-4. ***Unmake the Moment*** at 11th, if the table lets the trigger drift. The moment it becomes "when
-   an ally dies" rather than "your turn begins," it stops being a feature and becomes a veto. §4.10.
+1. ***The Hour Is Not Come***. A reactive *"no, they do not die"* on a Focus Point is the strongest
+   single thing v3 added. It competes for the reaction, which is the only reason it is not
+   unambiguously too much.
+2. ***Death Foretold*** **at 1st level.** Five creatures, Will save, frightened 2 on a failure, and
+   frightened 3 + stunned 1 + fleeing on a critical failure. Against a 1st-level encounter that is
+   often simply the whole fight. Watch levels 1–3 specifically; it settles down as enemies' Will saves
+   scale.
+3. ***Coiling Doubt***'s critical failure — three creatures, twice-take-lower, one minute, stupefied 2.
+4. **Threefold Thread plus Twin Fates plus the Herald's *Sentence Passed*.** At 17th a Herald can strip
+   a boss's fortune effects and natural 20s while Snarling it at −2 every round and *Hunted by the Sky*
+   pushes that to −4. That is −4 on a boss's every attack, at will. It is the single largest stack in
+   the class.
+5. **Snarl against a crit-fishing enemy**, as in v2. The lever is still to cap Snarl at −1.
 
 ### 9.8 Where it is weak, on purpose
 
-- **8 HP, light armour, and Reflex Trained until 13th.** The Stargazer dies to area damage. This is
-  the Caster-Specialist chassis working as designed, but the player should know it before level 4.
-  The cheapest in-budget fix if it is brutal at your table: swap Reflex Expert to 9th and Fortitude
-  Expert to 13th. It costs nothing — it is the same 60 points, re-slotted.
-- **It cannot fight.** 70 points of attack. At 11th level a Stargazer's Strike is Expert with no
-  weapon specialization: roughly four points of attack bonus and four points of damage behind the
-  party's Rogue. Cantrips are the answer, and they are the *only* answer.
-- **It depends entirely on the GM announcing rolls before making them.** See §12.2. A GM who rolls
-  fast behind a screen turns this class off.
-
----
+- **8 HP, light armour, and Reflex Trained until 13th.** The Stargazer still dies to area damage —
+  v3 bought defences against *being attacked and being talked to*, not against fireballs. Legendary
+  Will and Legendary Perception do nothing about a Reflex save.
+- **It cannot fight.** 70 points of attack, no weapon specialization, ever.
+- **One reaction, three things that want it.** §9.4.
+- **It depends entirely on the GM announcing rolls before making them.** §12.2. A GM who rolls fast
+  behind a screen turns most of this class off.
 
 ## 10 — The rewind, in three tiers
 
@@ -1184,7 +1422,7 @@ invoke it, they will ask *"is this a bad ending?"* at every fork, and you have b
 
 ### 10.2 Tier 2 — *Unmake the Moment* (110 points, 11th level, every Path)
 
-The one-round rewind. Full text in §4.10. Three notes:
+The one-round rewind. Full text in §4.11. Three notes:
 
 - **The trigger is the whole design.** *Your turn begins.* The window is always the previous round,
   always known, always a clean initiative boundary. Every other trigger turns this into a negotiation.
@@ -1305,7 +1543,20 @@ The awkward one, and the reason this class needs more automation work than the S
   `scripts/outcomes/` helpers see the die after the fact, which is the wrong side of the roll for this.
   Roll it at daily preparations, whisper it, and let the player say when.
 
-### 11.4 The Sky, the part that does not exist yet
+### 11.4 The Sky — what v3 already changed in code
+
+**Done in this change, not left as a note:**
+
+- `scripts/sky/signs.mjs` — the `ASPECTS` weights are now **20 / 30 / 10 / 30 / 10** (Quiet, Benefic,
+  Retrograde, Malefic, Exalted), per §8.2. The comment explaining why `exalted` was 0 has been replaced
+  with one explaining what changed and **that it reaches the Saint**.
+- `README.md` — the *Schedule Zenith* bullet said `Exalted` had "a roll weight of **zero**." It no
+  longer does, and the bullet now says so while still recommending scheduling for an arc climax.
+
+Nothing else in `scripts/sky/` needed to change: `rollAspect()` already normalises over the weight
+total, so reweighting is a data edit, and `scheduleZenith` is untouched.
+
+### 11.5 The Sky, the part that still does not exist
 
 `scripts/sky/` currently applies effects **only to Saints**, and only `Sky: Ascendant` / `Sky: Zenith`
 when a Saint's own Cloth is up (`tracker.mjs → applyTo`). §8.3's domain modifiers are **not
@@ -1326,16 +1577,18 @@ implemented for anyone**. Building them means:
 
 Estimated work: the 48 effect items are mechanical and can be generated from a table; the tracker
 change is small. This is the single largest implementation item in the class and it should be its own
-phase, the way the Soulbound's lineages were.
+phase, the way the Soulbound's lineages were. **v3's reweighting makes it more urgent, not less:** the
+sky is now live on four days in five instead of one in two, so a subsystem that applies nothing is
+wrong four times as often.
 
-### 11.5 Auguries
+### 11.6 Auguries
 
 Spell items with `traits: ["prediction", "focus", "occult"]`, `category: "focus"`, and standard
 focus-spell auto-heightening. The Augury of the Day is a compendium lookup keyed off
 `SkyTracker.state.sign` — a one-line mapping from §5.3 — granted and revoked on the
 `isaacs-hb-pf2e.skyChanged` hook, which `tracker.mjs` already fires.
 
-### 11.6 What not to automate
+### 11.7 What not to automate
 
 - **Rewrite the Ending.** It is a screenshot and a conversation.
 - **Unmake the Moment.** Same, at a smaller scale. Undoing a round of state in Foundry is not a
@@ -1359,9 +1612,10 @@ In order of how likely each is to bite.
 3. **The GM forgets the sky.** The number one failure mode of the whole framework: it is invisible by
    design, so nothing at the table reminds you. Use the tracker's Advance Day button as part of your
    morning routine. If you skip a day, do not retcon it — the sky was cloudy.
-4. **Half of all days are Quiet and the player feels the class is off.** This is correct (§8.2) and it
-   is worth saying out loud at session one, because a Stargazer whose first four sessions are Quiet
-   will conclude the sky does not exist. Consider seeding a live aspect early.
+4. **The sky is now loud.** After v3's reweighting only one day in five is Quiet and 30% are Malefic,
+   so the players will notice unexplained penalties much sooner than v2's spread intended. That is the
+   point — but it also means the folklore forms faster, and a table that liked the sky being subtle
+   should move 10 weight from Malefic to Quiet (§8.2) rather than abandoning the subsystem.
 5. **Portent is a 20 and the player hoards it for four sessions.** Fine, and the best part of the
    class. Just remind them once that a new Vigil overwrites it.
 6. **8 HP plus light armour plus Reflex Trained until 13th means the Stargazer dies to fireballs.**
@@ -1382,17 +1636,33 @@ take the build to review, and revisit them after play.
    Stargazer read as "a caster" in a way the original pitch did not. The alternative was a second
    bespoke at-will class action, which would have cost 50–110 and needed balancing from scratch.
    Cantrips use content that is already balanced. If cantrips feel wrong at your table, the fallback
-   is in §2.6 item 1 and it is clean.
-2. **Losing Legendary Will.** It is the single most-noticed nerf from v1 and it lands at 17th, which
-   most campaigns never see. It is also the most BCS-defensible thing in the document (line 69).
+   is in §2.8 item 1 and it is clean.
+2. **Legendary Will and Legendary Perception together.** v2 dropped Legendary Will on BCS line 69's
+   advice; v3 restored it *and* added Legendary Perception, which no caster has. From 17th the class
+   is very close to immune to anything targeting its mind or its senses. That is the correct end state
+   for a seer and it is two profile breaks in the same direction — if the class ever feels
+   untouchable rather than perceptive, this pair is why.
 3. **Snarl not applying to saving throws.** §4.3 argues this at length. It is the change most likely
    to be unpopular with the player and most likely to be correct.
-4. **Whether Night Vigil is worth 50 or 500.** §9.6. Unanswerable on paper.
+4. **Whether Night Vigil is worth 50 or 500.** §9.6. Unanswerable on paper, and v3's reweighting
+   raised it again without repricing it: Forewarned went from live on 30% of days to 40%, and the
+   hostile half got heavier. If anything in this class is quietly underpriced, it is this.
 5. **The Sky's domain modifiers for every creature in the world** are 48 unbuilt effect items and a
    tracker change (§11.4). Until they exist, §8.3 is a paper subsystem and Forewarned has nothing to
    forewarn against. **This is the gap between this document and a playable class**, and it should be
    the first phase of implementation, not the last.
-6. **Trade the Day versus rerolling the aspect.** v1 rerolled; the shipped queue says the future is
+6. **The Exalted reweighting reaches the Saint** (§8.2). A Zenith can now happen by chance, roughly
+   once per 130 days of game time, where `signs.mjs` previously guaranteed it never would. This is the
+   only change in v3 that alters an already-played class, and it was a side effect of a Stargazer
+   request rather than a Saint decision. Worth a look from the Saint's side.
+7. **Whether Auguries at 30 points are now too good rather than too weak.** §5.1 raised the ceiling
+   because a random daily grant has to be worth having. *Death Foretold* at 1st level and *The Hour Is
+   Not Come* are the two most likely to have overshot; §9.7 says what to watch.
+8. **Whether the single reaction is enough of a brake.** Three abilities now compete for it, and §9.4
+   leans on that competition as the reason v3's buffs do not simply stack. If *Two Warnings* (10th)
+   turns out to be mandatory rather than optional, the brake was load-bearing and the feat should
+   probably not exist.
+9. **Trade the Day versus rerolling the aspect.** v1 rerolled; the shipped queue says the future is
    fixed. Trade the Day respects the code. If you would rather the diviner be able to genuinely
    change the weather, that is a different class thesis and it needs the queue design revisited too.
 
@@ -1400,16 +1670,19 @@ take the build to review, and revisit them after play.
 
 ## Summary card
 
-> **Stargazer** — Key ability WIS · 8 HP · Stargazer DC (spell DC, Legendary at 19) · 5 occult
-> cantrips, **no spell slots** · Auguries (focus spells) · Perception Expert → Master@11 · Will
-> Expert → Master@11 · simple weapons and light armour, both Expert, no weapon specialization ·
-> 6 initial skills · Astronomy Lore as Core Skill to Legendary
+> **Stargazer** — Key ability WIS · 8 HP · Stargazer DC (spell DC, **Legendary at 19**) · 5 occult
+> cantrips, **no spell slots** · 16 Auguries, 9 known · Perception Expert → Master@7 → **Legendary@13**
+> (the Investigator line) · Will Expert → Master@11 → **Legendary@17** · simple weapons and light
+> armour, both Expert, no weapon specialization, ever · 6 initial skills · Astronomy Lore as Core Skill
+> to Legendary
 >
-> **Identity:** an at-will ±1/±2 on any d20 within 60 feet that costs no action (Fortune's Thread) ·
-> a prophesied d20 you can force onto anyone (Portent) · the only creature alive who knows which sign
-> is up, what it means, and what the next three days hold (Night Vigil) · a one-round rewind at 11th ·
-> and, eventually, the right to declare that the ending you saw does not count.
+> **Identity:** an at-will ±2 on **three** d20s within 60 feet that costs no action (Fortune's Thread) ·
+> a prophesied d20 you can force onto anyone (Portent) · a 1st-level focus spell that shows five
+> creatures the hour of their own death (*Death Foretold*) · the only creature alive who knows which
+> sign is up, what it means, and what the next three days hold (Night Vigil) · a one-round rewind at
+> 11th · and, eventually, the right to declare that the ending you saw does not count.
 >
-> **Role:** secondary support and information. Not a Bard. Not a healer. Bring one of those too.
+> **Role:** first-rank support and the best information class in the game. Still no spell slots, still
+> almost no healing, still cannot fight. Bring a Cleric.
 >
-> **BCS total: 2100 / 2100** — chassis 1080, features 1020.
+> **BCS total: 2860** — chassis 1460, features 1400. **36% above the 2100 budget, on purpose** (§2.4).
