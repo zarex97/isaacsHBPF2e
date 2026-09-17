@@ -51,8 +51,9 @@ macro in the module's macro pack.
 - **Set sign and aspect** — the day's sky. Twelve constellations plus *Starless*, the thirteenth sky.
 - **Advance Day** — takes the next pre-rolled day. The next seven days are rolled in advance and fixed, so
   the *Read the Constellation* feat has an answer that can't be re-rolled for a better one.
-- **Schedule Zenith** — pin an Exalted day. `Exalted` has a roll weight of **zero**: one day in 260 never
-  happens by chance, so the only path to a Zenith is you deciding on one.
+- **Schedule Zenith** — pin an Exalted day. Since the Stargazer reweighting, `Exalted` has a roll
+  weight of **10**, so an unscheduled Zenith lands roughly once every 130 days of game time. Scheduling
+  is still how you put one on a *particular* day — the arc climax should not wait on a die.
 - **Re-apply** — force a refresh if you edited a Cloth or added a Saint mid-session.
 
 The tracker only ever touches effects it applied itself, so anything you dragged onto a sheet by hand is
