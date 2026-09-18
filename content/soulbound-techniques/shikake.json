@@ -42,13 +42,13 @@
                         "criticalFailure"
                     ],
                     "predicate": [
-                        "self:feature:refined-release"
+                        "feature:refined-release"
                     ]
                 }
             ]
         }
     },
-    "img": "icons/magic/perception/eye-ringed-glow-angry-purple.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/eye-ringed-glow-angry-purple.svg",
     "name": "Shikake",
     "system": {
         "cost": {

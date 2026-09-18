@@ -4,6 +4,7 @@
             "riders": [
                 {
                     "apply": {
+                        "basic": true,
                         "dc": "reiatsu",
                         "riders": [
                             {
@@ -11,24 +12,8 @@
                                     "damageType": "electricity",
                                     "formula": "3d6",
                                     "perStep": "1d6",
-                                    "multiplier": 0.5,
                                     "type": "damage"
-                                },
-                                "outcomes": [
-                                    "success"
-                                ]
-                            },
-                            {
-                                "apply": {
-                                    "damageType": "electricity",
-                                    "formula": "3d6",
-                                    "perStep": "1d6",
-                                    "type": "damage"
-                                },
-                                "outcomes": [
-                                    "failure",
-                                    "criticalFailure"
-                                ]
+                                }
                             }
                         ],
                         "statistic": "reflex",
@@ -44,11 +29,25 @@
                     },
                     "event": "turn-end",
                     "self": true
+                },
+                {
+                    "apply": {
+                        "text": "<strong>Arc</strong> (once per round). One other creature within 15 feet of the target takes @Damage[3d6[electricity]] damage with a basic Reflex save against your Reiatsu DC.",
+                        "type": "prompt"
+                    },
+                    "event": "strike-resolved",
+                    "outcomes": [
+                        "success",
+                        "criticalSuccess"
+                    ],
+                    "predicate": [
+                        "item:tag:soulbound-spirit-weapon"
+                    ]
                 }
             ]
         }
     },
-    "img": "icons/magic/lightning/bolt-strike-forked-white.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/bolt-strike-forked-white.svg",
     "name": "Effect: Thunderbolt Form",
     "system": {
         "description": {

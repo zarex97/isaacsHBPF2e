@@ -1,0 +1,48 @@
+{
+    "img": "icons/magic/control/debuff-chains-ropes-red.webp",
+    "name": "Effect: Chain Anchor",
+    "system": {
+        "description": {
+            "value": "<p>Anchored. You can't <strong>Step</strong> away from the creature that struck you until the end of your next turn.</p>"
+        },
+        "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 4
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "domain": "all",
+                "key": "RollOption",
+                "option": "soulbound:anchored",
+                "value": true
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

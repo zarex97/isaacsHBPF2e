@@ -1,6 +1,6 @@
 {
     "folder": "Level 18",
-    "img": "icons/magic/light/hand-sparks-glow-orange.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/hand-sparks-glow-orange.svg",
     "name": "Entrust Your Cosmo",
     "system": {
         "actionType": {

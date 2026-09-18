@@ -1,6 +1,10 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "includesSelf": false
+            },
             "riders": [
                 {
                     "apply": {
@@ -13,9 +17,9 @@
                 },
                 {
                     "apply": {
-                        "value": 1,
                         "slug": "stunned",
-                        "type": "condition"
+                        "type": "condition",
+                        "value": 1
                     },
                     "outcomes": [
                         "criticalFailure"
@@ -24,7 +28,7 @@
             ]
         }
     },
-    "img": "icons/creatures/abilities/wolf-howl-moon-grey-large.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/wolf-howl-moon-grey-large.svg",
     "name": "Aullido",
     "system": {
         "area": {

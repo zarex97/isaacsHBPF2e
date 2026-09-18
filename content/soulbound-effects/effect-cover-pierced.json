@@ -1,0 +1,70 @@
+{
+    "folder": null,
+    "img": "modules/isaacs-hb-pf2e/icons/barrier-shield-dome-blue.svg",
+    "name": "Effect: Cover Pierced",
+    "system": {
+        "badge": null,
+        "description": {
+            "value": "<p>The attacker treats this creature's cover as <strong>one step less</strong>: greater becomes standard, standard becomes lesser, and lesser becomes none.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "OGL",
+            "remaster": true,
+            "title": "Isaac's Homebrew"
+        },
+        "rules": [
+            {
+                "key": "AdjustModifier",
+                "mode": "subtract",
+                "predicate": [
+                    "self:cover-level:greater"
+                ],
+                "selector": "ac",
+                "slug": "cover",
+                "value": 2
+            },
+            {
+                "key": "AdjustModifier",
+                "mode": "subtract",
+                "predicate": [
+                    "self:cover-level:standard"
+                ],
+                "selector": "ac",
+                "slug": "cover",
+                "value": 1
+            },
+            {
+                "key": "AdjustModifier",
+                "mode": "subtract",
+                "predicate": [
+                    "self:cover-level:lesser"
+                ],
+                "selector": "ac",
+                "slug": "cover",
+                "value": 1
+            }
+        ],
+        "slug": "effect-cover-pierced",
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": false
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

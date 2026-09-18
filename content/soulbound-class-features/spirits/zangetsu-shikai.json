@@ -1,6 +1,14 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "releaseForm": {
+                "effect": "Effect: Zangetsu — Shikai",
+                "rung": "released"
+            }
+        }
+    },
     "folder": "Spirits",
-    "img": "icons/weapons/swords/greatsword-crossguard-black.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/greatsword-crossguard-black.svg",
     "name": "Zangetsu — Shikai",
     "system": {
         "actionType": {
@@ -26,12 +34,8 @@
         },
         "rules": [
             {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Zangetsu — Shikai"
-            },
-            {
-                "key": "RollOption",
                 "domain": "all",
+                "key": "RollOption",
                 "option": "soulbound:release:never-sealed",
                 "value": true
             }

@@ -1,6 +1,6 @@
 {
     "folder": "Activities",
-    "img": "icons/magic/light/beam-explosion-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/beam-explosion-blue.svg",
     "name": "Effect: Chiron's Light Impulse",
     "system": {
         "description": {

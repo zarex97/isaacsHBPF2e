@@ -1,5 +1,5 @@
 {
-    "img": "icons/creatures/abilities/paw-print-pair-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/paw-print-pair-blue.svg",
     "name": "Effect: Pantera — Resurrección",
     "system": {
         "description": {
@@ -22,6 +22,10 @@
         "rules": [
             {
                 "key": "GrantItem",
+                "onDeleteActions": {
+                    "grantee": null,
+                    "granter": "cascade"
+                },
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-equipment.Item.Pantera — Claws"
             },
             {
@@ -29,6 +33,17 @@
                 "label": "Pantera",
                 "selector": "speed",
                 "type": "untyped",
+                "value": 10
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "mode": "override",
+                "predicate": [
+                    "item:tag:soulbound-pantera-claw",
+                    "feature:refined-release"
+                ],
+                "property": "damage-dice-faces",
                 "value": 10
             }
         ],

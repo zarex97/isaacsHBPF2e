@@ -1,6 +1,6 @@
 {
     "folder": "Core",
-    "img": "icons/magic/light/explosion-star-large-purple.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/explosion-star-large-purple.svg",
     "name": "Perfected Full Release",
     "system": {
         "actionType": {

@@ -1,4 +1,12 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "releaseForm": {
+                "effect": "Effect: The Miracle — Schrift",
+                "rung": "released"
+            }
+        }
+    },
     "folder": "Spirits",
     "img": "icons/magic/holy/angel-winged-humanoid-blue.webp",
     "name": "The Miracle — Schrift",
@@ -24,12 +32,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [
-            {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: The Miracle — Schrift"
-            }
-        ],
+        "rules": [],
         "traits": {
             "otherTags": [
                 "soulbound-feature"

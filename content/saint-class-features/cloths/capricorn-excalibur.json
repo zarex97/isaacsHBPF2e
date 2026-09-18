@@ -48,7 +48,7 @@
         }
     },
     "folder": "Gold Cloths",
-    "img": "icons/weapons/swords/greatsword-crossguard-gold.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/greatsword-crossguard-gold.svg",
     "name": "Capricorn — Excalibur",
     "system": {
         "actionType": {

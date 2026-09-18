@@ -40,26 +40,18 @@
                         "statistic": "will",
                         "type": "save"
                     },
-                    "area": {
-                        "type": "emanation",
-                        "value": 15
-                    },
-                    "areaTargeting": {
-                        "affects": "enemies",
-                        "includesSelf": false
-                    },
-                    "event": "turn-end",
+                    "event": "aura-tick",
+                    "note": "Crushing spiritual pressure. The Aura above decides who is caught and when.",
                     "predicate": [
                         {
                             "not": "rider:target:effect:steeled-against-pressure"
                         }
-                    ],
-                    "self": true
+                    ]
                 }
             ]
         }
     },
-    "img": "icons/magic/light/explosion-star-large-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/explosion-star-large-blue.svg",
     "name": "Effect: Full Release",
     "system": {
         "description": {
@@ -79,7 +71,50 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [],
+        "rules": [
+            {
+                "domain": "all",
+                "key": "RollOption",
+                "option": "soulbound:full-release",
+                "value": true
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "mode": "upgrade",
+                "predicate": [
+                    "item:tag:soulbound-spirit-weapon",
+                    {
+                        "not": "soulbound:full-release:no-die-step"
+                    }
+                ],
+                "property": "damage-dice-faces"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Unbound Technique"
+            },
+            {
+                "effects": [
+                    {
+                        "affects": "enemies",
+                        "events": [
+                            "turn-end"
+                        ],
+                        "removeOnExit": false,
+                        "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Aura Tick"
+                    }
+                ],
+                "key": "Aura",
+                "radius": 15,
+                "slug": "soulbound-pressure",
+                "traits": [
+                    "emotion",
+                    "fear",
+                    "mental"
+                ]
+            }
+        ],
         "start": {
             "initiative": null,
             "value": 0

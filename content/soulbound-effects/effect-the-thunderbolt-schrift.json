@@ -1,5 +1,5 @@
 {
-    "img": "icons/magic/lightning/bolt-strike-white.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/bolt-strike-white.svg",
     "name": "Effect: The Thunderbolt — Schrift",
     "system": {
         "description": {
@@ -22,6 +22,10 @@
         "rules": [
             {
                 "key": "GrantItem",
+                "onDeleteActions": {
+                    "grantee": null,
+                    "granter": "cascade"
+                },
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-equipment.Item.The Thunderbolt — Arcing Sword"
             },
             {
@@ -30,8 +34,8 @@
                 "value": "max(1,floor(@actor.level/2))"
             },
             {
-                "key": "RollOption",
                 "domain": "all",
+                "key": "RollOption",
                 "option": "soulbound:thunderbolt:flash-step-teleport",
                 "value": true
             }

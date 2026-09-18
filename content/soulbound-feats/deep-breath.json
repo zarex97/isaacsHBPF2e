@@ -1,6 +1,13 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "deepBreath": {
+                "restores": 2
+            }
+        }
+    },
     "folder": "4th",
-    "img": "icons/magic/air/wind-vortex-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/wind-vortex-blue.svg",
     "name": "Deep Breath",
     "system": {
         "actionType": {
@@ -24,14 +31,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [
-            {
-                "key": "RollOption",
-                "domain": "all",
-                "option": "soulbound:deep-breath",
-                "value": true
-            }
-        ],
+        "rules": [],
         "traits": {
             "otherTags": [
                 "soulbound-feat"

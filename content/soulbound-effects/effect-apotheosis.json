@@ -1,0 +1,81 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "basic": true,
+                        "dc": "reiatsu",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "force",
+                                    "formula": "origin.severance.dice",
+                                    "multiplier": 0.5,
+                                    "type": "damage"
+                                }
+                            }
+                        ],
+                        "statistic": "fortitude",
+                        "type": "save"
+                    },
+                    "area": {
+                        "type": "emanation",
+                        "value": 30
+                    },
+                    "areaTargeting": {
+                        "affects": "enemies",
+                        "includesSelf": false
+                    },
+                    "event": "turn-start",
+                    "note": "Apotheosis detonates a second time.",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "folder": null,
+    "img": "modules/isaacs-hb-pf2e/icons/angel-winged-humanoid-golden.svg",
+    "name": "Effect: Apotheosis",
+    "system": {
+        "badge": null,
+        "description": {
+            "value": "<p>You gain <strong>temporary Hit Points equal to twice your level</strong>. At the start of your next turn the light detonates again, for <strong>half</strong> the Waning dice.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 10
+        },
+        "publication": {
+            "license": "OGL",
+            "remaster": true,
+            "title": "Isaac's Homebrew"
+        },
+        "rules": [
+            {
+                "key": "TempHP",
+                "value": "2 * @actor.level"
+            }
+        ],
+        "slug": "effect-apotheosis",
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "force"
+            ]
+        }
+    },
+    "type": "effect"
+}

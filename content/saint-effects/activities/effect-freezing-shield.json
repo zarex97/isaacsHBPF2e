@@ -43,7 +43,7 @@
         }
     },
     "folder": "Activities",
-    "img": "icons/magic/water/orb-ice-water.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/orb-ice-water.svg",
     "name": "Effect: Freezing Shield",
     "system": {
         "description": {

@@ -1,4 +1,26 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Segunda Piel (Early)"
+                    },
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 1
+                    },
+                    "event": "strike-received",
+                    "note": "Each time you are critically hit, Hierro reaches spirit for a round.",
+                    "outcomes": [
+                        "criticalSuccess"
+                    ],
+                    "self": true
+                }
+            ]
+        }
+    },
     "folder": "12th",
     "img": "icons/equipment/chest/breastplate-scale-grey.webp",
     "name": "Segunda Piel Temprana",
@@ -28,14 +50,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [
-            {
-                "key": "RollOption",
-                "domain": "all",
-                "option": "soulbound:segunda-piel-temprana",
-                "value": true
-            }
-        ],
+        "rules": [],
         "traits": {
             "otherTags": [
                 "soulbound-feat",

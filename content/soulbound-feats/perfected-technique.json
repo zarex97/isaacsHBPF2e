@@ -1,4 +1,14 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "freeCast": {
+                "label": "Perfected Technique",
+                "predicate": [
+                    "item:tag:sb-tier-release"
+                ]
+            }
+        }
+    },
     "folder": "10th",
     "img": "icons/magic/light/explosion-star-glow-blue.webp",
     "name": "Perfected Technique",
@@ -15,7 +25,7 @@
         },
         "frequency": {
             "max": 1,
-            "per": "round",
+            "per": "PT10M",
             "value": 1
         },
         "level": {
@@ -29,14 +39,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [
-            {
-                "key": "RollOption",
-                "domain": "all",
-                "option": "soulbound:perfected-technique",
-                "value": true
-            }
-        ],
+        "rules": [],
         "traits": {
             "otherTags": [
                 "soulbound-feat"

@@ -91,7 +91,7 @@
         }
     },
     "folder": "4th — Ultimate (L16)",
-    "img": "icons/magic/nature/rose-thorned-red.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/rose-thorned-red.svg",
     "name": "Royal Funeral",
     "system": {
         "area": null,

@@ -1,0 +1,48 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "freeCast": {
+                "label": "Full Release",
+                "predicate": [
+                    "item:tag:sb-tier-release"
+                ]
+            }
+        }
+    },
+    "folder": "Actions",
+    "img": "modules/isaacs-hb-pf2e/icons/explosion-star-large-blue.svg",
+    "name": "Unbound Technique",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p>While you are in a <strong>Full Release</strong>, your Release Technique costs no Reiatsu Points &mdash; but you can use it only <strong>once per round</strong>.</p><p>This entry is the allowance itself: it pays for the Technique, and when it is spent the Technique cannot be used again until your next round.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "action"
+}

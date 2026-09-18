@@ -1,6 +1,6 @@
 {
     "folder": "14th",
-    "img": "icons/magic/light/explosion-star-large-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/explosion-star-large-blue.svg",
     "name": "Vollständig Endurance",
     "system": {
         "actionType": {
@@ -30,9 +30,9 @@
         },
         "rules": [
             {
-                "key": "RollOption",
                 "domain": "all",
-                "option": "soulbound:vollstandig-endurance",
+                "key": "RollOption",
+                "option": "soulbound:no-full-release-fatigue",
                 "value": true
             }
         ],

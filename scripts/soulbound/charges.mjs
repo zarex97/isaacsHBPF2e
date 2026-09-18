@@ -42,6 +42,68 @@ export function afterRefresh({ held, max, regain }) {
 }
 
 export const Charges = {
+    /**
+     * What an item declares about the pool it spends from.
+     *
+     *     "flags": { "isaacs-hb-pf2e": { "chargeSpend": {
+     *         "effect": "Effect: Daiguren Hyōrinmaru", "spend": 1, "perRound": 1 } } }
+     *
+     * Named rather than inferred, because the three Spirits that want a pool want different numbers and
+     * the item is the only place that knows which pool it draws on.
+     */
+    declarationOn(item) {
+        const declared = item?.flags?.[MODULE_ID]?.chargeSpend;
+        if (!declared?.effect) return null;
+        return {
+            effect: declared.effect,
+            spending: Number(declared.spend ?? 1),
+            perRound: declared.perRound === null ? Infinity : Number(declared.perRound ?? 1),
+        };
+    },
+
+    /**
+     * The spend that has to happen *before* the ability resolves.
+     *
+     * Hyōrinmaru's petal-flowers are the case: "once per round you may spend one petal-flower to use one
+     * of" three Techniques, and a Technique cast with no petal left has to be refused rather than cast
+     * and then quietly not charged. Returns false to stop the cast.
+     */
+    async beforeCast(spell) {
+        const declared = this.declarationOn(spell);
+        if (!declared) return true;
+        const actor = spell?.actor;
+        if (!actor) return true;
+        const { allowed } = await this.spend(actor, declared.effect, declared);
+        return allowed;
+    },
+
+    /**
+     * Give a spent charge back at the start of each of your turns.
+     *
+     * Guide §7A, Hyōrinmaru's Perfected Bankai at 17th: *"restores one spent petal-flower at the start
+     * of each of your turns."* The refresh is declared on the charge-bearing effect itself, so a Spirit
+     * whose pool refills on a different schedule — Los Lobos regains a wolf every turn from 13th, with
+     * no Perfected clause at all — says so in content instead of here:
+     *
+     *     "chargeRefresh": { "regain": 1, "requires": "feature:perfected-full-release" }
+     */
+    registerHooks() {
+        Hooks.on("pf2e.startTurn", async (combatant) => {
+            if (!game.user.isGM) return;
+            const actor = combatant?.actor;
+            if (!actor) return;
+            const options = actor.getRollOptions?.() ?? [];
+            for (const effect of actor.itemTypes?.effect ?? []) {
+                const declared = effect.flags?.[MODULE_ID]?.chargeRefresh;
+                if (!declared) continue;
+                if (declared.requires && !options.includes(declared.requires)) continue;
+                if (this.held(actor, effect.name) >= this.max(actor, effect.name)) continue;
+                const now = await this.refresh(actor, effect.name, { regain: Number(declared.regain ?? 1) });
+                ui.notifications.info(`${effect.name}: ${now} left.`);
+            }
+        });
+    },
+
     /** The charge-bearing effect, by the name it is authored under. */
     effectOn(actor, effectName) {
         return actor?.itemTypes?.effect?.find((e) => e.name === effectName) ?? null;

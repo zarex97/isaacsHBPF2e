@@ -1,12 +1,21 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "includesSelf": false
+            },
+            "chargeSpend": {
+                "effect": "Effect: Daiguren Hyōrinmaru",
+                "perRound": 1,
+                "spend": 1
+            },
             "riders": [
                 {
                     "apply": {
-                        "value": 1,
                         "slug": "slowed",
-                        "type": "condition"
+                        "type": "condition",
+                        "value": 1
                     },
                     "duration": {
                         "unit": "rounds",
@@ -20,7 +29,7 @@
             ]
         }
     },
-    "img": "icons/magic/water/snowflake-ice-swirl-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/snowflake-ice-swirl-blue.svg",
     "name": "Hyōryū Senbi",
     "system": {
         "area": {

@@ -1,6 +1,10 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "includesSelf": false
+            },
             "bypass": [
                 {
                     "immunity": {
@@ -16,10 +20,32 @@
                         ]
                     }
                 }
+            ],
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Wound That Will Not Close"
+                    },
+                    "outcomes": [
+                        "failure",
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "damageType": "untyped",
+                        "fractionOfCurrentHp": 0.5,
+                        "type": "damage"
+                    },
+                    "event": "action-used",
+                    "note": "R-15: paid once, after the Art resolves, and reduced by nothing.",
+                    "self": true
+                }
             ]
         }
     },
-    "img": "icons/magic/fire/blade-two-handed-glowing-orange.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/blade-two-handed-glowing-orange.svg",
     "name": "Ittō Kasō",
     "system": {
         "area": {

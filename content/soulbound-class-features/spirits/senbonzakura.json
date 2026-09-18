@@ -1,6 +1,6 @@
 {
     "folder": "Spirits",
-    "img": "icons/magic/nature/leaf-petals-pink.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/leaf-petals-pink.svg",
     "name": "Senbonzakura",
     "system": {
         "actionType": {
@@ -45,6 +45,14 @@
                 ],
                 "reevaluateOnUpdate": true,
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Senbonzakura Kageyoshi"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    "soulbound:severance"
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-techniques.Item.Shūkei: Hakuteiken"
             }
         ],
         "traits": {

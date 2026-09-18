@@ -27,7 +27,7 @@
         }
     },
     "folder": "Activities",
-    "img": "icons/weapons/simple/gladius.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/gladius.svg",
     "name": "Effect: Double Excalibur",
     "system": {
         "description": {

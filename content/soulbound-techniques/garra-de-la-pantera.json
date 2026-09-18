@@ -12,10 +12,38 @@
                     "value": 1
                 },
                 "name": "Garra de la Pantera — shards"
-            }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "damageType": "bleed",
+                        "formula": "2d6",
+                        "type": "persistent-damage"
+                    },
+                    "note": "Segunda Etapa: embedded shards.",
+                    "outcomes": [
+                        "criticalFailure"
+                    ],
+                    "predicate": [
+                        "self:effect:pantera-segunda-etapa"
+                    ]
+                },
+                {
+                    "apply": {
+                        "text": "Refined Release: you may <strong>Step</strong> as a free action.",
+                        "type": "prompt"
+                    },
+                    "event": "action-used",
+                    "note": "Refined: the cat moves after it swipes.",
+                    "predicate": [
+                        "feature:refined-release"
+                    ],
+                    "self": true
+                }
+            ]
         }
     },
-    "img": "icons/creatures/abilities/paw-print-pair-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/paw-print-pair-blue.svg",
     "name": "Garra de la Pantera",
     "system": {
         "area": {

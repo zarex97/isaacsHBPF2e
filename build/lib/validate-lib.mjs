@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { ROOT, rel } from "./pack.mjs";
+import { ROOT, rel, sluggify } from "./pack.mjs";
 
 const pf2e = JSON.parse(fs.readFileSync(path.join(ROOT, "build", "lib", "pf2e-traits.json"), "utf8"));
 /** pf2e's immunity/weakness/resistance dictionaries, snapshotted from a running 8.3.0. */
@@ -134,6 +134,349 @@ export function validate(packs, { errors }) {
     }
     validateAdvancementTable(packs, errors);
     validateActionsAreReachable(packs, errors);
+    validateHomebrewTraits(packs, errors);
+    validateMultipleAttackPenalties(packs, errors);
+    validateReevaluatedGrants(packs, errors);
+    validateGrantedWeaponsCascade(packs, errors);
+    validateIconsExist(packs, errors);
+    validateSlugPredicates(packs, errors);
+    validateAlterationProperties(packs, errors);
+    validateCounterBadges(packs, errors);
+}
+
+/**
+ * A counter badge that is meant to reach zero must not carry `labels`.
+ *
+ * pf2e's `EffectPF2e#_preUpdate` nulls `min` and `max` the moment a counter has labels, then treats the
+ * minimum as **1** and — this is the part that bites — **deletes the effect** when a change would take
+ * the value below it:
+ *
+ *     const minValue = badgeWithoutOperators.min ?? 1;
+ *     if (this.actor && currentValue < minValue) { await this.actor.deleteEmbeddedDocuments(...); }
+ *
+ * `Effect: Daiguren Hyōrinmaru` declared `min: 0` for its three petal-flowers and carried
+ * `labels: ["1","2","3"]` beside it. Spending the third petal did not empty the pool, it **deleted the
+ * Bankai** — the fly Speed, the cold resistance and the host of all three petal Techniques with it.
+ *
+ * So `min: 0` and `labels` together are always a contradiction, and this says which one the author meant
+ * rather than guessing. A labelled counter with `min: 1` is a different thing and is left alone: those
+ * name their states, and zero of them is not a state.
+ */
+function validateCounterBadges(packs, errors) {
+    for (const { docs } of packs) {
+        for (const { file, doc } of docs) {
+            const badge = doc.system?.badge;
+            if (badge?.type !== "counter") continue;
+            if (badge.min === 0 && Array.isArray(badge.labels) && badge.labels.length > 0) {
+                errors.push(
+                    `${rel(file)}: a counter badge with \`min: 0\` must not carry \`labels\` — pf2e nulls `
+                    + "the minimum for a labelled counter, treats it as 1, and DELETES the effect when the "
+                    + "value would go below it. Drop the labels, or say `min: 1`.",
+                );
+            }
+        }
+    }
+}
+
+/**
+ * The `ItemAlteration` properties pf2e actually has.
+ *
+ * Its handler map is closed and finite (`rules/rule-element/item-alteration/handlers.ts`), and an
+ * unknown property is rejected at schema validation — silently, from the content's point of view: the
+ * rule is dropped and the item keeps whatever it printed. Two abilities shipped that way, both of them
+ * trying to compress an action cost, which pf2e has no handler for at all:
+ *
+ *   Effect: Tensa Zangetsu   {"property": "time", "value": "1"}
+ *   Instant Full Release     {"property": "action-cost", "value": 1}
+ *
+ * The module supplies that one capability itself, through an `actionCost` flag — see
+ * `scripts/soulbound/action-cost.mjs`. Everything else must be a property pf2e will recognise.
+ */
+const ALTERATION_PROPERTIES = new Set([
+    "ac-bonus", "area-size", "badge-max", "badge-value", "check-penalty", "damage-dice-faces",
+    "damage-dice-number", "damage-type", "defense-passive", "description", "dex-cap",
+    "focus-point-cost", "hardness", "hp-max", "material-type", "materials", "pd-recovery-dc",
+    "persistent-damage", "property-runes", "range-increment", "range-max", "frequency-max",
+    "frequency-per", "other-tags", "runes-potency", "runes-resilient", "runes-striking",
+    "speed-penalty", "traits", "weapon-traits",
+]);
+
+function validateAlterationProperties(packs, errors) {
+    const walk = (node, onHit) => {
+        if (Array.isArray(node)) return node.forEach((v) => walk(v, onHit));
+        if (!node || typeof node !== "object") return;
+        if (node.key === "ItemAlteration" && typeof node.property === "string") onHit(node.property);
+        for (const value of Object.values(node)) walk(value, onHit);
+    };
+    for (const { docs } of packs) {
+        for (const { file, doc } of docs) {
+            walk(doc, (property) => {
+                if (ALTERATION_PROPERTIES.has(property)) return;
+                errors.push(
+                    `${rel(file)}: ItemAlteration property "${property}" is not one pf2e has, so the rule `
+                    + "is dropped at validation and the item keeps its printed value. For an action cost, "
+                    + "declare `flags.isaacs-hb-pf2e.actionCost` instead.",
+                );
+            });
+        }
+    }
+}
+
+
+/**
+ * A form effect that grants a weapon must take it away again.
+ *
+ * pf2e detaches a **physical** grantee when its granter is deleted — deliberately, so that a granted
+ * sword does not vanish out of a character's inventory:
+ *
+ *     this.onDeleteActions?.granter ??
+ *         (setHasElement(PHYSICAL_ITEM_TYPES, grantee.type) ? "detach" : "cascade")
+ *
+ * A spirit weapon is the opposite case. It exists only while the form is worn, and the form is deleted
+ * and re-created on every Release — so the default left another copy behind each time. A Miracle Quincy
+ * driven through five Releases was carrying five Swords and Shields.
+ */
+function validateGrantedWeaponsCascade(packs, errors) {
+    for (const { docs } of packs) {
+        for (const { file, doc } of docs) {
+            if (doc.type !== "effect") continue;
+            for (const rule of doc.system?.rules ?? []) {
+                if (rule.key !== "GrantItem") continue;
+                if (!String(rule.uuid ?? "").includes("soulbound-equipment")) continue;
+                if (rule.onDeleteActions?.granter === "cascade") continue;
+                errors.push(
+                    `${rel(file)}: grants a weapon without \`onDeleteActions.granter: "cascade"\`. pf2e `
+                    + "detaches a physical grantee by default, so taking the form off leaves the weapon "
+                    + "behind and the next Release adds another copy.",
+                );
+            }
+        }
+    }
+}
+
+/**
+ * Every icon the module points at must exist.
+ *
+ * All of this module's art used to reference Foundry's own library, and **eighty-nine of those paths
+ * were invented** — `leaf-petals-pink.webp`, `wolf-howl-moon-grey.webp`, `sword-katana-black.webp`.
+ * They read exactly like real files. Only seven ever produced a console error, because Foundry
+ * validates an icon at the moment something renders it, so the other eighty-two sat on a silent
+ * fallback and nobody could tell the difference from a deliberate choice.
+ *
+ * The art now ships with the module, which is what makes this checkable at all: a path under
+ * `modules/isaacs-hb-pf2e/` is a file in this repository. Paths into Foundry's own library are left
+ * alone, because someone else's install is not ours to assume.
+ */
+function validateIconsExist(packs, errors) {
+    const prefix = "modules/isaacs-hb-pf2e/";
+    for (const { docs } of packs) {
+        for (const { file, doc } of docs) {
+            const img = doc.img;
+            if (typeof img !== "string" || !img.startsWith(prefix)) continue;
+            if (fs.existsSync(path.join(ROOT, img.slice(prefix.length)))) continue;
+            errors.push(
+                `${rel(file)}: img "${img}" does not exist. Run \`npm run icons\` — the art is drawn `
+                + "from the filenames, so a new name is a new icon.",
+            );
+        }
+    }
+}
+
+/**
+ * A homebrew trait must be registered for the **item type** that uses it.
+ *
+ * `pf2e-homebrew` registers traits per category — `spellTraits`, `featTraits`, `actionTraits`,
+ * `weaponTraits` — and pf2e validates an item's traits against the one category matching its type. A
+ * trait registered only as a spell trait is therefore **stripped** from a feat that carries it, with a
+ * warning per item per data preparation and no other sign.
+ *
+ * `reiatsu` was registered only under `spellTraits` while four actions and eleven feats carried it,
+ * `Full Release` and `Blut` among them; `cosmo` was the same on one Saint action. The visible cost is
+ * small — those items are not searchable by their own class's trait — but the warning is identical in
+ * shape to the ones that do matter, and a console full of harmless warnings is where a real one hides.
+ */
+/**
+ * Which item types each homebrew category actually reaches, read off `CONFIG.PF2E` in a live world
+ * rather than guessed. Registering a trait under one category populates several of pf2e's lists:
+ *
+ *     classTraits  -> featTraits, actionTraits, spellTraits, effectTraits, classTraits
+ *     featTraits   -> featTraits, actionTraits, effectTraits
+ *     spellTraits  -> spellTraits ONLY
+ *
+ * That last line is the trap. `reiatsu` was registered as a spell trait, which is true of the sixty-two
+ * kidō — and says nothing about the eleven feats and four actions that also carry it.
+ */
+const TRAIT_CATEGORY_COVERS = {
+    classTraits: ["class", "feat", "action", "spell", "effect"],
+    featTraits: ["feat", "action", "effect"],
+    actionTraits: ["action", "effect"],
+    spellTraits: ["spell"],
+    weaponTraits: ["weapon"],
+    equipmentTraits: ["equipment", "weapon", "armor", "consumable"],
+};
+
+function validateHomebrewTraits(packs, errors) {
+    const homebrew = JSON.parse(fs.readFileSync(path.join(ROOT, "module.json"), "utf8"))
+        ?.flags?.["isaacs-hb-pf2e"]?.["pf2e-homebrew"] ?? {};
+    const known = new Set(Object.values(homebrew).flatMap((block) => Object.keys(block ?? {})));
+
+    /** Every item type a trait is registered for, across all the categories that name it. */
+    const reaches = new Map();
+    for (const [category, block] of Object.entries(homebrew)) {
+        for (const trait of Object.keys(block ?? {})) {
+            const types = reaches.get(trait) ?? new Set();
+            for (const type of TRAIT_CATEGORY_COVERS[category] ?? []) types.add(type);
+            reaches.set(trait, types);
+        }
+    }
+
+    for (const { docs } of packs) {
+        for (const { file, doc } of docs) {
+            for (const trait of doc.system?.traits?.value ?? []) {
+                // Only our own traits are checked; pf2e's own list is its business.
+                if (!known.has(trait)) continue;
+                if (reaches.get(trait)?.has(doc.type)) continue;
+                errors.push(
+                    `${rel(file)}: homebrew trait "${trait}" is not registered for ${doc.type}s in `
+                    + "module.json, so pf2e strips it from this item at load. Registering under "
+                    + "`spellTraits` alone covers spells and nothing else.",
+                );
+            }
+        }
+    }
+}
+
+/**
+ * A `MultipleAttackPenalty` supplies a **replacement penalty**, so its value must be negative.
+ *
+ * pf2e reads the value as the penalty itself and rejects anything above zero outright:
+ *
+ *     if (value < 0) { penalties.push({ label, penalty: value, predicate }); }
+ *     else if (value !== 0) { this.failValidation("value: must resolve to less than or equal to zero"); }
+ *
+ * `calculateMAPs` then turns that into `{ map1: penalty, map2: penalty * 2 }` — so "counts as agile" is
+ * **-4**, not the 1 that reads so naturally as "reduce the penalty by one". Both of the module's MAP
+ * rules were written the second way: *Bala* said so on every Soulbound in the world, once per data
+ * preparation, and *Twin Fang* said it only for characters who had taken the feat.
+ *
+ * The check is a whole-number one on purpose. A fractional or string value would resolve at runtime and
+ * cannot be judged here; a positive literal never can be right.
+ */
+function validateMultipleAttackPenalties(packs, errors) {
+    for (const { docs } of packs) {
+        for (const { file, doc } of docs) {
+            for (const rule of doc.system?.rules ?? []) {
+                if (rule.key !== "MultipleAttackPenalty") continue;
+                const value = Number(rule.value);
+                if (!Number.isFinite(value) || value < 0) continue;
+                errors.push(
+                    `${rel(file)}: MultipleAttackPenalty value ${rule.value} must be negative — pf2e reads `
+                    + "it as the penalty itself and drops the rule otherwise. \"Counts as agile\" is -4, "
+                    + "which becomes -4/-8; it is not a reduction of the usual -5.",
+                );
+            }
+        }
+    }
+}
+
+/**
+ * A predicated `GrantItem` must say `reevaluateOnUpdate`.
+ *
+ * Without it pf2e tests the predicate **once**, when the granting item is created, and never looks
+ * again — `preUpdateActor` returns immediately unless the flag is set. A grant gated on something that
+ * becomes true later therefore never happens at all.
+ *
+ * `Effect: Los Lobos — Resurrección` granted its Refined Sustain on `feature:refined-release` and a
+ * 9th-level Tercera Espada released with no Sustain on the sheet. Seventy-one of the module's other
+ * seventy-three predicated grants already carried the flag; it is the convention, and the one other
+ * that did not — `Effect: Om` — is `inMemoryOnly` and is rebuilt every preparation instead.
+ */
+function validateReevaluatedGrants(packs, errors) {
+    for (const { docs } of packs) {
+        for (const { file, doc } of docs) {
+            for (const rule of doc.system?.rules ?? []) {
+                if (rule.key !== "GrantItem") continue;
+                if (!Array.isArray(rule.predicate) || rule.predicate.length === 0) continue;
+                if (rule.reevaluateOnUpdate === true) continue;
+                // An `inMemoryOnly` grant is rebuilt by `onApplyActiveEffects` on every data
+                // preparation, which is more often than an actor update — pf2e's `preUpdateActor`
+                // returns early for these on purpose. `Effect: Om` is the module's one such grant.
+                if (rule.inMemoryOnly === true) continue;
+                errors.push(
+                    `${rel(file)}: GrantItem is predicated but does not set \`reevaluateOnUpdate\`, so `
+                    + "pf2e tests the predicate once at creation and never again — a grant gated on "
+                    + "something that becomes true later never happens at all.",
+                );
+            }
+        }
+    }
+}
+
+/**
+ * Slugs pf2e owns, that a predicate may legitimately name without us shipping the item.
+ *
+ * Kept as an explicit list rather than a "give up if it is not ours" rule, because the whole point of
+ * this check is that an unrecognised slug is almost always a typo.
+ */
+const EXTERNAL_SLUGS = new Set(["grapple"]);
+
+/**
+ * Every `item:slug:<x>` must name something that exists.
+ *
+ * `Effect: Tensa Zangetsu` carried two alterations predicated on `item:slug:getsuga-tensho`, and the
+ * slug the build actually writes is **`getsuga-tensh`** — `sluggify` here reduces anything outside
+ * `[a-z0-9]` to a separator, so the macron in "Getsuga Tenshō" is dropped rather than transliterated.
+ * The predicate read perfectly and matched nothing, which cost Tensa Zangetsu both of the things that
+ * make it the speed Bankai: the one-action Getsuga and its 60-foot line.
+ *
+ * Note the failure is invisible from either side on its own. The slug looks right next to the name; the
+ * name looks right next to the slug. Only holding the predicate against the built pack shows it.
+ *
+ * The same trap caught `self:effect:regeneracion-suppressed`, which is why both predicate forms are
+ * checked here: the Hollow's Regeneración could never be switched off, and guide §5.2 calls that
+ * clause the point of the Lineage.
+ */
+function validateSlugPredicates(packs, errors) {
+    const known = new Set(EXTERNAL_SLUGS);
+    for (const { docs } of packs) {
+        for (const { doc } of docs) {
+            if (doc.system?.slug) known.add(doc.system.slug);
+        }
+    }
+    // `self:effect:<x>` names an EFFECT, and pf2e publishes that option with the leading `effect-`
+    // stripped: an effect slugged `effect-regeneracion-suppressed` is tested as
+    // `self:effect:regeneracion-suppressed`. So the two forms are checked against two different sets.
+    const effects = new Set();
+    for (const { docs } of packs) {
+        for (const { doc } of docs) {
+            if (doc.type !== "effect") continue;
+            const slug = doc.system?.slug ?? sluggify(doc.name ?? "");
+            effects.add(slug.replace(/^effect-/, ""));
+        }
+    }
+
+    const forms = [
+        { pattern: /item:slug:([a-z0-9-]+)/g, label: "item:slug:", set: known },
+        { pattern: /self:effect:([a-z0-9-]+)/g, label: "self:effect:", set: effects },
+    ];
+    for (const { docs } of packs) {
+        for (const { file, doc } of docs) {
+            const json = JSON.stringify(doc);
+            const seen = new Set();
+            for (const { pattern, label, set } of forms) {
+                for (const [, slug] of json.matchAll(pattern)) {
+                    if (set.has(slug) || seen.has(label + slug)) continue;
+                    seen.add(label + slug);
+                    errors.push(
+                        `${rel(file)}: predicate names \`${label}${slug}\`, which no document carries. `
+                        + "Check the built slug — sluggify drops accented letters rather than transliterating "
+                        + "them, so \"Getsuga Tenshō\" is `getsuga-tensh` and \"Regeneración Suppressed\" is "
+                        + "`regeneraci-n-suppressed`. Pin `system.slug` when the name carries an accent.",
+                    );
+                }
+            }
+        }
+    }
 }
 
 /**
@@ -147,20 +490,28 @@ function validateActionsAreReachable(packs, errors) {
     // document ID, not the name, or every action looks orphaned.
     const actions = new Map();
     const granted = new Set();
-    for (const { docs } of packs) {
+    for (const { def, docs } of packs) {
         for (const { file, doc } of docs) {
-            if (doc.type === "action") actions.set(doc._id, { name: doc.name, file });
+            if (doc.type === "action") actions.set(doc._id, { name: doc.name, file, kind: "action" });
+            // A **Technique** is exactly as invisible when nothing grants it, and until now nothing
+            // said so: `Licht Regen` and `Galvano Javelin` were authored down to the incapacitation
+            // trait, sat in the pack, and reached no character — their Spirits granted the 1st-level
+            // Technique and the 13th-level Vollständig and skipped the 9th. The fifteen Severing Arts
+            // were unreachable the same way. Kidō are excluded: those are chosen, not granted.
+            if (doc.type === "spell" && def.name.endsWith("-techniques")) {
+                actions.set(doc._id, { name: doc.name, file, kind: "Technique" });
+            }
             for (const rule of doc.system?.rules ?? []) {
                 if (rule.key !== "GrantItem" || typeof rule.uuid !== "string") continue;
                 granted.add(rule.uuid.split(".").at(-1));
             }
         }
     }
-    for (const [id, { name, file }] of actions) {
+    for (const [id, { name, file, kind }] of actions) {
         if (!granted.has(id)) {
             errors.push(
-                `${rel(file)}: nothing grants the action "${name}", so no character will ever see it — ` +
-                    `add a GrantItem on the feature or sky effect that provides it`,
+                `${rel(file)}: nothing grants the ${kind} "${name}", so no character will ever see it — ` +
+                    `add a GrantItem on the feature, Spirit or sky effect that provides it`,
             );
         }
     }
@@ -253,15 +604,18 @@ function validateItem(doc, where, errors, family) {
     if (doc.type === "effect") validateEffect(doc, where, errors);
     if (doc.type === "class") validateClass(doc, where, errors, family);
 
-    validateAreaTargeting(doc, where, errors);
-    validateRiders(doc, where, errors);
-    validateCounterThresholds(doc, where, errors);
-    validateBypass(doc, where, errors);
-    validateFreeCast(doc, where, errors);
-    validateFrequency(doc, where, errors);
-    validateLingering(doc, where, errors);
-    validateAstral(doc, where, errors);
-    validateSouls(doc, where, errors);
+    validateFlagBlocks(doc, where, errors);
+
+    // A spell **variant** is a first-class item at cast time: pf2e builds it with
+    // `mergeObject(source, overlay, { overwrite: true })`, so an overlay's flags replace the base's and
+    // are read by the rider engine exactly like any other item's. They were not checked at all — a rider
+    // with an invented apply type sat in `Burner Finger Four` and validation passed without a word,
+    // which is precisely the silence this whole validator exists to break.
+    for (const [id, overlay] of Object.entries(doc.system?.overlays ?? {})) {
+        if (!overlay?.flags) continue;
+        validateFlagBlocks({ ...overlay, type: doc.type, system: { ...system, ...overlay.system } },
+                           `${where} [overlay ${id}]`, errors);
+    }
 
     if (MUST_BE_INCAPACITATION.has(system.slug) && !(traits ?? []).includes("incapacitation")) {
         errors.push(
@@ -282,6 +636,21 @@ const AFFECTS = new Set(["all", "allies", "enemies"]);
  * at runtime, only a Technique that quietly goes back to manual targeting — which is indistinguishable
  * from the feature being off, and so gets diagnosed as "the module is broken".
  */
+/**
+ * The module's own flag blocks, checked wherever they appear — on an item, or inside a spell overlay.
+ */
+function validateFlagBlocks(doc, where, errors) {
+    validateAreaTargeting(doc, where, errors);
+    validateRiders(doc, where, errors);
+    validateCounterThresholds(doc, where, errors);
+    validateBypass(doc, where, errors);
+    validateFreeCast(doc, where, errors);
+    validateFrequency(doc, where, errors);
+    validateLingering(doc, where, errors);
+    validateAstral(doc, where, errors);
+    validateSouls(doc, where, errors);
+}
+
 function validateAreaTargeting(doc, where, errors) {
     const flag = doc.flags?.["isaacs-hb-pf2e"]?.areaTargeting;
     if (!flag) return;
@@ -346,7 +715,7 @@ const DURATION_UNITS = new Set(["rounds", "minutes", "hours", "days", "unlimited
 const RIDER_TYPES = new Set([
     "condition", "effect", "prompt", "choice", "save", "damage", "persistent-damage", "death", "teleport",
     "strikes", "banish", "heal", "readout", "toggle", "counteract", "encasement", "escape",
-    "equip", "reaction", "flat-check",
+    "equip", "reaction", "flat-check", "charge",
 ]);
 const RIDER_EVENTS = new Set([
     "save-rolled", "strike-resolved", "strike-received", "action-used", "damage-applied",
@@ -458,9 +827,18 @@ function validateFrequency(doc, where, errors) {
  * deals it, having it in both places would deal it twice.
  */
 function validateLingering(doc, where, errors) {
-    const flag = doc.flags?.["isaacs-hb-pf2e"]?.lingering;
-    if (flag === undefined) return;
-    const at = `${where}: lingering`;
+    const declared = doc.flags?.["isaacs-hb-pf2e"]?.lingering;
+    if (declared === undefined) return;
+    // `lingering` may be one patch or a list of predicated ones — Burner Finger Five leaves difficult
+    // ground always and burning ground at Refined Release, which is two patches, not one.
+    const specs = [declared].flat();
+    specs.forEach((flag, index) => {
+        const at = specs.length > 1 ? `${where}: lingering[${index}]` : `${where}: lingering`;
+        validateOneLingering(flag, at, errors, doc);
+    });
+}
+
+function validateOneLingering(flag, at, errors, doc) {
 
     if (!(Number(flag.duration?.value) > 0)) {
         errors.push(`${at} needs a duration — an area with no expiry is never swept off the map`);
@@ -588,6 +966,8 @@ function validateFreeCast(doc, where, errors) {
     if (flag.predicate !== undefined && !Array.isArray(flag.predicate)) {
         errors.push(`${where}: freeCast.predicate must be an array`);
     }
+    // An unlimited allowance has nothing to spend by design — see `FreeCast.find`.
+    if (flag.unlimited === true) return;
     const frequency = doc.system?.frequency;
     if (!frequency || !(Number(frequency.max) > 0)) {
         errors.push(
@@ -715,6 +1095,30 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
         errors.push(`${at} is a save rider, but this spell has no save for it to key off`);
     }
 
+    // A `self` rider with no event AND no outcomes fires once per creature caught.
+    //
+    // The default event is `save-rolled`, which is right for "for each creature that fails, you regain 3
+    // Hit Points" — Sekishiki Kisōen says exactly that, and carries `outcomes` to prove it. It is wrong
+    // for anything that happens once: Ittō Kasō's price would have been charged per victim and not at
+    // all against an empty cone, and Garra's free Step would have been offered once per creature. A
+    // rider that means "you, once" wants `event: "action-used"`, which fires on the cast itself.
+    // Top level only: a nested rider runs inside its parent's pass and has no event of its own.
+    if (depth === 0 && rider.self === true && rider.event === undefined && rider.outcomes === undefined) {
+        errors.push(
+            `${at} is a \`self\` rider with neither an event nor outcomes, so it defaults to `
+            + "`save-rolled` and fires once per creature caught — and not at all if none was. For "
+            + "something that happens once to the caster, say `event: \"action-used\"`.",
+        );
+    }
+    // A key the engine does not read is the whole failure mode this validator exists for. `once` is real
+    // on an effect apply (`apply.once`) and means nothing at the rider level, where it reads just as
+    // naturally — so say so rather than letting it sit there looking implemented.
+    if (rider.once !== undefined) {
+        errors.push(
+            `${at} has a top-level \`once\`, which nothing reads. Only \`apply.once\` exists, and only `
+            + "for an effect apply; a per-round limit on anything else belongs in the card's text.",
+        );
+    }
     if (rider.outcomes !== undefined) {
         if (!Array.isArray(rider.outcomes) || rider.outcomes.length === 0) {
             errors.push(`${at} outcomes must be a non-empty array, or absent to mean "any outcome"`);
@@ -730,19 +1134,34 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
     }
 
     if (rider.area !== undefined) {
-        if (!AREA_SHAPES.has(rider.area.type)) {
-            errors.push(`${at} area.type "${rider.area.type}" is not an effect-area shape`);
+        // A rider may carry several shapes at once. Senbonzakura Kageyoshi is two emanations, and the
+        // guide says "each enemy in **either**" — one rider with two shapes means a creature standing in
+        // both is caught once, where two riders made it two separate turn events and hit it twice.
+        const shapes = [rider.area].flat();
+        for (const area of shapes) {
+            if (!AREA_SHAPES.has(area.type)) {
+                errors.push(`${at} area.type "${area.type}" is not an effect-area shape`);
+            }
+            if (!(Number(area.value) > 0)) {
+                errors.push(`${at} area.value must be a positive number of feet`);
+            }
+            if (area.affects !== undefined && !AFFECTS.has(area.affects)) {
+                errors.push(`${at} area.affects must be all/allies/enemies — got "${area.affects}"`);
+            }
+            if (area.anchor !== undefined && !/^[a-z0-9-]+$/.test(String(area.anchor))) {
+                errors.push(`${at} area.anchor must be a slug naming a remembered point — got "${area.anchor}"`);
+            }
         }
-        if (!(Number(rider.area.value) > 0)) {
-            errors.push(`${at} area.value must be a positive number of feet`);
-        }
-        if (rider.area.affects !== undefined && !AFFECTS.has(rider.area.affects)) {
-            errors.push(`${at} area.affects must be all/allies/enemies — got "${rider.area.affects}"`);
-        }
-        if (!["turn-start", "turn-end"].includes(event)) {
+        // A **splash** is the exception, and it is why `anchor: "target"` exists: Cero Oscuras' Refined
+        // burst opens at the creature it just hit, which is only knowable once the Strike has resolved.
+        // Any other area on a strike event is still the old mistake — an `action-used` rider lands on
+        // the targets the caster confirmed, so it needs no area of its own.
+        const splash = event === "strike-resolved" && shapes.every((area) => area.anchor === "target");
+        if (!["turn-start", "turn-end"].includes(event) && !splash) {
             errors.push(
-                `${at} has an area, which only makes sense on a turn event — got "${event}". An ` +
-                    `action-used rider lands on the targets the caster confirmed, so it needs no area.`,
+                `${at} has an area, which only makes sense on a turn event or as a target-anchored ` +
+                    `splash on "strike-resolved" — got "${event}". An action-used rider lands on the ` +
+                    `targets the caster confirmed, so it needs no area.`,
             );
         }
     }
@@ -854,6 +1273,16 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
             break;
         case "prompt":
             if (!apply.text) errors.push(`${at} prompt riders need text — it is the only thing they do`);
+            break;
+        case "charge":
+            // Hyōrinmaru's petal-flowers, Los Lobos' wolves, Gerard's Miracle points: a pool held as a
+            // counter badge on an effect, named here because only the item knows which pool it draws on.
+            if (typeof apply.effect !== "string" || !apply.effect.startsWith("Effect: ")) {
+                errors.push(`${at} charge riders name the charge-bearing effect — got "${apply.effect}"`);
+            }
+            if (apply.spend !== undefined && !(Number(apply.spend) > 0)) {
+                errors.push(`${at} a charge rider spends at least one — got "${apply.spend}"`);
+            }
             break;
         case "strikes":
             // A volley visits every confirmed target in order, so it must be a `self` rider — a per-target
@@ -1055,12 +1484,20 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
                     }
                 }
             } else {
+                // A share of the target's current hit points is not dice and needs no formula.
+                const share = Number(apply.fractionOfCurrentHp);
+                if (apply.fractionOfCurrentHp !== undefined && !(share > 0 && share <= 1)) {
+                    errors.push(`${at} fractionOfCurrentHp must be above 0 and at most 1 — got "${apply.fractionOfCurrentHp}"`);
+                }
+                if (share > 0) return;
                 const isResolvable = typeof apply.formula === "string" && apply.formula.startsWith("origin.");
                 if (!isResolvable && !FLAT_OR_DICE.test(String(apply.formula ?? ""))) {
                     errors.push(`${at} ${apply.type} needs a formula like "4d6" — got "${apply.formula}"`);
                 }
                 const known = /^origin\.technique\..+\.damage(\+\d+d\d+)?$/.test(apply.formula)
                     || apply.formula === "origin.libra.bleed"
+                    // The Waning dice as they stand when the rider fires, not when it was authored.
+                    || apply.formula === "origin.severance.dice"
                     || /^origin\.libra\.dice\.d\d+$/.test(apply.formula);
                 if (isResolvable && !known) {
                     errors.push(`${at} unrecognised resolvable formula "${apply.formula}"`);
@@ -1095,10 +1532,26 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
             if (!isClassDC(apply.dc)) {
                 errors.push(`${at} save dc must be one of ${[...CLASS_DC_NAMES].join("/")} or a whole number — got "${apply.dc}"`);
             }
+            if (apply.basic !== undefined && typeof apply.basic !== "boolean") {
+                errors.push(`${at} basic must be true or false — got "${apply.basic}"`);
+            }
             const nested = apply.riders;
             if (!Array.isArray(nested) || nested.length === 0) {
                 errors.push(`${at} a save rider with no riders of its own does nothing`);
             } else {
+                // `basic: true` expands damage riders that do NOT name their own outcomes into the four
+                // degrees. If every damage rider already names them, the flag is a claim the data does not
+                // support — the likeliest reading being that someone wrote the ladder by hand and then
+                // added the flag, which is how a hand-written ladder missing its critical failure survives.
+                if (apply.basic === true) {
+                    const damage = nested.filter((inner) => inner?.apply?.type === "damage");
+                    if (damage.length > 0 && damage.every((inner) => inner.outcomes)) {
+                        errors.push(
+                            `${at} basic: true, but every damage rider names its own outcomes — the flag `
+                            + "does nothing. Drop the outcomes and let it expand, or drop the flag.",
+                        );
+                    }
+                }
                 nested.forEach((inner, j) =>
                     validateRider(inner, `${at}.apply.riders[${j}]`, errors, { doc, depth: depth + 1 }),
                 );

@@ -1,5 +1,5 @@
 {
-    "img": "icons/weapons/bows/bow-recurve-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/bow-recurve-blue.svg",
     "name": "Effect: Quincy's Discipline",
     "system": {
         "description": {
@@ -19,17 +19,26 @@
         },
         "rules": [
             {
-                "key": "RollOption",
                 "domain": "all",
+                "key": "RollOption",
                 "option": "soulbound:aspect:quincy",
                 "value": true
             },
             {
                 "key": "FlatModifier",
                 "label": "Borrowed Nature",
+                "predicate": [
+                    {
+                        "not": "soulbound:second-nature"
+                    }
+                ],
                 "selector": "will",
                 "type": "status",
                 "value": -1
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Blut"
             }
         ],
         "start": {

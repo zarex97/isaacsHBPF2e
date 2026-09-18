@@ -1,6 +1,6 @@
 {
     "folder": "Spirits",
-    "img": "icons/creatures/abilities/paw-print-pair-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/paw-print-pair-blue.svg",
     "name": "Pantera",
     "system": {
         "actionType": {
@@ -45,6 +45,14 @@
                 ],
                 "reevaluateOnUpdate": true,
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Pantera — Segunda Etapa"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    "soulbound:severance"
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-techniques.Item.Desgarrón"
             }
         ],
         "traits": {

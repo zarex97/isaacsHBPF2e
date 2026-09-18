@@ -1,12 +1,16 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "includesSelf": false
+            },
             "riders": [
                 {
                     "apply": {
-                        "value": 1,
                         "slug": "stunned",
-                        "type": "condition"
+                        "type": "condition",
+                        "value": 1
                     },
                     "outcomes": [
                         "failure"
@@ -14,9 +18,9 @@
                 },
                 {
                     "apply": {
-                        "value": 2,
                         "slug": "stunned",
-                        "type": "condition"
+                        "type": "condition",
+                        "value": 2
                     },
                     "outcomes": [
                         "criticalFailure"
@@ -25,7 +29,7 @@
             ]
         }
     },
-    "img": "icons/magic/lightning/bolt-strike-white.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/bolt-strike-white.svg",
     "name": "Galvano Blast",
     "system": {
         "area": {

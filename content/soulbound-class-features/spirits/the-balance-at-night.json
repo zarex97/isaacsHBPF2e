@@ -1,6 +1,14 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "releaseForm": {
+                "effect": "Effect: The Balance, at Night",
+                "rung": "full"
+            }
+        }
+    },
     "folder": "Spirits",
-    "img": "icons/equipment/shield/heater-crystal-white.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/heater-crystal-white.svg",
     "name": "The Balance, at Night",
     "system": {
         "actionType": {
@@ -24,12 +32,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [
-            {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: The Balance, at Night"
-            }
-        ],
+        "rules": [],
         "traits": {
             "otherTags": [
                 "soulbound-feature"

@@ -1,6 +1,6 @@
 {
     "folder": "Activities",
-    "img": "icons/magic/life/heart-cross-strong-flame-red.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/heart-cross-strong-flame-red.svg",
     "name": "Effect: Rise",
     "system": {
         "description": {

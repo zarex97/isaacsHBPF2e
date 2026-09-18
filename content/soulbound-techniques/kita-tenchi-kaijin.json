@@ -1,6 +1,10 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "includesSelf": false
+            },
             "bypass": [
                 {
                     "resistance": {
@@ -14,7 +18,7 @@
             ]
         }
     },
-    "img": "icons/magic/fire/blade-two-handed-blackened-orange.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/blade-two-handed-blackened-orange.svg",
     "name": "Kita: Tenchi Kaijin",
     "system": {
         "area": {

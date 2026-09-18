@@ -1,6 +1,6 @@
 {
     "folder": "Lineages",
-    "img": "icons/magic/fire/beam-jet-stream-red.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/beam-jet-stream-red.svg",
     "name": "Cero and Bala",
     "system": {
         "actionType": {

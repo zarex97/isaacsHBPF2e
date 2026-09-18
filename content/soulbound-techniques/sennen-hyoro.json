@@ -1,6 +1,15 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "includesSelf": false
+            },
+            "chargeSpend": {
+                "effect": "Effect: Daiguren Hyōrinmaru",
+                "perRound": 1,
+                "spend": 1
+            },
             "riders": [
                 {
                     "apply": {
@@ -33,7 +42,7 @@
             ]
         }
     },
-    "img": "icons/magic/water/snowflake-ice-swirl-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/snowflake-ice-swirl-blue.svg",
     "name": "Sennen Hyōrō",
     "system": {
         "area": {

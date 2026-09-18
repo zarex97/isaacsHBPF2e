@@ -1,6 +1,14 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "releaseForm": {
+                "effect": "Effect: Zanka no Tachi",
+                "rung": "full"
+            }
+        }
+    },
     "folder": "Spirits",
-    "img": "icons/magic/fire/blade-two-handed-blackened-orange.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/blade-two-handed-blackened-orange.svg",
     "name": "Zanka no Tachi",
     "system": {
         "actionType": {
@@ -25,10 +33,6 @@
             "title": "Isaac's Homebrew: The Soulbound"
         },
         "rules": [
-            {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Zanka no Tachi"
-            },
             {
                 "key": "GrantItem",
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-techniques.Item.Kita: Tenchi Kaijin"

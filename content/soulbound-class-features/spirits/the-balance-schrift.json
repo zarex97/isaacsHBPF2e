@@ -1,4 +1,12 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "releaseForm": {
+                "effect": "Effect: The Balance — Schrift",
+                "rung": "released"
+            }
+        }
+    },
     "folder": "Spirits",
     "img": "icons/equipment/shield/heater-crystal-blue.webp",
     "name": "The Balance — Schrift",
@@ -24,12 +32,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [
-            {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: The Balance — Schrift"
-            }
-        ],
+        "rules": [],
         "traits": {
             "otherTags": [
                 "soulbound-feature"

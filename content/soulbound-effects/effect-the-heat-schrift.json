@@ -1,5 +1,5 @@
 {
-    "img": "icons/magic/fire/projectile-fireball-smoke-strong-red.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/projectile-fireball-smoke-strong-red.svg",
     "name": "Effect: The Heat — Schrift",
     "system": {
         "description": {
@@ -26,8 +26,8 @@
                 "value": "max(1,floor(@actor.level/2))"
             },
             {
-                "key": "ItemAlteration",
                 "itemType": "weapon",
+                "key": "ItemAlteration",
                 "mode": "override",
                 "predicate": [
                     "item:tag:soulbound-spirit-weapon"
@@ -36,14 +36,26 @@
                 "value": "fire"
             },
             {
-                "key": "ItemAlteration",
                 "itemType": "weapon",
+                "key": "ItemAlteration",
                 "mode": "add",
                 "predicate": [
                     "item:tag:soulbound-spirit-weapon"
                 ],
                 "property": "traits",
                 "value": "deadly-d8"
+            },
+            {
+                "damageType": "fire",
+                "diceNumber": 1,
+                "dieSize": "d6",
+                "key": "DamageDice",
+                "label": "Deeper Burn",
+                "predicate": [
+                    "item:slug:burner-finger",
+                    "feature:refined-release"
+                ],
+                "selector": "spell-damage"
             }
         ],
         "start": {

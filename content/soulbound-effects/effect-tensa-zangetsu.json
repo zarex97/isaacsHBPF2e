@@ -1,5 +1,32 @@
 {
-    "img": "icons/weapons/swords/sword-katana-black.webp",
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "actionCost": [
+                {
+                    "slug": "getsuga-tensh",
+                    "value": 1
+                }
+            ],
+            "riders": [
+                {
+                    "apply": {
+                        "text": "Tensa Zangetsu: you may <strong>Step</strong> as a free action.",
+                        "type": "prompt"
+                    },
+                    "event": "strike-resolved",
+                    "note": "Once per round; pf2e has no per-round gate on a rider, so the card says once.",
+                    "outcomes": [
+                        "success",
+                        "criticalSuccess"
+                    ],
+                    "predicate": [
+                        "item:tag:soulbound-spirit-weapon"
+                    ]
+                }
+            ]
+        }
+    },
+    "img": "modules/isaacs-hb-pf2e/icons/sword-katana-black.svg",
     "name": "Effect: Tensa Zangetsu",
     "system": {
         "description": {
@@ -19,6 +46,12 @@
         },
         "rules": [
             {
+                "domain": "all",
+                "key": "RollOption",
+                "option": "soulbound:full-release:no-die-step",
+                "value": true
+            },
+            {
                 "key": "FlatModifier",
                 "label": "Tensa Zangetsu",
                 "selector": "speed",
@@ -26,8 +59,8 @@
                 "value": 10
             },
             {
-                "key": "ItemAlteration",
                 "itemType": "feat",
+                "key": "ItemAlteration",
                 "mode": "override",
                 "predicate": [
                     "item:slug:flash-step"
@@ -36,24 +69,28 @@
                 "value": 2
             },
             {
-                "key": "ItemAlteration",
                 "itemType": "spell",
+                "key": "ItemAlteration",
                 "mode": "override",
                 "predicate": [
-                    "item:slug:getsuga-tensho"
-                ],
-                "property": "time",
-                "value": "1"
-            },
-            {
-                "key": "ItemAlteration",
-                "itemType": "spell",
-                "mode": "override",
-                "predicate": [
-                    "item:slug:getsuga-tensho"
+                    "item:slug:getsuga-tensh",
+                    {
+                        "not": "feature:refined-release"
+                    }
                 ],
                 "property": "area-size",
                 "value": 60
+            },
+            {
+                "itemType": "spell",
+                "key": "ItemAlteration",
+                "mode": "override",
+                "predicate": [
+                    "item:slug:getsuga-tensh",
+                    "feature:refined-release"
+                ],
+                "property": "area-size",
+                "value": 90
             }
         ],
         "start": {

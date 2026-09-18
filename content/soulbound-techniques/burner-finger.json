@@ -1,5 +1,5 @@
 {
-    "img": "icons/magic/fire/projectile-fireball-smoke-strong-red.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/projectile-fireball-smoke-strong-red.svg",
     "name": "Burner Finger",
     "system": {
         "cost": {
@@ -127,6 +127,14 @@
                     "target": {
                         "value": ""
                     }
+                },
+                "flags": {
+                    "isaacs-hb-pf2e": {
+                        "areaTargeting": {
+                            "affects": "enemies",
+                            "includesSelf": false
+                        }
+                    }
                 }
             },
             "burnerfingerfour": {
@@ -163,6 +171,27 @@
                     "target": {
                         "value": ""
                     }
+                },
+                "flags": {
+                    "isaacs-hb-pf2e": {
+                        "areaTargeting": {
+                            "affects": "enemies",
+                            "includesSelf": false
+                        },
+                        "riders": [
+                            {
+                                "apply": {
+                                    "type": "persistent-damage",
+                                    "damageType": "fire",
+                                    "formula": "1d4"
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            }
+                        ]
+                    }
                 }
             },
             "burnerfingerfive": {
@@ -198,6 +227,55 @@
                     },
                     "target": {
                         "value": ""
+                    }
+                },
+                "flags": {
+                    "isaacs-hb-pf2e": {
+                        "areaTargeting": {
+                            "affects": "enemies",
+                            "includesSelf": false,
+                            "alternateArea": [
+                                {
+                                    "area": {
+                                        "type": "cone",
+                                        "value": 60
+                                    },
+                                    "predicate": [
+                                        "self:effect:deus-ex-machina"
+                                    ]
+                                }
+                            ]
+                        },
+                        "lingering": [
+                            {
+                                "name": "Burner Finger Five — scorched ground",
+                                "difficultTerrain": 2,
+                                "duration": {
+                                    "unit": "rounds",
+                                    "value": 1
+                                },
+                                "predicate": [
+                                    {
+                                        "not": "feature:refined-release"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Burner Finger Five — burning ground",
+                                "difficultTerrain": 2,
+                                "damage": {
+                                    "formula": "2d6",
+                                    "type": "fire"
+                                },
+                                "duration": {
+                                    "unit": "rounds",
+                                    "value": 2
+                                },
+                                "predicate": [
+                                    "feature:refined-release"
+                                ]
+                            }
+                        ]
                     }
                 }
             }

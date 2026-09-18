@@ -1,6 +1,6 @@
 {
     "folder": "Spirits",
-    "img": "icons/magic/death/skull-crowned-white.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/skull-crowned-white.svg",
     "name": "Arrogante",
     "system": {
         "actionType": {
@@ -45,6 +45,14 @@
                 ],
                 "reevaluateOnUpdate": true,
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Respira Absoluta"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    "soulbound:severance"
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-techniques.Item.La Hora Final"
             }
         ],
         "traits": {

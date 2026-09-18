@@ -1,52 +1,19 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
-            "riders": [
-                {
-                    "apply": {
-                        "value": 1,
-                        "slug": "enfeebled",
-                        "type": "condition"
-                    },
-                    "duration": {
-                        "unit": "minutes",
-                        "value": 1
-                    },
-                    "outcomes": [
-                        "failure"
-                    ]
-                },
-                {
-                    "apply": {
-                        "value": 2,
-                        "slug": "enfeebled",
-                        "type": "condition"
-                    },
-                    "duration": {
-                        "unit": "minutes",
-                        "value": 1
-                    },
-                    "outcomes": [
-                        "criticalFailure"
-                    ]
-                },
-                {
-                    "apply": {
-                        "value": 1,
-                        "slug": "clumsy",
-                        "type": "condition"
-                    },
-                    "duration": {
-                        "unit": "minutes",
-                        "value": 1
-                    },
-                    "outcomes": [
-                        "criticalFailure"
-                    ]
-                }
-            ],
             "areaTargeting": {
                 "affects": "enemies",
+                "alternateArea": [
+                    {
+                        "area": {
+                            "type": "emanation",
+                            "value": 20
+                        },
+                        "predicate": [
+                            "feature:refined-release"
+                        ]
+                    }
+                ],
                 "includesSelf": false
             },
             "lingering": {
@@ -60,10 +27,67 @@
                     "value": 1
                 },
                 "name": "Respira — miasma"
-            }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "slug": "enfeebled",
+                        "type": "condition",
+                        "value": 1
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "failure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "slug": "enfeebled",
+                        "type": "condition",
+                        "value": 2
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "slug": "clumsy",
+                        "type": "condition",
+                        "value": 1
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Respira — Cannot Heal"
+                    },
+                    "note": "Refined: the miasma stops it knitting itself back together.",
+                    "outcomes": [
+                        "criticalFailure"
+                    ],
+                    "predicate": [
+                        "feature:refined-release"
+                    ]
+                }
+            ]
         }
     },
-    "img": "icons/magic/death/skull-crowned-white.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/skull-crowned-white.svg",
     "name": "Respira",
     "system": {
         "area": {
@@ -93,7 +117,7 @@
             }
         },
         "description": {
-            "value": "<p><em>Breath of Death.</em> A black miasma spills from you and everything in it gets older.</p><p>Each creature in a 15-foot emanation takes @Damage[2d6[void]] damage with a basic Fortitude save. Creatures that fail are <strong>enfeebled 1</strong> for 1 minute as they age; on a critical failure, <strong>enfeebled 2</strong> and <strong>clumsy 1</strong> instead.</p><p>The miasma lingers: until the start of your next turn, an enemy that enters or ends its turn in the area takes <strong>1d6 void</strong> damage with no save.</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d6, and the lingering damage by 1d6 at every other increment.</p><p><strong>Refined (9th)</strong> The emanation increases to <strong>20 feet</strong>, objects and unattended structures in the area are <strong>broken</strong> (already-broken objects are destroyed), and a creature that critically fails also can't regain Hit Points until the end of its next turn.</p>"
+            "value": "<p><em>Breath of Death.</em> A black miasma spills from you and everything in it gets older.</p><p>Each creature in the emanation takes @Damage[2d6[void]] damage with a basic Fortitude save. Creatures that fail are <strong>enfeebled 1</strong> for 1 minute as they age; on a critical failure, <strong>enfeebled 2</strong> and <strong>clumsy 1</strong> instead.</p><p>The miasma lingers: until the start of your next turn, an enemy that enters or ends its turn in the area takes <strong>1d6 void</strong> damage with no save.</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d6, and the lingering damage by 1d6 at every other increment.</p><p><strong>Refined (9th)</strong> The emanation increases to <strong>20 feet</strong>, objects and unattended structures in the area are <strong>broken</strong> (already-broken objects are destroyed), and a creature that critically fails also can't regain Hit Points until the end of its next turn.</p>"
         },
         "duration": {
             "sustained": false,
@@ -119,7 +143,17 @@
             "value": ""
         },
         "requirements": "",
-        "rules": [],
+        "rules": [
+            {
+                "key": "Note",
+                "predicate": [
+                    "feature:refined-release"
+                ],
+                "selector": "all",
+                "text": "Objects and unattended structures in the emanation are <strong>broken</strong>; those already broken are <strong>destroyed</strong>.",
+                "title": "Refined Release"
+            }
+        ],
         "target": {
             "value": ""
         },
@@ -128,6 +162,7 @@
         },
         "traits": {
             "otherTags": [
+                "sb-refined-area-20",
                 "sb-tier-release"
             ],
             "rarity": "common",

@@ -43,6 +43,39 @@ export function roundOfSeverance({ began, now }) {
     return Math.max(1, now - began + 1);
 }
 
+/** The tag every Severing Art carries, and the only thing that identifies one. */
+export const ART_TAG = "sb-tier-severing";
+
+/** Is this item a Severing Art? */
+export function isSeveringArt(item) {
+    return (item?.system?.traits?.otherTags ?? []).includes(ART_TAG);
+}
+
+/**
+ * Stamp the Waning dice onto every Severing Art the actor is carrying.
+ *
+ * **The whole table was inert.** `waningDice` was pure, exported and unit-tested; the fifteen Arts were
+ * authored at a flat `20d6`, which is the round-one value, and nothing ever connected the two. A
+ * twentieth-level Soulbound could sit through nine rounds of a 4d6 rider, doubled Flash Step and free
+ * kidō and still end the fight for seventy points of damage — which removes the decision the capstone
+ * is built around. Guide §9 is explicit that the decay *is* the balance lever.
+ *
+ * Done in `prepareDerivedData` rather than at cast time so the **card is honest**: a player in round
+ * three sees 16d6 on the Art before deciding whether to spend it. That costs a re-preparation whenever
+ * the round advances, which `registerHooks` does for exactly the actors in a Severance.
+ */
+export function applyWaning(actor, round) {
+    const dice = waningDice(round);
+    for (const item of actor.itemTypes?.spell ?? []) {
+        if (!isSeveringArt(item)) continue;
+        const part = item.system?.damage?.["0"];
+        if (!part?.formula) continue;
+        // Ittō Kasō is "the Waning dice **+2d6**" (R-14), so the extra is kept rather than overwritten.
+        const extra = /\+\s*(\d+d\d+)/.exec(part.formula)?.[1];
+        part.formula = dice === 0 ? "0" : `${dice}d6${extra ? ` + ${extra}` : ""}`;
+    }
+}
+
 async function packed(name) {
     const pack = game.packs.get(EFFECTS_PACK);
     const entry = pack ? (await pack.getIndex()).find((e) => e.name === name) : null;
@@ -58,12 +91,25 @@ export const Severance = {
         return actor?.itemTypes?.effect?.find((e) => e.name === SEVERANCE) ?? null;
     },
 
+    /**
+     * The encounter this actor is actually in.
+     *
+     * **Not `game.combat`**, which is `game.combats.viewed` — the encounter belonging to the scene the
+     * *client* happens to be looking at. Beginning a Severance while viewing another scene stamped the
+     * flag from a fallback and every round of the Waning table read from round one for the rest of the
+     * fight. The combatant knows its own encounter and no view can change that.
+     */
+    encounterFor(actor) {
+        return actor?.combatant?.encounter ?? actor?.combatant?.combat ?? game.combat ?? null;
+    },
+
     /** Which round of Severance this actor is in, or 0 if they are not in one. */
     round(actor) {
         const effect = this.effectOn(actor);
         if (!effect) return 0;
         const began = effect.getFlag(MODULE_ID, "severanceBegan");
-        return roundOfSeverance({ began, now: game.combat?.round ?? began });
+        const now = this.encounterFor(actor)?.round;
+        return roundOfSeverance({ began, now: Number.isInteger(now) ? now : began });
     },
 
     /** The dice a Severing Art would roll right now. 0 means it refuses. */
@@ -71,12 +117,55 @@ export const Severance = {
         return waningDice(this.round(actor));
     },
 
+    /**
+     * Refuse an Art that has decayed past use, and end Severance when one is used.
+     *
+     * Guide §9: using the Art "is two actions, costs nothing, and immediately ends Severance whether you
+     * want it to or not", and after the seventh round it cannot be used at all. Both halves lived only
+     * in the prose — `waningDice` returned 0 for round 8 and nothing asked it, so the Art stayed on the
+     * sheet and rolled its printed twenty dice in round ten.
+     */
+    beforeCast(spell) {
+        if (!isSeveringArt(spell)) return true;
+        const actor = spell?.actor;
+        if (!actor) return true;
+        if (!this.effectOn(actor)) {
+            ui.notifications.warn(`${spell.name} can only be used during Severance.`);
+            return false;
+        }
+        if (this.dice(actor) === 0) {
+            ui.notifications.warn(
+                `${spell.name} has decayed past use — a Severing Art cannot be used after the seventh round.`,
+            );
+            return false;
+        }
+        return true;
+    },
+
+    /** Called after the Art has actually reached the table. */
+    async afterCast(spell) {
+        if (!isSeveringArt(spell)) return;
+        const actor = spell?.actor;
+        if (!actor || !this.effectOn(actor)) return;
+        await this.end(actor);
+        ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<p><strong>${spell.name}</strong> ends Severance.</p>`,
+        });
+    },
+
     async begin(actor) {
         if (!Reiatsu.isSoulbound(actor)) return null;
         const doc = await packed(SEVERANCE);
         if (!doc) return null;
-        const [made] = await actor.createEmbeddedDocuments("Item", [foundry.utils.deepClone(doc.toObject())]);
-        await made?.setFlag(MODULE_ID, "severanceBegan", game.combat?.round ?? 1);
+        // Stamped on the source rather than set afterwards: a `setFlag` on a freshly created embedded
+        // document is a second write that anything reading in between — a `prepareDerivedData` triggered
+        // by the creation itself — will miss, and the Waning table reads this on every preparation.
+        const source = foundry.utils.deepClone(doc.toObject());
+        const round = this.encounterFor(actor)?.round;
+        foundry.utils.setProperty(source, `flags.${MODULE_ID}.severanceBegan`,
+                                  Number.isInteger(round) && round > 0 ? round : 1);
+        const [made] = await actor.createEmbeddedDocuments("Item", [source]);
         return made;
     },
 
@@ -91,19 +180,39 @@ export const Severance = {
         const held = actor.itemTypes.effect.filter((e) => e.name === SEVERANCE);
         if (held.length > 0) await actor.deleteEmbeddedDocuments("Item", held.map((e) => e.id));
 
+        // R-10 is a list, and the Released Form is the first thing on it: "you lose your Released Form,
+        // your Release Technique, your Full Release and your entire reiatsu pool". Zeroing the pool and
+        // refusing a fresh Release left the character still standing in the form they had just severed.
+        //
+        // Imported here rather than at the top: `release` imports `reiatsu`, which imports this module
+        // for the Waning table, and a static import would close that ring at evaluation time.
+        const { Release } = await import("./release.mjs");
+        await Release.exit(actor, "full");
+        await Release.exit(actor, "released");
+
         const doc = await packed(SPENT);
         if (doc) await actor.createEmbeddedDocuments("Item", [foundry.utils.deepClone(doc.toObject())]);
+
+        // The Severing Art is granted by the **Spirit feature**, predicated on `soulbound:severance` —
+        // so deleting the Severance effect does not cascade it away, and pf2e only re-tests a predicated
+        // grant on an actor *update*. Without this nudge the Art sits on the sheet after Severance is
+        // over, which invites using something `beforeCast` will then refuse. Touching the level is the
+        // smallest update that re-evaluates every grant without changing anything.
+        await actor.update({ "system.details.level.value": actor.system.details.level.value });
     },
 
     registerHooks() {
         // The clock. Severance lasts ten rounds; the eleventh ends it whether or not the Art was used.
         Hooks.on("combatTurnChange", async () => {
             if (!game.user.isGM) return;
-            for (const combatant of game.combat?.combatants ?? []) {
+            for (const combatant of game.combats?.contents?.flatMap((c) => c.combatants.contents) ?? []) {
                 const actor = combatant.actor;
                 if (!Reiatsu.isSoulbound(actor)) continue;
                 if (!this.effectOn(actor)) continue;
-                if (this.round(actor) > 10) await this.end(actor);
+                if (this.round(actor) > 10) { await this.end(actor); continue; }
+                // The Waning dice are a function of the round, and nothing else re-prepares an actor
+                // when the round turns — so the Art on the sheet would keep round one's twenty dice.
+                actor.reset();
             }
         });
     },

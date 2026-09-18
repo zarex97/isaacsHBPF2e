@@ -1,6 +1,10 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "includesSelf": false
+            },
             "riders": [
                 {
                     "apply": {
@@ -20,9 +24,11 @@
                 {
                     "apply": {
                         "damageType": "cold",
+                        "dc": 50,
                         "formula": "4d6",
                         "type": "persistent-damage"
                     },
+                    "note": "No flat check: the ice does not stop while it holds you.",
                     "outcomes": [
                         "failure",
                         "criticalFailure"
@@ -31,7 +37,7 @@
             ]
         }
     },
-    "img": "icons/magic/water/snowflake-ice-swirl-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/snowflake-ice-swirl-blue.svg",
     "name": "Hyōten Hyakkasō",
     "system": {
         "area": {

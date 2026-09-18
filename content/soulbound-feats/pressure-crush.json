@@ -1,6 +1,6 @@
 {
     "folder": "8th",
-    "img": "icons/magic/air/wind-vortex-blue-large.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/wind-vortex-blue-large.svg",
     "name": "Pressure Crush",
     "system": {
         "actionType": {

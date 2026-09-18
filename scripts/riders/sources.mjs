@@ -243,6 +243,14 @@ export const Sources = {
                 } catch (error) {
                     console.error("Isaac's Homebrew | damage rider failed", error);
                 }
+                try {
+                    // A Hollow's Regeneración is switched off by the damage TYPE, which exists only here:
+                    // by the time hit points have changed, all that is left is a number.
+                    const { Regeneracion } = await import("../soulbound/regeneracion.mjs");
+                    await Regeneracion.onDamage(this, params);
+                } catch (error) {
+                    console.error("Isaac's Homebrew | Regeneración could not be suppressed", error);
+                }
                 return result;
             },
             { feature: "damage riders and IWR bypass", strategy: "prototype" },

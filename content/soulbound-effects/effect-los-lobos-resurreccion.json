@@ -1,5 +1,5 @@
 {
-    "img": "icons/creatures/abilities/wolf-howl-moon-grey.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/wolf-howl-moon-grey.svg",
     "name": "Effect: Los Lobos — Resurrección",
     "system": {
         "description": {
@@ -22,6 +22,10 @@
         "rules": [
             {
                 "key": "GrantItem",
+                "onDeleteActions": {
+                    "grantee": null,
+                    "granter": "cascade"
+                },
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-equipment.Item.Los Lobos — Pistols"
             },
             {
@@ -30,6 +34,14 @@
                 "selector": "speed",
                 "type": "status",
                 "value": 5
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    "feature:refined-release"
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Cero Metralleta — Sustain"
             }
         ],
         "start": {

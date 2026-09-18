@@ -1,5 +1,14 @@
 {
-    "img": "icons/magic/holy/angel-winged-humanoid-golden.webp",
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "refuseDeath": {
+                "cost": 5,
+                "label": "Bailar de Valquiria",
+                "resource": "effect-miracle-points"
+            }
+        }
+    },
+    "img": "modules/isaacs-hb-pf2e/icons/angel-winged-humanoid-golden.svg",
     "name": "Effect: Bailar de Valquiria",
     "system": {
         "description": {
@@ -19,8 +28,8 @@
         },
         "rules": [
             {
-                "key": "RollOption",
                 "domain": "all",
+                "key": "RollOption",
                 "option": "soulbound:the-miracle:made-flesh",
                 "value": true
             }
