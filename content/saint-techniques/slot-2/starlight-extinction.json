@@ -33,7 +33,7 @@
         }
     },
     "folder": "2nd (L6)",
-    "img": "icons/magic/movement/portal-vortex-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/portal-vortex-blue.svg",
     "name": "Starlight Extinction",
     "system": {
         "area": null,

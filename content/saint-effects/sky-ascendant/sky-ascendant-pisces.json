@@ -51,7 +51,7 @@
         }
     },
     "folder": "Sky: Ascendant",
-    "img": "icons/magic/nature/rose-thorned-red.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/rose-thorned-red.svg",
     "name": "Sky: Ascendant (Pisces)",
     "system": {
         "description": {

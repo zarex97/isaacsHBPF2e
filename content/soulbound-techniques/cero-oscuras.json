@@ -16,13 +16,47 @@
                         "criticalSuccess"
                     ],
                     "predicate": [
-                        "self:feature:refined-release"
+                        "feature:refined-release"
+                    ]
+                },
+                {
+                    "apply": {
+                        "basic": true,
+                        "dc": "reiatsu",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "spirit",
+                                    "formula": "3d6",
+                                    "multiplier": 0.5,
+                                    "perStep": "1d6",
+                                    "type": "damage"
+                                }
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
+                    },
+                    "area": {
+                        "affects": "enemies",
+                        "anchor": "target",
+                        "type": "burst",
+                        "value": 5
+                    },
+                    "event": "strike-resolved",
+                    "note": "Refined: the cero splashes off whatever it hits.",
+                    "outcomes": [
+                        "success",
+                        "criticalSuccess"
+                    ],
+                    "predicate": [
+                        "feature:refined-release"
                     ]
                 }
             ]
         }
     },
-    "img": "icons/creatures/abilities/wing-bat-membrane-green.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/wing-bat-membrane-green.svg",
     "name": "Cero Oscuras",
     "system": {
         "cost": {

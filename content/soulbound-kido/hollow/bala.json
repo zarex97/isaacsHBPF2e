@@ -1,6 +1,6 @@
 {
     "folder": "Hollow Arts",
-    "img": "icons/magic/fire/projectile-bolt-glowing-red.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/projectile-bolt-glowing-red.svg",
     "name": "Bala",
     "system": {
         "cost": {
@@ -51,8 +51,11 @@
             {
                 "key": "MultipleAttackPenalty",
                 "label": "Bala (agile)",
+                "predicate": [
+                    "item:slug:bala"
+                ],
                 "selector": "spell-attack",
-                "value": 1
+                "value": -4
             }
         ],
         "target": {

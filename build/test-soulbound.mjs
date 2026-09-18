@@ -30,7 +30,10 @@ function runValidate(packName, doc) {
         [{ def: { name: packName, type: "Item" }, docs: [{ file: `content/${packName}/x.json`, doc }] }],
         { errors },
     );
-    return errors;
+    // Reachability is a whole-module question — "does anything grant this" — and a one-document
+    // synthetic pack can never answer it. These fixtures exist to test the FAMILY rules, so the
+    // cross-document checks are dropped here and proved against the real packs by `npm run validate`.
+    return errors.filter((e) => !/nothing grants the/.test(e));
 }
 
 check(
@@ -348,10 +351,20 @@ check("Released Form grants the Release action and is not itself one", releaseAc
 
 const pressure = contentDoc("soulbound-effects/effect-full-release.json");
 const emanation = pressure.flags["isaacs-hb-pf2e"].riders[0];
+// It used to be a `turn-end` **area rider**, which fires when the CASTER's turn ends and sweeps whoever
+// is standing there then. The guide says "an enemy that ends ITS turn in the emanation" — a per-creature
+// trigger — and pf2e has an `Aura` for exactly that. Making it one is also what makes `Twin Pressure`
+// expressible: that feat adds "enter" to the events list and nothing else.
+const pressureAura = pressure.system.rules.find((r) => r.key === "Aura" && r.slug === "soulbound-pressure");
 check(
-    "the pressure emanation is a turn-end area rider on the Reiatsu DC (guide §4.8)",
-    [emanation.event, emanation.area.value, emanation.apply.type, emanation.apply.statistic, emanation.apply.dc],
-    ["turn-end", 15, "save", "will", "reiatsu"],
+    "the pressure emanation is a real aura, caught per creature at the end of ITS turn (guide §4.8)",
+    [pressureAura?.radius, pressureAura?.effects[0].affects, pressureAura?.effects[0].events],
+    [15, "enemies", ["turn-end"]],
+);
+check(
+    "and its save is an aura-tick rider on the Reiatsu DC",
+    [emanation.event, emanation.apply.type, emanation.apply.statistic, emanation.apply.dc],
+    ["aura-tick", "save", "will", "reiatsu"],
 );
 check(
     "a creature that succeeds is made immune for 10 minutes rather than asked again",
@@ -566,12 +579,13 @@ check(
     [true, null, true],
 );
 // `agile` is a WEAPON trait — pf2e reads it off a weapon when computing a Strike's MAP and would never
-// look for it on a spell, so authoring it here would validate and do nothing.
+// look for it on a spell, so authoring it here would validate and do nothing. That much was right. The
+// rule that replaced it then carried `value: 1`, which pf2e rejects outright — see SB-31 below.
 check(
     "Bala's agile clause is a MultipleAttackPenalty rule, not an inert weapon trait",
     [
         bala.system.traits.value.includes("agile"),
-        bala.system.rules.some((r) => r.key === "MultipleAttackPenalty" && r.value === 1),
+        bala.system.rules.some((r) => r.key === "MultipleAttackPenalty" && r.value < 0),
     ],
     [false, true],
 );
@@ -641,10 +655,14 @@ check("Regeneración is fast healing that scales 2 / 4 / 6 (guide §5.2)", typeo
 // `self:condition:dying:0` is never true, so a predicate written that way leaves fast healing permanently
 // OFF, which looks exactly like the feature not existing. `self:effect:<slug>` is pf2e's own spelling too
 // (see its `air-gate` class feature).
+// There are two FastHealing rules now — the ordinary rate and Murciélago's doubled one — so this asserts
+// the two switches are on the base rule rather than pinning the whole predicate, which the doubling
+// legitimately extends.
 check(
     "and it is off while dying and while suppressed, in pf2e's own spellings",
-    fh?.predicate,
-    [{ not: "self:condition:dying" }, { not: "self:effect:regeneracion-suppressed" }],
+    [{ not: "self:condition:dying" }, { not: "self:effect:regeneracion-suppressed" }]
+        .every((p) => fh?.predicate.some((q) => JSON.stringify(q) === JSON.stringify(p))),
+    true,
 );
 
 const segunda = lineageDoc("segunda-piel");
@@ -807,7 +825,9 @@ check("Senbonzakura is a Soul Reaper Spirit the chooser can find", [
     senbon.system.traits.otherTags.includes("soulbound-lineage-soul-reaper"),
 ], [true, true]);
 check("and it grants a Shikai, a Release Technique and a Bankai at 13th",
-    senbon.system.rules.filter((r) => r.key === "GrantItem").length, 3);
+    ["Shikai", "soulbound-techniques", "Kageyoshi"].map((needle) =>
+        senbon.system.rules.some((r) => r.key === "GrantItem" && r.uuid.includes(needle))),
+    [true, true, true]);
 check("the Bankai is level-gated", senbon.system.rules.some((r) => r.key === "GrantItem" && r.reevaluateOnUpdate === true), true);
 
 const senbonTech = techDoc("senbonzakura");
@@ -826,11 +846,16 @@ check(
 // "The emanation increases to 20 feet" is a 9th-level benefit, and a focus effect heightens per RANK —
 // "at 9th level" is not a rank step. pf2e's own `area-size` alteration is the lever, applied by the
 // feature that grants the benefit.
+//
+// It used to be ONE alteration adding a flat 5 feet to every `sb-tier-release` item, which this test
+// asserted. That was the bug: Getsuga Tenshō's line goes 30 → 60 and La Gota's cone 30 → 40, and three
+// more Spirits' Refined benefit is not a widening at all. The size travels with the technique now; the
+// fuller invariants are at the bottom of this file.
 const refined = featureDoc("refined-release");
 check(
-    "Refined Release widens a Release Technique's area by 5 feet",
+    "Refined Release sets an area outright rather than nudging every Technique by 5 feet",
     refined.system.rules.find((r) => r.key === "ItemAlteration"),
-    { itemType: "spell", key: "ItemAlteration", mode: "add", predicate: ["item:tag:sb-tier-release"], property: "area-size", value: 5 },
+    { itemType: "spell", key: "ItemAlteration", mode: "override", predicate: ["item:tag:sb-refined-area-20"], property: "area-size", value: 20 },
 );
 
 const { nextMode } = await import("../scripts/soulbound/modes.mjs");
@@ -845,11 +870,14 @@ check(
         .some((r) => r.key === "ItemAlteration" && r.mode === "remove" && r.value === "reach-15"),
     true,
 );
+// The damage moved a level down when the emanation gained the basic Reflex it always should have had:
+// `apply` is the save now, and the dice are the save's nested rider. The assertion used to read
+// `r.apply.formula` and would have gone on passing if the save were removed again.
 check(
     "the Bankai ticks at the start of your turn against enemies in the emanation",
     (() => {
         const r = contentDoc("soulbound-effects/effect-senbonzakura-kageyoshi.json").flags["isaacs-hb-pf2e"].riders[0];
-        return [r.event, r.apply.formula, r.area.value, r.areaTargeting.affects];
+        return [r.event, r.apply.riders[0].apply.formula, [r.area].flat()[0].value, r.areaTargeting.affects];
     })(),
     ["turn-start", "5d6", 20, "enemies"],
 );
@@ -870,7 +898,9 @@ check("and never falls below nothing", afterRefresh({ held: 0, max: 3, regain: -
 
 const hyorin = spiritDoc("hyorinmaru");
 check("Hyōrinmaru grants a Shikai, Ryūsenka and a Bankai at 13th",
-    hyorin.system.rules.filter((r) => r.key === "GrantItem").length, 3);
+    ["Shikai", "Ryūsenka", "Daiguren"].map((needle) =>
+        hyorin.system.rules.some((r) => r.key === "GrantItem" && r.uuid.includes(needle))),
+    [true, true, true]);
 
 const daiguren = contentDoc("soulbound-effects/effect-daiguren-hyorinmaru.json");
 check(
@@ -932,17 +962,19 @@ check(
     ],
     [1, 2],
 );
+// The Getsuga half asserted `property: "time"`, which pf2e has no handler for — so this check was
+// pinning an inert rule in place and calling it compression. The action cost is a module capability
+// now; the assertions for it are at the bottom of this file.
 check(
-    "Tensa Zangetsu compresses: Getsuga to 1 action, Flash Step to twice a round",
+    "Tensa Zangetsu compresses Flash Step to twice a round, and adds no die step",
     (() => {
         const rules = contentDoc("soulbound-effects/effect-tensa-zangetsu.json").system.rules;
         return [
-            rules.some((r) => r.property === "time" && r.value === "1"),
             rules.some((r) => r.property === "frequency-max" && r.value === 2),
             rules.some((r) => r.property === "damage-dice-faces"),
         ];
     })(),
-    [true, true, false],
+    [true, false],
 );
 
 const getsuga = techDoc("getsuga-tensho");
@@ -951,10 +983,12 @@ check(
     [getsuga.system.area, getsuga.system.damage["0"].formula, getsuga.system.damage["0"].type],
     [{ type: "line", value: 30 }, "2d6", "spirit"],
 );
+// `feature:<slug>`, not `self:feature:<slug>`. pf2e has no `self:feature:` option at all, and this
+// assertion was pinning the broken spelling in place on six Refined riders at once.
 check(
     "and Kuroi Getsuga's spirit-resistance bypass waits for Refined Release",
     getsuga.flags["isaacs-hb-pf2e"].bypass[0].predicate,
-    ["self:feature:refined-release"],
+    ["feature:refined-release"],
 );
 
 const zanka = contentDoc("soulbound-effects/effect-zanka-no-tachi.json");
@@ -1008,7 +1042,9 @@ check("someone already hypnotized is not asked twice", shouldRoll({ ...observer,
 
 const kyoka = spiritDoc("kyoka-suigetsu");
 check("Kyōka Suigetsu grants a Shikai, Shikake and a Full Release at 13th",
-    kyoka.system.rules.filter((r) => r.key === "GrantItem").length, 3);
+    ["Kanzen Saimin", "Shikake", "Sōten Kisshun"].map((needle) =>
+        kyoka.system.rules.some((r) => r.key === "GrantItem" && r.uuid.includes(needle))),
+    [true, true, true]);
 
 const hypnotized = contentDoc("soulbound-effects/effect-hypnotized.json");
 check(
@@ -1032,10 +1068,15 @@ check(
 // All five Soul Reaper Spirits, each with its full ladder.
 for (const name of ["senbonzakura", "zangetsu", "hyorinmaru", "ryujin-jakka", "kyoka-suigetsu"]) {
     const doc = spiritDoc(name);
-    check(`${name}: three rungs granted, the Full Release gated to 13th`, [
-        doc.system.rules.filter((r) => r.key === "GrantItem").length,
-        doc.system.rules.some((r) => r.key === "GrantItem" && JSON.stringify(r.predicate ?? []).includes("13")),
-    ], [3, true]);
+    // By what each grant is, not how many there are. The count said three until the Severing Art turned
+    // out to be granted by nobody at all, and a count is a number to edit rather than a claim to check.
+    const grants = doc.system.rules.filter((r) => r.key === "GrantItem");
+    const gated = (needle) => grants.some((r) => JSON.stringify(r.predicate ?? []).includes(needle));
+    check(`${name}: a form from 1st, a Full Release gated to 13th, and a Severing Art behind Severance`, [
+        grants.some((r) => !r.predicate?.length),
+        gated("13"),
+        gated("soulbound:severance"),
+    ], [true, true, true]);
 }
 
 /* ---------------------------------------------------------------------------------------------- */
@@ -1049,10 +1090,13 @@ for (const name of HOLLOW_SPIRITS) {
         doc.system.traits.otherTags.includes("soulbound-spirit"),
         doc.system.traits.otherTags.includes("soulbound-lineage-hollow"),
     ], [true, true]);
-    check(`${name}: three rungs, the Segunda Etapa gated to 13th`, [
-        doc.system.rules.filter((r) => r.key === "GrantItem").length,
-        doc.system.rules.some((r) => r.key === "GrantItem" && JSON.stringify(r.predicate ?? []).includes("13")),
-    ], [3, true]);
+    const grants = doc.system.rules.filter((r) => r.key === "GrantItem");
+    const gated = (needle) => grants.some((r) => JSON.stringify(r.predicate ?? []).includes(needle));
+    check(`${name}: a form from 1st, a Segunda Etapa gated to 13th, and a Severing Art`, [
+        grants.some((r) => !r.predicate?.length),
+        gated("13"),
+        gated("soulbound:severance"),
+    ], [true, true, true]);
 }
 
 // pf2e's Resistance takes an `exceptions` list, so guide §7B's "all damage except spirit" is exactly
@@ -1191,10 +1235,18 @@ for (const name of QUINCY_SPIRITS) {
         doc.system.traits.otherTags.includes("soulbound-spirit"),
         doc.system.traits.otherTags.includes("soulbound-lineage-quincy"),
     ], [true, true]);
-    check(`${name}: three rungs, the Vollständig gated to 13th`, [
-        doc.system.rules.filter((r) => r.key === "GrantItem").length,
-        doc.system.rules.some((r) => r.key === "GrantItem" && JSON.stringify(r.predicate ?? []).includes("13")),
-    ], [3, true]);
+    // Asserted by what each grant IS rather than by counting them — the count was 3 until the 9th-level
+    // Technique and the Severing Art turned out to be granted by nobody, and a count would have had to
+    // be edited rather than consulted. Every Spirit grants a Schrift Form, a Technique it can use from
+    // 1st, a Vollständig at 13th, and a Severing Art that exists only inside Severance.
+    const grants = doc.system.rules.filter((r) => r.key === "GrantItem");
+    const gated = (needle) => grants.some((r) => JSON.stringify(r.predicate ?? []).includes(needle));
+    check(`${name}: a Schrift Form, and a Vollständig gated to 13th`, [
+        grants.some((r) => !r.predicate?.length),
+        gated("13"),
+    ], [true, true]);
+    check(`${name}: and a Severing Art that only Severance can reach`,
+        gated("soulbound:severance"), true);
 }
 
 // Guide §7C is explicit that these carry incapacitation: stunned on a failed basic save at rank 1 is
@@ -1234,11 +1286,19 @@ check(
     Object.keys(burner.system.overlays).length,
     4,
 );
+// Ordered by each overlay's `sort`, which is what pf2e itself orders variants by — the object's key
+// order is incidental, and a re-serialisation that sorted the keys once turned a player's "Three" into
+// the emanation without touching a single value.
+const fingers = Object.values(burner.system.overlays).sort((a, b) => a.sort - b.sort);
 check(
     "the base is the ranged attack; the others are line, emanation and cone",
-    [burner.system.defense, ...Object.values(burner.system.overlays).map((o) => o.system.area?.type ?? "none")],
+    [burner.system.area, ...fingers.map((f) => f.system?.area?.type ?? "none")],
     [null, "none", "line", "emanation", "cone"],
 );
+check("and the guide's own numbering survives it",
+    fingers.map((f) => f.name),
+    ["Burner Finger Two", "Burner Finger Three", "Burner Finger Four", "Burner Finger Five"]);
+
 
 // The AC bonus must read the POOL, not a roll option nothing sets.
 const balanceSchrift = contentDoc("soulbound-effects/effect-the-balance-schrift.json");
@@ -1441,5 +1501,1014 @@ check(
     sealNow.system.description.value.includes("not yet distinguished"),
     false,
 );
+
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  The release ladder, and the two ways it went wrong                                              */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * SB-6. Every Spirit's Released Form used to be granted by its class feature, unconditionally, at the
+ * level the feature arrives. A sealed 1st-level Senbonzakura therefore had 15-foot reach, and from 13th
+ * the Bankai's `turn-start` emanation and the Full Release fear aura fired every round for free.
+ *
+ * The form effects are now applied by the Release and Full Release actions and declared, not granted:
+ * `flags["isaacs-hb-pf2e"].releaseForm = { rung, effect }`. These checks are the wall that keeps a new
+ * Spirit from being authored the old way — the old way passes the validator and looks completely normal.
+ */
+const spiritFiles = fs
+    .readdirSync(path.join(ROOT, "content", "soulbound-class-features", "spirits"))
+    .filter((f) => f.endsWith(".json"));
+
+const formFeatures = spiritFiles
+    .map((f) => ({ file: f, doc: spiritDoc(f.replace(/\.json$/, "")) }))
+    .filter(({ doc }) => doc.flags?.["isaacs-hb-pf2e"]?.releaseForm);
+
+check("every rung of every Spirit declares the form it wears — fifteen at 1st, fifteen at 13th", [
+    formFeatures.filter(({ doc }) => doc.flags["isaacs-hb-pf2e"].releaseForm.rung === "released").length,
+    formFeatures.filter(({ doc }) => doc.flags["isaacs-hb-pf2e"].releaseForm.rung === "full").length,
+], [15, 15]);
+
+const grantsAnEffect = spiritFiles.filter((f) => {
+    const doc = spiritDoc(f.replace(/\.json$/, ""));
+    return (doc.system.rules ?? []).some(
+        (r) => r.key === "GrantItem" && String(r.uuid ?? "").includes("soulbound-effects"),
+    );
+});
+check(
+    "and no Spirit feature grants a Released Form outright — that is what made every form permanent",
+    grantsAnEffect,
+    [],
+);
+
+check(
+    "Full Release stops granting its own effect too; the action applies it",
+    (featureDoc("full-release").system.rules ?? []).some(
+        (r) => r.key === "GrantItem" && String(r.uuid ?? "").includes("Effect: Full Release"),
+    ),
+    false,
+);
+
+const fullReleaseEffect = contentDoc("soulbound-effects/effect-full-release.json");
+check(
+    "Effect: Full Release carries the damage-die step guide §4.8 promises and it never had",
+    (fullReleaseEffect.system.rules ?? []).some(
+        (r) => r.key === "ItemAlteration" && r.property === "damage-dice-faces" && r.mode === "upgrade",
+    ),
+    true,
+);
+check(
+    "Tensa Zangetsu opts out of it, because guide §7A says its die does NOT increase",
+    (contentDoc("soulbound-effects/effect-tensa-zangetsu.json").system.rules ?? []).some(
+        (r) => r.key === "RollOption" && r.option === "soulbound:full-release:no-die-step",
+    ),
+    true,
+);
+
+/**
+ * SB-7. `Refined Release` used to be one blanket `+5 to area-size` on every `sb-tier-release` item.
+ * That is right for the three Spirits whose Refined benefit is "the emanation increases to 20 feet",
+ * wrong for the two whose widening is a different number, and simply false for the three whose Refined
+ * benefit is not a widening at all — they were being handed area the guide never gives them.
+ *
+ * The size now travels with the technique as an `sb-refined-area-<n>` tag, and Refined Release carries
+ * one override per distinct size. A technique with no tag gets no area change, which is the default the
+ * blanket rule could not express.
+ */
+const refinedRules = featureDoc("refined-release").system.rules;
+check(
+    "Refined Release no longer widens every Release Technique by a flat 5 feet",
+    refinedRules.some((r) => r.mode === "add" && r.property === "area-size"),
+    false,
+);
+
+const refinedSizes = new Set(
+    refinedRules
+        .filter((r) => r.property === "area-size" && r.mode === "override")
+        .map((r) => r.value),
+);
+
+const REFINED_AREA = {
+    // guide §7A–7C, one row per Release Technique whose Refined benefit changes its area
+    senbonzakura: 20, "ennetsu-jigoku": 20, respira: 20,
+    "getsuga-tensho": 60, "la-gota": 40,
+};
+// The Refined benefits that are NOT area increases. Listed rather than inferred, because "this one
+// gains nothing" is exactly the case the blanket rule got wrong and silence would get wrong again.
+const REFINED_NO_AREA = ["garra-de-la-pantera", "cero-metralleta", "galvano-blast"];
+
+for (const [slug, size] of Object.entries(REFINED_AREA)) {
+    const tags = techDoc(slug).system.traits.otherTags ?? [];
+    check(`${slug}'s Refined area is ${size} feet`, tags.includes(`sb-refined-area-${size}`), true);
+    check(`and Refined Release has a rule that can deliver ${size}`, refinedSizes.has(size), true);
+}
+for (const slug of REFINED_NO_AREA) {
+    const tags = techDoc(slug).system.traits.otherTags ?? [];
+    check(
+        `${slug}'s Refined benefit is not a widening, so it carries no area tag`,
+        tags.some((t) => t.startsWith("sb-refined-area-")),
+        false,
+    );
+}
+
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  The choice prompts, and the two ways they were unbounded                                        */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * SB-3. `Kidō Learned` offered all eleven Soul Reaper kidō at **every** level — a 1st-level character
+ * was shown Kurohitsugi, which guide §6.1 prints as 15th.
+ *
+ * The gate is the guide's own sentence rather than a table of levels: a kidō has no rank of its own and
+ * auto-heightens to half your level rounded up, so you can learn one when your auto-heighten rank
+ * reaches its base rank. `Reiatsu.kidoRank` publishes that as `soulbound:kido-rank:<n>` and the filters
+ * compare against it, which is also the only form that can gate `Additional Kidō` — a feat takeable at
+ * any level, where a static exclusion list is no use at all.
+ */
+check("a kidō is learnable when your auto-heighten rank reaches its base rank (guide §6)", [
+    Reiatsu.kidoRank(1), Reiatsu.kidoRank(7), Reiatsu.kidoRank(9), Reiatsu.kidoRank(13), Reiatsu.kidoRank(15),
+], [1, 4, 5, 7, 8]);
+
+// The four gated kidō, at the base rank the guide's printed level implies.
+for (const [slug, rank, level] of [
+    ["rikujokoro", 4, "7th"], ["soren-sokatsui", 5, "9th"], ["kin", 5, "9th"], ["kurohitsugi", 8, "15th"],
+]) {
+    const doc = contentDoc(
+        `soulbound-kido/${["rikujokoro", "kin"].includes(slug) ? "bakudo" : "hado"}/${slug}.json`,
+    );
+    check(`${slug} is base rank ${rank}, so it arrives at ${level}`, doc.system.level.value, rank);
+}
+
+const GATE = { lte: ["item:level", "soulbound:kido-rank"] };
+const kidoChoosers = [
+    ...["1st", "2nd", "5th", "9th", "13th", "17th"].map((n) => ({
+        label: `Kidō Learned (${n})`,
+        doc: lineageDoc(`kido-learned-${n}`),
+    })),
+    { label: "Additional Kidō", doc: contentDoc("soulbound-feats/additional-kido.json") },
+];
+for (const { label, doc } of kidoChoosers) {
+    const choice = doc.system.rules.find((r) => r.key === "ChoiceSet");
+    check(
+        `${label} will not offer a kidō above your auto-heighten rank`,
+        (choice?.choices?.filter ?? []).some((f) => JSON.stringify(f) === JSON.stringify(GATE)),
+        true,
+    );
+    // SB-2. Two slots could pick the same kidō and both landed: a live 20th-level Soul Reaper finished
+    // holding Kurohitsugi twice, knowing five where guide §5.1 promises six.
+    const grant = doc.system.rules.find((r) => r.key === "GrantItem");
+    check(`${label} refuses a kidō you already know`, grant?.allowDuplicate, false);
+}
+
+/**
+ * SB-4. Zanjutsu's free 5th-level technique offered all six, and a live 5th-level character was granted
+ * `Zanjutsu: Kendō` — a 14th-level technique. Unlike `Additional Kidō` this grant lands at exactly one
+ * level, so the gate is static: the two 5th-level sword arts are the rank-2 ones.
+ */
+const zanChoice = lineageDoc("zanjutsu").system.rules.find((r) => r.key === "ChoiceSet");
+check(
+    "Zanjutsu's free technique is a 5th-level pick, so it offers only 5th-level sword arts",
+    (zanChoice?.choices?.filter ?? []).some((f) => JSON.stringify(f) === JSON.stringify({ lte: ["item:level", 2] })),
+    true,
+);
+check("Sōkotsu and Hitotsume: Nadegiri are the rank-2 pair that gate lets through", [
+    techDoc("sokotsu").system.level.value, techDoc("hitotsume-nadegiri").system.level.value,
+], [2, 2]);
+check("and the four it excludes are all above it", [
+    techDoc("shitonegaeshi").system.level.value, techDoc("nadegiri").system.level.value,
+    techDoc("ikkotsu").system.level.value, techDoc("zanjutsu-kendo").system.level.value,
+].every((r) => r > 2), true);
+
+
+/**
+ * C-35. "Your Release Technique costs no Reiatsu Points, but you can use it only once per round"
+ * (guide §4.8) was the one clause of Full Release with nothing behind it at all.
+ *
+ * Both halves ride on one ledger. `Unbound Technique` is an `action` — the only item types pf2e
+ * recharges a frequency on are `action` and `feat`, so an effect cannot hold the allowance itself —
+ * granted by `Effect: Full Release`, so it exists exactly as long as the state does. `FreeCast` spends
+ * it to pay for the Technique; `Release.beforeCast` reads the same value and refuses a second use.
+ */
+const unbound = contentDoc("soulbound-class-features/actions/unbound-technique.json");
+check("the Full Release allowance is an action, because pf2e only recharges those and feats",
+    unbound.type, "action");
+check("and it is once per round", unbound.system.frequency, { max: 1, per: "round", value: 1 });
+check("it pays for a Release Technique and nothing else",
+    unbound.flags["isaacs-hb-pf2e"].freeCast.predicate, ["item:tag:sb-tier-release"]);
+check("and it arrives with the Full Release, not with the 13th level",
+    fullReleaseEffect.system.rules.some(
+        (r) => r.key === "GrantItem" && String(r.uuid).endsWith("Unbound Technique"),
+    ),
+    true,
+);
+
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  A basic save's four degrees                                                                     */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * SB-13/SB-14. A self-rolled save — an aura tick, a turn-start emanation — is not a spell's own save,
+ * so pf2e never applies the basic ladder for it. Every one of them in the content carried the ladder by
+ * hand, and **not one doubled on a critical failure**. Written out three times per ability, the missing
+ * fourth line is invisible; `basic: true` writes it once.
+ */
+const { basicLadder } = await import("../scripts/riders/apply.mjs");
+
+const damageOnly = { basic: true, riders: [{ apply: { type: "damage", formula: "5d6", damageType: "slashing" } }] };
+check("a basic save halves on a success, doubles on a critical failure, and pays nothing on a critical success",
+    basicLadder(damageOnly).map((r) => [r.outcomes[0], r.apply.multiplier ?? 1]),
+    [["success", 0.5], ["failure", 1], ["criticalFailure", 2]]);
+
+check("without the flag the riders are left exactly as written",
+    basicLadder({ riders: [{ apply: { type: "damage", formula: "1d6" } }] }).length, 1);
+
+check("a damage rider that names its own outcomes is not expanded — an ability off the ladder says so",
+    basicLadder({ basic: true, riders: [{ outcomes: ["failure"], apply: { type: "damage", formula: "1d6" } }] }).length,
+    1);
+
+check("and a condition is not scaled by a degree of success at all",
+    basicLadder({ basic: true, riders: [{ apply: { type: "condition", slug: "off-guard" } }] })[0].outcomes,
+    undefined);
+
+// The two the guide calls basic, now saying so in one word each.
+const kageyoshi = contentDoc("soulbound-effects/effect-senbonzakura-kageyoshi.json");
+const kageRider = kageyoshi.flags["isaacs-hb-pf2e"].riders[0];
+check("Senbonzakura Kageyoshi's emanation is a basic Reflex, not free damage (guide §7A)",
+    [kageRider.apply.type, kageRider.apply.statistic, kageRider.apply.basic,
+     [kageRider.area].flat()[0]],
+    ["save", "reflex", true, { type: "emanation", value: 20 }]);
+check("and it still deals 5d6 slashing rising a die a rank",
+    [kageRider.apply.riders[0].apply.formula, kageRider.apply.riders[0].apply.perStep],
+    ["5d6", "1d6"]);
+
+const thunder = contentDoc("soulbound-effects/effect-thunderbolt-form.json");
+check("Thunderbolt Form's aura is a basic Reflex too (guide §7C)",
+    thunder.flags["isaacs-hb-pf2e"].riders[0].apply.basic, true);
+
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  SB-15 — an aura that never left the caster                                                      */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * `targetsFor` checked `rider.self` before `rider.area`, so a rider with both resolved to the origin's
+ * own token and the area was never built. Every Soulbound aura says `self: true` — it reads correctly,
+ * "this aura is mine" — so all six emptied: driven live, a 13th-level Senbonzakura rolled its own
+ * Reflex save against its own DC and took its own 5d6 while the ghoul beside it took nothing.
+ *
+ * These pin the shape of the content rather than the engine, because the engine change is one line and
+ * the thing that will drift is a seventh aura authored to the same pattern.
+ */
+// Effect: Full Release is no longer in this list: its emanation was promoted to a real pf2e `Aura`,
+// which catches per creature at the end of ITS turn rather than sweeping at the caster's. The five
+// below are still area riders and still have to say who they catch.
+const AURAS = [
+    ["soulbound-effects/effect-senbonzakura-kageyoshi.json", "turn-start", 20],
+    ["soulbound-effects/effect-zanka-no-tachi.json", "turn-start", 30],
+    ["soulbound-effects/effect-minami.json", "turn-end", 20],
+    ["soulbound-effects/effect-respira-absoluta.json", "turn-end", 20],
+    ["soulbound-effects/effect-thunderbolt-form.json", "turn-end", 10],
+];
+for (const [file, event, radius] of AURAS) {
+    const rider = contentDoc(file).flags["isaacs-hb-pf2e"].riders[0];
+    // A rider may carry several shapes; the first is the one centred on the caster.
+    const first = [rider.area].flat()[0];
+    check(`${file.split("/").pop()} is a ${radius}-foot ${event} aura`,
+        [rider.event, first?.type, first?.value], [event, "emanation", radius]);
+    check("and it says who it catches, in one place or the other",
+        Boolean(rider.areaTargeting?.affects ?? rider.area?.affects), true);
+}
+
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  SB-16 and SB-17 — two predicates and two properties that named nothing                          */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * SB-16. `sluggify` here reduces anything outside `[a-z0-9]` to a separator, so "Getsuga Tenshō" is
+ * built as **`getsuga-tensh`** — the macron is dropped, not transliterated. `Effect: Tensa Zangetsu`
+ * predicated on `getsuga-tensho`, which reads perfectly next to the name and matches nothing.
+ */
+const tensa = contentDoc("soulbound-effects/effect-tensa-zangetsu.json");
+const getsugaRules = tensa.system.rules.filter((r) => JSON.stringify(r.predicate ?? []).includes("getsuga"));
+check("Tensa Zangetsu names the slug the build actually writes",
+    getsugaRules.every((r) => r.predicate.includes("item:slug:getsuga-tensh")), true);
+
+/**
+ * And the line is two predicated overrides rather than an `add`: an `add` racing Refined Release's own
+ * `override` to 60 resolved to whichever ran last, and it was the override — so guide §7A's
+ * "60 feet (90 with Refined)" never reached 90.
+ */
+check("Getsuga's line is 60 without Refined Release and 90 with it (guide §7A)",
+    getsugaRules.filter((r) => r.property === "area-size")
+        .map((r) => [r.value, r.predicate.some((p) => typeof p === "object" && p.not === "feature:refined-release")])
+        .sort((a, b) => a[0] - b[0]),
+    [[60, true], [90, false]]);
+
+/**
+ * SB-17. pf2e's `ItemAlteration` handler map has no entry for an action cost, and an unknown property
+ * is dropped at schema validation — so `{"property": "time"}` on Tensa and `{"property":
+ * "action-cost"}` on Instant Full Release were both inert, and both are the whole point of their
+ * ability. The module supplies that one capability through an `actionCost` flag.
+ */
+const { applyActionCosts } = await import("../scripts/soulbound/action-cost.mjs");
+
+check("Tensa declares Getsuga at one action (guide §7A)",
+    tensa.flags["isaacs-hb-pf2e"].actionCost, [{ slug: "getsuga-tensh", value: 1 }]);
+check("Instant Full Release declares Full Release at one action (guide §8.5)",
+    contentDoc("soulbound-feats/instant-full-release.json").flags["isaacs-hb-pf2e"].actionCost,
+    [{ slug: "full-release", value: 1 }]);
+check("and neither still carries a property pf2e would throw away",
+    [...tensa.system.rules, ...contentDoc("soulbound-feats/instant-full-release.json").system.rules]
+        .some((r) => ["time", "action-cost"].includes(r.property)),
+    false);
+
+// The compression itself, on a stand-in actor: a spell carries its cost as a string, a feat as a number.
+const fakeActor = {
+    items: [
+        { flags: { "isaacs-hb-pf2e": { actionCost: [{ slug: "getsuga-tensh", value: 1 }] } }, system: {} },
+        { system: { slug: "getsuga-tensh", time: { value: "2" } } },
+        { system: { slug: "full-release", actions: { value: 2 } } },
+    ],
+};
+applyActionCosts(fakeActor);
+check("a two-action spell becomes one action, and an unrelated item is untouched",
+    [fakeActor.items[1].system.time.value, fakeActor.items[2].system.actions.value], ["1", 2]);
+
+const cheaper = { items: [
+    { flags: { "isaacs-hb-pf2e": { actionCost: [{ slug: "x", value: 2 }] } }, system: {} },
+    { system: { slug: "x", time: { value: "1" } } },
+] };
+applyActionCosts(cheaper);
+check("and a declaration never raises a cost that is already lower",
+    cheaper.items[1].system.time.value, "1");
+
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  Charge pools — the third machine with no caller                                                 */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * `charges.mjs` could spend and refresh a pool since Phase 3, and nothing ever called it. The counter
+ * badges were authored — Hyōrinmaru's three petal-flowers, Los Lobos' eight wolves — and simply never
+ * moved: all three petal Techniques were usable every round, for ever, which is three times the damage
+ * the Bankai is costed for with nothing on the sheet to show it.
+ *
+ * Two entry points now, matching the two ways an ability reaches the table. A Technique that is **cast**
+ * is refused before it resolves (`Charges.beforeCast`, in the cast pipeline beside the release gate); a
+ * Technique that is a **reaction** never passes through `cast`, so its spend is a `charge` rider on the
+ * prompt being accepted.
+ */
+const { Charges } = await import("../scripts/soulbound/charges.mjs");
+
+const pool = contentDoc("soulbound-effects/effect-daiguren-hyorinmaru.json");
+check("the petal-flowers are a counter of three (guide §7A)",
+    [pool.system.badge.type, pool.system.badge.value, pool.system.badge.max], ["counter", 3, 3]);
+check("and they only come back once Perfected Full Release is on the sheet",
+    pool.flags["isaacs-hb-pf2e"].chargeRefresh,
+    { regain: 1, requires: "feature:perfected-full-release" });
+
+// Los Lobos regains a wolf every turn from 13th, with no Perfected clause at all — the same machine,
+// a different schedule, said in content rather than in code.
+check("Los Lobos' wolves regain one a turn from 13th, unconditionally (guide §7B)",
+    contentDoc("soulbound-effects/effect-colmillo.json").flags["isaacs-hb-pf2e"].chargeRefresh,
+    { regain: 1 });
+
+for (const slug of ["sennen-hyoro", "hyoryu-senbi"]) {
+    check(`${slug} spends one petal-flower, once per round`,
+        Charges.declarationOn(techDoc(slug)), { effect: "Effect: Daiguren Hyōrinmaru", spending: 1, perRound: 1 });
+}
+check("Zanhyō Ningyō is a reaction, so its spend rides on the prompt instead",
+    techDoc("zanhyo-ningyo").flags["isaacs-hb-pf2e"].riders[0].apply.riders
+        .some((r) => r.apply.type === "charge" && r.apply.effect === "Effect: Daiguren Hyōrinmaru"),
+    true);
+check("and it is still a reaction, not a cast", techDoc("zanhyo-ningyo").system.time.value, "reaction");
+
+
+/**
+ * SB-18. `Effect: Daiguren Hyōrinmaru` declared `min: 0` for its three petal-flowers and carried
+ * `labels: ["1","2","3"]` beside it. pf2e nulls the minimum of a labelled counter, treats it as 1, and
+ * **deletes the effect** when a change would take the value below it — so spending the third petal did
+ * not empty the pool, it deleted the Bankai, taking the fly Speed, the cold resistance and the host of
+ * all three petal Techniques with it. Reproduced live: the effect was simply gone.
+ */
+check("the petal-flowers can be spent down to none without deleting the Bankai",
+    [pool.system.badge.min, pool.system.badge.labels], [0, undefined]);
+check("Los Lobos' wolves were already right, and stay right",
+    contentDoc("soulbound-effects/effect-colmillo.json").system.badge.min, 0);
+
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  SB-19 — who an area catches                                                                     */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * `configFor` defaults `affects` to **`"all"`** when an item carries no `areaTargeting` flag, and 24 of
+ * the class's 33 area effects carried none — so every kidō line and burst, Getsuga Tenshō, Galvano
+ * Blast, both of Hyōrinmaru's petal areas and **thirteen of the fifteen Severing Arts** caught the
+ * caster's own party.
+ *
+ * The guide settles it in one sentence, about Zanka no Tachi:
+ *
+ * > **Design note.** This is the most complex Bankai in the class and **the only one that damages your
+ * > own party.**
+ *
+ * So exactly one area in the class affects everyone — Zanka no Tachi's ambient burn, which was already
+ * authored `affects: "all"` — and every other one is enemies-only.
+ */
+const SOULBOUND_AREA_DIRS = ["soulbound-techniques", "soulbound-kido"];
+const areaItems = [];
+(function walk(dir) {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) walk(full);
+        else if (entry.name.endsWith(".json") && entry.name !== "_folders.json") {
+            const doc = JSON.parse(fs.readFileSync(full, "utf8"));
+            if (doc.system?.area) areaItems.push({ name: doc.name, doc });
+        }
+    }
+})(path.join(ROOT, "content", SOULBOUND_AREA_DIRS[0]));
+(function walk(dir) {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) walk(full);
+        else if (entry.name.endsWith(".json") && entry.name !== "_folders.json") {
+            const doc = JSON.parse(fs.readFileSync(full, "utf8"));
+            if (doc.system?.area) areaItems.push({ name: doc.name, doc });
+        }
+    }
+})(path.join(ROOT, "content", SOULBOUND_AREA_DIRS[1]));
+
+check("every Soulbound area says who it catches, rather than defaulting to everyone",
+    areaItems.filter((i) => !i.doc.flags?.["isaacs-hb-pf2e"]?.areaTargeting?.affects).map((i) => i.name),
+    []);
+check("and none of them catches allies — Zanka no Tachi's ambient burn is the class's only friendly fire",
+    areaItems.filter((i) => i.doc.flags["isaacs-hb-pf2e"].areaTargeting.affects !== "enemies").map((i) => i.name),
+    []);
+check("Zanka no Tachi's ambient burn still reaches everyone but the caster (guide §7A design note)",
+    (() => {
+        const r = contentDoc("soulbound-effects/effect-zanka-no-tachi.json").flags["isaacs-hb-pf2e"].riders[0];
+        return [r.areaTargeting.affects, r.areaTargeting.includesSelf];
+    })(),
+    ["all", false]);
+
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  SB-20 — the feat layer                                                                          */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * Twenty-three of the class's forty-seven feats had no mechanism behind them at all: a `RollOption`
+ * nothing reads, or an empty `rules` array. `Reiatsu Flood` was the single exception among those that
+ * looked inert — `rising-pressure.mjs` reads it by slug.
+ *
+ * A feat passes this check when it has a rule that is not just a `RollOption`, a module flag that the
+ * engine acts on, or a slug the scripts read. The list below is the ones fixed so far; the rest are
+ * enumerated in the checklist so the count cannot drift silently.
+ */
+const MECHANICAL_FLAGS = ["riders", "areaTargeting", "actionCost", "chargeSpend", "chargeRefresh",
+    "bypass", "lingering", "overlap", "freeCast", "releaseForm", "modeSwitch"];
+
+function featHasMechanism(slug) {
+    const doc = contentDoc(`soulbound-feats/${slug}.json`);
+    const rules = doc.system.rules ?? [];
+    const flags = Object.keys(doc.flags?.["isaacs-hb-pf2e"] ?? {});
+    // A *toggleable* RollOption is a mechanism: it is pf2e's own way of putting a cast-time choice on
+    // the sheet, and Cero Doble's cone is read off one. A plain RollOption is not.
+    return rules.some((r) => r.key !== "RollOption" || r.toggleable)
+        || flags.some((f) => MECHANICAL_FLAGS.includes(f));
+}
+
+for (const slug of ["perfected-technique", "zanjutsu-hakuda", "chain-anchor", "segunda-piel-temprana"]) {
+    check(`${slug} does something`, featHasMechanism(slug), true);
+}
+
+// Perfected Technique rides the same allowance machinery as the Full Release's Unbound Technique.
+// pf2e has no "encounter" frequency period — its list is turn/round/PT1M/PT10M/PT1H/PT24H/day/P1W/P1M/P1Y
+// — so PT10M is the stand-in for once a fight, and is named here so the choice is not mistaken for a bug.
+const perfected = contentDoc("soulbound-feats/perfected-technique.json");
+check("Perfected Technique frees one Release Technique, once a fight (guide §8.3)",
+    [perfected.system.frequency, perfected.flags["isaacs-hb-pf2e"].freeCast.predicate],
+    [{ max: 1, per: "PT10M", value: 1 }, ["item:tag:sb-tier-release"]]);
+
+// Zanjutsu: Hakuda is a real unarmed attack, not a roll option describing one.
+const hakuda = contentDoc("soulbound-feats/zanjutsu-hakuda.json").system.rules[0];
+check("Zanjutsu: Hakuda grants a 1d6 agile finesse nonlethal fist (guide §8.3)",
+    [hakuda.key, hakuda.damage.base.dice + hakuda.damage.base.die, hakuda.traits.sort()],
+    ["Strike", "1d6", ["agile", "finesse", "nonlethal", "unarmed"]]);
+
+// Rising Tide can only be known where the grant happens, which is why it sat unread.
+check("Rising Tide is paid out by Rising Pressure itself",
+    fs.readFileSync(path.join(ROOT, "scripts/soulbound/rising-pressure.mjs"), "utf8").includes("rising-tide"),
+    true);
+
+
+/**
+ * `Twin Pressure` (feat 14) could not have been written as content at all: the events list belongs to
+ * an effect the feat does not own. It is stamped onto `Effect: Full Release` as that effect is created,
+ * beside the Perfected radius — the same answer as `applyFullReleaseShape` gives the duration.
+ */
+check("Twin Pressure is applied where the aura is built, not from the feat",
+    fs.readFileSync(path.join(ROOT, "scripts/soulbound/release.mjs"), "utf8").includes("twin-pressure"),
+    true);
+check("and the aura's default trigger is turn-end alone",
+    pressureAura.effects[0].events, ["turn-end"]);
+
+
+/**
+ * SB-22. `Actor#increaseCondition` is additive — `Math.clamp(currentValue + addend, 1, max)` — and the
+ * Full Release aura, ticking each round, walked a creature to **frightened 8** from a class whose
+ * highest printed value is 2.
+ *
+ * Sixty durationless condition riders exist across both classes and **fifty-seven** read as "become X":
+ * stunned 2, prone, blinded, doomed 1. The three that genuinely accumulate — two Pisces skies and an
+ * Aquarius one — all declare a `max`, so `max` is the signal, and no content file had to change.
+ */
+const conditionRiders = [];
+(function walk(dir) {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) { walk(full); continue; }
+        if (!entry.name.endsWith(".json") || entry.name === "_folders.json") continue;
+        const doc = JSON.parse(fs.readFileSync(full, "utf8"));
+        const visit = (riders) => {
+            if (!Array.isArray(riders)) return;
+            for (const r of riders) {
+                const ap = r?.apply;
+                if (!ap || typeof ap !== "object") continue;
+                if (ap.type === "condition" && !r.duration) {
+                    conditionRiders.push({ name: doc.name, slug: ap.slug, value: ap.value, max: ap.max });
+                }
+                for (const key of ["riders", "onHit", "onAllHit", "options"]) visit(ap[key]);
+            }
+        };
+        visit(doc.flags?.["isaacs-hb-pf2e"]?.riders);
+    }
+})(path.join(ROOT, "content"));
+
+check("only the riders that declare a `max` accumulate; every other one means \"become X\"",
+    conditionRiders.filter((r) => r.max).map((r) => `${r.name}: ${r.slug} ${r.value}/${r.max}`).sort(),
+    ["Sky: Ascendant (Aquarius): slowed 1/4",
+     "Sky: Ascendant (Pisces): enfeebled 1/4",
+     "Sky: Zenith (Pisces): enfeebled 1/4"]);
+
+check("the Full Release aura's frightened is not one of them",
+    conditionRiders.filter((r) => r.slug === "frightened").every((r) => !r.max), true);
+
+check("and the engine sets rather than adds when no max is declared",
+    fs.readFileSync(path.join(ROOT, "scripts/riders/apply.mjs"), "utf8")
+        .includes("set to at least the value, never above what is already there"),
+    true);
+
+
+/**
+ * A second tranche of SB-20, all of it hooking machinery that already existed.
+ */
+for (const slug of ["cero-doble", "zanjutsu-footwork"]) {
+    check(`${slug} does something`, featHasMechanism(slug), true);
+}
+
+// "May be shaped as a 30-foot cone" is a choice, not a rule, so it is a toggle on the sheet — pf2e's
+// own answer for a cast-time choice — read by the `alternateArea` seam written for Photon Burst.
+const ceroDoble = contentDoc("soulbound-feats/cero-doble.json").system.rules[0];
+check("Cero Doble is a toggle the player flips, not an automatic reshape (guide §8.2)",
+    [ceroDoble.key, ceroDoble.toggleable, ceroDoble.option],
+    ["RollOption", true, "soulbound:cero-doble"]);
+const ceroKido = contentDoc("soulbound-kido/hollow/cero.json").flags["isaacs-hb-pf2e"];
+check("and Cero offers the cone only while that toggle is on",
+    ceroKido.areaTargeting.alternateArea.map((a) => [a.predicate, a.area.type, a.area.value]),
+    [[["soulbound:cero-doble"], "cone", 30]]);
+check("with the 10-foot push on a critical failure, gated the same way",
+    ceroKido.riders.some((r) => r.apply.type === "teleport" && r.apply.distance === 10
+        && r.predicate.includes("soulbound:cero-doble")),
+    true);
+
+// Two clauses put you in your released form the moment a fight begins, and they are one event.
+const releaseSource = fs.readFileSync(path.join(ROOT, "scripts/soulbound/release.mjs"), "utf8");
+check("Sheathed Draw releases you when the fight starts (guide §8.1)",
+    releaseSource.includes("sheathed-draw"), true);
+check("Vollständig Endurance suppresses the Full Release fatigue (guide §8.5)",
+    releaseSource.includes("soulbound:no-full-release-fatigue"), true);
+check("and the feat declares that option",
+    contentDoc("soulbound-feats/vollstandig-endurance.json").system.rules[0].option,
+    "soulbound:no-full-release-fatigue");
+
+// The Quincy counteract cluster: three clauses that all turn on one roll.
+const applySource = fs.readFileSync(path.join(ROOT, "scripts/riders/apply.mjs"), "utf8");
+check("Seal the Art's Reiatsu Point is charged where the outcome is known",
+    applySource.includes("soulbound:reishi-mastery") && applySource.includes("soulbound:sklaverei"),
+    true);
+
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  SB-20, closed: every feat does something                                                        */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * Twenty-three of forty-seven feats had no mechanism at all. This is the standing guard that says so
+ * for every one of them, so the number cannot drift back.
+ *
+ * A feat counts as mechanical when any of these is true:
+ *
+ *  - it carries a rule that is not merely a flat `RollOption` — including a **toggleable** one, which
+ *    is pf2e's own way of putting a cast-time choice on the sheet (Cero Doble, Kidō Focus);
+ *  - it carries a module flag the engine acts on;
+ *  - it is an **activity** with an action cost or a frequency, which is the whole mechanism for an
+ *    action-economy feat — pf2e writes `Double Shot` exactly this way (Rapid Bala, Shunpo Strike,
+ *    Descorrer, Reader of Threads);
+ *  - something reads it, by slug or by the option it sets (Reiatsu Flood, Unbroken Chain).
+ */
+const SCRIPTS = (() => {
+    let text = "";
+    (function walk(dir) {
+        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+            const full = path.join(dir, entry.name);
+            if (entry.isDirectory()) walk(full);
+            else if (entry.name.endsWith(".mjs")) text += fs.readFileSync(full, "utf8");
+        }
+    })(path.join(ROOT, "scripts"));
+    return text;
+})();
+
+const ENGINE_FLAGS = ["riders", "areaTargeting", "actionCost", "chargeSpend", "chargeRefresh", "bypass",
+    "lingering", "overlap", "freeCast", "releaseForm", "modeSwitch", "deepBreath"];
+
+const inertFeats = [];
+for (const file of fs.readdirSync(path.join(ROOT, "content", "soulbound-feats"))) {
+    //  is a bare array, not a document.
+    if (!file.endsWith(".json") || file === "_folders.json") continue;
+    const doc = contentDoc(`soulbound-feats/${file}`);
+    const rules = doc.system.rules ?? [];
+    const flags = Object.keys(doc.flags?.["isaacs-hb-pf2e"] ?? {});
+    if (rules.some((r) => r.key !== "RollOption" || r.toggleable)) continue;
+    if (flags.some((f) => ENGINE_FLAGS.includes(f))) continue;
+    const actionType = doc.system.actionType?.value;
+    if (["action", "reaction", "free"].includes(actionType)
+        && (doc.system.frequency || doc.system.actions?.value)) continue;
+    const slug = doc.system.slug ?? file.replace(/\.json$/, "");
+    const options = rules.filter((r) => r.key === "RollOption").map((r) => r.option);
+    const read = SCRIPTS.includes(`"${slug}"`) || SCRIPTS.includes(`feature:${slug}`)
+        || options.some((o) => SCRIPTS.includes(o));
+    if (!read) inertFeats.push(doc.name);
+}
+check("every Soulbound feat has a mechanism behind it", inertFeats, []);
+
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  Senbonzakura Kageyoshi, finished                                                                */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * The Bankai's second emanation is the only area in either class that is **placed and then stays
+ * there**, ticking at the start of each of the caster's turns from wherever it was last sent. Every
+ * other area is centred on the caster, which is why `shapeFromArea` took the origin's centre for both
+ * the anchor and the direction — so an area may now name an `anchor`, a key under the caster's
+ * `areaAnchors` flag holding the point.
+ *
+ * Gokei then reshapes that second area rather than adding a third: a 10-foot burst at double damage.
+ */
+const kage = contentDoc("soulbound-effects/effect-senbonzakura-kageyoshi.json")
+    .flags["isaacs-hb-pf2e"].riders;
+// Both shapes ride ONE rider, so a creature standing in both is caught once — the guide says "each
+// enemy in **either** emanation", and two riders made that two turn events and two lots of damage.
+check("the Bankai ticks from two places at once, as one event (guide §7A)",
+    kage.map((r) => [r.event, [r.area].flat().map((a) => `${a.type} ${a.value} ${a.anchor ?? "on you"}`)]),
+    [["turn-start", ["emanation 20 on you", "emanation 20 senbonzakura-second"]],
+     ["turn-start", ["emanation 20 on you", "burst 10 senbonzakura-second"]]]);
+check("and all three are a basic Reflex for 5d6 slashing, a die a rank",
+    kage.every((r) => r.apply.basic === true && r.apply.statistic === "reflex"
+        && r.apply.riders[0].apply.formula === "5d6" && r.apply.riders[0].apply.perStep === "1d6"),
+    true);
+check("Gokei reshapes the second area and doubles it, rather than adding a third",
+    kage.map((r) => [JSON.stringify(r.predicate), r.apply.riders[0].apply.multiplier ?? 1]),
+    [[JSON.stringify([{ not: "soulbound:senbonzakura:gokei" }]), 1],
+     [JSON.stringify(["soulbound:senbonzakura:gokei"]), 2]]);
+
+// One Sustain, three things it can do — the guide gives them all the same action.
+const sustain = contentDoc("soulbound-class-features/actions/senbonzakura-kageyoshi-sustain.json");
+check("the Sustain can send the blades as well as switch modes, once per round",
+    [sustain.flags["isaacs-hb-pf2e"].modeSwitch.place.anchor,
+     sustain.flags["isaacs-hb-pf2e"].modeSwitch.place.range,
+     sustain.system.frequency],
+    ["senbonzakura-second", 60, { max: 1, per: "round", value: 1 }]);
+
+// Senkei abandons defence: it takes the reach back and ignores every resistance.
+const senkei = contentDoc("soulbound-effects/effect-senkei.json");
+check("Senkei's Strikes ignore all resistances (guide §7A)",
+    senkei.flags["isaacs-hb-pf2e"].bypass[0].resistance.types, "all");
+check("and it still takes back the reach the Shikai granted",
+    senkei.system.rules.some((r) => r.key === "ItemAlteration" && r.mode === "remove" && r.value === "reach-15"),
+    true);
+
+// Shikake was authored correctly all along; SB-12 repaired the predicate that gated its Refined half.
+const shikakeRiders = contentDoc("soulbound-techniques/shikake.json").flags["isaacs-hb-pf2e"].riders;
+check("Shikake lasts a round on a failure and two on a critical failure (guide §7A)",
+    shikakeRiders.filter((r) => r.apply.type === "effect")
+        .map((r) => [r.outcomes[0], r.duration.value]),
+    [["failure", 1], ["criticalFailure", 2]]);
+check("and its Refined off-guard waits for Refined Release, spelled the way pf2e emits it",
+    shikakeRiders.find((r) => r.apply.slug === "off-guard").predicate, ["feature:refined-release"]);
+
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  SB-24 … SB-26 — the Hollow clauses that were predicates pointing at nothing                     */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * SB-24. Regeneración's second off-switch was `{not: "self:effect:regeneracion-suppressed"}` — an
+ * effect **that did not exist and that nothing applied**, so a Hollow's fast healing could never be
+ * switched off. The guide calls that clause the point of the Lineage: *"Soul Reapers and Quincy exist
+ * to shut this down, and both can, from 1st level."*
+ *
+ * Which types close it depends on the character — **Segunda Piel** (15th) narrows it to spirit alone.
+ */
+const { suppressorsFor, typesOf, traitsOf } = await import("../scripts/soulbound/regeneracion.mjs");
+check("spirit and vitality damage suppress Regeneración, and a holy effect does",
+    suppressorsFor([]), { types: ["spirit", "vitality"], traits: ["holy"] });
+check("Segunda Piel narrows that to spirit alone",
+    suppressorsFor(["feature:segunda-piel"]), { types: ["spirit"], traits: [] });
+// `holy` is a TRAIT, not a damage type: pf2e's DAMAGE_TYPES has no such entry, so `5[holy]` parses as
+// untyped and a type check for it matches nothing. The two halves of the guide's "holy or vitality
+// effect" are therefore asked in two different places.
+check("holy is not among the damage types asked for",
+    suppressorsFor([]).types.includes("holy"), false);
+check("the effect the predicate names exists, and lasts to the end of your next turn",
+    contentDoc("soulbound-effects/effect-regeneracion-suppressed.json").system.duration,
+    { expiry: "turn-end", sustained: false, unit: "rounds", value: 1 });
+check("and its slug is pinned, because sluggify would make the option `regeneraci-n-suppressed`",
+    contentDoc("soulbound-effects/effect-regeneracion-suppressed.json").system.slug,
+    "effect-regeneracion-suppressed");
+check("the damage types come off the roll's instances",
+    typesOf({ instances: [{ type: "spirit" }, { type: "slashing" }] }), ["spirit", "slashing"]);
+check("the source's traits come off the damage roll options",
+    traitsOf({ rollOptions: new Set(["item:trait:holy", "item:slug:sacred-blade"]) }), ["holy"]);
+check("and off the item when a caller passes no options",
+    traitsOf({ item: { system: { traits: { value: ["holy", "divine"] } } } }), ["holy", "divine"]);
+check("the TARGET's own traits are never read — a holy Hollow does not suppress itself",
+    traitsOf({ rollOptions: new Set(["self:trait:holy"]) }), []);
+
+/**
+ * SB-25. "Your Regeneración fast healing **doubles**" was a roll option nothing read. The base rate is
+ * predicated off when the doubling applies and a doubled rule takes its place — two `FastHealing` rules
+ * at once would heal twice rather than once for double.
+ */
+const regenRules = contentDoc("soulbound-class-features/lineages/regeneracion.json").system.rules;
+check("Regeneración is one rate or the other, never both (guide §7B)",
+    regenRules.map((r) => [r.value.startsWith("2*"), r.predicate.some((p) =>
+        p === "soulbound:murcielago:high-speed-regeneration")]),
+    [[false, false], [true, true]]);
+
+/**
+ * SB-27. "You can still gain doomed, but it never increases past 1" was first a roll option nothing
+ * read, and then — the repair — an `ActiveEffectLike` lowering `system.attributes.doomed.max`. That
+ * read perfectly and **also did nothing**, because pf2e assigns the value after every rule element:
+ *
+ *     this.prepareSynthetics();                     // every ActiveEffectLike applies here
+ *     attributes.doomed.max = attributes.dying.max; // and is overwritten here, unconditionally
+ *
+ * No priority or mode wins against a plain assignment further down the same method, so the cap is
+ * declared on the item and applied in the module's own `prepareDerivedData` wrapper, which is later.
+ */
+const arrogante = contentDoc("soulbound-effects/effect-arrogante-resurreccion.json");
+check("Arrogante caps doomed at 1 where pf2e cannot overwrite it (guide §7B)",
+    arrogante.flags["isaacs-hb-pf2e"].attributeCaps,
+    [{ path: "attributes.doomed.max", value: 1 }]);
+check("and the ActiveEffectLike that could never work is gone",
+    arrogante.system.rules.some((r) => r.path === "system.attributes.doomed.max"), false);
+
+const { applyAttributeCaps } = await import("../scripts/soulbound/attribute-caps.mjs");
+const capped = (caps, current) => {
+    const actor = { system: { attributes: { doomed: { max: current } } },
+                    items: [{ flags: { "isaacs-hb-pf2e": { attributeCaps: caps } } }] };
+    applyAttributeCaps(actor);
+    return actor.system.attributes.doomed.max;
+};
+check("a cap lowers the ceiling", capped([{ path: "attributes.doomed.max", value: 1 }], 4), 1);
+check("and never raises it — two items asking for different ceilings agree on the lower",
+    capped([{ path: "attributes.doomed.max", value: 3 }], 1), 1);
+check("an actor with no declaration is untouched", capped([], 4), 4);
+
+// Tiburón's Hirviendo changes La Gota's SHAPE, not just its size: "may be used as a 60-foot line
+// instead of a cone". An `area-size` override could only ever have widened the cone.
+// `alternateArea` is FIRST MATCH WINS, so the order is load-bearing: at 13th both predicates pass, and
+// a Hirviendo Tiburón must throw the 60-foot line, not the Refined 40-foot cone.
+check("La Gota widens at Refined and becomes a line under Hirviendo, in that order (guide §7B)",
+    contentDoc("soulbound-techniques/la-gota.json").flags["isaacs-hb-pf2e"].areaTargeting.alternateArea
+        .map((a) => [a.predicate, a.area.type, a.area.value]),
+    [[["self:effect:hirviendo"], "line", 60], [["feature:refined-release"], "cone", 40]]);
+
+
+/**
+ * Every `system.slug === "x"` in the scripts must name a document the build actually writes.
+ *
+ * `validateSlugPredicates` catches this for `item:slug:` in *content*. It said nothing about code — and
+ * the same trap caught the module's own: `sluggify` reduces anything outside `[a-z0-9]` to a separator,
+ * so "Regeneración" is built as **`regeneraci-n`**, and `slug === "regeneracion"` in
+ * `scripts/soulbound/regeneracion.mjs` matched nothing. The Hollow's fast healing could never be
+ * suppressed, which is the clause guide §5.2 calls the point of the Lineage.
+ *
+ * The fix there was a **tag** rather than an explicit slug: ASCII by construction, and it does not
+ * change the document's derived id the way `system.slug` would, which would break every existing
+ * character's link to it.
+ */
+const BUILT_SLUGS = (() => {
+    const slugs = new Set();
+    (function walk(dir) {
+        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+            const full = path.join(dir, entry.name);
+            if (entry.isDirectory()) { walk(full); continue; }
+            if (!entry.name.endsWith(".json") || entry.name === "_folders.json") continue;
+            const doc = JSON.parse(fs.readFileSync(full, "utf8"));
+            if (!doc?.name) continue;
+            slugs.add(doc.system?.slug ?? doc.name.toLowerCase()
+                .replace(/['’]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, ""));
+        }
+    })(path.join(ROOT, "content"));
+    return slugs;
+})();
+
+// pf2e owns these; they are conditions and system slugs, not our documents.
+const SYSTEM_SLUGS = new Set(["dying", "persistent-damage", "saint", "soulbound", "kido-focus"]);
+
+const unresolvedInScripts = [];
+for (const [, slug] of SCRIPTS.matchAll(/slug\s*===\s*["']([a-z0-9-]+)["']/g)) {
+    if (BUILT_SLUGS.has(slug) || SYSTEM_SLUGS.has(slug)) continue;
+    if (!unresolvedInScripts.includes(slug)) unresolvedInScripts.push(slug);
+}
+check("every slug the scripts compare against names a document the build writes", unresolvedInScripts, []);
+
+
+/**
+ * SB-31. "Bala counts as agile for the purpose of your multiple attack penalty (-4/-8 rather than
+ * -5/-10)" was authored as `value: 1` — a reduction of one. pf2e reads the value as the **penalty
+ * itself**, rejects anything above zero, and drops the rule; the warning was in every Soulbound's
+ * console, once per data preparation, for as long as the class has existed.
+ *
+ * A MAP synthetic lives on the ACTOR keyed by domain, not on the item that declared it, so an
+ * unpredicated one on `spell-attack` would have made every spell attack the character makes agile —
+ * a Murciélago's Cero Oscuras included.
+ */
+const balaMap = contentDoc("soulbound-kido/hollow/bala.json").system.rules
+    .find((r) => r.key === "MultipleAttackPenalty");
+check("Bala's agile MAP is the penalty itself, not a reduction of it", balaMap.value, -4);
+check("and it is scoped to Bala, because the synthetic is actor-wide",
+    balaMap.predicate, ["item:slug:bala"]);
+check("Bala's selector is a real spell-attack check domain", balaMap.selector, "spell-attack");
+
+// Twin Fang was wrong the same way, and silently: it only warns for a character who took the feat.
+const twinMap = contentDoc("soulbound-feats/twin-fang.json").system.rules
+    .find((r) => r.key === "MultipleAttackPenalty");
+check("Twin Fang's MAP is negative too", twinMap.value, -4);
+check("and stays scoped to the spirit weapon", twinMap.predicate.at(-1), "item:tag:soulbound-spirit-weapon");
+
+
+// A corrected rule in the pack reaches nobody who already exists: an owned item is a COPY. `repair`
+// refuses to replace `system.rules` wholesale for a good reason — pf2e writes a `flag` onto a GrantItem
+// at grant time and a `selection` onto a ChoiceSet when the player answers it, both INSIDE that array —
+// but that reason only covers rules which carry such state.
+const { rulesAreSafeToRefresh } = await import("../scripts/soulbound/release.mjs");
+const map1 = [{ key: "MultipleAttackPenalty", value: 1 }];
+const map4 = [{ key: "MultipleAttackPenalty", value: -4 }];
+check("a stale stateless rule is refreshed", rulesAreSafeToRefresh(map1, map4), true);
+check("an identical one is left alone", rulesAreSafeToRefresh(map4, map4), false);
+check("a GrantItem is never overwritten — its grant-time flag lives in the array",
+    rulesAreSafeToRefresh([{ key: "GrantItem", uuid: "x" }], [{ key: "GrantItem", uuid: "y" }]), false);
+check("nor is a ChoiceSet, whose selection lives there too",
+    rulesAreSafeToRefresh([{ key: "ChoiceSet", selection: "a" }], [{ key: "ChoiceSet" }]), false);
+check("a stateful rule anywhere in either version protects the whole array",
+    rulesAreSafeToRefresh(map1, [...map4, { key: "GrantItem", uuid: "y" }]), false);
+check("and a missing side is never refreshed", rulesAreSafeToRefresh(map1, undefined), false);
+
+
+/**
+ * SB-35. `unbroken-chain.mjs` said in its own docstring that it read its conditions from the feat "so a
+ * second refusal-to-die declares itself and needs no code here" — and then matched one hard-coded slug.
+ * Fine while exactly one ability refused to die; wrong the moment Bailar de Valquiria (5 Miracle points,
+ * repeatable) and The Balance's Refined clause did too.
+ */
+const { shouldCatch: refuses, poolOf, declarationsOn } =
+    await import("../scripts/soulbound/unbroken-chain.mjs");
+const at0 = { next: 0, current: 20, released: true, points: 5 };
+check("a blow that would drop you is caught", refuses({ ...at0 }), true);
+check("a blow that leaves you standing is not", refuses({ ...at0, next: 3 }), false);
+check("nor is one landing on someone already down", refuses({ ...at0, current: 0 }), false);
+check("a price you cannot pay is no refusal", refuses({ ...at0, points: 4, cost: 5 }), false);
+check("and one you can is", refuses({ ...at0, points: 5, cost: 5 }), true);
+check("Unbroken Chain needs the release state", refuses({ ...at0, released: false }), false);
+check("Bailar does not — it is already a Vollständig",
+    refuses({ ...at0, released: false, requiresRelease: false }), true);
+check("a spent daily use ends it", refuses({ ...at0, usesLeft: 0 }), false);
+
+check("the reiatsu pool is the default resource",
+    poolOf({ system: { resources: { focus: { value: 3 } } } }).value, 3);
+check("and a counter badge is the other",
+    poolOf({ itemTypes: { effect: [{ system: { slug: "effect-miracle-points", badge: { type: "counter", value: 7 } } }] } },
+           "effect-miracle-points").value, 7);
+check("a resource that is not there pays nothing",
+    poolOf({ itemTypes: { effect: [] } }, "effect-miracle-points").value, 0);
+
+// Cheapest first, so a Soulbound carrying both spends the Reiatsu Point before the five Miracle points.
+check("declarations come back cheapest first",
+    declarationsOn({ items: [
+        { flags: { "isaacs-hb-pf2e": { refuseDeath: { label: "Bailar", cost: 5 } } } },
+        { flags: { "isaacs-hb-pf2e": { refuseDeath: { label: "Unbroken Chain", cost: 1 } } } },
+    ] }).map((d) => d.declared.label),
+    ["Unbroken Chain", "Bailar"]);
+
+check("Unbroken Chain declares its own price now",
+    contentDoc("soulbound-feats/unbroken-chain.json").flags["isaacs-hb-pf2e"].refuseDeath,
+    { cost: 1, frequency: true, label: "Unbroken Chain", requires: "released", resource: "focus" });
+check("and Bailar declares a different one",
+    contentDoc("soulbound-effects/effect-bailar-de-valquiria.json").flags["isaacs-hb-pf2e"].refuseDeath,
+    { cost: 5, label: "Bailar de Valquiria", resource: "effect-miracle-points" });
+
+
+/**
+ * SB-42. The Waning table was pure, exported, unit-tested — and connected to nothing. All fifteen
+ * Severing Arts were authored at a flat `20d6`, the round-one value, so a Soulbound could sit through
+ * nine rounds of a 4d6 rider, doubled Flash Step and free kidō and still end the fight for seventy
+ * points. Guide §9 is explicit that the decay IS the balance lever.
+ */
+const { applyWaning, isSeveringArt, waningDice: waning } =
+    await import("../scripts/soulbound/severance.mjs");
+
+check("the table runs 20 down to 8 across rounds one to seven",
+    [1, 2, 3, 4, 5, 6, 7].map(waning), [20, 18, 16, 14, 12, 10, 8]);
+check("and refuses outside it — the Art is gone, not cheap",
+    [0, 8, 9, 10].map(waning), [0, 0, 0, 0]);
+
+const art = (formula) => ({
+    system: { traits: { otherTags: ["sb-tier-severing"] }, damage: { 0: { formula } } },
+});
+const notArt = { system: { traits: { otherTags: [] }, damage: { 0: { formula: "20d6" } } } };
+
+const stamped = (round, formula) => {
+    const item = art(formula);
+    applyWaning({ itemTypes: { spell: [item] } }, round);
+    return item.system.damage[0].formula;
+};
+check("round three stamps sixteen dice", stamped(3, "20d6"), "16d6");
+check("round seven stamps eight", stamped(7, "20d6"), "8d6");
+check("round eight leaves nothing to roll", stamped(8, "20d6"), "0");
+// Ittō Kasō is "the Waning dice **+2d6**" (R-14): the extra survives the rewrite.
+check("an Art with an extra keeps it", stamped(3, "20d6 + 2d6"), "16d6 + 2d6");
+
+const other = { itemTypes: { spell: [notArt] } };
+applyWaning(other, 3);
+check("and a Technique that is not an Art is untouched", notArt.system.damage[0].formula, "20d6");
+
+check("the tag is the only thing that identifies an Art",
+    [isSeveringArt(art("20d6")), isSeveringArt(notArt)], [true, false]);
+
+// Every one of the fifteen carries it, or the stamp would skip it in silence.
+for (const name of ["mugetsu", "shukei-hakuteiken", "hyoten-hyakkaso", "itto-kaso",
+                    "kanzen-saimin-owari", "desgarron", "cero-oscuras-ceniza", "la-hora-final",
+                    "aullido", "ola-azul", "sprenger", "burning-full-fingers", "the-reckoning",
+                    "electrocution", "apotheosis"]) {
+    check(`${name} is tagged as a Severing Art`,
+        techDoc(name).system.traits.otherTags.includes("sb-tier-severing"), true);
+}
+
+check("Severance pays for the Release Technique and every kidō, without a counter",
+    contentDoc("soulbound-effects/effect-severance.json").flags["isaacs-hb-pf2e"].freeCast.unlimited,
+    true);
+
+
+/**
+ * SB-46. Four Severing Art clauses that were prose: the wound that will not close (R-11, R-14),
+ * Ittō Kasō's price (R-15), Hyōten Hyakkasō's flat check (R-13) and Apotheosis (R-26).
+ */
+check("Shūkei: Hakuteiken and Ittō Kasō share the wound that will not close",
+    ["shukei-hakuteiken", "itto-kaso"].map((n) =>
+        (techDoc(n).flags["isaacs-hb-pf2e"].riders ?? []).some((r) =>
+            /Wound That Will Not Close/.test(r.apply?.uuid ?? ""))),
+    [true, true]);
+check("and that effect suppresses regeneration by the option Regeneración already tests",
+    contentDoc("soulbound-effects/effect-wound-that-will-not-close.json").system.rules
+        .some((r) => r.key === "RollOption" && r.option === "self:effect:regeneracion-suppressed"),
+    true);
+
+// R-15: the number is not known until it lands, and nothing may reduce it.
+const price = (techDoc("itto-kaso").flags["isaacs-hb-pf2e"].riders ?? [])
+    .find((r) => r.apply?.fractionOfCurrentHp !== undefined);
+check("Ittō Kasō costs half your current hit points, to yourself",
+    [price?.apply.fractionOfCurrentHp, price?.self], [0.5, true]);
+
+// R-13: the engine has no "no flat check" mode, so the DC is one no d20 reaches — and it says so.
+check("Hyōten Hyakkasō's persistent cold cannot be shaken off",
+    (techDoc("hyoten-hyakkaso").flags["isaacs-hb-pf2e"].riders ?? [])
+        .find((r) => r.apply?.type === "persistent-damage")?.apply.dc > 20,
+    true);
+
+const apo = contentDoc("soulbound-effects/effect-apotheosis.json");
+check("Apotheosis gives temporary hit points equal to twice your level",
+    apo.system.rules.find((r) => r.key === "TempHP")?.value, "2 * @actor.level");
+check("and detonates again at the start of your next turn for half the Waning dice",
+    [apo.flags["isaacs-hb-pf2e"].riders[0].event,
+     apo.flags["isaacs-hb-pf2e"].riders[0].apply.riders[0].apply.formula,
+     apo.flags["isaacs-hb-pf2e"].riders[0].apply.riders[0].apply.multiplier],
+    ["turn-start", "origin.severance.dice", 0.5]);
 
 report("Soulbound tests");

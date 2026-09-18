@@ -1,6 +1,6 @@
 {
     "folder": "Spirits",
-    "img": "icons/creatures/abilities/wing-bat-membrane-green.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/wing-bat-membrane-green.svg",
     "name": "Murciélago",
     "system": {
         "actionType": {
@@ -45,6 +45,14 @@
                 ],
                 "reevaluateOnUpdate": true,
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Murciélago — Segunda Etapa"
+            },
+            {
+                "key": "GrantItem",
+                "predicate": [
+                    "soulbound:severance"
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-techniques.Item.Cero Oscuras: Ceniza"
             }
         ],
         "traits": {

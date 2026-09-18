@@ -22,7 +22,7 @@
             }
         }
     },
-    "img": "icons/magic/light/beams-rays-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/beams-rays-blue.svg",
     "name": "Licht Regen",
     "system": {
         "area": {

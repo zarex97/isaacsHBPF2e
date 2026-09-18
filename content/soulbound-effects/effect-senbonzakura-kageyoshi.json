@@ -4,26 +4,87 @@
             "riders": [
                 {
                     "apply": {
-                        "damageType": "slashing",
-                        "formula": "5d6",
-                        "perStep": "1d6",
-                        "type": "damage"
+                        "basic": true,
+                        "dc": "reiatsu",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "slashing",
+                                    "formula": "5d6",
+                                    "perStep": "1d6",
+                                    "type": "damage"
+                                }
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
                     },
-                    "area": {
-                        "type": "emanation",
-                        "value": 20
-                    },
+                    "area": [
+                        {
+                            "type": "emanation",
+                            "value": 20
+                        },
+                        {
+                            "anchor": "senbonzakura-second",
+                            "type": "emanation",
+                            "value": 20
+                        }
+                    ],
                     "areaTargeting": {
                         "affects": "enemies",
                         "includesSelf": false
                     },
                     "event": "turn-start",
+                    "predicate": [
+                        {
+                            "not": "soulbound:senbonzakura:gokei"
+                        }
+                    ],
+                    "self": true
+                },
+                {
+                    "apply": {
+                        "basic": true,
+                        "dc": "reiatsu",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "slashing",
+                                    "formula": "5d6",
+                                    "multiplier": 2,
+                                    "perStep": "1d6",
+                                    "type": "damage"
+                                }
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
+                    },
+                    "area": [
+                        {
+                            "type": "emanation",
+                            "value": 20
+                        },
+                        {
+                            "anchor": "senbonzakura-second",
+                            "type": "burst",
+                            "value": 10
+                        }
+                    ],
+                    "areaTargeting": {
+                        "affects": "enemies",
+                        "includesSelf": false
+                    },
+                    "event": "turn-start",
+                    "predicate": [
+                        "soulbound:senbonzakura:gokei"
+                    ],
                     "self": true
                 }
             ]
         }
     },
-    "img": "icons/magic/nature/leaf-petals-pink-red.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/leaf-petals-pink-red.svg",
     "name": "Effect: Senbonzakura Kageyoshi",
     "system": {
         "description": {
@@ -41,7 +102,12 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [],
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Senbonzakura Kageyoshi — Sustain"
+            }
+        ],
         "start": {
             "initiative": null,
             "value": 0

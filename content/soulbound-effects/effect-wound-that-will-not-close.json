@@ -1,0 +1,52 @@
+{
+    "folder": null,
+    "img": "modules/isaacs-hb-pf2e/icons/skull-energy-light-white-dim.svg",
+    "name": "Effect: Wound That Will Not Close",
+    "system": {
+        "badge": null,
+        "description": {
+            "value": "<p>The cut went through something that does not grow back. For <strong>1 minute</strong> this creature <strong>cannot regain Hit Points</strong>, and any <strong>regeneration or fast healing</strong> it has is suppressed.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 10
+        },
+        "publication": {
+            "license": "OGL",
+            "remaster": true,
+            "title": "Isaac's Homebrew"
+        },
+        "rules": [
+            {
+                "key": "Note",
+                "selector": "all",
+                "text": "This creature cannot regain Hit Points, and its regeneration or fast healing is suppressed.",
+                "title": "Wound That Will Not Close"
+            },
+            {
+                "domain": "all",
+                "key": "RollOption",
+                "option": "self:effect:regeneracion-suppressed",
+                "value": true
+            }
+        ],
+        "slug": "effect-wound-that-will-not-close",
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

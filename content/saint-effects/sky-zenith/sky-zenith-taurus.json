@@ -49,7 +49,7 @@
         }
     },
     "folder": "Sky: Zenith",
-    "img": "icons/creatures/abilities/bull-horns-brown.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/bull-horns-brown.svg",
     "name": "Sky: Zenith (Taurus)",
     "system": {
         "description": {

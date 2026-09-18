@@ -1,6 +1,11 @@
 import { classSlugOf, classStatisticOf } from "../lib/class-dc.mjs";
 import { describeActor, describeDamage, riderOptions, testPredicate } from "../lib/roll-options.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
+
+/** The Waning dice for an actor, read lazily so this module does not import the ladder. */
+function SeveranceDice(actor) {
+    return game.modules.get(MODULE_ID)?.api?.severance?.dice?.(actor) ?? 0;
+}
 import { catchTokens } from "../targeting/catch.mjs";
 import { shapeFromArea } from "../targeting/place.mjs";
 import {
@@ -285,6 +290,8 @@ async function applyOne(rider, context) {
             return;
         case "save":
             return applySave(rider, context);
+        case "charge":
+            return applyCharge(rider, context);
         case "damage":
             return applyDamageRider(rider, context);
         case "death":
@@ -342,7 +349,17 @@ async function applyOne(rider, context) {
  * targeting uses, so "enemies within 10 feet" means the same thing in both places.
  */
 async function targetsFor(rider, context) {
-    if (rider.self) return context.originToken ? [context.originToken] : [];
+    // `self` before `area` was the order for a year, and it silently emptied six auras.
+    //
+    // A `turn-start` / `turn-end` / `aura-tick` rider is dispatched once, with the origin's own token as
+    // the target, and the area is what fans it out from there. Every Soulbound aura also says
+    // `self: true` — which reads correctly, "this aura is mine" — and that short-circuit meant the
+    // Bankai's emanation, the Full Release fear aura, Zanka no Tachi's ambient burn, Minami's ash,
+    // Respira Absoluta and Thunderbolt Form all resolved against **the caster and nobody else**. Driven
+    // live, a 13th-level Senbonzakura rolled its own Reflex save at its own DC and took its own 5d6.
+    //
+    // So an area always fans out. `self` keeps its meaning where there is no area: fire once, at me.
+    if (rider.self && !rider.area) return context.originToken ? [context.originToken] : [];
     if (!rider.area) return context.target ? [context.target] : [];
 
     const originToken = context.originToken;
@@ -355,27 +372,81 @@ async function targetsFor(rider, context) {
         return [];
     }
 
-    const shape = shapeFromArea(rider.area, originToken.object, originToken.object.center);
-    if (!shape) return [];
+    /**
+     * An area that is somewhere else.
+     *
+     * Almost every area rider is centred on the caster, and `shapeFromArea` takes the origin token's
+     * centre for both the anchor and the direction. Senbonzakura Kageyoshi is the exception the guide
+     * builds a whole Bankai around:
+     *
+     * > You gain a **second 20-foot emanation** centred on a point within 60 feet … you can Sustain once
+     * > per round to move the second emanation up to 30 feet. — guide §7A
+     *
+     * So an area may name an **anchor**: a key under the origin's `areaAnchors` flag holding the point it
+     * was last placed at. Nothing remembered means nothing to tick, which is the right answer before the
+     * blades have been sent anywhere.
+     */
+    /**
+     * One rider, one or more shapes — and a creature caught by two of them is caught **once**.
+     *
+     * Senbonzakura Kageyoshi is two emanations at once, and guide §7A says "each enemy in **either**
+     * emanation takes 5d6", not once per emanation. Written as two riders they were two separate turn
+     * events, and a creature standing in both rolled twice and took damage twice. Written as one rider
+     * with two shapes they go into a single Region, and `catchTokens` returns each token once.
+     */
+    const areas = [rider.area].flat().filter(Boolean);
+    const anchors = context.originActor?.getFlag?.(MODULE_ID, "areaAnchors") ?? {};
+    const shapes = [];
+    for (const area of areas) {
+        // `anchor: "target"` centres the shape on the creature that was struck, not on the caster.
+        //
+        // Murciélago's Refined Cero Oscuras "gains a 5-foot burst at the target dealing half damage to
+        // others" — the only sensible centre is the thing it hit, and every rider area until now could
+        // only be centred on the caster or on a point placed by hand. A splash is a common enough shape
+        // that this belongs in the engine rather than in one Spirit.
+        const centre = area.anchor === "target"
+            ? context.target?.object?.center
+            : area.anchor
+                ? anchors[area.anchor] && { x: anchors[area.anchor].x, y: anchors[area.anchor].y }
+                : originToken.object.center;
+        // An anchored area that has never been placed has nowhere to be, which is the right answer
+        // before the blades have been sent anywhere.
+        if (!centre) continue;
+        const shape = shapeFromArea(area, originToken.object, centre);
+        if (shape) shapes.push(shape);
+    }
+    if (shapes.length === 0) return [];
 
     const region = new CONFIG.Region.documentClass(
-        { name: "Rider area", shapes: [shape], flags: { pf2e: { areaShape: rider.area.type } } },
+        { name: "Rider area", shapes, flags: { pf2e: { areaShape: areas[0].type } } },
         { parent: canvas.scene },
     );
     // `catchTokens` reads the origin actor off `config.item`, so hand it something item-shaped. The aura
     // belongs to the Cloth, not to any one Technique, so there is no real item to give it.
+    // Who the area catches may be written inside `area` or in a sibling `areaTargeting`. Both spellings
+    // are in the content — the sibling is the one an item uses for cast-time targeting, so it is what an
+    // author reaches for — and reading only the first meant `affects: "enemies"` on all six Soulbound
+    // auras was decoration. The sibling wins where both are present; it is the more specific statement.
+    const aiming = { ...(areas[0] ?? {}), ...(rider.areaTargeting ?? {}) };
     const config = {
         item: { actor: context.originActor, name: context.originActor?.name ?? "", system: {} },
-        affects: rider.area.affects ?? "enemies",
-        includesSelf: rider.area.includesSelf === true,
-        includesNeutral: rider.area.includesNeutral === true,
-        requireLineOfEffect: rider.area.requireLineOfEffect !== false,
+        affects: aiming.affects ?? "enemies",
+        includesSelf: aiming.includesSelf === true,
+        includesNeutral: aiming.includesNeutral === true,
+        requireLineOfEffect: aiming.requireLineOfEffect !== false,
         predicate: [],
-        maxTargets: Number(rider.area.maxTargets) || 0,
+        maxTargets: Number(aiming.maxTargets) || 0,
     };
 
     const { caught } = catchTokens(region, config, originToken.object);
-    return caught.filter((entry) => entry.checked).map((entry) => entry.token.document);
+    let tokens = caught.filter((entry) => entry.checked).map((entry) => entry.token.document);
+    // A splash is damage to everyone **else**. Cero Oscuras' Refined burst deals "half damage to other
+    // creatures in it" — the creature it hit is the centre of the burst, not a second victim of it — so
+    // an area anchored on the target can say to leave the target out.
+    if (areas.some((area) => area.anchor === "target" && area.excludeAnchor !== false) && context.target) {
+        tokens = tokens.filter((token) => token.id !== context.target.id);
+    }
+    return tokens;
 }
 
 /* ------------------------------------------------------------------------------------------------ */
@@ -997,7 +1068,25 @@ export async function resolveCounteract(payload) {
         extraRollOptions: [`${MODULE_ID}:counteract`],
     });
     const outcome = DEGREES[roll?.degreeOfSuccess ?? -1];
-    const ourRank = Math.max(1, Number(item?.rank) || Math.ceil((actor.level ?? 1) / 2));
+
+    /**
+     * The Quincy's counteract cluster — guide §5.3, §8.3 and §5.3's 15th-level Mastery.
+     *
+     * Three clauses that all turn on the same roll, and all three were roll options nothing read:
+     *
+     *  - **Seal the Art** costs 1 Reiatsu Point. Nothing spent it: the action is an `action` item, and
+     *    pf2e only deducts focus for a *spell*. So it is charged here, where the outcome is known.
+     *  - **Reishi Mastery** (feat 10) raises the counteract rank by 1 **and makes it free on a critical
+     *    success** — which is why the charge has to wait for the roll rather than happen on the cast.
+     *  - **Sklaverei** (15th) refunds a point on a successful counteract, ignoring Rising Pressure's
+     *    per-encounter cap, and leaves the target **off-guard** until the end of its next turn.
+     *
+     * Read from roll options rather than by slug so a Borrowed Nature dip that grants `Seal the Art`
+     * behaves the same way.
+     */
+    const options = actor.getRollOptions?.() ?? [];
+    const mastery = options.includes("soulbound:reishi-mastery");
+    const ourRank = Math.max(1, Number(item?.rank) || Math.ceil((actor.level ?? 1) / 2)) + (mastery ? 1 : 0);
     const reach = { criticalSuccess: 3, success: 1, failure: -1, criticalFailure: -Infinity }[outcome] ?? -Infinity;
     const counteracted = targetRank <= ourRank + reach;
 
@@ -1017,6 +1106,25 @@ export async function resolveCounteract(payload) {
         await effect.update({ disabled: true, [`flags.${MODULE_ID}.suppressedUntil`]: "end-of-next-turn" });
     } else if (counteracted) {
         await effect.delete();
+    }
+
+    if (classSlugOf(actor) === "soulbound") {
+        const pool = actor.system?.resources?.focus;
+        const free = mastery && outcome === "criticalSuccess";
+        let value = pool?.value ?? 0;
+
+        if (!free) value = Math.max(0, value - 1);
+        // Sklaverei's refund ignores the per-encounter ceiling, so it is written straight to the pool
+        // rather than routed through Rising Pressure's ledger.
+        if (counteracted && options.includes("soulbound:sklaverei")) {
+            value = Math.min(pool?.max ?? value, value + 1);
+        }
+        if (value !== (pool?.value ?? 0)) {
+            await actor.update({ "system.resources.focus.value": value });
+        }
+        if (counteracted && options.includes("soulbound:sklaverei") && effect.actor) {
+            await effect.actor.increaseCondition("off-guard");
+        }
     }
 
     await ChatMessage.create({
@@ -1185,12 +1293,35 @@ async function applyCondition(rider, context) {
     const value = Number(rider.apply.value) || null;
 
     if (!rider.duration) {
-        const params = {};
-        if (value) params.value = value;
         // "cumulative to enfeebled 4" — the cap belongs on the increment, not on a predicate that would
-        // have to be rewritten every time the ceiling moves.
-        if (Number(rider.apply.max)) params.max = Number(rider.apply.max);
-        await context.actor.increaseCondition(slug, params);
+        // have to be rewritten every time the ceiling moves. `max` is also the *declaration* that this
+        // rider is meant to accumulate at all.
+        const max = Number(rider.apply.max);
+        if (max) {
+            await context.actor.increaseCondition(slug, value ? { value, max } : { max });
+            return;
+        }
+
+        /**
+         * "Become frightened 1" sets the value; it does not add to it.
+         *
+         * `Actor#increaseCondition` is additive — `Math.clamp(currentValue + addend, 1, max)` — so a
+         * Full Release aura ticking each round walked one creature to **frightened 8**, from a class
+         * whose highest printed value is 2. Sixty durationless condition riders exist across both
+         * classes and **fifty-seven** of them read as "become X": stunned 2, prone, blinded, doomed 1.
+         * The three that genuinely accumulate all declare a `max`, which is why that is the signal.
+         *
+         * So: set to at least the value, never above what is already there. An unvalued condition —
+         * prone, blinded — is simply applied if absent, which `increaseCondition` already does.
+         */
+        const existing = context.actor.itemTypes.condition.find((c) => c.slug === slug && c.active);
+        if (!existing) {
+            await context.actor.increaseCondition(slug, value ? { value } : {});
+            return;
+        }
+        const current = existing._source.system.value.value;
+        if (current === null || !value || value <= current) return;
+        await game.pf2e.ConditionManager.updateConditionValue(existing.id, context.actor, value);
         return;
     }
 
@@ -1453,6 +1584,28 @@ async function applyDamageRider(rider, context) {
     const multiplier = Number(rider.apply.multiplier);
     const expression = Number.isFinite(multiplier) && multiplier !== 1 ? `(${scaled}) * ${multiplier}` : scaled;
 
+    // Damage measured as a share of what the target still has, rather than as dice.
+    //
+    // *Ittō Kasō*'s price is "damage equal to **half your current Hit Points**, unpreventable,
+    // unreducible, unresistable and unredirectable, applied **after** the Art resolves" (R-15) — the
+    // drawback that pays for its extra dice and its immunity-piercing fire. There is no formula for it:
+    // the number is not known until the moment it lands, and none of the usual reductions may touch it.
+    const share = Number(rider.apply.fractionOfCurrentHp);
+    if (Number.isFinite(share) && share > 0) {
+        const current = context.actor?.hitPoints?.value ?? 0;
+        const amount = Math.floor(current * share);
+        if (amount <= 0) return;
+        const bare = await new DamageRoll(`(${amount})[${damageType}]`).evaluate();
+        await bare.toMessage(
+            { speaker: ChatMessage.getSpeaker({ actor: context.originActor }),
+              flavor: `${context.item?.name ?? "Rider"} — ${context.actor.name} (unpreventable)` },
+            { rollMode: game.settings.get("core", "rollMode") },
+        );
+        // `skipIWR` is the "unresistable" half, and it is the whole point of the clause.
+        await context.actor.applyDamage({ damage: bare, token: context.target, skipIWR: true, final: true });
+        return;
+    }
+
     const roll = await new DamageRoll(`(${expression})[${damageType}]`).evaluate();
     const name = context.item?.name ?? context.originActor?.name ?? "Rider";
     await roll.toMessage(
@@ -1534,6 +1687,64 @@ async function applyDeath(rider, context) {
  * — so the save is rolled here against the Saint's own DC, and the nested riders are chosen by its result
  * exactly the way the outer ones were chosen by the event's.
  */
+/**
+ * A basic save's four degrees, written once instead of three times per ability.
+ *
+ * > **basic Reflex** — critical success: no damage · success: half · failure: full · critical failure:
+ * > double.
+ *
+ * A self-rolled save — a `turn-start` aura tick, a `turn-end` emanation — is not a spell's own save, so
+ * pf2e never applies that ladder for it: the rider has to carry it. Every one of them in the content
+ * carried it by hand, and **not one doubled on a critical failure**; most did not halve on a success
+ * either. Written out three times per ability, the missing fourth line is invisible.
+ *
+ * So `basic: true` on a save rider expands each nested **damage** rider that does not name its own
+ * outcomes into the ladder. A damage rider that *does* name outcomes is left exactly as written — an
+ * ability whose damage does not follow the basic ladder is a real thing and says so — and non-damage
+ * riders are untouched, because "restrained on a critical failure" is not scaled by anything.
+ */
+export function basicLadder(spec) {
+    const riders = spec?.riders ?? [];
+    if (spec?.basic !== true) return riders;
+
+    const LADDER = [
+        ["success", 0.5],
+        ["failure", 1],
+        ["criticalFailure", 2],
+    ];
+    return riders.flatMap((rider) => {
+        const apply = rider?.apply;
+        if (apply?.type !== "damage" || rider.outcomes) return [rider];
+        return LADDER.map(([outcome, multiplier]) => ({
+            ...rider,
+            outcomes: [outcome],
+            apply: multiplier === 1 ? { ...apply } : { ...apply, multiplier },
+        }));
+    });
+}
+
+/**
+ * Spend from a charge pool.
+ *
+ * The other half of `Charges.beforeCast`. A Technique that is *cast* is refused before it resolves if
+ * the pool is empty; a Technique that is a **reaction** never passes through `cast` at all —
+ * Zanhyō Ningyō is triggered by damage landing on you — so its spend rides on the prompt being
+ * accepted, as a rider beside the one that summons the doll.
+ *
+ * Always spends from the ORIGIN's pool, not the target's: the petal-flowers are the Bankai's, and a
+ * rider resolving against an enemy must not look for a pool on them.
+ */
+async function applyCharge(rider, context) {
+    const { Charges } = await import("../soulbound/charges.mjs");
+    const actor = context.originActor;
+    const { effect, spend = 1, perRound = 1 } = rider.apply;
+    if (!actor || !effect) return;
+    await Charges.spend(actor, effect, {
+        spending: Number(spend),
+        perRound: perRound === null ? Infinity : Number(perRound),
+    });
+}
+
 async function applySave(rider, context) {
     return runSave(rider.apply, context);
 }
@@ -1558,17 +1769,31 @@ export async function runSave(spec, context) {
     const value = resolveDC(dc, context);
     if (!value) return;
 
+    /**
+     * `Kidō Focus` (feat 2): "spend 1 additional action to give the target a −1 circumstance penalty to
+     * its save."
+     *
+     * The extra action is a choice, so the feat is a **toggle** on the caster's sheet, and this is the
+     * only place the penalty can land — the save is rolled by the module, not by pf2e, so no rule
+     * element on either side would ever see it. Restricted to kidō, which is what the feat says.
+     */
+    const originOptions = context.originActor?.getRollOptions?.() ?? [];
+    const kidoFocus = originOptions.includes("soulbound:kido-focus")
+        && (context.item?.system?.traits?.otherTags ?? []).includes("sb-tier-kido");
     const roll = await statistic.roll({
         dc: { value },
         skipDialog: true,
         item: context.item ?? null,
         origin: context.originActor ?? null,
+        modifiers: kidoFocus
+            ? [new game.pf2e.Modifier({ slug: "kido-focus", label: "Kidō Focus", modifier: -1, type: "circumstance" })]
+            : [],
         extraRollOptions: [`${MODULE_ID}:rider-save`],
     });
     const outcome = DEGREES[roll?.degreeOfSuccess ?? -1];
     if (!outcome) return;
 
-    const nested = (spec.riders ?? []).map((r, index) => ({ rider: r, item: context.item, index }));
+    const nested = basicLadder(spec).map((r, index) => ({ rider: r, item: context.item, index }));
     const options = riderOptions({
         originActor: context.originActor,
         targetActor: context.actor,
@@ -1759,6 +1984,15 @@ function resolveFromOrigin(expression, context) {
     const match = /^origin\.statistic\.([\w-]+)\.rank$/.exec(String(expression));
     if (match) return originActor?.getStatistic?.(match[1])?.rank ?? null;
     if (expression === "origin.level") return originActor?.level ?? null;
+
+    // The Waning dice as they stand *now*. Apotheosis "detonates again at the start of your next turn
+    // for half the Waning dice" (R-26), and by then the round has turned — so the second blast is worth
+    // what the table says in the round it actually lands, not what the first one rolled. Reading it
+    // here is the only way to ask that question at the moment it is asked.
+    if (expression === "origin.severance.dice") {
+        const dice = SeveranceDice(originActor);
+        return dice > 0 ? `${dice}d6` : null;
+    }
     // How far the Technique itself has heightened, sky included — the growth a Strike inherits when the
     // Technique says "each Strike's damage increases by 1d6".
     if (expression === "origin.item.steps") {

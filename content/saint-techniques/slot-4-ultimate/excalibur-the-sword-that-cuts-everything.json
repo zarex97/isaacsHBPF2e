@@ -58,7 +58,7 @@
         }
     },
     "folder": "4th — Ultimate (L16)",
-    "img": "icons/weapons/swords/greatsword-flamberge-gold.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/greatsword-flamberge-gold.svg",
     "name": "Excalibur: The Sword That Cuts Everything",
     "system": {
         "area": {

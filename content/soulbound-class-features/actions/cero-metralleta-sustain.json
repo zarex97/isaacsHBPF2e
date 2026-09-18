@@ -1,0 +1,49 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "freeCast": {
+                "label": "Cero Metralleta — Sustain",
+                "predicate": [
+                    "item:slug:cero-metralleta"
+                ]
+            }
+        }
+    },
+    "folder": "Actions",
+    "img": "icons/skills/ranged/target-bullseye-arrow-blue.webp",
+    "name": "Cero Metralleta — Sustain",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per round</p><hr /><p>Fire again in a <strong>different direction</strong>, at <strong>no Reiatsu cost</strong>. Choose the cone or the line freshly, as you would on the first shot.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "publication": {
+            "license": "OGL",
+            "remaster": true,
+            "title": "Isaac's Homebrew"
+        },
+        "rules": [],
+        "slug": "cero-metralleta-sustain",
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "action"
+}

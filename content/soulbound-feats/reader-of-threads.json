@@ -1,6 +1,6 @@
 {
     "folder": "1st",
-    "img": "icons/magic/perception/eye-ringed-glow-angry-small-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/eye-ringed-glow-angry-small-blue.svg",
     "name": "Reader of Threads",
     "system": {
         "actionType": {
@@ -29,7 +29,29 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [],
+        "rules": [
+            {
+                "key": "Note",
+                "outcome": [
+                    "success",
+                    "criticalSuccess"
+                ],
+                "predicate": [
+                    {
+                        "or": [
+                            "action:recall-knowledge",
+                            "skill-check"
+                        ]
+                    }
+                ],
+                "selector": [
+                    "spirit-lore",
+                    "religion"
+                ],
+                "text": "On a success you learn <strong>one additional</strong> piece of information.",
+                "title": "Reader of Threads"
+            }
+        ],
         "traits": {
             "otherTags": [
                 "soulbound-feat"

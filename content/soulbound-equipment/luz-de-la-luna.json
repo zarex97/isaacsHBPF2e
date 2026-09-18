@@ -1,5 +1,5 @@
 {
-    "img": "icons/weapons/polearms/javelin-glowing-green.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/javelin-glowing-green.svg",
     "name": "Luz de la Luna",
     "system": {
         "baseItem": "javelin",

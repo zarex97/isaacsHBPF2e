@@ -24,7 +24,7 @@
             }
         }
     },
-    "img": "icons/magic/lightning/bolt-strike-forked-green.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/bolt-strike-forked-green.svg",
     "name": "Lanza del Relámpago",
     "system": {
         "cost": {

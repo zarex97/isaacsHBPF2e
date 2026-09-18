@@ -1,6 +1,6 @@
 {
     "folder": "Level 1",
-    "img": "icons/magic/light/orb-lightning-purple.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/orb-lightning-purple.svg",
     "name": "Fists of the Constellation",
     "system": {
         "actionType": {

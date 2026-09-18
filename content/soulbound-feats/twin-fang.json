@@ -1,6 +1,6 @@
 {
     "folder": "1st",
-    "img": "icons/weapons/swords/swords-short-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/swords-short-blue.svg",
     "name": "Twin Fang",
     "system": {
         "actionType": {
@@ -38,7 +38,7 @@
                     "item:tag:soulbound-spirit-weapon"
                 ],
                 "selector": "strike-attack-roll",
-                "value": 1
+                "value": -4
             }
         ],
         "traits": {

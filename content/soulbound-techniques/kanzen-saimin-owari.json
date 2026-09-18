@@ -1,6 +1,10 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "includesSelf": false
+            },
             "riders": [
                 {
                     "apply": {
@@ -19,7 +23,7 @@
             ]
         }
     },
-    "img": "icons/magic/perception/eye-ringed-glow-angry-large-purple.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/eye-ringed-glow-angry-large-purple.svg",
     "name": "Kanzen Saimin: Owari",
     "system": {
         "area": {

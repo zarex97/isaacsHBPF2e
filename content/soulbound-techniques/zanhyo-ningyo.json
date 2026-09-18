@@ -12,6 +12,14 @@
                                     "type": "effect",
                                     "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Remnant Ice Doll"
                                 }
+                            },
+                            {
+                                "apply": {
+                                    "effect": "Effect: Daiguren Hyōrinmaru",
+                                    "perRound": 1,
+                                    "spend": 1,
+                                    "type": "charge"
+                                }
                             }
                         ],
                         "type": "reaction"
@@ -22,7 +30,7 @@
             ]
         }
     },
-    "img": "icons/magic/water/snowflake-ice-swirl-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/snowflake-ice-swirl-blue.svg",
     "name": "Zanhyō Ningyō",
     "system": {
         "cost": {

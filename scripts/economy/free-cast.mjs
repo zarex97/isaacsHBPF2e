@@ -50,19 +50,21 @@ export const FreeCast = {
                 window: { title: "Free cast" },
                 content:
                     `<p><strong>${allowance.item.name}</strong> can pay for ${spell.name} without a Focus `
-                    + `Point. ${allowance.remaining} left.</p><p>Use it?</p>`,
+                    + `Point.${allowance.unlimited ? "" : ` ${allowance.remaining} left.`}</p><p>Use it?</p>`,
                 rejectClose: false,
             });
             if (!spend) return;
         }
 
         options.consume = false;
-        await allowance.item.update({ "system.frequency.value": allowance.remaining - 1 });
+        if (!allowance.unlimited) {
+            await allowance.item.update({ "system.frequency.value": allowance.remaining - 1 });
+        }
         await ChatMessage.create({
             speaker: ChatMessage.getSpeaker({ actor }),
             content:
-                `<p><strong>${allowance.item.name}</strong> paid for ${spell.name} — no Focus Point spent. `
-                + `${allowance.remaining - 1} left.</p>`,
+                `<p><strong>${allowance.item.name}</strong> paid for ${spell.name} — no Focus Point spent.`
+                + `${allowance.unlimited ? "" : ` ${allowance.remaining - 1} left.`}</p>`,
         });
     },
 
@@ -76,9 +78,14 @@ export const FreeCast = {
         for (const item of spell.actor?.items ?? []) {
             const flag = item.flags?.[MODULE_ID]?.[FLAG];
             if (!flag) continue;
+            if (!testPredicate(flag.predicate, options)) continue;
+            // An allowance with no ceiling at all. Severance says "your Release Technique and every kidō
+            // you know cost nothing and have **no frequency limit**" (guide §9, R-04) — there is no
+            // counter to decrement, and the frequency check would otherwise refuse an item that has no
+            // frequency to read, which is every effect that is not itself a once-per-day feat.
+            if (flag.unlimited) return { item, remaining: Infinity, unlimited: true };
             const remaining = item.system?.frequency?.value ?? 0;
             if (remaining <= 0) continue;
-            if (!testPredicate(flag.predicate, options)) continue;
             return { item, remaining };
         }
         return null;

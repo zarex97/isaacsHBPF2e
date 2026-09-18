@@ -1,6 +1,32 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "alternateArea": [
+                    {
+                        "area": {
+                            "type": "emanation",
+                            "value": 20
+                        },
+                        "predicate": [
+                            "feature:refined-release"
+                        ]
+                    }
+                ],
+                "includesSelf": false
+            },
+            "lingering": {
+                "difficultTerrain": 2,
+                "duration": {
+                    "unit": "rounds",
+                    "value": 1
+                },
+                "name": "Ennetsu Jigoku — embers",
+                "predicate": [
+                    "feature:refined-release"
+                ]
+            },
             "riders": [
                 {
                     "apply": {
@@ -14,25 +40,10 @@
                         "criticalFailure"
                     ]
                 }
-            ],
-            "areaTargeting": {
-                "affects": "enemies",
-                "includesSelf": false
-            },
-            "lingering": {
-                "difficultTerrain": 2,
-                "duration": {
-                    "unit": "rounds",
-                    "value": 1
-                },
-                "name": "Ennetsu Jigoku — embers",
-                "predicate": [
-                    "self:feature:refined-release"
-                ]
-            }
+            ]
         }
     },
-    "img": "icons/magic/fire/blade-two-handed-glowing-orange.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/blade-two-handed-glowing-orange.svg",
     "name": "Ennetsu Jigoku",
     "system": {
         "area": {
@@ -62,7 +73,7 @@
             }
         },
         "description": {
-            "value": "<p><em>Scorching Heat Hell.</em></p><p>Each creature in a 15-foot emanation takes @Damage[2d6[fire]] damage with a basic Reflex save. Creatures that fail also take <strong>1d4 persistent fire</strong> damage.</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d6, and the persistent damage by 1d4 at every other increment.</p><p><strong>Refined (9th)</strong> The emanation increases to <strong>20 feet</strong>, and the ground within it becomes <strong>difficult terrain</strong> from burning debris until the end of your next turn.</p>"
+            "value": "<p><em>Scorching Heat Hell.</em></p><p>Each creature in the emanation takes @Damage[2d6[fire]] damage with a basic Reflex save. Creatures that fail also take <strong>1d4 persistent fire</strong> damage.</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d6, and the persistent damage by 1d4 at every other increment.</p><p><strong>Refined (9th)</strong> The emanation increases to <strong>20 feet</strong>, and the ground within it becomes <strong>difficult terrain</strong> from burning debris until the end of your next turn.</p>"
         },
         "duration": {
             "sustained": false,
@@ -97,6 +108,7 @@
         },
         "traits": {
             "otherTags": [
+                "sb-refined-area-20",
                 "sb-tier-release"
             ],
             "rarity": "common",

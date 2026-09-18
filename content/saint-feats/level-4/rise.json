@@ -1,6 +1,6 @@
 {
     "folder": "Level 4",
-    "img": "icons/magic/life/heart-cross-strong-flame-red.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/heart-cross-strong-flame-red.svg",
     "name": "Rise",
     "system": {
         "actionType": {

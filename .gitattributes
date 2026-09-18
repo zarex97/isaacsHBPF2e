@@ -1,2 +1,13 @@
-# Auto detect text files and perform LF normalization
+# Auto detect text files and perform LF normalization.
+#
+# The explicit `eol=lf` entries below exist to silence the warning, not to change behaviour: `text=auto`
+# already normalises on checkin, and git announced that conversion for all ninety-six generated icons on
+# every commit, which buried anything worth reading in the output.
 * text=auto
+
+*.json text eol=lf
+*.mjs  text eol=lf
+*.md   text eol=lf
+*.svg  text eol=lf
+*.webp binary
+*.png  binary

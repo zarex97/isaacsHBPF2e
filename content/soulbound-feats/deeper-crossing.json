@@ -1,6 +1,6 @@
 {
     "folder": "Borrowed Nature",
-    "img": "icons/magic/symbols/runes-triangle-purple.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/runes-triangle-purple.svg",
     "name": "Deeper Crossing",
     "system": {
         "actionType": {
@@ -30,10 +30,20 @@
         },
         "rules": [
             {
-                "key": "RollOption",
                 "domain": "all",
+                "key": "RollOption",
                 "option": "soulbound:deeper-crossing",
                 "value": true
+            },
+            {
+                "itemType": "action",
+                "key": "ItemAlteration",
+                "mode": "override",
+                "predicate": [
+                    "item:slug:don-the-other-face"
+                ],
+                "property": "frequency-max",
+                "value": 2
             }
         ],
         "traits": {

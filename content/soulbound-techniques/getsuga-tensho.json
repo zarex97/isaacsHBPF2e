@@ -1,6 +1,34 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "alternateArea": [
+                    {
+                        "area": {
+                            "type": "line",
+                            "value": 60
+                        },
+                        "predicate": [
+                            "feature:refined-release"
+                        ]
+                    }
+                ],
+                "includesSelf": false
+            },
+            "bypass": [
+                {
+                    "predicate": [
+                        "feature:refined-release"
+                    ],
+                    "resistance": {
+                        "max": null,
+                        "types": [
+                            "spirit"
+                        ]
+                    }
+                }
+            ],
             "riders": [
                 {
                     "apply": {
@@ -12,26 +40,13 @@
                         "criticalFailure"
                     ],
                     "predicate": [
-                        "self:feature:refined-release"
+                        "feature:refined-release"
                     ]
-                }
-            ],
-            "bypass": [
-                {
-                    "predicate": [
-                        "self:feature:refined-release"
-                    ],
-                    "resistance": {
-                        "max": null,
-                        "types": [
-                            "spirit"
-                        ]
-                    }
                 }
             ]
         }
     },
-    "img": "icons/magic/death/projectile-dark-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/projectile-dark-blue.svg",
     "name": "Getsuga Tenshō",
     "system": {
         "area": {
@@ -61,7 +76,7 @@
             }
         },
         "description": {
-            "value": "<p><em>Moon Fang Heaven-Piercer.</em></p><p>Each creature in a 30-foot line takes @Damage[2d6[spirit]] damage with a basic Reflex save.</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d6.</p><p><strong>Refined (9th) &mdash; Kuroi Getsuga</strong> <em>(Black Moon Fang)</em>. The line increases to <strong>60 feet</strong>, the damage <strong>ignores resistance to spirit damage</strong>, and creatures that critically fail take 1d6 persistent spirit damage.</p>"
+            "value": "<p><em>Moon Fang Heaven-Piercer.</em></p><p>Each creature in the line takes @Damage[2d6[spirit]] damage with a basic Reflex save.</p><hr /><p><strong>Heightened (+1)</strong> The damage increases by 1d6.</p><p><strong>Refined (9th) &mdash; Kuroi Getsuga</strong> <em>(Black Moon Fang)</em>. The line increases to <strong>60 feet</strong>, the damage <strong>ignores resistance to spirit damage</strong>, and creatures that critically fail take 1d6 persistent spirit damage.</p>"
         },
         "duration": {
             "sustained": false,
@@ -96,6 +111,7 @@
         },
         "traits": {
             "otherTags": [
+                "sb-refined-area-60",
                 "sb-tier-release"
             ],
             "rarity": "common",

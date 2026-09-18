@@ -1,0 +1,59 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "modeSwitch": {
+                "family": [
+                    "Gokei",
+                    "Senkei"
+                ],
+                "none": "Neither",
+                "place": {
+                    "anchor": "senbonzakura-second",
+                    "area": {
+                        "type": "emanation",
+                        "value": 20
+                    },
+                    "label": "Send them",
+                    "range": 60
+                },
+                "prompt": "Sustain the blades. <strong>Send them</strong> places the second emanation, or moves it up to 30 feet; <strong>Gokei</strong> amasses them around one creature; <strong>Senkei</strong> condenses them into a cage around you and one enemy; or let them keep scattering."
+            }
+        }
+    },
+    "folder": "Actions",
+    "img": "modules/isaacs-hb-pf2e/icons/leaf-petals-pink.svg",
+    "name": "Senbonzakura Kageyoshi — Sustain",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per round</p><hr /><p>Move the second emanation up to <strong>30 feet</strong>, or switch modes:</p><ul><li><strong>Gokei</strong> <em>(Total Scene)</em> &mdash; the second emanation shrinks to a <strong>10-foot burst</strong> centred on one enemy; that enemy takes <strong>double</strong> the damage and cannot benefit from cover or concealment against it.</li><li><strong>Senkei</strong> <em>(Slaughterscape)</em> &mdash; the blades condense into a 20-foot cage around you and one enemy. Neither of you can leave; your Strikes against that enemy ignore all resistances, and you may make one extra Strike each round at your current multiple attack penalty. <strong>You lose Senbonzakura's reach and cover-ignoring</strong>, and enemies outside the cage cannot be targeted by you.</li></ul><p>Choosing neither returns the blades to their scattered state.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "concentrate",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "action"
+}

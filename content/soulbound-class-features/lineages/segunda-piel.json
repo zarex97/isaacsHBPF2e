@@ -1,6 +1,6 @@
 {
     "folder": "Lineages",
-    "img": "icons/equipment/chest/breastplate-scale-grey-white.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/breastplate-scale-grey-white.svg",
     "name": "Segunda Piel",
     "system": {
         "actionType": {

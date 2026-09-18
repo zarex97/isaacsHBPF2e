@@ -15,7 +15,7 @@
             ]
         }
     },
-    "img": "icons/magic/fire/blade-two-handed-glowing-red.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/blade-two-handed-glowing-red.svg",
     "name": "Effect: Higashi",
     "system": {
         "description": {

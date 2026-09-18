@@ -1,4 +1,22 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "text": "Soul Sever: perform a <strong>Konsō</strong> on it as a free action, with no check. It can never rise as undead.",
+                        "type": "prompt"
+                    },
+                    "event": "damage-applied",
+                    "note": "Fires when your damage takes something to zero; the option is published by describeActor.",
+                    "predicate": [
+                        "rider:target:hp-zero"
+                    ],
+                    "self": true
+                }
+            ]
+        }
+    },
     "folder": "12th",
     "img": "icons/magic/holy/prayer-hands-glowing-yellow.webp",
     "name": "Soul Sever",
@@ -24,14 +42,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [
-            {
-                "key": "RollOption",
-                "domain": "all",
-                "option": "soulbound:soul-sever",
-                "value": true
-            }
-        ],
+        "rules": [],
         "traits": {
             "otherTags": [
                 "soulbound-feat"

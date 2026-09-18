@@ -1,5 +1,23 @@
 {
-    "img": "icons/magic/control/energy-stream-link-red.webp",
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "bypass": [
+                {
+                    "predicate": [
+                        "item:type:weapon"
+                    ],
+                    "resistance": {
+                        "max": null,
+                        "types": [
+                            "physical",
+                            "spirit"
+                        ]
+                    }
+                }
+            ]
+        }
+    },
+    "img": "modules/isaacs-hb-pf2e/icons/energy-stream-link-red.svg",
     "name": "Effect: Blut Arterie",
     "system": {
         "description": {
@@ -21,10 +39,17 @@
         },
         "rules": [
             {
-                "key": "RollOption",
                 "domain": "all",
+                "key": "RollOption",
                 "option": "soulbound:blut-arterie",
                 "value": true
+            },
+            {
+                "key": "EphemeralEffect",
+                "selectors": [
+                    "strike-attack-roll"
+                ],
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Cover Pierced"
             }
         ],
         "start": {

@@ -1,6 +1,14 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "releaseForm": {
+                "effect": "Effect: Ryūjin Jakka — Shikai",
+                "rung": "released"
+            }
+        }
+    },
     "folder": "Spirits",
-    "img": "icons/magic/fire/blade-two-handed-glowing-orange.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/blade-two-handed-glowing-orange.svg",
     "name": "Ryūjin Jakka — Shikai",
     "system": {
         "actionType": {
@@ -24,12 +32,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [
-            {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Ryūjin Jakka — Shikai"
-            }
-        ],
+        "rules": [],
         "traits": {
             "otherTags": [
                 "soulbound-feature"

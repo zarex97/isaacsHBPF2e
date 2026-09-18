@@ -1,6 +1,6 @@
 {
     "folder": "Core",
-    "img": "icons/tools/navigation/telescope-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/telescope-blue.svg",
     "name": "Sky-Reading",
     "system": {
         "actionType": {

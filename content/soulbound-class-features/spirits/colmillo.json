@@ -1,6 +1,14 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "releaseForm": {
+                "effect": "Effect: Colmillo",
+                "rung": "full"
+            }
+        }
+    },
     "folder": "Spirits",
-    "img": "icons/creatures/abilities/wolf-howl-moon-grey-large.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/wolf-howl-moon-grey-large.svg",
     "name": "Colmillo",
     "system": {
         "actionType": {
@@ -25,10 +33,6 @@
             "title": "Isaac's Homebrew: The Soulbound"
         },
         "rules": [
-            {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Colmillo"
-            },
             {
                 "key": "GrantItem",
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-techniques.Item.Colmillo — Fang"

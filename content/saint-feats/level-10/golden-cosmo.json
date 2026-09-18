@@ -1,6 +1,6 @@
 {
     "folder": "Level 10",
-    "img": "icons/magic/light/beams-rays-orange.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/beams-rays-orange.svg",
     "name": "Golden Cosmo",
     "system": {
         "actionType": {

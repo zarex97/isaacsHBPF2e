@@ -22,7 +22,7 @@
             ]
         }
     },
-    "img": "icons/magic/fire/blade-two-handed-blackened-orange.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/blade-two-handed-blackened-orange.svg",
     "name": "Effect: Zanka no Tachi",
     "system": {
         "description": {
@@ -42,8 +42,8 @@
         },
         "rules": [
             {
-                "key": "ItemAlteration",
                 "itemType": "weapon",
+                "key": "ItemAlteration",
                 "mode": "upgrade",
                 "predicate": [
                     "item:tag:soulbound-spirit-weapon"
@@ -51,13 +51,17 @@
                 "property": "damage-dice-faces"
             },
             {
-                "key": "ItemAlteration",
                 "itemType": "weapon",
+                "key": "ItemAlteration",
                 "mode": "upgrade",
                 "predicate": [
                     "item:tag:soulbound-spirit-weapon"
                 ],
                 "property": "damage-dice-faces"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Zanka no Tachi — Sustain"
             }
         ],
         "start": {

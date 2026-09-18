@@ -1,6 +1,10 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "includesSelf": false
+            },
             "riders": [
                 {
                     "apply": {
@@ -17,7 +21,7 @@
         }
     },
     "folder": "Way of Destruction (Hadō)",
-    "img": "icons/magic/fire/beam-jet-stream-blue-yellow.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/beam-jet-stream-blue-yellow.svg",
     "name": "Sōren Sōkatsui — Twin Wave",
     "system": {
         "area": {

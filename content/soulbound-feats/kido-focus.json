@@ -26,10 +26,12 @@
         },
         "rules": [
             {
-                "key": "RollOption",
                 "domain": "all",
+                "key": "RollOption",
+                "label": "Kidō Focus — spend an extra action for −1 to their save",
                 "option": "soulbound:kido-focus",
-                "value": true
+                "toggleable": true,
+                "value": false
             }
         ],
         "traits": {

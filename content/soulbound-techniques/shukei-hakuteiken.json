@@ -12,10 +12,23 @@
                         "types": "all"
                     }
                 }
+            ],
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Wound That Will Not Close"
+                    },
+                    "event": "strike-resolved",
+                    "outcomes": [
+                        "success",
+                        "criticalSuccess"
+                    ]
+                }
             ]
         }
     },
-    "img": "icons/weapons/swords/sword-guard-white.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/sword-guard-white.svg",
     "name": "Shūkei: Hakuteiken",
     "system": {
         "cost": {

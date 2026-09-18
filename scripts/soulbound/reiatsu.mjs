@@ -1,4 +1,7 @@
 import { classSlugOf } from "../lib/class-dc.mjs";
+import { applyActionCosts } from "./action-cost.mjs";
+import { applyAttributeCaps } from "./attribute-caps.mjs";
+import { Severance, applyWaning } from "./severance.mjs";
 import { wrap } from "../lib/wrap.mjs";
 
 const MODULE_ID = "isaacs-hb-pf2e";
@@ -63,6 +66,28 @@ export const Reiatsu = {
         return item?.type === "spell" && (item.system?.traits?.value ?? []).includes("reiatsu");
     },
 
+    /**
+     * The highest base rank of kidō this character may learn — guide §6, read the honest way.
+     *
+     * A kidō has **no rank of its own**: it "auto-heightens to half your level rounded up, like every
+     * other focus effect". So the level at which a kidō becomes learnable is the level at which your
+     * auto-heighten rank reaches its base rank, and that single sentence reproduces every level the
+     * guide prints, exactly:
+     *
+     *   Byakurai, Sai, Danku, Kaidō …  base rank 1 → 1st
+     *   Rikujōkōrō                      base rank 4 → 7th
+     *   Sōren Sōkatsui, Kin             base rank 5 → 9th
+     *   Kurohitsugi                     base rank 8 → 15th
+     *
+     * It is published as a roll option rather than written into six ChoiceSet filters as a list of
+     * exclusions, because `Additional Kidō` can be taken at any level and a static list cannot gate it.
+     * Content then says `{"lte": ["item:level", "soulbound:kido-rank"]}` and never mentions a level at
+     * all. Before this existed, a **1st-level** Soul Reaper was offered **Kurohitsugi**.
+     */
+    kidoRank(level) {
+        return Math.max(1, Math.ceil((Number(level) || 1) / 2));
+    },
+
     /** The key attribute chosen at 1st level; the entry's DC follows it. */
     attributeFor(actor) {
         return actor.classDCs?.soulbound?.attribute ?? actor.class?.system?.keyAbility?.selected ?? "str";
@@ -119,18 +144,76 @@ export const Reiatsu = {
      * The class features set `cap` to 1 / 2 / 3 by level (migration 889 strips an AE-like on `max`, but
      * leaves `cap` alone), so the correction is one line: a Soulbound's maximum is its ceiling.
      */
+    /**
+     * Kidō are not spells, and should not be posting to chat as **Arcane**.
+     *
+     * > Kidō are **not spells**. They use your Reiatsu DC, they can't be counteracted as spells, and you
+     * > can't heighten them with slots. — guide §6
+     *
+     * The entry is created with `tradition: { value: "" }`, which reads as "none" and is not. pf2e's
+     * `SpellcastingEntryPF2e#tradition` getter is
+     *
+     *     const defaultTradition = this.system.prepared.value === "items" ? null : "arcane";
+     *
+     * so **every** entry that is not an item-based one falls back to arcane, and the tradition is then
+     * unioned into each spell's traits — three separate places in `item/spell/document.ts` — and emitted
+     * as `spell:trait:arcane`. That is not only a wrong word on a card: anything keyed on the arcane
+     * tradition finds a kidō, which is exactly the counteracting §6 says cannot happen.
+     *
+     * There is no data value for "no tradition" on a focus entry, so the getter is overridden for this
+     * class's entry alone. The Saint's Cosmo is untouched: it chooses a real tradition in a setting.
+     */
+    untraditionEntry() {
+        const proto = CONFIG.PF2E?.Item?.documentClasses?.spellcastingEntry?.prototype;
+        const descriptor = proto && Object.getOwnPropertyDescriptor(proto, "tradition");
+        if (!descriptor?.get) {
+            console.warn("Isaac's Homebrew | no `tradition` getter to override; kidō will read as arcane");
+            return;
+        }
+        const original = descriptor.get;
+        Object.defineProperty(proto, "tradition", {
+            ...descriptor,
+            get() {
+                if (this.system?.proficiency?.slug === "soulbound") return null;
+                return original.call(this);
+            },
+        });
+    },
+
     install() {
         wrap(
             "CONFIG.PF2E.Actor.documentClasses.character.prototype.prepareDerivedData",
             function (wrapped, ...args) {
                 const result = wrapped(...args);
                 try {
+                    // Published for EVERY character, not only a Soulbound, and that is deliberate.
+                    // The first two kidō are chosen while the class item is still being created, so at
+                    // the moment their ChoiceSets run the actor has no class yet — gate on the class and
+                    // the option is absent, the `lte` compares against NaN, and the prompt opens with
+                    // **no choices at all**, which blocks character creation outright. The option says
+                    // something about the actor's level, not about their class, so computing it for
+                    // everyone costs a key and is correct at the only time it is hard to be correct.
+                    this.rollOptions.all[`soulbound:kido-rank:${Reiatsu.kidoRank(this.level)}`] = true;
+
+                    // Later than `prepareSynthetics`, which is the whole point: pf2e assigns
+                    // `doomed.max = dying.max` after every rule element has run, so no ActiveEffectLike
+                    // can cap it. Driven by an item flag, so it costs nothing on an actor without one.
+                    applyAttributeCaps(this);
+
                     if (classSlugOf(this) === "soulbound") {
                         const focus = this.system?.resources?.focus;
                         if (focus) {
                             focus.max = focus.cap ?? focus.max;
                             focus.value = Math.min(focus.value ?? 0, focus.max);
                         }
+                        // pf2e has no alteration for an action cost, and two abilities need one. This is
+                        // the one place a second wrapper on `prepareDerivedData` would have gone, and
+                        // `wrap()` refuses two on the same target by design — so it lives here.
+                        applyActionCosts(this);
+                        // The Severing Art's dice decay by round, and the card should say so before a
+                        // player decides whether to spend their one shot — see `applyWaning`.
+                        const round = Severance.round(this);
+                        if (round > 0) applyWaning(this, round);
                     }
                 } catch (error) {
                     console.error("Isaac's Homebrew | the reiatsu pool could not be sized", error);
@@ -139,6 +222,8 @@ export const Reiatsu = {
             },
             { feature: "the reiatsu pool" },
         );
+
+        this.untraditionEntry();
 
         // Actors are prepared during `setupGame`, which runs BEFORE the `setup` hook this wrap installs
         // from — so every Soulbound in the world loads with the pool pf2e derived and only picks up the

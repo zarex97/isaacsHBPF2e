@@ -1,4 +1,12 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "includesSelf": false
+            }
+        }
+    },
     "folder": "Quincy Arts (Gintō)",
     "img": "icons/magic/light/beam-rays-blue-large.webp",
     "name": "Heizen",

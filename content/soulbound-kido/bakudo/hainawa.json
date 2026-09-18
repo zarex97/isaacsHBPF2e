@@ -29,7 +29,7 @@
         }
     },
     "folder": "Way of Binding (Bakudō)",
-    "img": "icons/magic/control/debuff-chains-ropes-yellow.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/debuff-chains-ropes-yellow.svg",
     "name": "Hainawa — Crawling Rope",
     "system": {
         "cost": {

@@ -1,6 +1,14 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "releaseForm": {
+                "effect": "Effect: Kanzen Saimin",
+                "rung": "released"
+            }
+        }
+    },
     "folder": "Spirits",
-    "img": "icons/magic/perception/eye-ringed-glow-angry-purple.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/eye-ringed-glow-angry-purple.svg",
     "name": "Kanzen Saimin",
     "system": {
         "actionType": {
@@ -24,12 +32,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [
-            {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Kanzen Saimin"
-            }
-        ],
+        "rules": [],
         "traits": {
             "otherTags": [
                 "soulbound-feature"

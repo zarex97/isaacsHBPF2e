@@ -1,6 +1,6 @@
 {
     "folder": "6th",
-    "img": "icons/magic/movement/portal-vortex-purple.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/portal-vortex-purple.svg",
     "name": "Descorrer",
     "system": {
         "actionType": {

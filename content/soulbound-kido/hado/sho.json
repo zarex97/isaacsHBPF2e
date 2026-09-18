@@ -16,7 +16,7 @@
         }
     },
     "folder": "Way of Destruction (Hadō)",
-    "img": "icons/magic/movement/abstract-impact-white.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/abstract-impact-white.svg",
     "name": "Shō — Thrust",
     "system": {
         "cost": {

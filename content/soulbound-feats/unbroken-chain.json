@@ -1,4 +1,15 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "refuseDeath": {
+                "cost": 1,
+                "frequency": true,
+                "label": "Unbroken Chain",
+                "requires": "released",
+                "resource": "focus"
+            }
+        }
+    },
     "folder": "16th",
     "img": "icons/magic/control/debuff-chains-ropes-red.webp",
     "name": "Unbroken Chain",
@@ -29,14 +40,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [
-            {
-                "key": "RollOption",
-                "domain": "all",
-                "option": "soulbound:unbroken-chain",
-                "value": true
-            }
-        ],
+        "rules": [],
         "traits": {
             "otherTags": [
                 "soulbound-feat"

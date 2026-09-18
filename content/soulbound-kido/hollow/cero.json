@@ -1,6 +1,41 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "alternateArea": [
+                    {
+                        "area": {
+                            "type": "cone",
+                            "value": 30
+                        },
+                        "predicate": [
+                            "soulbound:cero-doble"
+                        ]
+                    }
+                ],
+                "includesSelf": false
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "direction": "away",
+                        "distance": 10,
+                        "type": "teleport"
+                    },
+                    "note": "Cero Doble: creatures that critically fail against the cone are pushed 10 feet.",
+                    "outcomes": [
+                        "criticalFailure"
+                    ],
+                    "predicate": [
+                        "soulbound:cero-doble"
+                    ]
+                }
+            ]
+        }
+    },
     "folder": "Hollow Arts",
-    "img": "icons/magic/fire/beam-jet-stream-red.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/beam-jet-stream-red.svg",
     "name": "Cero",
     "system": {
         "area": {

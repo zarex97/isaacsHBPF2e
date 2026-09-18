@@ -1,5 +1,5 @@
 {
-    "img": "icons/weapons/swords/sword-broad-blue.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/sword-broad-blue.svg",
     "name": "Tiburón — Hollow-Edged Blade",
     "system": {
         "baseItem": "greatsword",

@@ -1,6 +1,14 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "releaseForm": {
+                "effect": "Effect: The Heat — Schrift",
+                "rung": "released"
+            }
+        }
+    },
     "folder": "Spirits",
-    "img": "icons/magic/fire/projectile-fireball-smoke-strong-red.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/projectile-fireball-smoke-strong-red.svg",
     "name": "The Heat — Schrift",
     "system": {
         "actionType": {
@@ -24,12 +32,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [
-            {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: The Heat — Schrift"
-            }
-        ],
+        "rules": [],
         "traits": {
             "otherTags": [
                 "soulbound-feature"

@@ -1,4 +1,22 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Greater Flash Step"
+                    },
+                    "event": "action-used",
+                    "note": "Greater Flash Step (11th): the afterimage lasts until the start of your next turn.",
+                    "predicate": [
+                        "feature:greater-flash-step"
+                    ],
+                    "self": true
+                }
+            ]
+        }
+    },
     "folder": "Core",
     "img": "icons/magic/movement/trail-streak-impact-blue.webp",
     "name": "Flash Step",

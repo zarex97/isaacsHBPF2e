@@ -68,7 +68,7 @@
         }
     },
     "folder": "2nd (L6)",
-    "img": "icons/magic/nature/rose-thorned-white.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/rose-thorned-white.svg",
     "name": "Royal Demon Rose",
     "system": {
         "area": {

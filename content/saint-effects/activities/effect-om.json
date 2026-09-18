@@ -1,6 +1,6 @@
 {
     "folder": "Activities",
-    "img": "icons/magic/perception/eye-ringed-glow-angry-teal.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/eye-ringed-glow-angry-purple.svg",
     "name": "Effect: Om",
     "system": {
         "badge": {

@@ -17,6 +17,32 @@
                         "type": "reaction"
                     },
                     "event": "damage-applied",
+                    "predicate": [
+                        {
+                            "not": "feature:refined-release"
+                        }
+                    ],
+                    "self": true
+                },
+                {
+                    "apply": {
+                        "label": "Hand it to someone else",
+                        "prompt": "You have been hurt. Move the misfortune onto someone else?",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: The Balance — Held (Refined)"
+                                }
+                            }
+                        ],
+                        "type": "reaction"
+                    },
+                    "event": "damage-applied",
+                    "note": "Refined: the penalty reaches AC as well as saves.",
+                    "predicate": [
+                        "feature:refined-release"
+                    ],
                     "self": true
                 }
             ]

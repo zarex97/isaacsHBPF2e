@@ -1,6 +1,6 @@
 {
     "folder": "Activities",
-    "img": "icons/magic/light/explosion-star-glow-orange-purple.webp",
+    "img": "modules/isaacs-hb-pf2e/icons/explosion-star-glow-orange-purple.svg",
     "name": "Effect: Rising Cosmo",
     "system": {
         "badge": {
@@ -10,7 +10,7 @@
                 "+3"
             ],
             "max": 3,
-            "min": 0,
+            "min": 1,
             "type": "counter",
             "value": 1
         },

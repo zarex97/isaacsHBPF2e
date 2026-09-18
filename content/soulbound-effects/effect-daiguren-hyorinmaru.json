@@ -1,7 +1,21 @@
 {
-    "img": "icons/magic/water/snowflake-ice-swirl-blue.webp",
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "chargeRefresh": {
+                "regain": 1,
+                "requires": "feature:perfected-full-release"
+            }
+        }
+    },
+    "img": "modules/isaacs-hb-pf2e/icons/snowflake-ice-swirl-blue.svg",
     "name": "Effect: Daiguren Hyōrinmaru",
     "system": {
+        "badge": {
+            "max": 3,
+            "min": 0,
+            "type": "counter",
+            "value": 3
+        },
         "description": {
             "value": "<p>Wings, claws and a tail of ice. You have a <strong>fly Speed</strong> equal to your Speed and <strong>cold resistance equal to your level</strong>.</p><p>The badge counts your <strong>petal-flowers</strong>: one may be spent per round.</p>"
         },
@@ -44,17 +58,6 @@
             "value": [
                 "soulbound"
             ]
-        },
-        "badge": {
-            "labels": [
-                "1",
-                "2",
-                "3"
-            ],
-            "max": 3,
-            "min": 0,
-            "type": "counter",
-            "value": 3
         }
     },
     "type": "effect"

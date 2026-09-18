@@ -1,5 +1,15 @@
 {
-    "img": "icons/magic/symbols/runes-carved-stone-blue.webp",
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "freeCast": {
+                "label": "Soul Reaper's Discipline",
+                "predicate": [
+                    "item:tag:sb-tier-kido"
+                ]
+            }
+        }
+    },
+    "img": "modules/isaacs-hb-pf2e/icons/runes-carved-stone-blue.svg",
     "name": "Effect: Soul Reaper's Discipline",
     "system": {
         "description": {
@@ -8,6 +18,11 @@
         "duration": {
             "unit": "minutes",
             "value": 1
+        },
+        "frequency": {
+            "max": 99,
+            "per": "round",
+            "value": 99
         },
         "level": {
             "value": 6
@@ -19,17 +34,32 @@
         },
         "rules": [
             {
-                "key": "RollOption",
                 "domain": "all",
+                "key": "RollOption",
                 "option": "soulbound:aspect:soul-reaper",
                 "value": true
             },
             {
                 "key": "FlatModifier",
                 "label": "Borrowed Nature",
+                "predicate": [
+                    {
+                        "not": "soulbound:second-nature"
+                    }
+                ],
                 "selector": "will",
                 "type": "status",
                 "value": -1
+            },
+            {
+                "diceNumber": 1,
+                "key": "DamageDice",
+                "label": "Deeper Crossing",
+                "predicate": [
+                    "item:tag:soulbound-kido-hado",
+                    "soulbound:deeper-crossing"
+                ],
+                "selector": "spell-damage"
             }
         ],
         "start": {

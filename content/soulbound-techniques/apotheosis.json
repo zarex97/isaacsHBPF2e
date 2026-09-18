@@ -1,5 +1,23 @@
 {
-    "img": "icons/magic/holy/angel-winged-humanoid-golden.webp",
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "includesSelf": false
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Apotheosis"
+                    },
+                    "event": "action-used",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "img": "modules/isaacs-hb-pf2e/icons/angel-winged-humanoid-golden.svg",
     "name": "Apotheosis",
     "system": {
         "area": {
