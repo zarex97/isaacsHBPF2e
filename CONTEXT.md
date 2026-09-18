@@ -23,6 +23,11 @@ Which constellation is up today. Thirteen exist; twelve have a Cloth and *Starle
 The day's energy, orthogonal to the Sign — Quiet, Benefic, Retrograde, Malefic or Exalted.
 _Avoid_: aspect as a Soulbound term (that is Lineage); aspect as a Zanka no Tachi term (those are modes).
 
+**Domain**:
+The checks a Sign touches while its Aspect is live — Aries initiative, Taurus Fortitude saves and
+Athletics, Pisces Will saves. Libra's domain is the die itself rather than a list of checks, and
+Starless has none.
+
 **Ascendant**:
 A Saint whose Cloth's Sign is today's Sign. A state of a *Saint*, never a value of the Aspect.
 
