@@ -16,7 +16,13 @@ accepts it: the 20-foot burst places and the module's own *Confirm targets* dial
 every token inside it. Synthetic `PointerEvent`s never reached that step, because the layer
 re-centres the view on the preview between the aim and the click.
 
-*The blocker now is the test data.* `catch.mjs:53` filters an `enemies` area with
+*The second gate, found 19 Sep 2026: the burst does not follow the cursor.* Clicking the canvas
+confirms the area **where it already sits** — anchored near the caster — not where the pointer is.
+The module's own dialog says so in one line: *"Re-aim puts the area back on the cursor."* Four
+correctly-aimed clicks all placed the burst on the caster's own square, catching its allies. The
+next drive must press **Re-aim** first, or aim by moving the caster rather than the cursor.
+
+*The third gate is the test data.* `catch.mjs:53` filters an `enemies` area with
 `actor.isEnemyOf(originActor)`. The 17th-level test character **123** has `alliance: "opposition"`,
 and so do `D1` and `D2` — so from that caster nothing on the scene is an enemy and the dialog
 reports *"nothing in the area can be targeted"*. `ZZ SR — Hyorinmaru` is `alliance: "party"` and
