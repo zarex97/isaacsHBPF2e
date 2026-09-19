@@ -1,12 +1,12 @@
-# Isaac's Homebrew (PF2e): The Saint
+# Isaac's Homebrew (PF2e): The Saint and The Soulbound
 
-A Foundry VTT module for the **Pathfinder Second Edition** system that adds **The Saint** — a martial
-focus-user whose power answers to the sky.
+A Foundry VTT module for the **Pathfinder Second Edition** system that adds two martial focus-users:
+**The Saint**, whose power answers to the sky, and **The Soulbound**, whose pool refills by fighting.
 
 > *A Gold Saint stands in the attack, wearing gold, and punches a god.*
 
 Eleven days out of thirteen a Saint is an excellent-but-not-dominant martial. On the thirteenth — the day
-their own constellation rises — the Cloth burns. On one day in 260 the sky exalts them, and for that day they
+their own constellation rises — the Cloth burns. On one day in 130 the sky exalts them, and for that day they
 are very nearly unstoppable.
 
 | | |
@@ -174,6 +174,7 @@ Riders are authored on whatever the rule belongs to — a Technique, a Cloth, a 
 | `action-used` | An action or spell is posted to chat | The item posted, against the targets you confirmed |
 | `damage-applied` | Damage from this actor's item lands | The origin's items |
 | `turn-start`, `turn-end` | This actor's turn begins or ends | This actor's items |
+| `aura-tick` | A creature enters this actor's aura, or ends its turn inside it | This actor's items |
 
 A rider with no `event` means `save-rolled`, so every Technique written before events existed still means
 what it meant. A rider with no `outcomes` fires on any outcome — which is what "needles land on any attack
@@ -190,21 +191,41 @@ Two rules keep `action-used` honest, and both matter if you write one:
 
 ### What a rider can do
 
-- **condition** with a `duration` becomes a generated effect granting that condition, the way pf2e ships
-  its own timed conditions — so it expires on its own instead of sitting on the sheet until someone
-  notices. Without a duration it is a plain condition for the table to clear. `max` caps a cumulative one.
-- **effect** applies an authored item from the packs. `stack: true` walks a counter badge up instead of
-  adding a second icon, which is how Scorpio's needles are counted.
-- **save** makes the target roll against the Saint's Cosmo DC and carries its own riders, chosen by the
-  result. This is how "a Will save per unarmed hit" works when there is no chat card to hang buttons on.
-- **choice** whispers the caster a card of buttons and applies the one they pick. Which sense *Tenbu Hōrin*
-  takes and which limb *The Sharpest Sword* severs are decisions, and they belong to the caster — who is
-  often not whoever rolled.
-- **damage** rolls real damage, so immunities and resistances still apply, and posts it to chat.
-- **persistent-damage** applies a bleed or a burn. `perCounter` scales it by a counter the target already
-  carries, which is what makes Scorpio's "1d6 per needle" a single growing wound rather than fifteen.
-- **prompt** whispers the GM. Forced movement and outright death live here: automating half of a rider and
-  being honest about the other half beats guessing which 15 feet.
+The `apply.type` field. All twenty-one are dispatched from one switch, and `npm run test:riders` fails the
+build if this table and that switch disagree — the previous version of this section documented seven.
+
+| `type` | What it does |
+| :-- | :-- |
+| `condition` | Applies a pf2e condition. With a `duration` it becomes a generated effect that expires on its own; without one it is a plain condition for the table to clear. `max` caps a cumulative one. |
+| `effect` | Applies an authored effect item from the packs. `stack: true` walks a counter badge up instead of adding a second icon. |
+| `damage` | Rolls real damage, so immunities and resistances apply, and posts it to chat. |
+| `persistent-damage` | Applies a bleed or a burn. `perCounter` scales it by a counter the target already carries. |
+| `heal` | Heals. Lands on the origin when the rider is `self`. |
+| `save` | The target rolls a save against a class DC and the rider carries its own riders, chosen by the result. |
+| `flat-check` | Rolls a flat check and branches on it. |
+| `counteract` | Rolls a counteract check against an effect. |
+| `death` | Applies dying, or kills outright. |
+| `banish` | Removes a creature from the scene, and brings it back. |
+| `teleport` | Moves along the caster→target line, grid-snapped and clamped to the scene. `measure: "from-origin"` makes it a destination rather than a delta. |
+| `encasement` | Traps a creature in a hazard with its own escape DC. |
+| `escape` | Offers an escape attempt against something holding the target. |
+| `strikes` | Rolls one Strike per confirmed target without increasing MAP, then follows through to damage. |
+| `charge` | Spends from a charge pool. Always the **origin's**, never the target's. |
+| `toggle` | Flips a toggle on the origin. |
+| `equip` | Equips an item on the origin. |
+| `reaction` | Offers the actor a reaction, as buttons on a card. |
+| `prompt` | Whispers the GM. Forced movement and outright death live here: automating half of a rider and being honest about the other half beats guessing which 15 feet. |
+| `choice` | Whispers the caster a card of buttons and applies the one they pick. Which sense *Tenbu Hōrin* takes is a decision, and it belongs to the caster — who is often not whoever rolled. |
+| `readout` | Posts an informational card and touches no sheet. |
+
+**The DC is not always the Saint's.** A `save` rider's `dc` accepts `"cosmo"` (the Saint's), `"reiatsu"`
+(the Soulbound's), `"class"` (whichever class the origin actually has), or a flat number. `"cosmo"` is the
+spelling every one of the 48 Saint Techniques already uses and predates the second class; `"class"` is what
+a rider on a shared item wants.
+
+**A rider is not only a thing done to a target.** Several types act on the origin instead — `heal`,
+`equip`, `toggle` and `strikes` with `self: true` — and three (`prompt`, `choice`, `readout`) produce chat
+output without touching a sheet at all.
 
 ### Areas
 
