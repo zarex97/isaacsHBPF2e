@@ -2389,7 +2389,7 @@ check("and a missing side is never refreshed", rulesAreSafeToRefresh(map1, undef
  * repeatable) and The Balance's Refined clause did too.
  */
 const { shouldCatch: refuses, poolOf, declarationsOn } =
-    await import("../scripts/soulbound/unbroken-chain.mjs");
+    await import("../scripts/refuse-death.mjs");
 const at0 = { next: 0, current: 20, released: true, points: 5 };
 check("a blow that would drop you is caught", refuses({ ...at0 }), true);
 check("a blow that leaves you standing is not", refuses({ ...at0, next: 3 }), false);
