@@ -5,7 +5,13 @@ const MODULE_ID = "isaacs-hb-pf2e";
 
 const EFFECTS_PACK = `${MODULE_ID}.soulbound-effects`;
 
-/** The effect each rung of the ladder wears, by name. Severance is Phase 6's and is not listed yet. */
+/**
+ * The effect each rung wears, by name.
+ *
+ * Severance is absent on purpose: its effect is owned by `severance.mjs`, which holds the Waning table and
+ * the clock. This map is what `enter`/`exit` create and delete, and Severance is neither entered nor left
+ * that way — the capstone grants its effect with a rule element.
+ */
 const EFFECTS = {
     released: "Effect: Released",
     full: "Effect: Full Release",
@@ -30,8 +36,15 @@ async function packedEffect(name) {
     return pack.getDocument(entry._id);
 }
 
-/** What a rung falls back to when it ends. Full Release drops to Released; Released drops to sealed. */
-const FALLBACK = { full: "released", released: "sealed" };
+/**
+ * What a rung falls back to when it ends.
+ *
+ * Severance drops all the way to `sealed` rather than one step, because R-10 takes everything: "you lose
+ * your Released Form, your Release Technique, your Full Release and your entire reiatsu pool". There is no
+ * rung underneath to fall back to — which is what makes it the terminal state rather than a fourth rung
+ * like the others.
+ */
+const FALLBACK = { severance: "sealed", full: "released", released: "sealed" };
 
 /**
  * Which effects a Spirit wears at a given rung, read from the content rather than from a list here.
@@ -202,6 +215,23 @@ export const Release = {
             const total = options.includes("soulbound:kyoka:total");
             await Hypnosis.sweep(actor, { range: total ? 60 : null, includeImmune: total });
         }
+    },
+
+    /**
+     * Enter the fourth and final rung.
+     *
+     * Called from `severance.mjs` when `Effect: Severance` lands, because `Final Release` grants that
+     * effect with a `GrantItem` rule rather than through code — so nothing here is ever the thing that
+     * starts a Severance.
+     *
+     * The ladder is linear (ADR-0002): `sealed → released → full → severance`, and Final Getsuga Tenshou
+     * comes from Bankai, not from Shikai.
+     */
+    async enterSeverance(actor) {
+        if (!Reiatsu.isSoulbound(actor)) return false;
+        if (this.stateOf(actor) !== "full") return false;
+        await actor.setFlag(MODULE_ID, "releaseState", "severance");
+        return true;
     },
 
     async exit(actor, state = this.stateOf(actor)) {
