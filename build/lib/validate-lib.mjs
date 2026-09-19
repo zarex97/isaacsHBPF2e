@@ -114,6 +114,10 @@ const FAMILY_PREFIXES = [
  */
 const CLASS_DC_NAMES = new Set(["cosmo", "reiatsu", "class"]);
 
+// pf2e's Escape offers Acrobatics, Athletics or an unarmed attack roll. The unarmed modifier is built
+// inside the system's own action and is not a rollable statistic, so content may name only the two.
+const ESCAPE_SKILLS = new Set(["acrobatics", "athletics"]);
+
 function isClassDC(dc) {
     return CLASS_DC_NAMES.has(dc) || Number.isInteger(dc);
 }
@@ -1242,6 +1246,19 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
             if (apply.max !== undefined && !(Number.isInteger(apply.max) && apply.max > 0)) {
                 errors.push(`${at} condition max must be a positive integer`);
             }
+            // The grip's way out. Thirteen of these shipped saying `escapeDc: "reiatsu"` while only the
+            // encasement handler read the key, so nine abilities promised an Escape in their description
+            // and held their target for the full duration. The key is honoured now; a misspelt DC here
+            // would put "DC 10" on a captive's sheet and look deliberate, so it fails the build instead.
+            if (apply.escapeDc !== undefined && !isClassDC(apply.escapeDc)) {
+                errors.push(`${at} escapeDc must be one of ${[...CLASS_DC_NAMES].join("/")} or a whole number — got "${apply.escapeDc}"`);
+            }
+            if (apply.escapeStatistic !== undefined && !ESCAPE_SKILLS.has(apply.escapeStatistic)) {
+                errors.push(`${at} escapeStatistic must be one of ${[...ESCAPE_SKILLS].join("/")} — got "${apply.escapeStatistic}"`);
+            }
+            if (apply.escapeStatistic !== undefined && apply.escapeDc === undefined) {
+                errors.push(`${at} escapeStatistic names the skill for an Escape this rider does not grant`);
+            }
             break;
         case "effect":
             if (typeof apply.uuid !== "string") errors.push(`${at} effect riders need a uuid`);
@@ -1449,8 +1466,14 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
             if (apply.dc !== undefined && !(Number(apply.dc) > 0)) {
                 errors.push(`${at} escape riders need a positive dc — got "${apply.dc}"`);
             }
-            if (typeof apply.hazardUuid !== "string") {
-                errors.push(`${at} escape riders need a \`hazardUuid\` naming the shell they break`);
+            // Two shapes, one roll. An encasement's Escape names the hazard it shatters; a condition's
+            // names the conditions it lifts. Both are written by the engine rather than by hand — this is
+            // the guard for the day one is authored in content.
+            if (typeof apply.hazardUuid !== "string" && !(apply.conditions?.length > 0)) {
+                errors.push(
+                    `${at} escape riders need a \`hazardUuid\` naming the shell they break, or `
+                        + `\`conditions\` naming what they lift`,
+                );
             }
             if (rider.self !== true) errors.push(`${at} an escape rider must be \`self\`: it is the captive's own action`);
             break;

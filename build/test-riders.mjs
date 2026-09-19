@@ -1275,7 +1275,12 @@ check("no script holds a compendium uuid by name", scriptUuids, []);
 // pf2e emits `feature:<slug>` for a feature, and `self:` only ever prefixes effects and a few actor
 // facts; there is no `self:feature:` anywhere in the system. The predicate reads perfectly, matches
 // nothing, and the only symptom is a rider that quietly never fires.
-const DEAD_OPTIONS = ["item:time:", "self:feature:"];
+// `action:jump` is the third of the family, and the one that reads most like it must exist. pf2e has no
+// Jump action: **Leap** is the basic move, and the two Athletics actions are **High Jump** and **Long
+// Jump**, emitting `action:leap`, `action:high-jump` and `action:long-jump`. Capricorn's domain clause
+// said `action:jump` in all four Sky Aspect effects, so a Capricorn sky helped a Saint climb and swim and
+// never once helped them jump.
+const DEAD_OPTIONS = ["item:time:", "self:feature:", "action:jump"];
 const retired = [];
 for (const [file, doc] of (() => {
     const found = [];
@@ -1881,6 +1886,91 @@ for (const [dir, at] of [["sky-ascendant", 8], ["sky-zenith", 5]]) {
     check("the coffin is Hardness 30 / 120 HP, fixed — the guide gives it no heightening", [ice.apply.hardness, ice.apply.hp, ice.apply.hardnessPerStep, ice.apply.hpPerStep], [30, 120, undefined, undefined]);
     check("critical failure petrifies through the coffin, with no Escape — it cannot act to attempt one", [ice.apply.conditions, ice.apply.escapeDc], [["petrified"], undefined]);
     check("no bare prompt is left describing the coffin", coffin.filter((r) => r.apply.type === "prompt"), []);
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  The Escape a condition rider promises                                                        */
+/* -------------------------------------------------------------------------------------------- */
+
+/**
+ * `escapeDc` on a condition rider used to be a comment.
+ *
+ * Only the encasement handler read the key, so the thirteen condition riders that carry it — across nine
+ * Soulbound abilities, every one of whose descriptions says "(Escape against your Reiatsu DC)" — applied
+ * their condition with a timer and granted nothing. The captive's only way out was to wait. Neither
+ * `immobilized` nor `restrained` has a native Escape, and `grabbed`'s has no DC, so pf2e could not supply
+ * it either.
+ */
+const { ESCAPE_DC_TYPES, escapeActionSource, escapeStatisticFor } = await import("../scripts/riders/escape.mjs");
+
+{
+    // The guard that keeps it honest: an `escapeDc` written on any other rider type is a promise with no
+    // handler behind it, which is the shape this whole fix exists to remove.
+    const stray = [];
+    const seen = [];
+    const walkApplies = (node, file) => {
+        if (Array.isArray(node)) return node.forEach((v) => walkApplies(v, file));
+        if (!node || typeof node !== "object") return;
+        if (node.escapeDc !== undefined) {
+            seen.push(`${file}:${node.type}`);
+            if (!ESCAPE_DC_TYPES.has(node.type)) stray.push(`${file} (${node.type})`);
+        }
+        for (const value of Object.values(node)) walkApplies(value, file);
+    };
+    const walkContent = (at) => {
+        for (const entry of fs.readdirSync(at, { withFileTypes: true })) {
+            const full = path.join(at, entry.name);
+            if (entry.isDirectory()) walkContent(full);
+            else if (entry.name.endsWith(".json")) {
+                walkApplies(JSON.parse(fs.readFileSync(full, "utf8")), path.relative(ROOT, full));
+            }
+        }
+    };
+    walkContent(path.join(ROOT, "content"));
+    check("every escapeDc in the content sits on a rider type that grants one", stray, []);
+    check("and there are still fourteen of them to grant", seen.length, 14);
+
+    const item = { name: "Sai — Restrain", uuid: "Compendium.isaacs-hb-pf2e.soulbound-kido.Item.0123456789abcdef", img: "sai.webp" };
+    const source = escapeActionSource({
+        item,
+        dc: 27,
+        release: { conditions: ["immobilized"], effectId: "effect01", source: item.uuid, name: item.name },
+    });
+    check(
+        "the Escape is a one-action item named for what holds you",
+        [source.type, source.name, source.system.actions.value],
+        ["action", "Escape Sai — Restrain", 1],
+    );
+    check("its card names the DC, because nothing else will", source.system.description.value.includes("DC 27"), true);
+    check("and offers the two skills a check can be rolled for", source.system.description.value.includes("Acrobatics or Athletics"), true);
+
+    const rider = source.flags["isaacs-hb-pf2e"].riders[0];
+    check(
+        "using it rolls the escape on the captive's own sheet",
+        [rider.event, rider.self, rider.apply.type, rider.apply.dc],
+        ["action-used", true, "escape", 27],
+    );
+    check("and says what breaking free lifts", [rider.apply.effectId, rider.apply.conditions], ["effect01", ["immobilized"]]);
+    check(
+        "the grip is named on the rider, so renaming the action cannot change what chat says",
+        rider.apply.name,
+        "Sai — Restrain",
+    );
+    check(
+        "the same release is on the item, so an expiring effect can take it back down",
+        source.flags["isaacs-hb-pf2e"].escape.effectId,
+        "effect01",
+    );
+
+    const named = escapeActionSource({ item, dc: 20, statistic: "athletics", release: { conditions: ["grabbed"] } });
+    check("content may name one skill instead", named.system.description.value.includes("an Athletics check"), true);
+
+    const stub = (acrobatics, athletics) => ({
+        getStatistic: (slug) => ({ acrobatics: { slug: "acrobatics", mod: acrobatics }, athletics: { slug: "athletics", mod: athletics } })[slug],
+    });
+    check("the captive rolls their better skill", escapeStatisticFor(stub(9, 14)).slug, "athletics");
+    check("either way round", escapeStatisticFor(stub(15, 14)).slug, "acrobatics");
+    check("unless the rider named one", escapeStatisticFor(stub(15, 14), "athletics").slug, "athletics");
 }
 
 /** Freezing Shield's aura actually ticks now, through the generic marker every future aura can reuse. */

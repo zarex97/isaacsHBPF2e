@@ -10,6 +10,7 @@ import { Om } from "./roll-rewrites/om.mjs";
 import { Banish } from "./riders/banish.mjs";
 import { registerHooks as registerLibraHooks } from "./riders/libra.mjs";
 import { Encasement } from "./riders/encasement.mjs";
+import { Escape } from "./riders/escape.mjs";
 import { Riders } from "./riders/index.mjs";
 import { MODULE_ID, adjacentSigns } from "./sky/signs.mjs";
 import { SkyTrackerApp } from "./sky/tracker-app.mjs";
@@ -71,6 +72,7 @@ Hooks.once("init", () => {
     start("The Balance", () => Balance.registerHooks());
     start("the Crystal Wall", () => CrystalWall.registerHooks());
     start("encasements", () => Encasement.registerHooks());
+    start("escapes", () => Escape.registerHooks());
     start("the Libra Arms", () => registerLibraHooks());
     start("the spirit weapon", () => SpiritWeapon.registerHooks());
     start("Reiatsu", () => Reiatsu.registerHooks());
