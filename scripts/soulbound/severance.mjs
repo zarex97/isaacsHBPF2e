@@ -189,6 +189,10 @@ export const Severance = {
         const { Release } = await import("./release.mjs");
         await Release.exit(actor, "full");
         await Release.exit(actor, "released");
+        // `exit` only falls back from the rung the actor is standing on, and after ADR-0002 that rung is
+        // `severance` — so neither call above touches the flag and the character would be left reading as
+        // mid-capstone forever. R-10 takes everything, so the ladder goes to the bottom, not one step.
+        await actor.setFlag(MODULE_ID, "releaseState", "sealed");
 
         const doc = await packed(SPENT);
         if (doc) await actor.createEmbeddedDocuments("Item", [foundry.utils.deepClone(doc.toObject())]);
@@ -202,6 +206,43 @@ export const Severance = {
     },
 
     registerHooks() {
+        /**
+         * Stamp the round Severance began, and refuse it from the wrong rung.
+         *
+         * `Final Release` grants `Effect: Severance` with a `GrantItem` rule, so `begin()` — the only
+         * thing that ever wrote `severanceBegan` — was never reached. Without that stamp
+         * `roundOfSeverance` returns 0, `waningDice(0)` returns 0, and `beforeCast` refuses the Severing
+         * Art as "decayed past use". The capstone's entire payoff was unreachable.
+         *
+         * preCreate rather than create: the Waning table is read during preparation, and a `setFlag`
+         * after the fact is a second write that the preparation triggered by the creation itself misses.
+         */
+        Hooks.on("preCreateItem", (item) => {
+            if (item.name !== SEVERANCE) return true;
+            const actor = item.parent;
+            if (!actor || !Reiatsu.isSoulbound(actor)) return true;
+            const round = this.encounterFor(actor)?.round;
+            item.updateSource({
+                [`flags.${MODULE_ID}.severanceBegan`]:
+                    Number.isInteger(round) && round > 0 ? round : 1,
+            });
+            return true;
+        });
+
+        /** Move the ladder to its fourth rung once the effect has actually landed. */
+        Hooks.on("createItem", async (item) => {
+            if (item.name !== SEVERANCE) return;
+            const actor = item.parent;
+            if (!game.user.isGM || !actor || !Reiatsu.isSoulbound(actor)) return;
+            const { Release } = await import("./release.mjs");
+            if (!(await Release.enterSeverance(actor))) {
+                ui.notifications?.warn(
+                    "Severance begins from a Full Release. The effect is on the sheet, but the release "
+                    + "ladder was not advanced.",
+                );
+            }
+        });
+
         // The clock. Severance lasts ten rounds; the eleventh ends it whether or not the Art was used.
         Hooks.on("combatTurnChange", async () => {
             if (!game.user.isGM) return;
