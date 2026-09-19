@@ -7,12 +7,22 @@ each. Source: `Docs/soulbound-guide-v1.md` v1.4 §7A (Hyōrinmaru) and §9.1 (Hy
 
 **Open findings:** [#52 SB-48](../../issues/52) Spirit-Cutting is prose · [#53 SB-49](../../issues/53) Strike Techniques fire free · [#54 SB-50](../../issues/54) Ryūsenka's critical die
 
-**Not yet drivable.** Nine clauses wait on the harness rather than on the code: an area
-Technique's placement is confirmed by a click on the PIXI stage, and `canvas.regions.placeRegion`
-re-centres the view on the preview between the aim and the click, so a synthetic pointer event
-lands somewhere the preview is not. S-19b–S-19g, S-20b, S-20c and S-21a–S-21c are all behind that
-one gate. Turning `areaTargeting` off routes around the placement but also skips the card and the
-saves, so it proves nothing.
+**Not yet driven — and the reason changed on 19 Sep 2026.** Nine clauses wait: S-19b–S-19g,
+S-20b, S-20c and S-21a–S-21c.
+
+*The aiming is solved.* Driving the world through the Claude Chrome extension instead of
+`chrome-devtools` puts **real** pointer input on the canvas, and `canvas.regions.placeRegion`
+accepts it: the 20-foot burst places and the module's own *Confirm targets* dialog opens naming
+every token inside it. Synthetic `PointerEvent`s never reached that step, because the layer
+re-centres the view on the preview between the aim and the click.
+
+*The blocker now is the test data.* `catch.mjs:53` filters an `enemies` area with
+`actor.isEnemyOf(originActor)`. The 17th-level test character **123** has `alliance: "opposition"`,
+and so do `D1` and `D2` — so from that caster nothing on the scene is an enemy and the dialog
+reports *"nothing in the area can be targeted"*. `ZZ SR — Hyorinmaru` is `alliance: "party"` and
+`D1.actor.isEnemyOf(sr)` returns **true**, so the next drive should cast from it. Note that
+disposition writes on this world's tokens are silently reverted — the update resolves without error
+and the value stays — so switching caster is cheaper than fixing the dummies.
 
 ---
 
