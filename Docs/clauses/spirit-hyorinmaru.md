@@ -5,54 +5,27 @@ each. Source: `Docs/soulbound-guide-v1.md` v1.4 §7A (Hyōrinmaru) and §9.1 (Hy
 
 **Lineage:** Soul Reaper · **Ladder:** Shikai → Bankai · **Tracker issue:** #51
 
-**Open findings:** [#52 SB-48](../../issues/52) Spirit-Cutting is prose · [#53 SB-49](../../issues/53) Strike Techniques fire free · [#54 SB-50](../../issues/54) Ryūsenka's critical die
+**Open findings:** [#52 SB-48](../../issues/52) Spirit-Cutting is prose · [#53 SB-49](../../issues/53) Strike Techniques fire free · [#54 SB-50](../../issues/54) Ryūsenka's critical die · [#55 SB-51](../../issues/55) rider durations end a turn early
 
-**Not yet driven — and the reason changed on 19 Sep 2026.** Nine clauses wait: S-19b–S-19g,
-S-20b, S-20c and S-21a–S-21c.
+**Four clauses still undriven, and the three gates are now behind us.**
 
-*The aiming is solved.* Driving the world through the Claude Chrome extension instead of
-`chrome-devtools` puts **real** pointer input on the canvas, and `canvas.regions.placeRegion`
-accepts it: the 20-foot burst places and the module's own *Confirm targets* dialog opens naming
-every token inside it. Synthetic `PointerEvent`s never reached that step, because the layer
-re-centres the view on the preview between the aim and the click.
+The area Techniques drive end to end through the Claude Chrome extension. Three things had to be
+true at once, and each one looked like the whole problem until the next appeared: real pointer input
+reaches the PIXI stage where a synthetic `PointerEvent` does not; the caster must be **party**-aligned
+for an `enemies` area to catch anything, so drives use `ZZ SR — Hyorinmaru` rather than the
+opposition-aligned `123`; and the confirming click places the area **where the preview sits**, so the
+cursor has to be moved and read back through `canvas.mousePosition` before clicking.
 
-*The second gate, found 19 Sep 2026: the burst does not follow the cursor.* Clicking the canvas
-confirms the area **where it already sits** — anchored near the caster — not where the pointer is.
-The module's own dialog says so in one line: *"Re-aim puts the area back on the cursor."* Four
-correctly-aimed clicks all placed the burst on the caster's own square, catching its allies. The
-next drive must press **Re-aim** first, or aim by moving the caster rather than the cursor.
+What remains is not the harness. **S-19g** and **S-20c** are the two heightening clauses: a cast
+ignores an explicit `rank` argument and uses the auto-heighten rank, which for a 13th-level Soulbound
+is the spell's own base rank 7, where no interval applies. Proving them needs a caster above 14th who
+is also party-aligned. **S-16b** and **S-21c** are the returning blade and the shattering doll, both
+cosmetic riders with no sheet effect to read.
 
-*The third gate is the test data.* `catch.mjs:53` filters an `enemies` area with
-`actor.isEnemyOf(originActor)`. The 17th-level test character **123** has `alliance: "opposition"`,
-and so do `D1` and `D2` — so from that caster nothing on the scene is an enemy and the dialog
-reports *"nothing in the area can be targeted"*. `ZZ SR — Hyorinmaru` is `alliance: "party"` and
-`D1.actor.isEnemyOf(sr)` returns **true**, so the next drive should cast from it. Note that
-disposition writes on this world's tokens are silently reverted — the update resolves without error
-and the value stays — so switching caster is cheaper than fixing the dummies.
-
----
-
-## How a row is marked
-
-| Mark | Meaning |
-| :-- | :-- |
-| ☐ | Not yet driven |
-| ✅ | Driven live; the clause happened by itself |
-| ⚠️ | Driven live; partially happens — the gap is named in **Evidence** |
-| ❌ | Driven live; does not happen |
-| 🔧 | Was ❌ or ⚠️, a fix has landed, awaiting re-drive |
-| — | Nothing to automate (pure roleplaying / GM ruling) |
-
-**Clause** is a verbatim fragment of the guide. `build/check-clauses.mjs` asserts it still is one, so
-a paraphrase here or an edit to the guide fails the build.
-
-**Static check** names the assertion in `build/test-soulbound.mjs` or `build/test-riders.mjs` that
-guards the clause against a later edit. **Evidence** names what proved it happened at the table. A
-clause needs both: live evidence alone rots the moment someone edits the JSON, and a static check
-alone can assert a broken spelling.
-
-A row inherits its ✅ only where the old checklist's evidence names *that* clause. Siblings of a
-split row start ☐ even when the row they came from passed.
+*Harness notes for the next drive.* `canvas.pan` returns immediately where `canvas.animatePan` times
+out the extension's script channel. Token disposition writes are silently reverted in this world —
+the update resolves without error and the value does not change — so pick a caster whose alliance
+already fits rather than editing the dummies.
 
 ---
 
@@ -97,15 +70,15 @@ split row start ☐ even when the row they came from passed.
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| S-19a | Sennen Hyōrō | Four walls of ice erupt in a 20-foot burst within 60 feet |  | ✅ | Live: the card posts **Range 60 feet; Area 20-foot burst, Defense basic Reflex** |
-| S-19b | Sennen Hyōrō | Each enemy in the area attempts a Reflex save |  | ☐ |  |
-| S-19c | Sennen Hyōrō | on a failure it takes 5d6 cold damage |  | ☐ |  |
-| S-19d | Sennen Hyōrō | is immobilized until the end of its next turn |  | ☐ |  |
-| S-19e | Sennen Hyōrō | on a critical failure it is restrained for 1 minute instead |  | ☐ |  |
-| S-19f | Sennen Hyōrō | Escape vs. your Reiatsu DC |  | 🔧 | Fixed under #43. Driven live on 19 Sep 2026 at the caster's own Reiatsu DC via the rider; awaiting a drive through the Technique |
+| S-19a | Sennen Hyōrō | Four walls of ice erupt in a 20-foot burst within 60 feet |  | ✅ | Live 19 Sep 2026: the card posts **Range 60 feet; Area 20-foot burst, Defense basic Reflex**, and the placed burst caught three enemies |
+| S-19b | Sennen Hyōrō | Each enemy in the area attempts a Reflex save |  | ✅ | Live: D1, D2 and ZZ Victim each rolled a Reflex save at **DC 27**, the caster's Reiatsu DC — 20, 30 and 17 |
+| S-19c | Sennen Hyōrō | on a failure it takes 5d6 cold damage |  | ✅ | Live: **5d6 cold**. The basic-save ladder applied on the card — D2 succeeded and took half, ZZ Victim critically failed and took double |
+| S-19d | Sennen Hyōrō | is immobilized until the end of its next turn |  | ⚠️ | Live: D1's failure applied **Immobilized** plus `Sennen Hyōrō: Immobilized`. The effect expires `1 round, turn-start`, which ends at the start of its next turn rather than the end. **SB-51**, see #55 |
+| S-19e | Sennen Hyōrō | on a critical failure it is restrained for 1 minute instead |  | ✅ | Live: ZZ Victim rolled 17 against DC 27, a critical failure, and took **Restrained** for a duration of `1 minute` instead of the failure's immobilize |
+| S-19f | Sennen Hyōrō | Escape vs. your Reiatsu DC |  | ✅ | Live: `Escape Sennen Hyōrō` granted at **DC 27**, the caster's own Reiatsu DC |
 | S-19g | Sennen Hyōrō | Heightened (+1) +1d6 |  | ☐ |  |
-| S-20a | Hyōryū Senbi | 60-foot line, basic Reflex, 5d6 cold damage |  | ✅ | The card posts a 60-foot line, basic Reflex, and the cast spends one petal and one Reiatsu Point (ported from S-20) |
-| S-20b | Hyōryū Senbi | creatures that fail are slowed 1 until the end of their next turn |  | ☐ |  |
+| S-20a | Hyōryū Senbi | 60-foot line, basic Reflex, 5d6 cold damage |  | ✅ | Live: the card posts **Range 60 feet; Area 60-foot line, Defense basic Reflex**, the line placed and caught two enemies, and damage rolled **5d6 cold** |
+| S-20b | Hyōryū Senbi | creatures that fail are slowed 1 until the end of their next turn |  | ⚠️ | Live: Phantom Knight and `ar` both failed at DC 27 and took `Hyōryū Senbi: Slowed 1`. Same duration gap as S-19d — `turn-start` where the guide says the end of its next turn. **SB-51** |
 | S-20c | Hyōryū Senbi | Heightened (+1) +1d6 |  | ☐ |  |
 | S-21a | Zanhyō Ningyō | Trigger you are hit by an attack |  | ⚠️ | Authored as a `damage-applied` reaction, which fires on damage rather than on the hit (ported from S-21) |
 | S-21b | Zanhyō Ningyō | Reduce the damage by an amount equal to twice your level |  | ⚠️ | Granted as `Effect: Remnant Ice Doll`, resistance to all damage `@actor.level*2`; not yet driven (ported from S-21) |
@@ -133,10 +106,10 @@ split row start ☐ even when the row they came from passed.
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 9 |
-| ✅ | 17 |
-| ⚠️ | 4 |
+| ☐ | 4 |
+| ✅ | 21 |
+| ⚠️ | 6 |
 | ❌ | 2 |
-| 🔧 | 3 |
+| 🔧 | 2 |
 | — | 1 |
 | **Total** | **36** |
