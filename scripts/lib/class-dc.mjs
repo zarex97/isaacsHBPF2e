@@ -20,6 +20,26 @@ export function classSlugOf(actor) {
  * when a statistic has not been prepared yet — the same belt-and-braces the Saint's `resolveDC` already
  * had, kept rather than tidied away.
  */
+/**
+ * A class DC — the Saint's Cosmo or the Soulbound's Reiatsu — or a flat number written in the content.
+ *
+ * All three spellings are kept. `"cosmo"` is the Saint's own and predates the second class, so the shipped
+ * Saint content already says it — mostly on class-feature actions and sky effects; rewriting them to prove a
+ * point is how content breaks. `"class"` means whichever class the origin actually has, which is what a
+ * rider on a shared item wants.
+ *
+ * Returns `null` for a spelling it does not recognise, deliberately: a caller that cannot resolve a DC
+ * should say so rather than invent one. `encasement.mjs` used to keep a private copy of this that knew only
+ * `"cosmo"` and fell through to a hard-coded 10, so a Soulbound rider would have silently been handed a DC
+ * everything passes.
+ */
+export function resolveDC(dc, context) {
+    if (typeof dc === "number") return dc;
+    const slug = { cosmo: "saint", reiatsu: "soulbound", class: null }[dc];
+    if (slug === undefined) return null;
+    return classStatisticOf(context.originActor, slug)?.dc?.value ?? null;
+}
+
 export function classStatisticOf(actor, slug = null) {
     const wanted = slug ?? classSlugOf(actor);
     if (!wanted) return null;

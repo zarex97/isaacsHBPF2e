@@ -38,13 +38,14 @@ export const AreaTargeting = {
 
         game.settings.register(MODULE_ID, "areaTargetingScope", {
             name: "Area targeting applies to",
-            hint: "Whether area targeting is used only for the Saint's Techniques, or for every spell with "
+            hint: "Whether area targeting is used only for Techniques — the Saint's and the Soulbound's alike — "
+                + "or for every spell with "
                 + "an area in the world.",
             scope: "world",
             config: true,
             type: String,
             choices: {
-                techniques: "The Saint's Techniques only",
+                techniques: "Techniques only (Saint and Soulbound)",
                 spells: "Every spell with an area",
             },
             default: "techniques",
