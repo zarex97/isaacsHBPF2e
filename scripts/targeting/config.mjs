@@ -160,7 +160,7 @@ export function feetOf(range) {
  * A focus effect belonging to one of this module's classes.
  *
  * `cosmo` is the Saint's Technique trait and `reiatsu` the Soulbound's. Area targeting keys off this to
- * decide whether the "Saint's Techniques only" world setting covers a given cast, so a Soulbound
+ * decide whether the "Techniques only" world setting covers a given cast, so a Soulbound
  * Technique with an area would otherwise fall back to manual targeting with no symptom but the silence.
  */
 export function isTechnique(item) {

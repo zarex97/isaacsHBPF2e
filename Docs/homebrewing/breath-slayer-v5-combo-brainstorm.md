@@ -400,7 +400,7 @@ Non-negotiable mitigations:
 
 ### 7.5 Automation is genuinely feasible
 
-The module already has the machinery: `scripts/riders/`, `scripts/outcomes/`, `scripts/economy/`, and the
+The module already has the machinery: `scripts/riders/`, `scripts/roll-rewrites/`, `scripts/economy/`, and the
 Saint's Om-stack system (automation programme, §"Om spends for real") is *exactly* a counter that
 accrues, buffs a nominated roll, and lapses. A Breath Count effect with a counter badge plus the existing
 `counterThresholds` flag covers §4.2 and §4.3 nearly directly.
