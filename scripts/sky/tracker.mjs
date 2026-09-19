@@ -4,6 +4,16 @@ const SETTING = "sky";
 const EFFECT_FLAG = "skyEffect";
 const QUEUE_LENGTH = 7;
 
+/** An NPC opts into the Sky by tag, the same idiom `clothOf` uses to find a Cloth. */
+const TERRAIN_TAG = "sky-tracked";
+
+/** Shelter of the Cloth: allies within 30 feet treat the aspect as one step milder. */
+const SHELTER_SLUG = "shelter-of-the-cloth";
+const SHELTER_FEET = 30;
+
+/** One step milder, and the only two aspects that have a milder step. */
+const MILDER = { malefic: "retrograde", retrograde: "none" };
+
 /**
  * The sky's state and the only code that touches actors because of it.
  *
@@ -184,49 +194,160 @@ export const SkyTracker = {
         return actor.itemTypes.effect.filter((e) => e.getFlag(MODULE_ID, EFFECT_FLAG));
     },
 
+    /**
+     * Who the Sky lands on.
+     *
+     * ADR-0001 makes the Sky terrain: it applies to every creature, the ogre included. Its amendment draws
+     * the line where a machine can see it — guide v3 §8.4 says "track it for PCs and named NPCs only;
+     * −1 on a mook is noise", and Foundry has no marker for a named NPC — so characters are automatic and
+     * NPCs opt in by tag.
+     *
+     * Scene-scoped, not world-scoped: a world with hundreds of actors, most of them monsters in unopened
+     * folders, should not carry sky effects on all of them.
+     *
+     * Saints are added regardless of scene, because their Ascendant and Zenith boons are a class feature
+     * rather than weather — the Cloth is theirs wherever they stand.
+     */
+    audience() {
+        const found = new Map();
+        for (const token of game.scenes?.active?.tokens ?? []) {
+            const actor = token.actor;
+            if (!actor) continue;
+            const tagged = (actor.system?.traits?.otherTags ?? []).includes(TERRAIN_TAG);
+            if (actor.type === "character" || tagged) found.set(actor.id, actor);
+        }
+        for (const saint of this.saints()) found.set(saint.id, saint);
+        return [...found.values()];
+    },
+
+    /**
+     * The aspect this actor actually suffers, after the two features that exist to soften it.
+     *
+     * Both shipped with live rule elements and no consumer: `Unfailing Cosmo` emits
+     * `saint:unfailing-cosmo` and nothing read it, and `Shelter of the Cloth` carries a 30-foot `Aura`
+     * that nothing read either. The immunity used to be "implemented" only because this whole routine
+     * never ran on anyone but a Saint.
+     *
+     * Only the negative half is softened. Nothing mitigates a kindness.
+     */
+    aspectFor(actor) {
+        const { aspect } = this.state;
+        if (!MILDER[aspect]) return aspect;
+        const options = actor.getRollOptions?.() ?? [];
+        if (options.includes("saint:unfailing-cosmo")) return "none";
+        return this.isSheltered(actor) ? MILDER[aspect] : aspect;
+    },
+
+    /** Within 30 feet of a Saint whose Cloth spills far enough to shade them. */
+    isSheltered(actor) {
+        const scene = game.scenes?.active;
+        if (!scene) return false;
+        const mine = scene.tokens.filter((t) => t.actor?.id === actor.id);
+        if (mine.length === 0) return false;
+        const shelters = scene.tokens.filter((t) => (t.actor?.itemTypes?.feat ?? []).some(
+            (f) => (f.system?.rules ?? []).some((r) => r.key === "Aura" && r.slug === SHELTER_SLUG),
+        ));
+        for (const token of mine) {
+            for (const shelter of shelters) {
+                if (shelter.actor?.id === actor.id) continue;
+                const feet = canvas?.grid?.measurePath?.([token.object?.center ?? token, shelter.object?.center ?? shelter])?.distance
+                    ?? Infinity;
+                if (feet <= SHELTER_FEET) return true;
+            }
+        }
+        return false;
+    },
+
     async applyToAll() {
         if (!game.user.isGM) return;
-        for (const actor of this.saints()) await this.applyTo(actor);
+        const seen = new Set();
+        for (const actor of this.audience()) { seen.add(actor.id); await this.applyTo(actor); }
+
+        /**
+         * Sweep anyone still wearing a sky effect who is no longer in the audience.
+         *
+         * Leaving the audience is not a rare case: an NPC loses its opt-in tag, a token is deleted from
+         * the scene, a character walks into a different scene. `applyTo` only ever visits the audience, so
+         * without this the effect is orphaned on the sheet and nothing will ever take it off — which is
+         * exactly what untagging an NPC did the first time this was tested.
+         */
+        for (const actor of game.actors) {
+            if (seen.has(actor.id)) continue;
+            const ours = this.ownedEffects(actor);
+            if (ours.length > 0) await actor.deleteEmbeddedDocuments("Item", ours.map((e) => e.id));
+        }
+    },
+
+    /** Every sky effect this actor should be wearing right now, by name. */
+    wantedFor(actor) {
+        const { sign } = this.state;
+        const wanted = [];
+
+        // The Saint's own boon: their Cloth's sign is up.
+        const cloth = this.clothOf(actor);
+        if (cloth && cloth === sign) {
+            const tier = this.state.aspect === "exalted" ? "Zenith" : "Ascendant";
+            wanted.push(`Sky: ${tier} (${signOf(sign).label})`);
+        }
+
+        // The terrain everyone stands in. Starless is a real sky with nothing written in it, and a Quiet
+        // day has no modifier to carry, so neither produces an effect.
+        const aspect = this.aspectFor(actor);
+        if (sign !== "starless" && aspect !== "none") wanted.push(`Sky: ${aspectOf(aspect).label}`);
+        return wanted;
     },
 
     async applyTo(actor) {
         if (!game.user.isGM) return;
-        const cloth = this.clothOf(actor);
-        const { sign, aspect } = this.state;
-        const lit = cloth && cloth === sign;
-        const tier = lit ? (aspect === "exalted" ? "Zenith" : "Ascendant") : null;
-        const wanted = tier ? `Sky: ${tier} (${signOf(sign).label})` : null;
-
-        // Malefic and Retrograde riders are never applied to a Saint at all. That is Unfailing Cosmo (1st
-        // level), enforced here rather than left to the GM to remember.
+        const wanted = new Set(this.wantedFor(actor));
 
         const existing = this.ownedEffects(actor);
-        const keep = wanted ? existing.filter((e) => e.name === wanted) : [];
-        const remove = existing.filter((e) => !keep.includes(e));
+        const keep = existing.filter((e) => wanted.has(e.name));
+        const remove = existing.filter((e) => !wanted.has(e.name));
         if (remove.length > 0) {
-            await actor.deleteEmbeddedDocuments(
-                "Item",
-                remove.map((e) => e.id),
-            );
+            await actor.deleteEmbeddedDocuments("Item", remove.map((e) => e.id));
         }
-        if (!wanted || keep.length > 0) return;
+
+        const held = new Set(keep.map((e) => e.name));
+        const missing = [...wanted].filter((name) => !held.has(name));
+        if (missing.length === 0) return;
 
         const pack = game.packs.get(`${MODULE_ID}.saint-effects`);
         if (!pack) return;
-        const index = pack.index.find((e) => e.name === wanted);
-        if (!index) {
-            console.warn(`${MODULE_ID} | no sky effect named "${wanted}" in the effects pack`);
-            return;
+        const sources = [];
+        for (const name of missing) {
+            const index = pack.index.find((e) => e.name === name);
+            if (!index) {
+                console.warn(`${MODULE_ID} | no sky effect named "${name}" in the effects pack`);
+                continue;
+            }
+            const source = (await pack.getDocument(index._id)).toObject();
+            source.flags = foundry.utils.mergeObject(source.flags ?? {}, { [MODULE_ID]: { [EFFECT_FLAG]: true } });
+            /**
+             * Stamp the day's sign onto the effect on its way to the sheet.
+             *
+             * The four terrain effects are one item each for all twelve signs — four documents instead of
+             * forty-eight — so their modifiers predicate on `sky:sign:<id>` and something has to emit it.
+             * A lit Saint's Ascendant item already carries the same option; a second identical RollOption
+             * is idempotent, so this is unconditional rather than guessing which kind of effect it is.
+             *
+             * Stamped on the source rather than set afterwards, the same reasoning as
+             * `applyFullReleaseShape`: a rule added after creation misses the preparation the creation
+             * itself triggers.
+             */
+            source.system.rules = [
+                { key: "RollOption", option: `sky:sign:${this.state.sign}` },
+                ...(source.system.rules ?? []),
+            ];
+            sources.push(source);
         }
-        const source = (await pack.getDocument(index._id)).toObject();
-        source.flags = foundry.utils.mergeObject(source.flags ?? {}, { [MODULE_ID]: { [EFFECT_FLAG]: true } });
-        await actor.createEmbeddedDocuments("Item", [source]);
+        if (sources.length > 0) await actor.createEmbeddedDocuments("Item", sources);
     },
 
-    /** Strip our sky effects from every Saint — used when the module is disabled mid-session. */
+    /** Strip our sky effects from everyone wearing one — used when the module is disabled mid-session. */
     async clearAll() {
         if (!game.user.isGM) return;
-        for (const actor of this.saints()) {
+        for (const actor of this.audience()) {
             const ours = this.ownedEffects(actor);
             if (ours.length > 0) {
                 await actor.deleteEmbeddedDocuments(
