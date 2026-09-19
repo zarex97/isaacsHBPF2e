@@ -1540,7 +1540,7 @@ The awkward one, and the reason this class needs more automation work than the S
   expiring at the start of your next turn is enough.
 - **Portent** is a macro and a flag — `actor.setFlag("world", "portent", value)` — applied by hand.
   Replacing a d20 result programmatically fights pf2e's dice pipeline and is not worth it. The Saint's
-  `scripts/outcomes/` helpers see the die after the fact, which is the wrong side of the roll for this.
+  `scripts/roll-rewrites/` helpers see the die after the fact, which is the wrong side of the roll for this.
   Roll it at daily preparations, whisper it, and let the player say when.
 
 ### 11.4 The Sky — what v3 already changed in code

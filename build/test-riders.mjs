@@ -695,7 +695,7 @@ function mjsUnder(dir) {
  * ceiling is the part worth pinning down — five normally, seven only on a day Virgo is ascendant — because
  * the badge is authored with room for seven and nothing else says which of the two applies.
  */
-const { Om } = await import("../scripts/outcomes/om.mjs");
+const { Om } = await import("../scripts/roll-rewrites/om.mjs");
 const omEffect = load("saint-effects", "activities", "effect-om.json");
 const sky = (options) => ({ getRollOptions: () => options });
 

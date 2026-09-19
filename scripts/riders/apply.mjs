@@ -1,9 +1,15 @@
-import { classSlugOf, classStatisticOf } from "../lib/class-dc.mjs";
+import { classSlugOf, classStatisticOf, resolveDC } from "../lib/class-dc.mjs";
 import { describeActor, describeDamage, riderOptions, testPredicate } from "../lib/roll-options.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 
-/** The Waning dice for an actor, read lazily so this module does not import the ladder. */
-function SeveranceDice(actor) {
+/**
+ * The Soulbound's Severance Waning dice for an actor, read lazily so this module does not import the ladder.
+ *
+ * Named for its class on purpose: this file also dispatches the Saint's `severed-limb` / `severed-sense`
+ * riders from Capricorn's Excalibur, and a bare `SeveranceDice` in shared code reads as though one class
+ * owns the root word. `CONTEXT.md` keeps **Severed** and **Severance** apart.
+ */
+function soulboundSeveranceDice(actor) {
     return game.modules.get(MODULE_ID)?.api?.severance?.dice?.(actor) ?? 0;
 }
 import { catchTokens } from "../targeting/catch.mjs";
@@ -1804,21 +1810,6 @@ export async function runSave(spec, context) {
     }
 }
 
-/**
- * A class DC — the Saint's Cosmo or the Soulbound's Reiatsu — or a flat number written in the content.
- *
- * All three spellings are kept. `"cosmo"` is the Saint's own and predates the second class, so the shipped
- * Saint content already says it — mostly on class-feature actions and sky effects; rewriting them to prove a
- * point is how content breaks.
- * `"class"` means whichever class the origin actually has, which is what a rider on a shared item wants.
- */
-function resolveDC(dc, context) {
-    if (typeof dc === "number") return dc;
-    const slug = { cosmo: "saint", reiatsu: "soulbound", class: null }[dc];
-    if (slug === undefined) return null;
-    return classStatisticOf(context.originActor, slug)?.dc?.value ?? null;
-}
-
 function counterOn(actor, uuid) {
     const effect = actor.itemTypes.effect.find((e) => e.sourceId === uuid);
     const badge = effect?.system?.badge;
@@ -1991,7 +1982,7 @@ function resolveFromOrigin(expression, context) {
     // what the table says in the round it actually lands, not what the first one rolled. Reading it
     // here is the only way to ask that question at the moment it is asked.
     if (expression === "origin.severance.dice") {
-        const dice = SeveranceDice(originActor);
+        const dice = soulboundSeveranceDice(originActor);
         return dice > 0 ? `${dice}d6` : null;
     }
     // How far the Technique itself has heightened, sky included — the growth a Strike inherits when the
