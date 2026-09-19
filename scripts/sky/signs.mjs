@@ -37,7 +37,8 @@ export function signOf(id) {
  * `exalted` is no longer weight 0, which is a real change to the SAINT and not only to the Stargazer:
  * a Zenith can now happen by chance. A Saint's own sign rises 1 day in 13 and 1 day in 10 is Exalted,
  * so an unscheduled Zenith lands roughly once every 130 days of game time rather than never.
- * `scheduleZenith` is unchanged and is still how you put one on a specific day.
+ * `scheduleZenith` survives as a thin wrapper over `scheduleAspect`, and is still how you put one on a
+ * specific day.
  */
 export const ASPECTS = [
     { id: "none", label: "Quiet", weight: 20, hint: "The sky is unremarkable." },

@@ -1,4 +1,4 @@
-import { ASPECTS, CLOTH_SIGNS, MODULE_ID, SIGN_IDS, aspectOf, signOf } from "./signs.mjs";
+import { ASPECTS, ASPECT_IDS, CLOTH_SIGNS, MODULE_ID, SIGN_IDS, aspectOf, signOf } from "./signs.mjs";
 
 const SETTING = "sky";
 const EFFECT_FLAG = "skyEffect";
@@ -100,22 +100,57 @@ export const SkyTracker = {
     },
 
     /**
-     * Pin an Exalted day for a given sign `days` from now.
+     * Pin a sign, an aspect, or both, `days` from now.
      *
-     * This is the arc-climax button. `days: 0` makes today the Zenith.
+     * Each axis is independently optional: an unpinned one keeps whatever the queue already rolled for that
+     * day, rather than making the caller invent a value it does not care about. Pinning only the aspect is
+     * the common case for terrain — "next Tuesday is Malefic, whatever is up".
+     *
+     * `days: 0` changes today. The announcement is suppressed when writing into the queue, because the day
+     * has not changed; it is not suppressed for `days: 0`, because it has.
+     *
+     * Starless is schedulable here, unlike in `scheduleZenith`: a Zenith needs a Cloth to wake, but a
+     * Starless day is a real sky with a real meaning ("nothing is written") and a GM may want to pin one.
      */
-    async scheduleZenith(sign, days = 0) {
+    async scheduleAspect({ sign = null, aspect = null, days = 0 } = {}) {
         if (!game.user.isGM) return;
-        if (!CLOTH_SIGNS.includes(sign)) return;
-        if (days <= 0) return this.set({ sign, aspect: "exalted" });
+        if (sign === null && aspect === null) return;
+        if (sign !== null && !SIGN_IDS.includes(sign)) return;
+        if (aspect !== null && !ASPECT_IDS.includes(aspect)) return;
+
+        if (days <= 0) {
+            const today = {};
+            if (sign !== null) today.sign = sign;
+            if (aspect !== null) today.aspect = aspect;
+            return this.set(today);
+        }
 
         const queue = [...(this.state.queue ?? this.rollQueue())];
         while (queue.length < days) queue.push({ sign: this.rollSign(), aspect: this.rollAspect() });
-        queue[days - 1] = { sign, aspect: "exalted" };
+        const queued = queue[days - 1];
+        const pinned = { sign: sign ?? queued.sign, aspect: aspect ?? queued.aspect };
+        queue[days - 1] = pinned;
         await this.set({ queue }, { announce: false });
+
+        const when = `in ${days} day${days === 1 ? "" : "s"}`;
         ui.notifications.info(
-            `${signOf(sign).label} will rise Exalted in ${days} day${days === 1 ? "" : "s"}.`,
+            aspect === "exalted" && sign !== null
+                ? `${signOf(pinned.sign).label} will rise Exalted ${when}.`
+                : `${signOf(pinned.sign).label}, ${aspectOf(pinned.aspect).label}, ${when}.`,
         );
+        return pinned;
+    },
+
+    /**
+     * Pin an Exalted day for a given sign. The arc-climax button, kept as its own name because macros,
+     * journal links and the tracker UI all call it.
+     *
+     * Still meaningful after the reweighting: Exalted now arrives about one day in ten by chance, but a
+     * climax should land on a chosen session rather than when a d10 says so.
+     */
+    async scheduleZenith(sign, days = 0) {
+        if (!CLOTH_SIGNS.includes(sign)) return;
+        return this.scheduleAspect({ sign, aspect: "exalted", days });
     },
 
     /* ---------------------------------------------------------------------------------------------- */

@@ -1,4 +1,4 @@
-import { ASPECTS, CLOTH_SIGNS, MODULE_ID, SIGNS, signOf } from "./signs.mjs";
+import { ASPECTS, CLOTH_SIGNS, MODULE_ID, SIGNS, aspectOf, signOf } from "./signs.mjs";
 import { SkyTracker } from "./tracker.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin, DialogV2 } = foundry.applications.api;
@@ -20,7 +20,7 @@ export class SkyTrackerApp extends HandlebarsApplicationMixin(ApplicationV2) {
             setSign: SkyTrackerApp.#onSetSign,
             setAspect: SkyTrackerApp.#onSetAspect,
             advanceDay: SkyTrackerApp.#onAdvanceDay,
-            scheduleZenith: SkyTrackerApp.#onScheduleZenith,
+            scheduleDay: SkyTrackerApp.#onScheduleDay,
             reapply: SkyTrackerApp.#onReapply,
         },
     };
@@ -73,25 +73,41 @@ export class SkyTrackerApp extends HandlebarsApplicationMixin(ApplicationV2) {
         ui.notifications.info("Re-applied sky boons to every Saint.");
     }
 
-    static async #onScheduleZenith() {
-        const signOptions = CLOTH_SIGNS.map(
-            (id) => `<option value="${id}">${signOf(id).glyph} ${signOf(id).label}</option>`,
+    /**
+     * Pin a future day: a sign, an aspect, or both.
+     *
+     * Was "Schedule a Zenith", which could only ever write `exalted`. Since the Sky is terrain (ADR-0001)
+     * a GM wants to pin a Malefic day for the story as readily as an Exalted one, so both axes are here and
+     * both are optional — "leave as rolled" keeps whatever the pre-rolled queue already holds for that day.
+     */
+    static async #onScheduleDay() {
+        const keep = `<option value="">— leave as rolled —</option>`;
+        const signOptions = keep + SIGNS.map(
+            (sign) => `<option value="${sign.id}">${sign.glyph} ${sign.label}</option>`,
+        ).join("");
+        const aspectOptions = keep + ASPECTS.map(
+            (a) => `<option value="${a.id}">${a.label} — ${a.hint}</option>`,
         ).join("");
 
         const result = await DialogV2.prompt({
-            window: { title: "Schedule a Zenith" },
+            window: { title: "Schedule a Day" },
             content: `
-                <p>A Zenith is one day in 260. It never happens by chance — write it on the card before the
-                arc climax.</p>
+                <p>Pin the sign, the aspect, or both. Anything left as rolled keeps whatever the
+                forecast already holds for that day.</p>
                 <div class="form-group">
                     <label>Constellation</label>
                     <select name="sign">${signOptions}</select>
                 </div>
                 <div class="form-group">
+                    <label>Aspect</label>
+                    <select name="aspect">${aspectOptions}</select>
+                </div>
+                <div class="form-group">
                     <label>Days from now</label>
                     <input type="number" name="days" value="0" min="0" max="7" />
                 </div>
-                <p class="hint">0 makes today the Zenith. Up to 7 days can be scheduled ahead.</p>
+                <p class="hint">0 changes today. Up to 7 days can be scheduled ahead. A Zenith is a Saint's
+                own sign rising Exalted — about one day in 130 by chance, which is why you would pin one.</p>
             `,
             ok: {
                 label: "Schedule",
@@ -102,7 +118,11 @@ export class SkyTrackerApp extends HandlebarsApplicationMixin(ApplicationV2) {
             rejectClose: false,
         });
         if (!result) return;
-        await SkyTracker.scheduleZenith(result.sign, Number(result.days) || 0);
+        await SkyTracker.scheduleAspect({
+            sign: result.sign || null,
+            aspect: result.aspect || null,
+            days: Number(result.days) || 0,
+        });
     }
 
     /** Re-render whenever a Saint joins or leaves the world, or swaps a Cloth. */
