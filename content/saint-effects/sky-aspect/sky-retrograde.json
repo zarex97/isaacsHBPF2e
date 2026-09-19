@@ -1,0 +1,252 @@
+{
+    "folder": null,
+    "img": "icons/magic/unholy/orb-smoking-purple.webp",
+    "name": "Sky: Retrograde",
+    "system": {
+        "description": {
+            "value": "<p><strong>The sky drags.</strong> Today's sign carries a <strong>-1</strong> circumstance penalty on its domain — the checks that constellation touches.</p><p><em>The sky is terrain. It applies to every creature, not only to a Saint.</em></p><hr /><table><thead><tr><th>Sign</th><th>Automated on</th><th>Also, by hand</th></tr></thead><tbody><tr><td><strong>Aries</strong></td><td>initiative</td><td>The first Strike you make in each encounter is also affected — apply it by hand.</td></tr><tr><td><strong>Taurus</strong></td><td>fortitude, athletics</td><td>Athletics to resist forced movement is also affected.</td></tr><tr><td><strong>Gemini</strong></td><td>deception, diplomacy</td><td></td></tr><tr><td><strong>Cancer</strong></td><td>medicine</td><td>Recovery checks, and Fortitude saves against disease and poison, are also affected.</td></tr><tr><td><strong>Leo</strong></td><td>intimidation, performance</td><td></td></tr><tr><td><strong>Virgo</strong></td><td>crafting</td><td>Recall Knowledge with any skill, and Perception to Search, are also affected.</td></tr><tr><td><strong>Libra</strong></td><td>—</td><td>Libra's domain is the die itself, not a list of checks — see the effect's own clause.</td></tr><tr><td><strong>Scorpio</strong></td><td>stealth, thievery</td><td></td></tr><tr><td><strong>Sagittarius</strong></td><td>ranged-attack-roll, survival</td><td></td></tr><tr><td><strong>Capricorn</strong></td><td>athletics</td><td></td></tr><tr><td><strong>Aquarius</strong></td><td>arcana, nature, occultism, religion, society</td><td>Counteract checks are also affected.</td></tr><tr><td><strong>Pisces</strong></td><td>will</td><td>Perception against illusions and to disbelieve them is also affected.</td></tr></tbody></table><p>Only one sign is up on any given day, so only that row applies.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "days",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Saint"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "selector": "initiative",
+                "type": "circumstance",
+                "value": -1,
+                "label": "The Sky (Aries)",
+                "predicate": [
+                    "sky:sign:aries"
+                ]
+            },
+            {
+                "key": "FlatModifier",
+                "selector": "fortitude",
+                "type": "circumstance",
+                "value": -1,
+                "label": "The Sky (Taurus)",
+                "predicate": [
+                    "sky:sign:taurus"
+                ]
+            },
+            {
+                "key": "FlatModifier",
+                "selector": "athletics",
+                "type": "circumstance",
+                "value": -1,
+                "label": "The Sky (Taurus)",
+                "predicate": [
+                    "sky:sign:taurus",
+                    {
+                        "or": [
+                            "action:shove",
+                            "action:trip",
+                            "action:grapple"
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "FlatModifier",
+                "selector": "deception",
+                "type": "circumstance",
+                "value": -1,
+                "label": "The Sky (Gemini)",
+                "predicate": [
+                    "sky:sign:gemini"
+                ]
+            },
+            {
+                "key": "FlatModifier",
+                "selector": "diplomacy",
+                "type": "circumstance",
+                "value": -1,
+                "label": "The Sky (Gemini)",
+                "predicate": [
+                    "sky:sign:gemini"
+                ]
+            },
+            {
+                "key": "FlatModifier",
+                "selector": "medicine",
+                "type": "circumstance",
+                "value": -1,
+                "label": "The Sky (Cancer)",
+                "predicate": [
+                    "sky:sign:cancer"
+                ]
+            },
+            {
+                "key": "FlatModifier",
+                "selector": "intimidation",
+                "type": "circumstance",
+                "value": -1,
+                "label": "The Sky (Leo)",
+                "predicate": [
+                    "sky:sign:leo"
+                ]
+            },
+            {
+                "key": "FlatModifier",
+                "selector": "performance",
+                "type": "circumstance",
+                "value": -1,
+                "label": "The Sky (Leo)",
+                "predicate": [
+                    "sky:sign:leo"
+                ]
+            },
+            {
+                "key": "FlatModifier",
+                "selector": "crafting",
+                "type": "circumstance",
+                "value": -1,
+                "label": "The Sky (Virgo)",
+                "predicate": [
+                    "sky:sign:virgo"
+                ]
+            },
+            {
+                "key": "FlatModifier",
+                "selector": "stealth",
+                "type": "circumstance",
+                "value": -1,
+                "label": "The Sky (Scorpio)",
+                "predicate": [
+                    "sky:sign:scorpio"
+                ]
+            },
+            {
+                "key": "FlatModifier",
+                "selector": "thievery",
+                "type": "circumstance",
+                "value": -1,
+                "label": "The Sky (Scorpio)",
+                "predicate": [
+                    "sky:sign:scorpio"
+                ]
+            },
+            {
+                "key": "FlatModifier",
+                "selector": "ranged-attack-roll",
+                "type": "circumstance",
+                "value": -1,
+                "label": "The Sky (Sagittarius)",
+                "predicate": [
+                    "sky:sign:sagittarius"
+                ]
+            },
+            {
+                "key": "FlatModifier",
+                "selector": "survival",
+                "type": "circumstance",
+                "value": -1,
+                "label": "The Sky (Sagittarius)",
+                "predicate": [
+                    "sky:sign:sagittarius"
+                ]
+            },
+            {
+                "key": "FlatModifier",
+                "selector": "athletics",
+                "type": "circumstance",
+                "value": -1,
+                "label": "The Sky (Capricorn)",
+                "predicate": [
+                    "sky:sign:capricorn",
+                    {
+                        "or": [
+                            "action:climb",
+                            "action:jump",
+                            "action:swim"
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "FlatModifier",
+                "selector": "arcana",
+                "type": "circumstance",
+                "value": -1,
+                "label": "The Sky (Aquarius)",
+                "predicate": [
+                    "sky:sign:aquarius"
+                ]
+            },
+            {
+                "key": "FlatModifier",
+                "selector": "nature",
+                "type": "circumstance",
+                "value": -1,
+                "label": "The Sky (Aquarius)",
+                "predicate": [
+                    "sky:sign:aquarius"
+                ]
+            },
+            {
+                "key": "FlatModifier",
+                "selector": "occultism",
+                "type": "circumstance",
+                "value": -1,
+                "label": "The Sky (Aquarius)",
+                "predicate": [
+                    "sky:sign:aquarius"
+                ]
+            },
+            {
+                "key": "FlatModifier",
+                "selector": "religion",
+                "type": "circumstance",
+                "value": -1,
+                "label": "The Sky (Aquarius)",
+                "predicate": [
+                    "sky:sign:aquarius"
+                ]
+            },
+            {
+                "key": "FlatModifier",
+                "selector": "society",
+                "type": "circumstance",
+                "value": -1,
+                "label": "The Sky (Aquarius)",
+                "predicate": [
+                    "sky:sign:aquarius"
+                ]
+            },
+            {
+                "key": "FlatModifier",
+                "selector": "will",
+                "type": "circumstance",
+                "value": -1,
+                "label": "The Sky (Pisces)",
+                "predicate": [
+                    "sky:sign:pisces"
+                ]
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}
