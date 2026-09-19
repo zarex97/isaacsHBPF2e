@@ -1,5 +1,4 @@
-import { Reiatsu } from "./reiatsu.mjs";
-import { Release } from "./release.mjs";
+import { Release } from "./soulbound/release.mjs";
 
 const MODULE_ID = "isaacs-hb-pf2e";
 
@@ -69,18 +68,65 @@ export function declarationsOn(actor) {
     return found.sort((a, b) => (Number(a.declared.cost) || 1) - (Number(b.declared.cost) || 1));
 }
 
-export const UnbrokenChain = {
+export const RefuseDeath = {
+    /**
+     * Stamp the declaration onto owned copies that predate it.
+     *
+     * An owned feature is a copy taken when it was granted, so it carries the flags the pack had *then*.
+     * Arayashiki shipped for a long time with `flags: {}`, which means every Saint already in a world
+     * carries a copy with no declaration — and `declarationsOn` would find nothing on exactly the
+     * characters this was written for.
+     *
+     * Only flags are touched. Owned `system.rules` are never rewritten: pf2e stamps a `flag` onto each
+     * `GrantItem` at grant time that the pack source does not carry, and replacing the array wholesale
+     * strands every granted child.
+     *
+     * Idempotent, and safe to run more than once.
+     */
+    async repairAll() {
+        if (!game.user.isGM) return [];
+        const declared = new Map();
+        for (const pack of game.packs.filter((p) => p.metadata.packageName === MODULE_ID)) {
+            for (const entry of await pack.getIndex({ fields: [`flags.${MODULE_ID}.refuseDeath`] })) {
+                const flag = entry.flags?.[MODULE_ID]?.refuseDeath;
+                if (flag) declared.set(entry.name, flag);
+            }
+        }
+
+        const repaired = [];
+        for (const actor of game.actors) {
+            const updates = [];
+            for (const item of actor.items) {
+                const flag = declared.get(item.name);
+                if (!flag) continue;
+                if (item.flags?.[MODULE_ID]?.refuseDeath) continue;
+                updates.push({ _id: item.id, [`flags.${MODULE_ID}.refuseDeath`]: flag });
+            }
+            if (updates.length === 0) continue;
+            await actor.updateEmbeddedDocuments("Item", updates);
+            repaired.push({ actor: actor.name, items: updates.length });
+        }
+        console.log("Isaac's Homebrew | refuse-death repair", repaired);
+        return repaired;
+    },
+
     registerHooks() {
         Hooks.on("preUpdateActor", (actor, changes) => {
             if (!game.user.isGM) return;
-            if (!Reiatsu.isSoulbound(actor)) return;
+            // No class gate. This used to bail unless the actor was a Soulbound, which is why the Saint's
+            // *Eighth Sense — Arayashiki* never reached a hook written to be class-agnostic: it sat in
+            // `scripts/soulbound/` behind a check for the very class it was not supposed to care about.
+            // Any item that declares a price is now heard, whoever is carrying it.
 
             const next = foundry.utils.getProperty(changes, "system.attributes.hp.value");
             const current = actor.system?.attributes?.hp?.value ?? 0;
             const released = Release.stateOf(actor) !== "sealed";
 
             for (const { item, declared } of declarationsOn(actor)) {
-                const cost = Number(declared.cost) || 1;
+                // `Number(x) || 1` would turn a declared 0 into 1. Arayashiki costs nothing up front —
+                // "read the action for what it costs you afterward" — so zero has to survive.
+                const declaredCost = Number(declared.cost);
+                const cost = Number.isFinite(declaredCost) ? declaredCost : 1;
                 const pool = poolOf(actor, declared.resource);
                 // `frequency: true` means the item's own uses are spent as well as the resource. An item
                 // with no frequency and no such declaration is simply unlimited, which is what
@@ -105,12 +151,13 @@ export const UnbrokenChain = {
                 }
 
                 const price = pool.kind === "focus"
-                    ? `${cost} Reiatsu Point${cost === 1 ? "" : "s"}`
+                    ? `${cost} focus point${cost === 1 ? "" : "s"}`
                     : `${cost} ${pool.item?.name ?? declared.resource}`;
+                const spends = cost > 0 ? `spends ${price} and ` : "";
                 ChatMessage.create({
                     speaker: ChatMessage.getSpeaker({ actor }),
-                    content: `<p><strong>${declared.label ?? item.name}.</strong> ${actor.name} spends `
-                        + `${price} and stands at <strong>1 Hit Point</strong>.</p>`,
+                    content: `<p><strong>${declared.label ?? item.name}.</strong> ${actor.name} ${spends}`
+                        + `stands at <strong>1 Hit Point</strong>.</p>`,
                 });
                 return;   // one refusal per blow, and the cheapest was taken
             }
