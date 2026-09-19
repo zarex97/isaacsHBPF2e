@@ -10,11 +10,14 @@ each. Source: `Docs/soulbound-guide-v1.md` v1.4 §7A (Hyōrinmaru) and §9.1 (Hy
 turn early. **Still open:** [#53 SB-49](../../issues/53) Strike Techniques fire on every Strike, which is
 class-tier and not a Hyōrinmaru clause.
 
-**Every clause is driven.** Thirty-three of thirty-six happen by themselves in world `pf`, one is `—` by
-nature, and two are ⚠️ for a reason that is not the code: Sennen Hyōrō's and Hyōryū Senbi's heightening
-ladders cannot be exercised by any character this world contains. A focus spell caps at half the caster's
-level, their base rank is 7, and the only party-aligned Hyōrinmaru is 13th. The authored ladder is
-identical in form to Ryūsenka's, which *was* driven at rank 9 and rolled 5d6 from a 1d6 base.
+**Every clause is ✅ or `—`.** Thirty-five of thirty-six happen by themselves in world `pf`; the one
+`—` is a sentence about what the petal-flowers are *not*, proved by the clause above it.
+
+The last two took a fixture. Sennen Hyōrō's and Hyōryū Senbi's heightening cannot be exercised below
+15th level — a focus spell caps at half the caster's level and their base rank is 7 — and the world had
+no party-aligned Hyōrinmaru above 13th. **`ZZ Fix — Hyōrinmaru 17`** is a clone of `ZZ SR — Hyorinmaru`
+at level 17, party-aligned, and it casts both at rank 9 for **7d6**. Keep it: the same wall stands in
+front of every Spirit's heightening clauses.
 
 ## How a row is marked
 
@@ -84,10 +87,10 @@ disposition writes are silently reverted in this world; `system.details.alliance
 | S-19d | Sennen Hyōrō | is immobilized until the end of its next turn |  | ✅ | Live: the failure's **Immobilized** now reads `1 round, turn-end`. **SB-51 fixed** |
 | S-19e | Sennen Hyōrō | on a critical failure it is restrained for 1 minute instead |  | ✅ | Live: ZZ Victim rolled 17 against DC 27, a critical failure, and took **Restrained** for a duration of `1 minute` instead of the failure's immobilize |
 | S-19f | Sennen Hyōrō | Escape vs. your Reiatsu DC |  | ✅ | Live: `Escape Sennen Hyōrō` granted at **DC 27**, the caster's own Reiatsu DC |
-| S-19g | Sennen Hyōrō | Heightened (+1) +1d6 |  | ⚠️ | Authored `heightening: interval 1, +1d6`, and the base rank-7 cast rolled exactly **5d6**. The ladder cannot be exercised here: a focus spell caps at half the caster's level, so a 13th-level Hyōrinmaru never casts this above rank 7, and world `pf` has no party-aligned Hyōrinmaru above 14th. The same pf2e ladder is driven live on S-15g |
+| S-19g | Sennen Hyōrō | Heightened (+1) +1d6 |  | ✅ | Live on the level-17 fixture: a rank-9 cast posted **Base: 7th, Heightened: +2** and rolled **7d6 cold** where the rank-7 cast rolls 5d6 |
 | S-20a | Hyōryū Senbi | 60-foot line, basic Reflex, 5d6 cold damage |  | ✅ | Live: the card posts **Range 60 feet; Area 60-foot line, Defense basic Reflex**, the line placed and caught two enemies, and damage rolled **5d6 cold** |
 | S-20b | Hyōryū Senbi | creatures that fail are slowed 1 until the end of their next turn |  | ✅ | Live: both creatures caught took `Hyōryū Senbi: Slowed 1`, now reading `1 round, turn-end`. **SB-51 fixed** |
-| S-20c | Hyōryū Senbi | Heightened (+1) +1d6 |  | ⚠️ | Same as S-19g: authored `interval 1, +1d6`, the base rank-7 cast rolled **5d6**, and rank 8 and above are unreachable for a 13th-level caster |
+| S-20c | Hyōryū Senbi | Heightened (+1) +1d6 |  | ✅ | Live on the same fixture: the rank-9 card posted **Base: 7th, Heightened: +2** and rolled **7d6 cold** |
 | S-21a | Zanhyō Ningyō | Trigger you are hit by an attack |  | ✅ | Live: the reaction fires on `strike-received` and is offered on the hit itself, gated on `criticalSuccess`/`success`. A miss offered it before, against a trigger that reads *you are hit by an attack* |
 | S-21b | Zanhyō Ningyō | Reduce the damage by an amount equal to twice your level |  | ✅ | Live: taking it spends a petal and grants `Effect: Remnant Ice Doll`, resistance to all damage **26** at level 13 — twice the level. A 32-damage critical hit cost 6 hit points |
 | S-21c | Zanhyō Ningyō | the doll shatters |  | ✅ | Live: the doll is gone the moment a blow lands on its wearer. Needed a new `expire` rider and a new `damage-received` event, because `damage-applied` is the attacker's and the defender never saw it |
@@ -115,8 +118,8 @@ disposition writes are silently reverted in this world; `system.details.alliance
 | Status | Count |
 | :-- | --: |
 | ☐ | 0 |
-| ✅ | 33 |
-| ⚠️ | 2 |
+| ✅ | 35 |
+| ⚠️ | 0 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 1 |
