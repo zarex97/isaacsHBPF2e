@@ -14,7 +14,7 @@
 
 ### 1.1 The pitch
 
-A Gold Saint stands in the attack, wearing gold, and punches a god. Eleven days out of thirteen they're an excellent-but-not-dominant martial. On the thirteenth — the day their own constellation rises — the Cloth burns. On one day in 260, the sky exalts them and they are briefly unstoppable.
+A Gold Saint stands in the attack, wearing gold, and punches a god. Eleven days out of thirteen they're an excellent-but-not-dominant martial. On the thirteenth — the day their own constellation rises — the Cloth burns. On one day in 130, the sky exalts them and they are briefly unstoppable.
 
 ### 1.2 The three-tier curve
 
@@ -22,7 +22,7 @@ A Gold Saint stands in the attack, wearing gold, and punches a god. Eleven days 
 | :---- | :---- | :---- | :---- |
 | **Normal day** | \~15% weaker | baseline | \~11/13 days |
 | **Ascendant** | \~30% stronger | Techniques heighten as if **\+4 levels** | 1/13 days |
-| **Zenith** | \~100% stronger | Techniques heighten as if **\+8 levels** | 1/260 days |
+| **Zenith** | \~100% stronger | Techniques heighten as if **\+8 levels** | 1/130 days |
 
 The **−15% floor** lives in the Strike line (fist 1d6, no flurry). The **\+30%/+100%** lives in Techniques and boons. Defensive and control Cloths pay their multiplier in *scope* rather than dice — their flat DPR line is correct by design.
 
@@ -148,7 +148,7 @@ You always know when your own sign is ascendant and its aspect; nothing of the o
 - **Ascendant (any aspect):** your **Ascendant Boon** all day, and Techniques heighten as though you were **4 levels higher**.  
 - **Exalted:** your **Zenith Boon** instead, and Techniques heighten as though **8 levels higher**.
 
-**Odds:** Ascendant 1/13 (7.69%); Zenith 1/260 (0.385%). **The GM schedules Zeniths.**
+**Odds:** Ascendant 1/13 (7.69%); Zenith 1/130 (0.77%). **The GM can still schedule a Zenith** — an arc climax should not wait on a die.
 
 ### Unfailing Cosmo (L1)
 
@@ -563,7 +563,7 @@ The Arms are meant to be better than what the party can buy. *How much* better i
 ## 7 — Playtest & GM notes
 
 - **The −15% floor is a feature.** Session zero: *"You're a Gold Saint every day; the sky tells the world which day is yours."*  
-- **Schedule Zeniths.** 1-in-260 never happens by chance. Write "your sign, Exalted" on the card before the arc climax.  
+- **Schedule Zeniths.** One day in 130 is too rare to build an arc around. Write "your sign, Exalted" on the card before the climax.  
 - **Incapacitation is load-bearing** — never drop it from the death and removal effects, or they cheese bosses.  
 - **Cosmo Strike replaces Handwraps.** Don't double-tax an unarmed class.  
 - **Om is a real cost.** A blinded Virgo genuinely can't see. Don't let the table hand-wave it before 7th level, when Sixth Sense makes it survivable — that gap is the point of the mechanic.  

@@ -1,7 +1,7 @@
 {
   "name": "isaacs-hb-pf2e",
   "version": "0.4.1",
-  "description": "Isaac's homebrew content for the Pathfinder 2e system on Foundry VTT: The Saint.",
+  "description": "Isaac's homebrew content for the Pathfinder 2e system on Foundry VTT: The Saint and The Soulbound.",
   "private": true,
   "type": "module",
   "scripts": {
