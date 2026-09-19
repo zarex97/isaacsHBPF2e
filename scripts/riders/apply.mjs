@@ -26,6 +26,7 @@ import {
 import { Banish, durationSeconds } from "./banish.mjs";
 import { OUTCOME_LABELS, collectRiders, itemFor, riderAt } from "./data.mjs";
 import { Encasement } from "./encasement.mjs";
+import { Escape, escapeStatisticFor } from "./escape.mjs";
 import { WEAPON_TAG, crossingBleed, equipArm, libraDice, libraPotency } from "./libra.mjs";
 import { offerReaction } from "./reactions.mjs";
 import { selectRiders } from "./select.mjs";
@@ -958,27 +959,50 @@ async function applyToggle(rider, context) {
 }
 
 /**
- * A check against a shell rather than against a grip.
+ * A check against whatever is holding you — a shell, or a grip.
  *
- * `Encasement.apply` grants the captive their own "Escape …" action carrying exactly this rider, so using
- * it rolls the named statistic against the DC written on it at the moment the shell was raised — not a
- * fresh Cosmo DC read now, which would let the check track a Saint's level past the casting that trapped
- * them.
+ * `Encasement.apply` and `Escape.grant` both give the captive their own "Escape …" action carrying
+ * exactly this rider, so using it rolls against the DC written on it at the moment they were caught — not
+ * a fresh class DC read now, which would let the check track the caster's level past the casting that
+ * trapped them.
+ *
+ * The two differ only in what breaking free destroys: an encasement's shell is a hazard that shatters,
+ * and a condition rider's grip is the effect holding the condition on the sheet.
  */
 async function applyEscape(rider, context) {
-    const { statistic: slug = "athletics", dc, hazardUuid } = rider.apply;
-    const statistic = context.actor.getStatistic?.(slug);
+    const { statistic: slug, dc, hazardUuid } = rider.apply;
     const hazard = hazardUuid ? await fromUuid(hazardUuid) : null;
-    if (!statistic || !hazard) return;
 
+    // A shell names the hazard it is made of; a grip names the condition it holds you in. The roll is the
+    // same check against the same DC either way, and only what breaking it releases differs.
+    if (hazardUuid && !hazard) return;
+    const statistic = hazard
+        ? context.actor.getStatistic?.(slug ?? "athletics")
+        : escapeStatisticFor(context.actor, slug);
+    if (!statistic) return;
+
+    // The ability's own name, kept on the action at grant time rather than recovered from the action's
+    // title: a GM who renames "Escape Sai — Restrain" on a sheet should not change what the chat says.
+    const held = hazard?.name ?? rider.apply.name ?? "the grip";
     const roll = await statistic.roll({ dc: { value: Number(dc) || 0 }, skipDialog: true, label: "Escape" });
     const outcome = DEGREES[roll?.degreeOfSuccess ?? -1];
     if (outcome === "success" || outcome === "criticalSuccess") {
-        await Encasement.destroy(hazard, { freed: true });
+        if (hazard) {
+            await Encasement.destroy(hazard, { freed: true });
+        } else {
+            // `rider.apply` is the fallback for an Escape authored in content rather than granted here:
+            // it carries the same `conditions`/`effectId` the granted flag would, and without it such an
+            // action would roll, succeed, announce a release and perform none.
+            await Escape.release(context.actor, context.item, rider.apply);
+            await ChatMessage.create({
+                speaker: ChatMessage.getSpeaker({ actor: context.actor }),
+                content: `<p><strong>${context.actor.name}</strong> breaks free of ${held}.</p>`,
+            });
+        }
     } else {
         await ChatMessage.create({
             speaker: ChatMessage.getSpeaker({ actor: context.actor }),
-            content: `<p><strong>${context.actor.name}</strong> struggles against ${hazard.name} and does `
+            content: `<p><strong>${context.actor.name}</strong> struggles against ${held} and does `
                 + `not break free.</p>`,
         });
     }
@@ -1305,6 +1329,7 @@ async function applyCondition(rider, context) {
         const max = Number(rider.apply.max);
         if (max) {
             await context.actor.increaseCondition(slug, value ? { value, max } : { max });
+            await grantEscape(rider, context, { conditions: [slug] });
             return;
         }
 
@@ -1323,8 +1348,13 @@ async function applyCondition(rider, context) {
         const existing = context.actor.itemTypes.condition.find((c) => c.slug === slug && c.active);
         if (!existing) {
             await context.actor.increaseCondition(slug, value ? { value } : {});
+            await grantEscape(rider, context, { conditions: [slug] });
             return;
         }
+        // The grip landed on someone another source has already immobilized. Nothing new is written to
+        // the sheet, but they are still held by *this* ability and still owe an Escape against its DC —
+        // without this the third of the three durationless paths is the one that silently grants none.
+        await grantEscape(rider, context, { conditions: [slug] });
         const current = existing._source.system.value.value;
         if (current === null || !value || value <= current) return;
         await game.pf2e.ConditionManager.updateConditionValue(existing.id, context.actor, value);
@@ -1366,7 +1396,25 @@ async function applyCondition(rider, context) {
     const grant = { key: "GrantItem", uuid: conditionUuid, allowDuplicate: false };
     if (value) grant.alterations = [{ mode: "override", property: "badge-value", value }];
 
-    await context.actor.createEmbeddedDocuments("Item", [effectSource(label, [grant], rider, context)]);
+    const [created] = await context.actor.createEmbeddedDocuments(
+        "Item",
+        [effectSource(label, [grant], rider, context)],
+    );
+    await grantEscape(rider, context, { conditions: [slug], effectId: created?.id ?? null });
+}
+
+/**
+ * "(Escape against your Reiatsu DC)" — the half of a condition rider that nothing used to read.
+ *
+ * `escapeDc` has been authored on thirteen Soulbound condition riders since the class shipped and only
+ * `encasement.mjs` ever looked at it, so those nine abilities held their target for the full duration
+ * with no way out. The grant is called from every path that leaves the target held — including the one
+ * that writes nothing because the condition is already there from elsewhere — and never from the refresh
+ * path, where the grip is the same one and its Escape is already on the sheet.
+ */
+async function grantEscape(rider, context, release) {
+    if (!rider.apply.escapeDc) return;
+    await Escape.grant(rider, context, release);
 }
 
 /** An authored effect from a pack — the riders that are more than a condition with a timer. */

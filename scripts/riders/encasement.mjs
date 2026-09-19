@@ -1,6 +1,6 @@
 import { skyStepsFromOptions, stepsFor } from "../targeting/heightening.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
-import { resolveDC } from "../lib/class-dc.mjs";
+import { escapeDcFor } from "./escape.mjs";
 
 export const FLAG = "encasement";
 
@@ -187,22 +187,4 @@ function escapeAction(spec, hazard, context) {
             },
         },
     };
-}
-
-/**
- * The escape DC, resolved through the shared resolver rather than a private copy.
- *
- * The copy that used to live here understood only `"cosmo"` and fell through to a hard-coded 10, so a
- * Soulbound encasement rider would have been handed a DC everything passes, with no error. The shared
- * resolver returns `null` instead — but this DC is interpolated straight into the escape action's card
- * text, so `null` would print "DC null". It still falls back, and now says so out loud.
- */
-function escapeDcFor(dc, context) {
-    const value = resolveDC(dc, context);
-    if (value !== null) return value;
-    console.warn(
-        `Isaac's Homebrew | encasement: could not resolve escape DC ${JSON.stringify(dc)}`
-        + ` for ${context.originActor?.name ?? "an unknown origin"} — falling back to 10.`,
-    );
-    return 10;
 }

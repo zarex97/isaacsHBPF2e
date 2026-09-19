@@ -198,7 +198,7 @@ build if this table and that switch disagree — the previous version of this se
 
 | `type` | What it does |
 | :-- | :-- |
-| `condition` | Applies a pf2e condition. With a `duration` it becomes a generated effect that expires on its own; without one it is a plain condition for the table to clear. `max` caps a cumulative one. |
+| `condition` | Applies a pf2e condition. With a `duration` it becomes a generated effect that expires on its own; without one it is a plain condition for the table to clear. `max` caps a cumulative one. `escapeDc` grants the captive an Escape action against that DC, and `escapeStatistic` names the one skill it is rolled with instead of the better of Acrobatics and Athletics. |
 | `effect` | Applies an authored effect item from the packs. `stack: true` walks a counter badge up instead of adding a second icon. |
 | `damage` | Rolls real damage, so immunities and resistances apply, and posts it to chat. |
 | `persistent-damage` | Applies a bleed or a burn. `perCounter` scales it by a counter the target already carries. |

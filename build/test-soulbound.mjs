@@ -2511,4 +2511,50 @@ check("and detonates again at the start of your next turn for half the Waning di
      apo.flags["isaacs-hb-pf2e"].riders[0].apply.riders[0].apply.multiplier],
     ["turn-start", "origin.severance.dice", 0.5]);
 
+/* -------------------------------------------------------------------------------------------- */
+/*  Nine abilities that promise an Escape                                                        */
+/* -------------------------------------------------------------------------------------------- */
+
+/**
+ * Every "(Escape against your Reiatsu DC)" in the Soulbound content, and the rider that now makes one.
+ *
+ * All nine said it in their description and none of them created anything: `escapeDc` was read only by
+ * the encasement handler, so a condition rider carrying it applied the grip with a timer and left the
+ * captive to wait it out. The list is spelled out rather than scraped so that a tenth ability written
+ * with the sentence and without the key fails here, which is the way the first nine got in.
+ */
+{
+    const promised = [
+        ["soulbound-effects/effect-minami.json", ["grabbed"]],
+        ["soulbound-kido/bakudo/rikujokoro.json", ["immobilized", "immobilized"]],
+        ["soulbound-kido/bakudo/sai.json", ["immobilized", "immobilized"]],
+        ["soulbound-kido/hado/kurohitsugi.json", ["immobilized"]],
+        ["soulbound-kido/quincy/gritz.json", ["immobilized", "restrained"]],
+        ["soulbound-techniques/hyoten-hyakkaso.json", ["restrained"]],
+        ["soulbound-techniques/ryusenka.json", ["immobilized"]],
+        ["soulbound-techniques/sennen-hyoro.json", ["immobilized", "restrained"]],
+        ["soulbound-techniques/sprenger.json", ["restrained"]],
+    ];
+
+    const found = [];
+    for (const [file] of promised) {
+        const doc = contentDoc(file);
+        const held = [];
+        const walk = (node) => {
+            if (Array.isArray(node)) return node.forEach(walk);
+            if (!node || typeof node !== "object") return;
+            if (node.escapeDc !== undefined) held.push([node.type, node.slug, node.escapeDc]);
+            for (const value of Object.values(node)) walk(value);
+        };
+        walk(doc.flags?.["isaacs-hb-pf2e"] ?? {});
+        found.push([file, held.map(([, slug]) => slug)]);
+        check(
+            `${file}: every grip it applies is escapable against the Reiatsu DC`,
+            held.map(([type, , dc]) => `${type}:${dc}`),
+            held.map(() => "condition:reiatsu"),
+        );
+    }
+    check("all nine grips are accounted for", found, promised);
+}
+
 report("Soulbound tests");
