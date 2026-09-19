@@ -17,3 +17,9 @@ AGENTS.md
 # CodeGraph's per-project index. Removed from this repo in favour of GitNexus,
 # but ignored so a stray `codegraph init` can never commit a database again.
 .codegraph/
+
+# GitNexus skill files, reinstalled by `gitnexus setup` (which also puts twelve of
+# them in ~/.claude/skills/, making these a redundant subset). Scoped to skills/
+# rather than all of .claude/ on purpose: settings.json, commands/ and agents/
+# live there too, and those are worth sharing if we ever add them.
+.claude/skills/
