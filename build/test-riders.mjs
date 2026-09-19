@@ -2077,7 +2077,12 @@ function documentedIn(readme, heading, nextHeading) {
     const applySource = fs.readFileSync(path.join(ROOT, "scripts/riders/apply.mjs"), "utf8");
     const dataSource = fs.readFileSync(path.join(ROOT, "scripts/riders/data.mjs"), "utf8");
 
-    const dispatched = new Set([...applySource.matchAll(/^\s*case "([a-z-]+)":/gm)].map((m) => m[1]));
+    // Anchored to `applyOne`'s switch rather than the whole file: `apply.mjs` is 2000 lines and any other
+    // switch with a lowercase-hyphen case (`case "from-origin":`, teleport's own `measure` value) would
+    // otherwise be scraped as an apply type and demand documenting.
+    const applyOneStart = applySource.indexOf("async function applyOne(");
+    const applyOneBody = applySource.slice(applyOneStart, applySource.indexOf("\n}\n", applyOneStart));
+    const dispatched = new Set([...applyOneBody.matchAll(/^\s*case "([a-z-]+)":/gm)].map((m) => m[1]));
     const eventsBlock = dataSource.slice(dataSource.indexOf("export const EVENTS"));
     const events = new Set(
         [...eventsBlock.slice(0, eventsBlock.indexOf("]")).matchAll(/"([a-z-]+)"/g)].map((m) => m[1]),

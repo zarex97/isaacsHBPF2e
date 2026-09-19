@@ -37,7 +37,7 @@ export const SkyTracker = {
         return SIGN_IDS[Math.floor(Math.random() * SIGN_IDS.length)];
     },
 
-    /** Roll an aspect by weight. `exalted` has weight 0 — see the note in signs.mjs. */
+    /** Roll an aspect by weight. `exalted` carries weight 10 — see the note in signs.mjs. */
     rollAspect() {
         const total = ASPECTS.reduce((sum, a) => sum + a.weight, 0);
         let roll = Math.random() * total;
