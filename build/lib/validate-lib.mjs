@@ -719,10 +719,10 @@ const DURATION_UNITS = new Set(["rounds", "minutes", "hours", "days", "unlimited
 const RIDER_TYPES = new Set([
     "condition", "effect", "prompt", "choice", "save", "damage", "persistent-damage", "death", "teleport",
     "strikes", "banish", "heal", "readout", "toggle", "counteract", "encasement", "escape",
-    "equip", "reaction", "flat-check", "charge",
+    "equip", "expire", "reaction", "flat-check", "charge",
 ]);
 const RIDER_EVENTS = new Set([
-    "save-rolled", "strike-resolved", "strike-received", "action-used", "damage-applied",
+    "save-rolled", "strike-resolved", "strike-received", "action-used", "damage-applied", "damage-received",
     "turn-end", "turn-start", "aura-tick",
 ]);
 const RESISTANCE_TYPES = new Set([...pf2e.damageTypes, "all-damage", "physical", "precision", "critical-hits"]);
@@ -1432,6 +1432,18 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
             }
             if (rider.self !== true) errors.push(`${at} an equip rider must be \`self\`: it arms the Saint`);
             break;
+        case "expire": {
+            // An effect this rider cannot name is an effect it will never find, and the symptom is the
+            // silent no-op this whole apply type exists to remove: *Zanhyō Ningyō*'s doll never shattering.
+            const wanted = [apply.effect].flat().filter(Boolean);
+            if (wanted.length === 0) {
+                errors.push(`${at} expire riders need an \`effect\` naming what they take back off`);
+            }
+            for (const name of wanted) {
+                if (typeof name !== "string") errors.push(`${at} expire effect names must be strings`);
+            }
+            break;
+        }
         case "teleport":
             // A teleport with no distance moves nobody and says nothing, which is the same silent-no-op
             // shape that hid the null condition grant for so long. It fails the build instead.

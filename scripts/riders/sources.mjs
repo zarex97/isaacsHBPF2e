@@ -309,23 +309,69 @@ export const Sources = {
         if (!origin || origin === actor) return;
 
         const after = actor.hitPoints?.value ?? 0;
-        if (after >= before) return; // healing, or nothing landed
+        const landed = before - after;
 
-        const target = params?.token ?? actor.getActiveTokens(true, true).at(0);
+        // The token that *took* the damage — and `params.token` is not reliably it. pf2e hands this
+        // wrapper whatever token the damage was applied through, which is the controlled one, so a GM
+        // with the attacker selected sends the attacker's token here. Driven live, that pointed a
+        // `damage-received` event at the creature that swung. Trust the actor we were called on, and
+        // accept `params.token` only when it actually belongs to them.
+        // …and it may arrive as a placeable rather than a document, which has no `uuid` at all. Both
+        // spellings are normalised here, because the failure mode of getting it wrong is the quietest
+        // one in this file: `!target?.uuid` returns, and no rider on either side ever runs.
+        const asDocument = (t) => t?.document ?? t ?? null;
+        const own = asDocument(actor.getActiveTokens(true, false).at(0));
+        const passed = params?.token?.actor === actor ? asDocument(params.token) : null;
+        const target = passed ?? own;
         if (!target?.uuid) return;
 
+        const damage = {
+            types: damageTypesOf(params?.damage),
+            total: landed,
+            outcome: params?.outcome ?? null,
+        };
+
+        // The attacker's half still asks that something actually landed: a rider that reads "for each
+        // creature this damages" means damage, and healing arrives here too.
+        if (landed > 0) {
+            await Relay.request({
+                action: "applyRiders",
+                event: "damage-applied",
+                itemUuid: item.uuid,
+                originUuid: origin.uuid,
+                targetUuid: target.uuid,
+                outcome: params?.outcome ?? null,
+                damage,
+            });
+        }
+
+        // The mirror image, exactly as `strike-received` mirrors `strike-resolved`: the creature that
+        // *took* the damage gets its own items looked at, with origin and target swapped.
+        //
+        // `damage-applied` is the attacker's event — `collectRiders` is handed the origin's items — so a
+        // rider that has to answer "I was hurt" had nowhere to live. *Zanhyō Ningyō*'s doll is the case
+        // that needed it: it reduces one blow and then shatters, and "shatters" is a clause that cannot
+        // be written against an event the defender never sees.
+        //
+        // And unlike its twin, this one fires even when **nothing got through**. The doll is the reason
+        // again: it reduces damage by twice the Soulbound's level, so the blow it was spent on is often
+        // the blow that costs no hit points at all — and a doll that only shatters when it failed to do
+        // its job would be permanent on exactly the character who used it well. `damage.total` is 0 in
+        // that case, which is the honest number and what a rider predicating on it should see.
+        if (landed < 0) return; // healing: nobody took a blow
+        // Both slots must resolve to a **token**, and `getActiveTokens(true, true)` asks for linked ones
+        // only — an NPC's are not. That is the exact silent no-op the `strike-received` mirror documents:
+        // an Actor uuid resolves to an Actor, whose `.actor` is undefined, and the whole application
+        // returns without a word. The attacker's token when there is one, the defender's own otherwise.
+        const attackerToken = origin.getActiveTokens(true, false).at(0)?.document?.uuid ?? target.uuid;
         await Relay.request({
             action: "applyRiders",
-            event: "damage-applied",
+            event: "damage-received",
             itemUuid: item.uuid,
-            originUuid: origin.uuid,
-            targetUuid: target.uuid,
+            originUuid: target.uuid,
+            targetUuid: attackerToken,
             outcome: params?.outcome ?? null,
-            damage: {
-                types: damageTypesOf(params?.damage),
-                total: before - after,
-                outcome: params?.outcome ?? null,
-            },
+            damage,
         });
     },
 

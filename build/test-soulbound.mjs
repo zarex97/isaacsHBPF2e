@@ -156,7 +156,7 @@ const blade = contentDoc("soulbound-equipment/blade.json");
 check(
     "Blade: 1d8 slashing, versatile P, two-hand d10 (guide §4.1)",
     [blade.system.damage.die, blade.system.damage.damageType, [...blade.system.traits.value].sort()],
-    ["d8", "slashing", ["two-hand-d10", "versatile-p"]],
+    ["d8", "slashing", ["two-hand-d10", "versatile-p", "versatile-spirit"]],
 );
 
 const greatBlade = contentDoc("soulbound-equipment/great-blade.json");
@@ -165,14 +165,14 @@ const greatBlade = contentDoc("soulbound-equipment/great-blade.json");
 check(
     "Great Blade: 1d10 slashing, sweep, two-handed expressed in usage as pf2e does it",
     [greatBlade.system.damage.die, greatBlade.system.usage.value, [...greatBlade.system.traits.value].sort()],
-    ["d10", "held-in-two-hands", ["sweep"]],
+    ["d10", "held-in-two-hands", ["sweep", "versatile-spirit"]],
 );
 
 const paired = contentDoc("soulbound-equipment/paired-blades.json");
 check(
     "Paired Blades: 1d6 slashing, agile, finesse, twin (guide §4.1)",
     [paired.system.damage.die, [...paired.system.traits.value].sort()],
-    ["d6", ["agile", "finesse", "twin"]],
+    ["d6", ["agile", "finesse", "twin", "versatile-spirit"]],
 );
 
 const bow = contentDoc("soulbound-equipment/spirit-bow.json");
@@ -181,6 +181,24 @@ check(
     [bow.system.damage.die, bow.system.damage.damageType, bow.system.range, bow.system.reload.value],
     ["d8", "piercing", 60, "0"],
 );
+
+/**
+ * Spirit-Cutting shipped as a paragraph.
+ *
+ * Guide §4.1 says a spirit weapon's "Strikes can deal **spirit** damage instead of their normal damage
+ * type", and four Shikai entries repeat the promise as "(you may still choose spirit)". Every profile
+ * carried `rules: []` and said it only in its description, so no Soulbound could ever choose it — and
+ * in Shikai an unconditional damage-type override would have won anyway. `versatile-spirit` is the
+ * system's own answer and is what the strike UI offers the choice through.
+ */
+for (const name of ["blade", "great-blade", "paired-blades", "spirit-bow"]) {
+    const doc = contentDoc(`soulbound-equipment/${name}.json`);
+    check(
+        `${name}: Spirit-Cutting is a trait, not a paragraph`,
+        doc.system.traits.value.includes("versatile-spirit"),
+        true,
+    );
+}
 
 for (const name of ["blade", "great-blade", "paired-blades", "spirit-bow"]) {
     const doc = contentDoc(`soulbound-equipment/${name}.json`);
