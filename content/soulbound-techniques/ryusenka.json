@@ -32,6 +32,18 @@
                 },
                 {
                     "apply": {
+                        "damageType": "cold",
+                        "formula": "1d6",
+                        "type": "damage"
+                    },
+                    "event": "strike-resolved",
+                    "outcomes": [
+                        "criticalSuccess"
+                    ],
+                    "note": "S-15e: the critical hit's second die. The card's own damage is the first."
+                },
+                {
+                    "apply": {
                         "slug": "off-guard",
                         "type": "condition"
                     },

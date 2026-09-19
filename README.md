@@ -174,6 +174,7 @@ Riders are authored on whatever the rule belongs to — a Technique, a Cloth, a 
 | `strike-received` | A Strike resolves against this actor | The defender's items |
 | `action-used` | An action or spell is posted to chat | The item posted, against the targets you confirmed |
 | `damage-applied` | Damage from this actor's item lands | The origin's items |
+| `damage-received` | Damage from someone else's item lands on this actor | The defender's items |
 | `turn-start`, `turn-end` | This actor's turn begins or ends | This actor's items |
 | `aura-tick` | A creature enters this actor's aura, or ends its turn inside it | The aura effect itself |
 
@@ -211,6 +212,7 @@ build if this table and that switch disagree — the previous version of this se
 | `teleport` | Moves along the caster→target line, grid-snapped and clamped to the scene. `measure: "from-origin"` makes it a destination rather than a delta. |
 | `encasement` | Traps a creature in a hazard with its own escape DC. |
 | `escape` | Offers an escape attempt against something holding the target. |
+| `expire` | Takes a named effect back off before its own timer would — what "the doll shatters" needs. |
 | `strikes` | Rolls a volley, dealt round-robin across the confirmed targets — more Strikes than creatures is normal. `mapIndex` picks the variant, so a rider can deliberately strike at current MAP. Follows through to damage. |
 | `charge` | Spends from a charge pool. Always the **origin's**, never the target's. |
 | `toggle` | Flips a roll option on the **target**, unless the rider is `self`. |

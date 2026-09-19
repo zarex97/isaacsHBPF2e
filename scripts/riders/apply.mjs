@@ -333,6 +333,8 @@ async function applyOne(rider, context) {
             return applyEscape(rider, context);
         case "equip":
             return applyEquip(rider, context);
+        case "expire":
+            return applyExpire(rider, context);
         default:
             console.warn(`Isaac's Homebrew | ${context.item?.name}: unknown rider type "${apply.type}"`);
     }
@@ -1417,6 +1419,29 @@ async function grantEscape(rider, context, release) {
     await Escape.grant(rider, context, release);
 }
 
+/**
+ * Take an effect back off, before its own timer would.
+ *
+ * *Zanhyō Ningyō* is the reason: "a doll of ice takes the blow … **the doll shatters**". The doll is
+ * an effect granting resistance, and an effect with a one-round timer is a doll that absorbs every
+ * blow landed in that round rather than the one it was spent on. "Shatters" is a real clause and it
+ * needed something to say it with.
+ *
+ * Matches on the effect's own name and on the `<Ability>: <name>` form the condition riders generate,
+ * so a rider can retire either kind without knowing which one made it.
+ */
+async function applyExpire(rider, context) {
+    const wanted = [rider.apply.effect].flat().filter(Boolean);
+    for (const name of wanted) {
+        const gone = context.actor.itemTypes.effect.filter(
+            (e) => e.name === name || e.name.endsWith(`: ${name}`),
+        );
+        for (const effect of gone) {
+            if (context.actor.items.has(effect.id)) await effect.delete();
+        }
+    }
+}
+
 /** An authored effect from a pack — the riders that are more than a condition with a timer. */
 async function applyEffect(rider, context) {
     const uuid = rider.apply.uuid;
@@ -2096,9 +2121,21 @@ function outcomeSuffix(context) {
     return context.outcome ? ` on a ${OUTCOME_LABELS[context.outcome]}` : "";
 }
 
+/**
+ * When a rider's effect lets go.
+ *
+ * The default is `turn-end`, and it used to be `turn-start`. Both guides say the same thing in the
+ * same words, over and over — "immobilized **until the end of its next turn**", "slowed 1 **until the
+ * end of their next turn**", "off-guard **until the end of its next turn**" — and `turn-start` ends
+ * an effect at the *start* of that turn, one step short. Driven live, a creature slowed by *Hyōryū
+ * Senbi* got its full actions back before it had spent one of them.
+ *
+ * A rider that genuinely wants the shorter window says `expiry: "turn-start"` for itself. None of the
+ * shipped content did, which is what made this a silent default rather than a decision.
+ */
 function durationData(duration) {
     return {
-        expiry: duration?.expiry ?? "turn-start",
+        expiry: duration?.expiry ?? "turn-end",
         sustained: false,
         unit: duration?.unit ?? "rounds",
         value: Number(duration?.value) || 1,
