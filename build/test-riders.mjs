@@ -2046,6 +2046,54 @@ check("three steps of a flat number", growByStep(15, 5, 3), 30);
 check("three steps of matching dice", growByStep("6d8", "1d8", 3), "9d8");
 check("dice of different sizes cannot be combined — the base wins rather than guessing", growByStep("6d8", "1d6", 3), "6d8");
 
+
+/* -------------------------------------------------------------------------------------------- */
+/*  The README is documentation, and documentation drifts                                        */
+/* -------------------------------------------------------------------------------------------- */
+
+/**
+ * The rider reference in README.md is a third copy of two lists that already exist in the source: the
+ * apply-type switch and the EVENTS array. It had drifted to seven of twenty-one apply types and seven of
+ * eight events, and nothing failed. Comparing the sets here means the next divergence fails the build
+ * instead of rotting quietly.
+ */
+function documentedIn(readme, heading, nextHeading) {
+    const start = readme.indexOf(heading);
+    const end = readme.indexOf(nextHeading, start);
+    const section = readme.slice(start, end);
+    const names = new Set();
+    for (const line of section.split("\n")) {
+        if (!line.startsWith("|")) continue;
+        const firstCell = line.split("|")[1] ?? "";
+        for (const [, name] of firstCell.matchAll(/`([a-z-]+)`/g)) names.add(name);
+    }
+    names.delete("type");
+    names.delete("event");
+    return names;
+}
+
+{
+    const readme = fs.readFileSync(path.join(ROOT, "README.md"), "utf8");
+    const applySource = fs.readFileSync(path.join(ROOT, "scripts/riders/apply.mjs"), "utf8");
+    const dataSource = fs.readFileSync(path.join(ROOT, "scripts/riders/data.mjs"), "utf8");
+
+    const dispatched = new Set([...applySource.matchAll(/^\s*case "([a-z-]+)":/gm)].map((m) => m[1]));
+    const eventsBlock = dataSource.slice(dataSource.indexOf("export const EVENTS"));
+    const events = new Set(
+        [...eventsBlock.slice(0, eventsBlock.indexOf("]")).matchAll(/"([a-z-]+)"/g)].map((m) => m[1]),
+    );
+
+    const documentedTypes = documentedIn(readme, "### What a rider can do", "### Areas");
+    const documentedEvents = documentedIn(readme, "### Events", "### What a rider can do");
+
+    const missing = (a, b) => [...a].filter((x) => !b.has(x)).sort().join(", ") || "none";
+
+    check("README documents every apply type the dispatcher handles", missing(dispatched, documentedTypes), "none");
+    check("README invents no apply type the dispatcher lacks", missing(documentedTypes, dispatched), "none");
+    check("README documents every event", missing(events, documentedEvents), "none");
+    check("README invents no event", missing(documentedEvents, events), "none");
+}
+
 /* -------------------------------------------------------------------------------------------- */
 
 if (failures.length > 0) {

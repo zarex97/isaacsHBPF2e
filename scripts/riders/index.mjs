@@ -4,7 +4,12 @@ import { Relay } from "./relay.mjs";
 import { Sources } from "./sources.mjs";
 
 /**
- * Riders: what happens to a target *besides* damage.
+ * Riders: any declarative consequence the module fires from an event.
+ *
+ * This docstring used to say "what happens to a target *besides* damage", which the list outgrew in both
+ * directions: `damage` is one of the apply types, `heal`/`equip`/`toggle`/`strikes` act on the origin rather
+ * than a target, and `prompt`/`choice`/`readout` touch no sheet at all. `CONTEXT.md` carries the definition
+ * above; the one-line summary here is the place it kept drifting from.
  *
  * This is backlog §1. A rule element lives on the Saint's sheet and cannot write a condition onto a
  * target's sheet, so "a creature that fails is slowed 1 for 1 round" was always a line of text someone had
