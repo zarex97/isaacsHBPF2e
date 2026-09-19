@@ -1,6 +1,6 @@
 # Automating §4 and §5
 
-*Design note. **Built** — see `scripts/lib/degree.mjs`, `scripts/outcomes/`, `scripts/economy/recharge.mjs`
+*Design note. **Built** — see `scripts/lib/degree.mjs`, `scripts/roll-rewrites/`, `scripts/economy/recharge.mjs`
 and `scripts/targeting/{heightening,wall}.mjs`. One thing was decided differently once the code met the
 content, marked **[changed]** below.*
 
@@ -56,7 +56,7 @@ On `preCreateChatMessage`, for a check roll from an actor carrying an armed *The
 4. Write back `roll.options.degreeOfSuccess`, `flags.pf2e.context.outcome` and the rendered degree label.
 5. Consume the hourly allowance, and tag the card with what paid for it.
 
-New `scripts/outcomes/balance.mjs`, plus `scripts/lib/degree.mjs` holding the band comparison so the test
+New `scripts/roll-rewrites/balance.mjs`, plus `scripts/lib/degree.mjs` holding the band comparison so the test
 harness can import it.
 
 **The risk, stated plainly.** This is the only place in the module that re-implements a piece of pf2e
@@ -79,7 +79,7 @@ injected that way.
 The numbers are automated already; what is missing is that the empowerment applies to *one* roll. The
 `om:eyes-open` toggle stays on until somebody flips it back, so every later roll is empowered too.
 
-`scripts/outcomes/om.mjs` consumes it on the first roll that actually benefits: the first damage roll or
+`scripts/roll-rewrites/om.mjs` consumes it on the first roll that actually benefits: the first damage roll or
 Technique cast carrying `om:eyes-open` from that actor sets the Om badge to 0 and turns the toggle off.
 Both seams exist — the module wraps `cast` and watches `pf2e.damageRoll`.
 

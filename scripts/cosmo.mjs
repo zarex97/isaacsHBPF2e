@@ -96,7 +96,7 @@ export const Cosmo = {
         await spell.update({ "system.location.value": entry.id });
     },
 
-    isTechnique(item) {
+    isCosmoTechnique(item) {
         return item?.type === "spell" && (item.system.traits?.value ?? []).includes("cosmo");
     },
 
@@ -107,11 +107,11 @@ export const Cosmo = {
                 await this.ensureEntry(item.actor);
                 // Techniques granted alongside the class can land before the entry exists.
                 for (const spell of item.actor?.itemTypes.spell ?? []) {
-                    if (this.isTechnique(spell)) await this.fileSpell(spell);
+                    if (this.isCosmoTechnique(spell)) await this.fileSpell(spell);
                 }
                 return;
             }
-            if (this.isTechnique(item)) await this.fileSpell(item);
+            if (this.isCosmoTechnique(item)) await this.fileSpell(item);
         });
     },
 };
