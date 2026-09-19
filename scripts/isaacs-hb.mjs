@@ -16,7 +16,7 @@ import { SkyTrackerApp } from "./sky/tracker-app.mjs";
 import { SkyTracker } from "./sky/tracker.mjs";
 import { Blut } from "./soulbound/blut.mjs";
 import { SoulboundActions } from "./soulbound/actions.mjs";
-import { UnbrokenChain } from "./soulbound/unbroken-chain.mjs";
+import { RefuseDeath } from "./refuse-death.mjs";
 import { Charges } from "./soulbound/charges.mjs";
 import { Hypnosis } from "./soulbound/hypnosis.mjs";
 import { Modes } from "./soulbound/modes.mjs";
@@ -79,7 +79,7 @@ Hooks.once("init", () => {
     start("Severance", () => Severance.registerHooks());
     start("Blut", () => Blut.registerHooks());
     start("charge pools", () => Charges.registerHooks());
-    start("Unbroken Chain", () => UnbrokenChain.registerHooks());
+    start("Refuse Death", () => RefuseDeath.registerHooks());
     // The bridge from a used action to the state machine behind it. Without this the release
     // ladder is inert: `Release.enter()` has no other caller anywhere in the module.
     start("the Soulbound action bridge", () => SoulboundActions.registerHooks());
@@ -126,7 +126,7 @@ Hooks.once("init", () => {
         soulboundActions: SoulboundActions,
         modes: Modes,
         charges: Charges,
-        unbrokenChain: UnbrokenChain,
+        refuseDeath: RefuseDeath,
         hypnosis: Hypnosis,
         rig: SoulboundRig,
         open: () => new SkyTrackerApp().render(true),
@@ -144,6 +144,10 @@ Hooks.once("setup", () => {
 
 Hooks.once("ready", async () => {
     await SkyTracker.initialise();
+    // Characters built before an ability declared its refusal carry an owned copy with no declaration.
+    // Narrow and idempotent — it only copies a flag the pack already carries onto an item of the same
+    // name that lacks it — so it runs on load rather than waiting to be remembered.
+    await RefuseDeath.repairAll();
 });
 
 /** Scene-control button, so the tracker is one click away rather than buried in settings. */

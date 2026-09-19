@@ -35,5 +35,14 @@
             ]
         }
     },
-    "type": "action"
+    "type": "action",
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "refuseDeath": {
+                "label": "Eighth Sense — Arayashiki",
+                "cost": 0,
+                "frequency": true
+            }
+        }
+    }
 }
