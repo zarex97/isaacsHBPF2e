@@ -168,13 +168,13 @@ Riders are authored on whatever the rule belongs to — a Technique, a Cloth, a 
 
 | `event` | Fires when | Whose riders are read |
 | :-- | :-- | :-- |
-| `save-rolled` *(default)* | A target rolls its save from a chat card | The Technique, and the caster's items |
+| `save-rolled` *(default)* | A target rolls its save from a chat card | The Technique that forced the save |
 | `strike-resolved` | This actor's Strike resolves | The attacker's items |
 | `strike-received` | A Strike resolves against this actor | The defender's items |
 | `action-used` | An action or spell is posted to chat | The item posted, against the targets you confirmed |
 | `damage-applied` | Damage from this actor's item lands | The origin's items |
 | `turn-start`, `turn-end` | This actor's turn begins or ends | This actor's items |
-| `aura-tick` | A creature enters this actor's aura, or ends its turn inside it | This actor's items |
+| `aura-tick` | A creature enters this actor's aura, or ends its turn inside it | The aura effect itself |
 
 A rider with no `event` means `save-rolled`, so every Technique written before events existed still means
 what it meant. A rider with no `outcomes` fires on any outcome — which is what "needles land on any attack
@@ -182,8 +182,9 @@ you make, hit or miss" needs.
 
 Two rules keep `action-used` honest, and both matter if you write one:
 
-- **Only the item that was used is read.** Every other event searches the whole sheet, because a Strike
-  rider lives on the Cloth rather than on the fist that threw it. "When this ability is used" names one
+- **Only the item that produced the event is read** — for `action-used`, `save-rolled` and `aura-tick`
+  alike (`ITEM_SCOPED_EVENTS`). The other five search the whole sheet, because a Strike rider lives on the
+  Cloth rather than on the fist that threw it. "When this ability is used" names one
   ability, so a Saint holding two Zenith activities does not fire both from one.
 - **A roll the rider itself causes is not another use.** pf2e stamps the originating item onto every check
   it rolls, so the save your rider forces produces a message that looks like the ability being used again.
@@ -209,22 +210,23 @@ build if this table and that switch disagree — the previous version of this se
 | `teleport` | Moves along the caster→target line, grid-snapped and clamped to the scene. `measure: "from-origin"` makes it a destination rather than a delta. |
 | `encasement` | Traps a creature in a hazard with its own escape DC. |
 | `escape` | Offers an escape attempt against something holding the target. |
-| `strikes` | Rolls one Strike per confirmed target without increasing MAP, then follows through to damage. |
+| `strikes` | Rolls a volley, dealt round-robin across the confirmed targets — more Strikes than creatures is normal. `mapIndex` picks the variant, so a rider can deliberately strike at current MAP. Follows through to damage. |
 | `charge` | Spends from a charge pool. Always the **origin's**, never the target's. |
-| `toggle` | Flips a toggle on the origin. |
-| `equip` | Equips an item on the origin. |
+| `toggle` | Flips a roll option on the **target**, unless the rider is `self`. |
+| `equip` | Equips an item. Always the origin's, `self` or not. |
 | `reaction` | Offers the actor a reaction, as buttons on a card. |
 | `prompt` | Whispers the GM. Forced movement and outright death live here: automating half of a rider and being honest about the other half beats guessing which 15 feet. |
 | `choice` | Whispers the caster a card of buttons and applies the one they pick. Which sense *Tenbu Hōrin* takes is a decision, and it belongs to the caster — who is often not whoever rolled. |
 | `readout` | Posts an informational card and touches no sheet. |
 
 **The DC is not always the Saint's.** A `save` rider's `dc` accepts `"cosmo"` (the Saint's), `"reiatsu"`
-(the Soulbound's), `"class"` (whichever class the origin actually has), or a flat number. `"cosmo"` is the
-spelling every one of the 48 Saint Techniques already uses and predates the second class; `"class"` is what
-a rider on a shared item wants.
+(the Soulbound's), `"class"` (whichever class the origin actually has), or a flat number. `"cosmo"` predates the second class and is the
+spelling the shipped Saint content already uses — mostly on class-feature actions and sky effects rather
+than on the Techniques themselves, only two of which carry a `dc` at all. `"class"` is what a rider on a
+shared item wants.
 
-**A rider is not only a thing done to a target.** Several types act on the origin instead — `heal`,
-`equip`, `toggle` and `strikes` with `self: true` — and three (`prompt`, `choice`, `readout`) produce chat
+**A rider is not only a thing done to a target.** `equip` and `charge` always act on the origin; `heal`,
+`toggle` and `strikes` do when the rider is `self`; and three (`prompt`, `choice`, `readout`) produce chat
 output without touching a sheet at all.
 
 ### Areas

@@ -1807,8 +1807,9 @@ export async function runSave(spec, context) {
 /**
  * A class DC — the Saint's Cosmo or the Soulbound's Reiatsu — or a flat number written in the content.
  *
- * All three spellings are kept. `"cosmo"` is the Saint's own and predates the second class, so every one
- * of the 48 Techniques already shipped says it; rewriting them to prove a point is how content breaks.
+ * All three spellings are kept. `"cosmo"` is the Saint's own and predates the second class, so the shipped
+ * Saint content already says it — mostly on class-feature actions and sky effects; rewriting them to prove a
+ * point is how content breaks.
  * `"class"` means whichever class the origin actually has, which is what a rider on a shared item wants.
  */
 function resolveDC(dc, context) {
