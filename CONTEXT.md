@@ -141,3 +141,22 @@ area targeting and the rider engine.
 A degree of success — critical success, success, failure or critical failure. The filter a
 rider is written against.
 _Avoid_: outcome as a name for roll-rewriting features such as Om or Libra's Balance.
+
+### Verification
+
+**Clause**:
+One independently-failable declaration a class guide makes — one thing that can pass or fail
+at the table on its own. "Your damage type becomes cold" is a clause; the sentence it comes
+from carries two more. Quoted verbatim wherever it is tracked, never paraphrased.
+_Avoid_: clause as a name for a guide paragraph or a checklist row; both usually hold several.
+
+**Clause tracker**:
+The file in `Docs/clauses/` holding one tier's clauses and the state of each, paired
+one-to-one with a GitHub issue of the same scope. Nineteen exist: one for the class, one per
+Lineage, one per Spirit.
+_Avoid_: checklist — that is the retired row-per-feature file and its findings log.
+
+**Finding**:
+One root cause, named `SB-<n>`, however many clauses it breaks. The unit a bug issue is
+filed against.
+_Avoid_: filing one issue per failing clause; a single finding has broken forty-seven at once.
