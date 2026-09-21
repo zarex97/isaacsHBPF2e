@@ -4,6 +4,9 @@ import { MODULE_ID } from "../sky/signs.mjs";
 
 export const FLAG = "lingering";
 
+/** The module's enemies-only movement-cost behavior. Spelled here so this file imports nothing new. */
+const TERRAIN_TYPE = `${MODULE_ID}.enemyMovementCost`;
+
 /** The behavior type this module contributes, namespaced the way Foundry requires of a module. */
 export const BEHAVIOR_TYPE = `${MODULE_ID}.lingering`;
 
@@ -106,9 +109,13 @@ export const Lingering = {
             }
             const cost = Number(spec.difficultTerrain) || 2;
             if (actions.length > 0) {
+                // `affects: "enemies"` swaps Foundry's own behavior for the module's subclass, which
+                // filters on the moving token's alliance. Foundry's has no such field, so a petal storm
+                // laid across a corridor used to slow the caster's own party too.
+                const enemiesOnly = spec.affects === "enemies" && CONFIG.RegionBehavior.dataModels[TERRAIN_TYPE];
                 behaviors.push({
-                    type: "modifyMovementCost",
-                    name: "Difficult terrain",
+                    type: enemiesOnly ? TERRAIN_TYPE : "modifyMovementCost",
+                    name: enemiesOnly ? "Difficult terrain (enemies)" : "Difficult terrain",
                     system: { difficulties: Object.fromEntries(actions.map((action) => [action, cost])) },
                 });
             }

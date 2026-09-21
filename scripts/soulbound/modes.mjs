@@ -114,6 +114,58 @@ export const Modes = {
         return created ?? null;
     },
 
+    /**
+     * Keep the caster's targets inside the cage.
+     *
+     * > **Senkei** — enemies outside the cage cannot be targeted by you.
+     *
+     * pf2e never asks whether a target is legal; Foundry lets any user target any token. So the rule is
+     * held at the moment the pick is made: a target outside the Region the mode raised is dropped again,
+     * and the player is told why rather than left wondering what un-clicked their click.
+     *
+     * Only the caster is governed. Everyone else may target whoever they like, cage or no cage — the
+     * clause is about what *you* can reach, and an ally shooting into it was never forbidden.
+     */
+    registerTargetGuard() {
+        Hooks.on("targetToken", (user, token, targeted) => {
+            if (!targeted || user !== game.user) return;
+            try {
+                const actor = token?.document?.parent === canvas.scene
+                    ? canvas.tokens?.controlled?.[0]?.actor
+                    : null;
+                if (!actor) return;
+                const cage = canvas.scene?.regions?.find(
+                    (r) => r.flags?.[MODULE_ID]?.modeArea?.actor === actor.uuid,
+                );
+                if (!cage) return;
+                if (token.actor?.uuid === actor.uuid) return;   // yourself is always reachable
+                /**
+                 * `testPoint` takes **one** argument.
+                 *
+                 * Its signature is `testPoint({x, y, elevation})`, and an elevation passed as a second
+                 * argument is not ignored — it is missing, so the region's own elevation test reads
+                 * `undefined` and answers false. Called that way the cage encloses nothing, refuses every
+                 * target on the board, and looks from the outside exactly like a guard that works.
+                 *
+                 * So the cage is asked to contain its own bearer before a "no" from it is trusted. A rule
+                 * that cannot be checked is a note; a rule that refuses everyone is a bug.
+                 */
+                const inside = (t) =>
+                    cage.testPoint({ x: t.center.x, y: t.center.y, elevation: t.document.elevation ?? 0 });
+                const here = canvas.tokens.controlled.find((t) => t.actor?.uuid === actor.uuid);
+                if (typeof cage.testPoint !== "function") return;
+                if (here && !inside(here)) return;
+                if (inside(token)) return;
+                token.setTarget(false, { user, releaseOthers: false });
+                ui.notifications.warn(
+                    `${token.name} is outside ${cage.name} — Senkei leaves you nothing else to reach.`,
+                );
+            } catch (error) {
+                console.error("Isaac's Homebrew | the cage could not hold a target", error);
+            }
+        });
+    },
+
     /** Take the shape back down with the mode that raised it. */
     async clearAreas(actor) {
         if (!canvas?.scene) return;

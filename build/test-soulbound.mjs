@@ -2348,7 +2348,12 @@ const BUILT_SLUGS = (() => {
 })();
 
 // pf2e owns these; they are conditions and system slugs, not our documents.
-const SYSTEM_SLUGS = new Set(["dying", "persistent-damage", "saint", "soulbound", "kido-focus"]);
+const SYSTEM_SLUGS = new Set([
+    "dying", "persistent-damage", "saint", "soulbound", "kido-focus",
+    // pf2e grants this one itself when a target is behind something. Senbonzakura reads it to take
+    // the bonus back out of the DC, which is the only way an attacker can ignore cover.
+    "effect-cover",
+]);
 
 const unresolvedInScripts = [];
 for (const [, slug] of SCRIPTS.matchAll(/slug\s*===\s*["']([a-z0-9-]+)["']/g)) {

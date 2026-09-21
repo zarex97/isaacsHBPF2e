@@ -675,6 +675,9 @@ check("every wrap the module needs is still there", [...claimedBy.keys()].sort()
     "CONFIG.PF2E.Actor.documentClasses.character.prototype.prepareDerivedData",
     "CONFIG.PF2E.Item.documentClasses.action.prototype.toMessage",
     "CONFIG.PF2E.Item.documentClasses.spellcastingEntry.prototype.cast",
+    // Cover belongs to the defender, and two Senbonzakura clauses say a Strike goes around it. The check
+    // is the one place that holds the attacker, the target and the DC built from that target's AC.
+    "game.pf2e.Check.roll",
 ]);
 
 function mjsUnder(dir) {

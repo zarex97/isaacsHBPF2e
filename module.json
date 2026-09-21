@@ -45,7 +45,8 @@
     "socket": true,
     "documentTypes": {
         "RegionBehavior": {
-            "lingering": {}
+            "lingering": {},
+            "enemyMovementCost": {}
         }
     },
     "styles": [

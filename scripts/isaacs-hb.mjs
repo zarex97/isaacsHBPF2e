@@ -26,8 +26,10 @@ import { Release } from "./soulbound/release.mjs";
 import { Severance } from "./soulbound/severance.mjs";
 import { SoulboundRig } from "./soulbound/rig.mjs";
 import { RisingPressure } from "./soulbound/rising-pressure.mjs";
+import { Scattered } from "./soulbound/scattered.mjs";
 import { SpiritWeapon } from "./soulbound/weapon.mjs";
 import { AreaTargeting } from "./targeting/index.mjs";
+import { registerEnemyTerrain } from "./targeting/enemy-terrain.mjs";
 import { Lingering } from "./targeting/lingering.mjs";
 import { CrystalWall } from "./targeting/wall.mjs";
 
@@ -59,6 +61,7 @@ Hooks.once("init", () => {
         Deaths.registerSettings();
         Deaths.registerHooks();
     });
+    start("enemies-only difficult terrain", () => registerEnemyTerrain());
     start("lingering areas", () => {
         Lingering.register();
         Lingering.registerHooks();
@@ -75,6 +78,7 @@ Hooks.once("init", () => {
     start("escapes", () => Escape.registerHooks());
     start("the Libra Arms", () => registerLibraHooks());
     start("the spirit weapon", () => SpiritWeapon.registerHooks());
+    start("the Senkei cage's targets", () => Modes.registerTargetGuard());
     start("Reiatsu", () => Reiatsu.registerHooks());
     start("Rising Pressure", () => RisingPressure.registerHooks());
     start("the release ladder", () => Release.registerHooks());
@@ -142,6 +146,7 @@ Hooks.once("setup", () => {
     start("the cast pipeline", () => CastPipeline.install());
     start("the reiatsu pool", () => Reiatsu.install());
     start("the rider engine", () => Riders.registerHooks());
+    start("Strikes that ignore cover", () => Scattered.register());
 });
 
 Hooks.once("ready", async () => {
