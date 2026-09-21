@@ -239,6 +239,14 @@ export const Sources = {
                     console.error("Isaac's Homebrew | The Crossing could not halve a heal", error);
                 }
                 try {
+                    // …and a wound that will not close refuses the rest. After the Crossing on purpose:
+                    // this one is absolute, so it undoes whatever half was left behind as well.
+                    const { Wound } = await import("../soulbound/wound.mjs");
+                    if (game.user.isGM) await Wound.refuse(this, before);
+                } catch (error) {
+                    console.error("Isaac's Homebrew | the wound could not refuse a heal", error);
+                }
+                try {
                     await Sources.onDamage(this, params, before);
                 } catch (error) {
                     console.error("Isaac's Homebrew | damage rider failed", error);

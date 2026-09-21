@@ -1,3 +1,4 @@
+import { shapeFromArea } from "../targeting/place.mjs";
 import { Reiatsu } from "./reiatsu.mjs";
 
 const MODULE_ID = "isaacs-hb-pf2e";
@@ -64,6 +65,9 @@ export const Modes = {
         if (held.length > 0) {
             await actor.deleteEmbeddedDocuments("Item", held.map((e) => e.id));
         }
+        // The sibling's shape goes with the sibling. Switching Senkei to Gokei must not leave the cage
+        // standing on a board where nobody is caged any more.
+        await Modes.clearAreas(actor);
 
         const pack = game.packs.get(EFFECTS_PACK);
         const wanted = effectNameFor(mode);
@@ -74,7 +78,51 @@ export const Modes = {
         }
         const doc = await pack.getDocument(entry._id);
         await actor.createEmbeddedDocuments("Item", [foundry.utils.deepClone(doc.toObject())]);
+        await Modes.raiseArea(actor, doc.toObject());
         return mode;
+    },
+
+    /**
+     * The shape a mode stands inside, when it has one.
+     *
+     * *Senkei* is the case: "the blades condense into a thousand swords forming a **20-foot cage** around
+     * you and one enemy". That cage is a printed sentence with a number in it, and until now it existed
+     * only as prose in the effect's description — nothing on the board said where it was, so the one thing
+     * the players needed to see, they could not.
+     *
+     * A mode declares `area` in its own module flags and gets a Region centred on its bearer. The Region
+     * carries no behavior: pf2e cannot stop a creature leaving, and the turn-start prompt already says so.
+     * What it does is draw the boundary, which is the half a table actually argues about.
+     */
+    async raiseArea(actor, source) {
+        const area = source?.flags?.[MODULE_ID]?.area;
+        const token = actor?.getActiveTokens?.(true, false)?.at(0);
+        if (!area?.value || !token || !canvas?.ready) return null;
+        if (canvas.scene?.id !== token.document?.parent?.id) return null;
+
+        const shape = shapeFromArea(area, token, token.center);
+        if (!shape) return null;
+
+        const [created] = await canvas.scene.createEmbeddedDocuments("Region", [{
+            name: `${source.name} — ${area.value}-foot cage`,
+            shapes: [shape],
+            color: "#c94f7c",
+            visibility: CONST.REGION_VISIBILITY.ALWAYS,
+            behaviors: [],
+            flags: { [MODULE_ID]: { modeArea: { actor: actor.uuid, mode: source.name } } },
+        }]);
+        return created ?? null;
+    },
+
+    /** Take the shape back down with the mode that raised it. */
+    async clearAreas(actor) {
+        if (!canvas?.scene) return;
+        const mine = canvas.scene.regions.filter(
+            (r) => r.flags?.[MODULE_ID]?.modeArea?.actor === actor?.uuid,
+        );
+        if (mine.length > 0) {
+            await canvas.scene.deleteEmbeddedDocuments("Region", mine.map((r) => r.id));
+        }
     },
 
     /** Modes end with the encounter, like every other per-round state in this class. */
@@ -82,5 +130,6 @@ export const Modes = {
         const names = available.map(effectNameFor);
         const held = actor.itemTypes.effect.filter((e) => names.includes(e.name));
         if (held.length > 0) await actor.deleteEmbeddedDocuments("Item", held.map((e) => e.id));
+        await Modes.clearAreas(actor);
     },
 };

@@ -32,14 +32,16 @@
                     },
                     "duration": {
                         "unit": "rounds",
-                        "value": 1
+                        "value": 1,
+                        "expiry": "turn-start"
                     },
                     "outcomes": [
                         "criticalFailure"
                     ],
                     "predicate": [
                         "feature:refined-release"
-                    ]
+                    ],
+                    "note": "S-03b: the guide says until the *start* of your next turn, not the end."
                 }
             ]
         }
