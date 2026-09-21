@@ -20,16 +20,8 @@ each. Source: `Docs/soulbound-guide-v1.md` v1.4 §7A (Ryūjin Jakka) and §9.1 (
 paraphrase here or an edit to the guide fails the build. **Static check** names the assertion that guards
 it; **Evidence** names what proved it happened at the table.
 
-*Harness notes, carried from the three trackers before this one.* Drive through the Claude Chrome
-extension, and calibrate its pointer first: its coordinates are the **screenshot's**, not the page's —
-multiply a CSS position by `screenshotWidth / window.innerWidth`. `canvas.regions.placeRegion` listens on
-`canvas.stage` for `pointerdown`, so a synthetic `PointerEvent` dispatched at `canvas.app.view` commits a
-placement where the extension's own click does not. Cast from a **party**-aligned actor or an `enemies`
-area catches nobody. Token position and disposition writes are silently reverted in this world;
-`system.details.alliance` on the actor is not. `save-rolled` riders come from `pf2e-toolbelt.rollSave`,
-which fires only from a target row on the chat card. `Region#testPoint` takes **one** argument,
-`{x, y, elevation}`. A Foundry flag key containing a dot is a **path**, not a key. Owned items are copies
-taken at grant time, so a content flag added today does not reach a character granted yesterday.
+*How a clause is driven — the rig, the traps it sets and what a ✅ owes — is
+`Docs/tools/live-verification.md`. It is the one copy; this file records results, not method.*
 
 *Ryūjin Jakka's own shape.* The most complex Bankai in the class, the only one that damages its own
 party, and the only Spirit whose Severing Art costs its user Hit Points. Four of its clauses are about

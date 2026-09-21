@@ -156,6 +156,18 @@ one-to-one with a GitHub issue of the same scope. Nineteen exist: one for the cl
 Lineage, one per Spirit.
 _Avoid_: checklist — that is the retired row-per-feature file and its findings log.
 
+**Control**:
+The paired negative case run beside a clause: the same measurement with the cause removed,
+showing the effect gone. Evidence without one is compatible with the mechanism under test doing
+nothing at all — a guard that refuses everyone reads exactly like a guard that works.
+_Avoid_: control as a synonym for a second observation; it is specifically the one that should fail.
+
+**Drive**:
+To make a clause happen in the live world and watch what the table sees, as opposed to reading
+the JSON and concluding it would. Takes a clause as its object. Driving a Spirit is shorthand for
+driving each of its clauses — a Spirit is not a thing that can pass or fail.
+_Avoid_: drive as a synonym for test or run; a unit test is not a drive, and neither is a rig check.
+
 **Finding**:
 One root cause, named `SB-<n>`, however many clauses it breaks. The unit a bug issue is
 filed against.

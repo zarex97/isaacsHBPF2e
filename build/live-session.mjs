@@ -1,17 +1,22 @@
 /**
- * Bring up a live Foundry debugging session, idempotently.
+ * Bring up a live Foundry session, idempotently.
  *
- * Steps 1–3 of the workflow, which were being done by hand every time:
+ * The part that was being done by hand every time: start the Foundry desktop app if nothing is
+ * already listening on :30000, wait until it actually answers, and print what to do next.
  *
- *   1. Start the Foundry desktop app if it is not already listening on :30000.
- *   2. Start a dedicated debug Chrome with `--remote-debugging-port=9222` and its own profile, so the
- *      user's normal Chrome is never touched and the CDP port is always the same one.
- *   3. Wait until both are actually answering, and print the target page id.
+ * **It does not start a browser.** The driver is the Claude-in-Chrome extension, which lives in the
+ * user's own Chrome on the profile that carries it — see `Docs/tools/live-verification.md`. A browser
+ * this script started could not be that one: it would have its own throwaway profile and therefore no
+ * extension, which is exactly the trap `--devtools` used to set by default.
  *
- * It does NOT join the world. Joining is a POST, and the point of this script is to get to the place
- * where the driver — chrome-devtools MCP, or a browser tab a human is looking at — can take over.
+ * `--devtools` starts the debug Chrome on :9222 for the fallback driver, chrome-devtools MCP. That is
+ * for unattended runs, where no window is in focus and no real pointer exists.
  *
- *   node build/live-session.mjs              # bring it up
+ * It does NOT join the world either. Joining is a POST, and the point of this script is to get to the
+ * place where a driver can take over.
+ *
+ *   node build/live-session.mjs              # start Foundry, and stop
+ *   node build/live-session.mjs --devtools   # …and the debug Chrome for the fallback driver
  *   node build/live-session.mjs --status     # report only, start nothing
  *   node build/live-session.mjs --world pf   # also print the launch/join snippet for that world
  *
@@ -37,6 +42,8 @@ const CDP_URL = "http://127.0.0.1:9222";
 
 const args = process.argv.slice(2);
 const statusOnly = args.includes("--status");
+// Opt-in, because the browser this starts is the one the primary driver cannot use.
+const wantDevtools = args.includes("--devtools");
 const world = args[args.indexOf("--world") + 1] ?? null;
 
 /* -------------------------------------------------------------------------------------------- */
@@ -75,11 +82,15 @@ async function main() {
     const chromeUp = await reachable(`${CDP_URL}/json/version`);
 
     console.log(`Foundry  ${FOUNDRY_URL}      ${foundryUp ? "up" : "down"}`);
-    console.log(`Debug Chrome ${CDP_URL}   ${chromeUp ? "up" : "down"}`);
+    if (wantDevtools || chromeUp) {
+        console.log(`Debug Chrome ${CDP_URL}   ${chromeUp ? "up" : "down"}`);
+    }
 
     if (statusOnly) {
         if (chromeUp) await printTargets();
-        return foundryUp && chromeUp ? 0 : 1;
+        // A missing debug Chrome is only a failure when one was asked for: the primary driver is an
+        // extension in a browser this script never touches, and reporting that as "down" reads as broken.
+        return foundryUp && (chromeUp || !wantDevtools) ? 0 : 1;
     }
 
     if (!foundryUp) {
@@ -93,7 +104,7 @@ async function main() {
         console.log("Foundry is up.");
     }
 
-    if (!chromeUp) {
+    if (wantDevtools && !chromeUp) {
         console.log("\nStarting the debug Chrome…");
         // --window-size is not cosmetic: see the header.
         launch(CHROME_EXE, [
@@ -112,7 +123,7 @@ async function main() {
         console.log("Debug Chrome is up.");
     }
 
-    await printTargets();
+    if (chromeUp || wantDevtools) await printTargets();
     printNextSteps();
     return 0;
 }
@@ -130,7 +141,8 @@ async function printTargets() {
 
 function printNextSteps() {
     console.log(`
-Next, in the driver:
+Next, in the driver — a tab in your own Chrome, on the profile carrying the Claude-in-Chrome
+extension. See Docs/tools/live-verification.md; --devtools starts the fallback browser instead.
 
   1. Point the page at ${FOUNDRY_URL}. If another world is running you will land on /join;
      use "Return to Setup" (or shut the world down) to reach /setup.

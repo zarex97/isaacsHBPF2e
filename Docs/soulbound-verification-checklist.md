@@ -423,7 +423,8 @@ and asserts the chassis, the Lineage and the Spirit's presence at each checkpoin
 not the ceiling: it proves items **arrive**, and almost nothing about whether they **fire**. Every row
 above marked ✅ on rig evidence alone is really ⚠️.
 
-The repeatable setup is `Docs/tools/foundry-live-session.md` and `build/live-session.mjs`.
+The repeatable setup, and what a drive owes, is `Docs/tools/live-verification.md` and
+`build/live-session.mjs`.
 
 ---
 
@@ -895,7 +896,7 @@ An **aimed** area — a line or a burst placed at a point — resolves on a real
 `spellcasting.cast()` from a script simply never returns for Hyōryū Senbi or Sennen Hyōrō. An
 emanation is auto-centred and only wants the "Confirm targets" dialog, which is why Senbonzakura drove
 cleanly. The charge half was verified through `Charges.beforeCast` directly; aiming a placement without
-a mouse needs the synthetic-pointer route in `Docs/tools/foundry-live-session.md`.
+a mouse needs the synthetic-pointer route in `Docs/tools/live-verification.md` §10.
 
 ---
 
@@ -925,14 +926,18 @@ becomes `all`.
 ## 18 — Driving an aimed area
 
 An **emanation** needs no click and drove cleanly all along. A **line, cone or placed burst** resolves
-on a real canvas click, and three routes were tried before one worked — the full account, including
-the two that look like they work and do not, is in `Docs/tools/foundry-live-session.md` §8.
+on a real canvas click, and the full account is in `Docs/tools/live-verification.md` §10.
 
-The short version: a synthetic `pointermove` **does** put `canvas.mousePosition` exactly on the target,
-and a synthetic `pointerdown` **does not** confirm the placement; stubbing `placeRegion` turns the
-module's re-aim loop into an infinite one. So scripts cast against hand-picked targets with the
-module's own `areaTargeting` setting turned off for the duration. Area targeting is proven on
-emanations; everything downstream of it is proven on every shape.
+What was written here at the time: a synthetic `pointermove` **does** put `canvas.mousePosition` exactly
+on the target, a synthetic `pointerdown` **does not** confirm the placement, and stubbing `placeRegion`
+turns the module's re-aim loop into an infinite one. So scripts cast against hand-picked targets with
+the module's own `areaTargeting` setting turned off for the duration — which is still the right route
+whenever the clause under test is downstream of the aim.
+
+**Corrected 21 September 2026.** The middle claim was wrong about *where*, not about *what*. A synthetic
+`pointerdown` confirms a placement when it is dispatched at **`canvas.app.view`** — `placeRegion`
+registers on `canvas.stage` and PIXI federates from DOM events on the canvas element. An aimed area can
+be driven. See §10.
 
 **Hyōryū Senbi, driven that way:** the card posts a 60-foot line at basic Reflex, the cast spends
 **one petal and one Reiatsu Point**, and a second cast in the same round is **refused and costs

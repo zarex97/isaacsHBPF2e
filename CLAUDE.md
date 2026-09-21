@@ -14,6 +14,26 @@ The five canonical roles, each label string equal to its name. See `Docs/agents/
 
 Single-context: one `CONTEXT.md` plus `Docs/adr/` at the repo root. See `Docs/agents/domain.md`.
 
+## Working method
+
+### Refresh the graph before reading code
+
+Run `node .gitnexus/run.cjs analyze --index-only` **at the start of a session**, before the first
+`impact`, `context` or `query`, and again whenever a tool reports the index stale. It is a few seconds
+incrementally. An index left behind answers about code that no longer exists — a blast radius was once
+reported from an index twenty-seven commits back — and a stale answer is worse than no answer, because
+it looks like one.
+
+Then the generated rules below: `impact` before editing, `detect_changes` before committing. Use them
+to say what a change reaches, and to say plainly whether anything that worked has stopped working.
+
+### Verifying a clause
+
+Driven live, in world `pf`, through the **Claude-in-Chrome extension** on the profile signed in as
+`zarexlibertad@gmail.com` — not a browser a script started, which has no extension in it. The rig, the
+traps and what a ✅ owes are in `Docs/tools/live-verification.md`; the reasoning behind the driver is
+`Docs/adr/0003-live-verification-runs-through-the-browser-extension.md`.
+
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
