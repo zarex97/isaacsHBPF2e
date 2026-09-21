@@ -45,7 +45,8 @@ globalThis.game = { pf2e: { Predicate: StubPredicate } };
 const { riderOptions } = await import("../scripts/lib/roll-options.mjs");
 const { selectRiders } = await import("../scripts/riders/select.mjs");
 const { collectRiders, isAbilityUse, riderAt } = await import("../scripts/riders/data.mjs");
-const { mergeBypass, resistanceReduction, ignoresHardness, selectEntries } = await import(
+const { alreadySpent, gateByRound, riderKey } = await import("../scripts/riders/round-gate.mjs");
+const { mergeBypass, resistanceReduction, ignoresHardness, ignoredImmunities, selectEntries } = await import(
     "../scripts/riders/bypass.mjs"
 );
 const { degreeOf } = await import("../scripts/lib/degree.mjs");
@@ -2190,6 +2191,54 @@ function documentedIn(readme, heading, nextHeading) {
     check("README invents no apply type the dispatcher lacks", missing(documentedTypes, dispatched), "none");
     check("README documents every event", missing(events, documentedEvents), "none");
     check("README invents no event", missing(documentedEvents, events), "none");
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  Once per round, and the two things a bypass cannot reach                                     */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    // Tensa Zangetsu is the only `oncePerRound` rider today, and it is the reason the gate exists:
+    // "the first time each round you hit" prompted on every hit, and its own JSON said so.
+    const tensa = load("soulbound-effects", "effect-tensa-zangetsu.json");
+    check("Tensa Zangetsu's free Step is gated to once a round",
+        ridersOf(tensa).map((r) => r.oncePerRound === true), [true]);
+    check("and it no longer carries the note admitting it was not",
+        ridersOf(tensa).some((r) => typeof r.note === "string" && /per-round/.test(r.note)), false);
+
+    // A flag key containing a dot is a path. `setFlag(id, "riderRounds", {"abc.0": stamp})` becomes
+    // `{abc: {0: stamp}}`, and the read that follows finds nothing — the gate wrote every round and let
+    // every hit through. The separator is the whole fix, so it is asserted rather than remembered.
+    check("a rider key is not a Foundry flag path", riderKey({ id: "abc" }, 0).includes("."), false);
+
+    const stamp = "combat-1:3";
+    check("an unstamped round is not spent", alreadySpent({}, "abc-0", stamp), false);
+    check("a stamped round is spent", alreadySpent({ "abc-0": stamp }, "abc-0", stamp), true);
+    check("last round's stamp does not spend this one",
+        alreadySpent({ "abc-0": "combat-1:2" }, "abc-0", stamp), false);
+    check("another encounter's stamp does not spend this one",
+        alreadySpent({ "abc-0": "combat-2:3" }, "abc-0", stamp), false);
+    // Out of combat there is no round, so a per-round allowance has no boundary to enforce.
+    check("no encounter, no gate", alreadySpent({ "abc-0": stamp }, "abc-0", null), false);
+
+    // The gate is opt-in: a rider that never asked is never consulted, and no ledger is written for it.
+    const plain = [{ rider: { apply: { type: "prompt" } }, item: { id: "x" }, index: 0 }];
+    check("a rider without `oncePerRound` is passed through untouched",
+        (await gateByRound(plain, null)).length, 1);
+}
+
+{
+    // `applyIWR` reads exactly three things off a bypass — `resistance.ignore`, `resistance.redirect`
+    // and `immunity.redirect` — and decides immunity separately by asking the target. So the immunity
+    // half of every Art's promise has to be read back out and applied by shadowing the target instead.
+    const mugetsu = load("soulbound-techniques", "mugetsu.json");
+    const entries = mugetsu.flags["isaacs-hb-pf2e"].bypass.map((entry) => ({ entry, item: null }));
+    check("Mugetsu ignores spirit resistance through the bypass pf2e reads",
+        mergeBypass(null, entries, ["spirit"]).resistance.ignore.map((r) => r.type), ["spirit"]);
+    check("…and its immunity half comes back out for the shadow, because pf2e never reads it",
+        ignoredImmunities(entries, ["spirit"]), ["spirit"]);
+    check("a bypass with no immunity clause shadows nothing",
+        ignoredImmunities([{ entry: { resistance: { types: ["spirit"], max: null } } }], ["spirit"]), []);
 }
 
 /* -------------------------------------------------------------------------------------------- */

@@ -1,3 +1,4 @@
+import { FLAG as BYPASS_FLAG, MEMORY } from "../riders/bypass.mjs";
 import { Reiatsu } from "./reiatsu.mjs";
 
 const MODULE_ID = "isaacs-hb-pf2e";
@@ -147,6 +148,9 @@ export const Severance = {
         if (!isSeveringArt(spell)) return;
         const actor = spell?.actor;
         if (!actor || !this.effectOn(actor)) return;
+        // Before the end, not after: ending Severance revokes the Art, and the Art is the only thing that
+        // knows what its damage gets past. See `rememberedEntries`.
+        await rememberBypass(actor, spell);
         await this.end(actor);
         ChatMessage.create({
             speaker: ChatMessage.getSpeaker({ actor }),
@@ -165,6 +169,8 @@ export const Severance = {
         const round = this.encounterFor(actor)?.round;
         foundry.utils.setProperty(source, `flags.${MODULE_ID}.severanceBegan`,
                                   Number.isInteger(round) && round > 0 ? round : 1);
+        // A new Severance is a clean slate: last encounter's Art has no business bypassing anything now.
+        await actor.unsetFlag(MODULE_ID, MEMORY);
         const [made] = await actor.createEmbeddedDocuments("Item", [source]);
         return made;
     },
@@ -258,3 +264,12 @@ export const Severance = {
         });
     },
 };
+
+/** Copy the Art's own bypass onto its user, pinned to that Art, so the damage can still find it. */
+async function rememberBypass(actor, spell) {
+    const entries = spell?.flags?.[MODULE_ID]?.[BYPASS_FLAG];
+    if (!Array.isArray(entries) || entries.length === 0) return;
+    const slug = spell.slug ?? game.pf2e.system.sluggify(spell.name ?? "");
+    if (!slug) return;
+    await actor.setFlag(MODULE_ID, MEMORY, { slug, name: spell.name, entries });
+}

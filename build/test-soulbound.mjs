@@ -968,8 +968,31 @@ check(
     zangetsuShikai.system.rules.some((r) => r.key === "RollOption" && r.option === "soulbound:release:never-sealed"),
     true,
 );
+/**
+ * The two-handed half of the Shikai form, which shipped as prose.
+ *
+ * "it gains two-handed d12 **if it did not already have a two-handed trait**" is a condition about the
+ * weapon's own printed profile, and pf2e emits a bare `item:trait:two-hand` alongside the sized
+ * `item:trait:two-hand-d10` — so one `not` covers d6, d8, d10 and d12 without naming any of them.
+ */
+{
+    const rules = contentDoc("soulbound-effects/effect-zangetsu-shikai.json").system.rules;
+    const add = rules.find((r) => r.property === "traits" && r.mode === "add");
+    check("the Shikai form grants two-hand d12", add?.value, "two-hand-d12");
+    check(
+        "…only to a weapon that is not already two-handed, by the unsized trait option",
+        add?.predicate?.some((p) => p?.not === "item:trait:two-hand"),
+        true,
+    );
+}
+
 // pf2e's `damage-dice-faces` steps once per `upgrade` and refuses a value unless the mode is override.
 // Two steps is two rules, which is also how the Bankai says "two steps instead of one" out loud.
+//
+// NOTE: driven live on 2026-09-21, and **two `upgrade` rules still give one step** — a base d8 spirit
+// weapon reads d10 with one rule and d10 with two, whether the rules sit on one effect or on two. This
+// assertion counts rules, which is all it ever did; it is not evidence that Zanka no Tachi's "+2 steps"
+// reaches the table. See the `damage-dice-faces` bug issue.
 check(
     "the Shikai steps the die once; Zanka no Tachi steps it twice",
     [

@@ -22,12 +22,66 @@ export const FLAG = "bypass";
  *  - **Hardness**, which `applyDamage` reads straight off `actor.hardness` and which `bypass` says
  *    nothing about.
  */
-export function bypassEntriesOn(actor) {
+/**
+ * Every bypass the origin is carrying, plus the one the damage came from.
+ *
+ * `dealtBy` is not a convenience. A Severing Art **ends Severance**, and Severance is what granted it, so
+ * by the time the damage is applied the Art has been taken back off the sheet — and a scan of the
+ * origin's live items finds nothing. Mugetsu says it "ignores all resistances and immunities to spirit
+ * damage" and was being stopped dead by a target immune to spirit: 70 damage, 0 taken. Every one of the
+ * fifteen Arts had the same hole, because ending Severance is the one thing they all do.
+ *
+ * The item that dealt the damage is the authority on what that damage gets past, whether or not the
+ * sheet still lists it. Deduplicated by id so an item that *is* still equipped is not counted twice.
+ */
+/** Where a Severing Art's bypass is kept once the Art itself has been taken back off the sheet. */
+export const MEMORY = "severingBypass";
+
+/**
+ * The bypass of the Severing Art this creature has just spent, if any.
+ *
+ * Using an Art **ends Severance**, and Severance is what granted it, so the Art is off the sheet before
+ * its damage is ever rolled — let alone applied. By then the chat card cannot resolve its own item
+ * either, so `applyDamage` is handed `item: null` and there is nothing left to read a bypass from.
+ * Mugetsu promises to ignore "all resistances and immunities to spirit damage" and was being stopped
+ * dead by a target immune to spirit: 78 rolled, 0 taken. All fifteen Arts had it, because ending
+ * Severance is the one thing every one of them does.
+ *
+ * So the Art's bypass is copied onto the creature as it goes, and pinned to that Art by slug — the
+ * predicate machinery already tests `item:slug:`, so nothing else this creature does for the rest of the
+ * encounter picks it up. It is cleared the next time Severance begins.
+ */
+export function rememberedEntries(actor) {
+    const kept = actor?.getFlag?.(MODULE_ID, MEMORY);
+    if (!kept?.slug || !Array.isArray(kept.entries)) return [];
+    const item = { id: `remembered-${kept.slug}`, name: kept.name ?? kept.slug };
+    return kept.entries.map((entry) => ({
+        item,
+        entry: {
+            ...entry,
+            // Two spellings of the same pin. `item:slug:` is what an item's own roll options say; a chat
+            // message describes the same item from the outside, as `origin:item:slug:`. The bypass is
+            // read from both places, so it has to answer to both names.
+            predicate: [
+                ...(entry.predicate ?? []),
+                { or: [`item:slug:${kept.slug}`, `origin:item:slug:${kept.slug}`] },
+            ],
+        },
+    }));
+}
+
+export function bypassEntriesOn(actor, dealtBy = null) {
     const entries = [];
-    for (const item of actor?.items ?? []) {
+    const seen = new Set();
+    const consider = (item) => {
+        if (!item || seen.has(item.id)) return;
+        seen.add(item.id);
         const flagged = item.flags?.[MODULE_ID]?.[FLAG];
         if (Array.isArray(flagged)) entries.push(...flagged.map((entry) => ({ entry, item })));
-    }
+    };
+    for (const item of actor?.items ?? []) consider(item);
+    consider(dealtBy);
+    entries.push(...rememberedEntries(actor));
     return entries;
 }
 
@@ -97,6 +151,26 @@ export function resistanceReduction(entries) {
     }, 0);
 }
 
+/**
+ * The damage types whose *immunity* these entries ignore.
+ *
+ * `bypass.immunity.ignore` is a field pf2e defines and never reads. `applyIWR` consults exactly three
+ * things on the bypass — `resistance.ignore`, `resistance.redirect` and `immunity.redirect` — and decides
+ * immunity separately, by asking the target `isAffectedBy(type)`. So an Art that "ignores all immunities"
+ * was filling in a field nobody opens, and a creature immune to spirit took nothing from Mugetsu.
+ *
+ * Immunity therefore has to be got past the same way partial resistance and Hardness are: by shadowing
+ * the target for the length of one application.
+ */
+export function ignoredImmunities(entries, damageTypes) {
+    const types = new Set();
+    for (const { entry } of entries) {
+        if (entry.immunity?.mode !== "ignore") continue;
+        for (const type of expand(entry.immunity.types, damageTypes)) types.add(type);
+    }
+    return [...types];
+}
+
 export function ignoresHardness(entries) {
     return entries.some(({ entry }) => entry.hardness === "ignore");
 }
@@ -111,8 +185,27 @@ export function ignoresHardness(entries) {
  *
  * Returns a function that undoes everything it did.
  */
-export function shadowTarget(actor, { reduction = 0, hardness = false } = {}) {
+export function shadowTarget(actor, { reduction = 0, hardness = false, immunities = [] } = {}) {
     const undo = [];
+
+    // Taken out of the live array rather than filtered into a new one: `attributes.immunities` is read
+    // by reference inside `applyIWR`, so a replacement array would be ignored.
+    if (immunities.length > 0) {
+        const held = actor.attributes?.immunities;
+        if (Array.isArray(held)) {
+            const removed = [];
+            for (let index = held.length - 1; index >= 0; index -= 1) {
+                if (!immunities.includes(held[index]?.type)) continue;
+                removed.push({ index, immunity: held[index] });
+                held.splice(index, 1);
+            }
+            if (removed.length > 0) {
+                undo.push(() => {
+                    for (const { index, immunity } of removed.reverse()) held.splice(index, 0, immunity);
+                });
+            }
+        }
+    }
 
     if (hardness && actor.hardness > 0) {
         Object.defineProperty(actor, "hardness", { value: 0, configurable: true, writable: true });
@@ -139,4 +232,69 @@ export function shadowTarget(actor, { reduction = 0, hardness = false } = {}) {
             }
         }
     };
+}
+
+/**
+ * Put the bypass on the damage roll, where it survives the item that granted it.
+ *
+ * `applyDamage` is handed `{damage, token, item, rollOptions, …}` and nothing else — no message, no
+ * origin actor. When `item` is null, as it is for every Severing Art, there is no thread back to whoever
+ * dealt the damage and `applyBypass` can only stand down.
+ *
+ * A damage roll on its way to chat still knows all of it. `flags.pf2e.origin` names the actor and the
+ * item and carries sixty-odd roll options describing both, and `roll.options.bypass` is the field
+ * `applyIWR` reads at application time regardless of what still exists by then. So the merge is done
+ * here as well as at application: this one is what makes an Art's damage keep its promise, and the
+ * application-time pass stays because it is the one that can also shadow Hardness.
+ *
+ * Rolls are rewritten through `updateSource` on the message's own serialized copies. Mutating the live
+ * `message.rolls` getter would be lost — it deserializes a fresh object every read.
+ */
+export function registerRollBypass() {
+    Hooks.on("preCreateChatMessage", (message) => {
+        try {
+            const sources = message._source?.rolls ?? [];
+            if (sources.length === 0) return;
+            const originFlag = message.flags?.pf2e?.origin;
+            const origin = originFlag?.actor ? fromUuidSync(originFlag.actor) : null;
+            if (!origin) return;
+
+            const item = originFlag.uuid ? fromUuidSync(originFlag.uuid) : null;
+            const entries = bypassEntriesOn(origin, item);
+            if (entries.length === 0) return;
+
+            let changed = false;
+            const rewritten = sources.map((json, index) => {
+                const data = typeof json === "string" ? JSON.parse(json) : foundry.utils.deepClone(json);
+                if (data?.class !== "DamageRoll") return json;
+
+                const types = (message.rolls?.[index]?.instances ?? [])
+                    .map((instance) => instance.type)
+                    .filter(Boolean);
+                if (types.length === 0) return json;
+
+                const options = new Set([
+                    ...(originFlag.rollOptions ?? []),
+                    ...(origin.getRollOptions?.() ?? []),
+                    ...(item?.getRollOptions?.("item") ?? []),
+                    ...types.map((type) => `damage:type:${type}`),
+                ]);
+                const matching = selectEntries(entries, options);
+                if (matching.length === 0) return json;
+
+                data.options = { ...(data.options ?? {}) };
+                data.options.bypass = mergeBypass(data.options.bypass, matching, types);
+                // Kept beside the bypass for the half pf2e will not read: immunity and Hardness are
+                // decided off the target, so the application has to shadow it — and by then `item` is
+                // null and the predicates cannot be tested again. These are the ones that already matched.
+                data.options.soulboundBypass = { entries: matching.map(({ entry }) => entry), types };
+                changed = true;
+                return JSON.stringify(data);
+            });
+
+            if (changed) message.updateSource({ rolls: rewritten });
+        } catch (error) {
+            console.error("Isaac's Homebrew | could not put a bypass on a damage roll", error);
+        }
+    });
 }

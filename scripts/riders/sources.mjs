@@ -4,6 +4,7 @@ import { MODULE_ID } from "../sky/signs.mjs";
 import {
     bypassEntriesOn,
     ignoresHardness,
+    ignoredImmunities,
     mergeBypass,
     resistanceReduction,
     selectEntries,
@@ -279,13 +280,26 @@ export const Sources = {
         // A plain number means IWR is being skipped entirely; there is no roll to attach a bypass to.
         if (!damage || typeof damage === "number" || !Array.isArray(damage.instances)) return noop;
 
-        const origin = params.item?.actor;
-        if (!origin || origin === actor) return noop;
+        const damageTypes = damageTypesOf(damage);
 
-        const entries = bypassEntriesOn(origin);
+        // The damage may have arrived from an item that no longer exists — every Severing Art ends the
+        // Severance that granted it, and the chat card then resolves `item: null`. The roll carries the
+        // entries that already matched, so that is the thread back. See `registerRollBypass`.
+        const stamped = damage.options?.soulboundBypass;
+        const origin = params.item?.actor;
+        if (!origin || origin === actor) {
+            if (!Array.isArray(stamped?.entries) || stamped.entries.length === 0) return noop;
+            const carried = stamped.entries.map((entry) => ({ entry, item: null }));
+            return shadowTarget(actor, {
+                reduction: resistanceReduction(carried),
+                hardness: ignoresHardness(carried),
+                immunities: ignoredImmunities(carried, stamped.types ?? damageTypes),
+            });
+        }
+
+        const entries = bypassEntriesOn(origin, params.item);
         if (entries.length === 0) return noop;
 
-        const damageTypes = damageTypesOf(damage);
         const options = new Set([
             ...(params.rollOptions ?? []),
             ...damageTypes.map((type) => `damage:type:${type}`),
@@ -307,6 +321,7 @@ export const Sources = {
         return shadowTarget(actor, {
             reduction: resistanceReduction(matching),
             hardness: ignoresHardness(matching),
+            immunities: ignoredImmunities(matching, damageTypes),
         });
     },
 

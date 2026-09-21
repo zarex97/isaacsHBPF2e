@@ -29,6 +29,7 @@ import { RisingPressure } from "./soulbound/rising-pressure.mjs";
 import { Scattered } from "./soulbound/scattered.mjs";
 import { SpiritWeapon } from "./soulbound/weapon.mjs";
 import { AreaTargeting } from "./targeting/index.mjs";
+import { registerRollBypass } from "./riders/bypass.mjs";
 import { registerEnemyTerrain } from "./targeting/enemy-terrain.mjs";
 import { Lingering } from "./targeting/lingering.mjs";
 import { CrystalWall } from "./targeting/wall.mjs";
@@ -83,6 +84,7 @@ Hooks.once("init", () => {
     start("Rising Pressure", () => RisingPressure.registerHooks());
     start("the release ladder", () => Release.registerHooks());
     start("Severance", () => Severance.registerHooks());
+    start("a Severing Art's bypass on its own damage roll", () => registerRollBypass());
     start("Blut", () => Blut.registerHooks());
     start("charge pools", () => Charges.registerHooks());
     start("Refuse Death", () => RefuseDeath.registerHooks());
