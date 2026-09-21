@@ -18,7 +18,11 @@
                     "event": "turn-start",
                     "self": true
                 }
-            ]
+            ],
+            "area": {
+                "type": "emanation",
+                "value": 20
+            }
         }
     },
     "img": "modules/isaacs-hb-pf2e/icons/leaf-petals-white.svg",

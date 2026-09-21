@@ -23,6 +23,14 @@
                 "domain": "all",
                 "option": "soulbound:senbonzakura:gokei",
                 "value": true
+            },
+            {
+                "key": "Note",
+                "selector": [
+                    "attack"
+                ],
+                "title": "Gokei",
+                "text": "The creature at the centre <strong>cannot benefit from cover or concealment</strong> against the imploding sphere. pf2e applies both on the defender and offers the attacker no way to suppress them, so remove them by hand."
             }
         ],
         "start": {
