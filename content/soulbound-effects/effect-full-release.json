@@ -44,7 +44,7 @@
                     "note": "Crushing spiritual pressure. The Aura above decides who is caught and when.",
                     "predicate": [
                         {
-                            "not": "rider:target:effect:steeled-against-pressure"
+                            "not": "rider:target:effect:effect-steeled-against-pressure"
                         }
                     ]
                 }

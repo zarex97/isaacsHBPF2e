@@ -2330,6 +2330,70 @@ function documentedIn(readme, heading, nextHeading) {
 }
 
 /* -------------------------------------------------------------------------------------------- */
+/*  A predicate that names an effect has to name one that exists                                 */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * `rider:target:effect:` is built from the effect's **own slug**, not from pf2e's roll option.
+     *
+     * pf2e strips the "Effect: " prefix for `self:effect:hypnotized`; `describeActor` uses the raw slug,
+     * which is `effect-hypnotized`. Two predicates in the content had been written against the shorter
+     * spelling and matched nothing, in silence:
+     *
+     *  - the Full Release pressure's `{not: rider:target:effect:steeled-against-pressure}`, which is the
+     *    gate that makes "success = immune 10 minutes" mean anything. It never closed, so a creature that
+     *    succeeded was asked again on the next tick, for as long as it stood in the aura.
+     *  - Kyōka Suigetsu's Sustain, which is supposed to reach only a creature already hypnotized.
+     *
+     * Both are the same shape of mistake as the dotted flag key: a name that reads correctly beside the
+     * thing it refers to, and refers to nothing. So the names are checked against the effects that exist.
+     */
+    // The whole name, prefix included — `slugOf` above strips "Effect: " because pf2e does, and that is
+    // exactly the difference these two predicates fell down.
+    const rawSlug = (name) => String(name).toLowerCase()
+        .replace(/['’]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+
+    const effectSlugs = new Set();
+    const walk = (dir) => {
+        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+            const full = path.join(dir, entry.name);
+            if (entry.isDirectory()) walk(full);
+            else if (entry.name.endsWith(".json")) {
+                const doc = JSON.parse(fs.readFileSync(full, "utf8"));
+                if (doc?.type === "effect" || doc?.type === "affliction") {
+                    effectSlugs.add(doc.system?.slug || rawSlug(doc.name));
+                }
+            }
+        }
+    };
+    walk(path.join(ROOT, "content"));
+
+    const named = new Set();
+    const collect = (dir) => {
+        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+            const full = path.join(dir, entry.name);
+            if (entry.isDirectory()) collect(full);
+            else if (entry.name.endsWith(".json")) {
+                const raw = fs.readFileSync(full, "utf8");
+                for (const m of raw.matchAll(/rider:target:effect:([a-z0-9-]+)/g)) {
+                    named.add(`${m[1]}  (${entry.name})`);
+                }
+            }
+        }
+    };
+    collect(path.join(ROOT, "content"));
+
+    const dangling = [...named].filter((entry) => !effectSlugs.has(entry.split("  ")[0])).sort();
+    check("every `rider:target:effect:` predicate names an effect that exists",
+        dangling.join(", ") || "none", "none");
+    // The guard is only worth anything if it is looking at something.
+    check("…and there are some to check", named.size > 0, true);
+}
+
+/* -------------------------------------------------------------------------------------------- */
 
 if (failures.length > 0) {
     console.error(`Rider tests failed: ${failures.length} of ${checks}.`);

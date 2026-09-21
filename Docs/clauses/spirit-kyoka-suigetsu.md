@@ -78,7 +78,7 @@ are about what a creature *perceives*, which is the furthest thing from a number
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | S-37a | Sōten Kisshun | All enemies within **60 feet** who can see you must attempt the Shikai save, **including those who previously succeeded or became immune** | | ✅ | Live: entering Full Release re-asked **three dummies who were all inside an immunity window**, one of whom failed this time and was hypnotized. The permanent victim was auto-hypnotized without a roll, and the dummy at **135 feet was not asked** — the 60-foot range holds |
-| S-37b | Sōten Kisshun | Hitting you no longer ends the effect; only a critical hit does | | ☐ | |
+| S-37b | Sōten Kisshun | Hitting you no longer ends the effect; only a critical hit does | | ⚠️ | **Undecidable as written — #63.** *“No longer”* modifies a Shikai rule that §7A never states: its hypnosis has no break condition at all, only a duration. Nothing on either side ends it on a hit, so the clause reads as passing because the thing it changes was never there. A ruling is wanted, not a patch |
 | S-37c | Sōten Kisshun | Once per round you may **Sustain** to force one hypnotized creature to attempt a Will save; on a failure it is **confused** until the end of its turn | | ☐ | |
 
 ## Severing Art — Kanzen Saimin: Owari (guide §9.1)
@@ -95,9 +95,9 @@ are about what a creature *perceives*, which is the furthest thing from a number
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 5 |
+| ☐ | 4 |
 | ✅ | 15 |
-| ⚠️ | 1 |
+| ⚠️ | 2 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 2 |
