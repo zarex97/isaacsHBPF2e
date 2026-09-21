@@ -158,9 +158,26 @@ export const Hypnosis = {
         return actor?.getFlag(MODULE_ID, "hypnosis") ?? {};
     },
 
+    /**
+     * What a UUID is called inside the register.
+     *
+     * A Foundry flag key containing a dot is a **path**, and every UUID is full of them:
+     * `setFlag(id, "hypnosis.Scene.a.Token.b.Actor.c", entry)` writes six nested objects rather than one
+     * key. So the dots are flattened — and the read has to flatten them too, which is the half that was
+     * missing. `remember` sanitised on the way in and `entryFor` looked up the raw UUID on the way out,
+     * so the register was written correctly and never once read.
+     *
+     * Everything the ladder buys goes through that lookup: a creature that critically succeeded was
+     * asked again on the next Release, a creature that succeeded was asked again a second later, and
+     * "seen it once, falls to it forever" never fired at all. Three clauses, one missing `replaceAll`.
+     */
+    keyFor(observerUuid) {
+        return String(observerUuid ?? "").replaceAll(".", "_");
+    },
+
     /** What this Soulbound knows about one observer. */
     entryFor(actor, observerUuid) {
-        return this.register(actor)[observerUuid] ?? {
+        return this.register(actor)[this.keyFor(observerUuid)] ?? {
             immuneUntil: null, permanentVictim: false, lastOutcome: null,
         };
     },
@@ -178,7 +195,7 @@ export const Hypnosis = {
             permanentVictim: this.entryFor(actor, observerUuid).permanentVictim || result.permanentVictim,
             lastOutcome: outcome,
         };
-        await actor.setFlag(MODULE_ID, `hypnosis.${observerUuid.replaceAll(".", "_")}`, entry);
+        await actor.setFlag(MODULE_ID, `hypnosis.${this.keyFor(observerUuid)}`, entry);
         return entry;
     },
 
