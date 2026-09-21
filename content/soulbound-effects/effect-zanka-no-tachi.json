@@ -1,6 +1,7 @@
 {
     "flags": {
         "isaacs-hb-pf2e": {
+            "extraDieSteps": 1,
             "riders": [
                 {
                     "apply": {
@@ -41,15 +42,6 @@
             "title": "Isaac's Homebrew: The Soulbound"
         },
         "rules": [
-            {
-                "itemType": "weapon",
-                "key": "ItemAlteration",
-                "mode": "upgrade",
-                "predicate": [
-                    "item:tag:soulbound-spirit-weapon"
-                ],
-                "property": "damage-dice-faces"
-            },
             {
                 "itemType": "weapon",
                 "key": "ItemAlteration",

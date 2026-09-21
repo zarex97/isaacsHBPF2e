@@ -70,6 +70,33 @@ export function rememberedEntries(actor) {
     }));
 }
 
+/**
+ * A bypass written on a Technique belongs to that Technique's damage, and to nothing else.
+ *
+ * Every entry was being collected off every item the origin carries and tested against the damage in
+ * front of it, which is right for a **state** — Higashi's "your Strikes ignore all resistances" is a
+ * property of the creature while the aspect is up — and wrong for a **Technique**. Ryūjin Jakka's Kita
+ * says *"this damage cannot be reduced by resistance to fire"* about a 60-foot line, and because the
+ * spell sat in the repertoire, every ordinary Strike that Soul Reaper made ignored fire resistance too.
+ * Driven live, with no aspect selected at all: `resistance.ignore: fire, physical` on a plain Strike.
+ *
+ * So a spell's entry is pinned to that spell. Effects and feats stay broad, because a state is exactly
+ * what they are. Both spellings of the pin are accepted — an item describes itself as `item:slug:`, and
+ * a chat message describes it from outside as `origin:item:slug:`.
+ */
+function pinToSource(entry, item) {
+    if (item?.type !== "spell") return entry;
+    const slug = item.slug ?? item.system?.slug;
+    if (!slug) return entry;
+    return {
+        ...entry,
+        predicate: [
+            ...(entry.predicate ?? []),
+            { or: [`item:slug:${slug}`, `origin:item:slug:${slug}`] },
+        ],
+    };
+}
+
 export function bypassEntriesOn(actor, dealtBy = null) {
     const entries = [];
     const seen = new Set();
@@ -77,7 +104,8 @@ export function bypassEntriesOn(actor, dealtBy = null) {
         if (!item || seen.has(item.id)) return;
         seen.add(item.id);
         const flagged = item.flags?.[MODULE_ID]?.[FLAG];
-        if (Array.isArray(flagged)) entries.push(...flagged.map((entry) => ({ entry, item })));
+        if (!Array.isArray(flagged)) return;
+        entries.push(...flagged.map((entry) => ({ entry: pinToSource(entry, item), item })));
     };
     for (const item of actor?.items ?? []) consider(item);
     consider(dealtBy);

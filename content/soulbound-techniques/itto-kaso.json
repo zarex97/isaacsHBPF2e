@@ -60,7 +60,7 @@
             "0": {
                 "applyMod": false,
                 "category": null,
-                "formula": "20d6",
+                "formula": "20d6 + 2d6",
                 "kinds": [
                     "damage"
                 ],

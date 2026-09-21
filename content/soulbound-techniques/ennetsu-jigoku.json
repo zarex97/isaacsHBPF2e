@@ -33,6 +33,7 @@
                         "damageType": "fire",
                         "formula": "1d4",
                         "perStep": "1d4",
+                        "perStepInterval": 2,
                         "type": "persistent-damage"
                     },
                     "outcomes": [

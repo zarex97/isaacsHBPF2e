@@ -12,6 +12,27 @@
                         "types": "all"
                     }
                 }
+            ],
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Wound That Will Not Close"
+                    },
+                    "duration": {
+                        "expiry": "turn-end",
+                        "unit": "rounds",
+                        "value": 1
+                    },
+                    "event": "strike-resolved",
+                    "outcomes": [
+                        "success",
+                        "criticalSuccess"
+                    ],
+                    "predicate": [
+                        "item:tag:soulbound-spirit-weapon"
+                    ]
+                }
             ]
         }
     },

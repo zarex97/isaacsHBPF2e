@@ -151,6 +151,7 @@ export const Severance = {
         // Before the end, not after: ending Severance revokes the Art, and the Art is the only thing that
         // knows what its damage gets past. See `rememberedEntries`.
         await rememberBypass(actor, spell);
+        await detachArt(actor, spell);
         await this.end(actor);
         ChatMessage.create({
             speaker: ChatMessage.getSpeaker({ actor }),
@@ -169,8 +170,13 @@ export const Severance = {
         const round = this.encounterFor(actor)?.round;
         foundry.utils.setProperty(source, `flags.${MODULE_ID}.severanceBegan`,
                                   Number.isInteger(round) && round > 0 ? round : 1);
-        // A new Severance is a clean slate: last encounter's Art has no business bypassing anything now.
+        // A new Severance is a clean slate: last encounter's Art has no business bypassing anything now,
+        // and the detached copy of it must go before the grant puts a fresh one beside it.
         await actor.unsetFlag(MODULE_ID, MEMORY);
+        const spent = actor.itemTypes.spell.filter((i) => i.flags?.[MODULE_ID]?.severingArtSpent);
+        if (spent.length > 0) {
+            await actor.deleteEmbeddedDocuments("Item", spent.map((i) => i.id));
+        }
         const [made] = await actor.createEmbeddedDocuments("Item", [source]);
         return made;
     },
@@ -272,4 +278,41 @@ async function rememberBypass(actor, spell) {
     const slug = spell.slug ?? game.pf2e.system.sluggify(spell.name ?? "");
     if (!slug) return;
     await actor.setFlag(MODULE_ID, MEMORY, { slug, name: spell.name, entries });
+}
+
+/**
+ * Cut the Art loose from the grant that is about to be withdrawn.
+ *
+ * A Severing Art is granted by the Spirit feature predicated on `soulbound:severance`, so the instant
+ * the Art ends Severance the `GrantItem` takes it straight back off the sheet — while its own chat card
+ * is still sitting in the log waiting to be used. From then on the card cannot resolve its item, and
+ * everything hanging off that resolution is gone with it: the damage button's target rows, the per-target
+ * save buttons the outcome riders listen to, and the item `applyDamage` is handed.
+ *
+ * Ittō Kasō is where it shows worst — "creatures that fail can't regain Hit Points for 1 minute" is a
+ * rider on a save that can no longer be rolled from the card.
+ *
+ * So the item is detached rather than kept alive artificially: clearing `flags.pf2e.grantedBy` makes it
+ * an ordinary owned spell that the withdrawal no longer touches. It stays on the sheet as a spent thing,
+ * which is honest — you did just use it — and `begin` clears it when the next Severance starts.
+ * `beforeCast` already refuses an Art outside Severance, so a lingering copy cannot be fired twice.
+ */
+async function detachArt(actor, spell) {
+    if (!spell?.id || !actor?.items?.get?.(spell.id)) return;
+    const granterId = spell.flags?.pf2e?.grantedBy?.id;
+    if (!granterId) return;
+
+    // Both ends of the link, because a grant is recorded twice. The granted item names its granter, and
+    // the granter keeps an `itemGrants` entry naming it back — and it is that second list the withdrawal
+    // walks. Clearing only the first leaves the item exactly as revocable as it was.
+    const granter = actor.items.get(granterId);
+    if (granter) {
+        const grants = granter.flags?.pf2e?.itemGrants ?? {};
+        const key = Object.keys(grants).find((k) => grants[k]?.id === spell.id);
+        if (key) await granter.update({ [`flags.pf2e.itemGrants.-=${key}`]: null });
+    }
+    await spell.update({
+        "flags.pf2e.-=grantedBy": null,
+        [`flags.${MODULE_ID}.severingArtSpent`]: true,
+    });
 }
