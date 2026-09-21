@@ -230,6 +230,21 @@ like a hang. If one is already standing:
     ?.element.querySelector("button.select-button")?.click();
 ```
 
+**There are two prompt shapes, and the newer one has no `select-button`.** A Svelte `PickAThingPrompt`
+carries a `button.sv-btn-indicator` per choice and a plain **Save** — a resolver written against the
+older selector answers nothing there and the job hangs exactly as though none were installed. Worse, a
+detached prompt (`rendered: false`) ignores both, and the only way out is
+`close({force: true})` followed by `element.remove()`.
+
+Nine of them stacked up in one session from a single `actor.update({level: 20})` on a clone, and every
+symptom was somewhere else: three CDP timeouts, a world that would not finish launching, and a cast
+that resolved `pending` forever with no error and no notification. **Check for a standing prompt before
+believing any of those.**
+
+```js
+[...foundry.applications.instances.values()].filter((a) => a.constructor.name === "PickAThingPrompt")
+```
+
 **The selector is `button.select-button`.** `button[data-choice]` looks right and matches nothing — the
 choices are Svelte-rendered buttons carrying no dataset at all, so a resolver written against
 `data-choice` silently answers nothing and the job hangs exactly as though no resolver were installed.
