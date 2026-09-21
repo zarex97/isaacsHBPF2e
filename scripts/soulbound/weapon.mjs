@@ -64,6 +64,31 @@ export const SpiritWeapon = {
                 updates.push({ _id: weapon.id, "system.equipped.carryType": wanted });
             }
         }
+
+        /**
+         * Hands, for the forms that leave them empty.
+         *
+         * Senbonzakura's Shikai says "your hands are empty" — the blade scatters and there is nothing
+         * left to hold. `ItemAlteration` cannot express this: its property list covers traits, runes,
+         * damage dice and bulk, and nothing that touches how a weapon is carried. So the form declares
+         * `freesHands` on itself and this is the one place that reads it, the same way Libra's Arms are
+         * the one place that writes `handsHeld`.
+         *
+         * `carryType` stays `held`: the Strike has to remain available. Only the hand count drops, which
+         * is what `attributes.handsFree` is computed from.
+         */
+        const frees = (actor.itemTypes?.effect ?? []).some(
+            (effect) => effect.flags?.[MODULE_ID]?.freesHands === true,
+        );
+        for (const weapon of spirit) {
+            if (weapon.system.equipped?.carryType !== "held") continue;
+            const hands = frees ? 0 : 1;
+            if ((weapon.system.equipped?.handsHeld ?? 1) === hands) continue;
+            const queued = updates.find((u) => u._id === weapon.id);
+            if (queued) queued["system.equipped.handsHeld"] = hands;
+            else updates.push({ _id: weapon.id, "system.equipped.handsHeld": hands });
+        }
+
         if (updates.length > 0) await actor.updateEmbeddedDocuments("Item", updates);
     },
 
@@ -85,7 +110,14 @@ export const SpiritWeapon = {
             return (item.system?.traits?.otherTags ?? []).includes(SPIRIT_WEAPON_TAG);
         };
 
+        /** A form that frees the hands is an effect, not a weapon, so it needs its own way in. */
+        const freesHands = (item) => item?.type === "effect"
+            && item.actor
+            && item.flags?.[MODULE_ID]?.freesHands === true
+            && (game.user.isGM || item.actor.isOwner === true);
+
         Hooks.on("createItem", async (item) => {
+            if (freesHands(item)) queueReconcile(item.actor, (actor) => this.reconcile(actor));
             if (!touched(item)) return;
             if (!item.getFlag(MODULE_ID, "soulEtched")) await item.setFlag(MODULE_ID, "soulEtched", true);
             queueReconcile(item.actor, (actor) => this.reconcile(actor));
@@ -93,6 +125,7 @@ export const SpiritWeapon = {
 
         // A released form ending takes its weapon with it, and the sealed profile comes back up.
         Hooks.on("deleteItem", (item) => {
+            if (freesHands(item)) queueReconcile(item.actor, (actor) => this.reconcile(actor));
             if (!touched(item)) return;
             queueReconcile(item.actor, (actor) => this.reconcile(actor));
         });

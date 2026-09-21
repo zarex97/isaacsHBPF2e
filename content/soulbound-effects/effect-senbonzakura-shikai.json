@@ -92,5 +92,10 @@
             ]
         }
     },
-    "type": "effect"
+    "type": "effect",
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "freesHands": true
+        }
+    }
 }
