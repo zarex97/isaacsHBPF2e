@@ -22,7 +22,8 @@
                     "unit": "rounds",
                     "value": 1
                 },
-                "name": "Senbonzakura — petals"
+                "name": "Senbonzakura — petals",
+                "affects": "enemies"
             },
             "riders": [
                 {

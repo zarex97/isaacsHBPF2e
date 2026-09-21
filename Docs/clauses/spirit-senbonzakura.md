@@ -32,17 +32,17 @@ not. A heightening clause needs a caster above 14th — clone one rather than ed
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| S-01a | Shikai Form | Your Strikes gain **reach 15 feet** | | ⚠️ | `reach-15` is absent while sealed and arrives with Release (ported from S-01, **SB-6**) |
+| S-01a | Shikai Form | Your Strikes gain **reach 15 feet** | | ✅ | Live in released Shikai: the spirit weapon carries `reach-15`, and it is absent while sealed. **SB-6** closed this when the release ladder started running |
 | S-01b | Shikai Form | lose the two-hand and twin traits | | ✅ | Live: the Blade profile carries `two-hand-d10` in content and the Shikai form removes it — traits read `versatile-p, versatile-spirit, reach-15`. The `twin` removal is authored but unreachable on a Blade spirit |
 | S-01c | Shikai Form | your hands are empty | | ✅ | Live: sealed reads `handsHeld 1` / `handsFree 1`; Shikai reads `handsHeld 0` / `handsFree 2` with `carryType` still `held`, so the Strike survives. `ItemAlteration` has no property for this, so the form declares `freesHands` and `SpiritWeapon.reconcile` reads it |
-| S-01d | Shikai Form | Your Strikes are **not** affected by cover between you and the target | | ⚠️ | A **Scattered** note now reaches the attack roll, but pf2e applies cover as a bonus on the defender and gives the attacker no way to suppress it. The roll is not corrected |
+| S-01d | Shikai Form | Your Strikes are **not** affected by cover between you and the target | | ✅ | **Coded.** pf2e puts cover on the defender and gives an attacker no way to suppress it, so the correction is made where both sides meet — `Check.roll` takes the target's cover bonus back out of the DC. Live vs. a target in greater cover: **DC 20 → 18**, stamped `soulbound:ignored-cover:2` |
 
 ## Release Technique — Senbonzakura (1st)
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | S-02a | Senbonzakura | **15-foot emanation**, basic Reflex, **2d6** slashing | | ✅ | Cast live: emanation, basic Reflex, slashing (ported from S-02) |
-| S-02b | Senbonzakura | The area is **difficult terrain** for enemies until the start of your next turn | | ⚠️ | Live: casting raises a *Senbonzakura — petals* Region carrying `modifyMovementCost` on all twelve movement actions, with an expiry. **Not enemies-only** — a lingering Region has no allegiance filter, so it slows allies who walk in |
+| S-02b | Senbonzakura | The area is **difficult terrain** for enemies until the start of your next turn | | ✅ | **Coded.** Foundry's `modifyMovementCost` has no notion of who is walking, so the behavior is subclassed: `_getTerrainEffects` is handed the moving token and returns nothing for the caster's own side. Live in the petal Region: the enemy got `difficulty: 2`, the ally and the caster **`[]`** |
 | S-02c | Senbonzakura | **Heightened (+1)** +1d6 | | ✅ | Live at rank 10: 11d6 slashing, the guide's own target (ported from S-02) |
 
 ## Refined (9th)
@@ -68,13 +68,13 @@ not. A heightening clause needs a caster above 14th — clone one rather than ed
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | S-06a | Gokei | The second emanation shrinks to a **10-foot burst** centred on one enemy | | ✅ | Live: Gokei reshapes the second area rather than adding a third (ported from S-06) |
 | S-06b | Gokei | that enemy takes **double** the damage | | ✅ | Live: `5d6 × 2 = 36` and `× 2 = 26` on the two at the anchor, and nobody else (ported from S-06) |
-| S-06c | Gokei | cannot benefit from cover or concealment against it | | ⚠️ | A **Gokei** note now reaches the attack roll. Same ceiling as S-01d: cover and concealment sit on the defender |
+| S-06c | Gokei | cannot benefit from cover or concealment against it | | ✅ | **Coded.** Cover also grants its bonus to **Reflex** against `area-effect`, so it was helping against the one thing the clause forbids. The same `Check.roll` seam raises the save DC by that bonus instead. Live: **DC 20 → 22** on a covered target's Reflex save. Concealment needs no code here: it is a flat check against *attack rolls*, and Gokei is a basic Reflex save, so there is nothing for it to cancel |
 | S-07a | Senkei | The blades condense into a thousand swords forming a 20-foot cage around you and one enemy | | ✅ | Live: Senkei raises a Region named *Effect: Senkei — 20-foot cage* on the caster, and switching to Gokei takes it back down |
 | S-07b | Senkei | Neither of you can leave | | — | Arrives as a turn-start prompt; not a number pf2e can enforce (ported from S-07) |
 | S-07c | Senkei | your Strikes against that enemy ignore all resistances | | ✅ | A `bypass` makes your Strikes ignore all resistances (ported from S-07) |
 | S-07d | Senkei | you may make one extra Strike each round at your current multiple attack penalty | | — | Offered as a prompt; pf2e cannot grant an extra Strike (ported from S-07) |
 | S-07e | Senkei | **You lose Senbonzakura's reach and cover-ignoring** | | ✅ | Senkei takes `reach-15` back off the spirit weapon (ported from S-07) |
-| S-07f | Senkei | enemies outside the cage cannot be targeted by you | | ⚠️ | A **Senkei** note now reaches the attack roll and the cage is drawn as a Region, so the boundary is visible. pf2e does not restrict who an attacker may pick, so the restriction is still held by hand |
+| S-07f | Senkei | enemies outside the cage cannot be targeted by you | | ✅ | **Coded.** A `targetToken` hook drops a target that falls outside the cage Region and says why. Live with the cage up: targeting *D1* inside **held**, targeting *Piscis* outside was released with *“Piscis is outside Effect: Senkei — 20-foot cage”*. The cage must enclose its own bearer before a refusal is trusted, so a Region that cannot answer fails open |
 
 ## Severing Art — Shūkei: Hakuteiken (guide §9.1)
 
@@ -93,8 +93,8 @@ not. A heightening clause needs a caster above 14th — clone one rather than ed
 | Status | Count |
 | :-- | --: |
 | ☐ | 0 |
-| ✅ | 21 |
-| ⚠️ | 5 |
+| ✅ | 26 |
+| ⚠️ | 0 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 2 |
