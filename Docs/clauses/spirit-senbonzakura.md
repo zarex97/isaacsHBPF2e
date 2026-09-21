@@ -34,7 +34,7 @@ not. A heightening clause needs a caster above 14th — clone one rather than ed
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | S-01a | Shikai Form | Your Strikes gain **reach 15 feet** | | ⚠️ | `reach-15` is absent while sealed and arrives with Release (ported from S-01, **SB-6**) |
 | S-01b | Shikai Form | lose the two-hand and twin traits | | ✅ | Live: the Blade profile carries `two-hand-d10` in content and the Shikai form removes it — traits read `versatile-p, versatile-spirit, reach-15`. The `twin` removal is authored but unreachable on a Blade spirit |
-| S-01c | Shikai Form | your hands are empty | | ❌ | The spirit weapon stays `carryType: held`, `handsHeld: 1`. The form never frees the hands |
+| S-01c | Shikai Form | your hands are empty | | ✅ | Live: sealed reads `handsHeld 1` / `handsFree 1`; Shikai reads `handsHeld 0` / `handsFree 2` with `carryType` still `held`, so the Strike survives. `ItemAlteration` has no property for this, so the form declares `freesHands` and `SpiritWeapon.reconcile` reads it |
 | S-01d | Shikai Form | Your Strikes are **not** affected by cover between you and the target | | ⚠️ | A **Scattered** note now reaches the attack roll, but pf2e applies cover as a bonus on the defender and gives the attacker no way to suppress it. The roll is not corrected |
 
 ## Release Technique — Senbonzakura (1st)
@@ -42,7 +42,7 @@ not. A heightening clause needs a caster above 14th — clone one rather than ed
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | S-02a | Senbonzakura | **15-foot emanation**, basic Reflex, **2d6** slashing | | ✅ | Cast live: emanation, basic Reflex, slashing (ported from S-02) |
-| S-02b | Senbonzakura | The area is **difficult terrain** for enemies until the start of your next turn | | ☐ | A lingering difficult-terrain rider is authored; not driven (ported from S-02) |
+| S-02b | Senbonzakura | The area is **difficult terrain** for enemies until the start of your next turn | | ⚠️ | Live: casting raises a *Senbonzakura — petals* Region carrying `modifyMovementCost` on all twelve movement actions, with an expiry. **Not enemies-only** — a lingering Region has no allegiance filter, so it slows allies who walk in |
 | S-02c | Senbonzakura | **Heightened (+1)** +1d6 | | ✅ | Live at rank 10: 11d6 slashing, the guide's own target (ported from S-02) |
 
 ## Refined (9th)
@@ -50,7 +50,7 @@ not. A heightening clause needs a caster above 14th — clone one rather than ed
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | S-03a | Refined | The emanation increases to **20 feet** | | ✅ | 20-ft emanation via `alternateArea` on `feature:refined-release` (**SB-28**, ported from S-03) |
-| S-03b | Refined | creatures that critically fail are **off-guard** until the start of your next turn | | 🔧 | The rider now carries `expiry: turn-start`, matching the guide. Not yet driven through a critical failure |
+| S-03b | Refined | creatures that critically fail are **off-guard** until the start of your next turn | | ✅ | Live: D2 critically failed the Reflex save from the card and gained **off-guard**, on a generated effect whose duration reads `rounds 1, expiry turn-start` — the start of your next turn, as the guide says |
 
 ## Bankai — Senbonzakura Kageyoshi (13th)
 
@@ -74,7 +74,7 @@ not. A heightening clause needs a caster above 14th — clone one rather than ed
 | S-07c | Senkei | your Strikes against that enemy ignore all resistances | | ✅ | A `bypass` makes your Strikes ignore all resistances (ported from S-07) |
 | S-07d | Senkei | you may make one extra Strike each round at your current multiple attack penalty | | — | Offered as a prompt; pf2e cannot grant an extra Strike (ported from S-07) |
 | S-07e | Senkei | **You lose Senbonzakura's reach and cover-ignoring** | | ✅ | Senkei takes `reach-15` back off the spirit weapon (ported from S-07) |
-| S-07f | Senkei | enemies outside the cage cannot be targeted by you | | ☐ | |
+| S-07f | Senkei | enemies outside the cage cannot be targeted by you | | ⚠️ | A **Senkei** note now reaches the attack roll and the cage is drawn as a Region, so the boundary is visible. pf2e does not restrict who an attacker may pick, so the restriction is still held by hand |
 
 ## Severing Art — Shūkei: Hakuteiken (guide §9.1)
 
@@ -92,10 +92,10 @@ not. A heightening clause needs a caster above 14th — clone one rather than ed
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 2 |
-| ✅ | 19 |
-| ⚠️ | 3 |
-| ❌ | 1 |
-| 🔧 | 1 |
+| ☐ | 0 |
+| ✅ | 21 |
+| ⚠️ | 5 |
+| ❌ | 0 |
+| 🔧 | 0 |
 | — | 2 |
 | **Total** | **28** |
