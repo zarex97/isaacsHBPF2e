@@ -29,6 +29,7 @@ import { Encasement } from "./encasement.mjs";
 import { Escape, escapeStatisticFor } from "./escape.mjs";
 import { WEAPON_TAG, crossingBleed, equipArm, libraDice, libraPotency } from "./libra.mjs";
 import { offerReaction } from "./reactions.mjs";
+import { gateByRound } from "./round-gate.mjs";
 import { selectRiders } from "./select.mjs";
 
 /** pf2e's DegreeOfSuccess is an index, not a word. */
@@ -120,7 +121,13 @@ async function applyToTarget(target, candidates, context, payload) {
     // leaves it — see below for why Scorpio needs that and why an escalation ladder must never have it.
     const snapshot = candidates.filter(({ rider }) => rider.live !== true);
     const live = candidates.filter(({ rider }) => rider.live === true);
-    const chosen = selectRiders(snapshot, { outcome: payload.outcome ?? null, options });
+    // "The first time each round you hit" is a count, and `selectRiders` cannot count. The allowance
+    // belongs to the creature the rider is for, so the ledger is kept on the origin and spent here —
+    // after the predicate has agreed the rider applies, and before anything is written to the target.
+    const chosen = await gateByRound(
+        selectRiders(snapshot, { outcome: payload.outcome ?? null, options }),
+        context.originActor ?? actor,
+    );
     if (chosen.length === 0 && live.length === 0) return;
 
     const work = {
@@ -170,7 +177,11 @@ async function applyToTarget(target, candidates, context, payload) {
             item: context.item ?? context.messageItem ?? context.eventItem,
             extra: payload.damage ? describeDamage(payload.damage) : [],
         });
-        for (const { rider, item, index } of selectRiders(live, { outcome: payload.outcome ?? null, options: now })) {
+        const liveChosen = await gateByRound(
+            selectRiders(live, { outcome: payload.outcome ?? null, options: now }),
+            context.originActor ?? actor,
+        );
+        for (const { rider, item, index } of liveChosen) {
             try {
                 await applyOne(rider, { ...work, item, riderIndex: index, riderItem: item });
             } catch (error) {
