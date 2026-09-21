@@ -34,11 +34,8 @@ front of every Spirit's heightening clauses.
 paraphrase here or an edit to the guide fails the build. **Static check** names the assertion that guards
 it; **Evidence** names what proved it happened at the table.
 
-*Harness notes.* Drive through the Claude Chrome extension: real pointer input is what
-`canvas.regions.placeRegion` accepts. Cast from a **party**-aligned actor or an `enemies` area catches
-nobody. `canvas.pan` returns immediately where `canvas.animatePan` times out the script channel. Token
-disposition writes are silently reverted in this world; `system.details.alliance` on the actor is not.
----
+*How a clause is driven — the rig, the traps it sets and what a ✅ owes — is
+`Docs/tools/live-verification.md`. It is the one copy; this file records results, not method.*
 
 ## Shikai (1st) — guide §7A Hyōrinmaru
 

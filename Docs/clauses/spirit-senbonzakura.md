@@ -20,11 +20,8 @@ each. Source: `Docs/soulbound-guide-v1.md` v1.4 §7A (Senbonzakura) and §9.1 (S
 paraphrase here or an edit to the guide fails the build. **Static check** names the assertion that guards
 it; **Evidence** names what proved it happened at the table.
 
-*Harness notes, learned on Hyōrinmaru.* Drive through the Claude Chrome extension: real pointer input is
-what `canvas.regions.placeRegion` accepts. Cast from a **party**-aligned actor or an `enemies` area
-catches nobody. `canvas.pan` returns immediately where `canvas.animatePan` times out the script channel.
-Token disposition writes are silently reverted in this world; `system.details.alliance` on the actor is
-not. A heightening clause needs a caster above 14th — clone one rather than editing a level in place.
+*How a clause is driven — the rig, the traps it sets and what a ✅ owes — is
+`Docs/tools/live-verification.md`. It is the one copy; this file records results, not method.*
 
 ---
 
