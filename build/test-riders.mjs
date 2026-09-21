@@ -2242,6 +2242,45 @@ function documentedIn(readme, heading, nextHeading) {
 }
 
 /* -------------------------------------------------------------------------------------------- */
+/*  Ryūjin Jakka                                                                                 */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    // "+1d6 and +1 persistent die at EVERY OTHER increment" is two rates in one sentence, so the rate
+    // has to be sayable. Without the interval a rank-7 cast would earn six extra dice rather than three.
+    const ennetsu = load("soulbound-techniques", "ennetsu-jigoku.json");
+    const persistent = ridersOf(ennetsu).find((r) => r.apply?.type === "persistent-damage");
+    check("Ennetsu Jigoku's persistent fire grows", [persistent?.apply?.formula, persistent?.apply?.perStep],
+        ["1d4", "1d4"]);
+    check("…at every other increment", persistent?.apply?.perStepInterval, 2);
+
+    // "a creature that DAMAGES you", not one that swings at you. A rider with no `outcomes` fires on
+    // every outcome, and the heat was answering misses.
+    const nishi = load("soulbound-effects", "effect-nishi.json");
+    check("Nishi answers a hit and not a miss",
+        ridersOf(nishi)[0]?.outcomes, ["success", "criticalSuccess"]);
+
+    // The aspect carried a bypass and a roll option and nothing that stopped healing.
+    const higashi = load("soulbound-effects", "effect-higashi.json");
+    const wound = ridersOf(higashi)?.[0];
+    check("Higashi stops healing on a hit with the spirit weapon",
+        [wound?.event, wound?.apply?.type, wound?.predicate?.[0]],
+        ["strike-resolved", "effect", "item:tag:soulbound-spirit-weapon"]);
+    check("…until the end of your next turn",
+        [wound?.duration?.value, wound?.duration?.unit, wound?.duration?.expiry], [1, "rounds", "turn-end"]);
+
+    // A `turn-end` AREA rider sweeps whoever stands there when the CASTER's turn ends. The clause is
+    // about an enemy ending its own turn in the ash, which is what an Aura means by `turn-end`.
+    const minami = load("soulbound-effects", "effect-minami.json");
+    const ash = ridersOf(minami)[0];
+    check("Minami's ash waits for the enemy's own turn to end", ash?.event, "aura-tick");
+    check("…and has no area of its own to sweep", [ash?.area, ash?.self], [undefined, undefined]);
+    const aura = minami.system.rules.find((r) => r.key === "Aura");
+    check("…because the Aura decides who is caught",
+        [aura?.radius, aura?.effects?.[0]?.affects, aura?.effects?.[0]?.events], [20, "enemies", ["turn-end"]]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
 
 if (failures.length > 0) {
     console.error(`Rider tests failed: ${failures.length} of ${checks}.`);

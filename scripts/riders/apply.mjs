@@ -1566,6 +1566,26 @@ async function crossThresholds(source, was, now, context) {
  * put there by an earlier rider. Reading it back is what turns a static formula into the stacking one the
  * Cloth actually describes.
  */
+/**
+ * How many steps of its own growth this rider has earned.
+ *
+ * `perStep` normally means "one more die per heightening step". Ennetsu Jigoku's persistent fire is the
+ * exception the guide writes out loud — *"+1d6 and +1 persistent die at **every other** increment"* —
+ * two different rates in one sentence, so the rate has to be sayable. `perStepInterval: 2` is that: the
+ * steps are counted the usual way and then divided, so a rank-7 cast earns six increments and three
+ * extra dice rather than six.
+ */
+export function riderSteps(rider, context) {
+    const source = context.item;
+    const steps = stepsFor({
+        baseRank: source?.baseRank ?? source?.system?.level?.value,
+        castRank: source?.rank,
+        bonusSteps: skyStepsFromOptions(context.originActor?.getRollOptions?.() ?? []),
+    });
+    const interval = Math.max(1, Number(rider.apply?.perStepInterval) || 1);
+    return Math.floor(steps / interval);
+}
+
 async function applyPersistent(rider, context) {
     const { damageType = "bleed", perCounter, max } = rider.apply;
     // Almost always a literal. *Piranha Rose*'s persistent bleed is the exception — "+1d6 at 9th, 13th and
@@ -1577,7 +1597,18 @@ async function applyPersistent(rider, context) {
         || (typeof rawFormula === "string" && rawFormula.startsWith("origin."));
     const formula = resolvable ? (resolveFromOrigin(rawFormula, context) ?? "1d6") : rawFormula;
     const count = perCounter ? Math.min(counterOn(context.actor, perCounter), Number(max) || Infinity) : 1;
-    const scaled = perCounter ? scaleFormula(formula, count) : formula;
+    const counted = perCounter ? scaleFormula(formula, count) : formula;
+    if (!counted) return;
+
+    // Persistent damage heightens too, and did not. `applyDamageRider` has honoured `perStep` since it
+    // was written; this path never read it, so Ennetsu Jigoku's "1d4" stayed 1d4 at every rank while the
+    // headline dice climbed to 8d6 beside it — a flag on the content that nothing opened.
+    //
+    // Grown into one formula rather than appended as "1d4 + 3d4": a persistent-damage condition carries a
+    // single formula, and pf2e's own recovery card reads it back.
+    const perStep = rider.apply.perStep;
+    const steps = perStep ? riderSteps(rider, context) : 0;
+    const scaled = perStep && steps > 0 ? growByStep(counted, perStep, steps) : counted;
     if (!scaled) return;
 
     await inflictPersistent(context.actor, {
@@ -1655,14 +1686,7 @@ async function applyDamageRider(rider, context) {
     // on a critical failure alone, and that 4d8 grows a die per step like everything else — but a rider
     // sits outside `system.damage`, so pf2e never scales it. `perStep` is that growth, counted the same
     // way the Technique's own is: steps earned by rank, plus whatever the sky is worth today.
-    const source = context.item;
-    const steps = perStep
-        ? stepsFor({
-              baseRank: source?.baseRank ?? source?.system?.level?.value,
-              castRank: source?.rank,
-              bonusSteps: skyStepsFromOptions(context.originActor?.getRollOptions?.() ?? []),
-          })
-        : 0;
+    const steps = perStep ? riderSteps(rider, context) : 0;
     const growth = perStep ? scaleFormula(perStep, steps) : null;
     const scaled = growth ? `${counted} + ${growth}` : counted;
 

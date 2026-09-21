@@ -986,23 +986,30 @@ check(
     );
 }
 
-// pf2e's `damage-dice-faces` steps once per `upgrade` and refuses a value unless the mode is override.
-// Two steps is two rules, which is also how the Bankai says "two steps instead of one" out loud.
-//
-// NOTE: driven live on 2026-09-21, and **two `upgrade` rules still give one step** — a base d8 spirit
-// weapon reads d10 with one rule and d10 with two, whether the rules sit on one effect or on two. This
-// assertion counts rules, which is all it ever did; it is not evidence that Zanka no Tachi's "+2 steps"
-// reaches the table. See the `damage-dice-faces` bug issue.
-check(
-    "the Shikai steps the die once; Zanka no Tachi steps it twice",
-    [
-        contentDoc("soulbound-effects/effect-zangetsu-shikai.json").system.rules
-            .filter((r) => r.property === "damage-dice-faces").length,
-        contentDoc("soulbound-effects/effect-zanka-no-tachi.json").system.rules
-            .filter((r) => r.property === "damage-dice-faces").length,
-    ],
-    [1, 2],
-);
+/**
+ * "Two steps instead of one" is not expressible as a rule element.
+ *
+ * pf2e's `damage-dice-faces` handler latches — `if (item.flags.pf2e.damageFacesUpgraded) return` — so a
+ * second `upgrade` is a no-op whether it sits on the same effect or another one. Driven live: a base d8
+ * spirit weapon read d10 with one rule and d10 with two. The latch is deliberate; PF2e's own rule is that
+ * die-size increases do not stack, and the guide overrides that on purpose.
+ *
+ * So the Bankai keeps **one** honest `upgrade` and declares the rest as `extraDieSteps`, taken in
+ * `prepareDerivedData` after pf2e has finished. A second `upgrade` rule reappearing here would be a
+ * silent regression to one step, which is why the count is asserted as exactly one.
+ */
+{
+    const shikai = contentDoc("soulbound-effects/effect-zangetsu-shikai.json").system.rules;
+    const zanka = contentDoc("soulbound-effects/effect-zanka-no-tachi.json");
+    const faces = (rules) => rules.filter((r) => r.property === "damage-dice-faces").length;
+    check("one upgrade rule each, because a second would do nothing",
+        [faces(shikai), faces(zanka.system.rules)], [1, 1]);
+    check("and Zanka no Tachi asks for its second step in the one way that works",
+        zanka.flags["isaacs-hb-pf2e"].extraDieSteps, 1);
+    check("the Shikai does not, because one step is all it claims",
+        contentDoc("soulbound-effects/effect-zangetsu-shikai.json").flags?.["isaacs-hb-pf2e"]?.extraDieSteps,
+        undefined);
+}
 // The Getsuga half asserted `property: "time"`, which pf2e has no handler for — so this check was
 // pinning an inert rule in place and calling it compression. The action cost is a module capability
 // now; the assertions for it are at the bottom of this file.
@@ -1491,7 +1498,10 @@ for (const [file, spirit] of ARTS) {
         doc.system.traits.otherTags.includes("sb-tier-severing"),
         doc.system.traits.otherTags.includes(`soulbound-art-${spirit}`),
     ], [10, true, true]);
-    check(`${file}: prints round one's 20d6`, doc.system.damage["0"].formula, "20d6");
+    // Ittō Kasō is the one Art that beats the table — "the Waning dice **+2d6**" (R-14b) — and
+    // `applyWaning` preserves an extra it finds in the formula. Everything else is the bare table.
+    check(`${file}: prints round one's 20d6`, doc.system.damage["0"].formula,
+        file === "itto-kaso" ? "20d6 + 2d6" : "20d6");
 }
 
 // Ittō Kasō is the only Art with a self-cost, and the only one that beats the table.
@@ -1502,6 +1512,17 @@ check(
      itto.system.description.value.includes("+2d6")],
     [true, true],
 );
+/**
+ * …and carries it where the dice are rolled, not only where they are described.
+ *
+ * `applyWaning` preserves a `+NdN` that is already in the formula, and that behaviour has been asserted
+ * since it was written — against a hand-built fixture. The shipped content said plain `20d6`, so the
+ * only Art that beats the table did not, and the description promised an extra nobody rolled. Driven
+ * live at Waning round 1: `22d6 fire`.
+ */
+check("…and carries the +2d6 in the formula the dice are rolled from",
+    itto.system.damage["0"].formula, "20d6 + 2d6");
+
 // Six Arts are extrapolations and must say so where someone reads them.
 for (const file of ["kanzen-saimin-owari", "cero-oscuras-ceniza", "la-hora-final", "aullido",
                     "the-reckoning", "apotheosis"]) {
@@ -1802,13 +1823,16 @@ check("Thunderbolt Form's aura is a basic Reflex too (guide §7C)",
  * These pin the shape of the content rather than the engine, because the engine change is one line and
  * the thing that will drift is a seventh aura authored to the same pattern.
  */
-// Effect: Full Release is no longer in this list: its emanation was promoted to a real pf2e `Aura`,
-// which catches per creature at the end of ITS turn rather than sweeping at the caster's. The five
-// below are still area riders and still have to say who they catch.
+// Effect: Full Release is not in this list, and nor is Effect: Minami: both emanations were promoted to
+// real pf2e `Aura`s, which catch per creature at the end of ITS turn rather than sweeping at the
+// caster's. Minami went the same way for the same reason — driven live, two enemies were grabbed the
+// instant the *caster's* turn ended, which is not what "enemies that end their turn in it" says.
+//
+// The two `turn-start` entries below are correct as area riders: Zanka no Tachi's ambient heat and
+// Kageyoshi's petals both say "at the start of each of **your** turns", which is a sweep.
 const AURAS = [
     ["soulbound-effects/effect-senbonzakura-kageyoshi.json", "turn-start", 20],
     ["soulbound-effects/effect-zanka-no-tachi.json", "turn-start", 30],
-    ["soulbound-effects/effect-minami.json", "turn-end", 20],
     ["soulbound-effects/effect-respira-absoluta.json", "turn-end", 20],
     ["soulbound-effects/effect-thunderbolt-form.json", "turn-end", 10],
 ];

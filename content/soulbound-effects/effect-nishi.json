@@ -9,6 +9,11 @@
                         "type": "damage"
                     },
                     "event": "strike-received",
+                    "note": "The clause is \"a creature that DAMAGES you\", not one that swings at you. A rider with no `outcomes` fires on every outcome, so the heat answered misses too.",
+                    "outcomes": [
+                        "success",
+                        "criticalSuccess"
+                    ],
                     "predicate": [
                         {
                             "or": [
