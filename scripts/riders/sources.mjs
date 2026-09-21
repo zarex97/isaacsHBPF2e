@@ -34,38 +34,45 @@ export const Sources = {
         Hooks.on("createChatMessage", (message, _options, userId) => Sources.onMessage(message, userId));
         Hooks.on("pf2e.endTurn", (combatant) => Sources.onTurn("turn-end", combatant));
         Hooks.on("pf2e.startTurn", (combatant) => Sources.onTurn("turn-start", combatant));
+        Hooks.on("pf2e.endTurn", (combatant) => Sources.onAuraTurn("turn-end", combatant));
+        Hooks.on("pf2e.startTurn", (combatant) => Sources.onAuraTurn("turn-start", combatant));
         Hooks.on("createItem", (item, _options, userId) => Sources.onAuraTick(item, userId));
 
         Sources.wrapApplyDamage();
     },
 
     /**
-     * A creature entering — or ending its turn inside — an aura the Saint is carrying.
+     * A creature standing in an aura the caster is carrying.
      *
-     * pf2e's own `Aura` rule element already does the geometry: it watches the board every time a token
-     * moves and grants a named effect to whoever the aura's `effects` entry says to catch, on `enter` and
-     * `turn-end`. What it will not do is roll a save or deal damage — the schema even has a `save` field for
-     * exactly that, and pf2e discards it the moment the aura is built, so a Technique that wants "6d8 cold,
-     * basic Fortitude" out of an aura tick has to bring its own dice.
+     * pf2e's own `Aura` rule element does the geometry, and only the geometry. The schema offers
+     * `events: ["enter", "turn-start", "turn-end"]` and it reads that list **once**, to pick a default for
+     * `removeOnExit`:
      *
-     * The marker this reaches for is `Effect: Aura Tick` — content-free by design, so it can be reused by
-     * any Cloth with a persistent aura rather than authored once per Technique. Its only job is to be the
-     * item pf2e's own aura check creates and destroys as tokens cross the line; `flags.pf2e.aura` is stamped
-     * onto it natively by `applyAreaEffects`, which is how this is told the marker belongs to an aura at
-     * all, and `flags.pf2e.aura.origin` is how it is told whose. The riders that say what the tick is worth
-     * live on the *origin's own* granted effect — the same one an aura Technique's `action-used` rider hands
-     * out at cast time, carrying that cast's heightened numbers — found by asking that actor for the one
-     * item still carrying an `aura-tick` rider, which is why only one aura of this shape may be live on a
-     * Saint at once.
+     * ```ts
+     * effect.removeOnExit ??= Array.isArray(effect.events) ? effect.events.includes("enter") : false;
+     * ```
      *
-     * The marker is deleted the moment it is read, win or lose: pf2e's own re-grant check
-     * (`this.itemTypes.effect.some(e => e.sourceId === uuid)`) skips granting it again while a copy is still
-     * present, so a marker left standing would mean "ends its turn inside" fires exactly once, ever.
+     * That is the whole of it. `applyAreaEffects` never looks at `events` again — an aura effect is granted
+     * the moment a token is inside, whenever `checkAuras` next runs, which is on token movement, a
+     * disposition change or a scene preparation. So "enemies that end **their** turn in it" was paid out
+     * whenever somebody walked past, and never at the end of anybody's turn.
+     *
+     * The marker is `Effect: Aura Tick` — content-free by design, so any Technique with a persistent aura
+     * can reuse it. `flags.pf2e.aura` is stamped onto it natively by `applyAreaEffects`, and that is how
+     * this is told which aura it belongs to and whose.
+     *
+     * The marker is deleted the moment it is read, win or lose: pf2e's re-grant check skips an effect the
+     * target already carries (`itemTypes.effect.some(e => e.sourceId === uuid)`), so a marker left standing
+     * would mean the aura fires exactly once, ever.
+     *
+     * **This path is the `enter` half only.** `turn-start` and `turn-end` are driven from the encounter
+     * instead — see `onAuraTurn` — because pf2e will not time them, and the marker's arrival says nothing
+     * about whose turn it is.
      */
     async onAuraTick(item, userId) {
         if (!enabled() || game.user.id !== userId) return;
-        const aura = item?.flags?.pf2e?.aura;
-        if (!aura || item.slug !== "effect-aura-tick") return;
+        const stamp = item?.flags?.pf2e?.aura;
+        if (!stamp || item.slug !== "effect-aura-tick") return;
 
         // `getActiveTokens` hands back the `TokenDocument` itself, not a canvas placeable — there is no
         // `.document` to go one step further through, and doing so anyway threw an error nothing here
@@ -73,12 +80,68 @@ export const Sources = {
         // reached the relay at all.
         const target = item.actor;
         const targetToken = target?.getActiveTokens(true, true).at(0);
+        const sourceId = item.sourceId;
         await item.delete();
         if (!target || !targetToken) return;
 
-        const originActor = aura.origin ? (await fromUuid(aura.origin))?.actor ?? (await fromUuid(aura.origin)) : null;
-        const originEffect = originActor?.items?.find((candidate) => ridersOn(candidate).some((r) => r.event === "aura-tick"));
-        if (!originActor || !originEffect) return;
+        const originActor = stamp.origin
+            ? (await fromUuid(stamp.origin))?.actor ?? (await fromUuid(stamp.origin))
+            : null;
+        if (!originActor) return;
+
+        // Only an aura that says `enter` pays out here. One that says `turn-end` gets its marker on contact
+        // too, and paying that out would be the original bug with extra steps.
+        const entry = originActor.auras?.get?.(stamp.slug)?.effects?.find((e) => e.uuid === sourceId);
+        if (entry && !entry.events?.includes("enter")) return;
+
+        await Sources.dispatchAuraTick(originActor, stamp.slug, targetToken);
+    },
+
+    /**
+     * The half pf2e does not time: an aura that pays out at the start or end of a creature's **own** turn.
+     *
+     * Driven from the encounter rather than from the marker, because the marker's arrival is a fact about
+     * where tokens are standing and says nothing about whose turn it is. Every token on the board is asked
+     * whether the creature whose turn just turned is standing in an aura of theirs that named this moment.
+     *
+     * Runs on the active GM alone, the same as `onTurn`, so a five-player table pays out once.
+     */
+    async onAuraTurn(event, combatant) {
+        if (!enabled() || game.users.activeGM?.id !== game.user.id) return;
+        const token = combatant?.token;
+        const standing = token?.actor;
+        if (!token || !standing) return;
+
+        for (const other of token.scene?.tokens ?? []) {
+            const originActor = other.actor;
+            if (!originActor || other.id === token.id) continue;
+            for (const [slug, aura] of originActor.auras ?? []) {
+                const entry = (aura.effects ?? []).find(
+                    (e) => e.events?.includes(event) && auraCatches(e, originActor, standing),
+                );
+                if (!entry) continue;
+                // The geometry stays pf2e's: `containsToken` is what the aura's own check uses.
+                if (!other.auras?.get?.(slug)?.containsToken?.(token)) continue;
+                await Sources.dispatchAuraTick(originActor, slug, token);
+            }
+        }
+    },
+
+    /**
+     * Hand one aura's tick to the relay, with the rider that belongs to **that** aura.
+     *
+     * The riders that say what a tick is worth live on the origin's own effect, and that effect used to be
+     * found by asking the actor for the first item carrying an `aura-tick` rider at all. A Ryūjin Jakka in
+     * Full Release carries two — the pressure emanation, and whichever cardinal aspect is up — so Minami's
+     * ash rolled the pressure's Will save instead of its own Reflex and the grab never happened. The
+     * `Aura` rule's slug is stamped on the marker and written on the rule, so it is what they match by.
+     *
+     * The loose search is kept as a fallback for an aura whose rider lives on a different item from its
+     * `Aura` rule, which is how the first one was written.
+     */
+    async dispatchAuraTick(originActor, slug, targetToken) {
+        const originEffect = effectForAura(originActor.items ?? [], slug);
+        if (!originEffect) return;
 
         await Relay.request({
             action: "applyRiders",
@@ -428,4 +491,31 @@ function damageTypesOf(damage) {
     if (!damage || typeof damage === "number") return [];
     const instances = damage.instances ?? [];
     return [...new Set(instances.map((instance) => instance.type).filter((type) => type))];
+}
+
+/**
+ * Whether this aura effect catches that creature — pf2e's own `auraAffectsActor`, restated.
+ *
+ * Restated rather than imported because it is four lines and lives inside the system bundle with no
+ * export. Kept in pf2e's own order so the two can be read against each other.
+ */
+export function auraCatches(entry, originActor, actor) {
+    if (entry.includesSelf && originActor === actor) return true;
+    if (entry.affects === "allies") return actor.isAllyOf(originActor);
+    if (entry.affects === "enemies") return actor.isEnemyOf(originActor);
+    return entry.affects === "all" && actor !== originActor;
+}
+
+/**
+ * Which of these items carries the rider for that aura. Pure, so the matching can be exercised directly.
+ *
+ * Exact first, loose second. The exact match is the one that fixes the bug; the loose one is the shape the
+ * first aura of this kind was written in, where the `Aura` rule and the rider live on different items.
+ */
+export function effectForAura(items, slug) {
+    const carries = (item) => ridersOn(item).some((r) => r.event === "aura-tick");
+    const declares = (item) =>
+        (item.system?.rules ?? []).some((rule) => rule.key === "Aura" && rule.slug === slug);
+    const all = [...items];
+    return all.find((item) => carries(item) && declares(item)) ?? all.find(carries) ?? null;
 }

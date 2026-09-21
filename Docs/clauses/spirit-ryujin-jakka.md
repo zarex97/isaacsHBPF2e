@@ -91,7 +91,7 @@ direction pf2e is least willing to go.
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | S-29a | Minami | The ash of everything your flames have killed rises in a **20-foot emanation** | | ✅ | Live: `Effect: Minami` registers a pf2e `Aura` of **radius 20** and it is drawn on the caster's token |
-| S-29b | Minami | Enemies that end their turn in it must succeed at a Reflex save or be **grabbed** by ash-figures (Escape vs. your Reiatsu DC) | | 🔧 | **Half-proved.** It was a `turn-end` **area** rider, which sweeps whoever is standing there when the *caster's* turn ends — driven live, two enemies were grabbed the moment the caster's turn ended. It is a pf2e `Aura` now, enemies only, the same shape `SB-15` gave the Full Release pressure. The misfire is **gone** (the caster's turn ending now grabs nobody). The allow path is **unproven**: no `Aura` in this world applies its `turn-end` effect at all — the already-verified `soulbound-pressure` aura does not fire either, through the tracker's own button or `scene.checkAuras()`. Re-drive once that is understood |
+| S-29b | Minami | Enemies that end their turn in it must succeed at a Reflex save or be **grabbed** by ash-figures (Escape vs. your Reiatsu DC) | `test-riders` asserts the routing | ✅ | **Coded.** It was a `turn-end` **area** rider, which sweeps whoever stands there when the *caster's* turn ends. Promoted to a pf2e `Aura` — and then to a tick the module times itself, because pf2e reads an aura's `events` list exactly once, to default `removeOnExit`, and grants on contact thereafter. Live: **D1 ended its own turn** in the ash and rolled **Reflex DC 27**, critically failed, and came away **Grabbed**. The caster's turn ending drew no save, and a **party ally** standing 10 feet inside ended its own turn and drew none either |
 | S-29c | Minami | The figures take no actions and are not creatures | | — | Nothing is created. The figures are prose in the effect's description, which is exactly what *“take no actions and are not creatures”* asks for |
 
 ## Aspect — Kita: Tenchi Kaijin
@@ -121,9 +121,9 @@ direction pf2e is least willing to go.
 | Status | Count |
 | :-- | --: |
 | ☐ | 0 |
-| ✅ | 28 |
+| ✅ | 29 |
 | ⚠️ | 0 |
 | ❌ | 0 |
-| 🔧 | 1 |
+| 🔧 | 0 |
 | — | 2 |
 | **Total** | **31** |
