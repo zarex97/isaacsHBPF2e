@@ -79,15 +79,15 @@ are about what a creature *perceives*, which is the furthest thing from a number
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | S-37a | Sōten Kisshun | All enemies within **60 feet** who can see you must attempt the Shikai save, **including those who previously succeeded or became immune** | | ✅ | Live: entering Full Release re-asked **three dummies who were all inside an immunity window**, one of whom failed this time and was hypnotized. The permanent victim was auto-hypnotized without a roll, and the dummy at **135 feet was not asked** — the 60-foot range holds |
 | S-37b | Sōten Kisshun | Hitting you no longer ends the effect; only a critical hit does | | ⚠️ | **Undecidable as written — #63.** *“No longer”* modifies a Shikai rule that §7A never states: its hypnosis has no break condition at all, only a duration. Nothing on either side ends it on a hit, so the clause reads as passing because the thing it changes was never there. A ruling is wanted, not a patch |
-| S-37c | Sōten Kisshun | Once per round you may **Sustain** to force one hypnotized creature to attempt a Will save; on a failure it is **confused** until the end of its turn | | ☐ | |
+| S-37c | Sōten Kisshun | Once per round you may **Sustain** to force one hypnotized creature to attempt a Will save; on a failure it is **confused** until the end of its turn | `test-riders` asserts the predicate names an effect that exists | ✅ | **Coded.** There was no Sustain at all. `Kanzen Saimin — Sustain` is one action with pf2e's own `frequency` at **1 per round**, granted by the Full Release effect. Live, both ways: targeting the **hypnotized** dummy rolled **Will DC 27**, critically failed, and applied **Confused**; targeting an **unhypnotized** one drew **no save at all** |
 
 ## Severing Art — Kanzen Saimin: Owari (guide §9.1)
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| R-16a | Kanzen Saimin: Owari | **60-foot emanation**, basic Will, **mental** | | ☐ | |
-| R-16b | Kanzen Saimin: Owari | Creatures that fail are **confused** for 1 minute | | ☐ | |
-| R-16c | Kanzen Saimin: Owari | On a critical failure the creature perceives its own allies as you for that minute and cannot be shaken loose by damage | | ☐ | |
+| R-16a | Kanzen Saimin: Owari | **60-foot emanation**, basic Will, **mental** | | ✅ | Cast live in Severance round 1: the card reads **Area 60-foot emanation**, **Defense basic Will**, 2 actions, **20d6 mental**, and *“Kanzen Saimin: Owari ends Severance”* followed it |
+| R-16b | Kanzen Saimin: Owari | Creatures that fail are **confused** for 1 minute | | ✅ | Live: both dummies failed the Will save and came away **Confused**. The rider declares a 1-minute duration; pf2e's condition carries none of its own, so the rider is what removes it |
+| R-16c | Kanzen Saimin: Owari | On a critical failure the creature perceives its own allies as you for that minute and cannot be shaken loose by damage | | — | Perception again, and the same answer as S-33a. *“Perceives its own allies as you”* is a sentence for the GM; *“cannot be shaken loose by damage”* is the absence of a break condition, which is what the implementation already does — nothing removes the confusion early. Printed on the technique |
 
 ---
 
@@ -95,10 +95,10 @@ are about what a creature *perceives*, which is the furthest thing from a number
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 4 |
-| ✅ | 15 |
+| ☐ | 0 |
+| ✅ | 18 |
 | ⚠️ | 2 |
 | ❌ | 0 |
 | 🔧 | 0 |
-| — | 2 |
+| — | 3 |
 | **Total** | **23** |
