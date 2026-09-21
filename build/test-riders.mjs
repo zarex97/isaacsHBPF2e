@@ -46,6 +46,7 @@ const { riderOptions } = await import("../scripts/lib/roll-options.mjs");
 const { selectRiders } = await import("../scripts/riders/select.mjs");
 const { collectRiders, isAbilityUse, riderAt } = await import("../scripts/riders/data.mjs");
 const { alreadySpent, gateByRound, riderKey } = await import("../scripts/riders/round-gate.mjs");
+const { auraCatches, effectForAura } = await import("../scripts/riders/sources.mjs");
 const { mergeBypass, resistanceReduction, ignoresHardness, ignoredImmunities, selectEntries } = await import(
     "../scripts/riders/bypass.mjs"
 );
@@ -2278,6 +2279,54 @@ function documentedIn(readme, heading, nextHeading) {
     const aura = minami.system.rules.find((r) => r.key === "Aura");
     check("…because the Aura decides who is caught",
         [aura?.radius, aura?.effects?.[0]?.affects, aura?.effects?.[0]?.events], [20, "enemies", ["turn-end"]]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  Which aura a tick belongs to                                                                 */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * A creature can stand in two of ours at once.
+     *
+     * A Ryūjin Jakka in Full Release carries the pressure emanation and whichever cardinal aspect is up,
+     * and the tick used to be matched to "the first item on this actor with an `aura-tick` rider at all".
+     * Minami's ash therefore rolled the pressure's Will save instead of its own Reflex, and the grab never
+     * happened — driven live, the dummy came away with the pressure's immunity marker and nothing else.
+     */
+    const withAura = (slug) => ({
+        name: slug,
+        system: { rules: [{ key: "Aura", slug, radius: 20 }] },
+        flags: { "isaacs-hb-pf2e": { riders: [{ event: "aura-tick", apply: { type: "save" } }] } },
+    });
+    const pressure = withAura("soulbound-pressure");
+    const ash = withAura("soulbound-minami-ash");
+    const bystander = { name: "unrelated", system: { rules: [] }, flags: {} };
+
+    check("the tick goes to the aura it came from",
+        effectForAura([pressure, ash, bystander], "soulbound-minami-ash")?.name, "soulbound-minami-ash");
+    check("…and not to whichever one happens to be first",
+        effectForAura([pressure, ash], "soulbound-pressure")?.name, "soulbound-pressure");
+    // The first aura of this kind was written with its rider on a different item from its `Aura` rule.
+    const loose = { name: "loose", system: { rules: [] },
+        flags: { "isaacs-hb-pf2e": { riders: [{ event: "aura-tick", apply: { type: "save" } }] } } };
+    check("an aura whose rider lives elsewhere still finds it",
+        effectForAura([bystander, loose], "whatever")?.name, "loose");
+    check("and an actor carrying none of them gets nothing",
+        effectForAura([bystander], "soulbound-pressure"), null);
+
+    // pf2e's `auraAffectsActor`, restated here because it lives in the bundle with no export.
+    const you = { isAllyOf: () => false, isEnemyOf: () => false };
+    const ally = { isAllyOf: () => true, isEnemyOf: () => false };
+    const foe = { isAllyOf: () => false, isEnemyOf: () => true };
+    check("an enemies-only aura catches enemies and nobody else",
+        [foe, ally, you].map((who) => auraCatches({ affects: "enemies" }, you, who)), [true, false, false]);
+    check("an allies-only aura is the mirror of it",
+        [foe, ally, you].map((who) => auraCatches({ affects: "allies" }, you, who)), [false, true, false]);
+    check("`all` means everyone but the creature emitting it",
+        [foe, ally, you].map((who) => auraCatches({ affects: "all" }, you, who)), [true, true, false]);
+    check("unless it says it includes them",
+        auraCatches({ affects: "all", includesSelf: true }, you, you), true);
 }
 
 /* -------------------------------------------------------------------------------------------- */
