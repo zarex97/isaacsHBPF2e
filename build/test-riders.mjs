@@ -2424,6 +2424,35 @@ function documentedIn(readme, heading, nextHeading) {
 }
 
 /* -------------------------------------------------------------------------------------------- */
+/*  Difficult terrain, and who it is for                                                         */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * A lingering `difficultTerrain` with no `affects` slows everybody, including the caster's own party.
+     * That is right for the three the guide writes without an allegiance, and wrong for the two it does
+     * not — Senbonzakura's petals and Garra de la Pantera's shards are both "difficult terrain **for
+     * enemies**", and Garra's was slowing the party until this was driven.
+     *
+     * Pinned in both directions, because the mistake is invisible either way round: a missing `affects`
+     * reads as a sensible default, and a spurious one reads as thoroughness.
+     */
+    const lingeringOf = (file) =>
+        load("soulbound-techniques", file).flags["isaacs-hb-pf2e"]?.lingering ?? {};
+    const ENEMIES_ONLY = ["senbonzakura.json", "garra-de-la-pantera.json"];
+    const EVERYONE = ["ennetsu-jigoku.json", "la-gota.json"];
+
+    for (const file of ENEMIES_ONLY) {
+        check(`${file}'s terrain is enemies-only, as the guide says`,
+            lingeringOf(file).affects, "enemies");
+    }
+    for (const file of EVERYONE) {
+        check(`${file}'s terrain names no side, as the guide says`,
+            lingeringOf(file).affects ?? "unset", "unset");
+    }
+}
+
+/* -------------------------------------------------------------------------------------------- */
 
 if (failures.length > 0) {
     console.error(`Rider tests failed: ${failures.length} of ${checks}.`);

@@ -6,6 +6,7 @@
                 "includesSelf": false
             },
             "lingering": {
+                "affects": "enemies",
                 "difficultTerrain": 2,
                 "duration": {
                     "unit": "rounds",
