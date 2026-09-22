@@ -2204,6 +2204,10 @@ function documentedIn(readme, heading, nextHeading) {
     const tensa = load("soulbound-effects", "effect-tensa-zangetsu.json");
     check("Tensa Zangetsu's free Step is gated to once a round",
         ridersOf(tensa).map((r) => r.oncePerRound === true), [true]);
+    // Pantera's extra claw Strike is the second of this shape: "once per round when you critically hit".
+    const segunda = load("soulbound-effects", "effect-pantera-segunda-etapa.json");
+    check("…and so is Segunda Etapa's extra claw Strike",
+        ridersOf(segunda).map((r) => r.oncePerRound === true), [true]);
     check("and it no longer carries the note admitting it was not",
         ridersOf(tensa).some((r) => typeof r.note === "string" && /per-round/.test(r.note)), false);
 
