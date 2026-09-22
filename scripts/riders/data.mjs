@@ -122,6 +122,29 @@ export function eventOf(rider) {
 const ITEM_SCOPED_EVENTS = new Set(["action-used", "save-rolled", "aura-tick"]);
 
 /**
+ * A spell that rolls its **own** attack is item-scoped for `strike-resolved` too.
+ *
+ * The wide search above exists for a Technique that says "make one Strike": *Ikkotsu*, *Hitotsume:
+ * Nadegiri*, *Shūkei: Hakuteiken*. The Strike is made with a weapon, so the message's item is the
+ * weapon and the rider is on the spell — only the wider search can bring the two together.
+ *
+ * A spell with the **attack** trait is the opposite case. It rolls the attack itself, so "on a hit"
+ * names one roll: its own. Left in the wide search, Cero Oscuras' Refined splash detonated on every
+ * attack its owner made — driven live, casting *Lanza del Relámpago* fired the cero's burst as well as
+ * the lance's, twice over, against creatures the cero was never aimed at. *Galvano Javelin*'s stunned 1
+ * is the same shape of mistake waiting on any Soul Reaper who has it on the sheet.
+ *
+ * `strike-received` is deliberately not included: those riders are collected from the *defender*, whose
+ * items have nothing to do with the attacker's message item, and *Zanhyō Ningyō* is exactly such a
+ * spell — a reaction to being hit.
+ */
+function scopedAway(source, item, event) {
+    if (event !== "strike-resolved") return false;
+    if (source?.type !== "spell" || source.id === item?.id) return false;
+    return !!source.system?.traits?.value?.includes?.("attack");
+}
+
+/**
  * Gather every rider for an event, from every item that could be carrying one.
  *
  * A save rider lives on the Technique that forced the save, so the message's item is the obvious source.
@@ -138,6 +161,7 @@ export function collectRiders({ event, item, actor }) {
     for (const candidate of candidates) {
         if (!candidate || seen.has(candidate.id)) continue;
         seen.add(candidate.id);
+        if (scopedAway(candidate, item, event)) continue;
         sources.push(candidate);
     }
 

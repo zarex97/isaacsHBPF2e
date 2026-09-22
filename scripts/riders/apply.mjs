@@ -432,7 +432,21 @@ async function targetsFor(rider, context) {
         // An anchored area that has never been placed has nowhere to be, which is the right answer
         // before the blades have been sent anywhere.
         if (!centre) continue;
-        const shape = shapeFromArea(area, originToken.object, centre);
+        // A round area anchored on a creature is measured from that creature's **space**, not from the
+        // point at the middle of it.
+        //
+        // Centred on the centre point, a 5-foot burst is a circle of one grid square's radius drawn from
+        // the middle of one square: it covers the anchor's own space and stops exactly on the centre of
+        // every neighbour. Cero Oscuras' Refined splash therefore caught precisely one creature — the one
+        // it is defined to exclude — and driven live it reached nobody at all. An emanation measures from
+        // the token's occupied space, which is what "within 5 feet of that creature" means everywhere
+        // else in pf2e, so a burst anchored on the target is built as one. A cone or a line anchored the
+        // same way keeps its own shape; only the round ones have a space to grow out of.
+        const anchorToken = area.anchor === "target" ? context.target?.object : null;
+        const round = ["burst", "cylinder", "emanation"].includes(area.type);
+        const shape = anchorToken && round
+            ? shapeFromArea({ ...area, type: "emanation", anchor: null }, anchorToken, centre)
+            : shapeFromArea(area, originToken.object, centre);
         if (shape) shapes.push(shape);
     }
     if (shapes.length === 0) return [];
@@ -1816,6 +1830,13 @@ async function applyDeath(rider, context) {
  * outcomes into the ladder. A damage rider that *does* name outcomes is left exactly as written — an
  * ability whose damage does not follow the basic ladder is a real thing and says so — and non-damage
  * riders are untouched, because "restrained on a critical failure" is not scaled by anything.
+ *
+ * The ladder **composes** with a multiplier the author wrote rather than replacing it. Three riders in
+ * the content say a fraction of something and then ask for a basic save on top: Cero Oscuras' Refined
+ * splash is *half* damage to the creatures around the one it hit, Apotheosis detonates for *half* the
+ * Waning dice, and Senbonzakura's Gokei *doubles* the petal-blades. Overwriting the field made all three
+ * of those words decoration — the splash dealt the cero's damage in full to every neighbour, and Gokei
+ * did nothing at all — while reading correctly in the JSON beside the sentence it was meant to be.
  */
 export function basicLadder(spec) {
     const riders = spec?.riders ?? [];
@@ -1829,11 +1850,17 @@ export function basicLadder(spec) {
     return riders.flatMap((rider) => {
         const apply = rider?.apply;
         if (apply?.type !== "damage" || rider.outcomes) return [rider];
-        return LADDER.map(([outcome, multiplier]) => ({
-            ...rider,
-            outcomes: [outcome],
-            apply: multiplier === 1 ? { ...apply } : { ...apply, multiplier },
-        }));
+        const written = Number(apply.multiplier);
+        const base = Number.isFinite(written) && written > 0 ? written : 1;
+        return LADDER.map(([outcome, step]) => {
+            const multiplier = base * step;
+            const scaled = { ...apply, multiplier };
+            // A multiplier of exactly 1 is the absence of one: `applyDamage` wraps the formula in
+            // `(…) * n` for anything else, and `(10d6) * 1` on the card reads as though something had
+            // been done to it.
+            if (multiplier === 1) delete scaled.multiplier;
+            return { ...rider, outcomes: [outcome], apply: scaled };
+        });
     });
 }
 

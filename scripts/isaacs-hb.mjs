@@ -5,6 +5,7 @@ import { Deaths } from "./deaths.mjs";
 import { Duplicate } from "./economy/duplicate.mjs";
 import { FreeCast } from "./economy/free-cast.mjs";
 import { Recharge } from "./economy/recharge.mjs";
+import { SpellFrequency } from "./economy/spell-frequency.mjs";
 import { Balance } from "./roll-rewrites/balance.mjs";
 import { Om } from "./roll-rewrites/om.mjs";
 import { Banish } from "./riders/banish.mjs";
@@ -72,6 +73,7 @@ Hooks.once("init", () => {
     start("Cosmo", () => Cosmo.registerHooks());
     start("the Gemini duplicate", () => Duplicate.registerHooks());
     start("recharging", () => Recharge.registerHooks());
+    start("spell frequency", () => SpellFrequency.registerHooks());
     start("Om", () => Om.registerHooks());
     start("The Balance", () => Balance.registerHooks());
     start("the Crystal Wall", () => CrystalWall.registerHooks());

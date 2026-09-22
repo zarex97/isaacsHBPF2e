@@ -1,4 +1,5 @@
 import { FreeCast } from "./economy/free-cast.mjs";
+import { SpellFrequency } from "./economy/spell-frequency.mjs";
 import { Charges } from "./soulbound/charges.mjs";
 import { Release } from "./soulbound/release.mjs";
 import { Severance } from "./soulbound/severance.mjs";
@@ -62,6 +63,10 @@ export const CastPipeline = {
         // A Technique that spends from a charge pool is refused when the pool is empty, rather than cast
         // and then quietly not charged. Hyōrinmaru's three petal-flowers are the case.
         if (!(await Charges.beforeCast(spell))) return false;
+        // pf2e never spends a *spell's* Frequency, so a Technique that says "once per round" was limited
+        // by nothing until this step existed. Last of the refusals and first of the prices: a spell that
+        // is going to be turned away by any of the checks above must not have paid its allowance for it.
+        if (!(await SpellFrequency.beforeCast(spell))) return false;
         await FreeCast.beforeCast(spell, options);
         return true;
     },
