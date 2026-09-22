@@ -58,18 +58,18 @@ pf2e collapses two bonuses of the same type, so the type is the clause.
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| S-41a | Segunda Etapa | Your Speed increases by another **10 feet** | | ☐ | |
-| S-41b | Segunda Etapa | your claws gain **deadly d10** | | ☐ | |
-| S-41c | Segunda Etapa | Once per round when you critically hit with a claw, you may immediately make an additional claw Strike against the same target at your current multiple attack penalty | | ☐ | |
-| S-42a | Segunda Etapa | **Garra de la Pantera**'s cone increases to **60 feet** | | ☐ | |
-| S-42b | Segunda Etapa | creatures that critically fail against it take **2d6 persistent bleed** damage from embedded shards | | ☐ | |
+| S-41a | Segunda Etapa | Your Speed increases by another **10 feet** | | ✅ | Live at 13th entering Segunda: Speed **45 → 55**, with `Segunda Etapa untyped 10` added beside `Sonido untyped 10` and `Pantera untyped 10`. All three untyped, so all three count |
+| S-41b | Segunda Etapa | your claws gain **deadly d10** | | ✅ | Live: the claws' traits go `agile, finesse, unarmed` → **`…, deadly-d10`** the moment Segunda arrives |
+| S-41c | Segunda Etapa | Once per round when you critically hit with a claw, you may immediately make an additional claw Strike against the same target at your current multiple attack penalty | `test-riders` asserts the gate | ✅ | **Fixed.** The prompt had no per-round gate, so it fired on every critical hit. It takes `oncePerRound` now, the same gate Tensa Zangetsu's free Step uses. Live: **4 critical hits in round 1 → 1 prompt**, then **3 in round 2 → 1 prompt**, with the ledger stamp advancing `:1` → `:2` |
+| S-42a | Segunda Etapa | **Garra de la Pantera**'s cone increases to **60 feet** | | ✅ | Live: Garra's area **30 → 60** on entering Segunda, and the card read **Area 60-foot cone** when cast |
+| S-42b | Segunda Etapa | creatures that critically fail against it take **2d6 persistent bleed** damage from embedded shards | | ✅ | Live on a forced critical failure at Segunda: the target came away with **Persistent Damage (2d6 bleed)**. The rider is predicated on `self:effect:pantera-segunda-etapa`, so it is Segunda's and not Garra's |
 
 ## Severing Art — Desgarrón (guide §9.2)
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| R-17a | Desgarrón | **60-foot cone**, basic Reflex, **slashing** | | ☐ | |
-| R-17b | Desgarrón | Creatures that fail take **4d6 persistent bleed** | | ☐ | |
+| R-17a | Desgarrón | **60-foot cone**, basic Reflex, **slashing** | | ✅ | Cast live in Severance round 1 at 20th: the card reads **Range 60 feet; Area 60-foot cone**, **basic Reflex**, 2 actions, **20d6 slashing**, and *“Desgarrón ends Severance”* followed it |
+| R-17b | Desgarrón | Creatures that fail take **4d6 persistent bleed** | | ✅ | Live: both targets failed and came away with **Persistent Damage (4d6 bleed)** |
 
 ---
 
@@ -77,8 +77,8 @@ pf2e collapses two bonuses of the same type, so the type is the clause.
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 7 |
-| ✅ | 8 |
+| ☐ | 0 |
+| ✅ | 15 |
 | ⚠️ | 0 |
 | ❌ | 0 |
 | 🔧 | 0 |
