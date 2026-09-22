@@ -2394,6 +2394,36 @@ function documentedIn(readme, heading, nextHeading) {
 }
 
 /* -------------------------------------------------------------------------------------------- */
+/*  What breaks Kyōka Suigetsu's hypnosis                                                        */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * The Full Release says *"hitting you **no longer** ends the effect; only a critical hit does"*, and
+     * §7A's Shikai never stated the rule that sentence negates. Nothing on either side ended the
+     * hypnosis on a hit, so the clause read as passing because the thing it changes was never there —
+     * the "control that cannot fail" shape. Settled in #63 as: the Shikai breaks on a hit, the Full
+     * Release only on a critical one.
+     *
+     * Two riders, same apply, split on the roll option the Full Release emits. If they ever collapse to
+     * one the tiers stop differing, which is the whole of what the clause buys.
+     */
+    const ks = load("soulbound-effects", "effect-kanzen-saimin.json");
+    const riders = ridersOf(ks) ?? [];
+    check("the Shikai hypnosis breaks on a hit",
+        riders.map((r) => [r.event, r.apply?.type, r.apply?.effect]),
+        [["strike-received", "expire", "Hypnotized"], ["strike-received", "expire", "Hypnotized"]]);
+    check("…on any hit at the Shikai tier",
+        riders.find((r) => r.predicate?.some((p) => p?.not === "soulbound:kyoka:total"))?.outcomes,
+        ["success", "criticalSuccess"]);
+    check("…and only on a critical hit once Sōten Kisshun is up",
+        riders.find((r) => r.predicate?.includes("soulbound:kyoka:total"))?.outcomes,
+        ["criticalSuccess"]);
+    check("both are gated on the attacker actually being hypnotized",
+        riders.every((r) => r.predicate?.includes("rider:target:effect:effect-hypnotized")), true);
+}
+
+/* -------------------------------------------------------------------------------------------- */
 
 if (failures.length > 0) {
     console.error(`Rider tests failed: ${failures.length} of ${checks}.`);

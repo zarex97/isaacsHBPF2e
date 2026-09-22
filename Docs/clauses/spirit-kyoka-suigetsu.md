@@ -63,7 +63,7 @@ are about what a creature *perceives*, which is the furthest thing from a number
 | S-35a | Shikake | **Release Technique — Shikake** [two-actions] | | ✅ | Live: the card reads **2** actions |
 | S-35b | Shikake | Range 30 feet, one creature, Will save | | ✅ | Same card: **Range 30 feet; Targets 1 creature; Defense Will** |
 | S-35c | Shikake | the target treats one creature of your choice within its reach as if it were you, and treats you as an ally, until the end of its next turn | | ✅ | Live on a failure: the target came away with **`Effect: Shikake`, 1 round / turn-end** — *“until the end of its next turn”*. Which creature it mistakes for you is the GM's to point at; the effect prints the sentence |
-| S-35d | Shikake | **Critical Failure** as failure, for 2 rounds | | ⚠️ | **Not driven — harness wall.** pf2e-toolbelt auto-rolls the save for a single-target Technique at cast time, and in this world that path returned a **natural 20 eight times running** while `d2.getStatistic("will").roll()` rolled honestly beside it. A natural 20 upgrades one step, so a critical failure is unreachable through it. The rider is authored and its sibling fires; only the degree could not be produced |
+| S-35d | Shikake | **Critical Failure** as failure, for 2 rounds | | ✅ | Live on a clean target: a critical failure (die 13, total **−31** vs DC 27) applied **`Effect: Shikake`, 2 rounds** against the **1 round** a plain failure gives, plus the Refined off-guard. The earlier natural-20 streak that blocked this was the **D2 fixture**, not pf2e-toolbelt — a different dummy rolled honestly and produced both degrees in eight casts |
 | S-35e | Shikake | This is an illusion, mental, and visual effect | | ✅ | Live: the card's traits read **Illusion**, **Mental** and **Visual** alongside concentrate, focus, manipulate, reiatsu and soulbound |
 
 ## Refined (9th)
@@ -78,7 +78,7 @@ are about what a creature *perceives*, which is the furthest thing from a number
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | S-37a | Sōten Kisshun | All enemies within **60 feet** who can see you must attempt the Shikai save, **including those who previously succeeded or became immune** | | ✅ | Live: entering Full Release re-asked **three dummies who were all inside an immunity window**, one of whom failed this time and was hypnotized. The permanent victim was auto-hypnotized without a roll, and the dummy at **135 feet was not asked** — the 60-foot range holds |
-| S-37b | Sōten Kisshun | Hitting you no longer ends the effect; only a critical hit does | | ⚠️ | **Undecidable as written — #63.** *“No longer”* modifies a Shikai rule that §7A never states: its hypnosis has no break condition at all, only a duration. Nothing on either side ends it on a hit, so the clause reads as passing because the thing it changes was never there. A ruling is wanted, not a patch |
+| S-37b | Sōten Kisshun | Hitting you no longer ends the effect; only a critical hit does | `test-riders` asserts both riders | ✅ | **Coded — #63 settled as (1).** §7A stated no break condition at either tier, so the clause passed by accident. `Effect: Kanzen Saimin` now carries two `strike-received` riders that expire the hypnosis, split on `soulbound:kyoka:total`. Live, all four cells: **Shikai** — two misses left it, the hit **broke it**; **Full Release** — two hits left it, the critical hit **broke it** |
 | S-37c | Sōten Kisshun | Once per round you may **Sustain** to force one hypnotized creature to attempt a Will save; on a failure it is **confused** until the end of its turn | `test-riders` asserts the predicate names an effect that exists | ✅ | **Coded.** There was no Sustain at all. `Kanzen Saimin — Sustain` is one action with pf2e's own `frequency` at **1 per round**, granted by the Full Release effect. Live, both ways: targeting the **hypnotized** dummy rolled **Will DC 27**, critically failed, and applied **Confused**; targeting an **unhypnotized** one drew **no save at all** |
 
 ## Severing Art — Kanzen Saimin: Owari (guide §9.1)
@@ -96,8 +96,8 @@ are about what a creature *perceives*, which is the furthest thing from a number
 | Status | Count |
 | :-- | --: |
 | ☐ | 0 |
-| ✅ | 18 |
-| ⚠️ | 2 |
+| ✅ | 20 |
+| ⚠️ | 0 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 3 |
