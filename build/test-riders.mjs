@@ -45,6 +45,7 @@ globalThis.game = { pf2e: { Predicate: StubPredicate } };
 const { riderOptions } = await import("../scripts/lib/roll-options.mjs");
 const { selectRiders } = await import("../scripts/riders/select.mjs");
 const { collectRiders, isAbilityUse, riderAt } = await import("../scripts/riders/data.mjs");
+const { basicLadder } = await import("../scripts/riders/apply.mjs");
 const { alreadySpent, gateByRound, riderKey } = await import("../scripts/riders/round-gate.mjs");
 const { auraCatches, effectForAura } = await import("../scripts/riders/sources.mjs");
 const { mergeBypass, resistanceReduction, ignoresHardness, ignoredImmunities, selectEntries } = await import(
@@ -2454,6 +2455,153 @@ function documentedIn(readme, heading, nextHeading) {
         check(`${file}'s terrain names no side, as the guide says`,
             lingeringOf(file).affects ?? "unset", "unset");
     }
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  A splash, and the half of it the basic ladder must not eat                                   */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * Murcielago's Refined Cero Oscuras gains "a **5-foot burst** at the target's location dealing half
+     * damage to other creatures in it (basic Reflex)", and every word of that was wrong at once.
+     *
+     * The shape reached nobody. A 5-foot burst centred on the target's *centre point* is a circle one
+     * grid square in radius drawn from the middle of one square: it covers the creature it is defined to
+     * exclude and stops exactly on the centre of every neighbour. An area anchored on a creature is built
+     * as an emanation from that creature's space now, which is what "within 5 feet of it" means
+     * everywhere else in pf2e.
+     *
+     * And the damage was full. `basicLadder` **overwrote** the author's `multiplier`, so "half damage"
+     * was decoration - the splash dealt the whole cero to every neighbour. Three riders in the content
+     * scale something and then ask for a basic save on top, and all three were losing the fraction.
+     */
+    const splash = ridersOf(load("soulbound-techniques", "cero-oscuras.json"))
+        .find((rider) => rider.area?.anchor === "target");
+    check("Cero Oscuras' splash opens at the creature it hit", splash?.area?.anchor, "target");
+    check("…as a 5-foot burst", [splash?.area?.type, splash?.area?.value], ["burst", 5]);
+    // The creature it splashed off is the centre, not a second victim - `excludeAnchor` defaults to that.
+    check("…leaving that creature out", splash?.area?.excludeAnchor ?? "default", "default");
+    check("…for half damage", splash?.apply?.riders?.[0]?.apply?.multiplier, 0.5);
+    check("…on a basic Reflex save", [splash?.apply?.basic, splash?.apply?.statistic], [true, "reflex"]);
+
+    /** The ladder multiplies the author's fraction; it does not replace it. */
+    const expanded = basicLadder(splash.apply);
+    const by = (outcome) => expanded.find((r) => r.outcomes?.[0] === outcome)?.apply;
+    check("a success halves the half", by("success")?.multiplier, 0.25);
+    check("a failure is the half", by("failure")?.multiplier, 0.5);
+    // Exactly 1 is the absence of a multiplier: `(10d6) * 1` on the card reads as though something had
+    // been done to it.
+    check("a critical failure doubles the half back to the whole",
+        "multiplier" in by("criticalFailure"), false);
+
+    // The same composition, on the two riders that are not Murcielago's. Apotheosis detonates "for half
+    // the Waning dice" and Senbonzakura's Gokei doubles the petal-blades; both were losing the word.
+    const composedOnFailure = (file) => {
+        const rider = ridersOf(load("soulbound-effects", file))
+            .find((r) => r.apply?.basic === true && r.apply.riders?.some((n) => n.apply?.multiplier));
+        const rung = basicLadder(rider.apply).find((r) => r.outcomes?.[0] === "failure")?.apply;
+        return "multiplier" in rung ? rung.multiplier : 1;
+    };
+    check("Apotheosis still detonates for half on a failure",
+        composedOnFailure("effect-apotheosis.json"), 0.5);
+    check("Gokei still doubles on a failure",
+        composedOnFailure("effect-senbonzakura-kageyoshi.json"), 2);
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  "Whether or not you hit"                                                                     */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * Lanza del Relampago's lance "detonates in a **15-foot burst** at that point" whichever way the
+     * attack went. It was written as a `self` rider with no area, so casting it dealt 5d6 fire to the
+     * **caster**, with no save, and the burst never happened at all.
+     *
+     * An outcome-free `strike-resolved` rider is precisely "whether or not you hit"; the area anchored on
+     * the target is "at that point"; and `excludeAnchor: false` is what keeps the creature the lance was
+     * thrown at inside its own explosion.
+     */
+    const lance = ridersOf(load("soulbound-techniques", "lanza-del-relampago.json"))[0];
+    check("the detonation does not land on the caster", lance?.self ?? false, false);
+    check("…it fires however the attack went", [lance?.event, lance?.outcomes ?? "any"],
+        ["strike-resolved", "any"]);
+    check("…as a 15-foot burst where the lance landed",
+        [lance?.area?.type, lance?.area?.value, lance?.area?.anchor], ["burst", 15, "target"]);
+    check("…which includes the creature it was thrown at", lance?.area?.excludeAnchor, false);
+    check("…and everyone caught rolls a basic Reflex save",
+        [lance?.apply?.basic, lance?.apply?.statistic, lance?.apply?.riders?.[0]?.apply?.damageType],
+        [true, "reflex", "fire"]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  A spell's Frequency, which pf2e writes down and never reads                                  */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * pf2e spends a frequency in `createUseActionMessage` - abilities and feats only - and refills it in
+     * `Actor#recharge`, whose loop is `[itemTypes.action, itemTypes.feat]`. A **spell** is in neither, so
+     * "Frequency once per round" on one was enforced by nothing: Lanza del Relampago cast twice in a
+     * round posted two cards and left the counter at 1.
+     *
+     * `SpellFrequency` is both halves. This pins the list it is responsible for, so a sixth spell that
+     * says *Frequency* cannot be added without somebody reading this.
+     */
+    const spells = [];
+    const walk = (dir) => {
+        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+            const full = path.join(dir, entry.name);
+            if (entry.isDirectory()) walk(full);
+            else if (entry.name.endsWith(".json")) {
+                const doc = JSON.parse(fs.readFileSync(full, "utf8"));
+                if (doc?.type === "spell" && doc.system?.frequency) {
+                    spells.push(`${entry.name}:${doc.system.frequency.max}/${doc.system.frequency.per}`);
+                }
+            }
+        }
+    };
+    walk(path.join(ROOT, "content"));
+    check("every spell whose Frequency the module now enforces", spells.sort(), [
+        "hirviendo-boil.json:1/round",
+        "kita-tenchi-kaijin.json:1/round",
+        "lanza-del-relampago.json:1/round",
+        "the-miracle-growth.json:1/round",
+        "trident.json:1/round",
+    ]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  A spell attack's riders are its own                                                          */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * `strike-resolved` searches the whole sheet on purpose: a Technique that says "make one Strike"
+     * leaves the weapon as the message's item, and only the wide search brings the two together.
+     *
+     * A spell with the **attack** trait is the opposite case - it rolls the attack itself - and left in
+     * that search it answered everybody else's. Driven live, casting Lanza del Relampago fired Cero
+     * Oscuras' splash as well as the lance's, against creatures the cero was never aimed at.
+     *
+     * So the split is by trait, and both sides of it are pinned: the attack-trait spells that must be
+     * scoped to their own roll, and the Strike Techniques that must not be.
+     */
+    const strikeSpells = { scoped: [], wide: [] };
+    const dir = path.join(ROOT, "content", "soulbound-techniques");
+    for (const name of fs.readdirSync(dir)) {
+        if (!name.endsWith(".json")) continue;
+        const doc = JSON.parse(fs.readFileSync(path.join(dir, name), "utf8"));
+        if (doc.type !== "spell") continue;
+        if (!(ridersOf(doc) ?? []).some((rider) => rider.event === "strike-resolved")) continue;
+        (doc.system.traits.value.includes("attack") ? strikeSpells.scoped : strikeSpells.wide).push(name);
+    }
+    check("the spell attacks whose strike riders are their own", strikeSpells.scoped.sort(),
+        ["cero-oscuras.json", "galvano-javelin.json", "lanza-del-relampago.json"]);
+    check("…and the Strike Techniques that still need the wide search", strikeSpells.wide.sort(),
+        ["hitotsume-nadegiri.json", "ikkotsu.json", "ryusenka.json", "shitonegaeshi.json",
+            "shukei-hakuteiken.json"]);
 }
 
 /* -------------------------------------------------------------------------------------------- */

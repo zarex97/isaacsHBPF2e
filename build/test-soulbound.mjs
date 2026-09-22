@@ -1162,12 +1162,20 @@ check(
     false,
 );
 
+// The burst was written as the *cast's* area, with the detonation a `self` rider beside it. Both halves
+// were wrong, and this check used to pin them: cast-time area targeting would have replaced the single
+// creature the attack is rolled against with everyone in a 15-foot burst, and the `self` rider dealt the
+// lance's 5d6 fire to the caster. Driven live it did exactly that and nothing else — no burst, no save,
+// 13 damage to the Murciélago. "At that point" is the creature the lance was thrown at, so the burst is
+// anchored on the target and the attack keeps its one target.
 const lanza = techDoc("lanza-del-relampago");
+const lance = lanza.flags["isaacs-hb-pf2e"].riders[0];
 check(
-    "Lanza del Relámpago is an attack whose burst is the cast's own area, not a second one",
-    [lanza.system.defense, lanza.flags["isaacs-hb-pf2e"].areaTargeting.area,
-     lanza.flags["isaacs-hb-pf2e"].riders[0].area],
-    [null, { type: "burst", value: 15 }, undefined],
+    "Lanza del Relámpago is a spell attack at one creature, and the burst opens where the lance landed",
+    [lanza.system.defense, lanza.flags["isaacs-hb-pf2e"].areaTargeting, lance.self,
+     lance.area, lance.event],
+    [null, undefined, undefined, { anchor: "target", excludeAnchor: false, type: "burst", value: 15 },
+     "strike-resolved"],
 );
 
 const claws = contentDoc("soulbound-equipment/pantera-claws.json");

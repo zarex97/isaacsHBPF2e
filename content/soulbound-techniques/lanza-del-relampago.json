@@ -4,24 +4,35 @@
             "riders": [
                 {
                     "apply": {
-                        "damageType": "fire",
-                        "formula": "5d6",
-                        "perStep": "1d6",
-                        "type": "damage"
+                        "basic": true,
+                        "dc": "reiatsu",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "fire",
+                                    "formula": "5d6",
+                                    "perStep": "1d6",
+                                    "type": "damage"
+                                }
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
                     },
-                    "event": "action-used",
-                    "self": true
+                    "area": {
+                        "anchor": "target",
+                        "excludeAnchor": false,
+                        "type": "burst",
+                        "value": 15
+                    },
+                    "areaTargeting": {
+                        "affects": "all",
+                        "includesSelf": false
+                    },
+                    "event": "strike-resolved",
+                    "note": "Whether or not you hit, the lance detonates where it landed."
                 }
-            ],
-            "areaTargeting": {
-                "affects": "all",
-                "area": {
-                    "type": "burst",
-                    "value": 15
-                },
-                "includesSelf": false,
-                "range": 120
-            }
+            ]
         }
     },
     "img": "modules/isaacs-hb-pf2e/icons/bolt-strike-forked-green.svg",
