@@ -10,7 +10,8 @@
                     },
                     "duration": {
                         "unit": "rounds",
-                        "value": 1
+                        "value": 1,
+                        "expiry": "turn-start"
                     },
                     "outcomes": [
                         "failure"
@@ -24,7 +25,8 @@
                     },
                     "duration": {
                         "unit": "rounds",
-                        "value": 2
+                        "value": 2,
+                        "expiry": "turn-start"
                     },
                     "outcomes": [
                         "criticalFailure"
@@ -37,7 +39,8 @@
                     },
                     "duration": {
                         "unit": "rounds",
-                        "value": 1
+                        "value": 1,
+                        "expiry": "turn-start"
                     },
                     "outcomes": [
                         "failure"
@@ -50,7 +53,8 @@
                     },
                     "duration": {
                         "unit": "rounds",
-                        "value": 2
+                        "value": 2,
+                        "expiry": "turn-start"
                     },
                     "outcomes": [
                         "criticalFailure"

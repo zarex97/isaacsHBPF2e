@@ -61,7 +61,8 @@
                     },
                     "duration": {
                         "unit": "rounds",
-                        "value": 1
+                        "value": 1,
+                        "expiry": "turn-start"
                     },
                     "note": "Shadow aspect: Another Dimension confuses instead of banishing.",
                     "outcomes": [

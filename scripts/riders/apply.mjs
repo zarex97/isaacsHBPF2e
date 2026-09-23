@@ -81,6 +81,8 @@ export async function applyRiders(payload) {
     for (const [target, forTarget] of byTarget) {
         await applyToTarget(target, forTarget, context, payload);
     }
+
+    await spendStrikeTechnique(payload, context);
 }
 
 async function applyToTarget(target, candidates, context, payload) {
@@ -204,6 +206,19 @@ async function applyToTarget(target, candidates, context, payload) {
     if (work.notes.length > 0) await postNotes(work);
     if (work.prompts.length > 0) await postPrompts(work);
     for (const choice of work.choices) await postChoice(choice, work, payload);
+}
+
+/**
+ * The Strike a Technique paid for has happened; the marker is spent.
+ *
+ * Hit or miss, because the Technique was cast either way and *"make one Strike"* is one Strike. Called
+ * from `applyRiders` rather than from the source, because the source runs on whichever client rolled and
+ * the flag is the GM's to write — and because a collection that found nothing still consumed the cast.
+ */
+async function spendStrikeTechnique(payload, context) {
+    if (payload.event !== "strike-resolved") return;
+    const { StrikeTechnique } = await import("./strike-technique.mjs");
+    await StrikeTechnique.disarm(context.originActor);
 }
 
 /** One option of one choice rider, come back from the caster's click. */
