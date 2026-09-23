@@ -9,13 +9,15 @@
                     },
                     "duration": {
                         "unit": "rounds",
-                        "value": 1
+                        "value": 0,
+                        "expiry": "turn-end"
                     },
                     "event": "strike-resolved",
                     "outcomes": [
                         "success",
                         "criticalSuccess"
-                    ]
+                    ],
+                    "note": "“the target is **off-guard until the end of your turn**” — *your* turn, and *this* one, which is the only clause in the class phrased that way. pf2e writes that as a zero-round duration expiring at turn end: `calculateRemainingDuration` reads zero as “now” and then lets `turn-end` hold it until the initiative order passes below where it started. One round at `turn-start` — what it shipped with — is a whole extra turn of off-guard."
                 }
             ]
         }

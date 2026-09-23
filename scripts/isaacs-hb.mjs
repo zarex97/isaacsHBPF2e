@@ -14,6 +14,7 @@ import { registerHooks as registerLibraHooks } from "./riders/libra.mjs";
 import { Encasement } from "./riders/encasement.mjs";
 import { Escape } from "./riders/escape.mjs";
 import { Riders } from "./riders/index.mjs";
+import { StrikeTechnique } from "./riders/strike-technique.mjs";
 import { MODULE_ID, adjacentSigns } from "./sky/signs.mjs";
 import { SkyTrackerApp } from "./sky/tracker-app.mjs";
 import { SkyTracker } from "./sky/tracker.mjs";
@@ -69,6 +70,9 @@ Hooks.once("init", () => {
         Lingering.register();
         Lingering.registerHooks();
     });
+    // The marker a "make one Strike" Technique leaves for the Strike that follows it. Only the sweeps
+    // are hooks: arming is the cast pipeline's, spending is the rider engine's.
+    start("Strike Techniques", () => StrikeTechnique.registerHooks());
     start("astral projection", () => Astral.registerHooks());
     start("free casts' settings", () => FreeCast.registerSettings());
     start("Cosmo", () => Cosmo.registerHooks());

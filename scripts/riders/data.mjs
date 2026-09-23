@@ -138,10 +138,42 @@ const ITEM_SCOPED_EVENTS = new Set(["action-used", "save-rolled", "aura-tick"]);
  * items have nothing to do with the attacker's message item, and *Zanhyō Ningyō* is exactly such a
  * spell — a reaction to being hit.
  */
-function scopedAway(source, item, event) {
+/**
+ * Where a cast records which Technique the caster's next Strike belongs to.
+ *
+ * The flag itself is written and swept by `riders/strike-technique.mjs`; it is named here because
+ * `scopedAway` is the one thing that reads it, and because this file may not import that one — the
+ * dependency runs the other way, and a ring closed at evaluation time is how this module lost a whole
+ * `setup` hook once already.
+ */
+export const STRIKE_TECHNIQUE_FLAG = "strikeTechnique";
+
+/** The id, on the sheet, of the Technique whose Strike is pending — or null. */
+export function armedTechniqueId(actor) {
+    return actor?.getFlag?.(MODULE_ID, STRIKE_TECHNIQUE_FLAG)?.itemId ?? null;
+}
+
+function scopedAway(source, item, event, actor) {
     if (event !== "strike-resolved") return false;
     if (source?.type !== "spell" || source.id === item?.id) return false;
-    return !!source.system?.traits?.value?.includes?.("attack");
+    if (source.system?.traits?.value?.includes?.("attack")) return true;
+
+    /**
+     * A Technique that says "make one Strike" fires only for the Strike it paid for.
+     *
+     * This is the other half of the same wide search and it was much the larger one. *Ryūsenka*,
+     * *Ikkotsu*, *Shitonegaeshi*, *Hitotsume: Nadegiri* and *Shūkei: Hakuteiken* carry no attack trait, so
+     * nothing above catches them, and every one of them fired on **every** Strike their owner made, cast
+     * or not. Driven live: one bare critical Strike from a Soul Reaper who had cast nothing applied both
+     * *Ryūsenka: Off-Guard* and *Hitotsume: Nadegiri: Off-Guard*, and the pool read 1 point before and 1
+     * after. Guide §1.4 is one line — "Every technique costs 1 Reiatsu Point".
+     *
+     * The cast leaves a marker and the first Strike spends it. Note the direction: this **excludes**, so
+     * an actor with no marker collects no spell riders rather than all of them, and a Strike made without
+     * a Technique behind it is just a Strike.
+     */
+    const id = source.original?.id ?? source.id;
+    return armedTechniqueId(actor) !== id;
 }
 
 /**
@@ -161,7 +193,7 @@ export function collectRiders({ event, item, actor }) {
     for (const candidate of candidates) {
         if (!candidate || seen.has(candidate.id)) continue;
         seen.add(candidate.id);
-        if (scopedAway(candidate, item, event)) continue;
+        if (scopedAway(candidate, item, event, actor)) continue;
         sources.push(candidate);
     }
 

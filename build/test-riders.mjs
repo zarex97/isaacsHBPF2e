@@ -600,6 +600,164 @@ check(
     ["Sky: Ascendant (Scorpio)", "Sky: Ascendant (Scorpio)", "Sky: Ascendant (Scorpio)"],
 );
 
+/**
+ * A "make one Strike" Technique fires for the Strike it paid for, and no other.
+ *
+ * The wide search above is what lets a rider written on *Ryūsenka* find a Strike rolled with a weapon.
+ * Five Techniques are shaped that way and carry no attack trait to narrow them, so every one of them
+ * fired on **every** Strike their owner made — driven live, one bare critical Strike from a Soul Reaper
+ * who had cast nothing applied both *Ryūsenka: Off-Guard* and *Hitotsume: Nadegiri: Off-Guard*, with the
+ * pool reading 1 point before and 1 after. Guide §1.4: "Every technique costs 1 Reiatsu Point".
+ *
+ * The four checks below are the four cases the marker has to keep apart, and the third is the one that
+ * makes this a scoping fix rather than a switch: the seventeen **non-spell** sources of `strike-resolved`
+ * riders are passive by design and must go on firing on every Strike, cast or not.
+ */
+const ryusenkaSpell = {
+    id: "ryusenka",
+    type: "spell",
+    name: "Ryūsenka",
+    system: { traits: { value: [] } },
+    flags: load("soulbound-techniques", "ryusenka.json").flags,
+};
+const shikaiEffect = withRiders(
+    "Effect: Hyōrinmaru — Shikai",
+    ridersOf(load("soulbound-effects", "effect-hyorinmaru-shikai.json")),
+);
+const strikeWeapon = withRiders("Spirit Weapon (Blade)", []);
+const sheet = [ryusenkaSpell, shikaiEffect];
+const armed = (id) => ({ items: sheet, getFlag: (_m, key) => (key === "strikeTechnique" ? { itemId: id } : null) });
+
+check(
+    "a Strike Technique's riders do not fire on a Strike it did not pay for",
+    collectRiders({ event: "strike-resolved", item: strikeWeapon, actor: armed(null) })
+        .map((c) => c.item.name),
+    ["Effect: Hyōrinmaru — Shikai"],
+);
+check(
+    "…and do fire on the Strike the cast armed",
+    collectRiders({ event: "strike-resolved", item: strikeWeapon, actor: armed("ryusenka") })
+        .map((c) => c.item.name)
+        .filter((n) => n === "Ryūsenka").length,
+    ridersOf(load("soulbound-techniques", "ryusenka.json")).length,
+);
+check(
+    "a passive strike rider on an effect needs no marker at all",
+    collectRiders({ event: "strike-resolved", item: strikeWeapon, actor: { items: [shikaiEffect] } })
+        .map((c) => c.item.name),
+    ["Effect: Hyōrinmaru — Shikai"],
+);
+// An actor with no `getFlag` at all — every other test in this file builds one that way — must not throw
+// and must not collect the spell. The failure mode of getting this wrong is the loud kind, which is why
+// it is worth one line.
+check(
+    "…and an actor with no flags collects the effect and not the spell",
+    collectRiders({ event: "strike-resolved", item: strikeWeapon, actor: { items: sheet } })
+        .map((c) => c.item.name),
+    ["Effect: Hyōrinmaru — Shikai"],
+);
+
+/**
+ * S-15e. "On a critical hit the ice shatters: the target **instead** takes an additional 2d6 cold."
+ *
+ * *Instead* — so the critical branch is the hit branch doubled, and the heightening doubles with it. The
+ * card's own 1d6 ladder is one half and the rider is the other, which is why the rider carries the same
+ * `perStep` and the same (+2) interval rather than a flat die. It shipped flat: at rank 9 a critical hit
+ * dealt the card's 5d6 plus 1d6, where the guide asks for 10d6.
+ */
+const ryusenkaRiders = ridersOf(load("soulbound-techniques", "ryusenka.json"));
+const ryusenkaCrit = ryusenkaRiders.find((r) => r.apply?.type === "damage");
+check("Ryūsenka's critical hit doubles the die and the ladder with it",
+    [ryusenkaCrit.apply.formula, ryusenkaCrit.apply.perStep, ryusenkaCrit.apply.perStepInterval,
+     ryusenkaCrit.outcomes.join("/")],
+    ["1d6", "1d6", 2, "criticalSuccess"]);
+// The hit branch keeps the save and the crit branch does not: "instead" governs both halves of the
+// sentence, so a critical hit replaces the Fortitude save with off-guard rather than adding to it.
+check("…and the save belongs to the hit, not the critical hit",
+    ryusenkaRiders.filter((r) => r.apply?.type === "save").map((r) => r.outcomes.join("/")),
+    ["success"]);
+
+/**
+ * Spirit-Cutting's second half, guide §4.1: "affect incorporeal creatures as though the weapon had the
+ * ghost touch rune". The first half is the `versatile-spirit` trait on the four profiles; this one has no
+ * trait to carry it, because pf2e expresses it as a property rune and reads it back as
+ * `item:rune:property:ghost-touch` when it works out incorporeal resistance.
+ */
+const spiritWeapon = load("soulbound-class-features", "core", "spirit-weapon.json");
+const ghostTouch = spiritWeapon.system.rules.find((r) => r.key === "AdjustStrike");
+check("Spirit-Cutting reaches incorporeal creatures",
+    [ghostTouch?.property, ghostTouch?.mode, ghostTouch?.value, JSON.stringify(ghostTouch?.definition)],
+    ["property-runes", "add", "ghostTouch", '["item:tag:soulbound-spirit-weapon"]']);
+// …and the damage-type half, on all four sealed profiles, since the guide promises it of every one.
+for (const profile of ["blade", "great-blade", "paired-blades", "spirit-bow"]) {
+    check(`…and ${profile} can still choose spirit`,
+        load("soulbound-equipment", `${profile}.json`).system.traits.value.includes("versatile-spirit"),
+        true);
+}
+
+/**
+ * Every one-round rider says which end of the turn it means.
+ *
+ * The default in `effectSource` is `turn-end`, changed when Hyōrinmaru's clauses were fixed: both guides
+ * say "until the end of its next turn" over and over, and `turn-start` ends an effect one step short of
+ * that. Right for those — and one turn too long for the twenty-odd riders phrased "for 1 round", which
+ * is the whole kidō table and every Cosmo art on the Saint side. PF2e reads "1 round" as "until the same
+ * point in the initiative order next round", which is `turn-start`.
+ *
+ * So both readings are now written down rather than inherited, and this asserts that: a rounds-duration
+ * rider with no `expiry` is a rider nobody decided about. The list below is the exception, and each entry
+ * is a clause that states no duration at all — an aura's slow, an ash-figure's grab — where picking one
+ * would be a design call rather than a repair.
+ */
+const UNDECIDED_EXPIRY = new Set([
+    "effect-freezing-shield.json",   // "is slowed 1 on a failure" — the dome states no duration
+    "effect-minami.json",            // "grabbed by ash-figures (Escape vs. your Reiatsu DC)" — likewise
+    "the-yellow-spring-opens.json",  // "take 8d6 void and be slowed 1" — likewise
+]);
+
+{
+    const undecided = [];
+    const walk = (node, file) => {
+        if (Array.isArray(node)) {
+            for (const entry of node) walk(entry, file);
+        } else if (node && typeof node === "object") {
+            const duration = node.duration;
+            const apply = node.apply ?? {};
+            if (duration?.unit === "rounds" && !duration.expiry && (apply.type === "condition" || apply.type === "effect")) {
+                undecided.push(file);
+            }
+            for (const value of Object.values(node)) walk(value, file);
+        }
+    };
+    const files = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) return files(full);
+        return entry.name.endsWith(".json") ? [full] : [];
+    });
+    for (const full of files(path.join(ROOT, "content"))) {
+        const raw = fs.readFileSync(full, "utf8");
+        if (!raw.includes('"duration"')) continue;
+        walk(JSON.parse(raw).flags ?? {}, path.basename(full));
+    }
+    check("every one-round condition rider says which end of the turn it means",
+        [...new Set(undecided)].filter((f) => !UNDECIDED_EXPIRY.has(f)).sort(), []);
+}
+
+// The clauses that say "until the end of its next turn", pinned one by one so a future default flip
+// cannot quietly take them back.
+for (const [file, slug] of [
+    ["soulbound-techniques/ryusenka.json", "immobilized"],
+    ["soulbound-techniques/ryusenka.json", "off-guard"],
+    ["soulbound-techniques/hyoryu-senbi.json", "slowed"],
+    ["soulbound-techniques/sennen-hyoro.json", "immobilized"],
+    ["soulbound-kido/hado/kurohitsugi.json", "immobilized"],
+]) {
+    const doc = load(...file.split("/"));
+    const found = ridersOf(doc).filter((r) => r.apply?.slug === slug);
+    check(`${path.basename(file)} ${slug} lasts until the end of the target's next turn`,
+        found.map((r) => r.duration?.expiry), found.map(() => "turn-end"));
+}
+
 /* -------------------------------------------------------------------------------------------- */
 /*  Aiming                                                                                       */
 /* -------------------------------------------------------------------------------------------- */

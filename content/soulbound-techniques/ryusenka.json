@@ -14,7 +14,8 @@
                                 },
                                 "duration": {
                                     "unit": "rounds",
-                                    "value": 1
+                                    "value": 1,
+                                    "expiry": "turn-end"
                                 },
                                 "outcomes": [
                                     "failure",
@@ -34,13 +35,15 @@
                     "apply": {
                         "damageType": "cold",
                         "formula": "1d6",
-                        "type": "damage"
+                        "type": "damage",
+                        "perStep": "1d6",
+                        "perStepInterval": 2
                     },
                     "event": "strike-resolved",
                     "outcomes": [
                         "criticalSuccess"
                     ],
-                    "note": "S-15e: the critical hit's second die. The card's own damage is the first."
+                    "note": "S-15e. “On a critical hit … the target **instead** takes an additional 2d6 cold” — *instead*, so the critical branch is the hit branch doubled, and the heightening doubles with it. The card's own damage is one 1d6 ladder and this is the second, which is why it carries the same `perStep` and the same `(+2)` interval rather than a flat die. It shipped flat: at rank 9 a critical hit dealt the card's 5d6 plus 1d6, where the guide asks for 10d6."
                 },
                 {
                     "apply": {
@@ -49,7 +52,8 @@
                     },
                     "duration": {
                         "unit": "rounds",
-                        "value": 1
+                        "value": 1,
+                        "expiry": "turn-end"
                     },
                     "event": "strike-resolved",
                     "outcomes": [

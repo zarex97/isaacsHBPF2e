@@ -3,6 +3,7 @@ import { SpellFrequency } from "./economy/spell-frequency.mjs";
 import { Charges } from "./soulbound/charges.mjs";
 import { Release } from "./soulbound/release.mjs";
 import { Severance } from "./soulbound/severance.mjs";
+import { StrikeTechnique } from "./riders/strike-technique.mjs";
 import { wrap } from "./lib/wrap.mjs";
 import { configFor } from "./targeting/config.mjs";
 import { AreaTargeting, SPENDING, VARIANT } from "./targeting/index.mjs";
@@ -35,6 +36,12 @@ export const CastPipeline = {
                 // "immediately ends Severance whether you want it to or not", and ending it on an
                 // attempt that was cancelled would take the capstone away for nothing.
                 await Severance.afterCast(spell);
+                // "Make one Strike, and then…" — the Strike is rolled with a weapon, so the rider that
+                // follows it lives on this spell and can only be found by searching the sheet. The marker
+                // is what tells that search which Technique was actually paid for; without it every Strike
+                // Technique on the sheet fired on every Strike. Here rather than in `beforeCast` because
+                // the cast has now actually happened.
+                await StrikeTechnique.arm(options[VARIANT] ?? spell);
                 return result;
             },
             { feature: "area targeting and free casts", type: "MIXED" },
