@@ -1871,6 +1871,111 @@ check("and it arrives with the Full Release, not with the 13th level",
 
 
 /* ---------------------------------------------------------------------------------------------- */
+/*  Kidō — the four clauses that were descriptions                                                  */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * Four kidō shipped with a sentence each that nothing behind it read. They are grouped because they are
+ * the same failure four times: a clause that is true on the card, false at the table, and silent either
+ * way — a predicate that matches nothing does not complain.
+ */
+
+// K-09. "Ignores lesser cover." Byakurai had no rules, no riders and no flags at all, so the one line
+// separating it from any other 2d6 attack cantrip did nothing. The machinery already existed for
+// Senbonzakura's scattered blades; what it could not do was belong to an *item* rather than a stance.
+const { ignoringCover, withoutCover, LESSER_COVER } = await import("../scripts/soulbound/scattered.mjs");
+const paleLightning = kidoDoc("hado", "byakurai");
+check("Byakurai declares that it goes through lesser cover",
+    paleLightning.flags["isaacs-hb-pf2e"].ignoresCover, "lesser");
+const lesser = ignoringCover(null, paleLightning);
+check("…which the engine reads off the item, not off the caster", lesser?.max, LESSER_COVER);
+check("…and lesser cover is pf2e's +1", LESSER_COVER, 1);
+// The cap is the point: reading it as "any cover" makes a 1st-rank kidō better than a Shikai.
+check("…so +1 comes out of the DC", withoutCover({ value: 30 }, 1).value, 29);
+check("…and +2 — standard cover — does not",
+    withoutCover({ value: 30 }, 2 <= lesser.max ? 2 : 0).value, 30);
+check("a stance still ignores every kind", ignoringCover(
+    { getRollOptions: () => ["soulbound:senbonzakura:gokei"] }, null)?.max, Infinity);
+
+// K-17. "You **or an ally within 15 ft.**" — `damage-received` is the defender's own event, so when the
+// ally was the one hit the engine read the ally's items and the Soul Reaper's kidō was not among them.
+// Fourth ability to need `ally-damaged`, after Antithesis and The Balance.
+const splittingVoid = kidoDoc("bakudo", "danku").flags["isaacs-hb-pf2e"].riders;
+check("Danku answers both ends of its trigger",
+    splittingVoid.map((r) => r.event), ["damage-received", "ally-damaged"]);
+check("…the ally half reaching 15 feet, which is the clause's own number",
+    splittingVoid[1].range, 15);
+check("…and putting the wall in front of the creature that was hurt",
+    splittingVoid[1].apply.riders[0].trigger, "ally");
+/**
+ * "Resistance equal to **your** level" — the caster's.
+ *
+ * The effect's rule said `@actor.level`, which is resolved on the sheet it lands on. While the kidō
+ * could only ever protect its own caster the two were the same number and the bug was invisible; the
+ * ally half would have made a 3rd-level ally resist 3 from a 17th-level Soul Reaper's wall.
+ */
+for (const [index, rider] of splittingVoid.entries()) {
+    check(`…and the resistance is the caster's level on ${index === 0 ? "the self" : "the ally"} half`,
+        rider.apply.riders[0].apply.substitutions,
+        [{ path: "system.rules.0.value", value: "origin.level" }]);
+}
+
+/**
+ * K-07. "**`Additional Kidō` … is Soul Reaper only** … A Hollow or Quincy can never exceed two."
+ *
+ * The feat said so in `prerequisites`, which pf2e **displays and never tests** — it is a string for the
+ * reader, not a gate. Its ChoiceSet already refused to offer a Hollow's or a Quincy's own arts, so a
+ * Hollow taking it could not pick Cero twice; what it could do was pick Sōkatsui, and the guide's hard
+ * ceiling of two is the whole reason the Lineage gets Hierro and Regeneración instead.
+ *
+ * The predicate is on the **ChoiceSet only**. A `GrantItem` gated on a predicate is tested once, at
+ * creation, and the validator refuses one without `reevaluateOnUpdate` for that reason — but there is
+ * nothing to gate: with no selection made, the grant's `{item|flags…}` uuid resolves to nothing and
+ * hands over nothing.
+ */
+const extraKido = contentDoc("soulbound-feats/additional-kido.json");
+const extraChoice = extraKido.system.rules.find((r) => r.key === "ChoiceSet");
+check("Additional Kidō may be taken three times", extraKido.system.maxTakable, 3);
+check("…by a Soul Reaper, and tested rather than merely printed",
+    extraChoice.predicate, ["feature:soul-reaper"]);
+check("…and the grant carries no predicate of its own",
+    extraKido.system.rules.find((r) => r.key === "GrantItem").predicate, undefined);
+// The filter is the second half of the ceiling: no cantrips, no other Lineage's arts, nothing above the
+// rank the character's own level allows.
+check("…choosing a costed kidō of neither other Lineage, within rank",
+    JSON.stringify(extraChoice.choices.filter),
+    JSON.stringify(["item:tag:sb-tier-kido", { not: "item:trait:cantrip" },
+        { not: "item:tag:soulbound-kido-hollow" }, { not: "item:tag:soulbound-kido-quincy" },
+        { lte: ["item:level", "soulbound:kido-rank"] }]));
+
+// K-18. "can't cast spells or use kidō" was a line on an effect with `rules: []`. The cast pipeline
+// already refuses a cast for three other reasons; this is the fourth, read off an option so anything
+// else that seals a voice gets the same refusal.
+const silenced = contentDoc("soulbound-effects/effect-silenced-chain.json");
+check("a sealed voice says so where something can read it",
+    silenced.system.rules.filter((r) => r.key === "RollOption").map((r) => [r.option, r.domain]),
+    [["soulbound:silenced", "all"]]);
+
+// K-19. "At 9th level, also remove one of clumsy, enfeebled, or stupefied." Sixty condition riders
+// across both classes apply a condition; not one of them lifted one until this.
+const mend = kidoDoc("kaido", "kaido").flags["isaacs-hb-pf2e"].riders[0];
+check("Mend the Weave offers its 9th-level half on the cast",
+    [mend.event, mend.apply.type], ["action-used", "choice"]);
+// The caster's level, not the kidō's rank: a kidō auto-heightens to half your level, so rank 5 *is*
+// 9th level, and writing the rank would have been right by accident and wrong for every other kidō.
+check("…from 9th level, counted on the caster", mend.predicate, [{ gte: ["self:level", 9] }]);
+check("…lifting exactly the three the guide names",
+    mend.apply.options.map((o) => o.riders[0].apply.slug), ["clumsy", "enfeebled", "stupefied"]);
+check("…removing them rather than stepping them down",
+    mend.apply.options.every((o) => o.riders[0].apply.remove === true), true);
+// Offered only where there is something to lift, so the card does not promise a mend it cannot make.
+check("…and offering only what is actually there",
+    mend.apply.options.map((o) => o.predicate[0]),
+    ["rider:target:condition:clumsy", "rider:target:condition:enfeebled",
+     "rider:target:condition:stupefied"]);
+
+
+/* ---------------------------------------------------------------------------------------------- */
 /*  Unsealed, the afterimage, and the two allowances nothing spent                                  */
 /* ---------------------------------------------------------------------------------------------- */
 

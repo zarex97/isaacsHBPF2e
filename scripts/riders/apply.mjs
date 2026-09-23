@@ -1468,6 +1468,27 @@ async function applyCondition(rider, context) {
     const slug = rider.apply.slug;
     const value = Number(rider.apply.value) || null;
 
+    /**
+     * Taking one off, rather than putting one on.
+     *
+     * > **Kaidō — Mend the Weave.** At 9th level, also **remove** one of clumsy, enfeebled, or
+     * > stupefied. — guide §6.3
+     *
+     * Sixty condition riders across both classes apply a condition and not one of them lifted one, so
+     * the class's only healing kidō stopped at the hit points and the second half of its 9th-level
+     * upgrade was a sentence in a description.
+     *
+     * `forceRemove` rather than a decrement: the clause says *remove*, and pf2e's `decreaseCondition`
+     * otherwise steps a clumsy 3 down to clumsy 2 and calls it mended.
+     */
+    if (rider.apply.remove === true) {
+        const held = context.actor?.itemTypes?.condition?.find((c) => c.slug === slug && c.active);
+        if (!held) return;
+        await context.actor.decreaseCondition(slug, { forceRemove: true });
+        context.notes.push(`${context.actor.name} is no longer ${slug}.`);
+        return;
+    }
+
     if (!rider.duration) {
         // "cumulative to enfeebled 4" — the cap belongs on the increment, not on a predicate that would
         // have to be rewritten every time the ceiling moves. `max` is also the *declaration* that this
