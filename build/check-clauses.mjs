@@ -64,6 +64,12 @@ function fail(file, id, message) {
  */
 function normalise(text) {
     return text
+        // A blockquote marker is presentation too, and it is the one that bites. The guide puts whole
+        // Techniques inside `>` blocks — Colmillo, Kanzen Saimin's canon note — and hard-wraps them at
+        // column 100 like everything else, so a clause spanning a wrap inside a quote had a stray `>`
+        // in the middle of it where the tracker had a space. The symptom is a clause that is plainly
+        // verbatim and fails anyway, which has already cost two trackers a row split around nothing.
+        .replace(/^[ \t]*>+[ \t]?/gm, "")
         .replace(/[*_`]/g, "")
         .replace(/\s+/g, " ")
         .trim();

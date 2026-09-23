@@ -69,6 +69,11 @@
         "usage": {
             "canBeAmmo": false,
             "value": "held-in-one-plus-hands"
+        },
+        "ammo": {
+            "baseType": null,
+            "builtIn": true,
+            "capacity": null
         }
     },
     "type": "weapon"
