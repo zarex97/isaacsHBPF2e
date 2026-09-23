@@ -14,7 +14,7 @@
                         "type": "prompt"
                     },
                     "event": "strike-resolved",
-                    "note": "Once per round; pf2e has no per-round gate on a rider, so the card says once.",
+                    "oncePerRound": true,
                     "outcomes": [
                         "success",
                         "criticalSuccess"

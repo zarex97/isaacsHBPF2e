@@ -3,12 +3,69 @@
         "isaacs-hb-pf2e": {
             "riders": [
                 {
+                    "event": "ally-damaged",
+                    "range": 60,
+                    "self": true,
+                    "oncePerRound": true,
                     "apply": {
-                        "text": "<strong>Sight of the Balance.</strong> Choose an enemy within 60 feet: it takes a <strong>&minus;2 status penalty</strong> to its next save, and the next ally to attack it gains <strong>+1 status</strong> to that attack.",
-                        "type": "prompt"
+                        "type": "reaction",
+                        "freeAction": true,
+                        "label": "Take it instead",
+                        "prompt": "An ally has been hurt within 60 feet. Move the harm onto yourself?",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: The Balance — Redistributed"
+                                }
+                            },
+                            {
+                                "apply": {
+                                    "type": "heal",
+                                    "value": "event.damage.total"
+                                },
+                                "trigger": "ally"
+                            },
+                            {
+                                "apply": {
+                                    "type": "damage",
+                                    "formula": "event.damage.total",
+                                    "damageType": "untyped"
+                                }
+                            }
+                        ]
                     },
+                    "note": "Untyped on purpose: the blow's own damage types are not carried across the event, and guessing one would hand the Quincy a resistance or a weakness the harm never had. The reduction is `Effect: The Balance — Redistributed`, which reads three times the level at the Vollständig, so the arithmetic the clause asks for happens through the same resistance the Release Technique uses rather than through a second number."
+                },
+                {
                     "event": "turn-start",
-                    "self": true
+                    "self": true,
+                    "apply": {
+                        "type": "pick",
+                        "range": 60,
+                        "affects": "enemies",
+                        "prompt": "Sight of the Balance: whose fortune is yours to allot?",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Sight of the Balance"
+                                }
+                            },
+                            {
+                                "area": {
+                                    "type": "emanation",
+                                    "value": 60,
+                                    "affects": "allies",
+                                    "includesSelf": false
+                                },
+                                "apply": {
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Allotted Fortune"
+                                }
+                            }
+                        ]
+                    }
                 }
             ]
         }
@@ -41,7 +98,7 @@
             {
                 "key": "Note",
                 "selector": "all",
-                "text": "Your Release Technique reduces the triggering damage by <strong>three times your level</strong>, not twice. Once per round you may redirect an ally's damage within 60 feet to yourself and reduce it the same way, as a <strong>free action that does not spend your reaction</strong>.",
+                "text": "Your Release Technique reduces the triggering damage by <strong>three times your level</strong>, not twice. Once per round you may redirect an ally's damage within 60 feet to yourself and reduce it the same way, as a <strong>free action that does not spend your reaction</strong> — the module offers the card. <strong>Sight of the Balance</strong> offers its own card at the start of each of your turns.",
                 "title": "The Balance, at Night"
             }
         ],

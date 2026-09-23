@@ -10,19 +10,45 @@
                             {
                                 "apply": {
                                     "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: The Balance — Redistributed"
+                                }
+                            },
+                            {
+                                "trigger": true,
+                                "apply": {
+                                    "type": "damage",
+                                    "formula": "2d6",
+                                    "damageType": "spirit",
+                                    "perStep": "1d6",
+                                    "perStepInterval": 2
+                                }
+                            },
+                            {
+                                "trigger": true,
+                                "apply": {
+                                    "type": "effect",
                                     "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: The Balance — Held"
+                                }
+                            },
+                            {
+                                "apply": {
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: The Balance — Fortune Held",
+                                    "stack": true,
+                                    "value": 1
                                 }
                             }
                         ],
                         "type": "reaction"
                     },
-                    "event": "damage-applied",
+                    "event": "damage-received",
                     "predicate": [
                         {
                             "not": "feature:refined-release"
                         }
                     ],
-                    "self": true
+                    "self": true,
+                    "note": "The **defender's** event, not the attacker's. The trigger is \"You take damage from a creature or effect you can perceive\", so it is `damage-received` — `damage-applied` is \"damage from this actor's item landed on a target\", which is the opposite creature. Driven live on `damage-applied` an NPC hit the Quincy for 18 and no card appeared at all. The outer rider must stay `self`, because a reaction is offered to the ability's owner; `trigger: true` is what sends the 2d6 and the penalty to the creature that struck, while the reduction stays on the Quincy."
                 },
                 {
                     "apply": {
@@ -32,18 +58,43 @@
                             {
                                 "apply": {
                                     "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: The Balance — Redistributed"
+                                }
+                            },
+                            {
+                                "trigger": true,
+                                "apply": {
+                                    "type": "damage",
+                                    "formula": "2d6",
+                                    "damageType": "spirit",
+                                    "perStep": "1d6",
+                                    "perStepInterval": 2
+                                }
+                            },
+                            {
+                                "trigger": true,
+                                "apply": {
+                                    "type": "effect",
                                     "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: The Balance — Held (Refined)"
+                                }
+                            },
+                            {
+                                "apply": {
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: The Balance — Fortune Held",
+                                    "stack": true,
+                                    "value": 1
                                 }
                             }
                         ],
                         "type": "reaction"
                     },
-                    "event": "damage-applied",
-                    "note": "Refined: the penalty reaches AC as well as saves.",
+                    "event": "damage-received",
                     "predicate": [
                         "feature:refined-release"
                     ],
-                    "self": true
+                    "self": true,
+                    "note": "Refined: the penalty reaches AC as well as saves."
                 }
             ]
         }

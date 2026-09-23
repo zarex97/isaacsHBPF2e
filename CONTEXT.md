@@ -141,3 +141,34 @@ area targeting and the rider engine.
 A degree of success — critical success, success, failure or critical failure. The filter a
 rider is written against.
 _Avoid_: outcome as a name for roll-rewriting features such as Om or Libra's Balance.
+
+### Verification
+
+**Clause**:
+One independently-failable declaration a class guide makes — one thing that can pass or fail
+at the table on its own. "Your damage type becomes cold" is a clause; the sentence it comes
+from carries two more. Quoted verbatim wherever it is tracked, never paraphrased.
+_Avoid_: clause as a name for a guide paragraph or a checklist row; both usually hold several.
+
+**Clause tracker**:
+The file in `Docs/clauses/` holding one tier's clauses and the state of each, paired
+one-to-one with a GitHub issue of the same scope. Nineteen exist: one for the class, one per
+Lineage, one per Spirit.
+_Avoid_: checklist — that is the retired row-per-feature file and its findings log.
+
+**Control**:
+The paired negative case run beside a clause: the same measurement with the cause removed,
+showing the effect gone. Evidence without one is compatible with the mechanism under test doing
+nothing at all — a guard that refuses everyone reads exactly like a guard that works.
+_Avoid_: control as a synonym for a second observation; it is specifically the one that should fail.
+
+**Drive**:
+To make a clause happen in the live world and watch what the table sees, as opposed to reading
+the JSON and concluding it would. Takes a clause as its object. Driving a Spirit is shorthand for
+driving each of its clauses — a Spirit is not a thing that can pass or fail.
+_Avoid_: drive as a synonym for test or run; a unit test is not a drive, and neither is a rig check.
+
+**Finding**:
+One root cause, named `SB-<n>`, however many clauses it breaks. The unit a bug issue is
+filed against.
+_Avoid_: filing one issue per failing clause; a single finding has broken forty-seven at once.

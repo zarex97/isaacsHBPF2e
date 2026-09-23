@@ -1,3 +1,4 @@
+import { testPredicate } from "./lib/roll-options.mjs";
 import { Release } from "./soulbound/release.mjs";
 
 const MODULE_ID = "isaacs-hb-pf2e";
@@ -34,6 +35,25 @@ const MODULE_ID = "isaacs-hb-pf2e";
  * and a fourth needs a flag rather than a branch.
  */
 
+/**
+ * An effect from the module's own pack, by the name it is authored under.
+ *
+ * The content refers to effects by name and the build rewrites those to ids on the way in, so a `@UUID`
+ * in a JSON file resolves at the table — code gets no such pass, and `fromUuid` on a name-shaped
+ * compendium uuid returns null without a word. Looked up through the index, the way `release.mjs` does.
+ */
+async function grantStep(actor, name) {
+    const existing = actor.itemTypes.effect.find((e) => e.name === name);
+    if (existing) {
+        await existing.update({ "system.badge.value": (existing.system.badge?.value ?? 0) + 1 });
+        return;
+    }
+    const pack = game.packs.get(`${MODULE_ID}.soulbound-effects`);
+    const entry = (await pack?.getIndex())?.find((e) => e.name === name);
+    const doc = entry ? await pack.getDocument(entry._id) : null;
+    if (doc) await actor.createEmbeddedDocuments("Item", [foundry.utils.deepClone(doc.toObject())]);
+}
+
 /** Where a price is paid from: the reiatsu pool, or a counter badge on an effect. */
 export function poolOf(actor, resource) {
     if (!resource || resource === "focus") {
@@ -58,12 +78,24 @@ export function shouldCatch({ next, current, released, points, cost = 1, usesLef
     return usesLeft > 0;
 }
 
-/** Every item on the actor that declares a price for refusing to die, cheapest first. */
+/**
+ * Every item on the actor that declares a price for refusing to die, cheapest first.
+ *
+ * A declaration may carry a `predicate`, and The Balance is why. Its refusal is a **Refined** clause —
+ * *"if the triggering damage would have reduced you to 0 Hit Points, you instead remain at 1 Hit Point"*,
+ * guide §7C — and a Spirit has no item of its own at that rung: Refined is a class feat that publishes
+ * `feature:refined-release`, and the Spirit's form feature is carried from 1st level. So the declaration
+ * lives on the form feature and names the rung it belongs to, rather than the clause going unwritten
+ * because there was nowhere to put it.
+ */
 export function declarationsOn(actor) {
+    const options = new Set(actor?.getRollOptions?.() ?? []);
     const found = [];
     for (const item of actor?.items ?? []) {
         const declared = item.flags?.[MODULE_ID]?.refuseDeath;
-        if (declared) found.push({ item, declared });
+        if (!declared) continue;
+        if (declared.predicate && !testPredicate(declared.predicate, options)) continue;
+        found.push({ item, declared });
     }
     return found.sort((a, b) => (Number(a.declared.cost) || 1) - (Number(b.declared.cost) || 1));
 }
@@ -149,6 +181,19 @@ export const RefuseDeath = {
                 if (declared.frequency) {
                     item.update({ "system.frequency.value": (item.system.frequency.value ?? 1) - 1 });
                 }
+
+                /**
+                 * What the refusal leaves behind.
+                 *
+                 * *Bailar de Valquiria* does not merely survive: "your spirit weapon's damage die
+                 * increases by one step **for the rest of the encounter**", once per refusal and with no
+                 * limit on the refusals. So a declaration may name an effect to add, and adding it again
+                 * raises its counter rather than stacking a second copy — which is what makes the steps
+                 * count.
+                 */
+                // Fire and forget, like the two writes below it: this hook runs inside `preUpdateActor`
+                // and cannot be async — the whole trick is rewriting `changes` before it is committed.
+                if (declared.grants) grantStep(actor, declared.grants);
 
                 const price = pool.kind === "focus"
                     ? `${cost} focus point${cost === 1 ? "" : "s"}`

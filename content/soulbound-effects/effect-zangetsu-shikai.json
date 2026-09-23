@@ -3,7 +3,7 @@
     "name": "Effect: Zangetsu — Shikai",
     "system": {
         "description": {
-            "value": "<p>A blade that is never sealed. Your spirit weapon's damage die is one step larger.</p>"
+            "value": "<p>A blade that is never sealed. Your spirit weapon's damage die is one step larger, and it gains <strong>two-hand d12</strong> unless it was already two-handed.</p>"
         },
         "duration": {
             "expiry": null,
@@ -28,6 +28,19 @@
                     "item:tag:soulbound-spirit-weapon"
                 ],
                 "property": "damage-dice-faces"
+            },
+            {
+                "key": "ItemAlteration",
+                "itemType": "weapon",
+                "mode": "add",
+                "predicate": [
+                    "item:tag:soulbound-spirit-weapon",
+                    {
+                        "not": "item:trait:two-hand"
+                    }
+                ],
+                "property": "traits",
+                "value": "two-hand-d12"
             }
         ],
         "start": {

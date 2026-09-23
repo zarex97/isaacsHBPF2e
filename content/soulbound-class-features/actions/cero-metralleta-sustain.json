@@ -4,9 +4,22 @@
             "freeCast": {
                 "label": "Cero Metralleta — Sustain",
                 "predicate": [
-                    "item:slug:cero-metralleta"
-                ]
-            }
+                    "item:slug:cero-metralleta",
+                    "self:effect:cero-metralleta-sustained"
+                ],
+                "unlimited": true
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Cero Metralleta — Sustained"
+                    },
+                    "event": "action-used",
+                    "note": "Using the Sustain is what buys the free shot; the marker lasts until the end of this turn, which is the once-per-round gate.",
+                    "self": true
+                }
+            ]
         }
     },
     "folder": "Actions",

@@ -1,0 +1,41 @@
+{
+    "img": "icons/magic/death/skull-poison-green.webp",
+    "name": "Effect: Respira — In the Miasma",
+    "system": {
+        "description": {
+            "value": "<p>You are standing inside an Arrogante's <strong>Respira Absoluta</strong>.</p><p>Content-free by design: this is how <em>\"a creature <strong>within the emanation</strong>\"</em> becomes something a predicate can test. pf2e's own <code>Aura</code> rule grants it on entering and takes it back on leaving, so the decay that consumes what is aimed at the Arrogante reaches the creatures actually standing in the miasma and nobody else.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": false
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

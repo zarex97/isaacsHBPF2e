@@ -80,7 +80,11 @@ export async function offerReaction(rider, context) {
     const item = context.riderItem ?? context.item;
     if (!actor || !item) return;
 
-    const key = `${context.message?.id ?? item.uuid}:${JSON.stringify(context.riderIndex)}:${actor.id}`;
+    // One occasion, one offer. A chat message names most of them; an `ally-damaged` blow has none, so the
+    // dispatch carries its own id — without it every offer after the first shared the item's uuid as a key
+    // and was swallowed by this dedupe for a minute.
+    const occasion = context.message?.id ?? context.dispatchId ?? item.uuid;
+    const key = `${occasion}:${JSON.stringify(context.riderIndex)}:${actor.id}`;
     const owners = onlineOwners(actor);
 
     const allowed = canOffer({
@@ -106,7 +110,12 @@ export async function offerReaction(rider, context) {
     await ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor }),
         whisper: [...recipients],
-        flavor: `${item.name} — reaction`,
+        // Some of these are not reactions. The Balance's Vollständig redirects an ally's damage "as a free
+        // action **without spending your reaction**", and a card headed "reaction" is the table being told
+        // the opposite of what the clause says. `looksAbleToReact` is really "able to act at all" —
+        // unconscious, paralyzed, petrified, stunned — which gates a free action just as well, and the
+        // module has never tracked a *spent* reaction, so nothing else here needs to change.
+        flavor: `${item.name} — ${rider.apply.freeAction ? "free action" : "reaction"}`,
         content:
             `<p>${prompt}</p>`
             + `<div class="isaacs-hb-choice">`
@@ -120,6 +129,17 @@ export async function offerReaction(rider, context) {
                     riderIndex: context.riderIndex,
                     originUuid: actor.uuid,
                     targetUuid: context.target?.uuid ?? context.actor?.uuid ?? null,
+                    // The other end of the event, which a `self` reaction would otherwise lose: the
+                    // reaction is offered to its owner, so `target` is the owner too, and Antithesis
+                    // needs to know who struck them — "the **triggering creature** takes 2d6 spirit".
+                    eventTargetUuid: context.eventTarget?.uuid ?? null,
+                    // The third participant, on `ally-damaged` alone: the creature the harm landed on.
+                    eventAllyUuid: context.eventAlly?.uuid ?? null,
+                    // What the blow was worth, carried across the card so a rider resolved on the click
+                    // can still ask. The Balance's Vollständig redirect is measured entirely in it —
+                    // "redirect **that damage** to yourself" — and without this the card arrived with the
+                    // number already forgotten: driven live, the ally was healed nothing at all.
+                    damage: context.eventDamage ?? null,
                     messageId: context.message?.id ?? null,
                     outcome: context.outcome ?? null,
                 },

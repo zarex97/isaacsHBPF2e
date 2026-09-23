@@ -41,5 +41,20 @@
             ]
         }
     },
-    "type": "effect"
+    "type": "effect",
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "effect": "Effect: Remnant Ice Doll",
+                        "type": "expire"
+                    },
+                    "event": "damage-received",
+                    "note": "S-21c: the doll shatters once it has taken a blow.",
+                    "self": true
+                }
+            ]
+        }
+    }
 }

@@ -1,0 +1,50 @@
+{
+    "img": "icons/equipment/shield/heater-crystal-blue.webp",
+    "name": "Effect: Allotted Fortune",
+    "system": {
+        "description": {
+            "value": "<p>The Quincy has handed you the other half. You gain a <strong>+1 status bonus to your next attack roll</strong> against the creature they marked.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Allotted Fortune",
+                "selector": "attack",
+                "type": "status",
+                "value": 1,
+                "removeAfterRoll": true
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

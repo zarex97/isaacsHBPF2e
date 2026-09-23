@@ -19,21 +19,36 @@
                         "statistic": "reflex",
                         "type": "save"
                     },
-                    "area": {
-                        "type": "emanation",
-                        "value": 10
-                    },
-                    "areaTargeting": {
-                        "affects": "enemies",
-                        "includesSelf": false
-                    },
-                    "event": "turn-end",
-                    "self": true
+                    "event": "aura-tick",
+                    "note": "*“A creature that **ends its turn** in it”* — the creature's own turn end, which pf2e's `Aura` rule element does not time. It shipped as a `turn-end` rider with a 10-foot area, which fires on the **Quincy's** turn end and fans out from there: a different ability, and one that pays out even when nobody has stood in the current. `Sources.onAuraTurn` drives this shape from the encounter."
                 },
                 {
                     "apply": {
-                        "text": "<strong>Arc</strong> (once per round). One other creature within 15 feet of the target takes @Damage[3d6[electricity]] damage with a basic Reflex save against your Reiatsu DC.",
-                        "type": "prompt"
+                        "type": "pick",
+                        "from": "target",
+                        "range": 15,
+                        "affects": "enemies",
+                        "prompt": "Arcs jump from the creature you struck. Which one do they reach?",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "type": "save",
+                                    "statistic": "reflex",
+                                    "dc": "reiatsu",
+                                    "basic": true,
+                                    "riders": [
+                                        {
+                                            "apply": {
+                                                "type": "damage",
+                                                "formula": "3d6",
+                                                "damageType": "electricity",
+                                                "perStep": "1d6"
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
                     },
                     "event": "strike-resolved",
                     "outcomes": [
@@ -42,7 +57,9 @@
                     ],
                     "predicate": [
                         "item:tag:soulbound-spirit-weapon"
-                    ]
+                    ],
+                    "oncePerRound": true,
+                    "note": "*“Once per round when you hit with your spirit weapon, arcs jump: **one other creature** within 15 feet of the target”* — one, chosen, and measured from the creature struck rather than from the Quincy. It shipped as a `prompt`: a card telling the GM the numbers and applying none of them. An area would catch everybody within 15 feet, which is a different and much better ability, so this is a `pick` with `from: \"target\"`."
                 }
             ]
         }
@@ -74,6 +91,24 @@
                 "key": "BaseSpeed",
                 "selector": "fly",
                 "value": "@actor.system.movement.speeds.land.value"
+            },
+            {
+                "key": "Aura",
+                "radius": 10,
+                "slug": "thunderbolt-current",
+                "traits": [
+                    "electricity"
+                ],
+                "effects": [
+                    {
+                        "affects": "enemies",
+                        "events": [
+                            "turn-end"
+                        ],
+                        "removeOnExit": false,
+                        "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Aura Tick"
+                    }
+                ]
             }
         ],
         "start": {

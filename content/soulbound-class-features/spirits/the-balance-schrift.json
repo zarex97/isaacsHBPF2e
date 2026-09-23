@@ -4,6 +4,16 @@
             "releaseForm": {
                 "effect": "Effect: The Balance — Schrift",
                 "rung": "released"
+            },
+            "refuseDeath": {
+                "label": "The Balance",
+                "resource": "focus",
+                "cost": 0,
+                "requires": "released",
+                "frequency": true,
+                "predicate": [
+                    "feature:refined-release"
+                ]
             }
         }
     },
@@ -41,6 +51,11 @@
             "value": [
                 "soulbound"
             ]
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
         }
     },
     "type": "feat"

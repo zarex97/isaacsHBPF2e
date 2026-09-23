@@ -12,8 +12,10 @@
                                     "damageType": "spirit",
                                     "formula": "2d6",
                                     "perStep": "1d6",
-                                    "type": "damage"
-                                }
+                                    "type": "damage",
+                                    "perStepInterval": 2
+                                },
+                                "trigger": true
                             },
                             {
                                 "apply": {
@@ -24,8 +26,39 @@
                         ],
                         "type": "reaction"
                     },
-                    "event": "damage-applied",
+                    "event": "damage-received",
+                    "note": "The **defender's** event, not the attacker's. The trigger is \"You or an ally within 30 feet takes damage\", so it is `damage-received` — `damage-applied` is \"damage from this actor's item landed on a target\", which is the opposite creature. Driven live on `damage-applied` the reaction was never offered at all. Landing on the attacker is what sends the 2d6 to the triggering creature; the nested `self` sends the resistance back to whoever was hit.",
                     "self": true
+                },
+                {
+                    "apply": {
+                        "label": "Reverse the two events",
+                        "prompt": "An ally within 30 feet has been hurt. Reverse it?",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "spirit",
+                                    "formula": "2d6",
+                                    "perStep": "1d6",
+                                    "type": "damage",
+                                    "perStepInterval": 2
+                                },
+                                "trigger": true
+                            },
+                            {
+                                "apply": {
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Antithesis — Reversed"
+                                },
+                                "trigger": "ally"
+                            }
+                        ],
+                        "type": "reaction"
+                    },
+                    "event": "ally-damaged",
+                    "note": "S-63b's other half: *“You **or an ally within 30 feet** takes damage from a creature you can see.”* `damage-received` is the defender's own event, so when the ally is hit the engine reads the **ally's** items and the Quincy's Technique is not among them — which is why this clause was recorded ❌ twice before the `ally-damaged` event existed. Identical to the rider above in every other respect: `trigger: true` still sends the 2d6 to the creature that struck, and the resistance still lands on whoever was hurt. The one difference from the rider above is where the resistance goes: on `damage-received` the Quincy **is** the target of the trigger, so it lands on them by default; here the target of the trigger is the ally, and `trigger: \"ally\"` is the address for that.",
+                    "self": true,
+                    "range": 30
                 }
             ]
         }

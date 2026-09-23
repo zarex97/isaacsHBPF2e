@@ -156,7 +156,7 @@ const blade = contentDoc("soulbound-equipment/blade.json");
 check(
     "Blade: 1d8 slashing, versatile P, two-hand d10 (guide §4.1)",
     [blade.system.damage.die, blade.system.damage.damageType, [...blade.system.traits.value].sort()],
-    ["d8", "slashing", ["two-hand-d10", "versatile-p"]],
+    ["d8", "slashing", ["two-hand-d10", "versatile-p", "versatile-spirit"]],
 );
 
 const greatBlade = contentDoc("soulbound-equipment/great-blade.json");
@@ -165,14 +165,14 @@ const greatBlade = contentDoc("soulbound-equipment/great-blade.json");
 check(
     "Great Blade: 1d10 slashing, sweep, two-handed expressed in usage as pf2e does it",
     [greatBlade.system.damage.die, greatBlade.system.usage.value, [...greatBlade.system.traits.value].sort()],
-    ["d10", "held-in-two-hands", ["sweep"]],
+    ["d10", "held-in-two-hands", ["sweep", "versatile-spirit"]],
 );
 
 const paired = contentDoc("soulbound-equipment/paired-blades.json");
 check(
     "Paired Blades: 1d6 slashing, agile, finesse, twin (guide §4.1)",
     [paired.system.damage.die, [...paired.system.traits.value].sort()],
-    ["d6", ["agile", "finesse", "twin"]],
+    ["d6", ["agile", "finesse", "twin", "versatile-spirit"]],
 );
 
 const bow = contentDoc("soulbound-equipment/spirit-bow.json");
@@ -181,6 +181,24 @@ check(
     [bow.system.damage.die, bow.system.damage.damageType, bow.system.range, bow.system.reload.value],
     ["d8", "piercing", 60, "0"],
 );
+
+/**
+ * Spirit-Cutting shipped as a paragraph.
+ *
+ * Guide §4.1 says a spirit weapon's "Strikes can deal **spirit** damage instead of their normal damage
+ * type", and four Shikai entries repeat the promise as "(you may still choose spirit)". Every profile
+ * carried `rules: []` and said it only in its description, so no Soulbound could ever choose it — and
+ * in Shikai an unconditional damage-type override would have won anyway. `versatile-spirit` is the
+ * system's own answer and is what the strike UI offers the choice through.
+ */
+for (const name of ["blade", "great-blade", "paired-blades", "spirit-bow"]) {
+    const doc = contentDoc(`soulbound-equipment/${name}.json`);
+    check(
+        `${name}: Spirit-Cutting is a trait, not a paragraph`,
+        doc.system.traits.value.includes("versatile-spirit"),
+        true,
+    );
+}
 
 for (const name of ["blade", "great-blade", "paired-blades", "spirit-bow"]) {
     const doc = contentDoc(`soulbound-equipment/${name}.json`);
@@ -731,11 +749,20 @@ check("the same trigger is never offered twice", canOffer({ ...offerBase, alread
 check("an exhausted frequency is not offered", canOffer({ ...offerBase, frequencyLeft: 0 }), false);
 check("with nobody at the keyboard, nothing is offered", canOffer({ ...offerBase, ownerOnline: false }), false);
 
+/**
+ * Danku answers **being** damaged, not damaging.
+ *
+ * This assertion used to demand `damage-applied`, which reads right and is the opposite event: *"Trigger
+ * You or an ally within 15 ft. would take damage from a ranged attack, a spell, or an area effect"* is
+ * the defender's. `damage-applied` is "damage from **this actor's** item landed on a target", so the
+ * reaction was consulted on the turns the Soul Reaper was hurting somebody and never on the turns they
+ * were hurt. Invisible for as long as `damage-applied` itself never fired; see #71.
+ */
 const dankuReaction = kidoDoc("bakudo", "danku").flags["isaacs-hb-pf2e"].riders[0];
 check(
-    "Danku is a real reaction offered when damage lands (guide §6.2)",
+    "Danku is a real reaction offered when damage lands on you (guide §6.2)",
     [dankuReaction.apply.type, dankuReaction.event, dankuReaction.self],
-    ["reaction", "damage-applied", true],
+    ["reaction", "damage-received", true],
 );
 check(
     "and it grants resistance equal to your level",
@@ -950,18 +977,48 @@ check(
     zangetsuShikai.system.rules.some((r) => r.key === "RollOption" && r.option === "soulbound:release:never-sealed"),
     true,
 );
-// pf2e's `damage-dice-faces` steps once per `upgrade` and refuses a value unless the mode is override.
-// Two steps is two rules, which is also how the Bankai says "two steps instead of one" out loud.
-check(
-    "the Shikai steps the die once; Zanka no Tachi steps it twice",
-    [
-        contentDoc("soulbound-effects/effect-zangetsu-shikai.json").system.rules
-            .filter((r) => r.property === "damage-dice-faces").length,
-        contentDoc("soulbound-effects/effect-zanka-no-tachi.json").system.rules
-            .filter((r) => r.property === "damage-dice-faces").length,
-    ],
-    [1, 2],
-);
+/**
+ * The two-handed half of the Shikai form, which shipped as prose.
+ *
+ * "it gains two-handed d12 **if it did not already have a two-handed trait**" is a condition about the
+ * weapon's own printed profile, and pf2e emits a bare `item:trait:two-hand` alongside the sized
+ * `item:trait:two-hand-d10` — so one `not` covers d6, d8, d10 and d12 without naming any of them.
+ */
+{
+    const rules = contentDoc("soulbound-effects/effect-zangetsu-shikai.json").system.rules;
+    const add = rules.find((r) => r.property === "traits" && r.mode === "add");
+    check("the Shikai form grants two-hand d12", add?.value, "two-hand-d12");
+    check(
+        "…only to a weapon that is not already two-handed, by the unsized trait option",
+        add?.predicate?.some((p) => p?.not === "item:trait:two-hand"),
+        true,
+    );
+}
+
+/**
+ * "Two steps instead of one" is not expressible as a rule element.
+ *
+ * pf2e's `damage-dice-faces` handler latches — `if (item.flags.pf2e.damageFacesUpgraded) return` — so a
+ * second `upgrade` is a no-op whether it sits on the same effect or another one. Driven live: a base d8
+ * spirit weapon read d10 with one rule and d10 with two. The latch is deliberate; PF2e's own rule is that
+ * die-size increases do not stack, and the guide overrides that on purpose.
+ *
+ * So the Bankai keeps **one** honest `upgrade` and declares the rest as `extraDieSteps`, taken in
+ * `prepareDerivedData` after pf2e has finished. A second `upgrade` rule reappearing here would be a
+ * silent regression to one step, which is why the count is asserted as exactly one.
+ */
+{
+    const shikai = contentDoc("soulbound-effects/effect-zangetsu-shikai.json").system.rules;
+    const zanka = contentDoc("soulbound-effects/effect-zanka-no-tachi.json");
+    const faces = (rules) => rules.filter((r) => r.property === "damage-dice-faces").length;
+    check("one upgrade rule each, because a second would do nothing",
+        [faces(shikai), faces(zanka.system.rules)], [1, 1]);
+    check("and Zanka no Tachi asks for its second step in the one way that works",
+        zanka.flags["isaacs-hb-pf2e"].extraDieSteps, 1);
+    check("the Shikai does not, because one step is all it claims",
+        contentDoc("soulbound-effects/effect-zangetsu-shikai.json").flags?.["isaacs-hb-pf2e"]?.extraDieSteps,
+        undefined);
+}
 // The Getsuga half asserted `property: "time"`, which pf2e has no handler for — so this check was
 // pinning an inert rule in place and calling it compression. The action cost is a module capability
 // now; the assertions for it are at the bottom of this file.
@@ -1114,12 +1171,20 @@ check(
     false,
 );
 
+// The burst was written as the *cast's* area, with the detonation a `self` rider beside it. Both halves
+// were wrong, and this check used to pin them: cast-time area targeting would have replaced the single
+// creature the attack is rolled against with everyone in a 15-foot burst, and the `self` rider dealt the
+// lance's 5d6 fire to the caster. Driven live it did exactly that and nothing else — no burst, no save,
+// 13 damage to the Murciélago. "At that point" is the creature the lance was thrown at, so the burst is
+// anchored on the target and the attack keeps its one target.
 const lanza = techDoc("lanza-del-relampago");
+const lance = lanza.flags["isaacs-hb-pf2e"].riders[0];
 check(
-    "Lanza del Relámpago is an attack whose burst is the cast's own area, not a second one",
-    [lanza.system.defense, lanza.flags["isaacs-hb-pf2e"].areaTargeting.area,
-     lanza.flags["isaacs-hb-pf2e"].riders[0].area],
-    [null, { type: "burst", value: 15 }, undefined],
+    "Lanza del Relámpago is a spell attack at one creature, and the burst opens where the lance landed",
+    [lanza.system.defense, lanza.flags["isaacs-hb-pf2e"].areaTargeting, lance.self,
+     lance.area, lance.event],
+    [null, undefined, undefined, { anchor: "target", excludeAnchor: false, type: "burst", value: 15 },
+     "strike-resolved"],
 );
 
 const claws = contentDoc("soulbound-equipment/pantera-claws.json");
@@ -1171,7 +1236,7 @@ check(
 
 /* --- a released form replaces the weapon, it does not add a second ----------------------------- */
 
-const { SpiritWeapon: SW, PROFILE_TAG, SPIRIT_WEAPON_TAG } = await import("../scripts/soulbound/weapon.mjs");
+const { SpiritWeapon: SW, PROFILE_TAG, SPIRIT_WEAPON_TAG, handsFor } = await import("../scripts/soulbound/weapon.mjs");
 
 function armedWith(names) {
     const weapons = names.map(([name, tags, carryType], i) => ({
@@ -1223,6 +1288,41 @@ const RELEASED = [SPIRIT_WEAPON_TAG];
     await SW.reconcile(actor);
     check("reconcile does not wait for the class item to land", actor.updates.length, 1);
 }
+{
+    /**
+     * A two-handed form takes two hands.
+     *
+     * `reconcile` wrote `handsHeld: 1` for every spirit weapon in play, which is right for the nine held
+     * in one hand and wrong for the four that are not. Driven live, a crowned skeleton carrying Gran
+     * Caída — a vast double axe, `held-in-two-hands` — had a hand free, free enough to Grapple with.
+     *
+     * `held-in-one-plus-hands` stays at one on purpose: a bow is carried in one hand and drawn with two,
+     * and pf2e counts it as one for `handsFree` exactly as the rules do.
+     */
+    check("a two-handed spirit weapon occupies two hands",
+        handsFor({ system: { usage: { value: "held-in-two-hands" } } }), 2);
+    check("…a one-handed one occupies one",
+        handsFor({ system: { usage: { value: "held-in-one-hand" } } }), 1);
+    check("…a bow occupies one",
+        handsFor({ system: { usage: { value: "held-in-one-plus-hands" } } }), 1);
+    // pf2e derives `usage.hands` while preparing the item; where it exists it is the number to read.
+    check("…and a prepared item's own hand count wins",
+        handsFor({ system: { usage: { value: "held-in-one-hand", hands: 2 } } }), 2);
+
+    // Every spirit weapon the content ships, against the usage it declares.
+    const TWO_HANDED = ["gran-caida.json", "great-blade.json", "miracle-blade.json", "tiburon-blade.json"];
+    const declared = fs.readdirSync(path.join(ROOT, "content", "soulbound-equipment"))
+        .filter((name) => name.endsWith(".json"))
+        .map((name) => [name, JSON.parse(fs.readFileSync(path.join(ROOT, "content", "soulbound-equipment", name), "utf8"))])
+        .filter(([, doc]) => doc.type === "weapon");
+    const mismatched = declared
+        .filter(([name, doc]) => doc.system.equipped?.handsHeld !== handsFor(doc)
+            && !(doc.system.usage?.value === "held-in-one-plus-hands"))
+        .map(([name]) => name);
+    check("every spirit weapon is equipped in as many hands as it takes", mismatched, []);
+    check("…and the four two-handed ones are the four the guide names",
+        declared.filter(([, doc]) => handsFor(doc) === 2).map(([name]) => name).sort(), TWO_HANDED);
+}
 
 /* ---------------------------------------------------------------------------------------------- */
 /*  Quincy Spirits — and all fifteen                                                                */
@@ -1251,7 +1351,9 @@ for (const name of QUINCY_SPIRITS) {
 
 // Guide §7C is explicit that these carry incapacitation: stunned on a failed basic save at rank 1 is
 // above the curve without it, and against a higher-level creature it should do nothing but damage.
-for (const name of ["galvano-blast", "galvano-javelin"]) {
+// Electrocution joins them: §9.3 says its stunned 2 is incapacitation in as many words, and a Severing
+// Art that stunned a higher-level creature outright would be the one place the trait is load-bearing.
+for (const name of ["galvano-blast", "galvano-javelin", "electrocution"]) {
     check(`${name} carries incapacitation (guide §7C)`,
         techDoc(name).system.traits.value.includes("incapacitation"), true);
 }
@@ -1263,12 +1365,11 @@ check(
         .some((r) => r.key === "RollOption" && r.option === "soulbound:blut-both"),
     true,
 );
-check(
-    "and it steps the die twice, as two rules — one `upgrade` steps once",
-    contentDoc("soulbound-effects/effect-quincy-letzt-stil.json").system.rules
-        .filter((r) => r.property === "damage-dice-faces").length,
-    2,
-);
+// This check used to assert the opposite — "it steps the die twice, as two rules, because one `upgrade`
+// steps once" — and the reasoning was half right: one upgrade does step once, and *two* step once as
+// well. pf2e latches on `damageFacesUpgraded`, and the **Schrift's** own upgrade had already taken the
+// one pf2e allows, so both of Letzt Stil's were no-ops. Driven live the bow was 1d10 at the Vollständig,
+// identical to the Schrift. The second step is `extraDieSteps` now; see the block above.
 check(
     "its cost is a real state: the pool's ceiling goes to zero for 24 hours",
     (() => {
@@ -1300,13 +1401,31 @@ check("and the guide's own numbering survives it",
     ["Burner Finger Two", "Burner Finger Three", "Burner Finger Four", "Burner Finger Five"]);
 
 
-// The AC bonus must read the POOL, not a roll option nothing sets.
+/**
+ * The AC bonus must read an option something **publishes**.
+ *
+ * This assertion used to demand the opposite, and its comment said "read the POOL, not a roll option
+ * nothing sets" — which is exactly backwards, because `self:resource:focus:value` is the roll option
+ * nothing sets. **pf2e publishes no roll option for a resource at all.** Driven live, a Balance holding
+ * three Reiatsu Points had nothing matching `self:resource:` in `getRollOptions()`, so the one flat
+ * numeric bonus in the class could not apply at any pool size, and this test held it that way.
+ *
+ * So the effect publishes its own option from a resolvable pf2e does evaluate — `gte` is one of the
+ * comparisons registered on `Math` for rule-element values — and the modifier predicates on that. Live,
+ * both ways: AC 27 with points and AC 26 at zero.
+ */
 const balanceSchrift = contentDoc("soulbound-effects/effect-the-balance-schrift.json");
+check(
+    "The Balance publishes an option for holding a Reiatsu Point",
+    (() => { const r = balanceSchrift.system.rules.find((x) => x.key === "RollOption");
+             return [r?.option, r?.value]; })(),
+    ["soulbound:reiatsu-remaining", "gte(@actor.system.resources.focus.value,1)"],
+);
 check(
     "The Balance's AC bonus is a circumstance bonus gated on holding a Reiatsu Point",
     (() => { const r = balanceSchrift.system.rules.find((x) => x.selector === "ac");
              return [r?.type, r?.value, JSON.stringify(r?.predicate)]; })(),
-    ["circumstance", 1, JSON.stringify([{ gte: ["self:resource:focus:value", 1] }])],
+    ["circumstance", 1, JSON.stringify(["soulbound:reiatsu-remaining"])],
 );
 
 // Miracle points are the charge pool again, and the resistance reads the badge on its own item.
@@ -1450,7 +1569,10 @@ for (const [file, spirit] of ARTS) {
         doc.system.traits.otherTags.includes("sb-tier-severing"),
         doc.system.traits.otherTags.includes(`soulbound-art-${spirit}`),
     ], [10, true, true]);
-    check(`${file}: prints round one's 20d6`, doc.system.damage["0"].formula, "20d6");
+    // Ittō Kasō is the one Art that beats the table — "the Waning dice **+2d6**" (R-14b) — and
+    // `applyWaning` preserves an extra it finds in the formula. Everything else is the bare table.
+    check(`${file}: prints round one's 20d6`, doc.system.damage["0"].formula,
+        file === "itto-kaso" ? "20d6 + 2d6" : "20d6");
 }
 
 // Ittō Kasō is the only Art with a self-cost, and the only one that beats the table.
@@ -1461,6 +1583,17 @@ check(
      itto.system.description.value.includes("+2d6")],
     [true, true],
 );
+/**
+ * …and carries it where the dice are rolled, not only where they are described.
+ *
+ * `applyWaning` preserves a `+NdN` that is already in the formula, and that behaviour has been asserted
+ * since it was written — against a hand-built fixture. The shipped content said plain `20d6`, so the
+ * only Art that beats the table did not, and the description promised an extra nobody rolled. Driven
+ * live at Waning round 1: `22d6 fire`.
+ */
+check("…and carries the +2d6 in the formula the dice are rolled from",
+    itto.system.damage["0"].formula, "20d6 + 2d6");
+
 // Six Arts are extrapolations and must say so where someone reads them.
 for (const file of ["kanzen-saimin-owari", "cero-oscuras-ceniza", "la-hora-final", "aullido",
                     "the-reckoning", "apotheosis"]) {
@@ -1761,16 +1894,39 @@ check("Thunderbolt Form's aura is a basic Reflex too (guide §7C)",
  * These pin the shape of the content rather than the engine, because the engine change is one line and
  * the thing that will drift is a seventh aura authored to the same pattern.
  */
-// Effect: Full Release is no longer in this list: its emanation was promoted to a real pf2e `Aura`,
-// which catches per creature at the end of ITS turn rather than sweeping at the caster's. The five
-// below are still area riders and still have to say who they catch.
+// Effect: Full Release is not in this list, nor Effect: Minami, nor Effect: Respira Absoluta: all three
+// emanations were promoted to real pf2e `Aura`s, which catch per creature at the end of ITS turn rather
+// than sweeping at the caster's. Minami went that way first — driven live, two enemies were grabbed the
+// instant the *caster's* turn ended, which is not what "enemies that end their turn in it" says — and
+// Respira Absoluta followed it for the identical reason at the identical moment in a drive.
+//
+// **Effect: Thunderbolt Form has joined them.** It was left as an area rider on purpose — the note here
+// said it belonged to the Quincy pass, where it could be driven rather than changed on the strength of
+// somebody else's drive — and the Quincy pass drove it: on the old shape the current paid out at the
+// **Quincy's** turn end and never once when a creature stood in it.
+//
+// The two `turn-start` entries below are correct as area riders: Zanka no Tachi's ambient heat and
+// Kageyoshi's petals both say "at the start of each of **your** turns", which is a sweep.
 const AURAS = [
     ["soulbound-effects/effect-senbonzakura-kageyoshi.json", "turn-start", 20],
     ["soulbound-effects/effect-zanka-no-tachi.json", "turn-start", 30],
-    ["soulbound-effects/effect-minami.json", "turn-end", 20],
-    ["soulbound-effects/effect-respira-absoluta.json", "turn-end", 20],
-    ["soulbound-effects/effect-thunderbolt-form.json", "turn-end", 10],
 ];
+
+// And the promoted ones, pinned the other way: a real `Aura` rule, and no area rider left behind to
+// sweep in parallel with it.
+const PROMOTED = [
+    ["soulbound-effects/effect-full-release.json", 15],
+    ["soulbound-effects/effect-minami.json", 20],
+    ["soulbound-effects/effect-respira-absoluta.json", 20],
+    ["soulbound-effects/effect-thunderbolt-form.json", 10],
+];
+for (const [file, radius] of PROMOTED) {
+    const doc = contentDoc(file);
+    const aura = doc.system.rules.find((rule) => rule.key === "Aura");
+    check(`${file.split("/").pop()} is a real pf2e Aura of ${radius} feet`, aura?.radius, radius);
+    check("…and nothing beside it sweeps at the caster's turn end",
+        (doc.flags["isaacs-hb-pf2e"].riders ?? []).filter((r) => r.event === "turn-end").length, 0);
+}
 for (const [file, event, radius] of AURAS) {
     const rider = contentDoc(file).flags["isaacs-hb-pf2e"].riders[0];
     // A rider may carry several shapes; the first is the one centred on the caster.
@@ -1878,7 +2034,210 @@ check("Los Lobos' wolves regain one a turn from 13th, unconditionally (guide §7
 
 for (const slug of ["sennen-hyoro", "hyoryu-senbi"]) {
     check(`${slug} spends one petal-flower, once per round`,
-        Charges.declarationOn(techDoc(slug)), { effect: "Effect: Daiguren Hyōrinmaru", spending: 1, perRound: 1 });
+        Charges.declarationOn(techDoc(slug)),
+        { effect: "Effect: Daiguren Hyōrinmaru", spending: 1, perRound: 1, upTo: 0, all: false });
+}
+
+/**
+ * Los Lobos spends a *variable* number, and it is the only Spirit that does.
+ *
+ * *Colmillo* is "expend **any number** of wolves — **each** wolf you expend … detonates in a 10-foot
+ * burst", so one question decides both how much the pool pays and how many areas go on the cursor.
+ * *Aullido* is "you expend **all** remaining wolves", which is not a choice.
+ *
+ * Before this, neither Technique declared a spend at all: the pool filled to eight and never emptied,
+ * and Colmillo was an unlimited one-action 3d6 burst. Driven live, eight wolves survived a cast.
+ */
+check("Colmillo — Fang spends from the wolves, any number up to eight",
+    Charges.declarationOn(techDoc("colmillo-fang")),
+    { effect: "Effect: Colmillo", spending: 1, perRound: Infinity, upTo: 8, all: false });
+check("…and takes its burst count from that answer rather than a fixed one",
+    techDoc("colmillo-fang").flags["isaacs-hb-pf2e"].areaTargeting.areas ?? "from the answer",
+    "from the answer");
+check("Aullido expends every wolf that is left",
+    Charges.declarationOn(techDoc("aullido")),
+    { effect: "Effect: Colmillo", spending: 1, perRound: Infinity, upTo: 0, all: true });
+
+/* --- one Technique, five shapes, and only one of them an attack --------------------------------- */
+
+/**
+ * Burner Finger is the only Technique in the class built out of pf2e spell **overlays**, and the three
+ * area options inherited the base's **attack** trait. pf2e derives `defense.passive = AC` from that
+ * trait (`spell/document.ts`: `if (traits.value.includes("attack"))`), so Three, Four and Five each
+ * announced "Defense AC and basic Reflex" on the card and counted as attack spells for damage domains.
+ *
+ * Two keeps the trait, because Two really is a ranged spell attack against two creatures.
+ */
+{
+    const bf = techDoc("burner-finger");
+    const overlay = (k) => bf.system.overlays[k];
+    check("Burner Finger's five shapes", [
+        [bf.system.target?.value, JSON.stringify(bf.system.area ?? null)],
+        [overlay("burnerfingertwo").system.target?.value, JSON.stringify(overlay("burnerfingertwo").system.area ?? null)],
+        JSON.stringify(overlay("burnerfingerthree").system.area),
+        JSON.stringify(overlay("burnerfingerfour").system.area),
+        JSON.stringify(overlay("burnerfingerfive").system.area),
+    ], [
+        ["1 creature", "null"],
+        ["2 creatures", "null"],
+        '{"type":"line","value":30}',
+        '{"type":"emanation","value":15}',
+        '{"type":"cone","value":30}',
+    ]);
+    check("…the attack is the base and Two, and nothing else",
+        ["burnerfingertwo", "burnerfingerthree", "burnerfingerfour", "burnerfingerfive"]
+            .filter((k) => (overlay(k).system.traits?.value ?? bf.system.traits.value).includes("attack")),
+        ["burnerfingertwo"]);
+    // Five's cone grows at the Vollständig, and only there.
+    check("…and Five widens to 60 feet under Deus Ex Machina",
+        overlay("burnerfingerfive").flags["isaacs-hb-pf2e"].areaTargeting.alternateArea,
+        [{ area: { type: "cone", value: 60 }, predicate: ["self:effect:deus-ex-machina"] }]);
+}
+
+/* --- two die steps, and a cost that is actually paid --------------------------------------------- */
+
+/**
+ * *"Your spirit weapon's damage die increases by **two** steps instead of one."*
+ *
+ * Written as two `ItemAlteration` upgrades it is worth **zero**: pf2e latches on `damageFacesUpgraded`
+ * and the Schrift's own upgrade had already taken the one pf2e allows. Driven live, the bow was 1d10 at
+ * the Vollständig — identical to the Schrift. `extraDieSteps` is the answer the module already wrote for
+ * Zanka no Tachi, and the comment in `die-steps.mjs` explains why no arrangement of `upgrade` can work.
+ */
+{
+    const letzt = contentDoc("soulbound-effects/effect-quincy-letzt-stil.json");
+    check("Letzt Stil takes its second step the only way pf2e allows",
+        letzt.flags["isaacs-hb-pf2e"].extraDieSteps, 1);
+    check("…and no longer asks pf2e for an upgrade it will not give",
+        letzt.system.rules.filter((r) => r.property === "damage-dice-faces").length, 0);
+    // Every die-step declaration in the content, so a new one arrives beside its predecessors rather
+    // than in silence. The third is *Bailar de Valquiria*'s and is the only one that counts off a badge:
+    // its step is taken **per refusal**, and the refusals are unlimited.
+    const declared = [];
+    (function walk(dir) {
+        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+            const full = path.join(dir, entry.name);
+            if (entry.isDirectory()) walk(full);
+            else if (entry.name.endsWith(".json")) {
+                const doc = JSON.parse(fs.readFileSync(full, "utf8"));
+                if (doc.flags?.["isaacs-hb-pf2e"]?.extraDieSteps) declared.push(entry.name);
+            }
+        }
+    })(path.join(ROOT, "content"));
+    check("the forms that give a second die step", declared.sort(),
+        ["effect-quincy-letzt-stil.json", "effect-the-miracle-grown.json", "effect-zanka-no-tachi.json"]);
+}
+
+/**
+ * *"When Letzt Stil ends, you lose access to your Schrift Form, your Release Technique, Licht Regen,
+ * Vollständig, and your entire reiatsu pool until you complete 24 hours of rest."*
+ *
+ * `Release.release` has refused on `soulbound:letzt-stil-spent` since the ladder was built, and nothing
+ * ever published it: `Effect: Letzt Stil — Spent` was in the content, applied by nobody. Driven live the
+ * pool came out of the form untouched and the Schrift went straight back on.
+ *
+ * A form declares what leaving it costs, and `exitTo` is why the Schrift goes too — §7C takes the rung
+ * below, the way Severance does, and falling one step left three of the four named things in place.
+ */
+{
+    const letzt = contentDoc("soulbound-effects/effect-quincy-letzt-stil.json");
+    check("leaving Letzt Stil costs what the guide says it costs",
+        letzt.flags["isaacs-hb-pf2e"].endsWith,
+        { effect: "Effect: Letzt Stil — Spent", exitTo: "sealed" });
+    const spent = contentDoc("soulbound-effects/effect-letzt-stil-spent.json");
+    check("…the cost lasts a day", [spent.system.duration.value, spent.system.duration.unit], [24, "hours"]);
+    check("…empties the pool by capping it, so it cannot be refocused back",
+        spent.system.rules.some((r) => r.key === "ActiveEffectLike" && r.path === "system.resources.focus.cap"
+            && r.value === 0), true);
+    check("…and publishes the option the ladder has always refused on",
+        spent.system.rules.some((r) => r.key === "RollOption" && r.option === "soulbound:letzt-stil-spent"),
+        true);
+}
+
+/* --- a spirit weapon you can actually fire ------------------------------------------------------ */
+
+/**
+ * pf2e makes a ranged, non-thrown weapon with a reload value demand ammunition — `weapon/document.ts`
+ * fills `system.ammo` from the base item and `character/document.ts` refuses the Strike outright when
+ * nothing is loaded. Both of the class's ranged spirit weapons inherited that from their base items, so
+ * neither could be fired: *"No ammunition is assigned to Los Lobos — Pistols"*, no roll, no message.
+ *
+ * `builtIn` is pf2e's own field for a weapon that carries its own ammunition, and it is what guide §7B's
+ * "they need no ammunition" means. Driven live on both: refused before, two Strikes after.
+ *
+ * Pinned by walking the equipment rather than by naming two files, because the next ranged profile will
+ * arrive with the same inheritance and the same silence.
+ */
+{
+    const dir = path.join(ROOT, "content", "soulbound-equipment");
+    const ranged = fs.readdirSync(dir)
+        .filter((name) => name.endsWith(".json"))
+        .map((name) => [name, JSON.parse(fs.readFileSync(path.join(dir, name), "utf8"))])
+        .filter(([, doc]) => doc.type === "weapon" && doc.system.range && doc.system.reload?.value !== "-");
+    check("the class's ranged spirit weapons", ranged.map(([name]) => name).sort(),
+        ["los-lobos-pistols.json", "spirit-bow.json"]);
+    check("…and every one of them carries its own ammunition",
+        ranged.filter(([, doc]) => doc.system.ammo?.builtIn !== true).map(([name]) => name), []);
+}
+
+/* --- terrain that follows you, and a shape that stays a choice ---------------------------------- */
+
+/**
+ * Tiburón's Segunda Etapa: *"Water rises around you in a **20-foot emanation**, difficult terrain for
+ * enemies."* `Effect: Hirviendo` had `rules: []` — no water, no emanation, no terrain, only a form that
+ * said so. `TerrainAura` is the fix, and it is declared on the effect the way `freesHands` is.
+ */
+{
+    const hirviendo = contentDoc("soulbound-effects/effect-hirviendo.json");
+    check("Hirviendo's water is a 20-foot aura for enemies",
+        hirviendo.flags["isaacs-hb-pf2e"].terrainAura, { affects: "enemies", cost: 2, value: 20 });
+    // The push beside it is "once per round when you hit", and had no gate at all.
+    check("…and the push it grants is gated to once a round",
+        hirviendo.flags["isaacs-hb-pf2e"].riders[0].oncePerRound, true);
+}
+
+/**
+ * *"La Gota **may** be used as a 60-foot line **instead of** a cone."*
+ *
+ * Written as an `alternateArea` the line simply won at the Segunda Etapa, and the cone could no longer
+ * be cast at all. Shape choices carry predicates now and the list is filtered before it is offered, so
+ * the two cone sizes stay a size — one survivor is not a question — and the line is a third option that
+ * only exists once Hirviendo does.
+ */
+{
+    const gota = techDoc("la-gota");
+    const shapes = gota.flags["isaacs-hb-pf2e"].areaTargetingShapes;
+    check("La Gota offers its shapes rather than replacing one with another",
+        shapes.map((shape) => `${shape.value}-foot ${shape.type}`),
+        ["40-foot cone", "30-foot cone", "60-foot line"]);
+    check("…the wide cone is Refined's",
+        shapes.find((s) => s.value === 40)?.predicate, ["feature:refined-release"]);
+    check("…the narrow one is everyone else's",
+        shapes.find((s) => s.value === 30)?.predicate, [{ not: "feature:refined-release" }]);
+    check("…and the line only exists at the Segunda Etapa",
+        shapes.find((s) => s.type === "line")?.predicate, ["self:effect:hirviendo"]);
+    check("…with no alternateArea left to fight it",
+        gota.flags["isaacs-hb-pf2e"].areaTargeting.alternateArea ?? "gone", "gone");
+}
+
+/* --- a shape choice that reaches the card ------------------------------------------------------- */
+
+/**
+ * Cero Metralleta is offered as a 60-foot cone or a 120-foot line, and the choice reached the placement
+ * from the start — the Region really was a line. The **card** did not: it read "Area 60-foot cone"
+ * whatever was aimed, because the answer never reached pf2e. The content already shipped the variant.
+ *
+ * So a shape that has a variant names it, and the pipeline casts that variant instead of the original.
+ */
+{
+    const doc = techDoc("cero-metralleta");
+    const shapes = doc.flags["isaacs-hb-pf2e"].areaTargetingShapes;
+    check("Cero Metralleta offers the guide's two shapes",
+        shapes.map((shape) => `${shape.value}-foot ${shape.type}`), ["60-foot cone", "120-foot line"]);
+    const line = shapes.find((shape) => shape.type === "line");
+    check("…and the line names the variant that carries it", line.overlay, "cerometralletaline");
+    check("…which exists, and is that shape",
+        doc.system.overlays[line.overlay]?.system?.area, { type: "line", value: 120 });
 }
 check("Zanhyō Ningyō is a reaction, so its spend rides on the prompt instead",
     techDoc("zanhyo-ningyo").flags["isaacs-hb-pf2e"].riders[0].apply.riders
@@ -2290,14 +2649,14 @@ check("and never raises it — two items asking for different ceilings agree on 
     capped([{ path: "attributes.doomed.max", value: 3 }], 1), 1);
 check("an actor with no declaration is untouched", capped([], 4), 4);
 
-// Tiburón's Hirviendo changes La Gota's SHAPE, not just its size: "may be used as a 60-foot line
-// instead of a cone". An `area-size` override could only ever have widened the cone.
-// `alternateArea` is FIRST MATCH WINS, so the order is load-bearing: at 13th both predicates pass, and
-// a Hirviendo Tiburón must throw the 60-foot line, not the Refined 40-foot cone.
-check("La Gota widens at Refined and becomes a line under Hirviendo, in that order (guide §7B)",
-    contentDoc("soulbound-techniques/la-gota.json").flags["isaacs-hb-pf2e"].areaTargeting.alternateArea
-        .map((a) => [a.predicate, a.area.type, a.area.value]),
-    [[["self:effect:hirviendo"], "line", 60], [["feature:refined-release"], "cone", 40]]);
+// Tiburón's Hirviendo changes La Gota's SHAPE, not just its size — but the guide's word is **may**:
+// "La Gota **may** be used as a 60-foot line **instead of** a cone".
+//
+// This check used to assert the opposite, and to explain why: `alternateArea` is first-match-wins, so
+// the line was ordered above the Refined cone and "a Hirviendo Tiburón must throw the 60-foot line".
+// Driven live, that is exactly what happened — and it meant a 13th-level Tiburón could no longer cast
+// the cone at all. An option that replaces the thing it is an option to is not an option. The shapes
+// are a filtered choice now; see the block above.
 
 
 /**
@@ -2330,7 +2689,12 @@ const BUILT_SLUGS = (() => {
 })();
 
 // pf2e owns these; they are conditions and system slugs, not our documents.
-const SYSTEM_SLUGS = new Set(["dying", "persistent-damage", "saint", "soulbound", "kido-focus"]);
+const SYSTEM_SLUGS = new Set([
+    "dying", "persistent-damage", "saint", "soulbound", "kido-focus",
+    // pf2e grants this one itself when a target is behind something. Senbonzakura reads it to take
+    // the bonus back out of the DC, which is the only way an attacker can ignore cover.
+    "effect-cover",
+]);
 
 const unresolvedInScripts = [];
 for (const [, slug] of SCRIPTS.matchAll(/slug\s*===\s*["']([a-z0-9-]+)["']/g)) {
@@ -2420,9 +2784,13 @@ check("declarations come back cheapest first",
 check("Unbroken Chain declares its own price now",
     contentDoc("soulbound-feats/unbroken-chain.json").flags["isaacs-hb-pf2e"].refuseDeath,
     { cost: 1, frequency: true, label: "Unbroken Chain", requires: "released", resource: "focus" });
+// …and Bailar's carries a `grants`, which is what makes the refusal repeatable *and* cumulative:
+// "your spirit weapon's damage die increases by one step for the rest of the encounter", once per
+// refusal, with no limit on the refusals.
 check("and Bailar declares a different one",
     contentDoc("soulbound-effects/effect-bailar-de-valquiria.json").flags["isaacs-hb-pf2e"].refuseDeath,
-    { cost: 5, label: "Bailar de Valquiria", resource: "effect-miracle-points" });
+    { cost: 5, label: "Bailar de Valquiria", resource: "effect-miracle-points",
+      grants: "Effect: The Miracle — Grown" });
 
 
 /**

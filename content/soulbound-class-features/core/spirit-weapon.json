@@ -64,6 +64,15 @@
                 ],
                 "type": "circumstance",
                 "value": 1
+            },
+            {
+                "key": "AdjustStrike",
+                "mode": "add",
+                "property": "property-runes",
+                "value": "ghostTouch",
+                "definition": [
+                    "item:tag:soulbound-spirit-weapon"
+                ]
             }
         ],
         "traits": {

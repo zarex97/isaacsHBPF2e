@@ -21,6 +21,8 @@ export const EVENTS = [
     "strike-received", // a Strike resolved against this actor
     "action-used", // this actor posted an action or ability to chat
     "damage-applied", // damage from this actor's item landed on a target
+    "damage-received", // damage from someone else's item landed on this actor
+    "ally-damaged", // damage landed on an ally of this actor, within the rider's own range
     "turn-end", // this actor's turn ended
     "turn-start", // this actor's turn began
     "aura-tick", // a creature entered this actor's aura, or ended its turn inside it
@@ -121,6 +123,61 @@ export function eventOf(rider) {
 const ITEM_SCOPED_EVENTS = new Set(["action-used", "save-rolled", "aura-tick"]);
 
 /**
+ * A spell that rolls its **own** attack is item-scoped for `strike-resolved` too.
+ *
+ * The wide search above exists for a Technique that says "make one Strike": *Ikkotsu*, *Hitotsume:
+ * Nadegiri*, *Shūkei: Hakuteiken*. The Strike is made with a weapon, so the message's item is the
+ * weapon and the rider is on the spell — only the wider search can bring the two together.
+ *
+ * A spell with the **attack** trait is the opposite case. It rolls the attack itself, so "on a hit"
+ * names one roll: its own. Left in the wide search, Cero Oscuras' Refined splash detonated on every
+ * attack its owner made — driven live, casting *Lanza del Relámpago* fired the cero's burst as well as
+ * the lance's, twice over, against creatures the cero was never aimed at. *Galvano Javelin*'s stunned 1
+ * is the same shape of mistake waiting on any Soul Reaper who has it on the sheet.
+ *
+ * `strike-received` is deliberately not included: those riders are collected from the *defender*, whose
+ * items have nothing to do with the attacker's message item, and *Zanhyō Ningyō* is exactly such a
+ * spell — a reaction to being hit.
+ */
+/**
+ * Where a cast records which Technique the caster's next Strike belongs to.
+ *
+ * The flag itself is written and swept by `riders/strike-technique.mjs`; it is named here because
+ * `scopedAway` is the one thing that reads it, and because this file may not import that one — the
+ * dependency runs the other way, and a ring closed at evaluation time is how this module lost a whole
+ * `setup` hook once already.
+ */
+export const STRIKE_TECHNIQUE_FLAG = "strikeTechnique";
+
+/** The id, on the sheet, of the Technique whose Strike is pending — or null. */
+export function armedTechniqueId(actor) {
+    return actor?.getFlag?.(MODULE_ID, STRIKE_TECHNIQUE_FLAG)?.itemId ?? null;
+}
+
+function scopedAway(source, item, event, actor) {
+    if (event !== "strike-resolved") return false;
+    if (source?.type !== "spell" || source.id === item?.id) return false;
+    if (source.system?.traits?.value?.includes?.("attack")) return true;
+
+    /**
+     * A Technique that says "make one Strike" fires only for the Strike it paid for.
+     *
+     * This is the other half of the same wide search and it was much the larger one. *Ryūsenka*,
+     * *Ikkotsu*, *Shitonegaeshi*, *Hitotsume: Nadegiri* and *Shūkei: Hakuteiken* carry no attack trait, so
+     * nothing above catches them, and every one of them fired on **every** Strike their owner made, cast
+     * or not. Driven live: one bare critical Strike from a Soul Reaper who had cast nothing applied both
+     * *Ryūsenka: Off-Guard* and *Hitotsume: Nadegiri: Off-Guard*, and the pool read 1 point before and 1
+     * after. Guide §1.4 is one line — "Every technique costs 1 Reiatsu Point".
+     *
+     * The cast leaves a marker and the first Strike spends it. Note the direction: this **excludes**, so
+     * an actor with no marker collects no spell riders rather than all of them, and a Strike made without
+     * a Technique behind it is just a Strike.
+     */
+    const id = source.original?.id ?? source.id;
+    return armedTechniqueId(actor) !== id;
+}
+
+/**
  * Gather every rider for an event, from every item that could be carrying one.
  *
  * A save rider lives on the Technique that forced the save, so the message's item is the obvious source.
@@ -137,6 +194,7 @@ export function collectRiders({ event, item, actor }) {
     for (const candidate of candidates) {
         if (!candidate || seen.has(candidate.id)) continue;
         seen.add(candidate.id);
+        if (scopedAway(candidate, item, event, actor)) continue;
         sources.push(candidate);
     }
 

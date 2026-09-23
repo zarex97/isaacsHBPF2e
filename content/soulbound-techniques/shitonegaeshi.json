@@ -9,7 +9,8 @@
                     },
                     "duration": {
                         "unit": "rounds",
-                        "value": 1
+                        "value": 1,
+                        "expiry": "turn-end"
                     },
                     "event": "strike-resolved",
                     "outcomes": [

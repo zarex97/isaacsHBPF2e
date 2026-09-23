@@ -71,7 +71,7 @@
                     "feature:refined-release"
                 ],
                 "selector": "all",
-                "text": "Thrown on its chain, the blade <strong>returns to your hand immediately</strong>; it is never left on the ground.",
+                "text": "Thrown on its chain, the blade <strong>returns to your hand immediately</strong>; it is never left on the ground. The Technique's range is <strong>60 feet</strong> — pf2e reads `thrown 60` as a range <em>increment</em> and will let the blade fly further at a penalty, which Ryūsenka does not grant.",
                 "title": "Guncho Tsurara"
             }
         ],

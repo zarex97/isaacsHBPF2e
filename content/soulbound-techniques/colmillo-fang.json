@@ -3,7 +3,6 @@
         "isaacs-hb-pf2e": {
             "areaTargeting": {
                 "affects": "enemies",
-                "areas": 1,
                 "includesSelf": false,
                 "range": 60
             },
@@ -14,6 +13,12 @@
                 ],
                 "selector": "reflex",
                 "value": 0
+            },
+            "chargeSpend": {
+                "effect": "Effect: Colmillo",
+                "perRound": null,
+                "spend": 1,
+                "upTo": 8
             }
         }
     },

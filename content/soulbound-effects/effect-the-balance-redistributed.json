@@ -1,0 +1,58 @@
+{
+    "img": "icons/equipment/shield/heater-crystal-blue.webp",
+    "name": "Effect: The Balance — Redistributed",
+    "system": {
+        "description": {
+            "value": "<p>The harm was moved onto somebody else. You have <strong>resistance equal to twice the Quincy's level</strong> against the triggering damage — <strong>three times</strong> at the Vollständig.</p>"
+        },
+        "duration": {
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "Resistance",
+                "type": "all-damage",
+                "value": "@actor.level*2",
+                "predicate": [
+                    {
+                        "not": "soulbound:the-balance:at-night"
+                    }
+                ]
+            },
+            {
+                "key": "Resistance",
+                "type": "all-damage",
+                "value": "@actor.level*3",
+                "predicate": [
+                    "soulbound:the-balance:at-night"
+                ]
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}
