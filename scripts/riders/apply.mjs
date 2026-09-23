@@ -2050,7 +2050,20 @@ async function resolveContext(payload) {
     // The message's item only counts as a rider source when the message belongs to the origin. On
     // `strike-received` the message is the attacker's, and their weapon has nothing to say about the
     // roses growing on the person they hit.
-    const messageItem = message?.actor && message.actor === originActor ? itemFor(message) : null;
+    //
+    // "Belongs to" is two questions, not one. A spell card is spoken by the caster, so the speaker is the
+    // origin — but a **save message** is spoken by the creature that rolled it, and the Technique it is a
+    // save against is still the origin's. pf2e stamps that on the roll itself, `context.origin.actor`, and
+    // `Sources.onSaveMessage` sends the matching `originUuid`; without this second clause the Technique
+    // that forced the save carries no riders, and a save rolled by pf2e's own button does nothing at all.
+    // Narrowed to saves on purpose. pf2e stamps `context.origin` on an **attack roll** too, where it means
+    // the attacker — and on `strike-received` the origin is the person they hit, so a looser test would be
+    // one uuid collision away from letting an attacker's weapon carry the defender's riders. A save is the
+    // one context where "the roll is about somebody else's item" is the normal case.
+    const originIsSpeaker = message?.actor && message.actor === originActor;
+    const context = message?.flags?.pf2e?.context;
+    const originFlagsIt = context?.type === "saving-throw" && context.origin?.actor === originActor.uuid;
+    const messageItem = originIsSpeaker || originFlagsIt ? itemFor(message) : null;
 
     // ...but it is the only thing the *predicate* can be about. "Any creature that hits you with an unarmed
     // or non-reach melee attack takes 1d6 poison" is a question about the attacker's weapon, and answering
