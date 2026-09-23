@@ -1,0 +1,41 @@
+{
+    "img": "icons/magic/lightning/bolts-salvo-clouds-sky.webp",
+    "name": "Effect: Cero Metralleta — Sustained",
+    "system": {
+        "description": {
+            "value": "<p>The barrage is still firing. Your next <strong>Cero Metralleta</strong> this turn costs no Reiatsu Point, and you may shape it freshly as the cone or the line.</p><hr /><p><em>Guide §7B, Refined: \"You may <strong>Sustain</strong> Cero Metralleta at the start of your next turn to fire it again in a different direction without spending a Reiatsu Point.\" The free shot is what the Sustain buys — without this marker the very first Cero Metralleta of an encounter was free, once every round, which is not a Sustain and quietly removed the Technique's cost.</em></p>"
+        },
+        "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 9
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

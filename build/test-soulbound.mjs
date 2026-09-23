@@ -2005,7 +2005,74 @@ check("Los Lobos' wolves regain one a turn from 13th, unconditionally (guide §7
 
 for (const slug of ["sennen-hyoro", "hyoryu-senbi"]) {
     check(`${slug} spends one petal-flower, once per round`,
-        Charges.declarationOn(techDoc(slug)), { effect: "Effect: Daiguren Hyōrinmaru", spending: 1, perRound: 1 });
+        Charges.declarationOn(techDoc(slug)),
+        { effect: "Effect: Daiguren Hyōrinmaru", spending: 1, perRound: 1, upTo: 0, all: false });
+}
+
+/**
+ * Los Lobos spends a *variable* number, and it is the only Spirit that does.
+ *
+ * *Colmillo* is "expend **any number** of wolves — **each** wolf you expend … detonates in a 10-foot
+ * burst", so one question decides both how much the pool pays and how many areas go on the cursor.
+ * *Aullido* is "you expend **all** remaining wolves", which is not a choice.
+ *
+ * Before this, neither Technique declared a spend at all: the pool filled to eight and never emptied,
+ * and Colmillo was an unlimited one-action 3d6 burst. Driven live, eight wolves survived a cast.
+ */
+check("Colmillo — Fang spends from the wolves, any number up to eight",
+    Charges.declarationOn(techDoc("colmillo-fang")),
+    { effect: "Effect: Colmillo", spending: 1, perRound: Infinity, upTo: 8, all: false });
+check("…and takes its burst count from that answer rather than a fixed one",
+    techDoc("colmillo-fang").flags["isaacs-hb-pf2e"].areaTargeting.areas ?? "from the answer",
+    "from the answer");
+check("Aullido expends every wolf that is left",
+    Charges.declarationOn(techDoc("aullido")),
+    { effect: "Effect: Colmillo", spending: 1, perRound: Infinity, upTo: 0, all: true });
+
+/* --- a spirit weapon you can actually fire ------------------------------------------------------ */
+
+/**
+ * pf2e makes a ranged, non-thrown weapon with a reload value demand ammunition — `weapon/document.ts`
+ * fills `system.ammo` from the base item and `character/document.ts` refuses the Strike outright when
+ * nothing is loaded. Both of the class's ranged spirit weapons inherited that from their base items, so
+ * neither could be fired: *"No ammunition is assigned to Los Lobos — Pistols"*, no roll, no message.
+ *
+ * `builtIn` is pf2e's own field for a weapon that carries its own ammunition, and it is what guide §7B's
+ * "they need no ammunition" means. Driven live on both: refused before, two Strikes after.
+ *
+ * Pinned by walking the equipment rather than by naming two files, because the next ranged profile will
+ * arrive with the same inheritance and the same silence.
+ */
+{
+    const dir = path.join(ROOT, "content", "soulbound-equipment");
+    const ranged = fs.readdirSync(dir)
+        .filter((name) => name.endsWith(".json"))
+        .map((name) => [name, JSON.parse(fs.readFileSync(path.join(dir, name), "utf8"))])
+        .filter(([, doc]) => doc.type === "weapon" && doc.system.range && doc.system.reload?.value !== "-");
+    check("the class's ranged spirit weapons", ranged.map(([name]) => name).sort(),
+        ["los-lobos-pistols.json", "spirit-bow.json"]);
+    check("…and every one of them carries its own ammunition",
+        ranged.filter(([, doc]) => doc.system.ammo?.builtIn !== true).map(([name]) => name), []);
+}
+
+/* --- a shape choice that reaches the card ------------------------------------------------------- */
+
+/**
+ * Cero Metralleta is offered as a 60-foot cone or a 120-foot line, and the choice reached the placement
+ * from the start — the Region really was a line. The **card** did not: it read "Area 60-foot cone"
+ * whatever was aimed, because the answer never reached pf2e. The content already shipped the variant.
+ *
+ * So a shape that has a variant names it, and the pipeline casts that variant instead of the original.
+ */
+{
+    const doc = techDoc("cero-metralleta");
+    const shapes = doc.flags["isaacs-hb-pf2e"].areaTargetingShapes;
+    check("Cero Metralleta offers the guide's two shapes",
+        shapes.map((shape) => `${shape.value}-foot ${shape.type}`), ["60-foot cone", "120-foot line"]);
+    const line = shapes.find((shape) => shape.type === "line");
+    check("…and the line names the variant that carries it", line.overlay, "cerometralletaline");
+    check("…which exists, and is that shape",
+        doc.system.overlays[line.overlay]?.system?.area, { type: "line", value: 120 });
 }
 check("Zanhyō Ningyō is a reaction, so its spend rides on the prompt instead",
     techDoc("zanhyo-ningyo").flags["isaacs-hb-pf2e"].riders[0].apply.riders

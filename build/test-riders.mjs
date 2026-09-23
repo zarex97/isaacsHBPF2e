@@ -2704,6 +2704,42 @@ function documentedIn(readme, heading, nextHeading) {
 }
 
 /* -------------------------------------------------------------------------------------------- */
+/*  A free shot the Sustain has to buy                                                           */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * *"You may **Sustain** Cero Metralleta at the start of your next turn to fire it again in a
+     * different direction without spending a Reiatsu Point."*
+     *
+     * The allowance was not tied to the Sustain at all. `FreeCast` pays whenever a flagged item on the
+     * sheet has a use left, so the **first** Cero Metralleta of an encounter was free, once every round,
+     * forever — Refined removed the Technique's cost rather than buying a second shot. Driven live, a
+     * plain cast announced "no Focus Point spent" before the Sustain had been used once.
+     *
+     * Using the Sustain now leaves a marker that lasts until the end of that turn, and the free cast is
+     * predicated on it. The marker's one-turn life is the once-per-round gate; the allowance itself is
+     * unlimited, because the Sustain's own frequency is spent by posting it and would otherwise be gone
+     * exactly when the free cast came to look for it.
+     */
+    const sustain = load("soulbound-class-features", "actions", "cero-metralleta-sustain.json");
+    const flag = sustain.flags["isaacs-hb-pf2e"];
+    check("the free shot is gated on having used the Sustain",
+        flag.freeCast?.predicate?.includes("self:effect:cero-metralleta-sustained"), true);
+    check("…and still only pays for Cero Metralleta",
+        flag.freeCast?.predicate?.includes("item:slug:cero-metralleta"), true);
+    check("…with no ceiling of its own — the marker is the ceiling", flag.freeCast?.unlimited, true);
+    const marker = flag.riders?.find((rider) => rider.event === "action-used");
+    check("using the Sustain is what leaves the marker",
+        [marker?.self, marker?.apply?.type, marker?.apply?.uuid?.endsWith("Effect: Cero Metralleta — Sustained")],
+        [true, "effect", true]);
+    check("…and the marker lasts exactly one turn",
+        [load("soulbound-effects", "effect-cero-metralleta-sustained.json").system.duration.value,
+            load("soulbound-effects", "effect-cero-metralleta-sustained.json").system.duration.expiry],
+        [1, "turn-end"]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
 
 if (failures.length > 0) {
     console.error(`Rider tests failed: ${failures.length} of ${checks}.`);
