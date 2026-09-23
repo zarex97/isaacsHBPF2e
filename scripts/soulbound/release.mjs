@@ -418,10 +418,27 @@ export const Release = {
         }
         if (updates.length > 0) await actor.updateEmbeddedDocuments("Item", updates);
 
+        // 3. Deliver grants a feature learned **after** this character was built.
+        //
+        // `GrantItem` runs once, at the moment the granting item is created. A rule added to the pack
+        // afterwards is never re-run — pf2e re-evaluates a grant on an actor update only when it says
+        // `reevaluateOnUpdate`, and most do not — so a feature that learned to hand something out last
+        // week hands it to nobody who already exists.
+        //
+        // Found by driving C-20: `Steady the Breath` is granted by `Reiatsu`, and **sixteen of the
+        // forty-one Soulbound in the rig did not have it**, because they predate the grant. The pool
+        // still refilled, because it is a real pf2e focus pool and Refocus is pf2e's own; what was
+        // missing was the class's name for the activity, on the sheet, where the player reads it.
+        //
+        // Deliberately narrow. Only a plain compendium uuid is followed — never `{item|flags…}`, which
+        // is a ChoiceSet's answer and belongs to a decision this cannot make — and never a predicated
+        // grant, which may be absent because its predicate is false rather than because it was missed.
+        const delivered = await this.deliverMissingGrants(actor);
+
         // 2. Take off anything the character has not actually Released into. Soulbound only: nobody else
         // has a release state, and `stateOf` would answer "sealed" for a Saint and strip nothing.
         if (!soulbound) {
-            return { actor: actor.name, refreshed, rewritten, taught: updates.length, removed: [] };
+            return { actor: actor.name, refreshed, rewritten, delivered, taught: updates.length, removed: [] };
         }
         const state = this.stateOf(actor);
         const allowed = new Set(
@@ -449,9 +466,47 @@ export const Release = {
             actor: actor.name,
             refreshed,
             rewritten,
+            delivered,
             taught: updates.length,
             removed: unearned.map((e) => e.name),
         };
+    },
+
+    /**
+     * Hand over what the packs say this character's own features should have granted.
+     *
+     * Reads the **pack** copy of each owned module item, walks its `GrantItem` rules, and creates
+     * anything the actor is missing by name. Idempotent: a second run finds nothing, because the first
+     * one gave it a copy with that name.
+     */
+    async deliverMissingGrants(actor) {
+        const held = new Set(actor.items.map((i) => i.name));
+        const authored = await this.authoredFlags();
+        const created = [];
+        const sources = [];
+
+        for (const item of actor.items) {
+            const compendiumSource = item._stats?.compendiumSource;
+            const record = (compendiumSource && authored.get(compendiumSource))
+                ?? authored.get(`name:${item.name}`);
+            for (const rule of record?.rules ?? []) {
+                if (rule?.key !== "GrantItem") continue;
+                // A ChoiceSet's answer, not a fixed grant: whose item it is depends on a decision this
+                // repair has no standing to make.
+                if (typeof rule.uuid !== "string" || !rule.uuid.startsWith("Compendium.")) continue;
+                // Absent may be correct: the predicate may simply be false for this character.
+                if (Array.isArray(rule.predicate) && rule.predicate.length > 0) continue;
+
+                const granted = await fromUuid(rule.uuid);
+                if (!granted || held.has(granted.name)) continue;
+                held.add(granted.name);
+                sources.push(foundry.utils.deepClone(granted.toObject()));
+                created.push(granted.name);
+            }
+        }
+
+        if (sources.length > 0) await actor.createEmbeddedDocuments("Item", sources);
+        return created;
     },
 
     /** Every Soulbound in the world. Safe to run more than once. */
