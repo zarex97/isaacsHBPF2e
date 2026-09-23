@@ -9,10 +9,17 @@
                 {
                     "apply": {
                         "type": "effect",
-                        "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Apotheosis"
+                        "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Apotheosis",
+                        "substitutions": [
+                            {
+                                "path": "flags.isaacs-hb-pf2e.riders.0.apply.riders.0.apply.formula",
+                                "value": "origin.severance.dice"
+                            }
+                        ]
                     },
                     "event": "action-used",
-                    "self": true
+                    "self": true,
+                    "note": "The second detonation's dice are **baked in here**, at cast time, and that is the whole of why this substitution exists. The effect's own rider asked for `origin.severance.dice` when it fired — \"the Waning dice as they stand now\" — and by the start of the next turn there is no Severance left to ask: using a Severing Art ends it, so `roundOfSeverance` reads 0, `waningDice(0)` reads 0, and the formula fell through to its literal fallback. Driven live: the second blast rolled **1d6** where the first had rolled 20d6."
                 }
             ]
         }

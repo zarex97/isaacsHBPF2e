@@ -4,7 +4,8 @@
             "refuseDeath": {
                 "cost": 5,
                 "label": "Bailar de Valquiria",
-                "resource": "effect-miracle-points"
+                "resource": "effect-miracle-points",
+                "grants": "Effect: The Miracle — Grown"
             }
         }
     },

@@ -955,6 +955,79 @@ for (const [file, slug] of [
 }
 
 /* -------------------------------------------------------------------------------------------- */
+/*  The Miracle                                                                                  */
+/* -------------------------------------------------------------------------------------------- */
+
+/**
+ * The last of the fifteen, and the only Spirit whose every number reads off one counter.
+ *
+ * Three of its clauses shipped as things that describe rather than do — a prompt quoting the spend, a
+ * `frequency` nothing decrements, and a price nothing charges — and the fourth was a timing bug that
+ * only shows on the turn after the one it was written for.
+ */
+{
+    const growth = ridersOf(load("soulbound-techniques", "the-miracle-growth.json"))[0];
+
+    // "[free-action]" — the class's only one, and the card said "reaction" until it was told otherwise.
+    check("the Growth is a free action on the defender's event",
+        [growth.event, growth.apply.freeAction, growth.self], ["damage-received", true, true]);
+
+    /**
+     * "**Frequency** once per round" was decoration: `offerReaction` reads `system.frequency.value` and
+     * nothing anywhere decrements it, so the only same-round gate was a sixty-second de-duplication
+     * window — and a round at a table routinely takes longer than a minute.
+     */
+    check("…gated by the round rather than by a timer", growth.oncePerRound, true);
+
+    /**
+     * "It costs a Reiatsu Point only the **first time each encounter**." Every other price in the class
+     * is taken by pf2e when a Technique is cast; a reaction is never cast, so nothing was ever charged.
+     */
+    const price = growth.apply.riders.find((r) => r.apply.type === "pool");
+    check("…and the first one each encounter is paid for",
+        [price?.apply?.spend, price?.apply?.oncePerEncounter, price?.self], [1, true, true]);
+    // The price comes first: a Quincy who declines after the points land would otherwise have them free.
+    check("…before the points are handed out",
+        growth.apply.riders.map((r) => r.apply.type), ["pool", "effect"]);
+
+    /**
+     * "You may spend **any number** of Miracle points … for each point spent, +1d6." Authored as five
+     * buttons, because a rider's options are authored — and each one predicated, which is a field the
+     * engine ignored until this Spirit needed it.
+     */
+    const spend = ridersOf(load("soulbound-effects", "effect-miracle-points.json"))[0];
+    check("the spend is offered at the start of the turn", [spend.event, spend.self, spend.apply.type],
+        ["turn-start", true, "choice"]);
+    check("…one option per point", spend.apply.options.length, 5);
+    for (const [index, option] of spend.apply.options.entries()) {
+        const n = index + 1;
+        check(`…spending ${n} costs ${n} and buys ${n}d6`,
+            [option.riders[0].apply.spend, option.riders[1].apply.substitutions[0].value.literal],
+            [n, n]);
+        // "+5 feet per point, **to a maximum of +20**" — the cap is on the bonus, so it is baked into the
+        // option rather than written as a rule that would have to know how many points were spent.
+        check(`…and ${Math.min(5 * n, 20)} feet of Speed`,
+            option.riders[1].apply.substitutions[1].value.literal, Math.min(5 * n, 20));
+        check(`…only when ${n} point${n === 1 ? " is" : "s are"} there`,
+            JSON.stringify(option.predicate), `[{"gte":["self:effect:miracle-points",${n}]}]`);
+    }
+
+    /**
+     * R-26c. "At the start of your next turn the emanation detonates a second time for **half** the
+     * Waning dice" — and by the start of that turn there is no Severance left to ask, because using a
+     * Severing Art ends it. The dice are captured at cast time instead.
+     */
+    const apotheosis = ridersOf(load("soulbound-techniques", "apotheosis.json"))[0];
+    check("Apotheosis captures the Waning dice when it is cast",
+        [apotheosis.apply.substitutions?.[0]?.value, apotheosis.event],
+        ["origin.severance.dice", "action-used"]);
+    const second = ridersOf(load("soulbound-effects", "effect-apotheosis.json"))[0];
+    check("…and the second detonation is worth half of them",
+        [second.event, second.apply.riders[0].apply.multiplier, second.apply.riders[0].apply.damageType],
+        ["turn-start", 0.5, "force"]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
 /*  Aiming                                                                                       */
 /* -------------------------------------------------------------------------------------------- */
 
