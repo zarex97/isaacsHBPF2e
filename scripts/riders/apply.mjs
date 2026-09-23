@@ -28,6 +28,7 @@ import { OUTCOME_LABELS, collectRiders, itemFor, riderAt } from "./data.mjs";
 import { Encasement } from "./encasement.mjs";
 import { Escape, escapeStatisticFor } from "./escape.mjs";
 import { WEAPON_TAG, crossingBleed, equipArm, libraDice, libraPotency } from "./libra.mjs";
+import { PROFILE_TAG as SPIRIT_PROFILE_TAG, SPIRIT_WEAPON_TAG } from "../soulbound/weapon.mjs";
 import { offerReaction } from "./reactions.mjs";
 import { gateByRound } from "./round-gate.mjs";
 import { selectRiders } from "./select.mjs";
@@ -741,6 +742,30 @@ function findStrike(actor, wanted, { exact = false } = {}) {
         if (held) return held;
         return actions.find((action) => action.item?.system?.category === "unarmed") ?? actions[0];
     }
+    /**
+     * "With your **spirit weapon**" — whichever one that is right now.
+     *
+     * Tiburón's *Trident* is "three ranged Strikes with your spirit weapon", and naming the weapon meant
+     * naming *Tiburón — Hollow-Edged Blade*, which is one Spirit's released profile and is not even the
+     * string `findStrike` compares: slugs drop the accent, so it is `tibur-n-hollow-edged-blade`. Driven
+     * live, the rider fell back to `unarmed` and a released Tiburón punched the target three times.
+     *
+     * The class already has a word for the weapon: the tag every profile and every released form carries.
+     * A released form's weapon wins over the sealed profile, because while one is in hand the other is
+     * stowed — the same order `SpiritWeapon.reconcile` keeps.
+     */
+    if (wanted === "spirit-weapon") {
+        const spirit = actions.filter(
+            (action) => (action.item?.system?.traits?.otherTags ?? []).includes(SPIRIT_WEAPON_TAG),
+        );
+        const released = spirit.find(
+            (action) => !(action.item?.system?.traits?.otherTags ?? []).includes(SPIRIT_PROFILE_TAG),
+        );
+        const held = released ?? spirit[0] ?? null;
+        if (held) return held;
+        return exact ? null : (actions.find((a) => a.item?.system?.category === "unarmed") ?? actions[0]);
+    }
+
     const found = actions.find(
         (action) => action.slug === wanted || action.item?.system?.category === wanted,
     );

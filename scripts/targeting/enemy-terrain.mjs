@@ -36,6 +36,21 @@ export function allianceOf(actor) {
 }
 
 /** Would this terrain catch that token, given whose it is? */
+/**
+ * Whose terrain this is, wherever the module wrote it down.
+ *
+ * Two things now lay enemies-only ground and they keep their bookkeeping under different keys: a
+ * `Lingering` area left behind by a cast, and a `TerrainAura` that stands around a form and moves with
+ * it. Reading only the first meant Tiburón's water slowed his own party as readily as the enemy — the
+ * filter was there, and it had nothing to compare against, so `catches` waved everybody through.
+ */
+function originOf(region) {
+    const flags = region?.flags?.[MODULE_ID] ?? {};
+    const uuid = flags[FLAG]?.originUuid ?? flags.terrainAura?.originUuid ?? null;
+    const document = uuid ? fromUuidSync(uuid) : null;
+    return document?.actor ?? document;
+}
+
 export function catches(originAlliance, tokenAlliance) {
     if (!originAlliance || !tokenAlliance) return true;   // unknown sides are caught, as before
     return originAlliance !== tokenAlliance;
@@ -51,9 +66,8 @@ export function registerEnemyTerrain() {
     class EnemyMovementCost extends base {
         /** @override */
         _getTerrainEffects(token, segment, options) {
-            const declared = this.parent?.parent?.flags?.[MODULE_ID]?.[FLAG];
-            const origin = declared?.originUuid ? fromUuidSync(declared.originUuid) : null;
-            const mine = allianceOf(origin?.actor ?? origin);
+            const origin = originOf(this.parent?.parent);
+            const mine = allianceOf(origin);
             const theirs = allianceOf(token?.actor);
             if (!catches(mine, theirs)) return [];
             return super._getTerrainEffects(token, segment, options);

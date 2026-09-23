@@ -14,9 +14,16 @@
                     ],
                     "predicate": [
                         "item:tag:soulbound-spirit-weapon"
-                    ]
+                    ],
+                    "oncePerRound": true,
+                    "note": "\"**Once per round** when you hit with your spirit weapon\" — the same gate Tensa Zangetsu's free Step and Pantera's extra claw Strike take. Without it the prompt arrived on every hit."
                 }
-            ]
+            ],
+            "terrainAura": {
+                "affects": "enemies",
+                "cost": 2,
+                "value": 20
+            }
         }
     },
     "img": "modules/isaacs-hb-pf2e/icons/water-elemental-blue.svg",

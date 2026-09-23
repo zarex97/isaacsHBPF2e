@@ -3,7 +3,7 @@
     "name": "Effect: Tiburón — Resurrección",
     "system": {
         "description": {
-            "value": "<p>A shark's tooth in your hands, a swim Speed, and water whenever you want it.</p>"
+            "value": "<p>A shark's tooth in your hands, a swim Speed, and water whenever you want it.</p><p>You can <strong>breathe water</strong>, and you can create water freely from the gill-slits along the blade.</p><hr /><p><em>pf2e automates no drowning and has no \"breathes water\" field, so the nearest thing it does have is said instead: the <strong>amphibious</strong> creature trait, which its own glossary defines as breathing in water and in air. It shows on the sheet and a predicate can read it. Whether the water is there at all remains the GM's to say.</em></p>"
         },
         "duration": {
             "expiry": null,
@@ -32,6 +32,12 @@
                 "key": "BaseSpeed",
                 "selector": "swim",
                 "value": "@actor.system.movement.speeds.land.value"
+            },
+            {
+                "add": [
+                    "amphibious"
+                ],
+                "key": "ActorTraits"
             }
         ],
         "start": {

@@ -3,26 +3,6 @@
         "isaacs-hb-pf2e": {
             "areaTargeting": {
                 "affects": "enemies",
-                "alternateArea": [
-                    {
-                        "area": {
-                            "type": "line",
-                            "value": 60
-                        },
-                        "predicate": [
-                            "self:effect:hirviendo"
-                        ]
-                    },
-                    {
-                        "area": {
-                            "type": "cone",
-                            "value": 40
-                        },
-                        "predicate": [
-                            "feature:refined-release"
-                        ]
-                    }
-                ],
                 "includesSelf": false
             },
             "lingering": {
@@ -59,6 +39,34 @@
                     "predicate": [
                         "feature:refined-release"
                     ]
+                }
+            ],
+            "areaTargetingShapes": [
+                {
+                    "label": "40-foot cone",
+                    "predicate": [
+                        "feature:refined-release"
+                    ],
+                    "type": "cone",
+                    "value": 40
+                },
+                {
+                    "label": "30-foot cone",
+                    "predicate": [
+                        {
+                            "not": "feature:refined-release"
+                        }
+                    ],
+                    "type": "cone",
+                    "value": 30
+                },
+                {
+                    "label": "60-foot line",
+                    "predicate": [
+                        "self:effect:hirviendo"
+                    ],
+                    "type": "line",
+                    "value": 60
                 }
             ]
         }
