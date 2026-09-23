@@ -12,8 +12,10 @@
                                     "damageType": "spirit",
                                     "formula": "2d6",
                                     "perStep": "1d6",
-                                    "type": "damage"
-                                }
+                                    "type": "damage",
+                                    "perStepInterval": 2
+                                },
+                                "trigger": true
                             },
                             {
                                 "apply": {
@@ -24,7 +26,8 @@
                         ],
                         "type": "reaction"
                     },
-                    "event": "damage-applied",
+                    "event": "damage-received",
+                    "note": "The **defender's** event, not the attacker's. The trigger is \"You or an ally within 30 feet takes damage\", so it is `damage-received` — `damage-applied` is \"damage from this actor's item landed on a target\", which is the opposite creature. Driven live on `damage-applied` the reaction was never offered at all. Landing on the attacker is what sends the 2d6 to the triggering creature; the nested `self` sends the resistance back to whoever was hit.",
                     "self": true
                 }
             ]

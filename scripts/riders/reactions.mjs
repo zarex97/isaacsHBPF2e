@@ -120,6 +120,10 @@ export async function offerReaction(rider, context) {
                     riderIndex: context.riderIndex,
                     originUuid: actor.uuid,
                     targetUuid: context.target?.uuid ?? context.actor?.uuid ?? null,
+                    // The other end of the event, which a `self` reaction would otherwise lose: the
+                    // reaction is offered to its owner, so `target` is the owner too, and Antithesis
+                    // needs to know who struck them — "the **triggering creature** takes 2d6 spirit".
+                    eventTargetUuid: context.eventTarget?.uuid ?? null,
                     messageId: context.message?.id ?? null,
                     outcome: context.outcome ?? null,
                 },

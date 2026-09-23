@@ -246,8 +246,11 @@ export async function resolveReaction(payload) {
     const target = payload.targetUuid ? await fromUuid(payload.targetUuid) : null;
     const actor = target?.actor ?? originActor;
 
+    // The creature the event was about, carried across the card so a nested `trigger` rider can reach it.
+    const eventTarget = payload.eventTargetUuid ? await fromUuid(payload.eventTargetUuid) : null;
+
     const work = {
-        ...context, originActor, actor, target, item,
+        ...context, originActor, actor, target, item, eventTarget,
         outcome: payload.outcome ?? null,
         adjustments: [], prompts: [], notes: [], choices: [], moves: [],
     };
@@ -289,6 +292,17 @@ async function applyFlatCheck(rider, context) {
 
 async function applyOne(rider, context) {
     const apply = rider.apply ?? {};
+    // A **nested** rider may name the creature the event was about, rather than the one the outer rider
+    // landed on.
+    //
+    // Antithesis is the case: *"the triggering creature takes 2d6 spirit damage, and the target of the
+    // trigger gains resistance equal to your level"* — one reaction, two recipients. The outer rider has
+    // to be `self`, because a reaction is offered to the ability's owner and `validate` insists on it, so
+    // everything nested inside lands on the Quincy by default. `trigger: true` sends this one entry to
+    // the other end of the event instead: the creature that struck them.
+    if (rider.trigger === true && context.eventTarget?.actor) {
+        context = { ...context, actor: context.eventTarget.actor, target: context.eventTarget };
+    }
     switch (apply.type) {
         case "prompt":
             context.prompts.push(apply.text ?? rider.note ?? "");
