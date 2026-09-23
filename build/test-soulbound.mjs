@@ -1354,12 +1354,11 @@ check(
         .some((r) => r.key === "RollOption" && r.option === "soulbound:blut-both"),
     true,
 );
-check(
-    "and it steps the die twice, as two rules — one `upgrade` steps once",
-    contentDoc("soulbound-effects/effect-quincy-letzt-stil.json").system.rules
-        .filter((r) => r.property === "damage-dice-faces").length,
-    2,
-);
+// This check used to assert the opposite — "it steps the die twice, as two rules, because one `upgrade`
+// steps once" — and the reasoning was half right: one upgrade does step once, and *two* step once as
+// well. pf2e latches on `damageFacesUpgraded`, and the **Schrift's** own upgrade had already taken the
+// one pf2e allows, so both of Letzt Stil's were no-ops. Driven live the bow was 1d10 at the Vollständig,
+// identical to the Schrift. The second step is `extraDieSteps` now; see the block above.
 check(
     "its cost is a real state: the pool's ceiling goes to zero for 24 hours",
     (() => {
@@ -2028,6 +2027,64 @@ check("…and takes its burst count from that answer rather than a fixed one",
 check("Aullido expends every wolf that is left",
     Charges.declarationOn(techDoc("aullido")),
     { effect: "Effect: Colmillo", spending: 1, perRound: Infinity, upTo: 0, all: true });
+
+/* --- two die steps, and a cost that is actually paid --------------------------------------------- */
+
+/**
+ * *"Your spirit weapon's damage die increases by **two** steps instead of one."*
+ *
+ * Written as two `ItemAlteration` upgrades it is worth **zero**: pf2e latches on `damageFacesUpgraded`
+ * and the Schrift's own upgrade had already taken the one pf2e allows. Driven live, the bow was 1d10 at
+ * the Vollständig — identical to the Schrift. `extraDieSteps` is the answer the module already wrote for
+ * Zanka no Tachi, and the comment in `die-steps.mjs` explains why no arrangement of `upgrade` can work.
+ */
+{
+    const letzt = contentDoc("soulbound-effects/effect-quincy-letzt-stil.json");
+    check("Letzt Stil takes its second step the only way pf2e allows",
+        letzt.flags["isaacs-hb-pf2e"].extraDieSteps, 1);
+    check("…and no longer asks pf2e for an upgrade it will not give",
+        letzt.system.rules.filter((r) => r.property === "damage-dice-faces").length, 0);
+    // Both die-step declarations in the content, so a third arrives beside its two predecessors.
+    const declared = [];
+    (function walk(dir) {
+        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+            const full = path.join(dir, entry.name);
+            if (entry.isDirectory()) walk(full);
+            else if (entry.name.endsWith(".json")) {
+                const doc = JSON.parse(fs.readFileSync(full, "utf8"));
+                if (doc.flags?.["isaacs-hb-pf2e"]?.extraDieSteps) declared.push(entry.name);
+            }
+        }
+    })(path.join(ROOT, "content"));
+    check("the forms that give a second die step", declared.sort(),
+        ["effect-quincy-letzt-stil.json", "effect-zanka-no-tachi.json"]);
+}
+
+/**
+ * *"When Letzt Stil ends, you lose access to your Schrift Form, your Release Technique, Licht Regen,
+ * Vollständig, and your entire reiatsu pool until you complete 24 hours of rest."*
+ *
+ * `Release.release` has refused on `soulbound:letzt-stil-spent` since the ladder was built, and nothing
+ * ever published it: `Effect: Letzt Stil — Spent` was in the content, applied by nobody. Driven live the
+ * pool came out of the form untouched and the Schrift went straight back on.
+ *
+ * A form declares what leaving it costs, and `exitTo` is why the Schrift goes too — §7C takes the rung
+ * below, the way Severance does, and falling one step left three of the four named things in place.
+ */
+{
+    const letzt = contentDoc("soulbound-effects/effect-quincy-letzt-stil.json");
+    check("leaving Letzt Stil costs what the guide says it costs",
+        letzt.flags["isaacs-hb-pf2e"].endsWith,
+        { effect: "Effect: Letzt Stil — Spent", exitTo: "sealed" });
+    const spent = contentDoc("soulbound-effects/effect-letzt-stil-spent.json");
+    check("…the cost lasts a day", [spent.system.duration.value, spent.system.duration.unit], [24, "hours"]);
+    check("…empties the pool by capping it, so it cannot be refocused back",
+        spent.system.rules.some((r) => r.key === "ActiveEffectLike" && r.path === "system.resources.focus.cap"
+            && r.value === 0), true);
+    check("…and publishes the option the ladder has always refused on",
+        spent.system.rules.some((r) => r.key === "RollOption" && r.option === "soulbound:letzt-stil-spent"),
+        true);
+}
 
 /* --- a spirit weapon you can actually fire ------------------------------------------------------ */
 

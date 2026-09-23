@@ -244,9 +244,37 @@ export const Release = {
         // Matched on the authored name rather than on a sourceId, for the same reason `enter` looks the
         // effect up by name: the id is assigned at build time and code has no way to know it.
         const held = actor.itemTypes.effect.filter((e) => names.has(e.name));
+        // What leaving this rung costs, read off the rung itself before it is taken away.
+        //
+        // Uryū's Letzt Stil is the only form in the class with a real one, and guide §7C states it twice
+        // over: "you lose access to your Schrift Form, your Release Technique, Licht Regen, Vollständig,
+        // and your entire reiatsu pool until you complete 24 hours of rest". `Release.release` has read
+        // `soulbound:letzt-stil-spent` since the ladder was built — and **nothing ever published it**, so
+        // the cost was a paragraph and the character could simply Release again on the next turn. Driven
+        // live: the pool came out of the form untouched and the Schrift went straight back on.
+        const costs = held.map((e) => e.flags?.[MODULE_ID]?.endsWith).filter((cost) => cost?.effect);
         if (held.length > 0) await actor.deleteEmbeddedDocuments("Item", held.map((e) => e.id));
+        for (const cost of costs) {
+            const doc = await packedEffect(cost.effect);
+            if (doc) await actor.createEmbeddedDocuments("Item", [foundry.utils.deepClone(doc.toObject())]);
+            else console.warn(`Isaac's Homebrew | exit cost not found: ${cost.effect}`);
+            // The pool is emptied by the cost effect's own `focus.cap` override rather than by a write
+            // here: a one-off `value: 0` grows back on the next refocus, and the guide says the pool is
+            // gone until 24 hours of rest.
+            if (cost.zeroPool) await actor.update({ "system.resources.focus.value": 0 });
+        }
         if (this.stateOf(actor) === state) {
             await actor.setFlag(MODULE_ID, "releaseState", FALLBACK[state] ?? "sealed");
+        }
+        // A cost that takes the rung below with it. Severance is written into `FALLBACK` because it is
+        // the only *rung* that does this; Letzt Stil is a **form**, and §7C takes the Schrift Form as
+        // well as the Vollständig — "you lose access to your Schrift Form, your Release Technique,
+        // Licht Regen, Vollständig". Falling one step left the Schrift on, and with it the bow, the
+        // reaction and Licht Regen, which is three of the four things the clause names.
+        for (const cost of costs) {
+            if (cost.exitTo === "sealed" && this.stateOf(actor) !== "sealed") {
+                await this.exit(actor, this.stateOf(actor));
+            }
         }
     },
 

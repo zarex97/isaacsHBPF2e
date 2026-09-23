@@ -2784,6 +2784,80 @@ function documentedIn(readme, heading, nextHeading) {
 }
 
 /* -------------------------------------------------------------------------------------------- */
+/*  A reaction to being hurt, and where each half of it lands                                    */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * Antithesis: *"**Trigger** You or an ally within 30 feet takes damage … **Effect** The triggering
+     * creature takes 2d6 spirit damage, and the target of the trigger gains resistance equal to your
+     * level."*
+     *
+     * It was keyed to **`damage-applied`**, which the events list defines as "damage from **this actor's
+     * item** landed on a target" — the attacker's half. Driven live, a dummy hit the Quincy for 20 and no
+     * reaction card appeared at all. `damage-received` is the mirror, and the one the trigger describes.
+     *
+     * The rider must then be `self`, because a reaction is offered to the ability's owner and `validate`
+     * insists on it — so everything nested inside lands on the Quincy, including the 2d6 that is supposed
+     * to go the other way. `trigger: true` sends one nested entry to the other end of the event.
+     */
+    const anti = load("soulbound-techniques", "antithesis.json");
+    const rider = ridersOf(anti)[0];
+    check("Antithesis answers being hurt, not hurting", rider.event, "damage-received");
+    check("…and is offered to its owner, as a reaction must be", rider.self, true);
+    const [damage, resistance] = rider.apply.riders;
+    check("…the 2d6 goes to whoever struck", [damage.apply.type, damage.trigger], ["damage", true]);
+    check("…and the resistance stays with whoever was struck",
+        [resistance.apply.type, resistance.trigger ?? "the owner"], ["effect", "the owner"]);
+    // "Heightened (+2) +1d6" — every other rank, not every rank.
+    check("…growing a die every other rank", damage.apply.perStepInterval, 2);
+
+    // Every reaction rider in the content is `self`, which is what the card being offered to its owner
+    // means; this is the rule `validate` enforces, asserted here so the shape is visible beside its use.
+    const reactions = [];
+    const walk = (dir) => {
+        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+            const full = path.join(dir, entry.name);
+            if (entry.isDirectory()) walk(full);
+            else if (entry.name.endsWith(".json")) {
+                const doc = JSON.parse(fs.readFileSync(full, "utf8"));
+                for (const r of ridersOf(doc) ?? []) {
+                    if (r.apply?.type === "reaction" && r.self !== true) reactions.push(entry.name);
+                }
+            }
+        }
+    };
+    walk(path.join(ROOT, "content"));
+    check("every reaction is offered to its own owner", reactions.sort(), []);
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  A free cast needs somewhere pf2e keeps a frequency                                           */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * *"Once per round you may use [Licht Regen] without spending a Reiatsu Point."*
+     *
+     * The `freeCast` flag sat on `Effect: Quincy: Letzt Stil`, and pf2e's **effect** data model has no
+     * `frequency` field — the authored `1/round` was dropped on load, so `FreeCast.find` read `?? 0`
+     * remaining and the allowance was never once available. Driven live, `find` returned null.
+     *
+     * A **feat** keeps a frequency and `Actor#recharge` refills it each round, so the allowance lives
+     * there and is predicated on actually being in the form.
+     */
+    const feat = load("soulbound-class-features", "spirits", "quincy-letzt-stil.json");
+    const flag = feat.flags["isaacs-hb-pf2e"].freeCast;
+    check("the free Licht Regen is an allowance on the feat, which keeps a frequency",
+        [feat.system.frequency?.max, feat.system.frequency?.per], [1, "round"]);
+    check("…and it only pays for Licht Regen, and only in the form",
+        flag?.predicate?.slice().sort(),
+        ["item:slug:licht-regen", "self:effect:quincy-letzt-stil"]);
+    check("…and the effect no longer claims a frequency pf2e would drop",
+        "frequency" in load("soulbound-effects", "effect-quincy-letzt-stil.json").system, false);
+}
+
+/* -------------------------------------------------------------------------------------------- */
 
 if (failures.length > 0) {
     console.error(`Rider tests failed: ${failures.length} of ${checks}.`);
