@@ -758,6 +758,46 @@ for (const [file, slug] of [
         found.map((r) => r.duration?.expiry), found.map(() => "turn-end"));
 }
 
+/**
+ * A `self` rider cannot ask a question about its target.
+ *
+ * `riderOptions` describes **the rider's target**, and a `self` rider's target is the ability's owner —
+ * so `rider:target:hp-zero` on a `self` rider asks whether *the caster* is the one dying. *Soul Sever*
+ * was written that way: "when you reduce a creature to 0 HP … perform a Konsō on **it**", authored as
+ * `self: true` with `predicate: ["rider:target:hp-zero"]`, and it could never fire. Measured live on a
+ * kill, the self reading produced `[]` where the target reading produced `["rider:target:hp-zero"]`.
+ *
+ * The contradiction is invisible in review — both halves read correctly on their own — so it is worth a
+ * scan rather than a memory. A `self` rider that legitimately asks about the **origin** uses
+ * `rider:origin:` or a plain `self:`/`feature:` option and is untouched by this.
+ */
+{
+    const contradictions = [];
+    const walk = (node, file, name) => {
+        if (Array.isArray(node)) {
+            for (const entry of node) walk(entry, file, name);
+        } else if (node && typeof node === "object") {
+            if (node.self === true && Array.isArray(node.predicate)) {
+                const text = JSON.stringify(node.predicate);
+                if (text.includes("rider:target:")) contradictions.push(`${file} — ${name}`);
+            }
+            for (const value of Object.values(node)) walk(value, file, name);
+        }
+    };
+    const files = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) return files(full);
+        return entry.name.endsWith(".json") ? [full] : [];
+    });
+    for (const full of files(path.join(ROOT, "content"))) {
+        const raw = fs.readFileSync(full, "utf8");
+        if (!raw.includes('"self"')) continue;
+        const doc = JSON.parse(raw);
+        walk(doc.flags ?? {}, path.basename(full), doc.name);
+    }
+    check("no self rider predicates on its own target", [...new Set(contradictions)].sort(), []);
+}
+
 /* -------------------------------------------------------------------------------------------- */
 /*  Aiming                                                                                       */
 /* -------------------------------------------------------------------------------------------- */
@@ -3240,15 +3280,40 @@ function documentedIn(readme, heading, nextHeading) {
         }
     };
     walk(path.join(ROOT, "content"));
+    /**
+     * The roster, kept because the count is the finding.
+     *
+     * Nine riders waited on an event that had never fired. Four of them turned out not to belong on it at
+     * all: Antithesis, The Balance, Danku and The Miracle's Growth are all triggered by **being** damaged,
+     * which is `damage-received` — the mistake was invisible for as long as neither event worked. What is
+     * left is the five that genuinely are the attacker's: damage this actor dealt, landing on somebody.
+     */
+    /**
+     * "You take damage" is the defender's event, and four abilities had it the wrong way round.
+     *
+     * The inversion is easy to make and was impossible to see: `damage-applied` never fired for anything,
+     * so a reaction keyed to it was simply never offered, and nothing distinguished that from a reaction
+     * nobody had tried. Pinned by name because the fifth one will read exactly like the first four.
+     */
+    for (const [file, name] of [
+        ["soulbound-techniques/antithesis.json", "Antithesis"],
+        ["soulbound-techniques/the-balance-reaction.json", "The Balance"],
+        ["soulbound-kido/bakudo/danku.json", "Danku"],
+        ["soulbound-techniques/the-miracle-growth.json", "The Miracle's Growth"],
+    ]) {
+        const riders = ridersOf(load(...file.split("/")));
+        check(`${name} answers being damaged, not damaging`,
+            [...new Set(riders.map((r) => r.event))], ["damage-received"]);
+        // A reaction is offered to the ability's owner, so the outer rider must be `self`; anything meant
+        // for the other end of the event is marked `trigger: true` inside it.
+        check(`…and is offered to its owner`, riders.every((r) => r.self === true), true);
+    }
+
     check("the riders that wait on damage-applied", waiting.sort(), [
-        "danku.json",
         "effect-deus-ex-machina.json",
         "sekishiki-kisoen.json",
         "sky-ascendant-aquarius.json",
         "soul-sever.json",
-        // The Balance left this list on purpose. Its reaction's trigger is "You take damage", which is
-        // the defender's event — it sat on `damage-applied` and was never offered once. See S-72b.
-        "the-miracle-growth.json",
         "the-yellow-spring-opens.json",
     ]);
 }

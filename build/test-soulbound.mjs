@@ -749,11 +749,20 @@ check("the same trigger is never offered twice", canOffer({ ...offerBase, alread
 check("an exhausted frequency is not offered", canOffer({ ...offerBase, frequencyLeft: 0 }), false);
 check("with nobody at the keyboard, nothing is offered", canOffer({ ...offerBase, ownerOnline: false }), false);
 
+/**
+ * Danku answers **being** damaged, not damaging.
+ *
+ * This assertion used to demand `damage-applied`, which reads right and is the opposite event: *"Trigger
+ * You or an ally within 15 ft. would take damage from a ranged attack, a spell, or an area effect"* is
+ * the defender's. `damage-applied` is "damage from **this actor's** item landed on a target", so the
+ * reaction was consulted on the turns the Soul Reaper was hurting somebody and never on the turns they
+ * were hurt. Invisible for as long as `damage-applied` itself never fired; see #71.
+ */
 const dankuReaction = kidoDoc("bakudo", "danku").flags["isaacs-hb-pf2e"].riders[0];
 check(
-    "Danku is a real reaction offered when damage lands (guide §6.2)",
+    "Danku is a real reaction offered when damage lands on you (guide §6.2)",
     [dankuReaction.apply.type, dankuReaction.event, dankuReaction.self],
-    ["reaction", "damage-applied", true],
+    ["reaction", "damage-received", true],
 );
 check(
     "and it grants resistance equal to your level",
