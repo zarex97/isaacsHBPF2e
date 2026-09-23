@@ -6,10 +6,12 @@
                     "apply": {
                         "count": 3,
                         "option": "trident",
+                        "strike": "spirit-weapon",
                         "type": "strikes"
                     },
                     "event": "action-used",
-                    "self": true
+                    "self": true,
+                    "note": "\"Make **three** ranged Strikes **with your spirit weapon**\" — named by the tag every spirit weapon carries rather than by one Spirit's released profile, whose slug drops its accent anyway. Without it the rider defaulted to `unarmed` and Tiburón punched the target three times. `variants[0]` is what keeps the multiple attack penalty from climbing."
                 }
             ]
         }

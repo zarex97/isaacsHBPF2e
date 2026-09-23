@@ -28,7 +28,9 @@ import { OUTCOME_LABELS, collectRiders, itemFor, riderAt } from "./data.mjs";
 import { Encasement } from "./encasement.mjs";
 import { Escape, escapeStatisticFor } from "./escape.mjs";
 import { WEAPON_TAG, crossingBleed, equipArm, libraDice, libraPotency } from "./libra.mjs";
+import { PROFILE_TAG as SPIRIT_PROFILE_TAG, SPIRIT_WEAPON_TAG } from "../soulbound/weapon.mjs";
 import { offerReaction } from "./reactions.mjs";
+import { gateByRound } from "./round-gate.mjs";
 import { selectRiders } from "./select.mjs";
 
 /** pf2e's DegreeOfSuccess is an index, not a word. */
@@ -79,6 +81,8 @@ export async function applyRiders(payload) {
     for (const [target, forTarget] of byTarget) {
         await applyToTarget(target, forTarget, context, payload);
     }
+
+    await spendStrikeTechnique(payload, context);
 }
 
 async function applyToTarget(target, candidates, context, payload) {
@@ -120,7 +124,13 @@ async function applyToTarget(target, candidates, context, payload) {
     // leaves it — see below for why Scorpio needs that and why an escalation ladder must never have it.
     const snapshot = candidates.filter(({ rider }) => rider.live !== true);
     const live = candidates.filter(({ rider }) => rider.live === true);
-    const chosen = selectRiders(snapshot, { outcome: payload.outcome ?? null, options });
+    // "The first time each round you hit" is a count, and `selectRiders` cannot count. The allowance
+    // belongs to the creature the rider is for, so the ledger is kept on the origin and spent here —
+    // after the predicate has agreed the rider applies, and before anything is written to the target.
+    const chosen = await gateByRound(
+        selectRiders(snapshot, { outcome: payload.outcome ?? null, options }),
+        context.originActor ?? actor,
+    );
     if (chosen.length === 0 && live.length === 0) return;
 
     const work = {
@@ -133,13 +143,15 @@ async function applyToTarget(target, candidates, context, payload) {
         // which creature the rose was thrown at, and by the time `target` is overwritten that fact is gone
         // unless something keeps a copy. `context.target` here is still the pre-overwrite value from
         // `resolveContext` — the enemy the event named — for exactly that.
-        eventTarget: context.target,
+        eventTarget: context.eventTarget ?? context.target,
+        eventAlly: context.eventAlly,
         outcome: payload.outcome ?? null,
         event: payload.event,
         adjustments: [],
         prompts: [],
         notes: [],
         choices: [],
+        picks: [],
         moves: [],
     };
     const before = new Set(actor.items.map((i) => i.id));
@@ -170,7 +182,11 @@ async function applyToTarget(target, candidates, context, payload) {
             item: context.item ?? context.messageItem ?? context.eventItem,
             extra: payload.damage ? describeDamage(payload.damage) : [],
         });
-        for (const { rider, item, index } of selectRiders(live, { outcome: payload.outcome ?? null, options: now })) {
+        const liveChosen = await gateByRound(
+            selectRiders(live, { outcome: payload.outcome ?? null, options: now }),
+            context.originActor ?? actor,
+        );
+        for (const { rider, item, index } of liveChosen) {
             try {
                 await applyOne(rider, { ...work, item, riderIndex: index, riderItem: item });
             } catch (error) {
@@ -192,6 +208,28 @@ async function applyToTarget(target, candidates, context, payload) {
     if (work.notes.length > 0) await postNotes(work);
     if (work.prompts.length > 0) await postPrompts(work);
     for (const choice of work.choices) await postChoice(choice, work, payload);
+    for (const pick of work.picks) await postPick(pick, work, payload);
+}
+
+/**
+ * The Strike a Technique paid for has happened; the marker is spent.
+ *
+ * Hit or miss, because the Technique was cast either way and *"make one Strike"* is one Strike. Called
+ * from `applyRiders` rather than from the source, because the source runs on whichever client rolled and
+ * the flag is the GM's to write — and because a collection that found nothing still consumed the cast.
+ */
+async function spendStrikeTechnique(payload, context) {
+    if (payload.event !== "strike-resolved") return;
+    const { StrikeTechnique } = await import("./strike-technique.mjs");
+    await StrikeTechnique.disarm(context.originActor);
+}
+
+/** Feet between two tokens, by the scene's own grid — the same measurement `sources.mjs` uses. */
+function distanceBetween(a, b) {
+    const measured = canvas.grid?.measurePath?.([a.center, b.center])?.distance;
+    if (Number.isFinite(measured)) return measured;
+    const feetPerPixel = (canvas.scene?.grid?.distance ?? 5) / (canvas.grid?.size ?? 100);
+    return Math.hypot(a.center.x - b.center.x, a.center.y - b.center.y) * feetPerPixel;
 }
 
 /** One option of one choice rider, come back from the caster's click. */
@@ -204,10 +242,37 @@ export async function applyChoice(payload) {
     const item = await fromUuid(payload.riderItemUuid);
     const rider = riderAt(item, payload.riderIndex);
     const option = rider?.apply?.options?.[payload.optionIndex];
-    if (!option?.apply) return;
+    if (!option?.apply && !Array.isArray(option?.riders)) return;
 
-    const work = { ...context, actor, target, item, outcome: payload.outcome ?? null, adjustments: [], prompts: [], notes: [], choices: [], moves: [] };
-    await applyOne({ ...rider, apply: option.apply, duration: option.duration ?? rider.duration }, work);
+    // …and it is tested again on the click, because the card outlives the moment it was posted: a Soulbound
+    // who spends four points and then presses the five-point button on the same card would otherwise take
+    // a fifth from a pool that no longer has it.
+    if (!testPredicate(option.predicate, riderOptions({ originActor: context.originActor, targetActor: actor, item }))) {
+        ui.notifications.warn(`${item?.name ?? "This option"}: ${option.label ?? "that option"} is no longer available.`);
+        return;
+    }
+
+    const work = { ...context, actor, target, item, outcome: payload.outcome ?? null, adjustments: [], prompts: [], notes: [], choices: [], picks: [], moves: [] };
+    /**
+     * An option may be a list rather than a single thing.
+     *
+     * The Miracle is why: *"You may spend any number of Miracle points … for each point spent, until the
+     * end of your turn your spirit weapon's Strikes deal +1d6"* is two actions on one button — take the
+     * points off the counter, and hand out what they bought. `reaction` and `pick` have spelled nesting
+     * as `riders` since they were written; this brings the third container into line rather than
+     * inventing a fourth shape for it.
+     */
+    const entries = Array.isArray(option.riders)
+        ? option.riders
+        : [{ ...rider, apply: option.apply, duration: option.duration ?? rider.duration }];
+    for (const [index, entry] of entries.entries()) {
+        await applyOne(entry, {
+            ...work,
+            riderIndex: Array.isArray(option.riders)
+                ? [payload.riderIndex, "options", payload.optionIndex, "riders", index].flat()
+                : payload.riderIndex,
+        });
+    }
     if (work.notes.length > 0) await postNotes(work);
     if (work.prompts.length > 0) await postPrompts(work);
 }
@@ -234,10 +299,14 @@ export async function resolveReaction(payload) {
     const target = payload.targetUuid ? await fromUuid(payload.targetUuid) : null;
     const actor = target?.actor ?? originActor;
 
+    // The creature the event was about, carried across the card so a nested `trigger` rider can reach it.
+    const eventTarget = payload.eventTargetUuid ? await fromUuid(payload.eventTargetUuid) : null;
+    const eventAlly = payload.eventAllyUuid ? await fromUuid(payload.eventAllyUuid) : null;
+
     const work = {
-        ...context, originActor, actor, target, item,
+        ...context, originActor, actor, target, item, eventTarget, eventAlly,
         outcome: payload.outcome ?? null,
-        adjustments: [], prompts: [], notes: [], choices: [], moves: [],
+        adjustments: [], prompts: [], notes: [], choices: [], picks: [], moves: [],
     };
     for (const [index, inner] of nested.entries()) {
         await applyOne(inner, { ...work, riderIndex: [payload.riderIndex, "riders", index].flat() });
@@ -277,9 +346,39 @@ async function applyFlatCheck(rider, context) {
 
 async function applyOne(rider, context) {
     const apply = rider.apply ?? {};
+    // A **nested** rider may name the creature the event was about, rather than the one the outer rider
+    // landed on.
+    //
+    // Antithesis is the case: *"the triggering creature takes 2d6 spirit damage, and the target of the
+    // trigger gains resistance equal to your level"* — one reaction, two recipients. The outer rider has
+    // to be `self`, because a reaction is offered to the ability's owner and `validate` insists on it, so
+    // everything nested inside lands on the Quincy by default. `trigger: true` sends this one entry to
+    // the other end of the event instead: the creature that struck them.
+    if (rider.trigger === true && context.eventTarget?.actor) {
+        context = { ...context, actor: context.eventTarget.actor, target: context.eventTarget };
+    }
+    /**
+     * …and `trigger: "ally"` for the creature the harm actually landed on.
+     *
+     * `ally-damaged` is the only event with three participants — the watcher whose riders are being read,
+     * the striker, and the ally who was hurt — and two of them need reaching from one rider. Antithesis
+     * wants both at once: *"The triggering creature takes 2d6 spirit damage, and **the target of the
+     * trigger** gains resistance equal to your level"*, where the target of the trigger is the ally.
+     */
+    if (rider.trigger === "ally" && context.eventAlly?.actor) {
+        context = { ...context, actor: context.eventAlly.actor, target: context.eventAlly };
+    }
     switch (apply.type) {
         case "prompt":
             context.prompts.push(apply.text ?? rider.note ?? "");
+            return;
+        case "pick":
+            // The creatures are read off the board when the card is posted, not authored — see `postPick`.
+            context.picks.push({
+                rider,
+                index: context.riderIndex,
+                item: context.riderItem ?? context.item,
+            });
             return;
         case "choice":
             // `target`/`actor` travel with the entry rather than being re-read from the outer context later:
@@ -299,6 +398,8 @@ async function applyOne(rider, context) {
             return applySave(rider, context);
         case "charge":
             return applyCharge(rider, context);
+        case "pool":
+            return applyPool(rider, context);
         case "damage":
             return applyDamageRider(rider, context);
         case "death":
@@ -333,6 +434,8 @@ async function applyOne(rider, context) {
             return applyEscape(rider, context);
         case "equip":
             return applyEquip(rider, context);
+        case "expire":
+            return applyExpire(rider, context);
         default:
             console.warn(`Isaac's Homebrew | ${context.item?.name}: unknown rider type "${apply.type}"`);
     }
@@ -419,7 +522,21 @@ async function targetsFor(rider, context) {
         // An anchored area that has never been placed has nowhere to be, which is the right answer
         // before the blades have been sent anywhere.
         if (!centre) continue;
-        const shape = shapeFromArea(area, originToken.object, centre);
+        // A round area anchored on a creature is measured from that creature's **space**, not from the
+        // point at the middle of it.
+        //
+        // Centred on the centre point, a 5-foot burst is a circle of one grid square's radius drawn from
+        // the middle of one square: it covers the anchor's own space and stops exactly on the centre of
+        // every neighbour. Cero Oscuras' Refined splash therefore caught precisely one creature — the one
+        // it is defined to exclude — and driven live it reached nobody at all. An emanation measures from
+        // the token's occupied space, which is what "within 5 feet of that creature" means everywhere
+        // else in pf2e, so a burst anchored on the target is built as one. A cone or a line anchored the
+        // same way keeps its own shape; only the round ones have a space to grow out of.
+        const anchorToken = area.anchor === "target" ? context.target?.object : null;
+        const round = ["burst", "cylinder", "emanation"].includes(area.type);
+        const shape = anchorToken && round
+            ? shapeFromArea({ ...area, type: "emanation", anchor: null }, anchorToken, centre)
+            : shapeFromArea(area, originToken.object, centre);
         if (shape) shapes.push(shape);
     }
     if (shapes.length === 0) return [];
@@ -714,6 +831,30 @@ function findStrike(actor, wanted, { exact = false } = {}) {
         if (held) return held;
         return actions.find((action) => action.item?.system?.category === "unarmed") ?? actions[0];
     }
+    /**
+     * "With your **spirit weapon**" — whichever one that is right now.
+     *
+     * Tiburón's *Trident* is "three ranged Strikes with your spirit weapon", and naming the weapon meant
+     * naming *Tiburón — Hollow-Edged Blade*, which is one Spirit's released profile and is not even the
+     * string `findStrike` compares: slugs drop the accent, so it is `tibur-n-hollow-edged-blade`. Driven
+     * live, the rider fell back to `unarmed` and a released Tiburón punched the target three times.
+     *
+     * The class already has a word for the weapon: the tag every profile and every released form carries.
+     * A released form's weapon wins over the sealed profile, because while one is in hand the other is
+     * stowed — the same order `SpiritWeapon.reconcile` keeps.
+     */
+    if (wanted === "spirit-weapon") {
+        const spirit = actions.filter(
+            (action) => (action.item?.system?.traits?.otherTags ?? []).includes(SPIRIT_WEAPON_TAG),
+        );
+        const released = spirit.find(
+            (action) => !(action.item?.system?.traits?.otherTags ?? []).includes(SPIRIT_PROFILE_TAG),
+        );
+        const held = released ?? spirit[0] ?? null;
+        if (held) return held;
+        return exact ? null : (actions.find((a) => a.item?.system?.category === "unarmed") ?? actions[0]);
+    }
+
     const found = actions.find(
         (action) => action.slug === wanted || action.item?.system?.category === wanted,
     );
@@ -841,7 +982,12 @@ async function applyHeal(rider, context) {
         castRank: source?.rank,
         bonusSteps: skyStepsFromOptions(context.originActor?.getRollOptions?.() ?? []),
     });
-    const each = (Number(rider.apply.value) || 0) + (Number(rider.apply.perStep) || 0) * steps;
+    // A heal measured by what just happened rather than by a flat number — "redirect that damage to
+    // yourself" gives the ally back exactly what landed on them, so the amount is the blow's.
+    const declared = typeof rider.apply.value === "string" && isResolvable(rider.apply.value)
+        ? Number(resolveFromOrigin(rider.apply.value, context))
+        : Number(rider.apply.value);
+    const each = (Number.isFinite(declared) ? declared : 0) + (Number(rider.apply.perStep) || 0) * steps;
     if (each <= 0) return;
 
     const cap = rider.apply.maxPerCast === "origin.level"
@@ -1417,6 +1563,29 @@ async function grantEscape(rider, context, release) {
     await Escape.grant(rider, context, release);
 }
 
+/**
+ * Take an effect back off, before its own timer would.
+ *
+ * *Zanhyō Ningyō* is the reason: "a doll of ice takes the blow … **the doll shatters**". The doll is
+ * an effect granting resistance, and an effect with a one-round timer is a doll that absorbs every
+ * blow landed in that round rather than the one it was spent on. "Shatters" is a real clause and it
+ * needed something to say it with.
+ *
+ * Matches on the effect's own name and on the `<Ability>: <name>` form the condition riders generate,
+ * so a rider can retire either kind without knowing which one made it.
+ */
+async function applyExpire(rider, context) {
+    const wanted = [rider.apply.effect].flat().filter(Boolean);
+    for (const name of wanted) {
+        const gone = context.actor.itemTypes.effect.filter(
+            (e) => e.name === name || e.name.endsWith(`: ${name}`),
+        );
+        for (const effect of gone) {
+            if (context.actor.items.has(effect.id)) await effect.delete();
+        }
+    }
+}
+
 /** An authored effect from a pack — the riders that are more than a condition with a timer. */
 async function applyEffect(rider, context) {
     const uuid = rider.apply.uuid;
@@ -1530,6 +1699,26 @@ async function crossThresholds(source, was, now, context) {
  * put there by an earlier rider. Reading it back is what turns a static formula into the stacking one the
  * Cloth actually describes.
  */
+/**
+ * How many steps of its own growth this rider has earned.
+ *
+ * `perStep` normally means "one more die per heightening step". Ennetsu Jigoku's persistent fire is the
+ * exception the guide writes out loud — *"+1d6 and +1 persistent die at **every other** increment"* —
+ * two different rates in one sentence, so the rate has to be sayable. `perStepInterval: 2` is that: the
+ * steps are counted the usual way and then divided, so a rank-7 cast earns six increments and three
+ * extra dice rather than six.
+ */
+export function riderSteps(rider, context) {
+    const source = context.item;
+    const steps = stepsFor({
+        baseRank: source?.baseRank ?? source?.system?.level?.value,
+        castRank: source?.rank,
+        bonusSteps: skyStepsFromOptions(context.originActor?.getRollOptions?.() ?? []),
+    });
+    const interval = Math.max(1, Number(rider.apply?.perStepInterval) || 1);
+    return Math.floor(steps / interval);
+}
+
 async function applyPersistent(rider, context) {
     const { damageType = "bleed", perCounter, max } = rider.apply;
     // Almost always a literal. *Piranha Rose*'s persistent bleed is the exception — "+1d6 at 9th, 13th and
@@ -1538,10 +1727,21 @@ async function applyPersistent(rider, context) {
     // pf2e's basic-save halving turning "negates" into "half a d6 of bleed".
     const rawFormula = rider.apply.formula ?? "1d6";
     const resolvable = typeof rawFormula === "object"
-        || (typeof rawFormula === "string" && rawFormula.startsWith("origin."));
+        || (typeof rawFormula === "string" && isResolvable(rawFormula));
     const formula = resolvable ? (resolveFromOrigin(rawFormula, context) ?? "1d6") : rawFormula;
     const count = perCounter ? Math.min(counterOn(context.actor, perCounter), Number(max) || Infinity) : 1;
-    const scaled = perCounter ? scaleFormula(formula, count) : formula;
+    const counted = perCounter ? scaleFormula(formula, count) : formula;
+    if (!counted) return;
+
+    // Persistent damage heightens too, and did not. `applyDamageRider` has honoured `perStep` since it
+    // was written; this path never read it, so Ennetsu Jigoku's "1d4" stayed 1d4 at every rank while the
+    // headline dice climbed to 8d6 beside it — a flag on the content that nothing opened.
+    //
+    // Grown into one formula rather than appended as "1d4 + 3d4": a persistent-damage condition carries a
+    // single formula, and pf2e's own recovery card reads it back.
+    const perStep = rider.apply.perStep;
+    const steps = perStep ? riderSteps(rider, context) : 0;
+    const scaled = perStep && steps > 0 ? growByStep(counted, perStep, steps) : counted;
     if (!scaled) return;
 
     await inflictPersistent(context.actor, {
@@ -1602,7 +1802,7 @@ async function applyDamageRider(rider, context) {
     // The formula is usually a literal — "1d6" — but may itself be a resolvable, for the one shape none
     // of the others cover: a *granted action*'s damage that has to track a different Technique's own
     // heightening, because the action carries no rank of its own for `perStep` to scale from.
-    const formula = typeof rider.apply.formula === "string" && rider.apply.formula.startsWith("origin.")
+    const formula = typeof rider.apply.formula === "string" && isResolvable(rider.apply.formula)
         ? (resolveFromOrigin(rider.apply.formula, context) ?? "1d6")
         : (rider.apply.formula ?? "1d6");
 
@@ -1619,14 +1819,7 @@ async function applyDamageRider(rider, context) {
     // on a critical failure alone, and that 4d8 grows a die per step like everything else — but a rider
     // sits outside `system.damage`, so pf2e never scales it. `perStep` is that growth, counted the same
     // way the Technique's own is: steps earned by rank, plus whatever the sky is worth today.
-    const source = context.item;
-    const steps = perStep
-        ? stepsFor({
-              baseRank: source?.baseRank ?? source?.system?.level?.value,
-              castRank: source?.rank,
-              bonusSteps: skyStepsFromOptions(context.originActor?.getRollOptions?.() ?? []),
-          })
-        : 0;
+    const steps = perStep ? riderSteps(rider, context) : 0;
     const growth = perStep ? scaleFormula(perStep, steps) : null;
     const scaled = growth ? `${counted} + ${growth}` : counted;
 
@@ -1756,6 +1949,13 @@ async function applyDeath(rider, context) {
  * outcomes into the ladder. A damage rider that *does* name outcomes is left exactly as written — an
  * ability whose damage does not follow the basic ladder is a real thing and says so — and non-damage
  * riders are untouched, because "restrained on a critical failure" is not scaled by anything.
+ *
+ * The ladder **composes** with a multiplier the author wrote rather than replacing it. Three riders in
+ * the content say a fraction of something and then ask for a basic save on top: Cero Oscuras' Refined
+ * splash is *half* damage to the creatures around the one it hit, Apotheosis detonates for *half* the
+ * Waning dice, and Senbonzakura's Gokei *doubles* the petal-blades. Overwriting the field made all three
+ * of those words decoration — the splash dealt the cero's damage in full to every neighbour, and Gokei
+ * did nothing at all — while reading correctly in the JSON beside the sentence it was meant to be.
  */
 export function basicLadder(spec) {
     const riders = spec?.riders ?? [];
@@ -1769,11 +1969,17 @@ export function basicLadder(spec) {
     return riders.flatMap((rider) => {
         const apply = rider?.apply;
         if (apply?.type !== "damage" || rider.outcomes) return [rider];
-        return LADDER.map(([outcome, multiplier]) => ({
-            ...rider,
-            outcomes: [outcome],
-            apply: multiplier === 1 ? { ...apply } : { ...apply, multiplier },
-        }));
+        const written = Number(apply.multiplier);
+        const base = Number.isFinite(written) && written > 0 ? written : 1;
+        return LADDER.map(([outcome, step]) => {
+            const multiplier = base * step;
+            const scaled = { ...apply, multiplier };
+            // A multiplier of exactly 1 is the absence of one: `applyDamage` wraps the formula in
+            // `(…) * n` for anything else, and `(10d6) * 1` on the card reads as though something had
+            // been done to it.
+            if (multiplier === 1) delete scaled.multiplier;
+            return { ...rider, outcomes: [outcome], apply: scaled };
+        });
     });
 }
 
@@ -1796,6 +2002,47 @@ async function applyCharge(rider, context) {
     await Charges.spend(actor, effect, {
         spending: Number(spend),
         perRound: perRound === null ? Infinity : Number(perRound),
+    });
+}
+
+/**
+ * A price paid out of the Reiatsu pool by something that is not a cast.
+ *
+ * Every other price in the class is charged by pf2e when a Technique is cast, which is why this is the
+ * only place that needs it: *The Miracle*'s Release Technique is a **reaction**, and reactions are never
+ * cast. "It costs a Reiatsu Point only the **first time each encounter**; after that it is free" is
+ * therefore two things pf2e cannot do — spend a point outside a cast, and remember that it did.
+ *
+ * The ledger is the encounter's id rather than its round, and it is stamped **before** the point is
+ * taken: a write that fails halfway leaves the Quincy having paid and not been charged again, which is
+ * the kinder of the two mistakes. Out of an encounter there is nothing to be the first of, so nothing is
+ * charged — the same reading `round-gate.mjs` takes of a per-round allowance outside combat.
+ */
+async function applyPool(rider, context) {
+    const actor = context.originActor;
+    const focus = actor?.system?.resources?.focus;
+    if (!focus) return;
+
+    const spend = Number(rider.apply.spend) || 1;
+    if (rider.apply.oncePerEncounter) {
+        const stamp = game.combat?.started ? game.combat.id : null;
+        if (!stamp) return;
+        const key = `${(context.riderItem ?? context.item)?.id ?? "unknown"}-pool`;
+        const ledger = actor.getFlag(MODULE_ID, "poolSpent") ?? {};
+        if (ledger[key] === stamp) return;
+        await actor.setFlag(MODULE_ID, "poolSpent", { ...ledger, [key]: stamp });
+    }
+
+    // Clamped rather than refused. The clause prices the first use and does not make it conditional, and
+    // a Schrift that lets you be hit for free should not become one that refuses to notice.
+    const paid = Math.min(spend, focus.value ?? 0);
+    if (paid <= 0) return;
+    await actor.update({ "system.resources.focus.value": (focus.value ?? 0) - paid });
+    await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        flavor: (context.riderItem ?? context.item)?.name ?? "Rider",
+        content: `<p>${actor.name} spends <strong>${paid} Reiatsu Point${paid === 1 ? "" : "s"}</strong> — `
+            + `${(focus.value ?? 0) - paid} left.</p>`,
     });
 }
 
@@ -1924,7 +2171,20 @@ async function resolveContext(payload) {
     // The message's item only counts as a rider source when the message belongs to the origin. On
     // `strike-received` the message is the attacker's, and their weapon has nothing to say about the
     // roses growing on the person they hit.
-    const messageItem = message?.actor && message.actor === originActor ? itemFor(message) : null;
+    //
+    // "Belongs to" is two questions, not one. A spell card is spoken by the caster, so the speaker is the
+    // origin — but a **save message** is spoken by the creature that rolled it, and the Technique it is a
+    // save against is still the origin's. pf2e stamps that on the roll itself, `context.origin.actor`, and
+    // `Sources.onSaveMessage` sends the matching `originUuid`; without this second clause the Technique
+    // that forced the save carries no riders, and a save rolled by pf2e's own button does nothing at all.
+    // Narrowed to saves on purpose. pf2e stamps `context.origin` on an **attack roll** too, where it means
+    // the attacker — and on `strike-received` the origin is the person they hit, so a looser test would be
+    // one uuid collision away from letting an attacker's weapon carry the defender's riders. A save is the
+    // one context where "the roll is about somebody else's item" is the normal case.
+    const originIsSpeaker = message?.actor && message.actor === originActor;
+    const context = message?.flags?.pf2e?.context;
+    const originFlagsIt = context?.type === "saving-throw" && context.origin?.actor === originActor.uuid;
+    const messageItem = originIsSpeaker || originFlagsIt ? itemFor(message) : null;
 
     // ...but it is the only thing the *predicate* can be about. "Any creature that hits you with an unarmed
     // or non-reach melee attack takes 1d6 poison" is a question about the attacker's weapon, and answering
@@ -1939,7 +2199,18 @@ async function resolveContext(payload) {
         ? (await Promise.all(payload.targetUuids.map((uuid) => fromUuid(uuid).catch(() => null)))).filter(Boolean)
         : [];
 
-    return { message, item, messageItem, eventItem, originActor, originToken, target, targets };
+    const eventTarget = payload.eventTargetUuid ? await fromUuid(payload.eventTargetUuid) : null;
+    const eventAlly = payload.eventAllyUuid ? await fromUuid(payload.eventAllyUuid) : null;
+
+    return {
+        message, item, messageItem, eventItem, originActor, originToken, target, targets,
+        eventTarget, eventAlly,
+        // What distinguishes one occasion from the next when there is no chat message to name it.
+        dispatchId: payload.dispatchId ?? null,
+        // What the blow was worth, for `event.damage.total`. Kept apart from the roll options
+        // `describeDamage` builds, because a predicate wants a flag and a formula wants a number.
+        eventDamage: payload.damage ?? null,
+    };
 }
 
 /**
@@ -1968,6 +2239,17 @@ function applySubstitutions(source, substitutions, context) {
         }
         foundry.utils.setProperty(source, path, value);
     }
+}
+
+/**
+ * Is this string a question rather than a formula?
+ *
+ * Two prefixes: `origin.` asks the caster something, `event.` asks the blow. Anything else is a literal
+ * — `"2d6"`, `"1d4"` — and must stay one, because a typo inside a prefix should read as an unknown
+ * expression rather than as dice nobody notices are missing.
+ */
+function isResolvable(expression) {
+    return expression.startsWith("origin.") || expression.startsWith("event.");
 }
 
 function resolveFromOrigin(expression, context) {
@@ -2024,6 +2306,22 @@ function resolveFromOrigin(expression, context) {
     const match = /^origin\.statistic\.([\w-]+)\.rank$/.exec(String(expression));
     if (match) return originActor?.getStatistic?.(match[1])?.rank ?? null;
     if (expression === "origin.level") return originActor?.level ?? null;
+
+    /**
+     * How much damage the event was, as a number.
+     *
+     * Every other expression here asks the **origin** something; this one asks the *blow*. The Balance's
+     * Vollständig is why it exists — "when an ally within 60 feet would take damage, you may redirect
+     * that damage to yourself" — and a redirect has to know how much. `describeDamage` publishes only
+     * `rider:damage:dealt`, a flag, so a rider could ask *whether* damage landed and never *how much*.
+     *
+     * Zero is a real answer and is returned as one: a blow entirely absorbed still happened, and a
+     * redirect of nothing should move nothing rather than fall back to a die.
+     */
+    if (expression === "event.damage.total") {
+        const total = Number(context.eventDamage?.total);
+        return Number.isFinite(total) ? total : null;
+    }
 
     // The Waning dice as they stand *now*. Apotheosis "detonates again at the start of your next turn
     // for half the Waning dice" (R-26), and by then the round has turned — so the second blast is worth
@@ -2096,9 +2394,21 @@ function outcomeSuffix(context) {
     return context.outcome ? ` on a ${OUTCOME_LABELS[context.outcome]}` : "";
 }
 
+/**
+ * When a rider's effect lets go.
+ *
+ * The default is `turn-end`, and it used to be `turn-start`. Both guides say the same thing in the
+ * same words, over and over — "immobilized **until the end of its next turn**", "slowed 1 **until the
+ * end of their next turn**", "off-guard **until the end of its next turn**" — and `turn-start` ends
+ * an effect at the *start* of that turn, one step short. Driven live, a creature slowed by *Hyōryū
+ * Senbi* got its full actions back before it had spent one of them.
+ *
+ * A rider that genuinely wants the shorter window says `expiry: "turn-start"` for itself. None of the
+ * shipped content did, which is what made this a silent default rather than a decision.
+ */
 function durationData(duration) {
     return {
-        expiry: duration?.expiry ?? "turn-start",
+        expiry: duration?.expiry ?? "turn-end",
         sustained: false,
         unit: duration?.unit ?? "rounds",
         value: Number(duration?.value) || 1,
@@ -2184,13 +2494,166 @@ async function postPrompts({ prompts, item, originActor, actor, outcome }) {
  * than a dialog on purpose: it survives a reload, and it cannot be missed by someone looking at their
  * sheet at the wrong moment.
  */
+/**
+ * A rider whose target the owner picks off the board.
+ *
+ * Two clauses in the guide need this and neither could be written before it existed:
+ *
+ * > then **choose one enemy within 60 feet**: it takes 2d6 spirit damage — The Balance (S-72d)
+ * > **Sight of the Balance:** at the start of each of your turns, **choose one enemy within 60 feet**
+ * >   — The Balance, at Night (S-74e)
+ *
+ * `apply.type: "choice"` is a menu of **authored** options — which sense *Tenbu Hōrin* takes — and cannot
+ * express "one of the creatures over there". So the buttons here are built from the board at post time,
+ * the way the counteract card's are, and the chosen token travels on the button rather than as an index
+ * into a rider.
+ *
+ * *Sight of the Balance* is the reason this is worth building rather than leaving to the table: it fires
+ * at the **start of a turn**, with no trigger to point at, so `trigger: true` — the module's only other
+ * way to reach somebody who is not the rider's target — has nothing to reach for. Without a picker the
+ * whole clause is a card headed "Left to the table" and two effects that are never created.
+ *
+ * The candidate list honours `range` in feet and `affects` (`enemies`, `allies`, `all`), using pf2e's own
+ * alliance test so "enemy" means what it means everywhere else. An empty list posts nothing: a card with
+ * no buttons is a card that cannot be answered.
+ */
+async function postPick({ rider, index, item }, context, payload) {
+    const spec = rider.apply ?? {};
+    const origin = context.originToken?.object;
+    if (!origin || !item?.uuid || !canvas?.ready) return;
+
+    /**
+     * Where the range is measured **from**.
+     *
+     * Usually the caster — "choose one enemy within 60 feet" of the Quincy. The Thunderbolt's arc is the
+     * exception and reads the other way: *"one other creature within 15 feet of **the target**"*, a circle
+     * drawn around the creature that was just struck. Whichever end it is, that creature is excluded from
+     * its own list, which is what "**other**" means.
+     */
+    const centre = spec.from === "target" ? (context.target?.object ?? origin) : origin;
+    const range = Number(spec.range);
+    const affects = spec.affects ?? "enemies";
+    const originActor = context.originActor;
+    const candidates = canvas.tokens.placeables.filter((token) => {
+        const actor = token.actor;
+        if (!actor || token === origin || token === centre) return false;
+        if (affects === "enemies" && !actor.isEnemyOf?.(originActor)) return false;
+        if (affects === "allies" && !actor.isAllyOf?.(originActor)) return false;
+        return !Number.isFinite(range) || distanceBetween(centre, token) <= range;
+    });
+    if (candidates.length === 0) return;
+
+    const buttons = candidates
+        .map((token) =>
+            `<button type="button" data-action="isaacs-hb-rider-pick" data-token="${token.document.uuid}">`
+            + `${foundry.utils.escapeHTML(token.name)}</button>`)
+        .join(" ");
+
+    const recipients = new Set(ChatMessage.getWhisperRecipients("GM").map((user) => user.id));
+    for (const [userId, level] of Object.entries(originActor?.ownership ?? {})) {
+        if (level === CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER && userId !== "default") recipients.add(userId);
+    }
+
+    await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: originActor }),
+        whisper: [...recipients],
+        flavor: item.name,
+        content:
+            `<p>${foundry.utils.escapeHTML(spec.prompt ?? "Choose a creature.")}</p>`
+            + `<div class="isaacs-hb-choice">${buttons}</div>`,
+        flags: {
+            [MODULE_ID]: {
+                pick: {
+                    riderItemUuid: item.uuid,
+                    riderIndex: index,
+                    originUuid: context.originToken?.uuid ?? originActor?.uuid,
+                    messageId: payload.messageId ?? null,
+                    itemUuid: payload.itemUuid ?? null,
+                    outcome: context.outcome ?? payload.outcome ?? null,
+                },
+            },
+        },
+    });
+}
+
+/**
+ * The creature came back from the card; apply what the rider says to it.
+ *
+ * Mirrors `resolveReaction` exactly, including why: the payload carries an **address**, not rider data, so
+ * the GM re-reads the ability rather than trusting a client to describe it.
+ */
+export async function applyPick(payload) {
+    const context = await resolveContext(payload);
+    if (!context) return;
+
+    const item = await fromUuid(payload.riderItemUuid);
+    const rider = riderAt(item, payload.riderIndex);
+    const nested = rider?.apply?.riders ?? [];
+    if (nested.length === 0) return;
+
+    const picked = payload.pickedUuid ? await fromUuid(payload.pickedUuid) : null;
+    const actor = picked?.actor;
+    if (!actor) return;
+
+    const origin = await fromUuid(payload.originUuid);
+    const originActor = origin?.actor ?? origin;
+
+    const work = {
+        ...context, originActor, actor, target: picked, item,
+        outcome: payload.outcome ?? null,
+        adjustments: [], prompts: [], notes: [], choices: [], picks: [], moves: [],
+    };
+    /**
+     * Each nested rider resolves its **own** targets, which is what lets one pick hand out two things to
+     * two different sets of people.
+     *
+     * *Sight of the Balance* is exactly that: a −2 for the creature chosen, and a +1 for the allies who
+     * are about to attack it. Applying the nested riders straight to the picked creature — which is what
+     * `resolveReaction` does, and what this did first — put both halves on the enemy, and the allies'
+     * bonus landed on the one creature it was supposed to be used *against*.
+     *
+     * `targetsFor` is the same function `applyRiders` uses, so `self`, `area` and a bare rider all mean
+     * here what they mean everywhere else.
+     */
+    for (const [inner, entry] of nested.entries()) {
+        const scoped = { ...work, riderIndex: [payload.riderIndex, "riders", inner].flat() };
+        for (const each of await targetsFor(entry, scoped)) {
+            const actorFor = each?.actor;
+            if (!actorFor) continue;
+            await applyOne(entry, { ...scoped, actor: actorFor, target: each });
+        }
+    }
+    if (work.notes.length > 0) await postNotes(work);
+    if (work.prompts.length > 0) await postPrompts(work);
+}
+
 async function postChoice({ rider, index, item, target, actor }, context, payload) {
     const options = rider.apply.options ?? [];
     if (options.length === 0 || !item?.uuid) return;
 
-    const buttons = options
+    /**
+     * An option may say when it is available.
+     *
+     * The Miracle's spend is five buttons — one per point — and a character holding four points must not
+     * be offered the fifth. The index travels on the button, so the buttons are **filtered rather than
+     * renumbered**: dropping an option would silently shift every later one onto the wrong rider.
+     *
+     * Tested against the same snapshot the riders were chosen from, so "at least five points" means what
+     * it meant a moment ago rather than what it means after the first button was pressed.
+     */
+    const chooser = riderOptions({
+        originActor: context.originActor,
+        targetActor: (actor ?? context.actor),
+        item,
+    });
+    const offered = options
+        .map((option, optionIndex) => ({ option, optionIndex }))
+        .filter(({ option }) => testPredicate(option.predicate, chooser));
+    if (offered.length === 0) return;
+
+    const buttons = offered
         .map(
-            (option, optionIndex) =>
+            ({ option, optionIndex }) =>
                 `<button type="button" data-action="isaacs-hb-rider-choice" data-option="${optionIndex}">`
                 + `${foundry.utils.escapeHTML(option.label ?? `Option ${optionIndex + 1}`)}</button>`,
         )

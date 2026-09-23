@@ -23,6 +23,10 @@
                 "domain": "all",
                 "option": "soulbound:kyoka:total",
                 "value": true
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-class-features.Item.Kanzen Saimin — Sustain"
             }
         ],
         "start": {

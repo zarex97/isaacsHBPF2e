@@ -3,7 +3,7 @@
     "name": "Effect: Kanzen Saimin",
     "system": {
         "description": {
-            "value": "<p>Everything anyone sees of you is a lie you are telling. A creature that has seen your release and failed its Will save perceives you 5 feet from where you stand.</p>"
+            "value": "<p>Everything anyone sees of you is a lie you are telling. A creature that has seen your release and failed its Will save perceives you 5 feet from where you stand.</p><p>Landing a blow on where you <em>actually</em> are breaks the hypnosis. Under <strong>Kanzen Saimin: Sōten Kisshun</strong> only a <strong>critical hit</strong> does.</p>"
         },
         "duration": {
             "expiry": null,
@@ -44,5 +44,44 @@
             ]
         }
     },
-    "type": "effect"
+    "type": "effect",
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "effect": "Hypnotized",
+                        "type": "expire"
+                    },
+                    "event": "strike-received",
+                    "note": "Shikai: landing a blow on the real you breaks the lie. #63 settled this — the Full Release's \"no longer ends the effect\" needs a Shikai rule to negate, and §7A never stated one.",
+                    "outcomes": [
+                        "success",
+                        "criticalSuccess"
+                    ],
+                    "predicate": [
+                        "rider:target:effect:effect-hypnotized",
+                        {
+                            "not": "soulbound:kyoka:total"
+                        }
+                    ]
+                },
+                {
+                    "apply": {
+                        "effect": "Hypnotized",
+                        "type": "expire"
+                    },
+                    "event": "strike-received",
+                    "note": "Full Release: only a critical hit breaks it. Same rider, narrower outcome, split on the roll option Sōten Kisshun emits.",
+                    "outcomes": [
+                        "criticalSuccess"
+                    ],
+                    "predicate": [
+                        "rider:target:effect:effect-hypnotized",
+                        "soulbound:kyoka:total"
+                    ]
+                }
+            ]
+        }
+    }
 }

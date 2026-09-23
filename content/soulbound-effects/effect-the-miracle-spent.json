@@ -1,0 +1,62 @@
+{
+    "img": "icons/magic/light/explosion-star-glow-yellow.webp",
+    "name": "Effect: The Miracle — Spent",
+    "system": {
+        "description": {
+            "value": "<p>Points spent into the swing. Your spirit weapon's Strikes deal <strong>+1d6</strong> per point until the end of your turn — and with <strong>Blitz of the Hero</strong>, <strong>+5 feet</strong> to your Speeds per point, to a maximum of +20.</p>"
+        },
+        "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 0
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "DamageDice",
+                "label": "The Miracle",
+                "selector": "strike-damage",
+                "predicate": [
+                    "item:tag:soulbound-spirit-weapon"
+                ],
+                "diceNumber": 1,
+                "dieSize": "d6"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Blitz of the Hero",
+                "selector": "speed",
+                "type": "status",
+                "value": 5,
+                "predicate": [
+                    "feature:refined-release"
+                ]
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

@@ -5,10 +5,12 @@
                 {
                     "apply": {
                         "option": "nadegiri",
+                        "strike": "spirit-weapon",
                         "type": "strikes"
                     },
                     "event": "action-used",
-                    "self": true
+                    "self": true,
+                    "note": "Requirements say the spirit weapon is Released, so the Strikes are made with it. Without naming it the volley fell back to `unarmed` — see Tiburón's Trident, where that was driven live."
                 }
             ],
             "areaTargeting": {

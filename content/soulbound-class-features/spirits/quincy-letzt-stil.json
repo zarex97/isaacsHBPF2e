@@ -4,6 +4,13 @@
             "releaseForm": {
                 "effect": "Effect: Quincy: Letzt Stil",
                 "rung": "full"
+            },
+            "freeCast": {
+                "label": "Quincy: Letzt Stil",
+                "predicate": [
+                    "item:slug:licht-regen",
+                    "self:effect:quincy-letzt-stil"
+                ]
             }
         }
     },
@@ -41,6 +48,11 @@
             "value": [
                 "soulbound"
             ]
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
         }
     },
     "type": "feat"

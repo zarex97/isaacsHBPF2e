@@ -18,7 +18,11 @@
                     "event": "turn-start",
                     "self": true
                 }
-            ]
+            ],
+            "area": {
+                "type": "emanation",
+                "value": 20
+            }
         }
     },
     "img": "modules/isaacs-hb-pf2e/icons/leaf-petals-white.svg",
@@ -55,6 +59,14 @@
                 ],
                 "property": "traits",
                 "value": "reach-15"
+            },
+            {
+                "key": "Note",
+                "selector": [
+                    "attack"
+                ],
+                "title": "Senkei",
+                "text": "Only the enemy inside the cage may be targeted. The cage is drawn on the board as a Region; enemies outside it are <strong>not legal targets</strong> for you. pf2e does not restrict who an attacker may pick, so hold this by hand."
             }
         ],
         "start": {

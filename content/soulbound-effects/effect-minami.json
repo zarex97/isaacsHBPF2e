@@ -25,16 +25,8 @@
                         "statistic": "reflex",
                         "type": "save"
                     },
-                    "area": {
-                        "type": "emanation",
-                        "value": 20
-                    },
-                    "areaTargeting": {
-                        "affects": "enemies",
-                        "includesSelf": false
-                    },
-                    "event": "turn-end",
-                    "self": true
+                    "event": "aura-tick",
+                    "note": "The Aura decides who is caught and when. A `turn-end` area rider sweeps whoever is standing there when the CASTER's turn ends; the clause is about an enemy ending ITS OWN turn in the ash."
                 }
             ]
         }
@@ -63,6 +55,24 @@
                 "domain": "all",
                 "option": "soulbound:zanka:minami",
                 "value": true
+            },
+            {
+                "effects": [
+                    {
+                        "affects": "enemies",
+                        "events": [
+                            "turn-end"
+                        ],
+                        "removeOnExit": false,
+                        "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Aura Tick"
+                    }
+                ],
+                "key": "Aura",
+                "radius": 20,
+                "slug": "soulbound-minami-ash",
+                "traits": [
+                    "fire"
+                ]
             }
         ],
         "start": {

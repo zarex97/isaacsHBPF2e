@@ -5,6 +5,8 @@ import { Deaths } from "./deaths.mjs";
 import { Duplicate } from "./economy/duplicate.mjs";
 import { FreeCast } from "./economy/free-cast.mjs";
 import { Recharge } from "./economy/recharge.mjs";
+import { SpellFrequency } from "./economy/spell-frequency.mjs";
+import { TerrainAura } from "./soulbound/terrain-aura.mjs";
 import { Balance } from "./roll-rewrites/balance.mjs";
 import { Om } from "./roll-rewrites/om.mjs";
 import { Banish } from "./riders/banish.mjs";
@@ -12,6 +14,7 @@ import { registerHooks as registerLibraHooks } from "./riders/libra.mjs";
 import { Encasement } from "./riders/encasement.mjs";
 import { Escape } from "./riders/escape.mjs";
 import { Riders } from "./riders/index.mjs";
+import { StrikeTechnique } from "./riders/strike-technique.mjs";
 import { MODULE_ID, adjacentSigns } from "./sky/signs.mjs";
 import { SkyTrackerApp } from "./sky/tracker-app.mjs";
 import { SkyTracker } from "./sky/tracker.mjs";
@@ -26,8 +29,11 @@ import { Release } from "./soulbound/release.mjs";
 import { Severance } from "./soulbound/severance.mjs";
 import { SoulboundRig } from "./soulbound/rig.mjs";
 import { RisingPressure } from "./soulbound/rising-pressure.mjs";
+import { Scattered } from "./soulbound/scattered.mjs";
 import { SpiritWeapon } from "./soulbound/weapon.mjs";
 import { AreaTargeting } from "./targeting/index.mjs";
+import { registerRollBypass } from "./riders/bypass.mjs";
+import { registerEnemyTerrain } from "./targeting/enemy-terrain.mjs";
 import { Lingering } from "./targeting/lingering.mjs";
 import { CrystalWall } from "./targeting/wall.mjs";
 
@@ -59,15 +65,21 @@ Hooks.once("init", () => {
         Deaths.registerSettings();
         Deaths.registerHooks();
     });
+    start("enemies-only difficult terrain", () => registerEnemyTerrain());
     start("lingering areas", () => {
         Lingering.register();
         Lingering.registerHooks();
     });
+    // The marker a "make one Strike" Technique leaves for the Strike that follows it. Only the sweeps
+    // are hooks: arming is the cast pipeline's, spending is the rider engine's.
+    start("Strike Techniques", () => StrikeTechnique.registerHooks());
     start("astral projection", () => Astral.registerHooks());
     start("free casts' settings", () => FreeCast.registerSettings());
     start("Cosmo", () => Cosmo.registerHooks());
     start("the Gemini duplicate", () => Duplicate.registerHooks());
     start("recharging", () => Recharge.registerHooks());
+    start("spell frequency", () => SpellFrequency.registerHooks());
+    start("terrain auras", () => TerrainAura.registerHooks());
     start("Om", () => Om.registerHooks());
     start("The Balance", () => Balance.registerHooks());
     start("the Crystal Wall", () => CrystalWall.registerHooks());
@@ -75,10 +87,12 @@ Hooks.once("init", () => {
     start("escapes", () => Escape.registerHooks());
     start("the Libra Arms", () => registerLibraHooks());
     start("the spirit weapon", () => SpiritWeapon.registerHooks());
+    start("the Senkei cage's targets", () => Modes.registerTargetGuard());
     start("Reiatsu", () => Reiatsu.registerHooks());
     start("Rising Pressure", () => RisingPressure.registerHooks());
     start("the release ladder", () => Release.registerHooks());
     start("Severance", () => Severance.registerHooks());
+    start("a Severing Art's bypass on its own damage roll", () => registerRollBypass());
     start("Blut", () => Blut.registerHooks());
     start("charge pools", () => Charges.registerHooks());
     start("Refuse Death", () => RefuseDeath.registerHooks());
@@ -142,6 +156,7 @@ Hooks.once("setup", () => {
     start("the cast pipeline", () => CastPipeline.install());
     start("the reiatsu pool", () => Reiatsu.install());
     start("the rider engine", () => Riders.registerHooks());
+    start("Strikes that ignore cover", () => Scattered.register());
 });
 
 Hooks.once("ready", async () => {

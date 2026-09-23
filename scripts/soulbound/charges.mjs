@@ -58,7 +58,42 @@ export const Charges = {
             effect: declared.effect,
             spending: Number(declared.spend ?? 1),
             perRound: declared.perRound === null ? Infinity : Number(declared.perRound ?? 1),
+            // Two Techniques spend a variable number rather than a fixed one, and both are Los Lobos'.
+            // *Colmillo* is "expend **any number** of wolves — **each** wolf you expend … detonates",
+            // so the count is the caster's to choose and is also the number of bursts they then aim;
+            // *Aullido* is "you expend **all** remaining wolves", which is not a choice at all.
+            upTo: Number(declared.upTo) || 0,
+            all: declared.all === true,
         };
+    },
+
+    /**
+     * How many charges this use will take, asking when the answer is the caster's.
+     *
+     * Asked from the **targeting** step rather than from `beforeCast`, because the answer is also how
+     * many areas go on the cursor — and because asking there keeps "aim first, pay after": a caster who
+     * backs out of the placement has spent nothing, which is the ordering the Focus Point already relies
+     * on. `beforeCast` then spends exactly what was agreed.
+     */
+    async countFor(item) {
+        const declared = this.declarationOn(item);
+        const actor = item?.actor;
+        if (!declared || !actor) return 0;
+        const held = this.held(actor, declared.effect);
+        if (declared.all) return held;
+        if (!declared.upTo || held <= 1) return Math.min(declared.spending, held);
+
+        const ceiling = Math.min(held, declared.upTo);
+        const picked = await foundry.applications.api.DialogV2.wait({
+            window: { title: item.name },
+            content: `<p>How many do you spend? <strong>${held}</strong> left.</p>`,
+            buttons: Array.from({ length: ceiling }, (_, index) => ({
+                action: String(index + 1),
+                label: String(index + 1),
+            })),
+            rejectClose: false,
+        });
+        return picked === null || picked === undefined ? 0 : Number(picked);
     },
 
     /**
@@ -68,12 +103,15 @@ export const Charges = {
      * of" three Techniques, and a Technique cast with no petal left has to be refused rather than cast
      * and then quietly not charged. Returns false to stop the cast.
      */
-    async beforeCast(spell) {
+    async beforeCast(spell, spending) {
         const declared = this.declarationOn(spell);
         if (!declared) return true;
         const actor = spell?.actor;
         if (!actor) return true;
-        const { allowed } = await this.spend(actor, declared.effect, declared);
+        // `spending` is what the targeting step already agreed with the caster. Absent — an ability that
+        // never went through area targeting — the declaration's own number stands.
+        const wanted = Number.isInteger(spending) && spending > 0 ? spending : declared.spending;
+        const { allowed } = await this.spend(actor, declared.effect, { ...declared, spending: wanted });
         return allowed;
     },
 

@@ -35,6 +35,44 @@
                 ],
                 "property": "traits",
                 "value": "reach-15"
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "mode": "remove",
+                "predicate": [
+                    "item:tag:soulbound-spirit-weapon"
+                ],
+                "property": "traits",
+                "value": "two-hand-d10"
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "mode": "remove",
+                "predicate": [
+                    "item:tag:soulbound-spirit-weapon"
+                ],
+                "property": "traits",
+                "value": "two-hand-d12"
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "mode": "remove",
+                "predicate": [
+                    "item:tag:soulbound-spirit-weapon"
+                ],
+                "property": "traits",
+                "value": "twin"
+            },
+            {
+                "key": "Note",
+                "selector": [
+                    "attack"
+                ],
+                "title": "Scattered",
+                "text": "The blades go <strong>around</strong> cover: this Strike is not affected by any cover between you and the target. pf2e applies cover as a circumstance bonus on the defender's AC and offers the attacker no way to suppress it, so remove it by hand."
             }
         ],
         "start": {
@@ -54,5 +92,10 @@
             ]
         }
     },
-    "type": "effect"
+    "type": "effect",
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "freesHands": true
+        }
+    }
 }

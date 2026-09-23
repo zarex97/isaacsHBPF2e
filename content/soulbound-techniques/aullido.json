@@ -13,7 +13,8 @@
                     },
                     "outcomes": [
                         "criticalFailure"
-                    ]
+                    ],
+                    "note": "\"If you had five or more\" is NOT gated here. Aullido expends every wolf as it is cast, so by the time a save is rolled the pool is empty and there is nothing left to count — see the tracker's R-20c."
                 },
                 {
                     "apply": {
@@ -23,9 +24,16 @@
                     },
                     "outcomes": [
                         "criticalFailure"
-                    ]
+                    ],
+                    "note": "\"If you had five or more\" is NOT gated here. Aullido expends every wolf as it is cast, so by the time a save is rolled the pool is empty and there is nothing left to count — see the tracker's R-20c."
                 }
-            ]
+            ],
+            "chargeSpend": {
+                "all": true,
+                "effect": "Effect: Colmillo",
+                "perRound": null,
+                "spend": 1
+            }
         }
     },
     "img": "modules/isaacs-hb-pf2e/icons/wolf-howl-moon-grey-large.svg",

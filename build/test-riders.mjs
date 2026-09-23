@@ -45,7 +45,10 @@ globalThis.game = { pf2e: { Predicate: StubPredicate } };
 const { riderOptions } = await import("../scripts/lib/roll-options.mjs");
 const { selectRiders } = await import("../scripts/riders/select.mjs");
 const { collectRiders, isAbilityUse, riderAt } = await import("../scripts/riders/data.mjs");
-const { mergeBypass, resistanceReduction, ignoresHardness, selectEntries } = await import(
+const { basicLadder } = await import("../scripts/riders/apply.mjs");
+const { alreadySpent, gateByRound, riderKey } = await import("../scripts/riders/round-gate.mjs");
+const { auraCatches, effectForAura } = await import("../scripts/riders/sources.mjs");
+const { mergeBypass, resistanceReduction, ignoresHardness, ignoredImmunities, selectEntries } = await import(
     "../scripts/riders/bypass.mjs"
 );
 const { degreeOf } = await import("../scripts/lib/degree.mjs");
@@ -597,6 +600,433 @@ check(
     ["Sky: Ascendant (Scorpio)", "Sky: Ascendant (Scorpio)", "Sky: Ascendant (Scorpio)"],
 );
 
+/**
+ * A "make one Strike" Technique fires for the Strike it paid for, and no other.
+ *
+ * The wide search above is what lets a rider written on *Ryūsenka* find a Strike rolled with a weapon.
+ * Five Techniques are shaped that way and carry no attack trait to narrow them, so every one of them
+ * fired on **every** Strike their owner made — driven live, one bare critical Strike from a Soul Reaper
+ * who had cast nothing applied both *Ryūsenka: Off-Guard* and *Hitotsume: Nadegiri: Off-Guard*, with the
+ * pool reading 1 point before and 1 after. Guide §1.4: "Every technique costs 1 Reiatsu Point".
+ *
+ * The four checks below are the four cases the marker has to keep apart, and the third is the one that
+ * makes this a scoping fix rather than a switch: the seventeen **non-spell** sources of `strike-resolved`
+ * riders are passive by design and must go on firing on every Strike, cast or not.
+ */
+const ryusenkaSpell = {
+    id: "ryusenka",
+    type: "spell",
+    name: "Ryūsenka",
+    system: { traits: { value: [] } },
+    flags: load("soulbound-techniques", "ryusenka.json").flags,
+};
+const shikaiEffect = withRiders(
+    "Effect: Hyōrinmaru — Shikai",
+    ridersOf(load("soulbound-effects", "effect-hyorinmaru-shikai.json")),
+);
+const strikeWeapon = withRiders("Spirit Weapon (Blade)", []);
+const sheet = [ryusenkaSpell, shikaiEffect];
+const armed = (id) => ({ items: sheet, getFlag: (_m, key) => (key === "strikeTechnique" ? { itemId: id } : null) });
+
+check(
+    "a Strike Technique's riders do not fire on a Strike it did not pay for",
+    collectRiders({ event: "strike-resolved", item: strikeWeapon, actor: armed(null) })
+        .map((c) => c.item.name),
+    ["Effect: Hyōrinmaru — Shikai"],
+);
+check(
+    "…and do fire on the Strike the cast armed",
+    collectRiders({ event: "strike-resolved", item: strikeWeapon, actor: armed("ryusenka") })
+        .map((c) => c.item.name)
+        .filter((n) => n === "Ryūsenka").length,
+    ridersOf(load("soulbound-techniques", "ryusenka.json")).length,
+);
+check(
+    "a passive strike rider on an effect needs no marker at all",
+    collectRiders({ event: "strike-resolved", item: strikeWeapon, actor: { items: [shikaiEffect] } })
+        .map((c) => c.item.name),
+    ["Effect: Hyōrinmaru — Shikai"],
+);
+// An actor with no `getFlag` at all — every other test in this file builds one that way — must not throw
+// and must not collect the spell. The failure mode of getting this wrong is the loud kind, which is why
+// it is worth one line.
+check(
+    "…and an actor with no flags collects the effect and not the spell",
+    collectRiders({ event: "strike-resolved", item: strikeWeapon, actor: { items: sheet } })
+        .map((c) => c.item.name),
+    ["Effect: Hyōrinmaru — Shikai"],
+);
+
+/**
+ * S-15e. "On a critical hit the ice shatters: the target **instead** takes an additional 2d6 cold."
+ *
+ * *Instead* — so the critical branch is the hit branch doubled, and the heightening doubles with it. The
+ * card's own 1d6 ladder is one half and the rider is the other, which is why the rider carries the same
+ * `perStep` and the same (+2) interval rather than a flat die. It shipped flat: at rank 9 a critical hit
+ * dealt the card's 5d6 plus 1d6, where the guide asks for 10d6.
+ */
+const ryusenkaRiders = ridersOf(load("soulbound-techniques", "ryusenka.json"));
+const ryusenkaCrit = ryusenkaRiders.find((r) => r.apply?.type === "damage");
+check("Ryūsenka's critical hit doubles the die and the ladder with it",
+    [ryusenkaCrit.apply.formula, ryusenkaCrit.apply.perStep, ryusenkaCrit.apply.perStepInterval,
+     ryusenkaCrit.outcomes.join("/")],
+    ["1d6", "1d6", 2, "criticalSuccess"]);
+// The hit branch keeps the save and the crit branch does not: "instead" governs both halves of the
+// sentence, so a critical hit replaces the Fortitude save with off-guard rather than adding to it.
+check("…and the save belongs to the hit, not the critical hit",
+    ryusenkaRiders.filter((r) => r.apply?.type === "save").map((r) => r.outcomes.join("/")),
+    ["success"]);
+
+/**
+ * Spirit-Cutting's second half, guide §4.1: "affect incorporeal creatures as though the weapon had the
+ * ghost touch rune". The first half is the `versatile-spirit` trait on the four profiles; this one has no
+ * trait to carry it, because pf2e expresses it as a property rune and reads it back as
+ * `item:rune:property:ghost-touch` when it works out incorporeal resistance.
+ */
+const spiritWeapon = load("soulbound-class-features", "core", "spirit-weapon.json");
+const ghostTouch = spiritWeapon.system.rules.find((r) => r.key === "AdjustStrike");
+check("Spirit-Cutting reaches incorporeal creatures",
+    [ghostTouch?.property, ghostTouch?.mode, ghostTouch?.value, JSON.stringify(ghostTouch?.definition)],
+    ["property-runes", "add", "ghostTouch", '["item:tag:soulbound-spirit-weapon"]']);
+// …and the damage-type half, on all four sealed profiles, since the guide promises it of every one.
+for (const profile of ["blade", "great-blade", "paired-blades", "spirit-bow"]) {
+    check(`…and ${profile} can still choose spirit`,
+        load("soulbound-equipment", `${profile}.json`).system.traits.value.includes("versatile-spirit"),
+        true);
+}
+
+/**
+ * Every one-round rider says which end of the turn it means.
+ *
+ * The default in `effectSource` is `turn-end`, changed when Hyōrinmaru's clauses were fixed: both guides
+ * say "until the end of its next turn" over and over, and `turn-start` ends an effect one step short of
+ * that. Right for those — and one turn too long for the twenty-odd riders phrased "for 1 round", which
+ * is the whole kidō table and every Cosmo art on the Saint side. PF2e reads "1 round" as "until the same
+ * point in the initiative order next round", which is `turn-start`.
+ *
+ * So both readings are now written down rather than inherited, and this asserts that: a rounds-duration
+ * rider with no `expiry` is a rider nobody decided about. The list below is the exception, and each entry
+ * is a clause that states no duration at all — an aura's slow, an ash-figure's grab — where picking one
+ * would be a design call rather than a repair.
+ */
+const UNDECIDED_EXPIRY = new Set([
+    "effect-freezing-shield.json",   // "is slowed 1 on a failure" — the dome states no duration
+    "effect-minami.json",            // "grabbed by ash-figures (Escape vs. your Reiatsu DC)" — likewise
+    "the-yellow-spring-opens.json",  // "take 8d6 void and be slowed 1" — likewise
+]);
+
+{
+    const undecided = [];
+    const walk = (node, file) => {
+        if (Array.isArray(node)) {
+            for (const entry of node) walk(entry, file);
+        } else if (node && typeof node === "object") {
+            const duration = node.duration;
+            const apply = node.apply ?? {};
+            if (duration?.unit === "rounds" && !duration.expiry && (apply.type === "condition" || apply.type === "effect")) {
+                undecided.push(file);
+            }
+            for (const value of Object.values(node)) walk(value, file);
+        }
+    };
+    const files = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) return files(full);
+        return entry.name.endsWith(".json") ? [full] : [];
+    });
+    for (const full of files(path.join(ROOT, "content"))) {
+        const raw = fs.readFileSync(full, "utf8");
+        if (!raw.includes('"duration"')) continue;
+        walk(JSON.parse(raw).flags ?? {}, path.basename(full));
+    }
+    check("every one-round condition rider says which end of the turn it means",
+        [...new Set(undecided)].filter((f) => !UNDECIDED_EXPIRY.has(f)).sort(), []);
+}
+
+// The clauses that say "until the end of its next turn", pinned one by one so a future default flip
+// cannot quietly take them back.
+for (const [file, slug] of [
+    ["soulbound-techniques/ryusenka.json", "immobilized"],
+    ["soulbound-techniques/ryusenka.json", "off-guard"],
+    ["soulbound-techniques/hyoryu-senbi.json", "slowed"],
+    ["soulbound-techniques/sennen-hyoro.json", "immobilized"],
+    ["soulbound-kido/hado/kurohitsugi.json", "immobilized"],
+]) {
+    const doc = load(...file.split("/"));
+    const found = ridersOf(doc).filter((r) => r.apply?.slug === slug);
+    check(`${path.basename(file)} ${slug} lasts until the end of the target's next turn`,
+        found.map((r) => r.duration?.expiry), found.map(() => "turn-end"));
+}
+
+/**
+ * A `self` rider cannot ask a question about its target.
+ *
+ * `riderOptions` describes **the rider's target**, and a `self` rider's target is the ability's owner —
+ * so `rider:target:hp-zero` on a `self` rider asks whether *the caster* is the one dying. *Soul Sever*
+ * was written that way: "when you reduce a creature to 0 HP … perform a Konsō on **it**", authored as
+ * `self: true` with `predicate: ["rider:target:hp-zero"]`, and it could never fire. Measured live on a
+ * kill, the self reading produced `[]` where the target reading produced `["rider:target:hp-zero"]`.
+ *
+ * The contradiction is invisible in review — both halves read correctly on their own — so it is worth a
+ * scan rather than a memory. A `self` rider that legitimately asks about the **origin** uses
+ * `rider:origin:` or a plain `self:`/`feature:` option and is untouched by this.
+ */
+{
+    const contradictions = [];
+    const walk = (node, file, name) => {
+        if (Array.isArray(node)) {
+            for (const entry of node) walk(entry, file, name);
+        } else if (node && typeof node === "object") {
+            if (node.self === true && Array.isArray(node.predicate)) {
+                const text = JSON.stringify(node.predicate);
+                if (text.includes("rider:target:")) contradictions.push(`${file} — ${name}`);
+            }
+            for (const value of Object.values(node)) walk(value, file, name);
+        }
+    };
+    const files = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) return files(full);
+        return entry.name.endsWith(".json") ? [full] : [];
+    });
+    for (const full of files(path.join(ROOT, "content"))) {
+        const raw = fs.readFileSync(full, "utf8");
+        if (!raw.includes('"self"')) continue;
+        const doc = JSON.parse(raw);
+        walk(doc.flags ?? {}, path.basename(full), doc.name);
+    }
+    check("no self rider predicates on its own target", [...new Set(contradictions)].sort(), []);
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  Two shapes the engine did not have                                                           */
+/* -------------------------------------------------------------------------------------------- */
+
+/**
+ * `ally-damaged`, and the range that makes it mean something.
+ *
+ * `damage-received` is the **defender's** event, so a clause phrased "when an ally near you takes damage"
+ * had nowhere to live: the rider engine reads the items of the creature the damage landed on, and the
+ * ability belongs to somebody else. Three Spirits hit it and all three were recorded ❌ rather than fixed.
+ *
+ * The range is the part worth pinning. 30 feet and 60 feet are different clauses, the source cannot know
+ * which, and a rider without one is refused by the validator rather than treated as unlimited — an
+ * ability that reaches the whole map is never what the guide meant.
+ */
+{
+    const antithesis = ridersOf(load("soulbound-techniques", "antithesis.json"));
+    const ally = antithesis.find((r) => r.event === "ally-damaged");
+    check("Antithesis reaches an ally within 30 feet", [ally?.event, ally?.range, ally?.self],
+        ["ally-damaged", 30, true]);
+    /**
+     * The two halves do the same thing to the same two creatures — but only one of them can say so by
+     * saying nothing.
+     *
+     * On `damage-received` the Quincy **is** "the target of the trigger", so the resistance lands on them
+     * by default. On `ally-damaged` the target of the trigger is the ally, and there are three creatures
+     * in the event rather than two: the watcher, the striker, and the one who was hurt. `trigger: "ally"`
+     * is the ally's address; `trigger: true` stays the striker's on both, so the 2d6 reads identically.
+     */
+    const own = antithesis.find((r) => r.event === "damage-received");
+    check("…and sends the same spirit damage to the same creature",
+        JSON.stringify(ally?.apply?.riders?.find((r) => r.apply.type === "damage")),
+        JSON.stringify(own?.apply?.riders?.find((r) => r.apply.type === "damage")));
+    check("…while the resistance follows the creature that was hurt",
+        [own?.apply?.riders?.find((r) => r.apply.type === "effect")?.trigger ?? null,
+         ally?.apply?.riders?.find((r) => r.apply.type === "effect")?.trigger ?? null],
+        [null, "ally"]);
+
+    const night = ridersOf(load("soulbound-effects", "effect-the-balance-at-night.json"));
+    const redirect = night.find((r) => r.event === "ally-damaged");
+    check("The Balance reaches an ally within 60 feet, once a round",
+        [redirect?.range, redirect?.self, redirect?.oncePerRound], [60, true, true]);
+    check("…as a free action, which is what the clause says it costs",
+        redirect?.apply?.freeAction, true);
+    /**
+     * The order inside is load-bearing. The reduction has to be **on** the Quincy before the harm is
+     * moved onto them, or the resistance it grants has nothing to reduce; and the healing is the only
+     * entry marked `trigger`, because it is the only one that belongs to the ally.
+     */
+    check("…reduction first, then the ally's hit points back, then the harm",
+        (redirect?.apply?.riders ?? []).map((r) => [r.apply.type, r.trigger ?? false]),
+        [["effect", false], ["heal", "ally"], ["damage", false]]);
+    check("…and both halves are measured by the blow itself",
+        [redirect?.apply?.riders?.[1]?.apply?.value, redirect?.apply?.riders?.[2]?.apply?.formula],
+        ["event.damage.total", "event.damage.total"]);
+}
+
+/**
+ * `pick`, for the clauses that say "choose one enemy within 60 feet".
+ *
+ * `choice` is a menu of authored options — which sense *Tenbu Hōrin* takes — and cannot express "one of
+ * the creatures over there". *Sight of the Balance* is why it had to be built rather than left to the
+ * table: it fires at the **start of a turn**, so there is no trigger to point at and the module's only
+ * other way to reach a creature that is not the rider's target has nothing to reach for.
+ */
+{
+    const night = ridersOf(load("soulbound-effects", "effect-the-balance-at-night.json"));
+    const sight = night.find((r) => r.apply?.type === "pick");
+    check("Sight of the Balance picks an enemy within 60 feet at the start of the turn",
+        [sight?.event, sight?.self, sight?.apply?.range, sight?.apply?.affects],
+        ["turn-start", true, 60, "enemies"]);
+    check("…and hands out both halves of the clause",
+        (sight?.apply?.riders ?? []).map((r) => r.apply.type), ["effect", "effect"]);
+
+    // "its **next** saving throw" and "that attack roll" — one roll each, which pf2e spells
+    // `removeAfterRoll`. Without it the −2 is a whole round of saves.
+    const penalty = load("soulbound-effects", "effect-sight-of-the-balance.json").system.rules[0];
+    check("the marked creature's penalty lasts one save",
+        [penalty.value, penalty.type, penalty.removeAfterRoll], [-2, "status", true]);
+    const bonus = load("soulbound-effects", "effect-allotted-fortune.json").system.rules[0];
+    check("and the ally's bonus lasts one attack",
+        [bonus.value, bonus.type, bonus.removeAfterRoll], [1, "status", true]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  The Thunderbolt                                                                              */
+/* -------------------------------------------------------------------------------------------- */
+
+/**
+ * An aura that pays out on the creature's own turn, and an arc that goes somewhere.
+ *
+ * Both halves of Thunderbolt Form were authored as the wrong shape, and each is the wrong shape a
+ * different clause in this class has already been written as once.
+ */
+{
+    const form = load("soulbound-effects", "effect-thunderbolt-form.json");
+
+    /**
+     * *"A creature that **ends its turn** in it"* — the creature's own turn end. pf2e's `Aura` rule
+     * element does the geometry and **never** the timing, so the module supplies the timing through
+     * `Sources.onAuraTurn` and the rider waits on `aura-tick`. It shipped as a `turn-end` rider with a
+     * 10-foot area, which fires on the **Quincy's** turn end and fans out from there: a different
+     * ability, and one that pays out even when nobody has stood in the current.
+     */
+    const aura = form.system.rules.find((r) => r.key === "Aura");
+    check("Thunderbolt Form's current is a real aura", [aura?.radius, aura?.slug], [10, "thunderbolt-current"]);
+    check("…that pays out when a creature ends its turn in it",
+        [aura?.effects?.[0]?.events, aura?.effects?.[0]?.affects], [["turn-end"], "enemies"]);
+    const tick = ridersOf(form).find((r) => r.event === "aura-tick");
+    check("…and the rider waits on the tick, not on the Quincy's own turn",
+        [tick?.apply?.type, tick?.apply?.statistic, tick?.apply?.basic], ["save", "reflex", true]);
+    check("…for 3d6 electricity",
+        [tick?.apply?.riders?.[0]?.apply?.formula, tick?.apply?.riders?.[0]?.apply?.damageType],
+        ["3d6", "electricity"]);
+    // The area and the `self` flag must be gone with it: leaving them would fire the old ability beside
+    // the new one, which reads at the table as the current ticking twice.
+    check("…and nothing of the old shape is left on it",
+        [tick?.area ?? null, tick?.self ?? null, tick?.areaTargeting ?? null], [null, null, null]);
+
+    /**
+     * *"Once per round when you hit with your spirit weapon, arcs jump: **one other creature** within 15
+     * feet of **the target**"* — one, chosen, measured from the creature struck. It shipped as a `prompt`:
+     * a card quoting the numbers and applying none of them, the same shape *Sight of the Balance* had.
+     */
+    const arc = ridersOf(form).find((r) => r.event === "strike-resolved");
+    check("the arc is a pick, centred on the creature struck",
+        [arc?.apply?.type, arc?.apply?.from, arc?.apply?.range, arc?.apply?.affects],
+        ["pick", "target", 15, "enemies"]);
+    check("…once a round, off the spirit weapon, on a hit",
+        [arc?.oncePerRound, JSON.stringify(arc?.predicate), arc?.outcomes?.join("/")],
+        [true, '["item:tag:soulbound-spirit-weapon"]', "success/criticalSuccess"]);
+    check("…for a basic Reflex save and 3d6 electricity",
+        [arc?.apply?.riders?.[0]?.apply?.statistic, arc?.apply?.riders?.[0]?.apply?.basic,
+         arc?.apply?.riders?.[0]?.apply?.riders?.[0]?.apply?.formula],
+        ["reflex", true, "3d6"]);
+
+    /**
+     * S-75b. *"(you may still choose spirit)"* is the `versatile-spirit` trait, and the four sealed
+     * profiles were given it while this Spirit's own sword — which replaces them — was not.
+     */
+    check("the Arcing Sword can still choose spirit",
+        load("soulbound-equipment", "thunderbolt-sword.json").system.traits.value.includes("versatile-spirit"),
+        true);
+
+    /**
+     * S-75d. The Schrift published `soulbound:thunderbolt:flash-step-teleport` and nothing read it. The
+     * exemptions have no rule element in pf2e; what can be automated is that Flash Step's own card says
+     * so, while the form is held.
+     */
+    const schrift = load("soulbound-effects", "effect-the-thunderbolt-schrift.json").system.rules;
+    const says = schrift.find((r) => r.key === "ItemAlteration");
+    check("Flash Step's card says what the Schrift turned it into",
+        [says?.property, says?.mode, JSON.stringify(says?.predicate)],
+        ["description", "add", '["item:slug:flash-step"]']);
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  The Miracle                                                                                  */
+/* -------------------------------------------------------------------------------------------- */
+
+/**
+ * The last of the fifteen, and the only Spirit whose every number reads off one counter.
+ *
+ * Three of its clauses shipped as things that describe rather than do — a prompt quoting the spend, a
+ * `frequency` nothing decrements, and a price nothing charges — and the fourth was a timing bug that
+ * only shows on the turn after the one it was written for.
+ */
+{
+    const growth = ridersOf(load("soulbound-techniques", "the-miracle-growth.json"))[0];
+
+    // "[free-action]" — the class's only one, and the card said "reaction" until it was told otherwise.
+    check("the Growth is a free action on the defender's event",
+        [growth.event, growth.apply.freeAction, growth.self], ["damage-received", true, true]);
+
+    /**
+     * "**Frequency** once per round" was decoration: `offerReaction` reads `system.frequency.value` and
+     * nothing anywhere decrements it, so the only same-round gate was a sixty-second de-duplication
+     * window — and a round at a table routinely takes longer than a minute.
+     */
+    check("…gated by the round rather than by a timer", growth.oncePerRound, true);
+
+    /**
+     * "It costs a Reiatsu Point only the **first time each encounter**." Every other price in the class
+     * is taken by pf2e when a Technique is cast; a reaction is never cast, so nothing was ever charged.
+     */
+    const price = growth.apply.riders.find((r) => r.apply.type === "pool");
+    check("…and the first one each encounter is paid for",
+        [price?.apply?.spend, price?.apply?.oncePerEncounter, price?.self], [1, true, true]);
+    // The price comes first: a Quincy who declines after the points land would otherwise have them free.
+    check("…before the points are handed out",
+        growth.apply.riders.map((r) => r.apply.type), ["pool", "effect"]);
+
+    /**
+     * "You may spend **any number** of Miracle points … for each point spent, +1d6." Authored as five
+     * buttons, because a rider's options are authored — and each one predicated, which is a field the
+     * engine ignored until this Spirit needed it.
+     */
+    const spend = ridersOf(load("soulbound-effects", "effect-miracle-points.json"))[0];
+    check("the spend is offered at the start of the turn", [spend.event, spend.self, spend.apply.type],
+        ["turn-start", true, "choice"]);
+    check("…one option per point", spend.apply.options.length, 5);
+    for (const [index, option] of spend.apply.options.entries()) {
+        const n = index + 1;
+        check(`…spending ${n} costs ${n} and buys ${n}d6`,
+            [option.riders[0].apply.spend, option.riders[1].apply.substitutions[0].value.literal],
+            [n, n]);
+        // "+5 feet per point, **to a maximum of +20**" — the cap is on the bonus, so it is baked into the
+        // option rather than written as a rule that would have to know how many points were spent.
+        check(`…and ${Math.min(5 * n, 20)} feet of Speed`,
+            option.riders[1].apply.substitutions[1].value.literal, Math.min(5 * n, 20));
+        check(`…only when ${n} point${n === 1 ? " is" : "s are"} there`,
+            JSON.stringify(option.predicate), `[{"gte":["self:effect:miracle-points",${n}]}]`);
+    }
+
+    /**
+     * R-26c. "At the start of your next turn the emanation detonates a second time for **half** the
+     * Waning dice" — and by the start of that turn there is no Severance left to ask, because using a
+     * Severing Art ends it. The dice are captured at cast time instead.
+     */
+    const apotheosis = ridersOf(load("soulbound-techniques", "apotheosis.json"))[0];
+    check("Apotheosis captures the Waning dice when it is cast",
+        [apotheosis.apply.substitutions?.[0]?.value, apotheosis.event],
+        ["origin.severance.dice", "action-used"]);
+    const second = ridersOf(load("soulbound-effects", "effect-apotheosis.json"))[0];
+    check("…and the second detonation is worth half of them",
+        [second.event, second.apply.riders[0].apply.multiplier, second.apply.riders[0].apply.damageType],
+        ["turn-start", 0.5, "force"]);
+}
+
 /* -------------------------------------------------------------------------------------------- */
 /*  Aiming                                                                                       */
 /* -------------------------------------------------------------------------------------------- */
@@ -634,6 +1064,98 @@ check("neither does a Technique with no area at all", canRotate(undefined), fals
 check("re-aim is not a cancellation", REAIM === null, false);
 check("re-aim is not an empty confirmation", Array.isArray(REAIM), false);
 check("re-aim survives the dialog's nullish coalescing", (REAIM ?? null) === REAIM, true);
+
+/* -------------------------------------------------------------------------------------------- */
+/*  The Balance                                                                                  */
+/* -------------------------------------------------------------------------------------------- */
+
+/**
+ * Every clause of The Balance that failed by being written somewhere nothing reads.
+ *
+ * Four separate cases, and they are worth keeping together because they are the same mistake wearing
+ * four faces: an authored statement that validates, builds, ships, and is never consulted.
+ *
+ *  - the reaction keyed to the **attacker's** event, so being hit offered nothing;
+ *  - an AC bonus predicated on a roll option pf2e does not publish;
+ *  - a refusal to die whose machinery was general and whose declaration was never written;
+ *  - a doomed ladder whose condition nothing counted.
+ */
+{
+    const reaction = load("soulbound-techniques", "the-balance-reaction.json");
+    const riders = ridersOf(reaction);
+
+    check("The Balance's reaction is on the defender's event", riders.map((r) => r.event),
+        ["damage-received", "damage-received"]);
+    // A reaction must be `self` — `validate` insists on it, because the card is offered to the ability's
+    // owner. Everything that is supposed to reach somebody else is marked `trigger: true`.
+    check("…offered to its owner", riders.map((r) => r.self), [true, true]);
+    check("…in two variants, chosen by the Refined rung",
+        riders.map((r) => JSON.stringify(r.predicate)),
+        ['[{"not":"feature:refined-release"}]', '["feature:refined-release"]']);
+
+    for (const [index, rider] of riders.entries()) {
+        const nested = rider.apply.riders;
+        const where = index === 0 ? "plain" : "refined";
+        // The reduction stays on the Quincy; the 2d6 and the penalty go to the creature that struck.
+        check(`…${where}: the reduction lands on the Quincy`,
+            [nested[0].apply.type, nested[0].trigger ?? false],
+            ["effect", false]);
+        check(`…${where}: the spirit damage goes to the triggering creature`,
+            [nested[1].apply.formula, nested[1].apply.damageType, nested[1].trigger],
+            ["2d6", "spirit", true]);
+        check(`…${where}: at every other rank, which is what Heightened (+2) means`,
+            [nested[1].apply.perStep, nested[1].apply.perStepInterval], ["1d6", 2]);
+        check(`…${where}: the saves penalty goes with it`,
+            [nested[2].apply.type, nested[2].trigger], ["effect", true]);
+        // R-24c: "if you have used your Release Technique at least three times this encounter".
+        check(`…${where}: and the use is counted`,
+            [nested[3].apply.type, nested[3].apply.stack, nested[3].apply.value], ["effect", true, 1]);
+    }
+
+    /**
+     * The one flat numeric bonus in the class, and it was never on.
+     *
+     * It was predicated on `{gte: ["self:resource:focus:value", 1]}`, which reads exactly right and
+     * matches nothing: **pf2e publishes no roll option for a resource**. Driven live, a character holding
+     * three Reiatsu Points had no option matching `self:resource:` at all, so the +1 could not apply at
+     * any pool size. The effect publishes its own option now, from a resolvable pf2e does evaluate.
+     */
+    const schrift = load("soulbound-effects", "effect-the-balance-schrift.json");
+    const rules = schrift.system.rules;
+    const option = rules.find((r) => r.key === "RollOption");
+    check("The Balance publishes an option for holding a Reiatsu Point",
+        [option?.option, option?.domain, option?.value],
+        ["soulbound:reiatsu-remaining", "all", "gte(@actor.system.resources.focus.value,1)"]);
+    const ac = rules.find((r) => r.key === "FlatModifier");
+    check("…and the AC bonus predicates on that, not on a resource",
+        [ac?.selector, ac?.type, ac?.value, JSON.stringify(ac?.predicate)],
+        ["ac", "circumstance", 1, '["soulbound:reiatsu-remaining"]']);
+
+    /**
+     * S-73b. `refuse-death.mjs` was made general for *Bailar de Valquiria*, and its docstring names this
+     * clause as one of the three it was generalised for — and The Balance was never given the flag. The
+     * `predicate` is the part worth pinning: Refined is a class feat rather than a rung with an item of
+     * its own, so the price lives on the Spirit's form feature and names the rung it belongs to.
+     */
+    const form = load("soulbound-class-features", "spirits", "the-balance-schrift.json");
+    const refusal = form.flags["isaacs-hb-pf2e"].refuseDeath;
+    check("The Balance refuses one death a day, at the Refined rung",
+        [refusal.cost, refusal.requires, refusal.frequency, JSON.stringify(refusal.predicate)],
+        [0, "released", true, '["feature:refined-release"]']);
+    check("…and the allowance is a frequency pf2e will refill",
+        [form.system.frequency.max, form.system.frequency.per], [1, "day"]);
+
+    /** R-24c: doomed 1 or doomed 2, by a tally the reaction keeps. */
+    const reckoning = ridersOf(load("soulbound-techniques", "the-reckoning.json"));
+    check("The Reckoning dooms by how much fortune was held",
+        reckoning.map((r) => [r.apply.value, JSON.stringify(r.predicate)]),
+        [
+            [1, '[{"not":{"gte":["self:effect:the-balance-fortune-held",3]}}]'],
+            [2, '[{"gte":["self:effect:the-balance-fortune-held",3]}]'],
+        ]);
+    check("…on a failure either way", reckoning.map((r) => r.outcomes.join("/")),
+        ["failure/criticalFailure", "failure/criticalFailure"]);
+}
 
 /* -------------------------------------------------------------------------------------------- */
 /*  Wrapped methods                                                                              */
@@ -675,7 +1197,106 @@ check("every wrap the module needs is still there", [...claimedBy.keys()].sort()
     "CONFIG.PF2E.Actor.documentClasses.character.prototype.prepareDerivedData",
     "CONFIG.PF2E.Item.documentClasses.action.prototype.toMessage",
     "CONFIG.PF2E.Item.documentClasses.spellcastingEntry.prototype.cast",
+    // Cover belongs to the defender, and two Senbonzakura clauses say a Strike goes around it. The check
+    // is the one place that holds the attacker, the target and the DC built from that target's AC.
+    "game.pf2e.Check.roll",
 ]);
+
+/**
+ * Where a `"prototype"` wrap actually lands.
+ *
+ * The strategy exists for one reason — `ActorPF2e#applyDamage` is declared on the shared base and
+ * inherited by every actor type, so a wrapper defined on the one subclass the path names leaves NPCs
+ * untouched — and for most of this module's life it did precisely that. The walk stopped at the **first**
+ * prototype that owned the method, and pf2e's `CharacterPF2e` declares its own `applyDamage`, so the patch
+ * went on the character class alone. **No damage rider in the module had ever fired against an NPC**,
+ * which is almost everything a Technique is aimed at.
+ *
+ * Nothing here needs Foundry: the bug is a prototype-chain walk, and a three-class chain reproduces it
+ * exactly. The second check is the other half — a subclass override must still run, reaching the patched
+ * method through `super`.
+ */
+class WrapBase {
+    hit() {
+        return "base";
+    }
+}
+class WrapSub extends WrapBase {
+    hit() {
+        return `sub(${super.hit()})`;
+    }
+}
+class WrapSibling extends WrapBase {}
+
+globalThis.__wrapProbe = { classes: { sub: WrapSub, sibling: WrapSibling } };
+const { wrap: wrapMethod } = await import("../scripts/lib/wrap.mjs");
+wrapMethod("__wrapProbe.classes.sub.prototype.hit", function (wrapped, ...args) {
+    return `wrapped:${wrapped(...args)}`;
+}, { feature: "the prototype-walk test", strategy: "prototype" });
+
+check("a prototype wrap lands on the class that declares the method", new WrapSibling().hit(), "wrapped:base");
+check("a subclass override still runs, reaching the wrap through super", new WrapSub().hit(), "sub(wrapped:base)");
+
+/* -------------------------------------------------------------------------------------------- */
+/*  The second road a save travels                                                               */
+/* -------------------------------------------------------------------------------------------- */
+
+/**
+ * Saves rolled by pf2e's own button.
+ *
+ * Every save rider reached the relay through `pf2e-toolbelt.rollSave`, and the Target Helper renders its
+ * per-target rows on a spell's own card and not on a **variant's**. The Heat's *Burner Finger* is the only
+ * Technique in the class built out of variants, so its three area options had no rows at all, and the save
+ * pf2e itself rolled told this module nothing: Burner Finger Four's 1d4 persistent fire could not be made
+ * to happen by any route.
+ *
+ * Three things have to hold, and each is a way the second road was got wrong while it was built: the
+ * origin comes off the roll's own context rather than the speaker, no `itemUuid` travels with it (a
+ * variant's uuid is the base spell's, so the GM side would collect Burner Finger *One's* riders), and a
+ * save this module rolled itself is ignored — `runSave` has already dispatched those riders, and doing it
+ * again is how an ability that forces a save forces it forever.
+ */
+const { Sources } = await import("../scripts/riders/sources.mjs");
+const { Relay } = await import("../scripts/riders/relay.mjs");
+
+const heatToken = { documentName: "Token", uuid: "Scene.s.Token.heat", actor: { uuid: "Actor.heat" } };
+const dummyToken = { documentName: "Token", uuid: "Scene.s.Token.dummy", actor: { uuid: "Actor.dummy" } };
+globalThis.fromUuid = async (uuid) => (uuid === heatToken.uuid ? heatToken : null);
+
+function saveMessage({ options = [] } = {}) {
+    return {
+        id: "save-message",
+        actor: dummyToken.actor,
+        token: dummyToken,
+        flags: { pf2e: { context: { type: "saving-throw", outcome: "criticalFailure", options, origin: { actor: "Actor.heat", token: heatToken.uuid } } } },
+    };
+}
+
+const sent = [];
+const realRequest = Relay.request;
+Relay.request = async (payload) => void sent.push(payload);
+
+const message = saveMessage();
+await Sources.onSaveMessage(message, message.flags.pf2e.context);
+check("a save rolled by pf2e's own button reaches the relay", sent.length, 1);
+check("the origin is the token the roll's context named", sent[0]?.originUuid, heatToken.uuid);
+check("the creature that rolled is the target", sent[0]?.targetUuid, dummyToken.uuid);
+check("no itemUuid travels with it, so the GM side rebuilds the variant", "itemUuid" in (sent[0] ?? {}), false);
+check("the event is the one every save rider listens for", sent[0]?.event, "save-rolled");
+
+sent.length = 0;
+const ownSave = saveMessage({ options: ["isaacs-hb-pf2e:rider-save"] });
+await Sources.onSaveMessage(ownSave, ownSave.flags.pf2e.context);
+check("a save this module rolled itself is not dispatched again", sent.length, 0);
+
+sent.length = 0;
+const sheetSave = saveMessage();
+delete sheetSave.flags.pf2e.context.origin;
+await Sources.onSaveMessage(sheetSave, sheetSave.flags.pf2e.context);
+check("a save with no origin — one rolled off a character sheet — is nothing to this module", sent.length, 0);
+
+Relay.request = realRequest;
+delete globalThis.fromUuid;
 
 function mjsUnder(dir) {
     return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
@@ -2187,6 +2808,746 @@ function documentedIn(readme, heading, nextHeading) {
     check("README invents no apply type the dispatcher lacks", missing(documentedTypes, dispatched), "none");
     check("README documents every event", missing(events, documentedEvents), "none");
     check("README invents no event", missing(documentedEvents, events), "none");
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  Once per round, and the two things a bypass cannot reach                                     */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    // Tensa Zangetsu is the only `oncePerRound` rider today, and it is the reason the gate exists:
+    // "the first time each round you hit" prompted on every hit, and its own JSON said so.
+    const tensa = load("soulbound-effects", "effect-tensa-zangetsu.json");
+    check("Tensa Zangetsu's free Step is gated to once a round",
+        ridersOf(tensa).map((r) => r.oncePerRound === true), [true]);
+    // Pantera's extra claw Strike is the second of this shape: "once per round when you critically hit".
+    const segunda = load("soulbound-effects", "effect-pantera-segunda-etapa.json");
+    check("…and so is Segunda Etapa's extra claw Strike",
+        ridersOf(segunda).map((r) => r.oncePerRound === true), [true]);
+    check("and it no longer carries the note admitting it was not",
+        ridersOf(tensa).some((r) => typeof r.note === "string" && /per-round/.test(r.note)), false);
+
+    // A flag key containing a dot is a path. `setFlag(id, "riderRounds", {"abc.0": stamp})` becomes
+    // `{abc: {0: stamp}}`, and the read that follows finds nothing — the gate wrote every round and let
+    // every hit through. The separator is the whole fix, so it is asserted rather than remembered.
+    check("a rider key is not a Foundry flag path", riderKey({ id: "abc" }, 0).includes("."), false);
+
+    const stamp = "combat-1:3";
+    check("an unstamped round is not spent", alreadySpent({}, "abc-0", stamp), false);
+    check("a stamped round is spent", alreadySpent({ "abc-0": stamp }, "abc-0", stamp), true);
+    check("last round's stamp does not spend this one",
+        alreadySpent({ "abc-0": "combat-1:2" }, "abc-0", stamp), false);
+    check("another encounter's stamp does not spend this one",
+        alreadySpent({ "abc-0": "combat-2:3" }, "abc-0", stamp), false);
+    // Out of combat there is no round, so a per-round allowance has no boundary to enforce.
+    check("no encounter, no gate", alreadySpent({ "abc-0": stamp }, "abc-0", null), false);
+
+    // The gate is opt-in: a rider that never asked is never consulted, and no ledger is written for it.
+    const plain = [{ rider: { apply: { type: "prompt" } }, item: { id: "x" }, index: 0 }];
+    check("a rider without `oncePerRound` is passed through untouched",
+        (await gateByRound(plain, null)).length, 1);
+}
+
+{
+    // `applyIWR` reads exactly three things off a bypass — `resistance.ignore`, `resistance.redirect`
+    // and `immunity.redirect` — and decides immunity separately by asking the target. So the immunity
+    // half of every Art's promise has to be read back out and applied by shadowing the target instead.
+    const mugetsu = load("soulbound-techniques", "mugetsu.json");
+    const entries = mugetsu.flags["isaacs-hb-pf2e"].bypass.map((entry) => ({ entry, item: null }));
+    check("Mugetsu ignores spirit resistance through the bypass pf2e reads",
+        mergeBypass(null, entries, ["spirit"]).resistance.ignore.map((r) => r.type), ["spirit"]);
+    check("…and its immunity half comes back out for the shadow, because pf2e never reads it",
+        ignoredImmunities(entries, ["spirit"]), ["spirit"]);
+    check("a bypass with no immunity clause shadows nothing",
+        ignoredImmunities([{ entry: { resistance: { types: ["spirit"], max: null } } }], ["spirit"]), []);
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  Ryūjin Jakka                                                                                 */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    // "+1d6 and +1 persistent die at EVERY OTHER increment" is two rates in one sentence, so the rate
+    // has to be sayable. Without the interval a rank-7 cast would earn six extra dice rather than three.
+    const ennetsu = load("soulbound-techniques", "ennetsu-jigoku.json");
+    const persistent = ridersOf(ennetsu).find((r) => r.apply?.type === "persistent-damage");
+    check("Ennetsu Jigoku's persistent fire grows", [persistent?.apply?.formula, persistent?.apply?.perStep],
+        ["1d4", "1d4"]);
+    check("…at every other increment", persistent?.apply?.perStepInterval, 2);
+
+    // "a creature that DAMAGES you", not one that swings at you. A rider with no `outcomes` fires on
+    // every outcome, and the heat was answering misses.
+    const nishi = load("soulbound-effects", "effect-nishi.json");
+    check("Nishi answers a hit and not a miss",
+        ridersOf(nishi)[0]?.outcomes, ["success", "criticalSuccess"]);
+
+    // The aspect carried a bypass and a roll option and nothing that stopped healing.
+    const higashi = load("soulbound-effects", "effect-higashi.json");
+    const wound = ridersOf(higashi)?.[0];
+    check("Higashi stops healing on a hit with the spirit weapon",
+        [wound?.event, wound?.apply?.type, wound?.predicate?.[0]],
+        ["strike-resolved", "effect", "item:tag:soulbound-spirit-weapon"]);
+    check("…until the end of your next turn",
+        [wound?.duration?.value, wound?.duration?.unit, wound?.duration?.expiry], [1, "rounds", "turn-end"]);
+
+    // A `turn-end` AREA rider sweeps whoever stands there when the CASTER's turn ends. The clause is
+    // about an enemy ending its own turn in the ash, which is what an Aura means by `turn-end`.
+    const minami = load("soulbound-effects", "effect-minami.json");
+    const ash = ridersOf(minami)[0];
+    check("Minami's ash waits for the enemy's own turn to end", ash?.event, "aura-tick");
+    check("…and has no area of its own to sweep", [ash?.area, ash?.self], [undefined, undefined]);
+    const aura = minami.system.rules.find((r) => r.key === "Aura");
+    check("…because the Aura decides who is caught",
+        [aura?.radius, aura?.effects?.[0]?.affects, aura?.effects?.[0]?.events], [20, "enemies", ["turn-end"]]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  Which aura a tick belongs to                                                                 */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * A creature can stand in two of ours at once.
+     *
+     * A Ryūjin Jakka in Full Release carries the pressure emanation and whichever cardinal aspect is up,
+     * and the tick used to be matched to "the first item on this actor with an `aura-tick` rider at all".
+     * Minami's ash therefore rolled the pressure's Will save instead of its own Reflex, and the grab never
+     * happened — driven live, the dummy came away with the pressure's immunity marker and nothing else.
+     */
+    const withAura = (slug) => ({
+        name: slug,
+        system: { rules: [{ key: "Aura", slug, radius: 20 }] },
+        flags: { "isaacs-hb-pf2e": { riders: [{ event: "aura-tick", apply: { type: "save" } }] } },
+    });
+    const pressure = withAura("soulbound-pressure");
+    const ash = withAura("soulbound-minami-ash");
+    const bystander = { name: "unrelated", system: { rules: [] }, flags: {} };
+
+    check("the tick goes to the aura it came from",
+        effectForAura([pressure, ash, bystander], "soulbound-minami-ash")?.name, "soulbound-minami-ash");
+    check("…and not to whichever one happens to be first",
+        effectForAura([pressure, ash], "soulbound-pressure")?.name, "soulbound-pressure");
+    // The first aura of this kind was written with its rider on a different item from its `Aura` rule.
+    const loose = { name: "loose", system: { rules: [] },
+        flags: { "isaacs-hb-pf2e": { riders: [{ event: "aura-tick", apply: { type: "save" } }] } } };
+    check("an aura whose rider lives elsewhere still finds it",
+        effectForAura([bystander, loose], "whatever")?.name, "loose");
+    check("and an actor carrying none of them gets nothing",
+        effectForAura([bystander], "soulbound-pressure"), null);
+
+    // pf2e's `auraAffectsActor`, restated here because it lives in the bundle with no export.
+    const you = { isAllyOf: () => false, isEnemyOf: () => false };
+    const ally = { isAllyOf: () => true, isEnemyOf: () => false };
+    const foe = { isAllyOf: () => false, isEnemyOf: () => true };
+    check("an enemies-only aura catches enemies and nobody else",
+        [foe, ally, you].map((who) => auraCatches({ affects: "enemies" }, you, who)), [true, false, false]);
+    check("an allies-only aura is the mirror of it",
+        [foe, ally, you].map((who) => auraCatches({ affects: "allies" }, you, who)), [false, true, false]);
+    check("`all` means everyone but the creature emitting it",
+        [foe, ally, you].map((who) => auraCatches({ affects: "all" }, you, who)), [true, true, false]);
+    check("unless it says it includes them",
+        auraCatches({ affects: "all", includesSelf: true }, you, you), true);
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  A predicate that names an effect has to name one that exists                                 */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * `rider:target:effect:` is built from the effect's **own slug**, not from pf2e's roll option.
+     *
+     * pf2e strips the "Effect: " prefix for `self:effect:hypnotized`; `describeActor` uses the raw slug,
+     * which is `effect-hypnotized`. Two predicates in the content had been written against the shorter
+     * spelling and matched nothing, in silence:
+     *
+     *  - the Full Release pressure's `{not: rider:target:effect:steeled-against-pressure}`, which is the
+     *    gate that makes "success = immune 10 minutes" mean anything. It never closed, so a creature that
+     *    succeeded was asked again on the next tick, for as long as it stood in the aura.
+     *  - Kyōka Suigetsu's Sustain, which is supposed to reach only a creature already hypnotized.
+     *
+     * Both are the same shape of mistake as the dotted flag key: a name that reads correctly beside the
+     * thing it refers to, and refers to nothing. So the names are checked against the effects that exist.
+     */
+    // The whole name, prefix included — `slugOf` above strips "Effect: " because pf2e does, and that is
+    // exactly the difference these two predicates fell down.
+    const rawSlug = (name) => String(name).toLowerCase()
+        .replace(/['’]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+
+    const effectSlugs = new Set();
+    const walk = (dir) => {
+        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+            const full = path.join(dir, entry.name);
+            if (entry.isDirectory()) walk(full);
+            else if (entry.name.endsWith(".json")) {
+                const doc = JSON.parse(fs.readFileSync(full, "utf8"));
+                if (doc?.type === "effect" || doc?.type === "affliction") {
+                    effectSlugs.add(doc.system?.slug || rawSlug(doc.name));
+                }
+            }
+        }
+    };
+    walk(path.join(ROOT, "content"));
+
+    const named = new Set();
+    const collect = (dir) => {
+        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+            const full = path.join(dir, entry.name);
+            if (entry.isDirectory()) collect(full);
+            else if (entry.name.endsWith(".json")) {
+                const raw = fs.readFileSync(full, "utf8");
+                for (const m of raw.matchAll(/rider:target:effect:([a-z0-9-]+)/g)) {
+                    named.add(`${m[1]}  (${entry.name})`);
+                }
+            }
+        }
+    };
+    collect(path.join(ROOT, "content"));
+
+    const dangling = [...named].filter((entry) => !effectSlugs.has(entry.split("  ")[0])).sort();
+    check("every `rider:target:effect:` predicate names an effect that exists",
+        dangling.join(", ") || "none", "none");
+    // The guard is only worth anything if it is looking at something.
+    check("…and there are some to check", named.size > 0, true);
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  What breaks Kyōka Suigetsu's hypnosis                                                        */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * The Full Release says *"hitting you **no longer** ends the effect; only a critical hit does"*, and
+     * §7A's Shikai never stated the rule that sentence negates. Nothing on either side ended the
+     * hypnosis on a hit, so the clause read as passing because the thing it changes was never there —
+     * the "control that cannot fail" shape. Settled in #63 as: the Shikai breaks on a hit, the Full
+     * Release only on a critical one.
+     *
+     * Two riders, same apply, split on the roll option the Full Release emits. If they ever collapse to
+     * one the tiers stop differing, which is the whole of what the clause buys.
+     */
+    const ks = load("soulbound-effects", "effect-kanzen-saimin.json");
+    const riders = ridersOf(ks) ?? [];
+    check("the Shikai hypnosis breaks on a hit",
+        riders.map((r) => [r.event, r.apply?.type, r.apply?.effect]),
+        [["strike-received", "expire", "Hypnotized"], ["strike-received", "expire", "Hypnotized"]]);
+    check("…on any hit at the Shikai tier",
+        riders.find((r) => r.predicate?.some((p) => p?.not === "soulbound:kyoka:total"))?.outcomes,
+        ["success", "criticalSuccess"]);
+    check("…and only on a critical hit once Sōten Kisshun is up",
+        riders.find((r) => r.predicate?.includes("soulbound:kyoka:total"))?.outcomes,
+        ["criticalSuccess"]);
+    check("both are gated on the attacker actually being hypnotized",
+        riders.every((r) => r.predicate?.includes("rider:target:effect:effect-hypnotized")), true);
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  Difficult terrain, and who it is for                                                         */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * A lingering `difficultTerrain` with no `affects` slows everybody, including the caster's own party.
+     * That is right for the three the guide writes without an allegiance, and wrong for the two it does
+     * not — Senbonzakura's petals and Garra de la Pantera's shards are both "difficult terrain **for
+     * enemies**", and Garra's was slowing the party until this was driven.
+     *
+     * Pinned in both directions, because the mistake is invisible either way round: a missing `affects`
+     * reads as a sensible default, and a spurious one reads as thoroughness.
+     */
+    const lingeringOf = (file) =>
+        load("soulbound-techniques", file).flags["isaacs-hb-pf2e"]?.lingering ?? {};
+    const ENEMIES_ONLY = ["senbonzakura.json", "garra-de-la-pantera.json"];
+    const EVERYONE = ["ennetsu-jigoku.json", "la-gota.json"];
+
+    for (const file of ENEMIES_ONLY) {
+        check(`${file}'s terrain is enemies-only, as the guide says`,
+            lingeringOf(file).affects, "enemies");
+    }
+    for (const file of EVERYONE) {
+        check(`${file}'s terrain names no side, as the guide says`,
+            lingeringOf(file).affects ?? "unset", "unset");
+    }
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  A splash, and the half of it the basic ladder must not eat                                   */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * Murcielago's Refined Cero Oscuras gains "a **5-foot burst** at the target's location dealing half
+     * damage to other creatures in it (basic Reflex)", and every word of that was wrong at once.
+     *
+     * The shape reached nobody. A 5-foot burst centred on the target's *centre point* is a circle one
+     * grid square in radius drawn from the middle of one square: it covers the creature it is defined to
+     * exclude and stops exactly on the centre of every neighbour. An area anchored on a creature is built
+     * as an emanation from that creature's space now, which is what "within 5 feet of it" means
+     * everywhere else in pf2e.
+     *
+     * And the damage was full. `basicLadder` **overwrote** the author's `multiplier`, so "half damage"
+     * was decoration - the splash dealt the whole cero to every neighbour. Three riders in the content
+     * scale something and then ask for a basic save on top, and all three were losing the fraction.
+     */
+    const splash = ridersOf(load("soulbound-techniques", "cero-oscuras.json"))
+        .find((rider) => rider.area?.anchor === "target");
+    check("Cero Oscuras' splash opens at the creature it hit", splash?.area?.anchor, "target");
+    check("…as a 5-foot burst", [splash?.area?.type, splash?.area?.value], ["burst", 5]);
+    // The creature it splashed off is the centre, not a second victim - `excludeAnchor` defaults to that.
+    check("…leaving that creature out", splash?.area?.excludeAnchor ?? "default", "default");
+    check("…for half damage", splash?.apply?.riders?.[0]?.apply?.multiplier, 0.5);
+    check("…on a basic Reflex save", [splash?.apply?.basic, splash?.apply?.statistic], [true, "reflex"]);
+
+    /** The ladder multiplies the author's fraction; it does not replace it. */
+    const expanded = basicLadder(splash.apply);
+    const by = (outcome) => expanded.find((r) => r.outcomes?.[0] === outcome)?.apply;
+    check("a success halves the half", by("success")?.multiplier, 0.25);
+    check("a failure is the half", by("failure")?.multiplier, 0.5);
+    // Exactly 1 is the absence of a multiplier: `(10d6) * 1` on the card reads as though something had
+    // been done to it.
+    check("a critical failure doubles the half back to the whole",
+        "multiplier" in by("criticalFailure"), false);
+
+    // The same composition, on the two riders that are not Murcielago's. Apotheosis detonates "for half
+    // the Waning dice" and Senbonzakura's Gokei doubles the petal-blades; both were losing the word.
+    const composedOnFailure = (file) => {
+        const rider = ridersOf(load("soulbound-effects", file))
+            .find((r) => r.apply?.basic === true && r.apply.riders?.some((n) => n.apply?.multiplier));
+        const rung = basicLadder(rider.apply).find((r) => r.outcomes?.[0] === "failure")?.apply;
+        return "multiplier" in rung ? rung.multiplier : 1;
+    };
+    check("Apotheosis still detonates for half on a failure",
+        composedOnFailure("effect-apotheosis.json"), 0.5);
+    check("Gokei still doubles on a failure",
+        composedOnFailure("effect-senbonzakura-kageyoshi.json"), 2);
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  "Whether or not you hit"                                                                     */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * Lanza del Relampago's lance "detonates in a **15-foot burst** at that point" whichever way the
+     * attack went. It was written as a `self` rider with no area, so casting it dealt 5d6 fire to the
+     * **caster**, with no save, and the burst never happened at all.
+     *
+     * An outcome-free `strike-resolved` rider is precisely "whether or not you hit"; the area anchored on
+     * the target is "at that point"; and `excludeAnchor: false` is what keeps the creature the lance was
+     * thrown at inside its own explosion.
+     */
+    const lance = ridersOf(load("soulbound-techniques", "lanza-del-relampago.json"))[0];
+    check("the detonation does not land on the caster", lance?.self ?? false, false);
+    check("…it fires however the attack went", [lance?.event, lance?.outcomes ?? "any"],
+        ["strike-resolved", "any"]);
+    check("…as a 15-foot burst where the lance landed",
+        [lance?.area?.type, lance?.area?.value, lance?.area?.anchor], ["burst", 15, "target"]);
+    check("…which includes the creature it was thrown at", lance?.area?.excludeAnchor, false);
+    check("…and everyone caught rolls a basic Reflex save",
+        [lance?.apply?.basic, lance?.apply?.statistic, lance?.apply?.riders?.[0]?.apply?.damageType],
+        [true, "reflex", "fire"]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  A spell's Frequency, which pf2e writes down and never reads                                  */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * pf2e spends a frequency in `createUseActionMessage` - abilities and feats only - and refills it in
+     * `Actor#recharge`, whose loop is `[itemTypes.action, itemTypes.feat]`. A **spell** is in neither, so
+     * "Frequency once per round" on one was enforced by nothing: Lanza del Relampago cast twice in a
+     * round posted two cards and left the counter at 1.
+     *
+     * `SpellFrequency` is both halves. This pins the list it is responsible for, so a sixth spell that
+     * says *Frequency* cannot be added without somebody reading this.
+     */
+    const spells = [];
+    const walk = (dir) => {
+        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+            const full = path.join(dir, entry.name);
+            if (entry.isDirectory()) walk(full);
+            else if (entry.name.endsWith(".json")) {
+                const doc = JSON.parse(fs.readFileSync(full, "utf8"));
+                if (doc?.type === "spell" && doc.system?.frequency) {
+                    spells.push(`${entry.name}:${doc.system.frequency.max}/${doc.system.frequency.per}`);
+                }
+            }
+        }
+    };
+    walk(path.join(ROOT, "content"));
+    check("every spell whose Frequency the module now enforces", spells.sort(), [
+        "hirviendo-boil.json:1/round",
+        "kita-tenchi-kaijin.json:1/round",
+        "lanza-del-relampago.json:1/round",
+        "the-miracle-growth.json:1/round",
+        "trident.json:1/round",
+    ]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  A spell attack's riders are its own                                                          */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * `strike-resolved` searches the whole sheet on purpose: a Technique that says "make one Strike"
+     * leaves the weapon as the message's item, and only the wide search brings the two together.
+     *
+     * A spell with the **attack** trait is the opposite case - it rolls the attack itself - and left in
+     * that search it answered everybody else's. Driven live, casting Lanza del Relampago fired Cero
+     * Oscuras' splash as well as the lance's, against creatures the cero was never aimed at.
+     *
+     * So the split is by trait, and both sides of it are pinned: the attack-trait spells that must be
+     * scoped to their own roll, and the Strike Techniques that must not be.
+     */
+    const strikeSpells = { scoped: [], wide: [] };
+    const dir = path.join(ROOT, "content", "soulbound-techniques");
+    for (const name of fs.readdirSync(dir)) {
+        if (!name.endsWith(".json")) continue;
+        const doc = JSON.parse(fs.readFileSync(path.join(dir, name), "utf8"));
+        if (doc.type !== "spell") continue;
+        if (!(ridersOf(doc) ?? []).some((rider) => rider.event === "strike-resolved")) continue;
+        (doc.system.traits.value.includes("attack") ? strikeSpells.scoped : strikeSpells.wide).push(name);
+    }
+    check("the spell attacks whose strike riders are their own", strikeSpells.scoped.sort(),
+        ["cero-oscuras.json", "galvano-javelin.json", "lanza-del-relampago.json"]);
+    check("…and the Strike Techniques that still need the wide search", strikeSpells.wide.sort(),
+        ["hitotsume-nadegiri.json", "ikkotsu.json", "ryusenka.json", "shitonegaeshi.json",
+            "shukei-hakuteiken.json"]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  A patch of ground is for somebody                                                            */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * `affects` was read when a lingering area made the ground difficult and nowhere else, so a patch
+     * that dealt **damage** dealt it to everybody standing in it. Respira is an emanation centred on the
+     * caster, so the caster was the first creature in their own miasma: driven live, an Arrogante ending
+     * their turn inside it came away with persistent void damage, and so did the party ally beside them.
+     *
+     * Two more things were wrong in the same six lines. The tick defaulted to **persistent** damage where
+     * the guide says a one-off *"(no save)"*, and it grew a die every heightening step where the guide
+     * says *"at every other increment"* — 5d6 at rank 5 instead of 3d6.
+     *
+     * All three are pinned here, in both directions: the two areas that name a side, and the ones that
+     * deliberately do not.
+     */
+    const lingeringOf = (...parts) => load(...parts).flags["isaacs-hb-pf2e"]?.lingering ?? {};
+    const respira = lingeringOf("soulbound-techniques", "respira.json");
+    check("Respira's miasma is for the enemy, as the guide says", respira.affects, "enemies");
+    check("…it ticks once rather than setting them alight", respira.damage?.persistent, false);
+    check("…and it grows at every other increment", respira.damage?.perStepInterval, 2);
+
+    // The other lingering that deals damage is a Saint Technique, and it is persistent on purpose.
+    const mavros = lingeringOf("saint-techniques", "slot-4-ultimate", "mavros-eruption-clast.json");
+    check("Mavros Eruption Clast is still persistent fire", mavros.damage?.persistent, true);
+
+    // `scaledDamage` is what pays for the interval, and it is worth checking it counts rather than
+    // multiplies: at four increments an interval of 2 earns two dice, not four.
+    const grown = (formula, perStep, perStepInterval, steps) => {
+        const interval = Math.max(1, Number(perStepInterval) || 1);
+        const earned = Math.floor(steps / interval);
+        const base = /^(\d*)d(\d+)$/.exec(formula);
+        const per = /^(\d*)d(\d+)$/.exec(perStep);
+        return `${(Number(base[1]) || 1) + (Number(per[1]) || 1) * earned}d${base[2]}`;
+    };
+    check("1d6 +1d6 every other increment, four increments in", grown("1d6", "1d6", 2, 4), "3d6");
+    check("…and the same rate with no interval named", grown("1d6", "1d6", undefined, 4), "5d6");
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  An aura ticks when the creature's own turn ends                                              */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * *"Enemies that end their turn in it take 3d6 void damage (basic Fortitude)."*
+     *
+     * Respira Absoluta was a `turn-end` **self** rider with an area, which sweeps whoever is standing
+     * there when the **caster's** turn ends — the right creatures at the wrong moment, the same finding
+     * Ryūjin Jakka's ash carries a note about. pf2e's own `Aura` is what decides who is caught and when,
+     * and the module has answered it through `aura-tick` since Minami.
+     *
+     * The nested damage also carried no `basic`, so a Fortitude save against it changed nothing at all.
+     */
+    const absoluta = load("soulbound-effects", "effect-respira-absoluta.json");
+    const riders = ridersOf(absoluta);
+    const tick = riders.find((rider) => rider.apply?.type === "save");
+    check("Respira Absoluta ticks on the aura, not on the caster's turn", tick?.event, "aura-tick");
+    check("…and it is a basic Fortitude save",
+        [tick?.apply?.basic, tick?.apply?.statistic], [true, "fortitude"]);
+    check("…with no area of its own, because the Aura is the area",
+        [tick?.area ?? "none", tick?.self ?? false], ["none", false]);
+
+    const aura = absoluta.system.rules.find((rule) => rule.key === "Aura");
+    check("the Aura is the guide's 20 feet, for enemies", [aura?.radius, aura?.effects?.length], [20, 2]);
+    check("…one entry is pf2e's own turn-end tick",
+        aura?.effects?.some((e) => /Effect: Aura Tick$/.test(e.uuid) && e.events?.includes("turn-end")), true);
+    // The second is what makes "a creature **within the emanation**" testable at all: pf2e grants it on
+    // entering and takes it back on leaving, so a predicate can ask whether somebody is standing there.
+    const marker = aura?.effects?.find((e) => /In the Miasma$/.test(e.uuid));
+    check("…and the other is the presence marker the flat check is gated on", !!marker, true);
+    check("…which is for enemies and is not a turn event", [marker?.affects, marker?.events ?? "none"],
+        ["enemies", "none"]);
+
+    /**
+     * The flat check: only from inside, and only once per minute each.
+     *
+     * It fired for every attacker anywhere — a dummy 70 feet away rolled it — and a creature that
+     * succeeded was asked again on its very next attack. It was also written `self: true`, which lands
+     * the rider on the **Arrogante**: the predicate would have described the Arrogante rather than their
+     * attacker, and the immunity marker would have gone on the wrong sheet.
+     */
+    const check5 = riders.find((rider) => rider.apply?.type === "flat-check");
+    check("the decay is rolled by the attacker, not by the Arrogante", check5?.self ?? false, false);
+    check("…only for a creature standing in the miasma",
+        check5?.predicate?.includes("rider:target:effect:effect-respira-in-the-miasma"), true);
+    check("…and not for one that has already got through",
+        (check5?.predicate ?? []).some((p) => p?.not === "rider:target:effect:effect-steeled-against-respira"),
+        true);
+    check("…which is what succeeding writes on them",
+        check5?.apply?.onSuccess?.[0]?.apply?.uuid?.endsWith("Effect: Steeled Against Respira"), true);
+    check("…and that marker lasts the guide's minute",
+        [load("soulbound-effects", "effect-steeled-against-respira.json").system.duration.value,
+            load("soulbound-effects", "effect-steeled-against-respira.json").system.duration.unit],
+        [1, "minutes"]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  A free shot the Sustain has to buy                                                           */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * *"You may **Sustain** Cero Metralleta at the start of your next turn to fire it again in a
+     * different direction without spending a Reiatsu Point."*
+     *
+     * The allowance was not tied to the Sustain at all. `FreeCast` pays whenever a flagged item on the
+     * sheet has a use left, so the **first** Cero Metralleta of an encounter was free, once every round,
+     * forever — Refined removed the Technique's cost rather than buying a second shot. Driven live, a
+     * plain cast announced "no Focus Point spent" before the Sustain had been used once.
+     *
+     * Using the Sustain now leaves a marker that lasts until the end of that turn, and the free cast is
+     * predicated on it. The marker's one-turn life is the once-per-round gate; the allowance itself is
+     * unlimited, because the Sustain's own frequency is spent by posting it and would otherwise be gone
+     * exactly when the free cast came to look for it.
+     */
+    const sustain = load("soulbound-class-features", "actions", "cero-metralleta-sustain.json");
+    const flag = sustain.flags["isaacs-hb-pf2e"];
+    check("the free shot is gated on having used the Sustain",
+        flag.freeCast?.predicate?.includes("self:effect:cero-metralleta-sustained"), true);
+    check("…and still only pays for Cero Metralleta",
+        flag.freeCast?.predicate?.includes("item:slug:cero-metralleta"), true);
+    check("…with no ceiling of its own — the marker is the ceiling", flag.freeCast?.unlimited, true);
+    const marker = flag.riders?.find((rider) => rider.event === "action-used");
+    check("using the Sustain is what leaves the marker",
+        [marker?.self, marker?.apply?.type, marker?.apply?.uuid?.endsWith("Effect: Cero Metralleta — Sustained")],
+        [true, "effect", true]);
+    check("…and the marker lasts exactly one turn",
+        [load("soulbound-effects", "effect-cero-metralleta-sustained.json").system.duration.value,
+            load("soulbound-effects", "effect-cero-metralleta-sustained.json").system.duration.expiry],
+        [1, "turn-end"]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  "With your spirit weapon" names the weapon, not a fist                                       */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * *"Make **three** ranged Strikes **with your spirit weapon**."*
+     *
+     * Trident's rider named no weapon, and `findStrike` falls back to `unarmed` — so a released Tiburón
+     * punched the target three times. Naming the profile would not have worked either: `findStrike`
+     * compares slugs, and *Tiburón — Hollow-Edged Blade* slugs to `tibur-n-hollow-edged-blade` with the
+     * accent dropped, which is the same trap as SB-16's `getsuga-tensh`.
+     *
+     * `spirit-weapon` is the class's own word for it — the tag every profile and every released form
+     * carries — so it survives the released/sealed swap and every Spirit that replaces its weapon.
+     */
+    const trident = load("soulbound-techniques", "trident.json");
+    const rider = ridersOf(trident)[0];
+    check("Trident strikes with the spirit weapon", rider.apply.strike, "spirit-weapon");
+    check("…three times", rider.apply.count, 3);
+    // `variants[0]` is the no-MAP variant, and no `mapIndex` is what asks for it: "the penalty does not
+    // increase until all three are made".
+    check("…at a penalty that does not climb", rider.apply.mapIndex ?? "variants[0]", "variants[0]");
+
+    // Nothing else in the content leans on the old fallback, which would now be a fist by accident.
+    const strikeRiders = [];
+    const walk = (dir) => {
+        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+            const full = path.join(dir, entry.name);
+            if (entry.isDirectory()) walk(full);
+            else if (entry.name.endsWith(".json")) {
+                const doc = JSON.parse(fs.readFileSync(full, "utf8"));
+                for (const r of ridersOf(doc) ?? []) {
+                    if (r.apply?.type === "strikes" && !r.apply.strike && !r.apply.strikes) {
+                        strikeRiders.push(entry.name);
+                    }
+                }
+            }
+        }
+    };
+    walk(path.join(ROOT, "content"));
+    check("every volley says which weapon it swings", strikeRiders.sort(), []);
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  A reaction to being hurt, and where each half of it lands                                    */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * Antithesis: *"**Trigger** You or an ally within 30 feet takes damage … **Effect** The triggering
+     * creature takes 2d6 spirit damage, and the target of the trigger gains resistance equal to your
+     * level."*
+     *
+     * It was keyed to **`damage-applied`**, which the events list defines as "damage from **this actor's
+     * item** landed on a target" — the attacker's half. Driven live, a dummy hit the Quincy for 20 and no
+     * reaction card appeared at all. `damage-received` is the mirror, and the one the trigger describes.
+     *
+     * The rider must then be `self`, because a reaction is offered to the ability's owner and `validate`
+     * insists on it — so everything nested inside lands on the Quincy, including the 2d6 that is supposed
+     * to go the other way. `trigger: true` sends one nested entry to the other end of the event.
+     */
+    const anti = load("soulbound-techniques", "antithesis.json");
+    const rider = ridersOf(anti)[0];
+    check("Antithesis answers being hurt, not hurting", rider.event, "damage-received");
+    check("…and is offered to its owner, as a reaction must be", rider.self, true);
+    const [damage, resistance] = rider.apply.riders;
+    check("…the 2d6 goes to whoever struck", [damage.apply.type, damage.trigger], ["damage", true]);
+    check("…and the resistance stays with whoever was struck",
+        [resistance.apply.type, resistance.trigger ?? "the owner"], ["effect", "the owner"]);
+    // "Heightened (+2) +1d6" — every other rank, not every rank.
+    check("…growing a die every other rank", damage.apply.perStepInterval, 2);
+
+    // Every reaction rider in the content is `self`, which is what the card being offered to its owner
+    // means; this is the rule `validate` enforces, asserted here so the shape is visible beside its use.
+    const reactions = [];
+    const walk = (dir) => {
+        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+            const full = path.join(dir, entry.name);
+            if (entry.isDirectory()) walk(full);
+            else if (entry.name.endsWith(".json")) {
+                const doc = JSON.parse(fs.readFileSync(full, "utf8"));
+                for (const r of ridersOf(doc) ?? []) {
+                    if (r.apply?.type === "reaction" && r.self !== true) reactions.push(entry.name);
+                }
+            }
+        }
+    };
+    walk(path.join(ROOT, "content"));
+    check("every reaction is offered to its own owner", reactions.sort(), []);
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  A free cast needs somewhere pf2e keeps a frequency                                           */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * *"Once per round you may use [Licht Regen] without spending a Reiatsu Point."*
+     *
+     * The `freeCast` flag sat on `Effect: Quincy: Letzt Stil`, and pf2e's **effect** data model has no
+     * `frequency` field — the authored `1/round` was dropped on load, so `FreeCast.find` read `?? 0`
+     * remaining and the allowance was never once available. Driven live, `find` returned null.
+     *
+     * A **feat** keeps a frequency and `Actor#recharge` refills it each round, so the allowance lives
+     * there and is predicated on actually being in the form.
+     */
+    const feat = load("soulbound-class-features", "spirits", "quincy-letzt-stil.json");
+    const flag = feat.flags["isaacs-hb-pf2e"].freeCast;
+    check("the free Licht Regen is an allowance on the feat, which keeps a frequency",
+        [feat.system.frequency?.max, feat.system.frequency?.per], [1, "round"]);
+    check("…and it only pays for Licht Regen, and only in the form",
+        flag?.predicate?.slice().sort(),
+        ["item:slug:licht-regen", "self:effect:quincy-letzt-stil"]);
+    check("…and the effect no longer claims a frequency pf2e would drop",
+        "frequency" in load("soulbound-effects", "effect-quincy-letzt-stil.json").system, false);
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  "Once per round, when you damage a creature with fire"                                       */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * The Heat's Vollständig, and the fourth per-round gate this campaign has had to add — after
+     * Pantera's extra claw Strike, Kyōka's Sustain and Tiburón's push. Without it every fire hit in a
+     * turn added its own 2d6 persistent.
+     *
+     * The rider itself does not fire at all, and not for a reason in this Spirit: `damage-applied` is
+     * gated on `landed > 0`, and `Sources.onDamage` reads the defender's hit points the instant
+     * `applyDamage` resolves — before pf2e has written them — so `landed` is always zero. **Nine riders
+     * across the Saint and the Soulbound sit on that event.** The gate is asserted here because it is
+     * the half that is this Spirit's to get right; the event is recorded in the tracker as S-70d.
+     */
+    const deus = load("soulbound-effects", "effect-deus-ex-machina.json");
+    const rider = ridersOf(deus)[0];
+    check("The Heat's persistent fire is once a round", rider.oncePerRound, true);
+    check("…on damaging with fire", [rider.event, rider.predicate], ["damage-applied", ["rider:damage:type:fire"]]);
+    check("…for 2d6 with the harder flat check",
+        [rider.apply.formula, rider.apply.damageType, rider.apply.dc], ["2d6", "fire", 20]);
+
+    // Every rider in the module that waits on `damage-applied`, so the count is visible next to the
+    // finding rather than buried in it.
+    const waiting = [];
+    const walk = (dir) => {
+        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+            const full = path.join(dir, entry.name);
+            if (entry.isDirectory()) walk(full);
+            else if (entry.name.endsWith(".json")) {
+                const raw = fs.readFileSync(full, "utf8");
+                if (/"event":\s*"damage-applied"/.test(raw)) waiting.push(entry.name);
+            }
+        }
+    };
+    walk(path.join(ROOT, "content"));
+    /**
+     * The roster, kept because the count is the finding.
+     *
+     * Nine riders waited on an event that had never fired. Four of them turned out not to belong on it at
+     * all: Antithesis, The Balance, Danku and The Miracle's Growth are all triggered by **being** damaged,
+     * which is `damage-received` — the mistake was invisible for as long as neither event worked. What is
+     * left is the five that genuinely are the attacker's: damage this actor dealt, landing on somebody.
+     */
+    /**
+     * "You take damage" is the defender's event, and four abilities had it the wrong way round.
+     *
+     * The inversion is easy to make and was impossible to see: `damage-applied` never fired for anything,
+     * so a reaction keyed to it was simply never offered, and nothing distinguished that from a reaction
+     * nobody had tried. Pinned by name because the fifth one will read exactly like the first four.
+     */
+    for (const [file, name] of [
+        ["soulbound-techniques/antithesis.json", "Antithesis"],
+        ["soulbound-techniques/the-balance-reaction.json", "The Balance"],
+        ["soulbound-kido/bakudo/danku.json", "Danku"],
+        ["soulbound-techniques/the-miracle-growth.json", "The Miracle's Growth"],
+    ]) {
+        const riders = ridersOf(load(...file.split("/")));
+        // `ally-damaged` is the same answer asked on somebody else's behalf: Antithesis' trigger is "You
+        // **or an ally within 30 feet**", and The Balance's Vollständig redirects an ally's damage. What
+        // must never appear here is `damage-applied`, which is the attacker's.
+        check(`${name} answers being damaged, not damaging`,
+            [...new Set(riders.map((r) => r.event))].filter((e) => e !== "ally-damaged"), ["damage-received"]);
+        // A reaction is offered to the ability's owner, so the outer rider must be `self`; anything meant
+        // for the other end of the event is marked `trigger: true` inside it.
+        check(`…and is offered to its owner`, riders.every((r) => r.self === true), true);
+    }
+
+    check("the riders that wait on damage-applied", waiting.sort(), [
+        "effect-deus-ex-machina.json",
+        "sekishiki-kisoen.json",
+        "sky-ascendant-aquarius.json",
+        "soul-sever.json",
+        "the-yellow-spring-opens.json",
+    ]);
 }
 
 /* -------------------------------------------------------------------------------------------- */

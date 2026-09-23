@@ -84,7 +84,7 @@ character:
 | C-33 | **Full Release** — cost | 13 | 2 actions, **once per day**, requires released form **and ≥1 Reiatsu Point** | ✅ | **SB-6 fixed.** The L13 feature no longer grants the effect; the action does, and it refuses when sealed or when the pool is empty. pf2e's own `frequency` still counts the daily use |
 | C-34 | Full Release — die step | 13 | Spirit weapon damage die +1 step | ✅ | **SB-6 fixed.** `Effect: Full Release` now carries the `damage-dice-faces` upgrade. Live: 1d8 / `two-hand-d10` → **1d10 / `two-hand-d12`**, and back when it ends. Predicated on `not soulbound:full-release:no-die-step`, which `Effect: Tensa Zangetsu` sets |
 | C-35 | Full Release — free technique | 13 | Release Technique costs nothing, **once per round** | ✅ | **SB-6 fixed.** `Unbound Technique` — an action granted by `Effect: Full Release`, frequency 1/round. Live: the card reads *"Unbound Technique paid for Senbonzakura — no Focus Point spent. 0 left"*, the pool does not move, and the next use is refused |
-| C-36 | Full Release — pressure emanation | 13 | **15-ft emanation**; enemy ending its turn there: Will vs. Reiatsu DC or **frightened 1** (2 on crit fail); success = immune 10 min | ✅ | **SB-15 and SB-22 fixed, and promoted to a real aura.** It was a `turn-end` *area rider*, which sweeps whoever stands there when the **caster's** turn ends; the guide says an enemy that ends **its** turn in it. It is a pf2e `Aura` now, radius 15 (20 Perfected), enemies only. Live: the ghoul ended its turn and came out **frightened 2** |
+| C-36 | Full Release — pressure emanation | 13 | **15-ft emanation**; enemy ending its turn there: Will vs. Reiatsu DC or **frightened 1** (2 on crit fail); success = immune 10 min | ✅ | **SB-15 and SB-22 fixed, and promoted to a real aura.** It was a `turn-end` *area rider*, which sweeps whoever stands there when the **caster's** turn ends; the guide says an enemy that ends **its** turn in it. It is a pf2e `Aura` now, radius 15 (20 Perfected), enemies only. Live: the ghoul ended its turn and came out **frightened 2**. **Re-driven 2026-09-21 after #60:** a real `Aura` was only half of it — pf2e reads an aura's `events` list once, to default `removeOnExit`, and grants on contact thereafter, so the timing was whenever somebody moved. The module times the tick itself now. Live: the dummy ended **its own** turn and rolled **Will DC 27**; the caster's turn ending drew nothing |
 | C-37 | Full Release — end state | 13 | **Fatigued** until 10 minutes' rest; no second use that day | ✅ | **SB-6 fixed.** A `deleteItem` hook drops the rung and applies **fatigued** when `Effect: Full Release` goes, by timer or by hand. Verified live at L13 |
 | C-38 | **Perfected Full Release** | 17 | 2 minutes, **no fatigue**, emanation 20 ft | ✅ | **SB-6 fixed.** `fullReleaseShape` is now stamped onto the effect as it is created. Live at L17: duration **2 minutes**, rider emanation **20 ft**, and **no fatigue** when it ends |
 | C-39 | **Unsealed** | 19 | Full Release **twice per day**; immune to fear while in it; first crit each round with the spirit weapon refunds 1 point **ignoring the per-encounter cap** | ❌ | **SB-6.** Frequency does rise to 2/day on the feat, but there is no daily use to spend |
@@ -423,7 +423,8 @@ and asserts the chassis, the Lineage and the Spirit's presence at each checkpoin
 not the ceiling: it proves items **arrive**, and almost nothing about whether they **fire**. Every row
 above marked ✅ on rig evidence alone is really ⚠️.
 
-The repeatable setup is `Docs/tools/foundry-live-session.md` and `build/live-session.mjs`.
+The repeatable setup, and what a drive owes, is `Docs/tools/live-verification.md` and
+`build/live-session.mjs`.
 
 ---
 
@@ -895,7 +896,7 @@ An **aimed** area — a line or a burst placed at a point — resolves on a real
 `spellcasting.cast()` from a script simply never returns for Hyōryū Senbi or Sennen Hyōrō. An
 emanation is auto-centred and only wants the "Confirm targets" dialog, which is why Senbonzakura drove
 cleanly. The charge half was verified through `Charges.beforeCast` directly; aiming a placement without
-a mouse needs the synthetic-pointer route in `Docs/tools/foundry-live-session.md`.
+a mouse needs the synthetic-pointer route in `Docs/tools/live-verification.md` §10.
 
 ---
 
@@ -925,14 +926,18 @@ becomes `all`.
 ## 18 — Driving an aimed area
 
 An **emanation** needs no click and drove cleanly all along. A **line, cone or placed burst** resolves
-on a real canvas click, and three routes were tried before one worked — the full account, including
-the two that look like they work and do not, is in `Docs/tools/foundry-live-session.md` §8.
+on a real canvas click, and the full account is in `Docs/tools/live-verification.md` §10.
 
-The short version: a synthetic `pointermove` **does** put `canvas.mousePosition` exactly on the target,
-and a synthetic `pointerdown` **does not** confirm the placement; stubbing `placeRegion` turns the
-module's re-aim loop into an infinite one. So scripts cast against hand-picked targets with the
-module's own `areaTargeting` setting turned off for the duration. Area targeting is proven on
-emanations; everything downstream of it is proven on every shape.
+What was written here at the time: a synthetic `pointermove` **does** put `canvas.mousePosition` exactly
+on the target, a synthetic `pointerdown` **does not** confirm the placement, and stubbing `placeRegion`
+turns the module's re-aim loop into an infinite one. So scripts cast against hand-picked targets with
+the module's own `areaTargeting` setting turned off for the duration — which is still the right route
+whenever the clause under test is downstream of the aim.
+
+**Corrected 21 September 2026.** The middle claim was wrong about *where*, not about *what*. A synthetic
+`pointerdown` confirms a placement when it is dispatched at **`canvas.app.view`** — `placeRegion`
+registers on `canvas.stage` and PIXI federates from DOM events on the canvas element. An aimed area can
+be driven. See §10.
 
 **Hyōryū Senbi, driven that way:** the card posts a 60-foot line at basic Reflex, the cast spends
 **one petal and one Reiatsu Point**, and a second cast in the same round is **refused and costs

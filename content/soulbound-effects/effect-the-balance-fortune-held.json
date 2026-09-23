@@ -1,0 +1,47 @@
+{
+    "img": "icons/equipment/shield/heater-crystal-blue.webp",
+    "name": "Effect: The Balance — Fortune Held",
+    "system": {
+        "description": {
+            "value": "<p>How much misfortune you have taken off other people this encounter. A tally, and nothing else — <em>The Reckoning</em> reads it to know whether the debt is <strong>doomed 1</strong> or <strong>doomed 2</strong>.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "badge": {
+            "max": 99,
+            "min": 0,
+            "type": "counter",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": false
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

@@ -9,7 +9,8 @@
                     },
                     "duration": {
                         "unit": "rounds",
-                        "value": 1
+                        "value": 1,
+                        "expiry": "turn-end"
                     },
                     "outcomes": [
                         "failure"
@@ -22,7 +23,8 @@
                     },
                     "duration": {
                         "unit": "rounds",
-                        "value": 2
+                        "value": 2,
+                        "expiry": "turn-end"
                     },
                     "outcomes": [
                         "criticalFailure"
@@ -35,7 +37,8 @@
                     },
                     "duration": {
                         "unit": "rounds",
-                        "value": 1
+                        "value": 1,
+                        "expiry": "turn-end"
                     },
                     "outcomes": [
                         "failure",

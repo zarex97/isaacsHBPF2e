@@ -12,7 +12,8 @@
                 },
                 {
                     "type": "line",
-                    "value": 120
+                    "value": 120,
+                    "overlay": "cerometralletaline"
                 }
             ]
         }

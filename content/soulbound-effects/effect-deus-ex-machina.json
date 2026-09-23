@@ -12,7 +12,9 @@
                     "event": "damage-applied",
                     "predicate": [
                         "rider:damage:type:fire"
-                    ]
+                    ],
+                    "oncePerRound": true,
+                    "note": "\"**Once per round**, when you damage a creature with fire\" — the same gate Pantera's extra claw Strike and Tiburón's push take. Without it every fire hit in a turn added its own 2d6 persistent."
                 }
             ]
         }

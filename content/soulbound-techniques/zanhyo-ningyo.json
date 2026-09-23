@@ -24,8 +24,13 @@
                         ],
                         "type": "reaction"
                     },
-                    "event": "damage-applied",
-                    "self": true
+                    "event": "strike-received",
+                    "self": true,
+                    "outcomes": [
+                        "criticalSuccess",
+                        "success"
+                    ],
+                    "note": "S-21a: the trigger is being hit, so a miss must not offer the doll."
                 }
             ]
         }

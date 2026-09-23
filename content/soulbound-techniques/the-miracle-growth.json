@@ -8,6 +8,14 @@
                         "prompt": "That hurt. Take it as growth?",
                         "riders": [
                             {
+                                "self": true,
+                                "apply": {
+                                    "type": "pool",
+                                    "spend": 1,
+                                    "oncePerEncounter": true
+                                }
+                            },
+                            {
                                 "apply": {
                                     "stack": true,
                                     "type": "effect",
@@ -16,10 +24,13 @@
                                 }
                             }
                         ],
-                        "type": "reaction"
+                        "type": "reaction",
+                        "freeAction": true
                     },
-                    "event": "damage-applied",
-                    "self": true
+                    "event": "damage-received",
+                    "self": true,
+                    "note": "The **defender's** event, not the attacker's. *“Trigger You take damage from an enemy”* — so it is `damage-received`; `damage-applied` is “damage from **this actor's** item landed on a target”, which is the creature at the other end. It sat on `damage-applied` from the day it was written, and since that event had never fired for anything (#71) the mistake was invisible: being hit offered nothing, and the reaction could not be taken by any route. Third and fourth occurrence of the same inversion after Antithesis (S-63c) and The Balance (S-72b). **Frequency once per round** is gated here rather than by the spell's own `frequency`: `offerReaction` *reads* `system.frequency.value` and nothing ever decrements it, so the only thing stopping a second offer in one round was the sixty-second de-duplication window — and a round at a real table routinely takes longer than a minute. `oncePerRound` is the ledger the rest of the class uses, and it is keyed to the encounter's round rather than to the clock.",
+                    "oncePerRound": true
                 }
             ]
         }

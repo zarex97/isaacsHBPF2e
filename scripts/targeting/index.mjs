@@ -9,7 +9,21 @@ import { Lingering } from "./lingering.mjs";
 import { Overlap } from "./overlap.mjs";
 import { discardArea, originOf, placeArea } from "./place.mjs";
 import { REAIM, reviewTargets } from "./review.mjs";
+import { Charges } from "../soulbound/charges.mjs";
 import { CrystalWall } from "./wall.mjs";
+
+/**
+ * Where a shape choice leaves the spell it decided on.
+ *
+ * `SpellcastingEntryPF2e#cast` posts whatever spell it is handed and spends the point off
+ * `spell.original`, so handing it a loaded variant is the whole of the fix — but `run` answers a
+ * boolean and is called from two places. The options object is already the thing the pipeline mutates
+ * for `consume`, so the variant travels there too rather than widening the return type.
+ */
+export const VARIANT = Symbol.for("isaacs-hb-pf2e.castVariant");
+
+/** Where the agreed charge count is left for `Charges.beforeCast`, for the same reason as `VARIANT`. */
+export const SPENDING = Symbol.for("isaacs-hb-pf2e.chargeSpending");
 
 /**
  * Area targeting: the step that used to be "click eight tokens and hope you got them all".
@@ -93,13 +107,33 @@ export const AreaTargeting = {
             return false;
         }
 
-        const cast = variantFor(spell, options);
+        let cast = variantFor(spell, options);
         // A Technique that offers two shapes asks before anything else happens, because the answer decides
         // what is put on the cursor. Backing out of the question is backing out of the cast, and costs
         // nothing — the Focus Point is spent after this returns.
-        const shape = await chooseShape(cast);
+        let shape = await chooseShape(cast);
         if (shape === false) return false;
-        const config = configFor(cast, shape ? { area: shape } : {});
+        // A named overlay is a whole second spell pf2e already knows how to post. Loading it here means
+        // the card, the range and the area all say the same thing, and the pipeline casts the variant
+        // rather than the original — see `CastPipeline`, which reads it back off `options`.
+        if (shape?.overlay && typeof cast.loadVariant === "function") {
+            const variant = cast.loadVariant({ overlayIds: [shape.overlay], castRank: cast.rank });
+            if (variant) {
+                cast = variant;
+                if (options) options[VARIANT] = variant;
+            }
+        }
+        // "Expend any number of wolves. **Each** wolf you expend … detonates in a 10-foot burst." The
+        // count is one question with two answers in it: how much the pool pays, and how many areas go on
+        // the cursor. Asked here so that backing out of the placement still costs nothing.
+        const spending = await Charges.countFor(cast);
+        if (Charges.declarationOn(cast) && spending <= 0) return false;
+        if (spending > 0 && options) options[SPENDING] = spending;
+
+        const config = configFor(cast, {
+            ...(shape ? { area: shape } : {}),
+            ...(spending > 1 ? { areas: spending } : {}),
+        });
         if (!config) return true;
         if (bypassHeld()) return true;
 
@@ -206,8 +240,31 @@ function collect(regions, config, originToken) {
  * rather than the chat card.
  */
 async function chooseShape(item) {
-    const choices = item.flags?.[MODULE_ID]?.areaTargetingShapes;
-    if (!Array.isArray(choices) || choices.length < 2) return null;
+    const declared = item.flags?.[MODULE_ID]?.areaTargetingShapes;
+    if (!Array.isArray(declared) || declared.length === 0) return null;
+
+    /**
+     * A shape a Technique only has at one rung.
+     *
+     * Tiburón's La Gota is a 30-foot cone, a 40-foot cone once it is Refined, and — at the Segunda
+     * Etapa — *"may be used as a **60-foot line** instead of a cone"*. The word is **may**: the line is
+     * an option beside the cone, not a replacement for it. Written as an `alternateArea` it was a
+     * replacement, and driven live a 13th-level Tiburón could no longer cast the cone at all.
+     *
+     * So a choice may carry a predicate, and the list is filtered before it is offered. One survivor is
+     * not a question — it is simply the shape, which is how the two cone sizes stay a size rather than
+     * becoming a prompt nobody wants.
+     */
+    const options = new Set([
+        ...(item.getRollOptions?.("item") ?? []),
+        ...(item.actor?.getRollOptions?.() ?? []),
+    ]);
+    const choices = declared.filter((choice) => testPredicate(choice.predicate, options));
+    if (choices.length === 0) return null;
+    if (choices.length === 1) {
+        const only = choices[0];
+        return { type: only.type, value: only.value, overlay: only.overlay ?? null };
+    }
 
     const picked = await foundry.applications.api.DialogV2.wait({
         window: { title: item.name },
@@ -220,7 +277,12 @@ async function chooseShape(item) {
     });
     if (picked === null || picked === undefined) return false;
     const choice = choices[Number(picked)];
-    return choice ? { type: choice.type, value: choice.value } : false;
+    if (!choice) return false;
+    // `overlay` names one of the spell's own variants, and it is what keeps the **card** honest. The
+    // shape reached the placement from the start — the Region really was a 120-foot line — but the chat
+    // card still read "Area 60-foot cone", because the choice had never reached pf2e. Driven live, a
+    // Cero Metralleta fired down a 120-foot line caught the creatures along it and announced a cone.
+    return { type: choice.type, value: choice.value, overlay: choice.overlay ?? null };
 }
 
 /**

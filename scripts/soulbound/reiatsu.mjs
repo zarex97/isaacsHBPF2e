@@ -1,5 +1,6 @@
 import { classSlugOf } from "../lib/class-dc.mjs";
 import { applyActionCosts } from "./action-cost.mjs";
+import { applyExtraDieSteps } from "./die-steps.mjs";
 import { applyAttributeCaps } from "./attribute-caps.mjs";
 import { Severance, applyWaning } from "./severance.mjs";
 import { wrap } from "../lib/wrap.mjs";
@@ -210,6 +211,9 @@ export const Reiatsu = {
                         // the one place a second wrapper on `prepareDerivedData` would have gone, and
                         // `wrap()` refuses two on the same target by design — so it lives here.
                         applyActionCosts(this);
+                        // pf2e's `damage-dice-faces` upgrade latches after one step, on purpose, so
+                        // "two steps instead of one" cannot be written as a rule element at all.
+                        applyExtraDieSteps(this);
                         // The Severing Art's dice decay by round, and the card should say so before a
                         // player decides whether to spend their one shot — see `applyWaning`.
                         const round = Severance.round(this);

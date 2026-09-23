@@ -1,10 +1,12 @@
 import { FreeCast } from "./economy/free-cast.mjs";
+import { SpellFrequency } from "./economy/spell-frequency.mjs";
 import { Charges } from "./soulbound/charges.mjs";
 import { Release } from "./soulbound/release.mjs";
 import { Severance } from "./soulbound/severance.mjs";
+import { StrikeTechnique } from "./riders/strike-technique.mjs";
 import { wrap } from "./lib/wrap.mjs";
 import { configFor } from "./targeting/config.mjs";
-import { AreaTargeting } from "./targeting/index.mjs";
+import { AreaTargeting, SPENDING, VARIANT } from "./targeting/index.mjs";
 
 /**
  * Everything the module does on the way to an ability reaching the table.
@@ -25,11 +27,21 @@ export const CastPipeline = {
             "CONFIG.PF2E.Item.documentClasses.spellcastingEntry.prototype.cast",
             async function (wrapped, spell, options = {}) {
                 if (!(await CastPipeline.beforeCast(spell, options))) return;
-                const result = await wrapped(spell, options);
+                // A Technique offered in two shapes decides which spell is actually cast: the line is a
+                // real pf2e variant, and posting the original would announce the cone whatever was aimed.
+                // `consume` already unwraps to `spell.original`, so the Focus Point still comes off the
+                // Technique the character owns.
+                const result = await wrapped(options[VARIANT] ?? spell, options);
                 // After the Art has actually reached the table, never before: guide §9 says using it
                 // "immediately ends Severance whether you want it to or not", and ending it on an
                 // attempt that was cancelled would take the capstone away for nothing.
                 await Severance.afterCast(spell);
+                // "Make one Strike, and then…" — the Strike is rolled with a weapon, so the rider that
+                // follows it lives on this spell and can only be found by searching the sheet. The marker
+                // is what tells that search which Technique was actually paid for; without it every Strike
+                // Technique on the sheet fired on every Strike. Here rather than in `beforeCast` because
+                // the cast has now actually happened.
+                await StrikeTechnique.arm(options[VARIANT] ?? spell);
                 return result;
             },
             { feature: "area targeting and free casts", type: "MIXED" },
@@ -61,7 +73,11 @@ export const CastPipeline = {
         if (!Severance.beforeCast(spell)) return false;
         // A Technique that spends from a charge pool is refused when the pool is empty, rather than cast
         // and then quietly not charged. Hyōrinmaru's three petal-flowers are the case.
-        if (!(await Charges.beforeCast(spell))) return false;
+        if (!(await Charges.beforeCast(spell, options?.[SPENDING]))) return false;
+        // pf2e never spends a *spell's* Frequency, so a Technique that says "once per round" was limited
+        // by nothing until this step existed. Last of the refusals and first of the prices: a spell that
+        // is going to be turned away by any of the checks above must not have paid its allowance for it.
+        if (!(await SpellFrequency.beforeCast(spell))) return false;
         await FreeCast.beforeCast(spell, options);
         return true;
     },

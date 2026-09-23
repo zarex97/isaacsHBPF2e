@@ -1,8 +1,12 @@
 import { testPredicate } from "../lib/roll-options.mjs";
+import { allianceOf, catches } from "./enemy-terrain.mjs";
 import { growByStep, inflictPersistent, runSave } from "../riders/apply.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 
 export const FLAG = "lingering";
+
+/** The module's enemies-only movement-cost behavior. Spelled here so this file imports nothing new. */
+const TERRAIN_TYPE = `${MODULE_ID}.enemyMovementCost`;
 
 /** The behavior type this module contributes, namespaced the way Foundry requires of a module. */
 export const BEHAVIOR_TYPE = `${MODULE_ID}.lingering`;
@@ -106,9 +110,13 @@ export const Lingering = {
             }
             const cost = Number(spec.difficultTerrain) || 2;
             if (actions.length > 0) {
+                // `affects: "enemies"` swaps Foundry's own behavior for the module's subclass, which
+                // filters on the moving token's alliance. Foundry's has no such field, so a petal storm
+                // laid across a corridor used to slow the caster's own party too.
+                const enemiesOnly = spec.affects === "enemies" && CONFIG.RegionBehavior.dataModels[TERRAIN_TYPE];
                 behaviors.push({
-                    type: "modifyMovementCost",
-                    name: "Difficult terrain",
+                    type: enemiesOnly ? TERRAIN_TYPE : "modifyMovementCost",
+                    name: enemiesOnly ? "Difficult terrain (enemies)" : "Difficult terrain",
                     system: { difficulties: Object.fromEntries(actions.map((action) => [action, cost])) },
                 });
             }
@@ -144,6 +152,13 @@ export const Lingering = {
                             originUuid: config.item.actor?.uuid ?? null,
                             damage: spec.damage ? scaledDamage(spec.damage, config.steps ?? 0) : null,
                             save: spec.save ? scaledSave(spec.save, config.steps ?? 0) : null,
+                            // Who the ground is *for*. `affects` was read for the movement cost and
+                            // nowhere else, so a patch that dealt damage dealt it to everyone standing
+                            // in it — the caster's own party, and the caster, who is at the centre of
+                            // every emanation they cast. Driven live, an Arrogante ending their turn in
+                            // their own Respira came away with persistent void damage, and so did the
+                            // ally beside them.
+                            affects: spec.affects ?? null,
                             ...scenery,
                         },
                     },
@@ -261,14 +276,20 @@ function boundsOf(region) {
  */
 function scaledDamage(damage, steps) {
     const grown = { ...damage };
-    if (damage.perStep && steps > 0) {
+    // `perStepInterval: 2` is "+1d6 at every *other* increment", which two Techniques say out loud —
+    // Ennetsu Jigoku's persistent fire, where the rider machinery already honoured it, and Respira's
+    // miasma, where this did not. A rank-5 Respira grew its 1d6 tick to 5d6 instead of 3d6.
+    const interval = Math.max(1, Number(damage.perStepInterval) || 1);
+    const earned = Math.floor(steps / interval);
+    if (damage.perStep && earned > 0) {
         const base = /^(\d*)d(\d+)$/.exec(String(damage.formula).trim());
         const per = /^(\d*)d(\d+)$/.exec(String(damage.perStep).trim());
         if (base && per && base[2] === per[2]) {
-            grown.formula = `${(Number(base[1]) || 1) + (Number(per[1]) || 1) * steps}d${base[2]}`;
+            grown.formula = `${(Number(base[1]) || 1) + (Number(per[1]) || 1) * earned}d${base[2]}`;
         }
     }
     delete grown.perStep;
+    delete grown.perStepInterval;
     return grown;
 }
 
@@ -326,12 +347,19 @@ class LingeringRegionBehaviorType extends foundry.data.regionBehaviors.RegionBeh
         const actor = event.data?.token?.actor;
         if (!actor || (!damage?.formula && !payload?.save)) return;
 
+        // `originUuid` is the caster's *actor* — see `createOne` — not a token, so no `.actor` step here.
+        const originActor = payload.originUuid ? await fromUuid(payload.originUuid) : null;
+
+        // "An **enemy** that enters or ends its turn in the area." Terrain has honoured `affects` since
+        // Senbonzakura's petals; damage and saves never did, and the content that says `enemies` was
+        // catching the caster's own side. Declared-only, so a patch of ground that names no side keeps
+        // catching everybody, which is what the three Techniques written that way mean.
+        if (payload.affects === "enemies" && !catches(allianceOf(originActor), allianceOf(actor))) return;
+
         // *Royal Demon Rose* is "any creature that starts its turn in the area must attempt a Fortitude
         // save" — a save with its own outcome ladder, not a flat tick, so it goes through the same
         // `runSave` a `save` rider would use rather than the flat persistent-damage path below.
         if (payload?.save) {
-            // `originUuid` is the caster's *actor* — see `createOne` — not a token, so no `.actor` step here.
-            const originActor = payload.originUuid ? await fromUuid(payload.originUuid) : null;
             if (!originActor) return;
             // The Technique that cast this ground, still on the caster's own sheet — `statistic.roll` wants
             // a real Item or nothing at all here, and a name-and-uuid stand-in tripped over the first pf2e

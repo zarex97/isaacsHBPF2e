@@ -62,12 +62,18 @@
             ],
             "rarity": "common",
             "value": [
-                "propulsive"
+                "propulsive",
+                "versatile-spirit"
             ]
         },
         "usage": {
             "canBeAmmo": false,
             "value": "held-in-one-plus-hands"
+        },
+        "ammo": {
+            "baseType": null,
+            "builtIn": true,
+            "capacity": null
         }
     },
     "type": "weapon"

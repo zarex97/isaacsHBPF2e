@@ -1,0 +1,75 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "dc": "reiatsu",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "slug": "confused",
+                                    "type": "condition"
+                                },
+                                "duration": {
+                                    "expiry": "turn-end",
+                                    "unit": "rounds",
+                                    "value": 1
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            }
+                        ],
+                        "statistic": "will",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "note": "Only a creature already inside the hypnosis can be pushed further into it — guide §7A.",
+                    "predicate": [
+                        "rider:target:effect:effect-hypnotized"
+                    ]
+                }
+            ]
+        }
+    },
+    "folder": "Actions",
+    "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
+    "name": "Kanzen Saimin — Sustain",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per round · <strong>Target</strong> one creature you have hypnotized</p><hr /><p>Push the lie further. The target attempts a Will save against your Reiatsu DC; on a failure it is <strong>confused</strong> until the end of its turn.</p><p>A creature that is not hypnotized is not affected &mdash; there is nothing yet for the lie to be built on.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "concentrate",
+                "illusion",
+                "mental",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "action"
+}
