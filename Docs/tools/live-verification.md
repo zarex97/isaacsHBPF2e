@@ -195,6 +195,9 @@ World `pf` is not a clean room. It is a working world with years of fixtures in 
 | `game.pf2e.Check.roll` re-tests every predicate | A modifier switched off before the call is switched back on before the dice fall. Correct the DC instead |
 | `save-rolled` riders come from `pf2e-toolbelt.rollSave` | Which fires only from a **target row on the chat card**. An ad-hoc `actor.saves.reflex.roll()` fires nothing |
 | `item.toMessage()` bypasses `spellcastingEntry.cast` | A *spell* posted that way skips area targeting; an *action* does not |
+| `item.toMessage()` also **spends no frequency** | pf2e decrements `system.frequency.value` in `createUseActionMessage`, which only the two character sheets call. Driving an action by `toMessage()` leaves a once-per-day allowance untouched, and reads exactly like the class failing to count. Click `[data-action="use-action"]` on the sheet's own row instead |
+| A **counted** frequency is not an **enforced** one | `createUseActionMessage` stops decrementing at zero and posts the card anyway. pf2e never refuses; whatever the card drives must check for itself |
+| A predicate on a tag matches nothing on an **old** sheet | `otherTags` is copied at grant time like everything else, so a tag added to the pack later is absent — and a predicate that matches nothing does not complain, it simply never fires. `Release.repair` unions them back; run it before believing a rule element did nothing |
 | `showCheckDialogs` / `showDamageDialogs` user flags | Block scripted rolls |
 | `game.user.updateTokenTargets` does not exist | Use `token.object.setTarget(true, { user, releaseOthers })` |
 

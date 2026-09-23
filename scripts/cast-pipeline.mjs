@@ -63,8 +63,32 @@ export const CastPipeline = {
         );
     },
 
+    /**
+     * A voice that has been sealed.
+     *
+     * > **#99 Kin — Silence the Chain.** **Failure** stupefied 2 for 1 minute; **can't cast spells or use
+     * > kidō for 1 round**. **Crit failure** stupefied 3, can't cast for 2 rounds. — guide §6.2
+     *
+     * That sentence is the whole difference between Kin and an ordinary stupefy, and it shipped as a line
+     * on the effect's description with `rules: []` behind it. Driven live, a target carrying
+     * `Effect: Silenced Chain` cast whatever it liked.
+     *
+     * Read off a roll option rather than by effect name, so anything else that seals a voice — a Schrift,
+     * a hazard, a GM's own effect — gets the same refusal by publishing the same option.
+     *
+     * **First** of the refusals, before the area is even aimed: a caster who cannot speak should not be
+     * asked to place a burst and then told no.
+     */
+    silenced(spell) {
+        const actor = spell?.actor;
+        if (!actor?.getRollOptions?.().includes("soulbound:silenced")) return true;
+        ui.notifications.warn(`${actor.name}'s voice is sealed: no spells and no kidō.`);
+        return false;
+    },
+
     /** Resolves false when the cast should not go ahead. Mutates `options` — the system gets the same object. */
     async beforeCast(spell, options) {
+        if (!this.silenced(spell)) return false;
         if (!(await AreaTargeting.run(spell, options))) return false;
         // Before the allowance is spent, not after: `Release.beforeCast` reads the same frequency that
         // `FreeCast` decrements, and the Soulbound's once-per-round cap is a refusal rather than a price.

@@ -55,10 +55,41 @@ export function coverBonusOn(actor) {
         .reduce((sum, m) => sum + (Number(m.modifier) || 0), 0);
 }
 
-/** Which ignore-cover option this attacker is carrying, or null. */
-export function ignoringCover(actor) {
+/**
+ * Lesser cover is pf2e's **+1**; standard is +2 and greater is +4.
+ *
+ * The number is the only way to tell them apart at the point where the correction is made — the bonus
+ * is on the defender's AC and its label has been renamed between releases — so it is the number that is
+ * matched.
+ */
+export const LESSER_COVER = 1;
+
+/**
+ * Which ignore-cover allowance is in play here, or null.
+ *
+ * Two shapes, because the clauses come in two shapes. A **stance** says it about everything you do —
+ * Senbonzakura's scattered blades, Gokei — and is an option on the actor. A **single ability** says it
+ * about itself:
+ *
+ * > **#4 Byakurai — Pale Lightning.** 60 ft., one creature. Spell attack roll. 2d6 electricity, doubled
+ * > on a crit. **Ignores lesser cover.** — guide §6.1
+ *
+ * That last sentence was the whole of Byakurai that never happened: the kidō had no rules, no riders and
+ * no flags, so the one thing distinguishing it from any other 2d6 attack cantrip was a line of prose.
+ * It is an item flag rather than an actor option because it must not leak onto the next Strike.
+ *
+ * `"lesser"` is deliberately not `"all"`: a +2 or +4 bonus is standard or greater cover, which this
+ * clause does not touch, and reading it as "any cover" would quietly make a 1st-rank kidō better than
+ * a Shikai.
+ */
+export function ignoringCover(actor, item = null) {
+    const declared = item?.flags?.["isaacs-hb-pf2e"]?.ignoresCover;
+    if (declared === "lesser") return { label: item?.name ?? "Ignores lesser cover", max: LESSER_COVER };
+    if (declared === "all") return { label: item?.name ?? "Ignores cover", max: Infinity };
     const options = actor?.getRollOptions?.() ?? [];
-    for (const [option, label] of IGNORES_COVER) if (options.includes(option)) return label;
+    for (const [option, label] of IGNORES_COVER) {
+        if (options.includes(option)) return { label, max: Infinity };
+    }
     return null;
 }
 
@@ -98,10 +129,14 @@ export const Scattered = {
             async function (wrapped, check, context = {}, ...rest) {
                 try {
                     if (context?.type === "attack-roll") {
-                        const label = ignoringCover(context.actor);
+                        const allowance = ignoringCover(context.actor, context.item);
+                        const label = allowance?.label;
                         const target = context.target?.actor;
-                        if (label && target) {
-                            const bonus = coverBonusOn(target);
+                        if (allowance && target) {
+                            const found = coverBonusOn(target);
+                            // "Lesser cover" and nothing more: a bonus above the allowance is standard or
+                            // greater cover, and is left exactly where it is.
+                            const bonus = found <= allowance.max ? found : 0;
                             const corrected = withoutCover(context.dc, bonus);
                             if (corrected !== context.dc) {
                                 context = { ...context, dc: corrected };
@@ -116,8 +151,10 @@ export const Scattered = {
                         }
                     } else if (context?.type === "saving-throw") {
                         const origin = context.origin?.actor ?? context.origin ?? context.item?.actor;
-                        const label = ignoringCover(origin);
-                        const bonus = label ? coverBonusOnCheck(check) : 0;
+                        const allowance = ignoringCover(origin, context.item);
+                        const label = allowance?.label;
+                        const found = allowance ? coverBonusOnCheck(check) : 0;
+                        const bonus = found <= (allowance?.max ?? 0) ? found : 0;
                         if (bonus > 0 && typeof context.dc?.value === "number") {
                             context = {
                                 ...context,

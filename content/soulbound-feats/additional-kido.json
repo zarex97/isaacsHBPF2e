@@ -55,6 +55,9 @@
                 },
                 "flag": "extraKido",
                 "key": "ChoiceSet",
+                "predicate": [
+                    "feature:soul-reaper"
+                ],
                 "prompt": "Choose one more kidō"
             },
             {
