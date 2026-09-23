@@ -1,5 +1,6 @@
 import { Hypnosis } from "./hypnosis.mjs";
 import { Reiatsu } from "./reiatsu.mjs";
+import { Suppression } from "./suppression.mjs";
 import { SpiritWeapon } from "./weapon.mjs";
 
 const MODULE_ID = "isaacs-hb-pf2e";
@@ -659,6 +660,20 @@ export const Release = {
         }
 
         /**
+         * > …and the target can't re-enter it during that time. — guide §5.3
+         *
+         * The other half of a Quincy's Seal the Art, and the half that had nothing behind it: the
+         * suppression wrote a marker flag and **nothing anywhere read it**, so a sealed Soul Reaper
+         * simply Released again on their next action and put the whole form back.
+         */
+        if (Suppression.blocked(actor)) {
+            ui.notifications.warn(
+                `${actor.name}'s art is sealed — it cannot be re-entered until the suppression lifts.`,
+            );
+            return false;
+        }
+
+        /**
          * > You can't Release while your spirit weapon is dismissed. — guide §4.7
          *
          * This comment's promise above — "a dismissed spirit weapon refuses" — was a description of
@@ -737,6 +752,11 @@ export const Release = {
             return refuse(() => ui.notifications.warn(
                 `${actor.name} has used Full Release ${used === 1 ? "once" : `${used} times`} today, `
                 + `which is all of it. It comes back with your daily preparations.`,
+            ));
+        }
+        if (Suppression.blocked(actor)) {
+            return refuse(() => ui.notifications.warn(
+                `${actor.name}'s art is sealed — it cannot be re-entered until the suppression lifts.`,
             ));
         }
         if (this.stateOf(actor) === "sealed") {

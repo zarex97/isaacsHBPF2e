@@ -67,6 +67,54 @@ export function stepTwoHand(traits, steps) {
     });
 }
 
+/**
+ * The same step, on a **Technique** rather than on the weapon.
+ *
+ * > **Zanjutsu Mastery (15th).** Your Zanjutsu techniques' damage dice increase by one step
+ * > (d6→d8, d8→d10). — guide §5.1
+ *
+ * This could not be written as an `ItemAlteration` at all: pf2e's `damage-dice-faces` handler declares
+ * `itemType: new fields.StringField({ required: true, choices: ["weapon"] })`, and a Zanjutsu technique
+ * is a **spell**. So the feature shipped publishing a roll option, `soulbound:zanjutsu-mastery`, that
+ * nothing anywhere read — the whole of a 15th-level Lineage capstone was one unread string.
+ *
+ * Declared on the feature rather than named in code, so any later feature that steps a family of
+ * Techniques says so the same way:
+ *
+ * ```json
+ * "flags": { "isaacs-hb-pf2e": { "techniqueDieSteps": { "value": 1, "tag": "sb-tier-zanjutsu" } } }
+ * ```
+ *
+ * The step is taken on the prepared document during `prepareDerivedData`, beside the weapon pass, which
+ * is the only moment a spell's damage is both computed and still writable.
+ */
+export function applyTechniqueDieSteps(actor) {
+    const declarations = [];
+    for (const item of actor?.items ?? []) {
+        const declared = item.flags?.[MODULE_ID]?.techniqueDieSteps;
+        const steps = Number(declared?.value) || 0;
+        if (steps > 0 && typeof declared?.tag === "string") declarations.push({ steps, tag: declared.tag });
+    }
+    if (declarations.length === 0) return;
+
+    for (const spell of actor.itemTypes?.spell ?? []) {
+        const tags = spell.system?.traits?.otherTags ?? [];
+        const steps = declarations
+            .filter((d) => tags.includes(d.tag))
+            .reduce((sum, d) => sum + d.steps, 0);
+        if (steps <= 0) continue;
+        for (const part of Object.values(spell.system?.damage ?? {})) {
+            // `2d6` → `2d8`: the die grows, the count does not. A formula that is not plain dice — a
+            // flat number, a `@actor` expression — is left exactly as it is rather than guessed at.
+            const match = /^(\d*)d(\d+)$/.exec(String(part?.formula ?? "").trim());
+            if (!match) continue;
+            const grown = nextDie(`d${match[2]}`, steps);
+            if (grown === `d${match[2]}`) continue;
+            part.formula = `${match[1] || 1}${grown}`;
+        }
+    }
+}
+
 export function applyExtraDieSteps(actor) {
     const steps = stepsRequested(actor);
     if (steps <= 0) return;

@@ -1871,6 +1871,112 @@ check("and it arrives with the Full Release, not with the 13th level",
 
 
 /* ---------------------------------------------------------------------------------------------- */
+/*  Zanjutsu Mastery — a 15th-level capstone that was one unread string                             */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * SR-09 to SR-12. The Soul Reaper's Lineage Mastery made two promises and kept neither: the feature's
+ * whole rules array was a single `RollOption` publishing `soulbound:zanjutsu-mastery`, and **nothing in
+ * the module or the content read it**.
+ *
+ * The die step could not have been written as a rule element even in principle. pf2e's
+ * `damage-dice-faces` handler declares `itemType: new fields.StringField({ choices: ["weapon"] })`, and
+ * a Zanjutsu technique is a **spell** — so the alteration that looks right is rejected outright.
+ */
+const zanjutsuMastery = contentDoc("soulbound-class-features/lineages/zanjutsu-mastery.json");
+const zmFlags = zanjutsuMastery.flags["isaacs-hb-pf2e"];
+check("Zanjutsu Mastery declares the step rather than naming the Techniques in code",
+    zmFlags.techniqueDieSteps, { tag: "sb-tier-zanjutsu", value: 1 });
+
+{
+    const { applyTechniqueDieSteps } = await import("../scripts/soulbound/die-steps.mjs");
+    const spell = (formula, tags) => ({
+        system: { traits: { otherTags: tags }, damage: { 0: { formula } } },
+    });
+    const feature = { flags: { "isaacs-hb-pf2e": { techniqueDieSteps: { tag: "sb-tier-zanjutsu", value: 1 } } } };
+    const drilled = spell("2d6", ["sb-tier-zanjutsu"]);
+    const elsewhere = spell("2d6", ["sb-tier-release"]);
+    // A formula that is not plain dice is left exactly as it is rather than guessed at.
+    const flat = spell("@actor.level", ["sb-tier-zanjutsu"]);
+    applyTechniqueDieSteps({ items: [feature], itemTypes: { spell: [drilled, elsewhere, flat] } });
+    check("…d6 becomes d8, and the number of dice does not move",
+        drilled.system.damage[0].formula, "2d8");
+    check("…a Technique of another tier is untouched", elsewhere.system.damage[0].formula, "2d6");
+    check("…and a formula that is not plain dice is left alone",
+        flat.system.damage[0].formula, "@actor.level");
+
+    // "d8→d10" is the guide's own second example, and d12 is where pf2e's ladder stops.
+    const eight = spell("1d8", ["sb-tier-zanjutsu"]);
+    const twelve = spell("3d12", ["sb-tier-zanjutsu"]);
+    applyTechniqueDieSteps({ items: [feature], itemTypes: { spell: [eight, twelve] } });
+    check("…d8 becomes d10", eight.system.damage[0].formula, "1d10");
+    check("…and nothing goes past d12", twelve.system.damage[0].formula, "3d12");
+
+    // An actor with no such declaration pays nothing for this at all.
+    const untouched = spell("2d6", ["sb-tier-zanjutsu"]);
+    applyTechniqueDieSteps({ items: [], itemTypes: { spell: [untouched] } });
+    check("…and a Soul Reaper below 15th is not stepped",
+        untouched.system.damage[0].formula, "2d6");
+}
+
+/**
+ * The other half: "Once per round, when you critically hit with your spirit weapon, you regain 1 Reiatsu
+ * Point; this ignores Rising Pressure's per-encounter cap." Word for word the clause `Unsealed` makes at
+ * 19th, and the same mechanism — `pool` could only ever spend until `gain` existed.
+ */
+const zmRefund = zmFlags.riders[0];
+check("…and a critical hit with the spirit weapon hands a point back",
+    [zmRefund.event, zmRefund.apply.type, zmRefund.apply.gain, zmRefund.outcomes],
+    ["strike-resolved", "pool", 1, ["criticalSuccess"]]);
+check("…once in a round", zmRefund.oncePerRound, true);
+check("…and only with the spirit weapon",
+    [zmRefund.predicate, zmRefund.self], [["item:tag:soulbound-spirit-weapon"], true]);
+
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  Seal the Art — the suppression that suppressed nothing                                          */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * Q-18, Q-19. "A release state … is **not ended outright but suppressed** until the end of the target's
+ * next turn, and the target can't re-enter it during that time."
+ *
+ * The counteract path wrote `effect.update({ disabled: true })`, and **a pf2e Effect item has no
+ * `disabled` field**. The one it does have, `system.expired`, is derived from `remainingDuration` in
+ * `prepareBaseData` and is rewritten on every preparation. Driven live: a Quincy spent a Reiatsu Point,
+ * the card announced that a 17th-level Shikai was suppressed, and all three of its rule elements were
+ * still live on the actor a moment later. Re-entry was not refused either — the marker flag was read by
+ * nothing at all.
+ */
+{
+    const { Suppression } = await import("../scripts/soulbound/suppression.mjs");
+    const effect = (rules) => ({ _source: { system: { rules } } });
+
+    // Parked and put back, so the rules must be ones that survive the round trip — the same reasoning
+    // `rulesAreSafeToRefresh` gives: a `GrantItem` or a `ChoiceSet` carries state *inside* the array.
+    check("a release state of plain synthetics can be parked",
+        Suppression.canSuppress(effect([{ key: "FlatModifier" }, { key: "Resistance" }])), true);
+    check("…one holding a grant cannot", Suppression.canSuppress(effect([{ key: "GrantItem" }])), false);
+    check("…nor one holding a choice", Suppression.canSuppress(effect([{ key: "ChoiceSet" }])), false);
+    check("…and an effect with no rules at all is trivially safe", Suppression.canSuppress(effect([])), true);
+
+    // "Can't re-enter it during that time" — asked of the whole actor, because re-entering is climbing
+    // the ladder again rather than re-creating one named effect.
+    //
+    // Driven live, and the first shape of this failed: the block was read off the suppressed *effect*,
+    // so the target re-sealed — which takes the release-state effect off the sheet — and the very next
+    // Release went through. Re-sealing to wash off a seal is precisely the loophole this closes, so the
+    // window is stamped on the **actor**, where taking an effect off cannot erase it.
+    const sealed = (flag) => ({ getFlag: () => flag });
+    check("a Soulbound whose art is sealed may not climb the ladder again",
+        Suppression.blocked(sealed({ turns: 1 })), true);
+    check("…nor while Sklaverei's minute is running",
+        Suppression.blocked(sealed({ until: 12345 })), true);
+    check("…and one with nothing sealed is free", Suppression.blocked(sealed(null)), false);
+}
+
+
+/* ---------------------------------------------------------------------------------------------- */
 /*  Final Release — the capstone that entered itself                                                */
 /* ---------------------------------------------------------------------------------------------- */
 

@@ -1,4 +1,30 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "gain": 1,
+                        "type": "pool"
+                    },
+                    "event": "strike-resolved",
+                    "note": "“Once per round, when you critically hit with your spirit weapon, you regain 1 Reiatsu Point; this ignores Rising Pressure's per-encounter cap.” Written straight to the pool by `gain` rather than routed through Rising Pressure, which is what ignoring the cap has to mean. The same clause as `Unsealed`'s at 19th, and the same mechanism.",
+                    "oncePerRound": true,
+                    "outcomes": [
+                        "criticalSuccess"
+                    ],
+                    "predicate": [
+                        "item:tag:soulbound-spirit-weapon"
+                    ],
+                    "self": true
+                }
+            ],
+            "techniqueDieSteps": {
+                "tag": "sb-tier-zanjutsu",
+                "value": 1
+            }
+        }
+    },
     "folder": "Lineages",
     "img": "icons/skills/melee/blade-tips-triple-steel.webp",
     "name": "Zanjutsu Mastery",
@@ -26,8 +52,8 @@
         },
         "rules": [
             {
-                "key": "RollOption",
                 "domain": "all",
+                "key": "RollOption",
                 "option": "soulbound:zanjutsu-mastery",
                 "value": true
             }
