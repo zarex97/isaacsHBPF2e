@@ -29,15 +29,16 @@
                 "uuid": "Compendium.isaacs-hb-pf2e.soulbound-equipment.Item.Freund Schild"
             },
             {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "soulbound:reiatsu-remaining",
+                "value": "gte(@actor.system.resources.focus.value,1)"
+            },
+            {
                 "key": "FlatModifier",
                 "label": "The Balance",
                 "predicate": [
-                    {
-                        "gte": [
-                            "self:resource:focus:value",
-                            1
-                        ]
-                    }
+                    "soulbound:reiatsu-remaining"
                 ],
                 "selector": "ac",
                 "type": "circumstance",
