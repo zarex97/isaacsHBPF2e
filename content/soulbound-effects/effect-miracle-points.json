@@ -3,12 +3,235 @@
         "isaacs-hb-pf2e": {
             "riders": [
                 {
-                    "apply": {
-                        "text": "<strong>Spend Miracle points</strong> (free action). Each point spent gives your spirit weapon's Strikes <strong>+1d6</strong> damage of its type until the end of your turn. With <strong>Blitz of the Hero</strong> each point also gives <strong>+5 feet status</strong> to your Speeds, to a maximum of +20 feet.",
-                        "type": "prompt"
-                    },
                     "event": "turn-start",
-                    "self": true
+                    "self": true,
+                    "apply": {
+                        "type": "choice",
+                        "prompt": "Miracle points: spend how many?",
+                        "options": [
+                            {
+                                "label": "Spend 1 — +1d6 damage, +5 feet",
+                                "predicate": [
+                                    {
+                                        "gte": [
+                                            "self:effect:miracle-points",
+                                            1
+                                        ]
+                                    }
+                                ],
+                                "riders": [
+                                    {
+                                        "self": true,
+                                        "apply": {
+                                            "type": "charge",
+                                            "effect": "Effect: Miracle Points",
+                                            "spend": 1,
+                                            "perRound": null
+                                        }
+                                    },
+                                    {
+                                        "self": true,
+                                        "apply": {
+                                            "type": "effect",
+                                            "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: The Miracle — Spent",
+                                            "replace": true,
+                                            "substitutions": [
+                                                {
+                                                    "path": "system.rules.0.diceNumber",
+                                                    "value": {
+                                                        "literal": 1
+                                                    }
+                                                },
+                                                {
+                                                    "path": "system.rules.1.value",
+                                                    "value": {
+                                                        "literal": 5
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "label": "Spend 2 — +2d6 damage, +10 feet",
+                                "predicate": [
+                                    {
+                                        "gte": [
+                                            "self:effect:miracle-points",
+                                            2
+                                        ]
+                                    }
+                                ],
+                                "riders": [
+                                    {
+                                        "self": true,
+                                        "apply": {
+                                            "type": "charge",
+                                            "effect": "Effect: Miracle Points",
+                                            "spend": 2,
+                                            "perRound": null
+                                        }
+                                    },
+                                    {
+                                        "self": true,
+                                        "apply": {
+                                            "type": "effect",
+                                            "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: The Miracle — Spent",
+                                            "replace": true,
+                                            "substitutions": [
+                                                {
+                                                    "path": "system.rules.0.diceNumber",
+                                                    "value": {
+                                                        "literal": 2
+                                                    }
+                                                },
+                                                {
+                                                    "path": "system.rules.1.value",
+                                                    "value": {
+                                                        "literal": 10
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "label": "Spend 3 — +3d6 damage, +15 feet",
+                                "predicate": [
+                                    {
+                                        "gte": [
+                                            "self:effect:miracle-points",
+                                            3
+                                        ]
+                                    }
+                                ],
+                                "riders": [
+                                    {
+                                        "self": true,
+                                        "apply": {
+                                            "type": "charge",
+                                            "effect": "Effect: Miracle Points",
+                                            "spend": 3,
+                                            "perRound": null
+                                        }
+                                    },
+                                    {
+                                        "self": true,
+                                        "apply": {
+                                            "type": "effect",
+                                            "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: The Miracle — Spent",
+                                            "replace": true,
+                                            "substitutions": [
+                                                {
+                                                    "path": "system.rules.0.diceNumber",
+                                                    "value": {
+                                                        "literal": 3
+                                                    }
+                                                },
+                                                {
+                                                    "path": "system.rules.1.value",
+                                                    "value": {
+                                                        "literal": 15
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "label": "Spend 4 — +4d6 damage, +20 feet",
+                                "predicate": [
+                                    {
+                                        "gte": [
+                                            "self:effect:miracle-points",
+                                            4
+                                        ]
+                                    }
+                                ],
+                                "riders": [
+                                    {
+                                        "self": true,
+                                        "apply": {
+                                            "type": "charge",
+                                            "effect": "Effect: Miracle Points",
+                                            "spend": 4,
+                                            "perRound": null
+                                        }
+                                    },
+                                    {
+                                        "self": true,
+                                        "apply": {
+                                            "type": "effect",
+                                            "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: The Miracle — Spent",
+                                            "replace": true,
+                                            "substitutions": [
+                                                {
+                                                    "path": "system.rules.0.diceNumber",
+                                                    "value": {
+                                                        "literal": 4
+                                                    }
+                                                },
+                                                {
+                                                    "path": "system.rules.1.value",
+                                                    "value": {
+                                                        "literal": 20
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "label": "Spend 5 — +5d6 damage, +20 feet",
+                                "predicate": [
+                                    {
+                                        "gte": [
+                                            "self:effect:miracle-points",
+                                            5
+                                        ]
+                                    }
+                                ],
+                                "riders": [
+                                    {
+                                        "self": true,
+                                        "apply": {
+                                            "type": "charge",
+                                            "effect": "Effect: Miracle Points",
+                                            "spend": 5,
+                                            "perRound": null
+                                        }
+                                    },
+                                    {
+                                        "self": true,
+                                        "apply": {
+                                            "type": "effect",
+                                            "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: The Miracle — Spent",
+                                            "replace": true,
+                                            "substitutions": [
+                                                {
+                                                    "path": "system.rules.0.diceNumber",
+                                                    "value": {
+                                                        "literal": 5
+                                                    }
+                                                },
+                                                {
+                                                    "path": "system.rules.1.value",
+                                                    "value": {
+                                                        "literal": 20
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "note": "Five buttons rather than a number box, because a rider's options are authored: five is what the pool can reach in two rounds of being hit, and a sixth would be a button nobody could press before the encounter turned. Each option is predicated on the points being there."
                 }
             ]
         }

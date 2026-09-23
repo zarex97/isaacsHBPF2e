@@ -2110,7 +2110,9 @@ check("Aullido expends every wolf that is left",
         letzt.flags["isaacs-hb-pf2e"].extraDieSteps, 1);
     check("…and no longer asks pf2e for an upgrade it will not give",
         letzt.system.rules.filter((r) => r.property === "damage-dice-faces").length, 0);
-    // Both die-step declarations in the content, so a third arrives beside its two predecessors.
+    // Every die-step declaration in the content, so a new one arrives beside its predecessors rather
+    // than in silence. The third is *Bailar de Valquiria*'s and is the only one that counts off a badge:
+    // its step is taken **per refusal**, and the refusals are unlimited.
     const declared = [];
     (function walk(dir) {
         for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -2123,7 +2125,7 @@ check("Aullido expends every wolf that is left",
         }
     })(path.join(ROOT, "content"));
     check("the forms that give a second die step", declared.sort(),
-        ["effect-quincy-letzt-stil.json", "effect-zanka-no-tachi.json"]);
+        ["effect-quincy-letzt-stil.json", "effect-the-miracle-grown.json", "effect-zanka-no-tachi.json"]);
 }
 
 /**
@@ -2782,9 +2784,13 @@ check("declarations come back cheapest first",
 check("Unbroken Chain declares its own price now",
     contentDoc("soulbound-feats/unbroken-chain.json").flags["isaacs-hb-pf2e"].refuseDeath,
     { cost: 1, frequency: true, label: "Unbroken Chain", requires: "released", resource: "focus" });
+// …and Bailar's carries a `grants`, which is what makes the refusal repeatable *and* cumulative:
+// "your spirit weapon's damage die increases by one step for the rest of the encounter", once per
+// refusal, with no limit on the refusals.
 check("and Bailar declares a different one",
     contentDoc("soulbound-effects/effect-bailar-de-valquiria.json").flags["isaacs-hb-pf2e"].refuseDeath,
-    { cost: 5, label: "Bailar de Valquiria", resource: "effect-miracle-points" });
+    { cost: 5, label: "Bailar de Valquiria", resource: "effect-miracle-points",
+      grants: "Effect: The Miracle — Grown" });
 
 
 /**

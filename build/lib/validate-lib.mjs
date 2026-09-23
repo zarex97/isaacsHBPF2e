@@ -719,7 +719,7 @@ const DURATION_UNITS = new Set(["rounds", "minutes", "hours", "days", "unlimited
 const RIDER_TYPES = new Set([
     "condition", "effect", "prompt", "choice", "save", "damage", "persistent-damage", "death", "teleport",
     "strikes", "banish", "heal", "readout", "toggle", "counteract", "encasement", "escape",
-    "equip", "expire", "reaction", "flat-check", "charge", "pick",
+    "equip", "expire", "reaction", "flat-check", "charge", "pick", "pool",
 ]);
 const RIDER_EVENTS = new Set([
     "save-rolled", "strike-resolved", "strike-received", "action-used", "damage-applied", "damage-received",
@@ -1420,6 +1420,12 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0, inherit
             }
             break;
         }
+        case "pool":
+            // A price, and the one thing that makes it a price rather than a tax: how much.
+            if (!(Number(apply.spend) > 0)) {
+                errors.push(`${at} a pool rider needs a positive \`spend\` — got "${apply.spend}"`);
+            }
+            break;
         case "flat-check":
             if (!(Number(apply.dc) > 0)) {
                 errors.push(`${at} a flat check needs a positive dc — got "${apply.dc}"`);
@@ -1658,8 +1664,20 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0, inherit
             options.forEach((option, j) => {
                 const oat = `${at}.apply.options[${j}]`;
                 if (!option.label) errors.push(`${oat} needs a label — it is the button text`);
+                // An option may be a **list** of riders rather than one — see `applyChoice`. The Miracle's
+                // spend is the case: one button takes the points off the counter and hands out what they
+                // bought, and `reaction` and `pick` have spelled nesting as `riders` since they were
+                // written. Validated as riders in their own right, at the depth they actually sit.
+                if (Array.isArray(option.riders)) {
+                    if (option.riders.length === 0) errors.push(`${oat} riders is empty`);
+                    option.riders.forEach((entry, k) => {
+                        validateRider(entry, `${oat}.riders[${k}]`, errors,
+                            { doc, depth: depth + 1, inheritedEvent: event });
+                    });
+                    return;
+                }
                 if (!option.apply) {
-                    errors.push(`${oat} needs an apply`);
+                    errors.push(`${oat} needs an apply, or a list of riders`);
                     return;
                 }
                 if (option.apply.type === "choice") {

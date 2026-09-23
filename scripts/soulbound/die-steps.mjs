@@ -44,7 +44,13 @@ export function stepsRequested(actor) {
     let steps = 0;
     for (const item of actor?.items ?? []) {
         const declared = item.flags?.[MODULE_ID]?.[FLAG];
-        const count = typeof declared === "number" ? declared : declared?.value;
+        // A declaration may count off the item's own counter rather than stating a number. *Bailar de
+        // Valquiria* needs it: "your spirit weapon's damage die increases by one step for the rest of the
+        // encounter" **each time** the refusal fires, and the refusals are unlimited — so the steps are a
+        // tally, and the tally is a badge.
+        const count = typeof declared === "number"
+            ? declared
+            : (declared?.fromBadge ? item.system?.badge?.value : declared?.value);
         if (!(count > 0)) continue;
         const predicate = typeof declared === "object" ? declared.predicate : null;
         if (predicate && !testPredicate(predicate, actor.getRollOptions?.() ?? [])) continue;

@@ -213,6 +213,7 @@ build if this table and that switch disagree — the previous version of this se
 | `save` | The target rolls a save against a class DC and the rider carries its own riders, chosen by the result. |
 | `flat-check` | Rolls a flat check and branches on it. |
 | `counteract` | Rolls a counteract check against an effect. |
+| `pool` | Spends Reiatsu Points, with an optional `oncePerEncounter`. Every other price in the class is charged by pf2e when a Technique is **cast**; *The Miracle*'s Release Technique is a reaction, and reactions are never cast. |
 | `death` | Applies dying, or kills outright. |
 | `banish` | Removes a creature from the scene, and brings it back. |
 | `teleport` | Moves along the caster→target line, grid-snapped and clamped to the scene. `measure: "from-origin"` makes it a destination rather than a delta. |

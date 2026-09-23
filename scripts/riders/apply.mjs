@@ -242,10 +242,37 @@ export async function applyChoice(payload) {
     const item = await fromUuid(payload.riderItemUuid);
     const rider = riderAt(item, payload.riderIndex);
     const option = rider?.apply?.options?.[payload.optionIndex];
-    if (!option?.apply) return;
+    if (!option?.apply && !Array.isArray(option?.riders)) return;
+
+    // …and it is tested again on the click, because the card outlives the moment it was posted: a Soulbound
+    // who spends four points and then presses the five-point button on the same card would otherwise take
+    // a fifth from a pool that no longer has it.
+    if (!testPredicate(option.predicate, riderOptions({ originActor: context.originActor, targetActor: actor, item }))) {
+        ui.notifications.warn(`${item?.name ?? "This option"}: ${option.label ?? "that option"} is no longer available.`);
+        return;
+    }
 
     const work = { ...context, actor, target, item, outcome: payload.outcome ?? null, adjustments: [], prompts: [], notes: [], choices: [], picks: [], moves: [] };
-    await applyOne({ ...rider, apply: option.apply, duration: option.duration ?? rider.duration }, work);
+    /**
+     * An option may be a list rather than a single thing.
+     *
+     * The Miracle is why: *"You may spend any number of Miracle points … for each point spent, until the
+     * end of your turn your spirit weapon's Strikes deal +1d6"* is two actions on one button — take the
+     * points off the counter, and hand out what they bought. `reaction` and `pick` have spelled nesting
+     * as `riders` since they were written; this brings the third container into line rather than
+     * inventing a fourth shape for it.
+     */
+    const entries = Array.isArray(option.riders)
+        ? option.riders
+        : [{ ...rider, apply: option.apply, duration: option.duration ?? rider.duration }];
+    for (const [index, entry] of entries.entries()) {
+        await applyOne(entry, {
+            ...work,
+            riderIndex: Array.isArray(option.riders)
+                ? [payload.riderIndex, "options", payload.optionIndex, "riders", index].flat()
+                : payload.riderIndex,
+        });
+    }
     if (work.notes.length > 0) await postNotes(work);
     if (work.prompts.length > 0) await postPrompts(work);
 }
@@ -371,6 +398,8 @@ async function applyOne(rider, context) {
             return applySave(rider, context);
         case "charge":
             return applyCharge(rider, context);
+        case "pool":
+            return applyPool(rider, context);
         case "damage":
             return applyDamageRider(rider, context);
         case "death":
@@ -1976,6 +2005,47 @@ async function applyCharge(rider, context) {
     });
 }
 
+/**
+ * A price paid out of the Reiatsu pool by something that is not a cast.
+ *
+ * Every other price in the class is charged by pf2e when a Technique is cast, which is why this is the
+ * only place that needs it: *The Miracle*'s Release Technique is a **reaction**, and reactions are never
+ * cast. "It costs a Reiatsu Point only the **first time each encounter**; after that it is free" is
+ * therefore two things pf2e cannot do — spend a point outside a cast, and remember that it did.
+ *
+ * The ledger is the encounter's id rather than its round, and it is stamped **before** the point is
+ * taken: a write that fails halfway leaves the Quincy having paid and not been charged again, which is
+ * the kinder of the two mistakes. Out of an encounter there is nothing to be the first of, so nothing is
+ * charged — the same reading `round-gate.mjs` takes of a per-round allowance outside combat.
+ */
+async function applyPool(rider, context) {
+    const actor = context.originActor;
+    const focus = actor?.system?.resources?.focus;
+    if (!focus) return;
+
+    const spend = Number(rider.apply.spend) || 1;
+    if (rider.apply.oncePerEncounter) {
+        const stamp = game.combat?.started ? game.combat.id : null;
+        if (!stamp) return;
+        const key = `${(context.riderItem ?? context.item)?.id ?? "unknown"}-pool`;
+        const ledger = actor.getFlag(MODULE_ID, "poolSpent") ?? {};
+        if (ledger[key] === stamp) return;
+        await actor.setFlag(MODULE_ID, "poolSpent", { ...ledger, [key]: stamp });
+    }
+
+    // Clamped rather than refused. The clause prices the first use and does not make it conditional, and
+    // a Schrift that lets you be hit for free should not become one that refuses to notice.
+    const paid = Math.min(spend, focus.value ?? 0);
+    if (paid <= 0) return;
+    await actor.update({ "system.resources.focus.value": (focus.value ?? 0) - paid });
+    await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        flavor: (context.riderItem ?? context.item)?.name ?? "Rider",
+        content: `<p>${actor.name} spends <strong>${paid} Reiatsu Point${paid === 1 ? "" : "s"}</strong> — `
+            + `${(focus.value ?? 0) - paid} left.</p>`,
+    });
+}
+
 async function applySave(rider, context) {
     return runSave(rider.apply, context);
 }
@@ -2561,9 +2631,29 @@ async function postChoice({ rider, index, item, target, actor }, context, payloa
     const options = rider.apply.options ?? [];
     if (options.length === 0 || !item?.uuid) return;
 
-    const buttons = options
+    /**
+     * An option may say when it is available.
+     *
+     * The Miracle's spend is five buttons — one per point — and a character holding four points must not
+     * be offered the fifth. The index travels on the button, so the buttons are **filtered rather than
+     * renumbered**: dropping an option would silently shift every later one onto the wrong rider.
+     *
+     * Tested against the same snapshot the riders were chosen from, so "at least five points" means what
+     * it meant a moment ago rather than what it means after the first button was pressed.
+     */
+    const chooser = riderOptions({
+        originActor: context.originActor,
+        targetActor: (actor ?? context.actor),
+        item,
+    });
+    const offered = options
+        .map((option, optionIndex) => ({ option, optionIndex }))
+        .filter(({ option }) => testPredicate(option.predicate, chooser));
+    if (offered.length === 0) return;
+
+    const buttons = offered
         .map(
-            (option, optionIndex) =>
+            ({ option, optionIndex }) =>
                 `<button type="button" data-action="isaacs-hb-rider-choice" data-option="${optionIndex}">`
                 + `${foundry.utils.escapeHTML(option.label ?? `Option ${optionIndex + 1}`)}</button>`,
         )

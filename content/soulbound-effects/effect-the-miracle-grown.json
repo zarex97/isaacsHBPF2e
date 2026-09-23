@@ -1,0 +1,54 @@
+{
+    "img": "icons/magic/light/explosion-star-glow-yellow.webp",
+    "name": "Effect: The Miracle — Grown",
+    "system": {
+        "description": {
+            "value": "<p>The body reassembled itself larger. Your spirit weapon's damage die is <strong>one step larger per tally here</strong>, for the rest of the encounter.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "badge": {
+            "max": 99,
+            "min": 0,
+            "type": "counter",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect",
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "extraDieSteps": {
+                "fromBadge": true
+            }
+        }
+    }
+}
