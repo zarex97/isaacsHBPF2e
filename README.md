@@ -175,8 +175,14 @@ Riders are authored on whatever the rule belongs to — a Technique, a Cloth, a 
 | `action-used` | An action or spell is posted to chat | The item posted, against the targets you confirmed |
 | `damage-applied` | Damage from this actor's item lands | The origin's items |
 | `damage-received` | Damage from someone else's item lands on this actor | The defender's items |
+| `ally-damaged` | Damage lands on an **ally**, within the rider's own `range` in feet | The watching ally's items |
 | `turn-start`, `turn-end` | This actor's turn begins or ends | This actor's items |
 | `aura-tick` | A creature enters this actor's aura, or ends its turn inside it | The aura effect itself |
+
+`ally-damaged` is the only event that takes a **`range`**, in feet, beside the `event` itself — "an ally
+within 30 feet" and "an ally within 60 feet" are different clauses, and the rider is the only thing that
+knows which. A rider without one never fires and says so in the console, because an ability that reaches
+the whole map is never what was meant.
 
 A rider with no `event` means `save-rolled`, so every Technique written before events existed still means
 what it meant. A rider with no `outcomes` fires on any outcome — which is what "needles land on any attack
@@ -219,6 +225,7 @@ build if this table and that switch disagree — the previous version of this se
 | `equip` | Equips an item. Always the origin's, `self` or not. |
 | `reaction` | Offers the actor a reaction, as buttons on a card. |
 | `prompt` | Whispers the GM. Forced movement and outright death live here: automating half of a rider and being honest about the other half beats guessing which 15 feet. |
+| `pick` | Whispers the caster a card of **creatures** — everything within `range` feet matching `affects` — and applies the rider's nested `riders` to the one they click. *"Choose one enemy within 60 feet"* is a target, not a menu, and `choice` cannot express it. |
 | `choice` | Whispers the caster a card of buttons and applies the one they pick. Which sense *Tenbu Hōrin* takes is a decision, and it belongs to the caster — who is often not whoever rolled. |
 | `readout` | Posts an informational card and touches no sheet. |
 
@@ -229,7 +236,7 @@ than on the Techniques themselves, only two of which carry a `dc` at all. `"clas
 shared item wants.
 
 **A rider is not only a thing done to a target.** `equip` and `charge` always act on the origin; `heal`,
-`toggle` and `strikes` do when the rider is `self`; and three (`prompt`, `choice`, `readout`) produce chat
+`toggle` and `strikes` do when the rider is `self`; and four (`prompt`, `choice`, `pick`, `readout`) produce chat
 output without touching a sheet at all.
 
 ### Areas

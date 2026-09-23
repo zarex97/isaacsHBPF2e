@@ -22,6 +22,7 @@ export const EVENTS = [
     "action-used", // this actor posted an action or ability to chat
     "damage-applied", // damage from this actor's item landed on a target
     "damage-received", // damage from someone else's item landed on this actor
+    "ally-damaged", // damage landed on an ally of this actor, within the rider's own range
     "turn-end", // this actor's turn ended
     "turn-start", // this actor's turn began
     "aura-tick", // a creature entered this actor's aura, or ended its turn inside it

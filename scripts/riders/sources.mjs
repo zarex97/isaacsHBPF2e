@@ -25,6 +25,46 @@ import { Relay } from "./relay.mjs";
  * five-player table. For chat messages that is the message's author; for `applyDamage` it is whoever
  * clicked apply; for turns it is the active GM.
  */
+/**
+ * Feet between two tokens, by the scene's own grid.
+ *
+ * `measurePath` is what pf2e's own range checks use, so a diagonal counts the way the table counts it.
+ * Falls back to a straight line when there is no grid measurement to be had, which is better than
+ * refusing to fire at all.
+ */
+function distanceBetween(a, b) {
+    const measured = canvas.grid?.measurePath?.([a.center, b.center])?.distance;
+    if (Number.isFinite(measured)) return measured;
+    const feetPerPixel = (canvas.scene?.grid?.distance ?? 5) / (canvas.grid?.size ?? 100);
+    return Math.hypot(a.center.x - b.center.x, a.center.y - b.center.y) * feetPerPixel;
+}
+
+/**
+ * The document that will actually be holding the new hit points.
+ *
+ * Never the one `applyDamage` was called on, and for two separate reasons:
+ *
+ *  - **A contextual clone.** pf2e's own apply button does
+ *    `token.actor.getContextualClone(…).applyDamage(…)` (`chat-message/helpers.ts`), so `this` inside the
+ *    wrapper is a throwaway built for the roll options. The update it issues reaches the real actor; the
+ *    clone's own `hitPoints` never move again.
+ *  - **A synthetic actor.** An unlinked token's actor is rebuilt from the token delta on every update, so
+ *    even the real instance is replaced rather than mutated.
+ *
+ * Both were one bug wearing two faces, and fixing only the second is how this came back: an NPC read
+ * correctly through `actor.token.actor` while every **character** — whose `token` is null — kept reading
+ * the clone. Driven live, a character went from 41 hit points to 27 and the wrapper still read 41 four
+ * hundred milliseconds later.
+ *
+ * So: the token the damage was applied *through* first, because pf2e passes it and it is the most
+ * specific answer; then the token the actor is standing on; then the world actor the clone was made
+ * from, which shares its id.
+ */
+function liveActorFor(actor, params) {
+    const passed = params?.token?.document ?? params?.token ?? null;
+    return passed?.actor ?? actor.token?.actor ?? (actor.id ? game.actors?.get(actor.id) : null) ?? actor;
+}
+
 export const Sources = {
     register() {
         // Saves, via pf2e-toolbelt's Target Helper. Fires on the client that rolled.
@@ -450,19 +490,11 @@ export const Sources = {
 
         // **Read the hit points back off the live actor, not the one we were called on.**
         //
-        // An unlinked token's actor is *synthetic*: applying damage writes the token's delta, Foundry
-        // rebuilds the synthetic actor from it, and the instance this wrapper was called on is a dead
-        // object that keeps the number it had before the blow — for ever, not for a tick. So `after`
-        // equalled `before`, `landed` was always **0**, and since the attacker's half of this event is
-        // gated on `landed > 0` it was never sent at all: **no `damage-applied` rider in the module had
-        // ever fired**, and the ones on `damage-received` were told `total: 0`.
-        //
-        // Driven live: a Strike took a dummy from 362 hit points to 348, and the captured actor still
-        // read 362 four hundred milliseconds later while `actor.token.actor` read 348 immediately.
-        //
-        // Linked actors and characters are unaffected — `token` is null for them and `actor` is already
-        // the live document.
-        const live = actor.token?.actor ?? actor;
+        // See `liveActorFor`. The short version: the thing this wrapper is called on is never the
+        // document that ends up holding the new number, so `after` equalled `before` and `landed` was
+        // always **0** — and since the attacker's half of this event is gated on `landed > 0` it was
+        // never sent at all.
+        const live = liveActorFor(actor, params);
         const after = live.hitPoints?.value ?? live.system?.attributes?.hp?.value ?? 0;
         const landed = before - after;
 
@@ -528,6 +560,98 @@ export const Sources = {
             outcome: params?.outcome ?? null,
             damage,
         });
+
+        // …and the third reading of one blow: somebody *else* watched it land.
+        await Sources.onAllyDamaged({
+            target, item, damage, outcome: params?.outcome ?? null, attackerToken,
+        });
+    },
+
+    /**
+     * An ally was hurt, and somebody near them can do something about it.
+     *
+     * Two clauses in the guide are phrased this way and neither could be written before this existed:
+     *
+     * > **Trigger** You **or an ally within 30 feet** takes damage from a creature you can see.
+     * >   — Antithesis, guide §7C (S-63b)
+     * > Once per round, when an **ally** within 60 feet would take damage, you may redirect that damage
+     * >   to yourself. — The Balance, at Night, guide §7C (S-74b)
+     *
+     * `damage-received` is the **defender's** event: the rider engine looks at the items of the creature
+     * the damage landed on, and the Quincy's Technique is not among them. So the reaction was offered to
+     * the wrong person, or — as shipped — to nobody at all, and both clauses were recorded ❌ rather than
+     * fixed, twice, because the module had no shape for them.
+     *
+     * This is that shape, and the three decisions inside it are the ones worth stating:
+     *
+     *  - **The range lives on the rider**, because 30 feet and 60 feet are different clauses. The source
+     *    cannot know it, so the source asks: it reads each nearby ally's own riders and dispatches only
+     *    when that rider's range covers the distance. A rider with no range is refused rather than
+     *    treated as unlimited — an ability that reaches the whole map is never what the guide meant, and
+     *    failing closed makes the mistake visible at authoring time.
+     *  - **Nobody is dispatched to speculatively.** The filter runs here, before the relay, so a table
+     *    with no such Technique in play pays one `ridersOn` per friendly token and sends nothing. That is
+     *    what keeps a single blow from becoming one socket job per creature on the scene.
+     *  - **The damaged creature is excluded.** They already had `damage-received`; offering them the same
+     *    reaction twice under two names is how a defensive ability gets taken twice for one blow.
+     *
+     * `isAllyOf` is pf2e's own alliance test, the same one `targeting/catch.mjs` uses for
+     * `affects: "allies"`, so "ally" means here what it means everywhere else in the module.
+     */
+    async onAllyDamaged({ target, item, damage, outcome, attackerToken }) {
+        const hurt = target?.object;
+        if (!hurt || !canvas?.ready) return;
+        const hurtActor = target.actor;
+        if (!hurtActor) return;
+
+        for (const candidate of canvas.tokens.placeables) {
+            const actor = candidate.actor;
+            if (!actor || candidate.document.uuid === target.uuid) continue;
+            if (!actor.isAllyOf?.(hurtActor)) continue;
+
+            // The widest range any of this ally's `ally-damaged` riders declares. One distance
+            // measurement per ally rather than one per rider, and none at all for the overwhelming
+            // majority who carry no such rider.
+            let reach = 0;
+            for (const owned of actor.items) {
+                for (const rider of ridersOn(owned)) {
+                    if (rider?.event !== "ally-damaged") continue;
+                    const range = Number(rider.range);
+                    if (!Number.isFinite(range) || range <= 0) {
+                        console.warn(
+                            `Isaac's Homebrew | ${owned.name}: an \`ally-damaged\` rider needs a \`range\` in `
+                            + "feet, and has none. It will never fire.",
+                        );
+                        continue;
+                    }
+                    reach = Math.max(reach, range);
+                }
+            }
+            if (reach <= 0) continue;
+            if (distanceBetween(candidate, hurt) > reach) continue;
+
+            await Relay.request({
+                action: "applyRiders",
+                event: "ally-damaged",
+                itemUuid: item.uuid,
+                originUuid: candidate.document.uuid,
+                targetUuid: candidate.document.uuid,
+                // Three creatures, not two, which is what makes this event different from every other
+                // one: the **watcher** whose riders are read, the **striker** the harm came from, and the
+                // **ally** it landed on. `eventTarget` keeps the meaning it has on `damage-received` —
+                // the creature that struck — so `trigger: true` reads the same on both, and the ally
+                // gets an address of its own.
+                eventTargetUuid: attackerToken,
+                eventAllyUuid: target.uuid,
+                // A blow leaves no chat message of its own, and the reaction offer de-duplicates on one.
+                // Without this every `ally-damaged` offer after the first shared a key — the item's uuid —
+                // and was swallowed for a minute: driven live, the second ally hurt in the same encounter
+                // got no card at all.
+                dispatchId: foundry.utils.randomID(),
+                outcome,
+                damage,
+            });
+        }
     },
 
     /**

@@ -719,10 +719,11 @@ const DURATION_UNITS = new Set(["rounds", "minutes", "hours", "days", "unlimited
 const RIDER_TYPES = new Set([
     "condition", "effect", "prompt", "choice", "save", "damage", "persistent-damage", "death", "teleport",
     "strikes", "banish", "heal", "readout", "toggle", "counteract", "encasement", "escape",
-    "equip", "expire", "reaction", "flat-check", "charge",
+    "equip", "expire", "reaction", "flat-check", "charge", "pick",
 ]);
 const RIDER_EVENTS = new Set([
     "save-rolled", "strike-resolved", "strike-received", "action-used", "damage-applied", "damage-received",
+    "ally-damaged",
     "turn-end", "turn-start", "aura-tick",
 ]);
 const RESISTANCE_TYPES = new Set([...pf2e.damageTypes, "all-damage", "physical", "precision", "critical-hits"]);
@@ -1082,15 +1083,40 @@ function validateCounterThresholds(doc, where, errors) {
  * option. Checking them with the same function is the only way a mistake three levels down still fails the
  * build rather than turning into a Technique that silently does nothing.
  */
-function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) {
+function validateRider(rider, at, errors, { doc, top = false, depth = 0, inheritedEvent = null } = {}) {
     if (depth > 3) {
         errors.push(`${at} is nested too deeply — riders may not recurse more than three levels`);
         return;
     }
 
-    const event = rider.event ?? "save-rolled";
+    /**
+     * A nested rider fires on whatever fired its parent.
+     *
+     * Only a **top-level** rider names an event; the entries inside a `save`, a `reaction` or a `pick` are
+     * applied when their parent resolves, so they inherit it. Defaulting them to `save-rolled` made the
+     * area check refuse *Sight of the Balance*'s ally bonus — a `turn-start` rider whose nested half fans
+     * out from the Quincy — and would have refused any future area nested under a reaction the same way.
+     */
+    const event = rider.event ?? inheritedEvent ?? "save-rolled";
     if (!RIDER_EVENTS.has(event)) {
         errors.push(`${at} unknown event "${rider.event}"`);
+    }
+
+    /**
+     * "An ally within 30 feet" and "an ally within 60 feet" are different clauses.
+     *
+     * The source cannot know which, so the rider says — and a rider that does not say never fires, which
+     * is a silent no-op of exactly the kind this file exists to turn into a build failure. The mirror
+     * check matters too: a `range` on any other event is a number nothing reads, and reads at a glance
+     * like a limit that is being enforced.
+     */
+    // `rider.event` rather than the inherited one: the range belongs to the rider that is **dispatched**,
+    // and the entries nested inside it are applied once that dispatch has already been decided.
+    if (rider.event === "ally-damaged" && !(Number(rider.range) > 0)) {
+        errors.push(`${at} an ally-damaged rider needs a \`range\` in feet — got "${rider.range}"`);
+    }
+    if (rider.event !== "ally-damaged" && rider.range !== undefined) {
+        errors.push(`${at} \`range\` is only read for ally-damaged riders, and nothing reads this one`);
     }
 
     // A save rider keys off a degree of success on this item's own save, so a spell without one can never
@@ -1356,18 +1382,40 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
             break;
         }
         case "heal":
-            if (!(Number(apply.value) > 0)) {
+            // "Redirect that damage to yourself" gives the ally back exactly what landed on them, so the
+            // amount is the blow's rather than a number written in advance.
+            if (apply.value !== "event.damage.total" && !(Number(apply.value) > 0)) {
                 errors.push(`${at} heal riders need a positive value — got "${apply.value}"`);
             }
             // The Saint is the one who heals, not the creature that failed its save. Landing this on the
-            // target would hand an enemy hit points for surviving the Technique.
-            if (rider.self !== true) errors.push(`${at} a heal rider must be \`self\``);
+            // target would hand an enemy hit points for surviving the Technique — **unless** the rider is
+            // marked `trigger`, which sends it to the creature the event was about. The Balance's
+            // Vollständig is the one case: the harm moves to the Quincy and the hit points move back.
+            if (rider.self !== true && !rider.trigger) {
+                errors.push(`${at} a heal rider must be \`self\` or \`trigger\``);
+            }
             if (apply.maxPerCast !== undefined
                 && apply.maxPerCast !== "origin.level"
                 && !(Number(apply.maxPerCast) > 0)) {
                 errors.push(`${at} maxPerCast must be a positive number or "origin.level"`);
             }
             break;
+        case "pick": {
+            // Everything a picker needs is a list it can build and something to do with the answer.
+            if (!Array.isArray(apply.riders) || apply.riders.length === 0) {
+                errors.push(`${at} a pick rider needs the riders to apply to the creature chosen`);
+            }
+            if (!(Number(apply.range) > 0)) {
+                errors.push(`${at} a pick rider needs a \`range\` in feet — got "${apply.range}"`);
+            }
+            if (apply.affects !== undefined && !["enemies", "allies", "all"].includes(apply.affects)) {
+                errors.push(`${at} pick affects must be enemies/allies/all — got "${apply.affects}"`);
+            }
+            for (const [index, inner] of (apply.riders ?? []).entries()) {
+                validateRider(inner, `${at}.riders[${index}]`, errors, { doc, depth: depth + 1, inheritedEvent: event });
+            }
+            break;
+        }
         case "flat-check":
             if (!(Number(apply.dc) > 0)) {
                 errors.push(`${at} a flat check needs a positive dc — got "${apply.dc}"`);
@@ -1393,7 +1441,7 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
                 errors.push(`${at} a reaction rider must be \`self\`: it is offered to the ability's owner`);
             }
             (apply.riders ?? []).forEach((inner, index) => {
-                validateRider(inner, `${at}.riders[${index}]`, errors, { doc, depth: depth + 1 });
+                validateRider(inner, `${at}.riders[${index}]`, errors, { doc, depth: depth + 1, inheritedEvent: event });
             });
             break;
         case "readout":
@@ -1525,7 +1573,8 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
                     errors.push(`${at} fractionOfCurrentHp must be above 0 and at most 1 — got "${apply.fractionOfCurrentHp}"`);
                 }
                 if (share > 0) return;
-                const isResolvable = typeof apply.formula === "string" && apply.formula.startsWith("origin.");
+                const isResolvable = typeof apply.formula === "string"
+                    && (apply.formula.startsWith("origin.") || apply.formula.startsWith("event."));
                 if (!isResolvable && !FLAT_OR_DICE.test(String(apply.formula ?? ""))) {
                     errors.push(`${at} ${apply.type} needs a formula like "4d6" — got "${apply.formula}"`);
                 }
@@ -1533,7 +1582,10 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0 } = {}) 
                     || apply.formula === "origin.libra.bleed"
                     // The Waning dice as they stand when the rider fires, not when it was authored.
                     || apply.formula === "origin.severance.dice"
-                    || /^origin\.libra\.dice\.d\d+$/.test(apply.formula);
+                    || /^origin\.libra\.dice\.d\d+$/.test(apply.formula)
+                    // How much the blow was worth. The only question a rider may ask about the event
+                    // itself, and the one a redirect cannot be written without.
+                    || apply.formula === "event.damage.total";
                 if (isResolvable && !known) {
                     errors.push(`${at} unrecognised resolvable formula "${apply.formula}"`);
                 }

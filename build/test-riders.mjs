@@ -799,6 +799,90 @@ for (const [file, slug] of [
 }
 
 /* -------------------------------------------------------------------------------------------- */
+/*  Two shapes the engine did not have                                                           */
+/* -------------------------------------------------------------------------------------------- */
+
+/**
+ * `ally-damaged`, and the range that makes it mean something.
+ *
+ * `damage-received` is the **defender's** event, so a clause phrased "when an ally near you takes damage"
+ * had nowhere to live: the rider engine reads the items of the creature the damage landed on, and the
+ * ability belongs to somebody else. Three Spirits hit it and all three were recorded ❌ rather than fixed.
+ *
+ * The range is the part worth pinning. 30 feet and 60 feet are different clauses, the source cannot know
+ * which, and a rider without one is refused by the validator rather than treated as unlimited — an
+ * ability that reaches the whole map is never what the guide meant.
+ */
+{
+    const antithesis = ridersOf(load("soulbound-techniques", "antithesis.json"));
+    const ally = antithesis.find((r) => r.event === "ally-damaged");
+    check("Antithesis reaches an ally within 30 feet", [ally?.event, ally?.range, ally?.self],
+        ["ally-damaged", 30, true]);
+    /**
+     * The two halves do the same thing to the same two creatures — but only one of them can say so by
+     * saying nothing.
+     *
+     * On `damage-received` the Quincy **is** "the target of the trigger", so the resistance lands on them
+     * by default. On `ally-damaged` the target of the trigger is the ally, and there are three creatures
+     * in the event rather than two: the watcher, the striker, and the one who was hurt. `trigger: "ally"`
+     * is the ally's address; `trigger: true` stays the striker's on both, so the 2d6 reads identically.
+     */
+    const own = antithesis.find((r) => r.event === "damage-received");
+    check("…and sends the same spirit damage to the same creature",
+        JSON.stringify(ally?.apply?.riders?.find((r) => r.apply.type === "damage")),
+        JSON.stringify(own?.apply?.riders?.find((r) => r.apply.type === "damage")));
+    check("…while the resistance follows the creature that was hurt",
+        [own?.apply?.riders?.find((r) => r.apply.type === "effect")?.trigger ?? null,
+         ally?.apply?.riders?.find((r) => r.apply.type === "effect")?.trigger ?? null],
+        [null, "ally"]);
+
+    const night = ridersOf(load("soulbound-effects", "effect-the-balance-at-night.json"));
+    const redirect = night.find((r) => r.event === "ally-damaged");
+    check("The Balance reaches an ally within 60 feet, once a round",
+        [redirect?.range, redirect?.self, redirect?.oncePerRound], [60, true, true]);
+    check("…as a free action, which is what the clause says it costs",
+        redirect?.apply?.freeAction, true);
+    /**
+     * The order inside is load-bearing. The reduction has to be **on** the Quincy before the harm is
+     * moved onto them, or the resistance it grants has nothing to reduce; and the healing is the only
+     * entry marked `trigger`, because it is the only one that belongs to the ally.
+     */
+    check("…reduction first, then the ally's hit points back, then the harm",
+        (redirect?.apply?.riders ?? []).map((r) => [r.apply.type, r.trigger ?? false]),
+        [["effect", false], ["heal", "ally"], ["damage", false]]);
+    check("…and both halves are measured by the blow itself",
+        [redirect?.apply?.riders?.[1]?.apply?.value, redirect?.apply?.riders?.[2]?.apply?.formula],
+        ["event.damage.total", "event.damage.total"]);
+}
+
+/**
+ * `pick`, for the clauses that say "choose one enemy within 60 feet".
+ *
+ * `choice` is a menu of authored options — which sense *Tenbu Hōrin* takes — and cannot express "one of
+ * the creatures over there". *Sight of the Balance* is why it had to be built rather than left to the
+ * table: it fires at the **start of a turn**, so there is no trigger to point at and the module's only
+ * other way to reach a creature that is not the rider's target has nothing to reach for.
+ */
+{
+    const night = ridersOf(load("soulbound-effects", "effect-the-balance-at-night.json"));
+    const sight = night.find((r) => r.apply?.type === "pick");
+    check("Sight of the Balance picks an enemy within 60 feet at the start of the turn",
+        [sight?.event, sight?.self, sight?.apply?.range, sight?.apply?.affects],
+        ["turn-start", true, 60, "enemies"]);
+    check("…and hands out both halves of the clause",
+        (sight?.apply?.riders ?? []).map((r) => r.apply.type), ["effect", "effect"]);
+
+    // "its **next** saving throw" and "that attack roll" — one roll each, which pf2e spells
+    // `removeAfterRoll`. Without it the −2 is a whole round of saves.
+    const penalty = load("soulbound-effects", "effect-sight-of-the-balance.json").system.rules[0];
+    check("the marked creature's penalty lasts one save",
+        [penalty.value, penalty.type, penalty.removeAfterRoll], [-2, "status", true]);
+    const bonus = load("soulbound-effects", "effect-allotted-fortune.json").system.rules[0];
+    check("and the ally's bonus lasts one attack",
+        [bonus.value, bonus.type, bonus.removeAfterRoll], [1, "status", true]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
 /*  Aiming                                                                                       */
 /* -------------------------------------------------------------------------------------------- */
 
@@ -3302,8 +3386,11 @@ function documentedIn(readme, heading, nextHeading) {
         ["soulbound-techniques/the-miracle-growth.json", "The Miracle's Growth"],
     ]) {
         const riders = ridersOf(load(...file.split("/")));
+        // `ally-damaged` is the same answer asked on somebody else's behalf: Antithesis' trigger is "You
+        // **or an ally within 30 feet**", and The Balance's Vollständig redirects an ally's damage. What
+        // must never appear here is `damage-applied`, which is the attacker's.
         check(`${name} answers being damaged, not damaging`,
-            [...new Set(riders.map((r) => r.event))], ["damage-received"]);
+            [...new Set(riders.map((r) => r.event))].filter((e) => e !== "ally-damaged"), ["damage-received"]);
         // A reaction is offered to the ability's owner, so the outer rider must be `self`; anything meant
         // for the other end of the event is marked `trigger: true` inside it.
         check(`…and is offered to its owner`, riders.every((r) => r.self === true), true);

@@ -1,0 +1,54 @@
+{
+    "img": "icons/equipment/shield/heater-crystal-blue.webp",
+    "name": "Effect: Sight of the Balance",
+    "system": {
+        "description": {
+            "value": "<p>Your fortune and misfortune are the Quincy's to allot. You take a <strong>−2 status penalty to your next saving throw</strong>.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Sight of the Balance",
+                "selector": [
+                    "fortitude",
+                    "reflex",
+                    "will"
+                ],
+                "type": "status",
+                "value": -2,
+                "removeAfterRoll": true
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

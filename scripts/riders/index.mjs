@@ -71,6 +71,7 @@ function bindCards(message, html) {
     if (html?.dataset?.isaacsHbBound) return;
     if (html?.dataset) html.dataset.isaacsHbBound = "1";
     bindChoiceButtons(message, html);
+    bindPickButtons(message, html);
     bindCounteractButtons(message, html);
     bindReactionButtons(message, html, (payload) => Relay.request(payload));
 }
@@ -90,6 +91,33 @@ function bindChoiceButtons(message, html) {
                 event: "choice",
                 optionIndex: Number(button.dataset.option),
                 ...choice,
+            });
+        });
+    }
+}
+
+/**
+ * The buttons on a "choose a creature" card.
+ *
+ * Same shape as the counteract card and for the same reason: the options were read off the **board** when
+ * the card was posted, not authored, so the creature travels on the button rather than as an index into a
+ * rider. What goes back to the GM is still only an address — which rider, on which item, and which token
+ * — so the GM re-reads what the ability actually does.
+ */
+function bindPickButtons(message, html) {
+    const pick = message?.flags?.[MODULE_ID]?.pick;
+    if (!pick || !html?.querySelectorAll) return;
+
+    for (const button of html.querySelectorAll(`[data-action="isaacs-hb-rider-pick"]`)) {
+        button.addEventListener("click", async () => {
+            for (const sibling of html.querySelectorAll(`[data-action="isaacs-hb-rider-pick"]`)) {
+                sibling.disabled = true;
+            }
+            await Relay.request({
+                action: "applyPick",
+                event: "pick",
+                pickedUuid: button.dataset.token,
+                ...pick,
             });
         });
     }

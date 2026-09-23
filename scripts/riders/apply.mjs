@@ -143,13 +143,15 @@ async function applyToTarget(target, candidates, context, payload) {
         // which creature the rose was thrown at, and by the time `target` is overwritten that fact is gone
         // unless something keeps a copy. `context.target` here is still the pre-overwrite value from
         // `resolveContext` — the enemy the event named — for exactly that.
-        eventTarget: context.target,
+        eventTarget: context.eventTarget ?? context.target,
+        eventAlly: context.eventAlly,
         outcome: payload.outcome ?? null,
         event: payload.event,
         adjustments: [],
         prompts: [],
         notes: [],
         choices: [],
+        picks: [],
         moves: [],
     };
     const before = new Set(actor.items.map((i) => i.id));
@@ -206,6 +208,7 @@ async function applyToTarget(target, candidates, context, payload) {
     if (work.notes.length > 0) await postNotes(work);
     if (work.prompts.length > 0) await postPrompts(work);
     for (const choice of work.choices) await postChoice(choice, work, payload);
+    for (const pick of work.picks) await postPick(pick, work, payload);
 }
 
 /**
@@ -221,6 +224,14 @@ async function spendStrikeTechnique(payload, context) {
     await StrikeTechnique.disarm(context.originActor);
 }
 
+/** Feet between two tokens, by the scene's own grid — the same measurement `sources.mjs` uses. */
+function distanceBetween(a, b) {
+    const measured = canvas.grid?.measurePath?.([a.center, b.center])?.distance;
+    if (Number.isFinite(measured)) return measured;
+    const feetPerPixel = (canvas.scene?.grid?.distance ?? 5) / (canvas.grid?.size ?? 100);
+    return Math.hypot(a.center.x - b.center.x, a.center.y - b.center.y) * feetPerPixel;
+}
+
 /** One option of one choice rider, come back from the caster's click. */
 export async function applyChoice(payload) {
     const context = await resolveContext(payload);
@@ -233,7 +244,7 @@ export async function applyChoice(payload) {
     const option = rider?.apply?.options?.[payload.optionIndex];
     if (!option?.apply) return;
 
-    const work = { ...context, actor, target, item, outcome: payload.outcome ?? null, adjustments: [], prompts: [], notes: [], choices: [], moves: [] };
+    const work = { ...context, actor, target, item, outcome: payload.outcome ?? null, adjustments: [], prompts: [], notes: [], choices: [], picks: [], moves: [] };
     await applyOne({ ...rider, apply: option.apply, duration: option.duration ?? rider.duration }, work);
     if (work.notes.length > 0) await postNotes(work);
     if (work.prompts.length > 0) await postPrompts(work);
@@ -263,11 +274,12 @@ export async function resolveReaction(payload) {
 
     // The creature the event was about, carried across the card so a nested `trigger` rider can reach it.
     const eventTarget = payload.eventTargetUuid ? await fromUuid(payload.eventTargetUuid) : null;
+    const eventAlly = payload.eventAllyUuid ? await fromUuid(payload.eventAllyUuid) : null;
 
     const work = {
-        ...context, originActor, actor, target, item, eventTarget,
+        ...context, originActor, actor, target, item, eventTarget, eventAlly,
         outcome: payload.outcome ?? null,
-        adjustments: [], prompts: [], notes: [], choices: [], moves: [],
+        adjustments: [], prompts: [], notes: [], choices: [], picks: [], moves: [],
     };
     for (const [index, inner] of nested.entries()) {
         await applyOne(inner, { ...work, riderIndex: [payload.riderIndex, "riders", index].flat() });
@@ -318,9 +330,28 @@ async function applyOne(rider, context) {
     if (rider.trigger === true && context.eventTarget?.actor) {
         context = { ...context, actor: context.eventTarget.actor, target: context.eventTarget };
     }
+    /**
+     * …and `trigger: "ally"` for the creature the harm actually landed on.
+     *
+     * `ally-damaged` is the only event with three participants — the watcher whose riders are being read,
+     * the striker, and the ally who was hurt — and two of them need reaching from one rider. Antithesis
+     * wants both at once: *"The triggering creature takes 2d6 spirit damage, and **the target of the
+     * trigger** gains resistance equal to your level"*, where the target of the trigger is the ally.
+     */
+    if (rider.trigger === "ally" && context.eventAlly?.actor) {
+        context = { ...context, actor: context.eventAlly.actor, target: context.eventAlly };
+    }
     switch (apply.type) {
         case "prompt":
             context.prompts.push(apply.text ?? rider.note ?? "");
+            return;
+        case "pick":
+            // The creatures are read off the board when the card is posted, not authored — see `postPick`.
+            context.picks.push({
+                rider,
+                index: context.riderIndex,
+                item: context.riderItem ?? context.item,
+            });
             return;
         case "choice":
             // `target`/`actor` travel with the entry rather than being re-read from the outer context later:
@@ -922,7 +953,12 @@ async function applyHeal(rider, context) {
         castRank: source?.rank,
         bonusSteps: skyStepsFromOptions(context.originActor?.getRollOptions?.() ?? []),
     });
-    const each = (Number(rider.apply.value) || 0) + (Number(rider.apply.perStep) || 0) * steps;
+    // A heal measured by what just happened rather than by a flat number — "redirect that damage to
+    // yourself" gives the ally back exactly what landed on them, so the amount is the blow's.
+    const declared = typeof rider.apply.value === "string" && isResolvable(rider.apply.value)
+        ? Number(resolveFromOrigin(rider.apply.value, context))
+        : Number(rider.apply.value);
+    const each = (Number.isFinite(declared) ? declared : 0) + (Number(rider.apply.perStep) || 0) * steps;
     if (each <= 0) return;
 
     const cap = rider.apply.maxPerCast === "origin.level"
@@ -1662,7 +1698,7 @@ async function applyPersistent(rider, context) {
     // pf2e's basic-save halving turning "negates" into "half a d6 of bleed".
     const rawFormula = rider.apply.formula ?? "1d6";
     const resolvable = typeof rawFormula === "object"
-        || (typeof rawFormula === "string" && rawFormula.startsWith("origin."));
+        || (typeof rawFormula === "string" && isResolvable(rawFormula));
     const formula = resolvable ? (resolveFromOrigin(rawFormula, context) ?? "1d6") : rawFormula;
     const count = perCounter ? Math.min(counterOn(context.actor, perCounter), Number(max) || Infinity) : 1;
     const counted = perCounter ? scaleFormula(formula, count) : formula;
@@ -1737,7 +1773,7 @@ async function applyDamageRider(rider, context) {
     // The formula is usually a literal — "1d6" — but may itself be a resolvable, for the one shape none
     // of the others cover: a *granted action*'s damage that has to track a different Technique's own
     // heightening, because the action carries no rank of its own for `perStep` to scale from.
-    const formula = typeof rider.apply.formula === "string" && rider.apply.formula.startsWith("origin.")
+    const formula = typeof rider.apply.formula === "string" && isResolvable(rider.apply.formula)
         ? (resolveFromOrigin(rider.apply.formula, context) ?? "1d6")
         : (rider.apply.formula ?? "1d6");
 
@@ -2093,7 +2129,18 @@ async function resolveContext(payload) {
         ? (await Promise.all(payload.targetUuids.map((uuid) => fromUuid(uuid).catch(() => null)))).filter(Boolean)
         : [];
 
-    return { message, item, messageItem, eventItem, originActor, originToken, target, targets };
+    const eventTarget = payload.eventTargetUuid ? await fromUuid(payload.eventTargetUuid) : null;
+    const eventAlly = payload.eventAllyUuid ? await fromUuid(payload.eventAllyUuid) : null;
+
+    return {
+        message, item, messageItem, eventItem, originActor, originToken, target, targets,
+        eventTarget, eventAlly,
+        // What distinguishes one occasion from the next when there is no chat message to name it.
+        dispatchId: payload.dispatchId ?? null,
+        // What the blow was worth, for `event.damage.total`. Kept apart from the roll options
+        // `describeDamage` builds, because a predicate wants a flag and a formula wants a number.
+        eventDamage: payload.damage ?? null,
+    };
 }
 
 /**
@@ -2122,6 +2169,17 @@ function applySubstitutions(source, substitutions, context) {
         }
         foundry.utils.setProperty(source, path, value);
     }
+}
+
+/**
+ * Is this string a question rather than a formula?
+ *
+ * Two prefixes: `origin.` asks the caster something, `event.` asks the blow. Anything else is a literal
+ * — `"2d6"`, `"1d4"` — and must stay one, because a typo inside a prefix should read as an unknown
+ * expression rather than as dice nobody notices are missing.
+ */
+function isResolvable(expression) {
+    return expression.startsWith("origin.") || expression.startsWith("event.");
 }
 
 function resolveFromOrigin(expression, context) {
@@ -2178,6 +2236,22 @@ function resolveFromOrigin(expression, context) {
     const match = /^origin\.statistic\.([\w-]+)\.rank$/.exec(String(expression));
     if (match) return originActor?.getStatistic?.(match[1])?.rank ?? null;
     if (expression === "origin.level") return originActor?.level ?? null;
+
+    /**
+     * How much damage the event was, as a number.
+     *
+     * Every other expression here asks the **origin** something; this one asks the *blow*. The Balance's
+     * Vollständig is why it exists — "when an ally within 60 feet would take damage, you may redirect
+     * that damage to yourself" — and a redirect has to know how much. `describeDamage` publishes only
+     * `rider:damage:dealt`, a flag, so a rider could ask *whether* damage landed and never *how much*.
+     *
+     * Zero is a real answer and is returned as one: a blow entirely absorbed still happened, and a
+     * redirect of nothing should move nothing rather than fall back to a die.
+     */
+    if (expression === "event.damage.total") {
+        const total = Number(context.eventDamage?.total);
+        return Number.isFinite(total) ? total : null;
+    }
 
     // The Waning dice as they stand *now*. Apotheosis "detonates again at the start of your next turn
     // for half the Waning dice" (R-26), and by then the round has turned — so the second blast is worth
@@ -2350,6 +2424,130 @@ async function postPrompts({ prompts, item, originActor, actor, outcome }) {
  * than a dialog on purpose: it survives a reload, and it cannot be missed by someone looking at their
  * sheet at the wrong moment.
  */
+/**
+ * A rider whose target the owner picks off the board.
+ *
+ * Two clauses in the guide need this and neither could be written before it existed:
+ *
+ * > then **choose one enemy within 60 feet**: it takes 2d6 spirit damage — The Balance (S-72d)
+ * > **Sight of the Balance:** at the start of each of your turns, **choose one enemy within 60 feet**
+ * >   — The Balance, at Night (S-74e)
+ *
+ * `apply.type: "choice"` is a menu of **authored** options — which sense *Tenbu Hōrin* takes — and cannot
+ * express "one of the creatures over there". So the buttons here are built from the board at post time,
+ * the way the counteract card's are, and the chosen token travels on the button rather than as an index
+ * into a rider.
+ *
+ * *Sight of the Balance* is the reason this is worth building rather than leaving to the table: it fires
+ * at the **start of a turn**, with no trigger to point at, so `trigger: true` — the module's only other
+ * way to reach somebody who is not the rider's target — has nothing to reach for. Without a picker the
+ * whole clause is a card headed "Left to the table" and two effects that are never created.
+ *
+ * The candidate list honours `range` in feet and `affects` (`enemies`, `allies`, `all`), using pf2e's own
+ * alliance test so "enemy" means what it means everywhere else. An empty list posts nothing: a card with
+ * no buttons is a card that cannot be answered.
+ */
+async function postPick({ rider, index, item }, context, payload) {
+    const spec = rider.apply ?? {};
+    const origin = context.originToken?.object;
+    if (!origin || !item?.uuid || !canvas?.ready) return;
+
+    const range = Number(spec.range);
+    const affects = spec.affects ?? "enemies";
+    const originActor = context.originActor;
+    const candidates = canvas.tokens.placeables.filter((token) => {
+        const actor = token.actor;
+        if (!actor || token === origin) return false;
+        if (affects === "enemies" && !actor.isEnemyOf?.(originActor)) return false;
+        if (affects === "allies" && !actor.isAllyOf?.(originActor)) return false;
+        return !Number.isFinite(range) || distanceBetween(origin, token) <= range;
+    });
+    if (candidates.length === 0) return;
+
+    const buttons = candidates
+        .map((token) =>
+            `<button type="button" data-action="isaacs-hb-rider-pick" data-token="${token.document.uuid}">`
+            + `${foundry.utils.escapeHTML(token.name)}</button>`)
+        .join(" ");
+
+    const recipients = new Set(ChatMessage.getWhisperRecipients("GM").map((user) => user.id));
+    for (const [userId, level] of Object.entries(originActor?.ownership ?? {})) {
+        if (level === CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER && userId !== "default") recipients.add(userId);
+    }
+
+    await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: originActor }),
+        whisper: [...recipients],
+        flavor: item.name,
+        content:
+            `<p>${foundry.utils.escapeHTML(spec.prompt ?? "Choose a creature.")}</p>`
+            + `<div class="isaacs-hb-choice">${buttons}</div>`,
+        flags: {
+            [MODULE_ID]: {
+                pick: {
+                    riderItemUuid: item.uuid,
+                    riderIndex: index,
+                    originUuid: context.originToken?.uuid ?? originActor?.uuid,
+                    messageId: payload.messageId ?? null,
+                    itemUuid: payload.itemUuid ?? null,
+                    outcome: context.outcome ?? payload.outcome ?? null,
+                },
+            },
+        },
+    });
+}
+
+/**
+ * The creature came back from the card; apply what the rider says to it.
+ *
+ * Mirrors `resolveReaction` exactly, including why: the payload carries an **address**, not rider data, so
+ * the GM re-reads the ability rather than trusting a client to describe it.
+ */
+export async function applyPick(payload) {
+    const context = await resolveContext(payload);
+    if (!context) return;
+
+    const item = await fromUuid(payload.riderItemUuid);
+    const rider = riderAt(item, payload.riderIndex);
+    const nested = rider?.apply?.riders ?? [];
+    if (nested.length === 0) return;
+
+    const picked = payload.pickedUuid ? await fromUuid(payload.pickedUuid) : null;
+    const actor = picked?.actor;
+    if (!actor) return;
+
+    const origin = await fromUuid(payload.originUuid);
+    const originActor = origin?.actor ?? origin;
+
+    const work = {
+        ...context, originActor, actor, target: picked, item,
+        outcome: payload.outcome ?? null,
+        adjustments: [], prompts: [], notes: [], choices: [], picks: [], moves: [],
+    };
+    /**
+     * Each nested rider resolves its **own** targets, which is what lets one pick hand out two things to
+     * two different sets of people.
+     *
+     * *Sight of the Balance* is exactly that: a −2 for the creature chosen, and a +1 for the allies who
+     * are about to attack it. Applying the nested riders straight to the picked creature — which is what
+     * `resolveReaction` does, and what this did first — put both halves on the enemy, and the allies'
+     * bonus landed on the one creature it was supposed to be used *against*.
+     *
+     * `targetsFor` is the same function `applyRiders` uses, so `self`, `area` and a bare rider all mean
+     * here what they mean everywhere else.
+     */
+    for (const [inner, entry] of nested.entries()) {
+        const scoped = { ...work, riderIndex: [payload.riderIndex, "riders", inner].flat() };
+        for (const each of await targetsFor(entry, scoped)) {
+            const actorFor = each?.actor;
+            if (!actorFor) continue;
+            await applyOne(entry, { ...scoped, actor: actorFor, target: each });
+        }
+    }
+    if (work.notes.length > 0) await postNotes(work);
+    if (work.prompts.length > 0) await postPrompts(work);
+}
+
 async function postChoice({ rider, index, item, target, actor }, context, payload) {
     const options = rider.apply.options ?? [];
     if (options.length === 0 || !item?.uuid) return;
