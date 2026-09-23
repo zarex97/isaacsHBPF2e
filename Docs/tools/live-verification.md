@@ -200,6 +200,9 @@ World `pf` is not a clean room. It is a working world with years of fixtures in 
 | A predicate on a tag matches nothing on an **old** sheet | `otherTags` is copied at grant time like everything else, so a tag added to the pack later is absent — and a predicate that matches nothing does not complain, it simply never fires. `Release.repair` unions them back; run it before believing a rule element did nothing |
 | `showCheckDialogs` / `showDamageDialogs` user flags | Block scripted rolls |
 | `game.user.updateTokenTargets` does not exist | Use `token.object.setTarget(true, { user, releaseOthers })` |
+| A damage card has **two** apply buttons | `data-action="applyDamage"` applies to the **selected** token; `data-action="target-applyDamage"` applies to the card's target. Driving a Strike leaves the *attacker* selected, so the first one damages the attacker and the target's hit points never move — which reads exactly like a resistance bypass that failed |
+| A combatant ends its turn **once per round** | pf2e's `_onEndTurn` skips everything when `roundOfLastTurnEnd === context.round`, so `pf2e.endTurn` does not fire and nothing measured in turns advances. A rig that jumps `combat.turn` back and forth inside one round will watch a one-turn window never close. Advance the **round** first |
+| An effect has no `disabled` field | A pf2e Effect item's `system.expired` is derived in `prepareBaseData`, so writing either one is overwritten or ignored. To switch an effect off without deleting it, move its rules aside — see `soulbound/suppression.mjs` |
 
 ## 7. Running long jobs
 

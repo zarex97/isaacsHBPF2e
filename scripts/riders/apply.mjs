@@ -1278,8 +1278,25 @@ export async function resolveCounteract(payload) {
     const suppressible = payload.suppress
         && (effect.system?.traits?.value ?? []).some((t) => SUPPRESSIBLE_TRAITS.has(t));
 
+    /**
+     * `disabled: true` was a field a pf2e **Effect item does not have**, so this suppressed nothing at
+     * all: driven live, a 17th-level Shikai announced as switched off still had all three of its rule
+     * elements live on the actor. `Suppression` parks the rules and the module's own riders instead, and
+     * puts them back when the window closes — see `soulbound/suppression.mjs`.
+     *
+     * Sklaverei (15th): "On a critical success against a release state, the suppression lasts 1 minute
+     * instead." A minute is not a number of turns, so it is counted on the world clock.
+     */
+    let suppressed = false;
     if (counteracted && suppressible) {
-        await effect.update({ disabled: true, [`flags.${MODULE_ID}.suppressedUntil`]: "end-of-next-turn" });
+        const { Suppression } = await import("../soulbound/suppression.mjs");
+        const minutes = outcome === "criticalSuccess" && options.includes("soulbound:sklaverei") ? 1 : 0;
+        suppressed = await Suppression.suppress(effect, { minutes });
+        // An effect whose rules carry grant-time state cannot be parked and must not be deleted either:
+        // ending a release state outright is the one thing this clause exists to prevent.
+        if (!suppressed) {
+            context.notes?.push?.(`${effect.name} could not be suppressed without stranding a grant.`);
+        }
     } else if (counteracted) {
         await effect.delete();
     }
@@ -1298,8 +1315,28 @@ export async function resolveCounteract(payload) {
         if (value !== (pool?.value ?? 0)) {
             await actor.update({ "system.resources.focus.value": value });
         }
+        /**
+         * "…and the target is **off-guard** until the end of its next turn."
+         *
+         * `increaseCondition` applies a condition with **no duration**, so this one never came off: a
+         * Quincy with Sklaverei left every target they ever sealed permanently off-guard. The condition
+         * is carried by a timed effect instead, which is how every other durational condition in the
+         * module is applied.
+         */
         if (counteracted && options.includes("soulbound:sklaverei") && effect.actor) {
-            await effect.actor.increaseCondition("off-guard");
+            await effect.actor.createEmbeddedDocuments("Item", [{
+                name: `${item?.name ?? "Seal the Art"}: Off-Guard`,
+                type: "effect",
+                img: item?.img ?? "icons/svg/downgrade.svg",
+                system: {
+                    duration: { unit: "rounds", value: 1, expiry: "turn-end", sustained: false },
+                    rules: [{
+                        key: "GrantItem",
+                        uuid: "Compendium.pf2e.conditionitems.Item.AJh5ex99aV6VTggg",
+                        allowDuplicate: false,
+                    }],
+                },
+            }]);
         }
     }
 
@@ -1307,8 +1344,13 @@ export async function resolveCounteract(payload) {
         speaker: ChatMessage.getSpeaker({ actor }),
         flavor: item?.name ?? "Counteract",
         content: counteracted && suppressible
-            ? `<p><strong>${effect.name}</strong> is <strong>suppressed</strong> until the end of `
-                + `${effect.actor?.name ?? "the target"}'s next turn, and cannot be re-entered until then.</p>`
+            // Sklaverei's critical success buys a minute rather than a turn, and the card has to say
+            // which: a player reading "until the end of your next turn" will act on it.
+            ? `<p><strong>${effect.name}</strong> is <strong>suppressed</strong> `
+                + (suppressed && outcome === "criticalSuccess" && options.includes("soulbound:sklaverei")
+                    ? "for <strong>1 minute</strong>"
+                    : `until the end of ${effect.actor?.name ?? "the target"}'s next turn`)
+                + ", and cannot be re-entered until then.</p>"
             : counteracted
                 ? `<p><strong>${effect.name}</strong> is counteracted and gone.</p>`
                 : `<p><strong>${effect.name}</strong> holds — rank ${targetRank} against a counteract rank of `
