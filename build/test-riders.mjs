@@ -2858,6 +2858,55 @@ function documentedIn(readme, heading, nextHeading) {
 }
 
 /* -------------------------------------------------------------------------------------------- */
+/*  "Once per round, when you damage a creature with fire"                                       */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * The Heat's Vollständig, and the fourth per-round gate this campaign has had to add — after
+     * Pantera's extra claw Strike, Kyōka's Sustain and Tiburón's push. Without it every fire hit in a
+     * turn added its own 2d6 persistent.
+     *
+     * The rider itself does not fire at all, and not for a reason in this Spirit: `damage-applied` is
+     * gated on `landed > 0`, and `Sources.onDamage` reads the defender's hit points the instant
+     * `applyDamage` resolves — before pf2e has written them — so `landed` is always zero. **Nine riders
+     * across the Saint and the Soulbound sit on that event.** The gate is asserted here because it is
+     * the half that is this Spirit's to get right; the event is recorded in the tracker as S-70d.
+     */
+    const deus = load("soulbound-effects", "effect-deus-ex-machina.json");
+    const rider = ridersOf(deus)[0];
+    check("The Heat's persistent fire is once a round", rider.oncePerRound, true);
+    check("…on damaging with fire", [rider.event, rider.predicate], ["damage-applied", ["rider:damage:type:fire"]]);
+    check("…for 2d6 with the harder flat check",
+        [rider.apply.formula, rider.apply.damageType, rider.apply.dc], ["2d6", "fire", 20]);
+
+    // Every rider in the module that waits on `damage-applied`, so the count is visible next to the
+    // finding rather than buried in it.
+    const waiting = [];
+    const walk = (dir) => {
+        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+            const full = path.join(dir, entry.name);
+            if (entry.isDirectory()) walk(full);
+            else if (entry.name.endsWith(".json")) {
+                const raw = fs.readFileSync(full, "utf8");
+                if (/"event":\s*"damage-applied"/.test(raw)) waiting.push(entry.name);
+            }
+        }
+    };
+    walk(path.join(ROOT, "content"));
+    check("the riders that wait on damage-applied", waiting.sort(), [
+        "danku.json",
+        "effect-deus-ex-machina.json",
+        "sekishiki-kisoen.json",
+        "sky-ascendant-aquarius.json",
+        "soul-sever.json",
+        "the-balance-reaction.json",
+        "the-miracle-growth.json",
+        "the-yellow-spring-opens.json",
+    ]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
 
 if (failures.length > 0) {
     console.error(`Rider tests failed: ${failures.length} of ${checks}.`);

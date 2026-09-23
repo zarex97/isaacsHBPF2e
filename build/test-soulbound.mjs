@@ -2028,6 +2028,42 @@ check("Aullido expends every wolf that is left",
     Charges.declarationOn(techDoc("aullido")),
     { effect: "Effect: Colmillo", spending: 1, perRound: Infinity, upTo: 0, all: true });
 
+/* --- one Technique, five shapes, and only one of them an attack --------------------------------- */
+
+/**
+ * Burner Finger is the only Technique in the class built out of pf2e spell **overlays**, and the three
+ * area options inherited the base's **attack** trait. pf2e derives `defense.passive = AC` from that
+ * trait (`spell/document.ts`: `if (traits.value.includes("attack"))`), so Three, Four and Five each
+ * announced "Defense AC and basic Reflex" on the card and counted as attack spells for damage domains.
+ *
+ * Two keeps the trait, because Two really is a ranged spell attack against two creatures.
+ */
+{
+    const bf = techDoc("burner-finger");
+    const overlay = (k) => bf.system.overlays[k];
+    check("Burner Finger's five shapes", [
+        [bf.system.target?.value, JSON.stringify(bf.system.area ?? null)],
+        [overlay("burnerfingertwo").system.target?.value, JSON.stringify(overlay("burnerfingertwo").system.area ?? null)],
+        JSON.stringify(overlay("burnerfingerthree").system.area),
+        JSON.stringify(overlay("burnerfingerfour").system.area),
+        JSON.stringify(overlay("burnerfingerfive").system.area),
+    ], [
+        ["1 creature", "null"],
+        ["2 creatures", "null"],
+        '{"type":"line","value":30}',
+        '{"type":"emanation","value":15}',
+        '{"type":"cone","value":30}',
+    ]);
+    check("…the attack is the base and Two, and nothing else",
+        ["burnerfingertwo", "burnerfingerthree", "burnerfingerfour", "burnerfingerfive"]
+            .filter((k) => (overlay(k).system.traits?.value ?? bf.system.traits.value).includes("attack")),
+        ["burnerfingertwo"]);
+    // Five's cone grows at the Vollständig, and only there.
+    check("…and Five widens to 60 feet under Deus Ex Machina",
+        overlay("burnerfingerfive").flags["isaacs-hb-pf2e"].areaTargeting.alternateArea,
+        [{ area: { type: "cone", value: 60 }, predicate: ["self:effect:deus-ex-machina"] }]);
+}
+
 /* --- two die steps, and a cost that is actually paid --------------------------------------------- */
 
 /**
