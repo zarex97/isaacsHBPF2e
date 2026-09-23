@@ -68,34 +68,34 @@ they are true of one Lineage rather than of the class.
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| C-13 | §4.1 | Choose one sealed profile |  | ☐ |  |
-| C-14 | §4.1 | Your spirit weapon is a martial weapon and always counts as one you're proficient with, regardless of its released form. |  | ☐ |  |
-| C-15 | §4.1 | **Bonded.** You can manifest or dismiss it as a free action once per round. Dismissed, it cannot be taken from you. If it leaves your hands you can Interact to call it back from up to 30 feet away. |  | ☐ |  |
-| C-16 | §4.1 | **Soul-Etched.** During your daily preparations you can transfer weapon runes into or out of your spirit weapon for free, with no cost and no Crafting check. |  | ☐ |  |
-| C-17 | §4.1 | **Spirit-Cutting.** Your spirit weapon's Strikes can deal **spirit** damage instead of their normal damage type, and affect incorporeal creatures as though the weapon had the *ghost touch* rune. |  | ☐ |  |
-| C-18 | §4.1 | **Voice in the Blade.** You gain a **+1 circumstance bonus** to saves against effects that would control you, possess you, or force you to release your weapon |  | ☐ |  |
+| C-13 | §4.1 | Choose one sealed profile | `test-soulbound` pins all four profiles | ✅ | Live, read off the pack rather than off one character's choice — all four exist with exactly the guide's line: **Blade 1d8 slashing, versatile-p, two-hand-d10**; **Great Blade 1d10 slashing, sweep, held-in-two-hands**; **Paired Blades 1d6 slashing, agile, finesse, twin**; **Spirit Bow 1d8 piercing, propulsive, range 60, reload 0**. All four are `category: martial`, and the ChoiceSet on *Spirit Weapon* offers them |
+| C-14 | §4.1 | Your spirit weapon is a martial weapon and always counts as one you're proficient with, regardless of its released form. |  | ✅ | Live: every sealed profile and seven of the eight **released** forms read `category: martial` — Freund Schild, the Arcing Sword, Gran Caída, Luz de la Luna, the Hollow-Edged Blade, the Sword and Shield, the Pistols. **Pantera's claws are `unarmed`**, and that is the guide's own exception rather than a slip: §7B says *“You gain two **claw** unarmed attacks”*. The promise the clause actually makes still holds for them, because the class trains unarmed alongside martial and steps both together — C-07 |
+| C-15 | §4.1 | **Bonded.** You can manifest or dismiss it as a free action once per round. Dismissed, it cannot be taken from you. If it leaves your hands you can Interact to call it back from up to 30 feet away. |  | ⚠️ | **The frequency is enforced; the rest is text.** Live: *Manifest or Dismiss Spirit Weapon* is an action carrying `frequency 1/round`, which pf2e counts and refills, and its card states the other three halves — that a dismissed weapon cannot be taken, that an Interact recalls it from 30 feet, and that a broken one re-forms after 10 minutes. None of those three is a thing Foundry models: there is no rule element for “cannot be taken from you”, and Interact-to-recall is a table action rather than a state. They are a reading the card makes at the moment they are needed |
+| C-16 | §4.1 | **Soul-Etched.** During your daily preparations you can transfer weapon runes into or out of your spirit weapon for free, with no cost and no Crafting check. |  | ⚠️ | **Nothing to enforce, and nothing that says so on the sheet.** Soul-Etched is a paragraph of *Spirit Weapon* rather than an item of its own, and pf2e lets a character move runes between their own weapons during daily preparations anyway — there is no cost or Crafting check to waive, so there is no rule that could express the waiver. What the clause buys at the table is the **permission**, and the permission is written where the player reads it |
+| C-17 | §4.1 | **Spirit-Cutting.** Your spirit weapon's Strikes can deal **spirit** damage instead of their normal damage type, and affect incorporeal creatures as though the weapon had the *ghost touch* rune. | `test-riders` pins the rule and the four profiles' trait | ✅ | Driven under #52, on this class feature rather than on a Spirit: against a dummy carrying **resistance 1000 to all damage with a ghost-touch exception**, the same character's **fist dealt 0** (80 → 80) and the **spirit weapon's 9 landed in full** (80 → 71) — the rune the only difference. The damage-type half is the `versatile-spirit` trait on all four profiles: the Strike offers **fire / piercing / spirit** in a form that overrides its damage type |
+| C-18 | §4.1 | **Voice in the Blade.** You gain a **+1 circumstance bonus** to saves against effects that would control you, possess you, or force you to release your weapon |  | ✅ | Live at 17th, the same save rolled twice: Will reads **+20** plain and **+21** against an effect carrying the **mental** trait — the +1 appears only when the trait is there, and it is a **circumstance** bonus, which is what §2.2 says buys back Will stopping at Expert. *“Cannot be Stolen or permanently Disarmed”* has no rule element in pf2e and stays a reading of the card |
 
 ## Reiatsu and Rising Pressure (guide §4.2)
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| C-19 | §4.2 | You have a **reiatsu pool**: maximum 1 point, increasing to 2 at 5th level and 3 at 11th. |  | ☐ |  |
-| C-20 | §4.2 | Refill it during daily preparations, or by spending 10 minutes on **Steady the Breath** |  | ☐ |  |
-| C-21 | §4.2 | Once per round, the first time you either deal damage to an enemy with your spirit weapon or take damage from an enemy, you regain 1 Reiatsu Point. |  | ☐ |  |
-| C-22 | §1.4 | Every technique costs 1 Reiatsu Point |  | ☐ |  |
-| C-23 | §4.2 | You can't exceed your maximum pool |  | ☐ |  |
-| C-24 | §4.2 | over the course of a single encounter you can't regain more points this way than your maximum pool size |  | ☐ |  |
-| C-25 | §4.2 | Max per encounter |  | ☐ |  |
+| C-19 | §4.2 | You have a **reiatsu pool**: maximum 1 point, increasing to 2 at 5th level and 3 at 11th. |  | ✅ | Live at all four boundaries: pool maximum **1 at 4th**, **2 at 5th**, **2 at 10th**, **3 at 11th** — and 3 at every level after. The steps are exactly where the guide puts them |
+| C-20 | §4.2 | Refill it during daily preparations, or by spending 10 minutes on **Steady the Breath** |  | ✅ | Live: **Steady the Breath** is a real action on the sheet, granted by *Reiatsu*, reading *“Ten minutes restores 1 Reiatsu Point”* — and the pool is a pf2e **focus pool** (`Reiatsu`, tradition `focus`), so pf2e's own Refocus is what restores it. Found while driving: **16 of the 41 Soulbound actors in the rig do not carry the action**, because they were built before the grant was added and hold a stale owned copy of *Reiatsu*. A fixture artefact, not a content one — every actor built since has it |
+| C-21 | §4.2 | Once per round, the first time you either deal damage to an enemy with your spirit weapon or take damage from an enemy, you regain 1 Reiatsu Point. | `test-soulbound` pins `grantFor`'s four gates | ✅ | Live in an encounter at 17th: a Strike with the spirit weapon that dealt damage moved the pool **0 → 1**, and the ledger stamped `{round: 11, gained: 1}` |
+| C-22 | §1.4 | Every technique costs 1 Reiatsu Point |  | ✅ | Live, in the same round: a second Strike that dealt damage paid **nothing** — the pool stayed at 1 and `gained` stayed at 1 |
+| C-23 | §4.2 | You can't exceed your maximum pool |  | ✅ | Live with a **fresh ledger** so the encounter cap could not be the gate: at a pool of 3 out of 3, a Strike that dealt damage granted nothing **and left `gained` at 0**. The ceiling refuses without spending the encounter's allowance, which is the right reading of two limits that could otherwise eat each other |
+| C-24 | §4.2 | over the course of a single encounter you can't regain more points this way than your maximum pool size |  | ✅ | **The clause §1.3 calls load-bearing, and it holds.** Live across four rounds: the pool climbed 0 → 1 → 2 → 3 on one grant a round, and then in the fourth round — with the pool **deliberately spent back down to 1**, so there was room — the trigger granted **nothing**, because the encounter had already paid out 3. Without it the pool refills every round and the whole economy is decoration |
+| C-25 | §4.2 | Max per encounter |  | ✅ | The table's own number, live: at a maximum pool of **3** the encounter paid out exactly **3** and then stopped. And a new encounter starts the count again — a ledger reading `{round: 99, gained: 3}` came back `{round: null, gained: 0}` on `combatStart`, which is what makes *“per encounter”* mean anything at a table that plays more than one fight |
 
 ## Spirit Sense, Konsō, Flash Step, Departed Flesh (guide §4.3–§4.6)
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| C-26 | §4.3 | You automatically sense the presence and approximate strength of undead, haunts, spirits, and incorporeal creatures within **60 feet**, even through thin barriers, without learning their exact location — they are **hidden** to you rather than undetected. |  | ☐ |  |
+| C-26 | §4.3 | You automatically sense the presence and approximate strength of undead, haunts, spirits, and incorporeal creatures within **60 feet**, even through thin barriers, without learning their exact location — they are **hidden** to you rather than undetected. |  | ✅ | Live: the character's senses read **`spiritsense: imprecise @ 60`** — an **imprecise** sense at exactly 60 feet, which is pf2e's own word for *“hidden to you rather than undetected”*. The restricted target list and the thin barriers are the sense's description; what is modelled is the acuity and the range, which are the two halves that change how a creature is found |
 | C-27 | §4.4 | **Konsō** is a 10-minute exploration activity. |  | ☐ |  |
 | C-28 | §4.5 | **Frequency** once per round You step between one instant and the next. Stride up to your Speed. This movement doesn't trigger reactions. |  | ☐ |  |
 | C-29 | §4.5 | **Greater Flash Step (11th).** You leave an afterimage: until the start of your next turn, the first attack made against you each round requires the attacker to succeed at a **DC 5 flat check** or the attack misses. |  | ☐ |  |
-| C-30 | §4.6 | You're immune to disease, you don't need to eat or drink, and when you roll a success on a save against a poison effect you get a critical success instead. |  | ☐ |  |
+| C-30 | §4.6 | You're immune to disease, you don't need to eat or drink, and when you roll a success on a save against a poison effect you get a critical success instead. |  | ✅ | Live: **immunity to disease**, and an `AdjustDegreeOfSuccess` on **Fortitude** predicated on `item:trait:poison` turning a **success into a critical success**. Not needing to eat or drink has nothing to model and is the card's to say |
 
 ## The release ladder (guide §4.7–§4.9)
 
@@ -123,9 +123,9 @@ are not in it yet. They are the next waves; the counts below are the rows that e
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 28 |
-| ✅ | 12 |
-| ⚠️ | 0 |
+| ☐ | 13 |
+| ✅ | 25 |
+| ⚠️ | 2 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 0 |

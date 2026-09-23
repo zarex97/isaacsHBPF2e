@@ -1370,6 +1370,23 @@ for (const name of ["galvano-blast", "galvano-javelin", "electrocution"]) {
  * nothing, because a weapon publishes no `item:proficiency:rank` option; and this class has one weapon
  * progression, which reaches expert at the level this feature arrives at.
  */
+/**
+ * C-13. All four sealed profiles, because the guide states them as a table and a table is the easiest
+ * thing in a document to edit on one side only.
+ */
+for (const [file, dice, die, type, traits] of [
+    ["blade", 1, "d8", "slashing", ["two-hand-d10", "versatile-p", "versatile-spirit"]],
+    ["great-blade", 1, "d10", "slashing", ["sweep", "versatile-spirit"]],
+    ["paired-blades", 1, "d6", "slashing", ["agile", "finesse", "twin", "versatile-spirit"]],
+    ["spirit-bow", 1, "d8", "piercing", ["propulsive", "versatile-spirit"]],
+]) {
+    const doc = contentDoc(`soulbound-equipment/${file}.json`);
+    check(`${file} is ${dice}${die} ${type}`,
+        [doc.system.damage.dice, doc.system.damage.die, doc.system.damage.damageType, doc.system.category],
+        [dice, die, type, "martial"]);
+    check(`…with the traits the guide gives it`, doc.system.traits.value.sort(), [...traits].sort());
+}
+
 check("Weapon Expertise grants the critical specialization it describes",
     contentDoc("soulbound-class-features/core/weapon-expertise.json").system.rules,
     [{ key: "CriticalSpecialization" }]);
