@@ -1358,6 +1358,22 @@ for (const name of ["galvano-blast", "galvano-javelin", "electrocution"]) {
         techDoc(name).system.traits.value.includes("incapacitation"), true);
 }
 
+/**
+ * C-08. Weapon Expertise promised critical specialization **in its description** and carried no rules.
+ *
+ * pf2e builds the `critical-specialization` roll option from a synthetic the `CriticalSpecialization`
+ * rule element creates (`system/damage/weapon.ts`), so a feature with no rule grants nothing however
+ * plainly its text says otherwise — and a class feature's text is exactly where nobody looks for a bug.
+ * Driven live on a critical hit at 17th: the damage card carries the note now and did not before.
+ *
+ * Unpredicated on purpose. A first attempt gated it on the weapon's proficiency rank and matched
+ * nothing, because a weapon publishes no `item:proficiency:rank` option; and this class has one weapon
+ * progression, which reaches expert at the level this feature arrives at.
+ */
+check("Weapon Expertise grants the critical specialization it describes",
+    contentDoc("soulbound-class-features/core/weapon-expertise.json").system.rules,
+    [{ key: "CriticalSpecialization" }]);
+
 // The exception blut.mjs was written blind to accept in Phase 2, so it would never learn Uryū's name.
 check(
     "Letzt Stil is the one thing in the class that sets soulbound:blut-both",
