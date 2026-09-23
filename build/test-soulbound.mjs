@@ -1562,16 +1562,16 @@ check("and nothing outside it rolls anything", [waningDice(0), waningDice(-1), w
 check("the round of Severance counts from the round it began",
     [roundOfSeverance({ began: 3, now: 3 }), roundOfSeverance({ began: 3, now: 9 })], [1, 7]);
 
-const severance = contentDoc("soulbound-effects/effect-severance.json");
-check("Severance lasts ten rounds", severance.system.duration, { unit: "rounds", value: 10 });
+const severanceEffect = contentDoc("soulbound-effects/effect-severance.json");
+check("Severance lasts ten rounds", severanceEffect.system.duration, { unit: "rounds", value: 10 });
 check(
     "and grants the four immunities guide §9 names",
-    severance.system.rules.filter((r) => r.key === "Immunity").map((r) => r.type).sort(),
+    severanceEffect.system.rules.filter((r) => r.key === "Immunity").map((r) => r.type).sort(),
     ["death-effects", "doomed", "fear-effects", "frightened"],
 );
 check(
     "its Strike rider is 4d6 spirit on the spirit weapon",
-    (() => { const r = severance.system.rules.find((x) => x.key === "DamageDice");
+    (() => { const r = severanceEffect.system.rules.find((x) => x.key === "DamageDice");
              return [r?.diceNumber, r?.dieSize, r?.damageType]; })(),
     [4, "d6", "spirit"],
 );
@@ -1871,6 +1871,81 @@ check("and it arrives with the Full Release, not with the 13th level",
 
 
 /* ---------------------------------------------------------------------------------------------- */
+/*  Final Release — the capstone that entered itself                                                */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * X-01. "**Frequency** once per week · **Requirements** You are 20th level and your spirit weapon is
+ * in its released form."
+ *
+ * The feat carried a `GrantItem` for `Effect: Severance`, and a `GrantItem` fires when the **item is
+ * created** — so choosing the feat put a 20th-level character into Severance on the spot, for ten
+ * rounds, without the three actions and without either requirement being looked at. Driven live:
+ * adding the feat to a **sealed** Soulbound put the effect straight onto the sheet.
+ *
+ * `Severance.begin()` has been the intended entry point since it was written and its own comment says
+ * it "was never reached". It has a caller now, routed by slug like every other rung of the ladder.
+ */
+const finalRelease = contentDoc("soulbound-feats/final-release.json");
+check("Final Release is three actions, once per week",
+    [finalRelease.system.actions.value, finalRelease.system.frequency],
+    [3, { max: 1, per: "P1W", value: 1 }]);
+check("…auditory, concentrate, reiatsu — the guide's own three",
+    [...finalRelease.system.traits.value].sort(),
+    ["auditory", "concentrate", "reiatsu", "soulbound"]);
+check("…and it grants nothing on its own: Severance belongs to the use, not to the choosing",
+    finalRelease.system.rules, []);
+
+/**
+ * X-03 to X-07. Severance is one effect and every general clause of §9.0 is a rule on it.
+ */
+/**
+ * A refusal must not cost the allowance it is refusing.
+ *
+ * `createUseActionMessage` decrements `system.frequency.value` and *then* posts the card, and the card
+ * is all this module ever sees — so by the time any requirement is checked, the use is already gone.
+ * Driven live: a Final Release turned away for the wrong requirement left the feat reading **0 of 1 per
+ * week**, and the week's one use was spent on a capstone that never happened.
+ */
+{
+    const { refundUse } = await import("../scripts/soulbound/release.mjs");
+    const fake = (frequency) => {
+        const item = { system: { frequency }, updated: null };
+        item.update = async (data) => { item.updated = data; };
+        return item;
+    };
+    const spent = fake({ value: 0, max: 1, per: "P1W" });
+    await refundUse(spent);
+    check("a refused use comes back", spent.updated, { "system.frequency.value": 1 });
+    // Clamped, so an action used by some other route — which pf2e never decremented — cannot be handed
+    // a use it did not spend.
+    const full = fake({ value: 2, max: 2, per: "day" });
+    await refundUse(full);
+    check("…and never more than the maximum", full.updated, null);
+    const none = fake(null);
+    await refundUse(none);
+    check("…and an item with no frequency is left alone", none.updated, null);
+}
+
+const severKey = (key) => severanceEffect.system.rules.filter((r) => r.key === key);
+// The duration, the immunities and the 4d6 rider are asserted above, where the Waning table is.
+check("Severance puts the Speed up by 20 feet",
+    severKey("FlatModifier").map((r) => [r.selector, r.value]), [["speed", 20]]);
+const alterations = severKey("ItemAlteration");
+check("…and Flash Step to twice per round",
+    alterations.filter((r) => JSON.stringify(r.predicate).includes("flash-step")).map((r) => [r.property, r.value]),
+    [["frequency-max", 2]]);
+// "Cost nothing and have no frequency limit" is two mechanisms, not one: the price is waived by an
+// unlimited `freeCast`, and the cap is raised past any real number by an alteration.
+check("…the Release Technique and every kidō costing nothing, without limit",
+    [severanceEffect.flags["isaacs-hb-pf2e"].freeCast.unlimited,
+     alterations.filter((r) => JSON.stringify(r.predicate).includes("sb-tier-kido")).map((r) => r.value)],
+    [true, [99]]);
+check("…and the Full Release it hands you costing no fatigue",
+    severKey("RollOption").map((r) => r.option).sort(),
+    ["soulbound:no-full-release-fatigue", "soulbound:severance"]);
+
+
 /*  Kidō — the four clauses that were descriptions                                                  */
 /* ---------------------------------------------------------------------------------------------- */
 

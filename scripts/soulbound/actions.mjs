@@ -56,6 +56,15 @@ const HANDLERS = {
     "full-release": async (actor) => Release.fullRelease(actor),
 
     /**
+     * **FINAL RELEASE** [three-actions] — guide §9.0. The capstone, and until now the one rung of the
+     * ladder that entered itself: its `GrantItem` fired when the feat was *chosen*, not when it was used.
+     */
+    "final-release": async (actor) => {
+        const { Severance } = await import("./severance.mjs");
+        return Severance.use(actor);
+    },
+
+    /**
      * **Manifest or Dismiss Spirit Weapon** [free-action] — guide §4.1.
      *
      * One card, two directions, so it toggles. It was routed nowhere, which is why "you can't Release

@@ -29,12 +29,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [
-            {
-                "key": "GrantItem",
-                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Severance"
-            }
-        ],
+        "rules": [],
         "traits": {
             "otherTags": [
                 "soulbound-feat"
