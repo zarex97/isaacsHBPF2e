@@ -8,11 +8,10 @@
                         "type": "prompt"
                     },
                     "event": "damage-applied",
-                    "note": "Fires when your damage takes something to zero; the option is published by describeActor.",
+                    "note": "Not `self`, and that was the whole failure. The prompt is about the creature that **died** — “perform a Konsō on **it**” — and its predicate asks about that creature's hit points. But a `self` rider is applied to the ability's owner, and `riderOptions` describes **the rider's target**: with `self: true` the option set was the Soul Reaper's own, where `rider:target:hp-zero` is true only when the Soul Reaper is the one dying. Measured live on a kill: the self reading produced `[]` and the target reading produced `[\"rider:target:hp-zero\"]`. Dropping `self` also makes `postPrompts` flavour the card with the dead creature's name, which is what a GM reading it needs.",
                     "predicate": [
                         "rider:target:hp-zero"
-                    ],
-                    "self": true
+                    ]
                 }
             ]
         }

@@ -18,8 +18,9 @@
                         ],
                         "type": "reaction"
                     },
-                    "event": "damage-applied",
-                    "self": true
+                    "event": "damage-received",
+                    "self": true,
+                    "note": "The **defender's** event, not the attacker's. *“Trigger You take damage from an enemy”* — so it is `damage-received`; `damage-applied` is “damage from **this actor's** item landed on a target”, which is the creature at the other end. It sat on `damage-applied` from the day it was written, and since that event had never fired for anything (#71) the mistake was invisible: being hit offered nothing, and the reaction could not be taken by any route. Third and fourth occurrence of the same inversion after Antithesis (S-63c) and The Balance (S-72b)."
                 }
             ]
         }
