@@ -90,8 +90,26 @@ function resolve(path, strategy) {
     if (typeof owner[name] !== "function") return null;
 
     if (strategy === "prototype") {
-        while (owner && !Object.hasOwn(owner, name)) owner = Object.getPrototypeOf(owner);
-        if (!owner) return null;
+        // The **shared base**, not the first prototype that happens to own the method.
+        //
+        // The walk used to stop at the first owner, which reads correctly — "climb past the objects that
+        // merely inherit it" — and is wrong whenever the path names a subclass that overrides. pf2e's
+        // `CharacterPF2e` declares its own `applyDamage`, so the walk stopped there and the patch went on
+        // the character class alone. `NPCPF2e` inherits `ActorPF2e`'s, untouched.
+        //
+        // That is the exact failure this strategy exists to avoid, and it was total: **no damage rider in
+        // the module had ever fired against an NPC**, which is almost everything a Technique is aimed at.
+        // Driven live, a fire Strike took a dummy from 400 hit points to 368 and `applyDamage` was never
+        // wrapped for it, so no `damage-applied` request was sent and nothing predicating on damage ran.
+        //
+        // So the walk continues to the **last** prototype that declares it and patches there. A subclass
+        // override still runs — it calls `super`, which is the patched one.
+        let base = null;
+        for (let node = owner; node; node = Object.getPrototypeOf(node)) {
+            if (Object.hasOwn(node, name)) base = node;
+        }
+        if (!base) return null;
+        owner = base;
     }
     return { owner, name };
 }

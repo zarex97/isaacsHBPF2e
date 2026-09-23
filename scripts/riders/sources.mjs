@@ -152,6 +152,59 @@ export const Sources = {
         });
     },
 
+    /**
+     * A save rolled by pf2e's own button, rather than through the Target Helper's rows.
+     *
+     * Every save rider in the module reached the relay through `pf2e-toolbelt.rollSave`, and the Target
+     * Helper renders its per-target rows on a spell's own card and **not on a variant's**. The Heat's
+     * *Burner Finger* is the only Technique in the class built out of variants, so its three area options
+     * had no rows at all — and pf2e's own `Save` button rolled them perfectly well and told this module
+     * nothing. Driven live: a dummy critically failed Burner Finger Four's Reflex save and took none of
+     * the 1d4 persistent fire the clause promises.
+     *
+     * The two roads are disjoint, which is what makes a second source safe rather than a double
+     * application: the Target Helper rolls with `createMessage: false` and writes the result onto the
+     * card, so it creates no message for this hook to see, while pf2e's button creates exactly this one.
+     *
+     * No `itemUuid` travels with the request, deliberately. A variant spell's uuid is the *base* spell's —
+     * the overlay lives only in `flags.pf2e.origin.variant` — so a uuid sent across the socket would
+     * resolve GM-side to Burner Finger One and carry One's riders. `ChatMessagePF2e#item` rebuilds the
+     * variant from those same flags, and `resolveContext` reads the item off the message for exactly that
+     * reason.
+     */
+    async onSaveMessage(message, context) {
+        if (!OUTCOMES.includes(context?.outcome)) return;
+
+        // The loop guard. A save this module rolled itself (`runSave`) produces a message like any other,
+        // and its riders have already been dispatched by the rider that asked for the save — dispatching
+        // them again from here is how *Aurora Execution* forces a save that forces a save forever.
+        if (context.options?.includes(`${MODULE_ID}:rider-save`)) return;
+
+        // The origin is on the roll's own context, put there by pf2e when the save knows what it is against.
+        // A save rolled off a character sheet has none, and is not an event this module has anything to say
+        // about.
+        const originUuid = context.origin?.token ?? context.origin?.actor;
+        const originDoc = originUuid ? await fromUuid(originUuid) : null;
+        const originActor = originDoc?.actor ?? originDoc;
+        if (!originActor || originActor === message.actor) return;
+
+        // Both slots resolve to tokens, the rule this file keeps for every other event: `applyToTarget`
+        // reads `.actor` off what it is handed, and an Actor uuid resolves to something whose `.actor` is
+        // undefined — a silent no-op rather than an error.
+        const origin = originDoc?.documentName === "Token" ? originDoc : originActor.getActiveTokens(true, true).at(0);
+        const target = message.token ?? message.actor?.getActiveTokens(true, true).at(0);
+        if (!origin?.uuid || !target?.uuid) return;
+
+        await Relay.request({
+            action: "applyRiders",
+            event: "save-rolled",
+            messageId: message.id,
+            originUuid: origin.uuid,
+            targetUuid: target.uuid,
+            outcome: context.outcome,
+        });
+    },
+
     async onSave({ message, target, data }) {
         if (!enabled() || !message || !target || !OUTCOMES.includes(data?.success)) return;
         await Relay.request({
@@ -174,6 +227,7 @@ export const Sources = {
     async onMessage(message, userId) {
         if (!enabled() || game.user.id !== userId) return;
         const context = message?.flags?.pf2e?.context;
+        if (context?.type === "saving-throw") return Sources.onSaveMessage(message, context);
         if (context?.type !== "attack-roll" || !OUTCOMES.includes(context.outcome)) {
             return Sources.onActionUsed(message);
         }
@@ -394,7 +448,22 @@ export const Sources = {
         const origin = item?.actor;
         if (!origin || origin === actor) return;
 
-        const after = actor.hitPoints?.value ?? 0;
+        // **Read the hit points back off the live actor, not the one we were called on.**
+        //
+        // An unlinked token's actor is *synthetic*: applying damage writes the token's delta, Foundry
+        // rebuilds the synthetic actor from it, and the instance this wrapper was called on is a dead
+        // object that keeps the number it had before the blow — for ever, not for a tick. So `after`
+        // equalled `before`, `landed` was always **0**, and since the attacker's half of this event is
+        // gated on `landed > 0` it was never sent at all: **no `damage-applied` rider in the module had
+        // ever fired**, and the ones on `damage-received` were told `total: 0`.
+        //
+        // Driven live: a Strike took a dummy from 362 hit points to 348, and the captured actor still
+        // read 362 four hundred milliseconds later while `actor.token.actor` read 348 immediately.
+        //
+        // Linked actors and characters are unaffected — `token` is null for them and `actor` is already
+        // the live document.
+        const live = actor.token?.actor ?? actor;
+        const after = live.hitPoints?.value ?? live.system?.attributes?.hp?.value ?? 0;
         const landed = before - after;
 
         // The token that *took* the damage — and `params.token` is not reliably it. pf2e hands this

@@ -683,6 +683,102 @@ check("every wrap the module needs is still there", [...claimedBy.keys()].sort()
     "game.pf2e.Check.roll",
 ]);
 
+/**
+ * Where a `"prototype"` wrap actually lands.
+ *
+ * The strategy exists for one reason — `ActorPF2e#applyDamage` is declared on the shared base and
+ * inherited by every actor type, so a wrapper defined on the one subclass the path names leaves NPCs
+ * untouched — and for most of this module's life it did precisely that. The walk stopped at the **first**
+ * prototype that owned the method, and pf2e's `CharacterPF2e` declares its own `applyDamage`, so the patch
+ * went on the character class alone. **No damage rider in the module had ever fired against an NPC**,
+ * which is almost everything a Technique is aimed at.
+ *
+ * Nothing here needs Foundry: the bug is a prototype-chain walk, and a three-class chain reproduces it
+ * exactly. The second check is the other half — a subclass override must still run, reaching the patched
+ * method through `super`.
+ */
+class WrapBase {
+    hit() {
+        return "base";
+    }
+}
+class WrapSub extends WrapBase {
+    hit() {
+        return `sub(${super.hit()})`;
+    }
+}
+class WrapSibling extends WrapBase {}
+
+globalThis.__wrapProbe = { classes: { sub: WrapSub, sibling: WrapSibling } };
+const { wrap: wrapMethod } = await import("../scripts/lib/wrap.mjs");
+wrapMethod("__wrapProbe.classes.sub.prototype.hit", function (wrapped, ...args) {
+    return `wrapped:${wrapped(...args)}`;
+}, { feature: "the prototype-walk test", strategy: "prototype" });
+
+check("a prototype wrap lands on the class that declares the method", new WrapSibling().hit(), "wrapped:base");
+check("a subclass override still runs, reaching the wrap through super", new WrapSub().hit(), "sub(wrapped:base)");
+
+/* -------------------------------------------------------------------------------------------- */
+/*  The second road a save travels                                                               */
+/* -------------------------------------------------------------------------------------------- */
+
+/**
+ * Saves rolled by pf2e's own button.
+ *
+ * Every save rider reached the relay through `pf2e-toolbelt.rollSave`, and the Target Helper renders its
+ * per-target rows on a spell's own card and not on a **variant's**. The Heat's *Burner Finger* is the only
+ * Technique in the class built out of variants, so its three area options had no rows at all, and the save
+ * pf2e itself rolled told this module nothing: Burner Finger Four's 1d4 persistent fire could not be made
+ * to happen by any route.
+ *
+ * Three things have to hold, and each is a way the second road was got wrong while it was built: the
+ * origin comes off the roll's own context rather than the speaker, no `itemUuid` travels with it (a
+ * variant's uuid is the base spell's, so the GM side would collect Burner Finger *One's* riders), and a
+ * save this module rolled itself is ignored — `runSave` has already dispatched those riders, and doing it
+ * again is how an ability that forces a save forces it forever.
+ */
+const { Sources } = await import("../scripts/riders/sources.mjs");
+const { Relay } = await import("../scripts/riders/relay.mjs");
+
+const heatToken = { documentName: "Token", uuid: "Scene.s.Token.heat", actor: { uuid: "Actor.heat" } };
+const dummyToken = { documentName: "Token", uuid: "Scene.s.Token.dummy", actor: { uuid: "Actor.dummy" } };
+globalThis.fromUuid = async (uuid) => (uuid === heatToken.uuid ? heatToken : null);
+
+function saveMessage({ options = [] } = {}) {
+    return {
+        id: "save-message",
+        actor: dummyToken.actor,
+        token: dummyToken,
+        flags: { pf2e: { context: { type: "saving-throw", outcome: "criticalFailure", options, origin: { actor: "Actor.heat", token: heatToken.uuid } } } },
+    };
+}
+
+const sent = [];
+const realRequest = Relay.request;
+Relay.request = async (payload) => void sent.push(payload);
+
+const message = saveMessage();
+await Sources.onSaveMessage(message, message.flags.pf2e.context);
+check("a save rolled by pf2e's own button reaches the relay", sent.length, 1);
+check("the origin is the token the roll's context named", sent[0]?.originUuid, heatToken.uuid);
+check("the creature that rolled is the target", sent[0]?.targetUuid, dummyToken.uuid);
+check("no itemUuid travels with it, so the GM side rebuilds the variant", "itemUuid" in (sent[0] ?? {}), false);
+check("the event is the one every save rider listens for", sent[0]?.event, "save-rolled");
+
+sent.length = 0;
+const ownSave = saveMessage({ options: ["isaacs-hb-pf2e:rider-save"] });
+await Sources.onSaveMessage(ownSave, ownSave.flags.pf2e.context);
+check("a save this module rolled itself is not dispatched again", sent.length, 0);
+
+sent.length = 0;
+const sheetSave = saveMessage();
+delete sheetSave.flags.pf2e.context.origin;
+await Sources.onSaveMessage(sheetSave, sheetSave.flags.pf2e.context);
+check("a save with no origin — one rolled off a character sheet — is nothing to this module", sent.length, 0);
+
+Relay.request = realRequest;
+delete globalThis.fromUuid;
+
 function mjsUnder(dir) {
     return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
         const full = path.join(dir, entry.name);
