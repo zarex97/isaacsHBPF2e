@@ -2023,6 +2023,35 @@ async function applyPool(rider, context) {
     const focus = actor?.system?.resources?.focus;
     if (!focus) return;
 
+    /**
+     * The pool can be paid *into*, not only out of.
+     *
+     * > **Unsealed.** … the first time each round you critically hit with your spirit weapon you regain
+     * > 1 Reiatsu Point. — guide §4.8
+     *
+     * Two clauses in the class hand a point back, and until this one there was no apply type that could:
+     * `pool` only ever spent. `gain` is a separate field rather than a negative `spend`, because a
+     * negative spend falls through the `paid <= 0` guard below and does nothing at all — silently, which
+     * is the failure this whole audit exists to catch.
+     *
+     * Clamped at the maximum, for the same reason Rising Pressure is: guide §4.2's "you can't exceed your
+     * maximum pool" is the pool's rule, not any one refund's.
+     */
+    if (rider.apply.gain !== undefined) {
+        const gain = Number(rider.apply.gain) || 0;
+        const max = focus.max ?? 0;
+        const gained = Math.min(gain, max - (focus.value ?? 0));
+        if (gained <= 0) return;
+        await actor.update({ "system.resources.focus.value": (focus.value ?? 0) + gained });
+        await ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            flavor: (context.riderItem ?? context.item)?.name ?? "Rider",
+            content: `<p>${actor.name} regains <strong>${gained} Reiatsu Point${gained === 1 ? "" : "s"}</strong> — `
+                + `${(focus.value ?? 0) + gained} of ${max}.</p>`,
+        });
+        return;
+    }
+
     const spend = Number(rider.apply.spend) || 1;
     if (rider.apply.oncePerEncounter) {
         const stamp = game.combat?.started ? game.combat.id : null;
