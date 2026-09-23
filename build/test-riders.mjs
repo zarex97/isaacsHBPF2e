@@ -2740,6 +2740,50 @@ function documentedIn(readme, heading, nextHeading) {
 }
 
 /* -------------------------------------------------------------------------------------------- */
+/*  "With your spirit weapon" names the weapon, not a fist                                       */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * *"Make **three** ranged Strikes **with your spirit weapon**."*
+     *
+     * Trident's rider named no weapon, and `findStrike` falls back to `unarmed` — so a released Tiburón
+     * punched the target three times. Naming the profile would not have worked either: `findStrike`
+     * compares slugs, and *Tiburón — Hollow-Edged Blade* slugs to `tibur-n-hollow-edged-blade` with the
+     * accent dropped, which is the same trap as SB-16's `getsuga-tensh`.
+     *
+     * `spirit-weapon` is the class's own word for it — the tag every profile and every released form
+     * carries — so it survives the released/sealed swap and every Spirit that replaces its weapon.
+     */
+    const trident = load("soulbound-techniques", "trident.json");
+    const rider = ridersOf(trident)[0];
+    check("Trident strikes with the spirit weapon", rider.apply.strike, "spirit-weapon");
+    check("…three times", rider.apply.count, 3);
+    // `variants[0]` is the no-MAP variant, and no `mapIndex` is what asks for it: "the penalty does not
+    // increase until all three are made".
+    check("…at a penalty that does not climb", rider.apply.mapIndex ?? "variants[0]", "variants[0]");
+
+    // Nothing else in the content leans on the old fallback, which would now be a fist by accident.
+    const strikeRiders = [];
+    const walk = (dir) => {
+        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+            const full = path.join(dir, entry.name);
+            if (entry.isDirectory()) walk(full);
+            else if (entry.name.endsWith(".json")) {
+                const doc = JSON.parse(fs.readFileSync(full, "utf8"));
+                for (const r of ridersOf(doc) ?? []) {
+                    if (r.apply?.type === "strikes" && !r.apply.strike && !r.apply.strikes) {
+                        strikeRiders.push(entry.name);
+                    }
+                }
+            }
+        }
+    };
+    walk(path.join(ROOT, "content"));
+    check("every volley says which weapon it swings", strikeRiders.sort(), []);
+}
+
+/* -------------------------------------------------------------------------------------------- */
 
 if (failures.length > 0) {
     console.error(`Rider tests failed: ${failures.length} of ${checks}.`);

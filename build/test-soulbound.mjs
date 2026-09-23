@@ -2055,6 +2055,46 @@ check("Aullido expends every wolf that is left",
         ranged.filter(([, doc]) => doc.system.ammo?.builtIn !== true).map(([name]) => name), []);
 }
 
+/* --- terrain that follows you, and a shape that stays a choice ---------------------------------- */
+
+/**
+ * Tiburón's Segunda Etapa: *"Water rises around you in a **20-foot emanation**, difficult terrain for
+ * enemies."* `Effect: Hirviendo` had `rules: []` — no water, no emanation, no terrain, only a form that
+ * said so. `TerrainAura` is the fix, and it is declared on the effect the way `freesHands` is.
+ */
+{
+    const hirviendo = contentDoc("soulbound-effects/effect-hirviendo.json");
+    check("Hirviendo's water is a 20-foot aura for enemies",
+        hirviendo.flags["isaacs-hb-pf2e"].terrainAura, { affects: "enemies", cost: 2, value: 20 });
+    // The push beside it is "once per round when you hit", and had no gate at all.
+    check("…and the push it grants is gated to once a round",
+        hirviendo.flags["isaacs-hb-pf2e"].riders[0].oncePerRound, true);
+}
+
+/**
+ * *"La Gota **may** be used as a 60-foot line **instead of** a cone."*
+ *
+ * Written as an `alternateArea` the line simply won at the Segunda Etapa, and the cone could no longer
+ * be cast at all. Shape choices carry predicates now and the list is filtered before it is offered, so
+ * the two cone sizes stay a size — one survivor is not a question — and the line is a third option that
+ * only exists once Hirviendo does.
+ */
+{
+    const gota = techDoc("la-gota");
+    const shapes = gota.flags["isaacs-hb-pf2e"].areaTargetingShapes;
+    check("La Gota offers its shapes rather than replacing one with another",
+        shapes.map((shape) => `${shape.value}-foot ${shape.type}`),
+        ["40-foot cone", "30-foot cone", "60-foot line"]);
+    check("…the wide cone is Refined's",
+        shapes.find((s) => s.value === 40)?.predicate, ["feature:refined-release"]);
+    check("…the narrow one is everyone else's",
+        shapes.find((s) => s.value === 30)?.predicate, [{ not: "feature:refined-release" }]);
+    check("…and the line only exists at the Segunda Etapa",
+        shapes.find((s) => s.type === "line")?.predicate, ["self:effect:hirviendo"]);
+    check("…with no alternateArea left to fight it",
+        gota.flags["isaacs-hb-pf2e"].areaTargeting.alternateArea ?? "gone", "gone");
+}
+
 /* --- a shape choice that reaches the card ------------------------------------------------------- */
 
 /**
@@ -2484,14 +2524,14 @@ check("and never raises it — two items asking for different ceilings agree on 
     capped([{ path: "attributes.doomed.max", value: 3 }], 1), 1);
 check("an actor with no declaration is untouched", capped([], 4), 4);
 
-// Tiburón's Hirviendo changes La Gota's SHAPE, not just its size: "may be used as a 60-foot line
-// instead of a cone". An `area-size` override could only ever have widened the cone.
-// `alternateArea` is FIRST MATCH WINS, so the order is load-bearing: at 13th both predicates pass, and
-// a Hirviendo Tiburón must throw the 60-foot line, not the Refined 40-foot cone.
-check("La Gota widens at Refined and becomes a line under Hirviendo, in that order (guide §7B)",
-    contentDoc("soulbound-techniques/la-gota.json").flags["isaacs-hb-pf2e"].areaTargeting.alternateArea
-        .map((a) => [a.predicate, a.area.type, a.area.value]),
-    [[["self:effect:hirviendo"], "line", 60], [["feature:refined-release"], "cone", 40]]);
+// Tiburón's Hirviendo changes La Gota's SHAPE, not just its size — but the guide's word is **may**:
+// "La Gota **may** be used as a 60-foot line **instead of** a cone".
+//
+// This check used to assert the opposite, and to explain why: `alternateArea` is first-match-wins, so
+// the line was ordered above the Refined cone and "a Hirviendo Tiburón must throw the 60-foot line".
+// Driven live, that is exactly what happened — and it meant a 13th-level Tiburón could no longer cast
+// the cone at all. An option that replaces the thing it is an option to is not an option. The shapes
+// are a filtered choice now; see the block above.
 
 
 /**

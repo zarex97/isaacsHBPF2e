@@ -240,8 +240,31 @@ function collect(regions, config, originToken) {
  * rather than the chat card.
  */
 async function chooseShape(item) {
-    const choices = item.flags?.[MODULE_ID]?.areaTargetingShapes;
-    if (!Array.isArray(choices) || choices.length < 2) return null;
+    const declared = item.flags?.[MODULE_ID]?.areaTargetingShapes;
+    if (!Array.isArray(declared) || declared.length === 0) return null;
+
+    /**
+     * A shape a Technique only has at one rung.
+     *
+     * Tiburón's La Gota is a 30-foot cone, a 40-foot cone once it is Refined, and — at the Segunda
+     * Etapa — *"may be used as a **60-foot line** instead of a cone"*. The word is **may**: the line is
+     * an option beside the cone, not a replacement for it. Written as an `alternateArea` it was a
+     * replacement, and driven live a 13th-level Tiburón could no longer cast the cone at all.
+     *
+     * So a choice may carry a predicate, and the list is filtered before it is offered. One survivor is
+     * not a question — it is simply the shape, which is how the two cone sizes stay a size rather than
+     * becoming a prompt nobody wants.
+     */
+    const options = new Set([
+        ...(item.getRollOptions?.("item") ?? []),
+        ...(item.actor?.getRollOptions?.() ?? []),
+    ]);
+    const choices = declared.filter((choice) => testPredicate(choice.predicate, options));
+    if (choices.length === 0) return null;
+    if (choices.length === 1) {
+        const only = choices[0];
+        return { type: only.type, value: only.value, overlay: only.overlay ?? null };
+    }
 
     const picked = await foundry.applications.api.DialogV2.wait({
         window: { title: item.name },
