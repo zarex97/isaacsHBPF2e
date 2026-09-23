@@ -101,6 +101,28 @@ export function rulesAreSafeToRefresh(owned, packed) {
     return ![...owned, ...packed].some((rule) => STATEFUL_RULES.has(rule?.key));
 }
 
+/**
+ * Give back the use pf2e has already taken.
+ *
+ * `createUseActionMessage` decrements `system.frequency.value` **before** it posts the card, and the card
+ * is the only thing this module ever sees. So every refusal below is a refusal that has already cost the
+ * allowance: driven live, a Final Release turned away for the wrong requirement left the feat reading
+ * **0 of 1 per week**, and the week's one use was gone for a capstone that never happened.
+ *
+ * Refusing is the whole value of automating any of this, and a refusal that charges for itself is worse
+ * than no refusal at all — the player would rather not have been stopped.
+ *
+ * Clamped at `max`, so this can never hand back a use that was not spent: an action used outside the
+ * sheet's own button is not decremented in the first place.
+ */
+export async function refundUse(item) {
+    const frequency = item?.system?.frequency;
+    if (!frequency || !Number.isInteger(frequency.max)) return;
+    const restored = Math.min(frequency.max, (frequency.value ?? 0) + 1);
+    if (restored === frequency.value) return;
+    await item.update({ "system.frequency.value": restored });
+}
+
 export function releaseCost({ releasesThisEncounter }) {
     return (releasesThisEncounter ?? 0) === 0 ? 0 : 1;
 }
@@ -708,25 +730,23 @@ export const Release = {
         const today = new Date(game.time.worldTime * 1000).toDateString();
         const ledger = actor.getFlag(MODULE_ID, "fullReleaseLedger") ?? {};
         const used = ledger.day === today ? (ledger.used ?? 0) : 0;
+        // Every refusal from here down hands pf2e's own counter back — see `refundUse`.
+        const refuse = async (say) => { say(); await refundUse(feat); return false; };
+
         if (used >= max) {
-            ui.notifications.warn(
+            return refuse(() => ui.notifications.warn(
                 `${actor.name} has used Full Release ${used === 1 ? "once" : `${used} times`} today, `
                 + `which is all of it. It comes back with your daily preparations.`,
-            );
-            return false;
+            ));
         }
-
         if (this.stateOf(actor) === "sealed") {
-            ui.notifications.warn(`${actor.name} must Release before a Full Release.`);
-            return false;
+            return refuse(() => ui.notifications.warn(`${actor.name} must Release before a Full Release.`));
         }
         if (this.stateOf(actor) === "full") {
-            ui.notifications.info(`${actor.name} is already in a Full Release.`);
-            return false;
+            return refuse(() => ui.notifications.info(`${actor.name} is already in a Full Release.`));
         }
         if ((actor.system?.resources?.focus?.value ?? 0) < 1) {
-            ui.notifications.warn(`Full Release requires at least 1 Reiatsu Point.`);
-            return false;
+            return refuse(() => ui.notifications.warn(`Full Release requires at least 1 Reiatsu Point.`));
         }
 
         await this.enter(actor, "full");

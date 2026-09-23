@@ -159,6 +159,59 @@ export const Severance = {
         });
     },
 
+    /**
+     * **FINAL RELEASE** [three-actions] — guide §9.0.
+     *
+     * > **Frequency** once per week · **Requirements** You are 20th level and your spirit weapon is in
+     * > its **released** form … You enter **Severance** for **10 rounds**.
+     *
+     * The feat used to carry a `GrantItem` for `Effect: Severance`, which is a rule that fires when the
+     * **item is created** — so a 20th-level character who *chose* the feat was in Severance from that
+     * instant, for ten rounds, without spending the three actions or meeting either requirement. Driven
+     * live: adding the feat to a sealed Soulbound put the effect straight onto the sheet.
+     *
+     * `begin()` below has been the intended entry point since it was written, and its own comment says
+     * it "was never reached". This is the caller.
+     *
+     * **Released, not Full.** The old `GrantItem` route left `Release.enterSeverance` — which demands
+     * the `full` rung — to warn and give up, so the ladder never advanced. But the guide asks only for
+     * the *released* form, and says in the next breath that Severance **gives** you the Full Release
+     * "without spending your daily Full Release and without the fatigue". So the Full Release is put on
+     * here, through `enter` rather than through `fullRelease`, which is exactly what "without spending"
+     * means: the daily allowance is never consulted.
+     */
+    async use(actor) {
+        if (!Reiatsu.isSoulbound(actor)) return false;
+        const { Release, refundUse } = await import("./release.mjs");
+
+        // pf2e has already spent the week's one use by the time this runs, so every refusal gives it
+        // back. A capstone turned away for the wrong requirement must not cost the week.
+        const feat = actor.itemTypes.feat.find((f) => f.system?.slug === "final-release");
+        const refuse = async (say) => { say(); await refundUse(feat); return false; };
+
+        if ((actor.system?.details?.level?.value ?? 0) < 20) {
+            return refuse(() => ui.notifications.warn("Final Release is a 20th-level capstone."));
+        }
+        if (Release.stateOf(actor) === "sealed") {
+            return refuse(() => ui.notifications.warn(
+                `${actor.name}'s spirit weapon must be in its released form to sever it.`,
+            ));
+        }
+        if (this.effectOn(actor)) {
+            return refuse(() => ui.notifications.info(`${actor.name} is already in Severance.`));
+        }
+
+        // "You gain your Spirit's Full Release ability and its 20-foot pressure emanation, without
+        // spending your daily Full Release" — `enter` and not `fullRelease`, so no allowance is counted
+        // and no requirement re-checked.
+        if (Release.stateOf(actor) !== "full") await Release.enter(actor, "full");
+        const made = await this.begin(actor);
+        if (made) {
+            ui.notifications.info(`${actor.name} stops carrying their power and becomes it.`);
+        }
+        return !!made;
+    },
+
     async begin(actor) {
         if (!Reiatsu.isSoulbound(actor)) return null;
         const doc = await packed(SEVERANCE);
@@ -189,9 +242,6 @@ export const Severance = {
      * route quietly forgetting it.
      */
     async end(actor) {
-        const held = actor.itemTypes.effect.filter((e) => e.name === SEVERANCE);
-        if (held.length > 0) await actor.deleteEmbeddedDocuments("Item", held.map((e) => e.id));
-
         // R-10 is a list, and the Released Form is the first thing on it: "you lose your Released Form,
         // your Release Technique, your Full Release and your entire reiatsu pool". Zeroing the pool and
         // refusing a fresh Release left the character still standing in the form they had just severed.
@@ -199,7 +249,21 @@ export const Severance = {
         // Imported here rather than at the top: `release` imports `reiatsu`, which imports this module
         // for the Waning table, and a static import would close that ring at evaluation time.
         const { Release } = await import("./release.mjs");
+
+        /**
+         * **The Full Release comes off first, and the order is the clause.**
+         *
+         * Guide §9.0 gives you the Full Release "without the fatigue", and the way that is said is the
+         * `soulbound:no-full-release-fatigue` option on `Effect: Severance`. The fatigue itself is a
+         * `deleteItem` hook on `Effect: Full Release`, which reads that option at the moment it fires.
+         * Taking the Severance effect off first takes the option with it — so the hook found nothing,
+         * and a capstone whose own text says "no fatigue" left the character fatigued.
+         */
         await Release.exit(actor, "full");
+
+        const held = actor.itemTypes.effect.filter((e) => e.name === SEVERANCE);
+        if (held.length > 0) await actor.deleteEmbeddedDocuments("Item", held.map((e) => e.id));
+
         await Release.exit(actor, "released");
         // `exit` only falls back from the rung the actor is standing on, and after ADR-0002 that rung is
         // `severance` — so neither call above touches the flag and the character would be left reading as

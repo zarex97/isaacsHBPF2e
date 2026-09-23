@@ -151,12 +151,33 @@ they are true of one Lineage rather than of the class.
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | K-19 | §6.3 | Touch, one willing creature. Restore **5 HP per half your level (rounded up)**, minimum 5. At 9th level, also remove one of clumsy, enfeebled, or stupefied. | `test-soulbound` pins the three conditions and the level | ✅ | **Fixed; sixty condition riders across both classes apply one and none of them lifted one.** The hit points were always right — live at 17th (half rounded up is 9, the kidō's rank) the heal rolled **45**, which is 5 × 9 — but the 9th-level half was a line in the description. It is a `choice` now, offered on the cast and predicated on the **caster's** level rather than the kidō's rank, because a kidō's rank is half that number. Live: an ally carrying clumsy 2 and stupefied 1 was offered exactly **“Lift the clumsiness”** and **“Lift the stupefaction”** and not enfeebled, and taking the first removed clumsy **entirely** rather than stepping it down to 1 |
 
+## Final Release and Severance (guide §9.0)
+
+*The 20th-level capstone's **general** half. Each Spirit's own Severing Art — the ending — is a row in
+its own `spirit-*.md`; what is here is the feat, the state, and the decay every one of them shares.*
+
+| ID | Guide | Clause | Static check | Status | Evidence |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| X-01 | §9.0 | **Frequency** once per week · **Requirements** You are 20th level and your spirit weapon is in its | `test-soulbound` pins the action, the frequency and the empty rules array | ✅ | **Fixed; the capstone entered itself.** The feat carried a `GrantItem` for `Effect: Severance`, and a `GrantItem` fires when the **item is created** — so a 20th-level character who merely *chose* the feat was in Severance from that instant, for ten rounds, without the three actions and without either requirement being read. Driven live before: adding the feat to a **sealed** Soulbound put the effect straight on the sheet. `Severance.begin()` had been the intended entry since it was written and its own comment said it *“was never reached”*; it has a caller now, routed by slug like every other rung. Live after: choosing the feat does nothing; using it from **sealed** is refused; using it from **released** enters Severance and spends the week's one use. A refusal costs nothing — pf2e decrements the frequency before the card is even posted, so a turned-away capstone used to eat the week, and every refusal hands the use back |
+| X-02 | §9.0 | You stop carrying your power and *become* it. You enter **Severance** for **10 rounds**. | `test-soulbound` pins the duration | ✅ | Live: the effect landed with `duration: 10 rounds` and a `severanceBegan` stamp reading the encounter's current round — which is what the whole Waning table is counted from, and what used to be missing entirely when the `GrantItem` was the only route in |
+| X-03 | §9.0 | Your spirit weapon's Strikes deal an additional **4d6 spirit** damage. | `test-soulbound` pins the die, the type and the predicate | ✅ | Live at 20th: the spirit weapon's damage reads **`(1d10 + 7) fire + 4d6 spirit`** — the rider is a `DamageDice` on `strike-damage`, predicated on the weapon's tag so an ordinary Strike with anything else is untouched |
+| X-04 | §9.0 | You are **immune to fear and death effects**, and to the **frightened** and **doomed** conditions. | `test-soulbound` pins all four | ✅ | Live: immunities went from `["disease", "fire"]` — the Quincy's own — to `["disease", "fear-effects", "fire", "death-effects", "frightened", "doomed"]`. Four added, exactly the guide's list, in pf2e's own spelling: `-effects` for the two that are effect types and bare slugs for the two conditions |
+| X-05 | §9.0 | **Reiatsu stops mattering.** You have no pool and need none: your Release Technique and every kidō | `test-soulbound` pins both mechanisms | ✅ | **Two mechanisms, not one**, and live both hold: the Release Technique was cast **twice in the same round** and a costed kidō after it, and the pool stayed at **3 the whole time**. The price is waived by an `unlimited` free cast; the *cap* — the Full Release's own once-per-round — is lifted by an `ItemAlteration` raising `frequency-max` past any real number. Waiving the price alone would have left the second cast refused |
+| X-06 | §9.0 | You gain your Spirit's **Full Release** ability and its 20-foot pressure emanation, without |  | ✅ | **Fixed; it asked for the wrong rung and charged for the gift.** The old route left `Release.enterSeverance` — which demands the `full` rung — to warn and give up, so the ladder never advanced past `released`. But the guide asks only for the *released* form and says in the next breath that Severance **gives** you the Full Release *“without spending your daily Full Release and without the fatigue”*. Live after: entered from `released`, `Effect: Full Release` came on, and the daily ledger read **undefined** afterwards — nothing was spent. The fatigue needed its own fix: `end()` removed the Severance effect first, which took `soulbound:no-full-release-fatigue` with it, so the `deleteItem` hook that applies the fatigue found nothing standing and a capstone whose text says *no fatigue* left you fatigued. The Full Release comes off **before** the Severance effect now, and live the character came out of it clean |
+| X-07 | §9.0 | Your Speed increases by **20 feet**, and Flash Step's frequency becomes **twice per round**. | `test-soulbound` pins both numbers | ✅ | Live: Speed **25 → 45** on entering Severance and back to 25 on leaving it; Flash Step's `frequency.max` **1 → 2** and back. The Speed is a `FlatModifier`; the frequency is an `ItemAlteration` predicated on the feat's slug, which is the only way to reach a number that lives on another item |
+| X-08 | §9.0 | Using it is **[two-actions]**, costs nothing, |  | ✅ | Live, and tested the only way that distinguishes it from the pool being emptied anyway: with the pool at **0 out of 3**, the Severing Art fired. Two actions, and nothing paid |
+| X-09 | §9.0 | **immediately ends Severance** whether you want it to or not. |  | ✅ | Live: the Art posted **“Burning Full Fingers ends Severance.”**, the effect came off, and the release ladder fell to `sealed` in the same breath — with no choice offered, which is the clause's *“whether you want it to or not”* |
+| X-10 | §9.0 | Its damage depends only on **which round of Severance you use it in**: | `test-soulbound` pins the whole Waning table | ✅ | Driven across four rounds of one encounter: the Art's own damage formula read **20d6** in the first round of Severance, then **18d6**, **16d6**, **14d6** as the rounds turned — 22 − 2 × the round, read off the spell itself rather than off a note. Nothing else re-prepares an actor when a round turns, which is why Severance asks for one |
+| X-11 | §9.0 | After the 7th round the Art has decayed past the point of | `test-soulbound` pins the three zeroes | ✅ | Live at the **8th** round of Severance: the Waning reads **0 dice** and the Art is **refused** — no message posted, Severance still standing, the one shot not thrown away for nothing. *“The rules simply say so”*, and so does the refusal |
+| X-12 | §9.0 | lose access to your **Released Form**, your **Release Technique**, your **Full Release**, and your | `test-soulbound` pins the cost effect | ✅ | Live, all four at once. After the Art: `Effect: Severed` on the sheet; the pool reading **0 / max 0 / cap 0** — the **cap** overridden, not the value, so a Refocus cannot grow it back; and every one of the three is refused — **Release** returns false, **Full Release** returns false, and the **Release Technique** posts no message. The Technique's card stays on the sheet, because pf2e keeps a spell in its entry; what is gone is the form that lets it be cast |
+| X-13 | §9.0 | keep your Hit Points, proficiencies, skills, Lineage features, and every other feat. |  | ✅ | Live, on the same sheet a moment later: **HP 200/200**, Perception **Master**, Fortitude **Legendary**, 38 class features including the Lineage's own Blut, and the character's other feat all standing. What Severance takes is exactly the list above it and nothing else |
+
 ---
 
 ## Still to write
 
-`F-` (feats, §8) and `X-` (Final Release and Severance, §9.0) belong in this file and are not in it yet.
-They are the next waves; the counts below are the rows that exist.
+`F-` (feats, §8) belongs in this file and is not in it yet. It is the last wave of the class tier; the
+counts below are the rows that exist.
 
 §6.4 (Cero and Bala) and §6.5 (Gintō) are **not** here on purpose: they are one Lineage's arts rather
 than the class's, and they are rows in `lineage-hollow.md` and `lineage-quincy.md`.
@@ -166,9 +187,9 @@ than the class's, and they are rows in `lineage-hollow.md` and `lineage-quincy.m
 | Status | Count |
 | :-- | --: |
 | ☐ | 0 |
-| ✅ | 54 |
+| ✅ | 67 |
 | ⚠️ | 5 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 0 |
-| **Total** | **59** |
+| **Total** | **72** |
