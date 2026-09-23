@@ -3,6 +3,7 @@ import { Blut } from "./blut.mjs";
 import { Modes } from "./modes.mjs";
 import { Reiatsu } from "./reiatsu.mjs";
 import { Release } from "./release.mjs";
+import { SpiritWeapon } from "./weapon.mjs";
 
 const MODULE_ID = "isaacs-hb-pf2e";
 
@@ -53,6 +54,14 @@ async function chooseOne(title, prompt, options) {
 const HANDLERS = {
     release: async (actor) => Release.release(actor),
     "full-release": async (actor) => Release.fullRelease(actor),
+
+    /**
+     * **Manifest or Dismiss Spirit Weapon** [free-action] — guide §4.1.
+     *
+     * One card, two directions, so it toggles. It was routed nowhere, which is why "you can't Release
+     * while your spirit weapon is dismissed" had nothing to refuse.
+     */
+    "manifest-or-dismiss-spirit-weapon": async (actor) => SpiritWeapon.toggle(actor),
 
     /**
      * **Steady the Breath** — the class's own name for Refocus (guide §4.2), and the only way

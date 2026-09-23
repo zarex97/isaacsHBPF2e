@@ -1871,6 +1871,70 @@ check("and it arrives with the Full Release, not with the 13th level",
 
 
 /* ---------------------------------------------------------------------------------------------- */
+/*  Unsealed, the afterimage, and the two allowances nothing spent                                  */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * C-39. `Unsealed` (19th) makes three promises and shipped with one.
+ *
+ * > You can use Full Release **twice per day**. While in a Full Release you're immune to fear effects,
+ * > and the first time each round you critically hit with your spirit weapon you regain 1 Reiatsu Point.
+ *
+ * The `ItemAlteration` raising the frequency to 2 was there and works. The other two were prose: nothing
+ * anywhere granted fear immunity, and nothing anywhere handed a point back — `pool` could only ever
+ * spend, which is why `gain` exists now.
+ *
+ * Both live on the **effect** rather than on the feature, because both are true only while the Full
+ * Release stands, and both are predicated on the feature so a 13th-level Full Release does not get them.
+ */
+const unsealed = contentDoc("soulbound-class-features/core/unsealed.json");
+check("Unsealed raises Full Release to twice per day, by altering the feat's own frequency",
+    unsealed.system.rules.filter((r) => r.key === "ItemAlteration" && r.property === "frequency-max")
+        .map((r) => [r.value, r.predicate]),
+    [[2, ["item:slug:full-release"]]]);
+
+// `fear-effects` and not `fear`: pf2e's immunity list is its own, and "fear" there is the *trait*. The
+// validator caught this before it shipped — an `Immunity` with a type pf2e does not know is dropped
+// during preparation without a word, which is a fear immunity that is not one.
+const fearImmunity = fullReleaseEffect.system.rules.find((r) => r.key === "Immunity");
+check("…a Full Release with Unsealed is immune to fear", [fearImmunity?.type, fearImmunity?.predicate],
+    ["fear-effects", ["feature:unsealed"]]);
+
+const refund = fullReleaseEffect.flags["isaacs-hb-pf2e"].riders
+    .find((r) => r.event === "strike-resolved");
+check("…and a critical hit with the spirit weapon hands a point back",
+    [refund?.apply?.type, refund?.apply?.gain, refund?.outcomes, refund?.self],
+    ["pool", 1, ["criticalSuccess"], true]);
+// "The **first time each round**" — the same count `Tensa Zangetsu` needed, and the same one the
+// afterimage below was missing. A rider that does not ask for the gate is never consulted by it.
+check("…once in a round, not once per critical hit", refund?.oncePerRound, true);
+check("…and only with the spirit weapon, on a character who has Unsealed",
+    refund?.predicate, ["feature:unsealed", "item:tag:soulbound-spirit-weapon"]);
+
+/**
+ * C-29. "The **first attack** made against you **each round** requires … a DC 5 flat check."
+ *
+ * Driven live: D1 threw two Fists at a released Senbonzakura in one round and the afterimage offered its
+ * flat check on **both**. The clause's whole shape is "first", and the rider had no way to count.
+ */
+const afterimage = contentDoc("soulbound-effects/effect-greater-flash-step.json");
+const flatCheck = afterimage.flags["isaacs-hb-pf2e"].riders[0];
+check("the afterimage answers an attack that has landed on you",
+    [flatCheck.event, flatCheck.self], ["strike-received", true]);
+check("…once each round, however many attacks come", flatCheck.oncePerRound, true);
+check("…and it is a DC 5 flat check",
+    [flatCheck.apply.riders[0].apply.type, flatCheck.apply.riders[0].apply.dc], ["flat-check", 5]);
+// It is worn for a round, from Flash Step, and only by a character who has the 11th-level feature.
+const stepping = contentDoc("soulbound-class-features/core/flash-step.json");
+check("…worn by Flash Step, and only from 11th",
+    [stepping.flags["isaacs-hb-pf2e"].riders[0].event,
+     stepping.flags["isaacs-hb-pf2e"].riders[0].predicate],
+    ["action-used", ["feature:greater-flash-step"]]);
+check("…and Flash Step is itself once per round",
+    stepping.system.frequency, { max: 1, per: "round", value: 1 });
+
+
+/* ---------------------------------------------------------------------------------------------- */
 /*  A basic save's four degrees                                                                     */
 /* ---------------------------------------------------------------------------------------------- */
 

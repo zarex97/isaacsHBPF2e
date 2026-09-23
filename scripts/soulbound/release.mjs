@@ -1,5 +1,6 @@
 import { Hypnosis } from "./hypnosis.mjs";
 import { Reiatsu } from "./reiatsu.mjs";
+import { SpiritWeapon } from "./weapon.mjs";
 
 const MODULE_ID = "isaacs-hb-pf2e";
 
@@ -316,12 +317,14 @@ export const Release = {
         for (const name of packs) {
             const pack = game.packs.get(`${MODULE_ID}.${name}`);
             if (!pack) continue;
-            for (const entry of await pack.getIndex({ fields: ["flags", "system.rules", "img"] })) {
+            const fields = ["flags", "system.rules", "system.traits.otherTags", "img"];
+            for (const entry of await pack.getIndex({ fields })) {
                 const flags = entry.flags?.[MODULE_ID];
                 const rules = entry.system?.rules;
+                const otherTags = entry.system?.traits?.otherTags ?? null;
                 const img = entry.img ?? null;
-                if (!flags && !rules?.length && !img) continue;
-                const record = { flags: flags ?? null, rules: rules ?? null, img };
+                if (!flags && !rules?.length && !otherTags?.length && !img) continue;
+                const record = { flags: flags ?? null, rules: rules ?? null, otherTags, img };
                 authored.set(`Compendium.${MODULE_ID}.${name}.Item.${entry._id}`, record);
                 authored.set(`name:${entry.name}`, record);
             }
@@ -394,6 +397,34 @@ export const Release = {
                 if (existing) existing.img = record.img;
                 else updates.push({ _id: item.id, img: record.img });
                 if (!refreshed.includes(item.name)) refreshed.push(item.name);
+            }
+
+            /**
+             * The tags, which are read by predicates and written by nobody.
+             *
+             * `Refined Release` (9th) widens a Technique's area with an `ItemAlteration` predicated on
+             * `item:tag:sb-refined-area-20`. Driven live at C-32: a **20th-level** Soul Reaper with
+             * Refined Release plainly on the sheet cast Senbonzakura into a **15-foot** emanation, because
+             * the owned copy of the spell predates the tag and carries only `sb-tier-release`. The pack was
+             * right; the character was built before it was. A predicate that matches nothing does not
+             * complain — it simply never fires, which is this audit's whole subject.
+             *
+             * A **union**, never a replacement, and read off `_source` rather than off the prepared item:
+             * pf2e's own `ItemAlteration` can add an `other-tag` during preparation, and rewriting the
+             * stored array from a prepared one would bake a synthetic tag into the document for ever.
+             * Union means a tag *removed* from the pack survives on an old sheet, which is the lesser of
+             * the two mistakes: a stale tag can only fire a rule that is still authored.
+             */
+            const ownTags = item._source?.system?.traits?.otherTags;
+            if (Array.isArray(ownTags) && Array.isArray(record.otherTags)) {
+                const missing = record.otherTags.filter((tag) => !ownTags.includes(tag));
+                if (missing.length > 0) {
+                    const merged = [...ownTags, ...missing];
+                    const existing = updates.find((u) => u._id === item.id);
+                    if (existing) existing["system.traits.otherTags"] = merged;
+                    else updates.push({ _id: item.id, "system.traits.otherTags": merged });
+                    if (!refreshed.includes(item.name)) refreshed.push(item.name);
+                }
             }
 
             // And the rules, but only where nothing in them carries grant-time state — see
@@ -605,6 +636,20 @@ export const Release = {
             return false;
         }
 
+        /**
+         * > You can't Release while your spirit weapon is dismissed. — guide §4.7
+         *
+         * This comment's promise above — "a dismissed spirit weapon refuses" — was a description of
+         * something no line of code did, because until `SpiritWeapon.isDismissed` there was no dismissed
+         * state to ask about. Dismissing was a chat card and nothing else.
+         */
+        if (SpiritWeapon.isDismissed(actor)) {
+            ui.notifications.warn(
+                `${actor.name}'s spirit weapon is dismissed. Manifest it before Releasing.`,
+            );
+            return false;
+        }
+
         const cost = releaseCost({ releasesThisEncounter: this.releasesThisEncounter(actor) });
         const pool = actor.system?.resources?.focus;
         if (cost > 0 && (pool?.value ?? 0) < cost) {
@@ -641,6 +686,36 @@ export const Release = {
      */
     async fullRelease(actor) {
         if (!Reiatsu.isSoulbound(actor)) return false;
+
+        /**
+         * > **Frequency** once per day … you can't use Full Release again today. — guide §4.8
+         *
+         * pf2e **counts** this and does not enforce it. `createUseActionMessage` decrements
+         * `system.frequency.value` when the sheet's use button is clicked, stops decrementing at zero, and
+         * then posts the card anyway — so a 13th-level Soulbound whose one use was spent clicked the
+         * button again, the counter stayed at 0, and they entered a second Full Release. Driven live, that
+         * is exactly what happened.
+         *
+         * The count is kept here rather than read off pf2e's, because by the time this runs pf2e has
+         * already decremented for a legitimate use and the two cases are indistinguishable from the
+         * counter alone. `max` is still read off the feat, so `Unsealed`'s `ItemAlteration` — the 19th
+         * level's "twice per day" — raises this allowance without knowing this code exists.
+         *
+         * The day is the world's, the same one `Steady the Breath` counts its first use of.
+         */
+        const feat = actor.itemTypes.feat.find((f) => f.system?.slug === "full-release");
+        const max = Number(feat?.system?.frequency?.max ?? 1);
+        const today = new Date(game.time.worldTime * 1000).toDateString();
+        const ledger = actor.getFlag(MODULE_ID, "fullReleaseLedger") ?? {};
+        const used = ledger.day === today ? (ledger.used ?? 0) : 0;
+        if (used >= max) {
+            ui.notifications.warn(
+                `${actor.name} has used Full Release ${used === 1 ? "once" : `${used} times`} today, `
+                + `which is all of it. It comes back with your daily preparations.`,
+            );
+            return false;
+        }
+
         if (this.stateOf(actor) === "sealed") {
             ui.notifications.warn(`${actor.name} must Release before a Full Release.`);
             return false;
@@ -655,7 +730,11 @@ export const Release = {
         }
 
         await this.enter(actor, "full");
-        ui.notifications.info(`${actor.name} enters a Full Release.`);
+        // Spent *after* every refusal above, so a Full Release that could not begin has not cost a use.
+        await actor.setFlag(MODULE_ID, "fullReleaseLedger", { day: today, used: used + 1 });
+        ui.notifications.info(
+            `${actor.name} enters a Full Release. ${max - used - 1} left today.`,
+        );
         return true;
     },
 

@@ -1421,8 +1421,17 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0, inherit
             break;
         }
         case "pool":
-            // A price, and the one thing that makes it a price rather than a tax: how much.
-            if (!(Number(apply.spend) > 0)) {
+            // A price or a refund, and exactly one of the two: `spend` takes points out, `gain` puts them
+            // back. Both must be positive — a refund written as a negative `spend` falls straight through
+            // `applyPool`'s own guard and does nothing, silently, which is the failure this file exists
+            // to make loud.
+            if (apply.spend !== undefined && apply.gain !== undefined) {
+                errors.push(`${at} a pool rider is a \`spend\` or a \`gain\`, not both`);
+            } else if (apply.gain !== undefined) {
+                if (!(Number(apply.gain) > 0)) {
+                    errors.push(`${at} a pool rider needs a positive \`gain\` — got "${apply.gain}"`);
+                }
+            } else if (!(Number(apply.spend) > 0)) {
                 errors.push(`${at} a pool rider needs a positive \`spend\` — got "${apply.spend}"`);
             }
             break;
