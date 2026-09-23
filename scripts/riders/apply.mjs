@@ -2452,15 +2452,24 @@ async function postPick({ rider, index, item }, context, payload) {
     const origin = context.originToken?.object;
     if (!origin || !item?.uuid || !canvas?.ready) return;
 
+    /**
+     * Where the range is measured **from**.
+     *
+     * Usually the caster — "choose one enemy within 60 feet" of the Quincy. The Thunderbolt's arc is the
+     * exception and reads the other way: *"one other creature within 15 feet of **the target**"*, a circle
+     * drawn around the creature that was just struck. Whichever end it is, that creature is excluded from
+     * its own list, which is what "**other**" means.
+     */
+    const centre = spec.from === "target" ? (context.target?.object ?? origin) : origin;
     const range = Number(spec.range);
     const affects = spec.affects ?? "enemies";
     const originActor = context.originActor;
     const candidates = canvas.tokens.placeables.filter((token) => {
         const actor = token.actor;
-        if (!actor || token === origin) return false;
+        if (!actor || token === origin || token === centre) return false;
         if (affects === "enemies" && !actor.isEnemyOf?.(originActor)) return false;
         if (affects === "allies" && !actor.isAllyOf?.(originActor)) return false;
-        return !Number.isFinite(range) || distanceBetween(origin, token) <= range;
+        return !Number.isFinite(range) || distanceBetween(centre, token) <= range;
     });
     if (candidates.length === 0) return;
 

@@ -38,6 +38,22 @@
                 "key": "RollOption",
                 "option": "soulbound:thunderbolt:flash-step-teleport",
                 "value": true
+            },
+            {
+                "key": "ItemAlteration",
+                "mode": "add",
+                "property": "description",
+                "itemType": "feat",
+                "label": "The Thunderbolt",
+                "predicate": [
+                    "item:slug:flash-step"
+                ],
+                "value": [
+                    {
+                        "title": "The Thunderbolt",
+                        "text": "Your Flash Step is an <strong>electricity-flavoured teleport</strong>: it <strong>ignores difficult terrain</strong>, and you may <strong>pass through creatures' spaces</strong> — though you can't end your movement there."
+                    }
+                ]
             }
         ],
         "start": {
