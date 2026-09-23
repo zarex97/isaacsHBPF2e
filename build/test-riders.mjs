@@ -639,6 +639,98 @@ check("re-aim is not an empty confirmation", Array.isArray(REAIM), false);
 check("re-aim survives the dialog's nullish coalescing", (REAIM ?? null) === REAIM, true);
 
 /* -------------------------------------------------------------------------------------------- */
+/*  The Balance                                                                                  */
+/* -------------------------------------------------------------------------------------------- */
+
+/**
+ * Every clause of The Balance that failed by being written somewhere nothing reads.
+ *
+ * Four separate cases, and they are worth keeping together because they are the same mistake wearing
+ * four faces: an authored statement that validates, builds, ships, and is never consulted.
+ *
+ *  - the reaction keyed to the **attacker's** event, so being hit offered nothing;
+ *  - an AC bonus predicated on a roll option pf2e does not publish;
+ *  - a refusal to die whose machinery was general and whose declaration was never written;
+ *  - a doomed ladder whose condition nothing counted.
+ */
+{
+    const reaction = load("soulbound-techniques", "the-balance-reaction.json");
+    const riders = ridersOf(reaction);
+
+    check("The Balance's reaction is on the defender's event", riders.map((r) => r.event),
+        ["damage-received", "damage-received"]);
+    // A reaction must be `self` — `validate` insists on it, because the card is offered to the ability's
+    // owner. Everything that is supposed to reach somebody else is marked `trigger: true`.
+    check("…offered to its owner", riders.map((r) => r.self), [true, true]);
+    check("…in two variants, chosen by the Refined rung",
+        riders.map((r) => JSON.stringify(r.predicate)),
+        ['[{"not":"feature:refined-release"}]', '["feature:refined-release"]']);
+
+    for (const [index, rider] of riders.entries()) {
+        const nested = rider.apply.riders;
+        const where = index === 0 ? "plain" : "refined";
+        // The reduction stays on the Quincy; the 2d6 and the penalty go to the creature that struck.
+        check(`…${where}: the reduction lands on the Quincy`,
+            [nested[0].apply.type, nested[0].trigger ?? false],
+            ["effect", false]);
+        check(`…${where}: the spirit damage goes to the triggering creature`,
+            [nested[1].apply.formula, nested[1].apply.damageType, nested[1].trigger],
+            ["2d6", "spirit", true]);
+        check(`…${where}: at every other rank, which is what Heightened (+2) means`,
+            [nested[1].apply.perStep, nested[1].apply.perStepInterval], ["1d6", 2]);
+        check(`…${where}: the saves penalty goes with it`,
+            [nested[2].apply.type, nested[2].trigger], ["effect", true]);
+        // R-24c: "if you have used your Release Technique at least three times this encounter".
+        check(`…${where}: and the use is counted`,
+            [nested[3].apply.type, nested[3].apply.stack, nested[3].apply.value], ["effect", true, 1]);
+    }
+
+    /**
+     * The one flat numeric bonus in the class, and it was never on.
+     *
+     * It was predicated on `{gte: ["self:resource:focus:value", 1]}`, which reads exactly right and
+     * matches nothing: **pf2e publishes no roll option for a resource**. Driven live, a character holding
+     * three Reiatsu Points had no option matching `self:resource:` at all, so the +1 could not apply at
+     * any pool size. The effect publishes its own option now, from a resolvable pf2e does evaluate.
+     */
+    const schrift = load("soulbound-effects", "effect-the-balance-schrift.json");
+    const rules = schrift.system.rules;
+    const option = rules.find((r) => r.key === "RollOption");
+    check("The Balance publishes an option for holding a Reiatsu Point",
+        [option?.option, option?.domain, option?.value],
+        ["soulbound:reiatsu-remaining", "all", "gte(@actor.system.resources.focus.value,1)"]);
+    const ac = rules.find((r) => r.key === "FlatModifier");
+    check("…and the AC bonus predicates on that, not on a resource",
+        [ac?.selector, ac?.type, ac?.value, JSON.stringify(ac?.predicate)],
+        ["ac", "circumstance", 1, '["soulbound:reiatsu-remaining"]']);
+
+    /**
+     * S-73b. `refuse-death.mjs` was made general for *Bailar de Valquiria*, and its docstring names this
+     * clause as one of the three it was generalised for — and The Balance was never given the flag. The
+     * `predicate` is the part worth pinning: Refined is a class feat rather than a rung with an item of
+     * its own, so the price lives on the Spirit's form feature and names the rung it belongs to.
+     */
+    const form = load("soulbound-class-features", "spirits", "the-balance-schrift.json");
+    const refusal = form.flags["isaacs-hb-pf2e"].refuseDeath;
+    check("The Balance refuses one death a day, at the Refined rung",
+        [refusal.cost, refusal.requires, refusal.frequency, JSON.stringify(refusal.predicate)],
+        [0, "released", true, '["feature:refined-release"]']);
+    check("…and the allowance is a frequency pf2e will refill",
+        [form.system.frequency.max, form.system.frequency.per], [1, "day"]);
+
+    /** R-24c: doomed 1 or doomed 2, by a tally the reaction keeps. */
+    const reckoning = ridersOf(load("soulbound-techniques", "the-reckoning.json"));
+    check("The Reckoning dooms by how much fortune was held",
+        reckoning.map((r) => [r.apply.value, JSON.stringify(r.predicate)]),
+        [
+            [1, '[{"not":{"gte":["self:effect:the-balance-fortune-held",3]}}]'],
+            [2, '[{"gte":["self:effect:the-balance-fortune-held",3]}]'],
+        ]);
+    check("…on a failure either way", reckoning.map((r) => r.outcomes.join("/")),
+        ["failure/criticalFailure", "failure/criticalFailure"]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
 /*  Wrapped methods                                                                              */
 /* -------------------------------------------------------------------------------------------- */
 
@@ -2996,7 +3088,8 @@ function documentedIn(readme, heading, nextHeading) {
         "sekishiki-kisoen.json",
         "sky-ascendant-aquarius.json",
         "soul-sever.json",
-        "the-balance-reaction.json",
+        // The Balance left this list on purpose. Its reaction's trigger is "You take damage", which is
+        // the defender's event — it sat on `damage-applied` and was never offered once. See S-72b.
         "the-miracle-growth.json",
         "the-yellow-spring-opens.json",
     ]);

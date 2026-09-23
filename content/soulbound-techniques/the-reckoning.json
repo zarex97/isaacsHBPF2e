@@ -4,13 +4,42 @@
             "riders": [
                 {
                     "apply": {
-                        "value": 1,
+                        "type": "condition",
                         "slug": "doomed",
-                        "type": "condition"
+                        "value": 1
                     },
                     "outcomes": [
                         "failure",
                         "criticalFailure"
+                    ],
+                    "predicate": [
+                        {
+                            "not": {
+                                "gte": [
+                                    "self:effect:the-balance-fortune-held",
+                                    3
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "apply": {
+                        "type": "condition",
+                        "slug": "doomed",
+                        "value": 2
+                    },
+                    "outcomes": [
+                        "failure",
+                        "criticalFailure"
+                    ],
+                    "predicate": [
+                        {
+                            "gte": [
+                                "self:effect:the-balance-fortune-held",
+                                3
+                            ]
+                        }
                     ]
                 }
             ],

@@ -1,3 +1,4 @@
+import { testPredicate } from "./lib/roll-options.mjs";
 import { Release } from "./soulbound/release.mjs";
 
 const MODULE_ID = "isaacs-hb-pf2e";
@@ -58,12 +59,24 @@ export function shouldCatch({ next, current, released, points, cost = 1, usesLef
     return usesLeft > 0;
 }
 
-/** Every item on the actor that declares a price for refusing to die, cheapest first. */
+/**
+ * Every item on the actor that declares a price for refusing to die, cheapest first.
+ *
+ * A declaration may carry a `predicate`, and The Balance is why. Its refusal is a **Refined** clause —
+ * *"if the triggering damage would have reduced you to 0 Hit Points, you instead remain at 1 Hit Point"*,
+ * guide §7C — and a Spirit has no item of its own at that rung: Refined is a class feat that publishes
+ * `feature:refined-release`, and the Spirit's form feature is carried from 1st level. So the declaration
+ * lives on the form feature and names the rung it belongs to, rather than the clause going unwritten
+ * because there was nowhere to put it.
+ */
 export function declarationsOn(actor) {
+    const options = new Set(actor?.getRollOptions?.() ?? []);
     const found = [];
     for (const item of actor?.items ?? []) {
         const declared = item.flags?.[MODULE_ID]?.refuseDeath;
-        if (declared) found.push({ item, declared });
+        if (!declared) continue;
+        if (declared.predicate && !testPredicate(declared.predicate, options)) continue;
+        found.push({ item, declared });
     }
     return found.sort((a, b) => (Number(a.declared.cost) || 1) - (Number(b.declared.cost) || 1));
 }

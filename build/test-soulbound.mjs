@@ -1390,13 +1390,31 @@ check("and the guide's own numbering survives it",
     ["Burner Finger Two", "Burner Finger Three", "Burner Finger Four", "Burner Finger Five"]);
 
 
-// The AC bonus must read the POOL, not a roll option nothing sets.
+/**
+ * The AC bonus must read an option something **publishes**.
+ *
+ * This assertion used to demand the opposite, and its comment said "read the POOL, not a roll option
+ * nothing sets" — which is exactly backwards, because `self:resource:focus:value` is the roll option
+ * nothing sets. **pf2e publishes no roll option for a resource at all.** Driven live, a Balance holding
+ * three Reiatsu Points had nothing matching `self:resource:` in `getRollOptions()`, so the one flat
+ * numeric bonus in the class could not apply at any pool size, and this test held it that way.
+ *
+ * So the effect publishes its own option from a resolvable pf2e does evaluate — `gte` is one of the
+ * comparisons registered on `Math` for rule-element values — and the modifier predicates on that. Live,
+ * both ways: AC 27 with points and AC 26 at zero.
+ */
 const balanceSchrift = contentDoc("soulbound-effects/effect-the-balance-schrift.json");
+check(
+    "The Balance publishes an option for holding a Reiatsu Point",
+    (() => { const r = balanceSchrift.system.rules.find((x) => x.key === "RollOption");
+             return [r?.option, r?.value]; })(),
+    ["soulbound:reiatsu-remaining", "gte(@actor.system.resources.focus.value,1)"],
+);
 check(
     "The Balance's AC bonus is a circumstance bonus gated on holding a Reiatsu Point",
     (() => { const r = balanceSchrift.system.rules.find((x) => x.selector === "ac");
              return [r?.type, r?.value, JSON.stringify(r?.predicate)]; })(),
-    ["circumstance", 1, JSON.stringify([{ gte: ["self:resource:focus:value", 1] }])],
+    ["circumstance", 1, JSON.stringify(["soulbound:reiatsu-remaining"])],
 );
 
 // Miracle points are the charge pool again, and the resistance reads the badge on its own item.
