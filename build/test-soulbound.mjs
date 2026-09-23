@@ -1351,7 +1351,9 @@ for (const name of QUINCY_SPIRITS) {
 
 // Guide §7C is explicit that these carry incapacitation: stunned on a failed basic save at rank 1 is
 // above the curve without it, and against a higher-level creature it should do nothing but damage.
-for (const name of ["galvano-blast", "galvano-javelin"]) {
+// Electrocution joins them: §9.3 says its stunned 2 is incapacitation in as many words, and a Severing
+// Art that stunned a higher-level creature outright would be the one place the trait is load-bearing.
+for (const name of ["galvano-blast", "galvano-javelin", "electrocution"]) {
     check(`${name} carries incapacitation (guide §7C)`,
         techDoc(name).system.traits.value.includes("incapacitation"), true);
 }
@@ -1898,16 +1900,16 @@ check("Thunderbolt Form's aura is a basic Reflex too (guide §7C)",
 // instant the *caster's* turn ended, which is not what "enemies that end their turn in it" says — and
 // Respira Absoluta followed it for the identical reason at the identical moment in a drive.
 //
-// **Effect: Thunderbolt Form is still an area rider and is still wrong**, for the same sentence: guide
-// §7C says "a creature that ends **its** turn in it". It is left as it is on purpose — it belongs to the
-// Quincy pass, where it can be driven and controlled rather than changed on the strength of this one.
+// **Effect: Thunderbolt Form has joined them.** It was left as an area rider on purpose — the note here
+// said it belonged to the Quincy pass, where it could be driven rather than changed on the strength of
+// somebody else's drive — and the Quincy pass drove it: on the old shape the current paid out at the
+// **Quincy's** turn end and never once when a creature stood in it.
 //
 // The two `turn-start` entries below are correct as area riders: Zanka no Tachi's ambient heat and
 // Kageyoshi's petals both say "at the start of each of **your** turns", which is a sweep.
 const AURAS = [
     ["soulbound-effects/effect-senbonzakura-kageyoshi.json", "turn-start", 20],
     ["soulbound-effects/effect-zanka-no-tachi.json", "turn-start", 30],
-    ["soulbound-effects/effect-thunderbolt-form.json", "turn-end", 10],
 ];
 
 // And the promoted ones, pinned the other way: a real `Aura` rule, and no area rider left behind to
@@ -1916,6 +1918,7 @@ const PROMOTED = [
     ["soulbound-effects/effect-full-release.json", 15],
     ["soulbound-effects/effect-minami.json", 20],
     ["soulbound-effects/effect-respira-absoluta.json", 20],
+    ["soulbound-effects/effect-thunderbolt-form.json", 10],
 ];
 for (const [file, radius] of PROMOTED) {
     const doc = contentDoc(file);

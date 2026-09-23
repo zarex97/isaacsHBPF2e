@@ -883,6 +883,78 @@ for (const [file, slug] of [
 }
 
 /* -------------------------------------------------------------------------------------------- */
+/*  The Thunderbolt                                                                              */
+/* -------------------------------------------------------------------------------------------- */
+
+/**
+ * An aura that pays out on the creature's own turn, and an arc that goes somewhere.
+ *
+ * Both halves of Thunderbolt Form were authored as the wrong shape, and each is the wrong shape a
+ * different clause in this class has already been written as once.
+ */
+{
+    const form = load("soulbound-effects", "effect-thunderbolt-form.json");
+
+    /**
+     * *"A creature that **ends its turn** in it"* — the creature's own turn end. pf2e's `Aura` rule
+     * element does the geometry and **never** the timing, so the module supplies the timing through
+     * `Sources.onAuraTurn` and the rider waits on `aura-tick`. It shipped as a `turn-end` rider with a
+     * 10-foot area, which fires on the **Quincy's** turn end and fans out from there: a different
+     * ability, and one that pays out even when nobody has stood in the current.
+     */
+    const aura = form.system.rules.find((r) => r.key === "Aura");
+    check("Thunderbolt Form's current is a real aura", [aura?.radius, aura?.slug], [10, "thunderbolt-current"]);
+    check("…that pays out when a creature ends its turn in it",
+        [aura?.effects?.[0]?.events, aura?.effects?.[0]?.affects], [["turn-end"], "enemies"]);
+    const tick = ridersOf(form).find((r) => r.event === "aura-tick");
+    check("…and the rider waits on the tick, not on the Quincy's own turn",
+        [tick?.apply?.type, tick?.apply?.statistic, tick?.apply?.basic], ["save", "reflex", true]);
+    check("…for 3d6 electricity",
+        [tick?.apply?.riders?.[0]?.apply?.formula, tick?.apply?.riders?.[0]?.apply?.damageType],
+        ["3d6", "electricity"]);
+    // The area and the `self` flag must be gone with it: leaving them would fire the old ability beside
+    // the new one, which reads at the table as the current ticking twice.
+    check("…and nothing of the old shape is left on it",
+        [tick?.area ?? null, tick?.self ?? null, tick?.areaTargeting ?? null], [null, null, null]);
+
+    /**
+     * *"Once per round when you hit with your spirit weapon, arcs jump: **one other creature** within 15
+     * feet of **the target**"* — one, chosen, measured from the creature struck. It shipped as a `prompt`:
+     * a card quoting the numbers and applying none of them, the same shape *Sight of the Balance* had.
+     */
+    const arc = ridersOf(form).find((r) => r.event === "strike-resolved");
+    check("the arc is a pick, centred on the creature struck",
+        [arc?.apply?.type, arc?.apply?.from, arc?.apply?.range, arc?.apply?.affects],
+        ["pick", "target", 15, "enemies"]);
+    check("…once a round, off the spirit weapon, on a hit",
+        [arc?.oncePerRound, JSON.stringify(arc?.predicate), arc?.outcomes?.join("/")],
+        [true, '["item:tag:soulbound-spirit-weapon"]', "success/criticalSuccess"]);
+    check("…for a basic Reflex save and 3d6 electricity",
+        [arc?.apply?.riders?.[0]?.apply?.statistic, arc?.apply?.riders?.[0]?.apply?.basic,
+         arc?.apply?.riders?.[0]?.apply?.riders?.[0]?.apply?.formula],
+        ["reflex", true, "3d6"]);
+
+    /**
+     * S-75b. *"(you may still choose spirit)"* is the `versatile-spirit` trait, and the four sealed
+     * profiles were given it while this Spirit's own sword — which replaces them — was not.
+     */
+    check("the Arcing Sword can still choose spirit",
+        load("soulbound-equipment", "thunderbolt-sword.json").system.traits.value.includes("versatile-spirit"),
+        true);
+
+    /**
+     * S-75d. The Schrift published `soulbound:thunderbolt:flash-step-teleport` and nothing read it. The
+     * exemptions have no rule element in pf2e; what can be automated is that Flash Step's own card says
+     * so, while the form is held.
+     */
+    const schrift = load("soulbound-effects", "effect-the-thunderbolt-schrift.json").system.rules;
+    const says = schrift.find((r) => r.key === "ItemAlteration");
+    check("Flash Step's card says what the Schrift turned it into",
+        [says?.property, says?.mode, JSON.stringify(says?.predicate)],
+        ["description", "add", '["item:slug:flash-step"]']);
+}
+
+/* -------------------------------------------------------------------------------------------- */
 /*  Aiming                                                                                       */
 /* -------------------------------------------------------------------------------------------- */
 

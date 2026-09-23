@@ -1411,6 +1411,10 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0, inherit
             if (apply.affects !== undefined && !["enemies", "allies", "all"].includes(apply.affects)) {
                 errors.push(`${at} pick affects must be enemies/allies/all — got "${apply.affects}"`);
             }
+            // "within 15 feet of **the target**" rather than of the caster.
+            if (apply.from !== undefined && !["origin", "target"].includes(apply.from)) {
+                errors.push(`${at} pick from must be origin/target — got "${apply.from}"`);
+            }
             for (const [index, inner] of (apply.riders ?? []).entries()) {
                 validateRider(inner, `${at}.riders[${index}]`, errors, { doc, depth: depth + 1, inheritedEvent: event });
             }
