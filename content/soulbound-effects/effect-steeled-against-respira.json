@@ -1,0 +1,41 @@
+{
+    "img": "icons/magic/defensive/shield-barrier-green.webp",
+    "name": "Effect: Steeled Against Respira",
+    "system": {
+        "description": {
+            "value": "<p>Something you aimed at an Arrogante reached them through the miasma. You are temporarily immune to <strong>Respira Absoluta</strong>'s flat check for 1 minute.</p><p><em>Guide §7B: \"A creature that succeeds is temporarily immune to this flat check for 1 minute.\" Without it the decay could hold one attacker off for a whole encounter, which is the clause the temporary immunity exists to prevent.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 13
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

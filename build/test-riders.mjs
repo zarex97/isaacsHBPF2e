@@ -2605,6 +2605,105 @@ function documentedIn(readme, heading, nextHeading) {
 }
 
 /* -------------------------------------------------------------------------------------------- */
+/*  A patch of ground is for somebody                                                            */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * `affects` was read when a lingering area made the ground difficult and nowhere else, so a patch
+     * that dealt **damage** dealt it to everybody standing in it. Respira is an emanation centred on the
+     * caster, so the caster was the first creature in their own miasma: driven live, an Arrogante ending
+     * their turn inside it came away with persistent void damage, and so did the party ally beside them.
+     *
+     * Two more things were wrong in the same six lines. The tick defaulted to **persistent** damage where
+     * the guide says a one-off *"(no save)"*, and it grew a die every heightening step where the guide
+     * says *"at every other increment"* — 5d6 at rank 5 instead of 3d6.
+     *
+     * All three are pinned here, in both directions: the two areas that name a side, and the ones that
+     * deliberately do not.
+     */
+    const lingeringOf = (...parts) => load(...parts).flags["isaacs-hb-pf2e"]?.lingering ?? {};
+    const respira = lingeringOf("soulbound-techniques", "respira.json");
+    check("Respira's miasma is for the enemy, as the guide says", respira.affects, "enemies");
+    check("…it ticks once rather than setting them alight", respira.damage?.persistent, false);
+    check("…and it grows at every other increment", respira.damage?.perStepInterval, 2);
+
+    // The other lingering that deals damage is a Saint Technique, and it is persistent on purpose.
+    const mavros = lingeringOf("saint-techniques", "slot-4-ultimate", "mavros-eruption-clast.json");
+    check("Mavros Eruption Clast is still persistent fire", mavros.damage?.persistent, true);
+
+    // `scaledDamage` is what pays for the interval, and it is worth checking it counts rather than
+    // multiplies: at four increments an interval of 2 earns two dice, not four.
+    const grown = (formula, perStep, perStepInterval, steps) => {
+        const interval = Math.max(1, Number(perStepInterval) || 1);
+        const earned = Math.floor(steps / interval);
+        const base = /^(\d*)d(\d+)$/.exec(formula);
+        const per = /^(\d*)d(\d+)$/.exec(perStep);
+        return `${(Number(base[1]) || 1) + (Number(per[1]) || 1) * earned}d${base[2]}`;
+    };
+    check("1d6 +1d6 every other increment, four increments in", grown("1d6", "1d6", 2, 4), "3d6");
+    check("…and the same rate with no interval named", grown("1d6", "1d6", undefined, 4), "5d6");
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  An aura ticks when the creature's own turn ends                                              */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    /**
+     * *"Enemies that end their turn in it take 3d6 void damage (basic Fortitude)."*
+     *
+     * Respira Absoluta was a `turn-end` **self** rider with an area, which sweeps whoever is standing
+     * there when the **caster's** turn ends — the right creatures at the wrong moment, the same finding
+     * Ryūjin Jakka's ash carries a note about. pf2e's own `Aura` is what decides who is caught and when,
+     * and the module has answered it through `aura-tick` since Minami.
+     *
+     * The nested damage also carried no `basic`, so a Fortitude save against it changed nothing at all.
+     */
+    const absoluta = load("soulbound-effects", "effect-respira-absoluta.json");
+    const riders = ridersOf(absoluta);
+    const tick = riders.find((rider) => rider.apply?.type === "save");
+    check("Respira Absoluta ticks on the aura, not on the caster's turn", tick?.event, "aura-tick");
+    check("…and it is a basic Fortitude save",
+        [tick?.apply?.basic, tick?.apply?.statistic], [true, "fortitude"]);
+    check("…with no area of its own, because the Aura is the area",
+        [tick?.area ?? "none", tick?.self ?? false], ["none", false]);
+
+    const aura = absoluta.system.rules.find((rule) => rule.key === "Aura");
+    check("the Aura is the guide's 20 feet, for enemies", [aura?.radius, aura?.effects?.length], [20, 2]);
+    check("…one entry is pf2e's own turn-end tick",
+        aura?.effects?.some((e) => /Effect: Aura Tick$/.test(e.uuid) && e.events?.includes("turn-end")), true);
+    // The second is what makes "a creature **within the emanation**" testable at all: pf2e grants it on
+    // entering and takes it back on leaving, so a predicate can ask whether somebody is standing there.
+    const marker = aura?.effects?.find((e) => /In the Miasma$/.test(e.uuid));
+    check("…and the other is the presence marker the flat check is gated on", !!marker, true);
+    check("…which is for enemies and is not a turn event", [marker?.affects, marker?.events ?? "none"],
+        ["enemies", "none"]);
+
+    /**
+     * The flat check: only from inside, and only once per minute each.
+     *
+     * It fired for every attacker anywhere — a dummy 70 feet away rolled it — and a creature that
+     * succeeded was asked again on its very next attack. It was also written `self: true`, which lands
+     * the rider on the **Arrogante**: the predicate would have described the Arrogante rather than their
+     * attacker, and the immunity marker would have gone on the wrong sheet.
+     */
+    const check5 = riders.find((rider) => rider.apply?.type === "flat-check");
+    check("the decay is rolled by the attacker, not by the Arrogante", check5?.self ?? false, false);
+    check("…only for a creature standing in the miasma",
+        check5?.predicate?.includes("rider:target:effect:effect-respira-in-the-miasma"), true);
+    check("…and not for one that has already got through",
+        (check5?.predicate ?? []).some((p) => p?.not === "rider:target:effect:effect-steeled-against-respira"),
+        true);
+    check("…which is what succeeding writes on them",
+        check5?.apply?.onSuccess?.[0]?.apply?.uuid?.endsWith("Effect: Steeled Against Respira"), true);
+    check("…and that marker lasts the guide's minute",
+        [load("soulbound-effects", "effect-steeled-against-respira.json").system.duration.value,
+            load("soulbound-effects", "effect-steeled-against-respira.json").system.duration.unit],
+        [1, "minutes"]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
 
 if (failures.length > 0) {
     console.error(`Rider tests failed: ${failures.length} of ${checks}.`);

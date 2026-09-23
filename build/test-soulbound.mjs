@@ -1227,7 +1227,7 @@ check(
 
 /* --- a released form replaces the weapon, it does not add a second ----------------------------- */
 
-const { SpiritWeapon: SW, PROFILE_TAG, SPIRIT_WEAPON_TAG } = await import("../scripts/soulbound/weapon.mjs");
+const { SpiritWeapon: SW, PROFILE_TAG, SPIRIT_WEAPON_TAG, handsFor } = await import("../scripts/soulbound/weapon.mjs");
 
 function armedWith(names) {
     const weapons = names.map(([name, tags, carryType], i) => ({
@@ -1278,6 +1278,41 @@ const RELEASED = [SPIRIT_WEAPON_TAG];
     const actor = armedWith([["Blade", SEALED, "held"], ["Claws", RELEASED, "held"]]);
     await SW.reconcile(actor);
     check("reconcile does not wait for the class item to land", actor.updates.length, 1);
+}
+{
+    /**
+     * A two-handed form takes two hands.
+     *
+     * `reconcile` wrote `handsHeld: 1` for every spirit weapon in play, which is right for the nine held
+     * in one hand and wrong for the four that are not. Driven live, a crowned skeleton carrying Gran
+     * Caída — a vast double axe, `held-in-two-hands` — had a hand free, free enough to Grapple with.
+     *
+     * `held-in-one-plus-hands` stays at one on purpose: a bow is carried in one hand and drawn with two,
+     * and pf2e counts it as one for `handsFree` exactly as the rules do.
+     */
+    check("a two-handed spirit weapon occupies two hands",
+        handsFor({ system: { usage: { value: "held-in-two-hands" } } }), 2);
+    check("…a one-handed one occupies one",
+        handsFor({ system: { usage: { value: "held-in-one-hand" } } }), 1);
+    check("…a bow occupies one",
+        handsFor({ system: { usage: { value: "held-in-one-plus-hands" } } }), 1);
+    // pf2e derives `usage.hands` while preparing the item; where it exists it is the number to read.
+    check("…and a prepared item's own hand count wins",
+        handsFor({ system: { usage: { value: "held-in-one-hand", hands: 2 } } }), 2);
+
+    // Every spirit weapon the content ships, against the usage it declares.
+    const TWO_HANDED = ["gran-caida.json", "great-blade.json", "miracle-blade.json", "tiburon-blade.json"];
+    const declared = fs.readdirSync(path.join(ROOT, "content", "soulbound-equipment"))
+        .filter((name) => name.endsWith(".json"))
+        .map((name) => [name, JSON.parse(fs.readFileSync(path.join(ROOT, "content", "soulbound-equipment", name), "utf8"))])
+        .filter(([, doc]) => doc.type === "weapon");
+    const mismatched = declared
+        .filter(([name, doc]) => doc.system.equipped?.handsHeld !== handsFor(doc)
+            && !(doc.system.usage?.value === "held-in-one-plus-hands"))
+        .map(([name]) => name);
+    check("every spirit weapon is equipped in as many hands as it takes", mismatched, []);
+    check("…and the four two-handed ones are the four the guide names",
+        declared.filter(([, doc]) => handsFor(doc) === 2).map(([name]) => name).sort(), TWO_HANDED);
 }
 
 /* ---------------------------------------------------------------------------------------------- */
@@ -1831,19 +1866,38 @@ check("Thunderbolt Form's aura is a basic Reflex too (guide §7C)",
  * These pin the shape of the content rather than the engine, because the engine change is one line and
  * the thing that will drift is a seventh aura authored to the same pattern.
  */
-// Effect: Full Release is not in this list, and nor is Effect: Minami: both emanations were promoted to
-// real pf2e `Aura`s, which catch per creature at the end of ITS turn rather than sweeping at the
-// caster's. Minami went the same way for the same reason — driven live, two enemies were grabbed the
-// instant the *caster's* turn ended, which is not what "enemies that end their turn in it" says.
+// Effect: Full Release is not in this list, nor Effect: Minami, nor Effect: Respira Absoluta: all three
+// emanations were promoted to real pf2e `Aura`s, which catch per creature at the end of ITS turn rather
+// than sweeping at the caster's. Minami went that way first — driven live, two enemies were grabbed the
+// instant the *caster's* turn ended, which is not what "enemies that end their turn in it" says — and
+// Respira Absoluta followed it for the identical reason at the identical moment in a drive.
+//
+// **Effect: Thunderbolt Form is still an area rider and is still wrong**, for the same sentence: guide
+// §7C says "a creature that ends **its** turn in it". It is left as it is on purpose — it belongs to the
+// Quincy pass, where it can be driven and controlled rather than changed on the strength of this one.
 //
 // The two `turn-start` entries below are correct as area riders: Zanka no Tachi's ambient heat and
 // Kageyoshi's petals both say "at the start of each of **your** turns", which is a sweep.
 const AURAS = [
     ["soulbound-effects/effect-senbonzakura-kageyoshi.json", "turn-start", 20],
     ["soulbound-effects/effect-zanka-no-tachi.json", "turn-start", 30],
-    ["soulbound-effects/effect-respira-absoluta.json", "turn-end", 20],
     ["soulbound-effects/effect-thunderbolt-form.json", "turn-end", 10],
 ];
+
+// And the promoted ones, pinned the other way: a real `Aura` rule, and no area rider left behind to
+// sweep in parallel with it.
+const PROMOTED = [
+    ["soulbound-effects/effect-full-release.json", 15],
+    ["soulbound-effects/effect-minami.json", 20],
+    ["soulbound-effects/effect-respira-absoluta.json", 20],
+];
+for (const [file, radius] of PROMOTED) {
+    const doc = contentDoc(file);
+    const aura = doc.system.rules.find((rule) => rule.key === "Aura");
+    check(`${file.split("/").pop()} is a real pf2e Aura of ${radius} feet`, aura?.radius, radius);
+    check("…and nothing beside it sweeps at the caster's turn end",
+        (doc.flags["isaacs-hb-pf2e"].riders ?? []).filter((r) => r.event === "turn-end").length, 0);
+}
 for (const [file, event, radius] of AURAS) {
     const rider = contentDoc(file).flags["isaacs-hb-pf2e"].riders[0];
     // A rider may carry several shapes; the first is the one centred on the caster.

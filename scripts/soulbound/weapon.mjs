@@ -9,6 +9,22 @@ export const SPIRIT_WEAPON_TAG = "soulbound-spirit-weapon";
 export const PROFILE_TAG = "soulbound-weapon-profile";
 
 /**
+ * How many hands a weapon in play occupies.
+ *
+ * pf2e derives `usage.hands` from `usage.value` while preparing the item, so that is the number to read
+ * where it exists — but `reconcile` runs from `createItem`, which can reach a source object whose data
+ * has not been prepared yet. The string is the authored field and is always there, so it is the fallback.
+ *
+ * `held-in-one-plus-hands` is deliberately one: a bow is *carried* in one hand and drawn with two, and
+ * pf2e counts it as one for `handsFree` exactly as the rules do.
+ */
+export function handsFor(weapon) {
+    const derived = Number(weapon?.system?.usage?.hands);
+    if (Number.isInteger(derived) && derived > 0) return derived;
+    return weapon?.system?.usage?.value === "held-in-two-hands" ? 2 : 1;
+}
+
+/**
  * The spirit weapon: finding it, and Soul-Etched rune transfer.
  *
  * The weapon is a real pf2e weapon item rather than a synthetic Strike, because everything the class does
@@ -76,13 +92,25 @@ export const SpiritWeapon = {
          *
          * `carryType` stays `held`: the Strike has to remain available. Only the hand count drops, which
          * is what `attributes.handsFree` is computed from.
+         *
+         * **A two-handed form takes two hands.** This used to write `1` for every spirit weapon in play,
+         * which is right for the nine held in one hand and wrong for the four that are not: Gran Caída,
+         * the Great Blade, the Miracle's sword-and-shield and Tiburón's hollow-edged blade all declare
+         * `held-in-two-hands` and were authored `handsHeld: 2`, and reconcile overwrote it on every pass.
+         * Driven live, a crowned skeleton carrying a vast double axe had a hand free — free enough to
+         * Grapple with, or to raise a shield in.
          */
         const frees = (actor.itemTypes?.effect ?? []).some(
             (effect) => effect.flags?.[MODULE_ID]?.freesHands === true,
         );
         for (const weapon of spirit) {
-            if (weapon.system.equipped?.carryType !== "held") continue;
-            const hands = frees ? 0 : 1;
+            // The carry type this pass is *leaving* the weapon with, not the one it found. A profile
+            // being taken back up in the same pass is still `stowed` on the document here, so reading
+            // the document skipped it — and it came back into the hand with whatever hand count the
+            // form had left behind. Live, a sealed Arrogante held the Blade in **zero** hands.
+            const queuedCarry = updates.find((u) => u._id === weapon.id)?.["system.equipped.carryType"];
+            if ((queuedCarry ?? weapon.system.equipped?.carryType) !== "held") continue;
+            const hands = frees ? 0 : handsFor(weapon);
             if ((weapon.system.equipped?.handsHeld ?? 1) === hands) continue;
             const queued = updates.find((u) => u._id === weapon.id);
             if (queued) queued["system.equipped.handsHeld"] = hands;

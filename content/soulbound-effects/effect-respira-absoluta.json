@@ -4,21 +4,21 @@
             "riders": [
                 {
                     "apply": {
+                        "basic": true,
                         "dc": "reiatsu",
                         "riders": [
                             {
                                 "apply": {
                                     "damageType": "void",
                                     "formula": "3d6",
-                                    "perStep": "1d6",
                                     "type": "damage"
                                 }
                             },
                             {
                                 "apply": {
-                                    "value": 1,
                                     "slug": "enfeebled",
-                                    "type": "condition"
+                                    "type": "condition",
+                                    "value": 1
                                 },
                                 "duration": {
                                     "unit": "rounds",
@@ -33,26 +33,32 @@
                         "statistic": "fortitude",
                         "type": "save"
                     },
-                    "area": {
-                        "type": "emanation",
-                        "value": 20
-                    },
-                    "areaTargeting": {
-                        "affects": "enemies",
-                        "includesSelf": false
-                    },
-                    "event": "turn-end",
-                    "self": true
+                    "event": "aura-tick",
+                    "note": "The Aura decides who is caught and when. A `turn-end` area rider sweeps whoever stands there at the CASTER's turn end; the clause is about an enemy ending ITS OWN turn in the miasma."
                 },
                 {
                     "apply": {
                         "dc": 5,
                         "formula": "1d20",
                         "label": "Respira — the attack may simply age to nothing",
+                        "onSuccess": [
+                            {
+                                "apply": {
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Steeled Against Respira"
+                                }
+                            }
+                        ],
                         "type": "flat-check"
                     },
                     "event": "strike-received",
-                    "self": true
+                    "note": "Not a `self` rider. `self: true` lands the rider on the Arrogante, so the predicate would have described the Arrogante rather than the creature attacking them, and the immunity would have been written on the wrong sheet. Landing it on the attacker is what makes \"a creature within the emanation\" and \"that creature is immune for 1 minute\" both true.",
+                    "predicate": [
+                        "rider:target:effect:effect-respira-in-the-miasma",
+                        {
+                            "not": "rider:target:effect:effect-steeled-against-respira"
+                        }
+                    ]
                 }
             ]
         }
@@ -75,7 +81,30 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [],
+        "rules": [
+            {
+                "effects": [
+                    {
+                        "affects": "enemies",
+                        "events": [
+                            "turn-end"
+                        ],
+                        "removeOnExit": false,
+                        "uuid": "Compendium.isaacs-hb-pf2e.saint-effects.Item.Effect: Aura Tick"
+                    },
+                    {
+                        "affects": "enemies",
+                        "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Respira — In the Miasma"
+                    }
+                ],
+                "key": "Aura",
+                "radius": 20,
+                "slug": "soulbound-respira-absoluta",
+                "traits": [
+                    "void"
+                ]
+            }
+        ],
         "start": {
             "initiative": null,
             "value": 0
