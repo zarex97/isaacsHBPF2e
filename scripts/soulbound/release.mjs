@@ -1,5 +1,7 @@
 import { Hypnosis } from "./hypnosis.mjs";
 import { Reiatsu } from "./reiatsu.mjs";
+import { Suppression } from "./suppression.mjs";
+import { SpiritWeapon } from "./weapon.mjs";
 
 const MODULE_ID = "isaacs-hb-pf2e";
 
@@ -98,6 +100,28 @@ export function rulesAreSafeToRefresh(owned, packed) {
     if (!Array.isArray(owned) || !Array.isArray(packed)) return false;
     if (JSON.stringify(owned) === JSON.stringify(packed)) return false;   // nothing to do
     return ![...owned, ...packed].some((rule) => STATEFUL_RULES.has(rule?.key));
+}
+
+/**
+ * Give back the use pf2e has already taken.
+ *
+ * `createUseActionMessage` decrements `system.frequency.value` **before** it posts the card, and the card
+ * is the only thing this module ever sees. So every refusal below is a refusal that has already cost the
+ * allowance: driven live, a Final Release turned away for the wrong requirement left the feat reading
+ * **0 of 1 per week**, and the week's one use was gone for a capstone that never happened.
+ *
+ * Refusing is the whole value of automating any of this, and a refusal that charges for itself is worse
+ * than no refusal at all — the player would rather not have been stopped.
+ *
+ * Clamped at `max`, so this can never hand back a use that was not spent: an action used outside the
+ * sheet's own button is not decremented in the first place.
+ */
+export async function refundUse(item) {
+    const frequency = item?.system?.frequency;
+    if (!frequency || !Number.isInteger(frequency.max)) return;
+    const restored = Math.min(frequency.max, (frequency.value ?? 0) + 1);
+    if (restored === frequency.value) return;
+    await item.update({ "system.frequency.value": restored });
 }
 
 export function releaseCost({ releasesThisEncounter }) {
@@ -316,12 +340,14 @@ export const Release = {
         for (const name of packs) {
             const pack = game.packs.get(`${MODULE_ID}.${name}`);
             if (!pack) continue;
-            for (const entry of await pack.getIndex({ fields: ["flags", "system.rules", "img"] })) {
+            const fields = ["flags", "system.rules", "system.traits.otherTags", "img"];
+            for (const entry of await pack.getIndex({ fields })) {
                 const flags = entry.flags?.[MODULE_ID];
                 const rules = entry.system?.rules;
+                const otherTags = entry.system?.traits?.otherTags ?? null;
                 const img = entry.img ?? null;
-                if (!flags && !rules?.length && !img) continue;
-                const record = { flags: flags ?? null, rules: rules ?? null, img };
+                if (!flags && !rules?.length && !otherTags?.length && !img) continue;
+                const record = { flags: flags ?? null, rules: rules ?? null, otherTags, img };
                 authored.set(`Compendium.${MODULE_ID}.${name}.Item.${entry._id}`, record);
                 authored.set(`name:${entry.name}`, record);
             }
@@ -396,6 +422,34 @@ export const Release = {
                 if (!refreshed.includes(item.name)) refreshed.push(item.name);
             }
 
+            /**
+             * The tags, which are read by predicates and written by nobody.
+             *
+             * `Refined Release` (9th) widens a Technique's area with an `ItemAlteration` predicated on
+             * `item:tag:sb-refined-area-20`. Driven live at C-32: a **20th-level** Soul Reaper with
+             * Refined Release plainly on the sheet cast Senbonzakura into a **15-foot** emanation, because
+             * the owned copy of the spell predates the tag and carries only `sb-tier-release`. The pack was
+             * right; the character was built before it was. A predicate that matches nothing does not
+             * complain — it simply never fires, which is this audit's whole subject.
+             *
+             * A **union**, never a replacement, and read off `_source` rather than off the prepared item:
+             * pf2e's own `ItemAlteration` can add an `other-tag` during preparation, and rewriting the
+             * stored array from a prepared one would bake a synthetic tag into the document for ever.
+             * Union means a tag *removed* from the pack survives on an old sheet, which is the lesser of
+             * the two mistakes: a stale tag can only fire a rule that is still authored.
+             */
+            const ownTags = item._source?.system?.traits?.otherTags;
+            if (Array.isArray(ownTags) && Array.isArray(record.otherTags)) {
+                const missing = record.otherTags.filter((tag) => !ownTags.includes(tag));
+                if (missing.length > 0) {
+                    const merged = [...ownTags, ...missing];
+                    const existing = updates.find((u) => u._id === item.id);
+                    if (existing) existing["system.traits.otherTags"] = merged;
+                    else updates.push({ _id: item.id, "system.traits.otherTags": merged });
+                    if (!refreshed.includes(item.name)) refreshed.push(item.name);
+                }
+            }
+
             // And the rules, but only where nothing in them carries grant-time state — see
             // `rulesAreSafeToRefresh`. This is the half that reaches a character who already exists:
             // a corrected rule in the pack does nothing for a sheet holding a copy of the old one.
@@ -418,10 +472,27 @@ export const Release = {
         }
         if (updates.length > 0) await actor.updateEmbeddedDocuments("Item", updates);
 
+        // 3. Deliver grants a feature learned **after** this character was built.
+        //
+        // `GrantItem` runs once, at the moment the granting item is created. A rule added to the pack
+        // afterwards is never re-run — pf2e re-evaluates a grant on an actor update only when it says
+        // `reevaluateOnUpdate`, and most do not — so a feature that learned to hand something out last
+        // week hands it to nobody who already exists.
+        //
+        // Found by driving C-20: `Steady the Breath` is granted by `Reiatsu`, and **sixteen of the
+        // forty-one Soulbound in the rig did not have it**, because they predate the grant. The pool
+        // still refilled, because it is a real pf2e focus pool and Refocus is pf2e's own; what was
+        // missing was the class's name for the activity, on the sheet, where the player reads it.
+        //
+        // Deliberately narrow. Only a plain compendium uuid is followed — never `{item|flags…}`, which
+        // is a ChoiceSet's answer and belongs to a decision this cannot make — and never a predicated
+        // grant, which may be absent because its predicate is false rather than because it was missed.
+        const delivered = await this.deliverMissingGrants(actor);
+
         // 2. Take off anything the character has not actually Released into. Soulbound only: nobody else
         // has a release state, and `stateOf` would answer "sealed" for a Saint and strip nothing.
         if (!soulbound) {
-            return { actor: actor.name, refreshed, rewritten, taught: updates.length, removed: [] };
+            return { actor: actor.name, refreshed, rewritten, delivered, taught: updates.length, removed: [] };
         }
         const state = this.stateOf(actor);
         const allowed = new Set(
@@ -449,9 +520,47 @@ export const Release = {
             actor: actor.name,
             refreshed,
             rewritten,
+            delivered,
             taught: updates.length,
             removed: unearned.map((e) => e.name),
         };
+    },
+
+    /**
+     * Hand over what the packs say this character's own features should have granted.
+     *
+     * Reads the **pack** copy of each owned module item, walks its `GrantItem` rules, and creates
+     * anything the actor is missing by name. Idempotent: a second run finds nothing, because the first
+     * one gave it a copy with that name.
+     */
+    async deliverMissingGrants(actor) {
+        const held = new Set(actor.items.map((i) => i.name));
+        const authored = await this.authoredFlags();
+        const created = [];
+        const sources = [];
+
+        for (const item of actor.items) {
+            const compendiumSource = item._stats?.compendiumSource;
+            const record = (compendiumSource && authored.get(compendiumSource))
+                ?? authored.get(`name:${item.name}`);
+            for (const rule of record?.rules ?? []) {
+                if (rule?.key !== "GrantItem") continue;
+                // A ChoiceSet's answer, not a fixed grant: whose item it is depends on a decision this
+                // repair has no standing to make.
+                if (typeof rule.uuid !== "string" || !rule.uuid.startsWith("Compendium.")) continue;
+                // Absent may be correct: the predicate may simply be false for this character.
+                if (Array.isArray(rule.predicate) && rule.predicate.length > 0) continue;
+
+                const granted = await fromUuid(rule.uuid);
+                if (!granted || held.has(granted.name)) continue;
+                held.add(granted.name);
+                sources.push(foundry.utils.deepClone(granted.toObject()));
+                created.push(granted.name);
+            }
+        }
+
+        if (sources.length > 0) await actor.createEmbeddedDocuments("Item", sources);
+        return created;
     },
 
     /** Every Soulbound in the world. Safe to run more than once. */
@@ -550,6 +659,34 @@ export const Release = {
             return false;
         }
 
+        /**
+         * > …and the target can't re-enter it during that time. — guide §5.3
+         *
+         * The other half of a Quincy's Seal the Art, and the half that had nothing behind it: the
+         * suppression wrote a marker flag and **nothing anywhere read it**, so a sealed Soul Reaper
+         * simply Released again on their next action and put the whole form back.
+         */
+        if (Suppression.blocked(actor)) {
+            ui.notifications.warn(
+                `${actor.name}'s art is sealed — it cannot be re-entered until the suppression lifts.`,
+            );
+            return false;
+        }
+
+        /**
+         * > You can't Release while your spirit weapon is dismissed. — guide §4.7
+         *
+         * This comment's promise above — "a dismissed spirit weapon refuses" — was a description of
+         * something no line of code did, because until `SpiritWeapon.isDismissed` there was no dismissed
+         * state to ask about. Dismissing was a chat card and nothing else.
+         */
+        if (SpiritWeapon.isDismissed(actor)) {
+            ui.notifications.warn(
+                `${actor.name}'s spirit weapon is dismissed. Manifest it before Releasing.`,
+            );
+            return false;
+        }
+
         const cost = releaseCost({ releasesThisEncounter: this.releasesThisEncounter(actor) });
         const pool = actor.system?.resources?.focus;
         if (cost > 0 && (pool?.value ?? 0) < cost) {
@@ -586,21 +723,58 @@ export const Release = {
      */
     async fullRelease(actor) {
         if (!Reiatsu.isSoulbound(actor)) return false;
+
+        /**
+         * > **Frequency** once per day … you can't use Full Release again today. — guide §4.8
+         *
+         * pf2e **counts** this and does not enforce it. `createUseActionMessage` decrements
+         * `system.frequency.value` when the sheet's use button is clicked, stops decrementing at zero, and
+         * then posts the card anyway — so a 13th-level Soulbound whose one use was spent clicked the
+         * button again, the counter stayed at 0, and they entered a second Full Release. Driven live, that
+         * is exactly what happened.
+         *
+         * The count is kept here rather than read off pf2e's, because by the time this runs pf2e has
+         * already decremented for a legitimate use and the two cases are indistinguishable from the
+         * counter alone. `max` is still read off the feat, so `Unsealed`'s `ItemAlteration` — the 19th
+         * level's "twice per day" — raises this allowance without knowing this code exists.
+         *
+         * The day is the world's, the same one `Steady the Breath` counts its first use of.
+         */
+        const feat = actor.itemTypes.feat.find((f) => f.system?.slug === "full-release");
+        const max = Number(feat?.system?.frequency?.max ?? 1);
+        const today = new Date(game.time.worldTime * 1000).toDateString();
+        const ledger = actor.getFlag(MODULE_ID, "fullReleaseLedger") ?? {};
+        const used = ledger.day === today ? (ledger.used ?? 0) : 0;
+        // Every refusal from here down hands pf2e's own counter back — see `refundUse`.
+        const refuse = async (say) => { say(); await refundUse(feat); return false; };
+
+        if (used >= max) {
+            return refuse(() => ui.notifications.warn(
+                `${actor.name} has used Full Release ${used === 1 ? "once" : `${used} times`} today, `
+                + `which is all of it. It comes back with your daily preparations.`,
+            ));
+        }
+        if (Suppression.blocked(actor)) {
+            return refuse(() => ui.notifications.warn(
+                `${actor.name}'s art is sealed — it cannot be re-entered until the suppression lifts.`,
+            ));
+        }
         if (this.stateOf(actor) === "sealed") {
-            ui.notifications.warn(`${actor.name} must Release before a Full Release.`);
-            return false;
+            return refuse(() => ui.notifications.warn(`${actor.name} must Release before a Full Release.`));
         }
         if (this.stateOf(actor) === "full") {
-            ui.notifications.info(`${actor.name} is already in a Full Release.`);
-            return false;
+            return refuse(() => ui.notifications.info(`${actor.name} is already in a Full Release.`));
         }
         if ((actor.system?.resources?.focus?.value ?? 0) < 1) {
-            ui.notifications.warn(`Full Release requires at least 1 Reiatsu Point.`);
-            return false;
+            return refuse(() => ui.notifications.warn(`Full Release requires at least 1 Reiatsu Point.`));
         }
 
         await this.enter(actor, "full");
-        ui.notifications.info(`${actor.name} enters a Full Release.`);
+        // Spent *after* every refusal above, so a Full Release that could not begin has not cost a use.
+        await actor.setFlag(MODULE_ID, "fullReleaseLedger", { day: today, used: used + 1 });
+        ui.notifications.info(
+            `${actor.name} enters a Full Release. ${max - used - 1} left today.`,
+        );
         return true;
     },
 

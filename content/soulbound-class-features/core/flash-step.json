@@ -13,6 +13,18 @@
                         "feature:greater-flash-step"
                     ],
                     "self": true
+                },
+                {
+                    "apply": {
+                        "text": "Ghost Step: this Flash Step ignores difficult terrain, and may pass through creatures' spaces — though it cannot end there.",
+                        "type": "prompt"
+                    },
+                    "event": "action-used",
+                    "note": "On the **actions that perform the movement**, not on the feat that permits it. `onActionUsed` reads `ridersOn(item)` — the riders of the item that was used — so a rider living on `Ghost Step` could never answer somebody else's Flash Step, and driven live it never once fired. Predicated on the feat instead, exactly the way Flash Step's own afterimage is predicated on `feature:greater-flash-step`.",
+                    "predicate": [
+                        "feat:ghost-step"
+                    ],
+                    "self": true
                 }
             ]
         }
@@ -50,7 +62,8 @@
         "rules": [],
         "traits": {
             "otherTags": [
-                "soulbound-feature"
+                "soulbound-feature",
+                "soulbound-flash-step"
             ],
             "rarity": "common",
             "value": [

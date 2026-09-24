@@ -30,6 +30,7 @@ import { Severance } from "./soulbound/severance.mjs";
 import { SoulboundRig } from "./soulbound/rig.mjs";
 import { RisingPressure } from "./soulbound/rising-pressure.mjs";
 import { Scattered } from "./soulbound/scattered.mjs";
+import { Suppression } from "./soulbound/suppression.mjs";
 import { SpiritWeapon } from "./soulbound/weapon.mjs";
 import { AreaTargeting } from "./targeting/index.mjs";
 import { registerRollBypass } from "./riders/bypass.mjs";
@@ -87,6 +88,8 @@ Hooks.once("init", () => {
     start("escapes", () => Escape.registerHooks());
     start("the Libra Arms", () => registerLibraHooks());
     start("the spirit weapon", () => SpiritWeapon.registerHooks());
+    // Seal the Art parks a release state rather than deleting it; these put it back.
+    start("suppressed arts", () => Suppression.registerHooks());
     start("the Senkei cage's targets", () => Modes.registerTargetGuard());
     start("Reiatsu", () => Reiatsu.registerHooks());
     start("Rising Pressure", () => RisingPressure.registerHooks());
@@ -134,6 +137,7 @@ Hooks.once("init", () => {
         crystalWall: CrystalWall,
         encasement: Encasement,
         spiritWeapon: SpiritWeapon,
+        suppression: Suppression,
         reiatsu: Reiatsu,
         risingPressure: RisingPressure,
         release: Release,

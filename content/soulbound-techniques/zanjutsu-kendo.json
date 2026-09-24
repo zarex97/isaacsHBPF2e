@@ -1,4 +1,73 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "options": [
+                            {
+                                "label": "Cut through everything it resists",
+                                "riders": [
+                                    {
+                                        "apply": {
+                                            "type": "effect",
+                                            "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Kendō — Unresisted"
+                                        },
+                                        "self": true
+                                    }
+                                ]
+                            },
+                            {
+                                "label": "Find the gap in its guard (AC 2 lower)",
+                                "riders": [
+                                    {
+                                        "apply": {
+                                            "type": "effect",
+                                            "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Kendō — Opened Guard"
+                                        },
+                                        "self": true
+                                    }
+                                ]
+                            }
+                        ],
+                        "prompt": "Before you roll: cut through what it resists, or find the gap in its guard?",
+                        "type": "choice"
+                    },
+                    "event": "action-used",
+                    "note": "“Before rolling, choose” — so the choice is offered on the cast, and both answers are worn until the Strike resolves. The Technique shipped with `rules: []` and no riders at all: none of its three promises happened (#80).",
+                    "self": true
+                },
+                {
+                    "apply": {
+                        "damageType": "untyped",
+                        "formula": "5d6",
+                        "type": "damage"
+                    },
+                    "event": "strike-resolved",
+                    "note": "“On a hit, **+5d6**.”",
+                    "outcomes": [
+                        "success",
+                        "criticalSuccess"
+                    ],
+                    "predicate": [
+                        "item:tag:soulbound-spirit-weapon"
+                    ]
+                },
+                {
+                    "apply": {
+                        "effect": [
+                            "Effect: Kendō — Unresisted",
+                            "Effect: Kendō — Opened Guard"
+                        ],
+                        "type": "expire"
+                    },
+                    "event": "strike-resolved",
+                    "note": "“Make **one** Strike.” Neither face can be scoped by a predicate: the AC penalty sits on the **defender's** AC, where `item:` means the defender's own items, and the bypass belongs to the attacker. Driven live, predicating the ephemeral effect caught an unarmed fist it had no business reaching, and predicating the modifier caught nothing at all. So the scope is the clause's own word — one Strike — and both are retired the moment one resolves.",
+                    "self": true
+                }
+            ]
+        }
+    },
     "img": "icons/skills/melee/blade-tips-triple-steel.webp",
     "name": "Zanjutsu: Kendō",
     "system": {

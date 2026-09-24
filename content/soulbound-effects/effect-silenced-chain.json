@@ -17,7 +17,13 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [],
+        "rules": [
+            {
+                "domain": "all",
+                "key": "RollOption",
+                "option": "soulbound:silenced"
+            }
+        ],
         "start": {
             "initiative": null,
             "value": 0

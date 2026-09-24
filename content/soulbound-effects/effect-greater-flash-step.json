@@ -1,4 +1,31 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "label": "Roll the afterimage's DC 5 flat check",
+                        "prompt": "An attack has found you. Was it the afterimage it hit?",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "dc": 5,
+                                    "formula": "1d20",
+                                    "label": "Afterimage — DC 5 flat check; on a failure the attack misses",
+                                    "type": "flat-check"
+                                }
+                            }
+                        ],
+                        "type": "reaction"
+                    },
+                    "event": "strike-received",
+                    "note": "\"The **first attack** made against you **each round**\" — without this the afterimage offers on every attack, which is the one thing the clause rules out.",
+                    "oncePerRound": true,
+                    "self": true
+                }
+            ]
+        }
+    },
     "img": "icons/magic/movement/trail-streak-impact-blue.webp",
     "name": "Effect: Greater Flash Step",
     "system": {
@@ -37,30 +64,5 @@
             ]
         }
     },
-    "type": "effect",
-    "flags": {
-        "isaacs-hb-pf2e": {
-            "riders": [
-                {
-                    "apply": {
-                        "label": "Roll the afterimage's DC 5 flat check",
-                        "prompt": "An attack has found you. Was it the afterimage it hit?",
-                        "riders": [
-                            {
-                                "apply": {
-                                    "dc": 5,
-                                    "formula": "1d20",
-                                    "label": "Afterimage — DC 5 flat check; on a failure the attack misses",
-                                    "type": "flat-check"
-                                }
-                            }
-                        ],
-                        "type": "reaction"
-                    },
-                    "event": "strike-received",
-                    "self": true
-                }
-            ]
-        }
-    }
+    "type": "effect"
 }

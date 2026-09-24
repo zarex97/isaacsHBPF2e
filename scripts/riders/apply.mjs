@@ -1278,8 +1278,25 @@ export async function resolveCounteract(payload) {
     const suppressible = payload.suppress
         && (effect.system?.traits?.value ?? []).some((t) => SUPPRESSIBLE_TRAITS.has(t));
 
+    /**
+     * `disabled: true` was a field a pf2e **Effect item does not have**, so this suppressed nothing at
+     * all: driven live, a 17th-level Shikai announced as switched off still had all three of its rule
+     * elements live on the actor. `Suppression` parks the rules and the module's own riders instead, and
+     * puts them back when the window closes — see `soulbound/suppression.mjs`.
+     *
+     * Sklaverei (15th): "On a critical success against a release state, the suppression lasts 1 minute
+     * instead." A minute is not a number of turns, so it is counted on the world clock.
+     */
+    let suppressed = false;
     if (counteracted && suppressible) {
-        await effect.update({ disabled: true, [`flags.${MODULE_ID}.suppressedUntil`]: "end-of-next-turn" });
+        const { Suppression } = await import("../soulbound/suppression.mjs");
+        const minutes = outcome === "criticalSuccess" && options.includes("soulbound:sklaverei") ? 1 : 0;
+        suppressed = await Suppression.suppress(effect, { minutes });
+        // An effect whose rules carry grant-time state cannot be parked and must not be deleted either:
+        // ending a release state outright is the one thing this clause exists to prevent.
+        if (!suppressed) {
+            context.notes?.push?.(`${effect.name} could not be suppressed without stranding a grant.`);
+        }
     } else if (counteracted) {
         await effect.delete();
     }
@@ -1298,8 +1315,28 @@ export async function resolveCounteract(payload) {
         if (value !== (pool?.value ?? 0)) {
             await actor.update({ "system.resources.focus.value": value });
         }
+        /**
+         * "…and the target is **off-guard** until the end of its next turn."
+         *
+         * `increaseCondition` applies a condition with **no duration**, so this one never came off: a
+         * Quincy with Sklaverei left every target they ever sealed permanently off-guard. The condition
+         * is carried by a timed effect instead, which is how every other durational condition in the
+         * module is applied.
+         */
         if (counteracted && options.includes("soulbound:sklaverei") && effect.actor) {
-            await effect.actor.increaseCondition("off-guard");
+            await effect.actor.createEmbeddedDocuments("Item", [{
+                name: `${item?.name ?? "Seal the Art"}: Off-Guard`,
+                type: "effect",
+                img: item?.img ?? "icons/svg/downgrade.svg",
+                system: {
+                    duration: { unit: "rounds", value: 1, expiry: "turn-end", sustained: false },
+                    rules: [{
+                        key: "GrantItem",
+                        uuid: "Compendium.pf2e.conditionitems.Item.AJh5ex99aV6VTggg",
+                        allowDuplicate: false,
+                    }],
+                },
+            }]);
         }
     }
 
@@ -1307,8 +1344,13 @@ export async function resolveCounteract(payload) {
         speaker: ChatMessage.getSpeaker({ actor }),
         flavor: item?.name ?? "Counteract",
         content: counteracted && suppressible
-            ? `<p><strong>${effect.name}</strong> is <strong>suppressed</strong> until the end of `
-                + `${effect.actor?.name ?? "the target"}'s next turn, and cannot be re-entered until then.</p>`
+            // Sklaverei's critical success buys a minute rather than a turn, and the card has to say
+            // which: a player reading "until the end of your next turn" will act on it.
+            ? `<p><strong>${effect.name}</strong> is <strong>suppressed</strong> `
+                + (suppressed && outcome === "criticalSuccess" && options.includes("soulbound:sklaverei")
+                    ? "for <strong>1 minute</strong>"
+                    : `until the end of ${effect.actor?.name ?? "the target"}'s next turn`)
+                + ", and cannot be re-entered until then.</p>"
             : counteracted
                 ? `<p><strong>${effect.name}</strong> is counteracted and gone.</p>`
                 : `<p><strong>${effect.name}</strong> holds — rank ${targetRank} against a counteract rank of `
@@ -1467,6 +1509,27 @@ export function receiptKeyFor(payload, targetId) {
 async function applyCondition(rider, context) {
     const slug = rider.apply.slug;
     const value = Number(rider.apply.value) || null;
+
+    /**
+     * Taking one off, rather than putting one on.
+     *
+     * > **Kaidō — Mend the Weave.** At 9th level, also **remove** one of clumsy, enfeebled, or
+     * > stupefied. — guide §6.3
+     *
+     * Sixty condition riders across both classes apply a condition and not one of them lifted one, so
+     * the class's only healing kidō stopped at the hit points and the second half of its 9th-level
+     * upgrade was a sentence in a description.
+     *
+     * `forceRemove` rather than a decrement: the clause says *remove*, and pf2e's `decreaseCondition`
+     * otherwise steps a clumsy 3 down to clumsy 2 and calls it mended.
+     */
+    if (rider.apply.remove === true) {
+        const held = context.actor?.itemTypes?.condition?.find((c) => c.slug === slug && c.active);
+        if (!held) return;
+        await context.actor.decreaseCondition(slug, { forceRemove: true });
+        context.notes.push(`${context.actor.name} is no longer ${slug}.`);
+        return;
+    }
 
     if (!rider.duration) {
         // "cumulative to enfeebled 4" — the cap belongs on the increment, not on a predicate that would
@@ -2022,6 +2085,35 @@ async function applyPool(rider, context) {
     const actor = context.originActor;
     const focus = actor?.system?.resources?.focus;
     if (!focus) return;
+
+    /**
+     * The pool can be paid *into*, not only out of.
+     *
+     * > **Unsealed.** … the first time each round you critically hit with your spirit weapon you regain
+     * > 1 Reiatsu Point. — guide §4.8
+     *
+     * Two clauses in the class hand a point back, and until this one there was no apply type that could:
+     * `pool` only ever spent. `gain` is a separate field rather than a negative `spend`, because a
+     * negative spend falls through the `paid <= 0` guard below and does nothing at all — silently, which
+     * is the failure this whole audit exists to catch.
+     *
+     * Clamped at the maximum, for the same reason Rising Pressure is: guide §4.2's "you can't exceed your
+     * maximum pool" is the pool's rule, not any one refund's.
+     */
+    if (rider.apply.gain !== undefined) {
+        const gain = Number(rider.apply.gain) || 0;
+        const max = focus.max ?? 0;
+        const gained = Math.min(gain, max - (focus.value ?? 0));
+        if (gained <= 0) return;
+        await actor.update({ "system.resources.focus.value": (focus.value ?? 0) + gained });
+        await ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            flavor: (context.riderItem ?? context.item)?.name ?? "Rider",
+            content: `<p>${actor.name} regains <strong>${gained} Reiatsu Point${gained === 1 ? "" : "s"}</strong> — `
+                + `${(focus.value ?? 0) + gained} of ${max}.</p>`,
+        });
+        return;
+    }
 
     const spend = Number(rider.apply.spend) || 1;
     if (rider.apply.oncePerEncounter) {

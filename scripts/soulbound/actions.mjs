@@ -3,6 +3,7 @@ import { Blut } from "./blut.mjs";
 import { Modes } from "./modes.mjs";
 import { Reiatsu } from "./reiatsu.mjs";
 import { Release } from "./release.mjs";
+import { SpiritWeapon } from "./weapon.mjs";
 
 const MODULE_ID = "isaacs-hb-pf2e";
 
@@ -53,6 +54,80 @@ async function chooseOne(title, prompt, options) {
 const HANDLERS = {
     release: async (actor) => Release.release(actor),
     "full-release": async (actor) => Release.fullRelease(actor),
+
+    /**
+     * **FINAL RELEASE** [three-actions] — guide §9.0. The capstone, and until now the one rung of the
+     * ladder that entered itself: its `GrantItem` fired when the feat was *chosen*, not when it was used.
+     */
+    "final-release": async (actor) => {
+        const { Severance } = await import("./severance.mjs");
+        return Severance.use(actor);
+    },
+
+    /**
+     * **Manifest or Dismiss Spirit Weapon** [free-action] — guide §4.1.
+     *
+     * One card, two directions, so it toggles. It was routed nowhere, which is why "you can't Release
+     * while your spirit weapon is dismissed" had nothing to refuse.
+     */
+    "manifest-or-dismiss-spirit-weapon": async (actor) => SpiritWeapon.toggle(actor),
+
+    /**
+     * **DON THE OTHER FACE** [one-action] (concentrate, reiatsu) — guide §8.6.
+     *
+     * > **Cost** 1 Reiatsu Point · **Frequency** once per encounter. For **1 minute** you gain your
+     * > borrowed Lineage's **Aspect**.
+     *
+     * The action shipped with `rules: []` and no flags — using it did nothing at all. Driven live: no
+     * Aspect, no point spent. What made it look as though it worked was `Second Nature` (feat 18), which
+     * grants the 6th-level Aspect permanently by its own `GrantItem`; on a sheet carrying that, the mask
+     * is simply always there and using the action changes nothing you can see.
+     *
+     * Which Aspect is read off the `ChoiceSet` answer `Borrowed Nature` already publishes, so nothing
+     * here has to know which face this character wears — only that it is one of three.
+     */
+    "don-the-other-face": async (actor) => {
+        const ASPECTS = {
+            "soul-reaper": "Effect: Soul Reaper's Discipline",
+            hollow: "Effect: Hollow's Mask",
+            quincy: "Effect: Quincy's Discipline",
+        };
+        const options = actor.getRollOptions?.() ?? [];
+        const borrowed = Object.keys(ASPECTS).find((k) => options.includes(`soulbound-borrowed:${k}`));
+        const face = actor.items.find((i) => i.system?.slug === "don-the-other-face");
+        const { refundUse } = await import("./release.mjs");
+
+        if (!borrowed) {
+            ui.notifications.warn(`${actor.name} has borrowed no other nature to wear.`);
+            await refundUse(face);
+            return false;
+        }
+        const name = ASPECTS[borrowed];
+        if (actor.itemTypes.effect.some((e) => e.name === name)) {
+            ui.notifications.info(`${actor.name} is already wearing it.`);
+            await refundUse(face);
+            return false;
+        }
+        const pool = actor.system?.resources?.focus;
+        if ((pool?.value ?? 0) < 1) {
+            ui.notifications.warn(`Donning the Other Face costs 1 Reiatsu Point.`);
+            await refundUse(face);
+            return false;
+        }
+
+        const pack = game.packs.get(`${MODULE_ID}.soulbound-effects`);
+        const entry = pack ? (await pack.getIndex()).find((e) => e.name === name) : null;
+        if (!entry) {
+            console.warn(`Isaac's Homebrew | no "${name}" to wear`);
+            await refundUse(face);
+            return false;
+        }
+        const doc = await pack.getDocument(entry._id);
+        await actor.update({ "system.resources.focus.value": (pool.value ?? 0) - 1 });
+        await actor.createEmbeddedDocuments("Item", [foundry.utils.deepClone(doc.toObject())]);
+        ui.notifications.info(`${actor.name} puts on the other face. It argues.`);
+        return true;
+    },
 
     /**
      * **Steady the Breath** — the class's own name for Refocus (guide §4.2), and the only way

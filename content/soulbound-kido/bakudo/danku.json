@@ -1,4 +1,60 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "label": "Raise the Splitting Void",
+                        "prompt": "Something is about to land. Put a wall of nothing in front of it?",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "substitutions": [
+                                        {
+                                            "path": "system.rules.0.value",
+                                            "value": "origin.level"
+                                        }
+                                    ],
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Splitting Void"
+                                }
+                            }
+                        ],
+                        "type": "reaction"
+                    },
+                    "event": "damage-received",
+                    "note": "The **defender's** event, not the attacker's. *“You or an ally within 15 ft. would take damage from a ranged attack, a spell, or an area effect”* — so it is `damage-received`; `damage-applied` is “damage from **this actor's** item landed on a target”, which is the creature at the other end. It sat on `damage-applied` from the day it was written, and since that event had never fired for anything (#71) the mistake was invisible: being hit offered nothing, and the reaction could not be taken by any route. Third and fourth occurrence of the same inversion after Antithesis (S-63c) and The Balance (S-72b).",
+                    "self": true
+                },
+                {
+                    "apply": {
+                        "label": "Raise the Splitting Void",
+                        "prompt": "Something is about to land on an ally within 15 feet. Put a wall of nothing in front of it?",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "substitutions": [
+                                        {
+                                            "path": "system.rules.0.value",
+                                            "value": "origin.level"
+                                        }
+                                    ],
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Splitting Void"
+                                },
+                                "trigger": "ally"
+                            }
+                        ],
+                        "type": "reaction"
+                    },
+                    "event": "ally-damaged",
+                    "note": "The other half of the same trigger: *“You **or an ally within 15 ft.** would take damage”*. `damage-received` is the **defender's** event, so when the ally is the one hit the engine reads the ally's items and the Soul Reaper's kidō is not among them — exactly the gap `ally-damaged` was added for, and the fourth ability to need it after Antithesis and The Balance. `trigger: \"ally\"` is what puts the wall in front of the creature that was hurt rather than in front of the caster.",
+                    "range": 15,
+                    "self": true
+                }
+            ]
+        }
+    },
     "folder": "Way of Binding (Bakudō)",
     "img": "modules/isaacs-hb-pf2e/icons/barrier-shield-dome-blue.svg",
     "name": "Danku — Splitting Void",
@@ -51,29 +107,5 @@
             ]
         }
     },
-    "type": "spell",
-    "flags": {
-        "isaacs-hb-pf2e": {
-            "riders": [
-                {
-                    "apply": {
-                        "label": "Raise the Splitting Void",
-                        "prompt": "Something is about to land. Put a wall of nothing in front of it?",
-                        "riders": [
-                            {
-                                "apply": {
-                                    "type": "effect",
-                                    "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Splitting Void"
-                                }
-                            }
-                        ],
-                        "type": "reaction"
-                    },
-                    "event": "damage-received",
-                    "self": true,
-                    "note": "The **defender's** event, not the attacker's. *“You or an ally within 15 ft. would take damage from a ranged attack, a spell, or an area effect”* — so it is `damage-received`; `damage-applied` is “damage from **this actor's** item landed on a target”, which is the creature at the other end. It sat on `damage-applied` from the day it was written, and since that event had never fired for anything (#71) the mistake was invisible: being hit offered nothing, and the reaction could not be taken by any route. Third and fourth occurrence of the same inversion after Antithesis (S-63c) and The Balance (S-72b)."
-                }
-            ]
-        }
-    }
+    "type": "spell"
 }

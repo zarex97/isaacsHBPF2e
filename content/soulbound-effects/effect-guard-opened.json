@@ -1,0 +1,46 @@
+{
+    "flags": {},
+    "img": "icons/skills/melee/blade-tips-triple-steel.webp",
+    "name": "Effect: Guard Opened",
+    "system": {
+        "description": {
+            "value": "<p>This creature's AC is <strong>2 lower</strong> against the Strike that opened its guard.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 8
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Kendō — Opened Guard",
+                "selector": "ac",
+                "type": "circumstance",
+                "value": -2
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": false
+        },
+        "traits": {
+            "otherTags": [],
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}
