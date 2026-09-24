@@ -251,7 +251,7 @@ does, and a four-step Depth ladder. Depth 1 is always available; the rest unlock
 
 | D | |
 | :-: | :-- |
-| 1 | Choose a second colour. You count as having that Instinct **for the purposes of Bonds only**. |
+| 1 | Choose a second colour. Electrum also **counts as a Substrate of that colour** for any effect that counts your bound Substrates of a colour; its Mass still counts toward Gold. |
 | 2 | Electrum may stand in for **either Substrate** of any one Bond you know. |
 | 3 | You gain your second colour's **Instinct clause** as well — but both clauses operate at **half value** (round down, minimum 1). |
 | 4 | Both Instinct clauses operate at **full value**. You are two organisms sharing a host, and they do not always want the same thing. |

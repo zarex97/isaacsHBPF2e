@@ -7,7 +7,7 @@
 record of what we intend to do before we do it, so that the five genuinely hard problems are named
 while they are still cheap.*
 
-**Companion documents:** `Docs/carapace-guide-v1.md` (the class) and
+**Companion documents:** `Docs/assimilator-guide-v1.md` (the class) and
 `Docs/homebrewing/carapace-material-lexicon-v3.md` (the thirty-six Substrates and thirty Bonds).
 
 ---
