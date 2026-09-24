@@ -1,0 +1,51 @@
+{
+    "flags": {},
+    "img": "icons/skills/melee/blade-tips-triple-steel.webp",
+    "name": "Effect: Kendō — Opened Guard",
+    "system": {
+        "description": {
+            "value": "<p>Your next Strike with your spirit weapon treats the target's <strong>AC as 2 lower</strong>.</p>"
+        },
+        "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 8
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "EphemeralEffect",
+                "selectors": [
+                    "strike-attack-roll"
+                ],
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Guard Opened"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

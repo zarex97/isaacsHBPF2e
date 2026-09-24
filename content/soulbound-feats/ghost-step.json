@@ -1,21 +1,5 @@
 {
-    "flags": {
-        "isaacs-hb-pf2e": {
-            "riders": [
-                {
-                    "apply": {
-                        "text": "Ghost Step: this Flash Step ignores difficult terrain, and may pass through creatures' spaces — though it cannot end there.",
-                        "type": "prompt"
-                    },
-                    "event": "action-used",
-                    "predicate": [
-                        "item:slug:flash-step"
-                    ],
-                    "self": true
-                }
-            ]
-        }
-    },
+    "flags": {},
     "folder": "10th",
     "img": "icons/magic/movement/trail-streak-impact-blue.webp",
     "name": "Ghost Step",

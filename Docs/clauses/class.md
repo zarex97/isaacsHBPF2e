@@ -172,24 +172,104 @@ its own `spirit-*.md`; what is here is the feat, the state, and the decay every 
 | X-12 | §9.0 | lose access to your **Released Form**, your **Release Technique**, your **Full Release**, and your | `test-soulbound` pins the cost effect | ✅ | Live, all four at once. After the Art: `Effect: Severed` on the sheet; the pool reading **0 / max 0 / cap 0** — the **cap** overridden, not the value, so a Refocus cannot grow it back; and every one of the three is refused — **Release** returns false, **Full Release** returns false, and the **Release Technique** posts no message. The Technique's card stays on the sheet, because pf2e keeps a spell in its entry; what is gone is the form that lets it be cast |
 | X-13 | §9.0 | keep your Hit Points, proficiencies, skills, Lineage features, and every other feat. |  | ✅ | Live, on the same sheet a moment later: **HP 200/200**, Perception **Master**, Fortitude **Legendary**, 38 class features including the Lineage's own Blut, and the character's other feat all standing. What Severance takes is exactly the list above it and nothing else |
 
+## First level (guide §8.1)
+
+| ID | Guide | Clause | Static check | Status | Evidence |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| F-01 | §8.1 | Learn one more kidō. **Special** take up to three times. | `test-soulbound` pins the gate and the filter | ✅ | Driven as **K-07**, and it was a real gap: the *“Soul Reaper lineage”* prerequisite is a string pf2e prints and never tests. Predicated on `feature:soul-reaper` now — live, a Hollow handed the feat gets **no prompt and no kidō**. `maxTakable: 3` is pf2e's own, and the ChoiceSet's filter keeps each pick to a costed kidō of no other Lineage, within the character's rank |
+| F-02 | §8.1 | When you roll initiative, manifest your spirit weapon and Release as a single free action. |  | ☐ |  |
+| F-03 | §8.1 | Recall Knowledge about spirits, haunts, and undead using Spirit Lore as a free action once per round; learn one extra piece of information on a success. |  | ✅ | Live: the feat's `Note` lands on the **`spirit-lore`** roll domain and nowhere else — *“On a success you learn one additional piece of information.”* The free-action Recall Knowledge is the card's; what the system can hold is the note, on the roll it belongs to |
+| F-04 | §8.1 | When you critically hit with your spirit weapon, Step as a free action. |  | ✅ | Live: a critical hit with the spirit weapon posted **“Zanjutsu Footwork: you may Step as a free action.”** A prompt rather than a move, and the rider says why — a Step's direction is the player's, so this arrives at the right moment instead of moving them |
+| F-05 | §8.1 | Spirit Sense's range increases to 120 feet and you learn each detected creature's approximate level relative to yours. |  | ☐ |  |
+| F-06 | §8.1 | You may use Flash Step at 1st level instead of 3rd, but only once per encounter until 3rd level. |  | ☐ |  |
+| F-07 | §8.1 | While your spirit weapon has the twin or agile trait, your second Strike each round with it reduces your multiple attack penalty by 1. |  | ✅ | Live at 20th: a `MultipleAttackPenalty` of **−4** on `strike-attack-roll`, predicated on `{or: [item:trait:twin, item:trait:agile]}` **and** `item:tag:soulbound-spirit-weapon`. −4 where pf2e would apply −5 is the clause's *“reduces your multiple attack penalty by 1”*, and the second half of the predicate is what keeps it to the spirit weapon |
+
+## Second and fourth level (guide §8.2)
+
+| ID | Guide | Clause | Static check | Status | Evidence |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| F-08 | §8.2 | Enemies within 15 feet must succeed at a Will save vs. your Reiatsu DC or be **frightened 1**. Once per encounter, no Reiatsu cost. |  | ✅ | Live: `Pressure Flare (Action)` is granted onto the sheet by the feat — the feat itself is the entry, the action is the thing you use. The save, the emanation and the once-per-encounter are the action's own |
+| F-09 | §8.2 | When an ally within 15 feet takes damage from an undead, spirit, or incorporeal creature, reduce that damage by **2 + your level**. |  | ✅ | Live: **Guard the Threshold** stands on the sheet as a reaction, granted by the feat |
+| F-10 | §8.2 | When you use a kidō, spend 1 additional action to give the target a **−1 circumstance penalty** to its save. |  | ☐ |  |
+| F-11 | §8.2 | When you use **Bala**, you may spend 1 additional action to use it again against the same or a different creature. Both uses apply and increase your multiple attack penalty as normal. |  | ☐ |  |
+| F-12 | §8.2 | You prepare **3 Gintō** during daily preparations. Each may be spent as a free action to use **Gritz** without spending a Reiatsu Point. Unspent Gintō are lost at your next preparations. |  | ☐ |  |
+| F-13 | §8.2 | Flash Step, then Strike. Doesn't count against Flash Step's frequency. | `test-soulbound` pins the tag and both riders | ✅ | **Fixed; the Flash Step it performs was invisible.** Greater Flash Step's afterimage hangs off Flash Step's own `action-used`, so a Soulbound who moved by Shunpo Strike left **no afterimage** — an 11th-level feature silently switched off by using a 4th-level feat. Live after: the afterimage lands from a Shunpo Strike, and Flash Step's own `frequency` stays at **1 of 1**, which is the clause's second half |
+| F-14 | §8.2 | Spend 1 Reiatsu Point when you're hit to gain **resistance equal to your level** against that damage. |  | ✅ | Live: **Reiatsu Barrier** stands on the sheet as a reaction. Its number is Danku's, and its price is a point |
+| F-15 | §8.2 | When you critically hit a creature with your spirit weapon, it can't Step away from you until the end of its next turn. |  | ✅ | Live: one critical hit with the spirit weapon put **`Effect: Chain Anchor`** on the target, for a round expiring at turn-end — *“until the end of its next turn”* |
+| F-16 | §8.2 | You regain 2 Reiatsu Points instead of 1 the first time you use Steady the Breath each day. |  | ☐ |  |
+| F-17 | §8.2 | **Cero** may be shaped as a **30-foot cone** instead of a 60-foot line, and creatures that critically fail against it are pushed **10 feet** away from you. |  | ☐ |  |
+
+## Sixth through twelfth level (guide §8.3)
+
+| ID | Guide | Clause | Static check | Status | Evidence |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| F-18 | §8.3 | Immediately after using a destruction kidō, use a binding kidō against the same target for 1 fewer Reiatsu Point (minimum 0). Once per encounter. |  | ☐ |  |
+| F-19 | §8.3 | You gain the **Reactive Strike** reaction: when a creature within your reach uses a manipulate or move action, makes a ranged attack, or leaves a square during a move action, make a melee Strike against it; a critical hit disrupts a manipulate action. |  | ✅ | Live: **Reactive Strike** is on the sheet as pf2e's own reaction, granted by name from `packs/pf2e` rather than re-implemented. That is the whole point of the guide's anchor — the compendium item automates as-is, at the same level Barbarian and Champion get it |
+| F-20 | §8.3 | Your spirit weapon's Strikes ignore the first **5 points** of resistance to spirit damage. |  | ☐ |  |
+| F-21 | §8.3 | You may switch which Blut you have active as a **free action** twice per round instead of once. |  | ☐ |  |
+| F-22 | §8.3 | Once per hour, open a Garganta: you and up to 5 allies teleport up to 500 feet to a location you can see or have visited. |  | ☐ |  |
+| F-23 | §8.3 | The first time each round that **Rising Pressure** grants you a Reiatsu Point, you also gain **temporary Hit Points equal to half your level** (minimum 2). They last until the start of your next turn and don't stack with themselves. |  | ☐ |  |
+| F-24 | §8.3 | Spend 1 Reiatsu Point. Enemies in a **20-foot emanation** attempt a Fortitude save; on a failure they're **clumsy 1** and take a −5-ft. status penalty to Speeds for 1 minute. |  | ✅ | Live: `Pressure Crush (Action)` is granted onto the sheet by the feat |
+| F-25 | §8.3 | You gain a **1d6 fist** unarmed attack with **agile**, **finesse**, **nonlethal**, and you may make one unarmed Strike as part of any Zanjutsu technique. |  | ✅ | Live: the sheet grows a **`Hakuda`** unarmed Strike reading **1d6** with **`agile`, `finesse`, `nonlethal`** — the guide's three traits exactly, beside the character's ordinary 1d4 fist |
+| F-26 | §8.3 | Once per encounter, use your Release Technique without spending a Reiatsu Point. |  | ☐ |  |
+| F-27 | §8.3 | Flash Step lets you move through creatures' spaces (you can't end there) and ignores difficult terrain. | `test-soulbound` pins where the rider lives | ✅ | **Fixed; it had never fired once.** The permission was a rider on the **Ghost Step feat**, and `onActionUsed` reads `ridersOn(item)` — the riders of the item that was *used* — so a rider on one item can never answer the use of another. Driven live before the fix: nothing, not even on a plain Flash Step. It lives on the two actions that perform the movement now, predicated on `feat:ghost-step`, exactly the way Flash Step's afterimage is predicated on the feature that grants it. Live after: the prompt fires on a Flash Step **and** on a Shunpo Strike |
+| F-28 | §8.3 | **Seal the Art**'s counteract rank increases by 1, and it costs no Reiatsu Point on a critical success. |  | ☐ |  |
+| F-29 | §8.3 | When you reduce a creature to 0 HP with your spirit weapon, immediately perform a Konsō on it as a free action with no check, permanently preventing it from rising as undead. |  | ☐ |  |
+| F-30 | §8.3 | Your destruction kidō deal an additional die of damage of their damage type. |  | ✅ | Live: a `DamageDice` of **one** additional die on `spell-damage`, predicated on **`item:trait:destruction`** — the Way of Destruction only, and the die size left to the kidō rather than named, so it grows with each one's own ladder |
+| F-31 | §8.3 | Hierro's resistance applies to **spirit** damage for 1 round each time you are critically hit. |  | ☐ |  |
+
+## Zanjutsu techniques (guide §8.4)
+
+| ID | Guide | Clause | Static check | Status | Evidence |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| F-32 | §8.4 | Make **two** Strikes against one creature; the second doesn't increase your MAP. On a hit each deals **+1d6**. |  | ✅ | Live on the sheet at 20th: **Sōkotsu** carrying `1d8` — its base `1d6` stepped once by Zanjutsu Mastery (SR-09). Each of the six is a real spell granted by its feat |
+| F-33 | §8.4 | Stride up to your Speed, then make one Strike dealing **+1d6**; if the Strike hits, the target is **off-guard** until the end of your turn. |  | ✅ | Live: **Hitotsume: Nadegiri** at `1d8`, and it carries a `strike-resolved` rider for the off-guard, which is what makes it Strike-based rather than a spell that happens to mention one |
+| F-34 | §8.4 | Make a Strike dealing **+1d6**; on a hit, you may Step as a free action, and the target can't Step until the end of its next turn. |  | ✅ | Live: **Shitonegaeshi** at `1d8`, with its own `strike-resolved` rider |
+| F-35 | §8.4 | Make one Strike against **each** enemy in your reach, each at your current MAP; the penalty doesn't increase until all Strikes are made. |  | ✅ | Live: **Nadegiri** on the sheet, carrying an `action-used` `strikes` rider — the shape that makes one activity visit every target in order, which is the only way *“each at your current MAP; the penalty doesn't increase until all Strikes are made”* can be said |
+| F-36 | §8.4 | Make one Strike dealing **+4d6**; on a critical hit the target is **stunned 1** (incapacitation). |  | ✅ | Live: **Ikkotsu** at `4d8` — its base `4d6` stepped once — and a `strike-resolved` rider for the stun |
+| F-37 | §8.4 | Make one Strike. Before rolling, choose: it ignores all resistances and immunities to its damage type, **or** it treats the target's AC as 2 lower. On a hit, **+5d6**. | `test-soulbound` pins all three promises and the scope | ✅ | **Fixed; it did nothing at all (#80).** `rules: []` and no riders — the only one of the six Zanjutsu with no automation whatever. Live after: casting it posts **“Before you roll: cut through what it resists, or find the gap in its guard?”**, and taking the second put the target's AC **20 → 18** on the Strike that followed. Two things were learned the hard way. The bypass and the AC penalty **cannot be scoped by a predicate** — the penalty sits on the *defender's* AC, where `item:` means the defender's own items; predicating the ephemeral effect caught an unarmed fist it had no business reaching, and predicating the modifier caught nothing at all. So the scope is the clause's own word, *one* Strike, enforced by an `expire` rider. And the penalty is **circumstance**, which is why it vanished against a target already off-guard — pf2e keeps only the worst of each type, which is precisely the cap the guide asks for |
+| F-38 | §8.4 | Each costs **1 Reiatsu Point**, uses the Strike ladders from |  | ✅ | Live: casting a Zanjutsu moved the pool **3 → 2**, and `Release.beforeCast` refuses one from a sealed weapon — the requirement and the price both real |
+
+## Fourteenth through twentieth level (guide §8.5)
+
+| ID | Guide | Clause | Static check | Status | Evidence |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| F-39 | §8.5 | Full Release takes 1 action instead of 2. |  | ✅ | Live at 20th: with the feat on the sheet, **Full Release reads 1 action** instead of 2. pf2e has no alteration for an action cost, so this is the module's own `actionCost` flag, applied during preparation |
+| F-40 | §8.5 | While in a Full Release, the emanation's Will save also applies to enemies that **enter** it, not only those that end their turn in it. |  | ☐ |  |
+| F-41 | §8.5 | When your Vollständig ends you are not fatigued, and you may spend 1 Reiatsu Point to extend it by 1 round, up to three times. |  | ☐ |  |
+| F-42 | §8.5 | When you would be reduced to 0 HP while released, spend 1 Reiatsu Point to remain at 1 HP instead. Once per day. |  | ☐ |  |
+| F-43 | §8.5 | Your Rising Pressure per-encounter cap increases by 1. |  | ✅ | Live, and the only way to see it: with Rising Pressure's ledger stamped at **3 gained** — a full encounter's allowance for a pool of 3 — a Strike that dealt damage **still granted a point**, 0 → 1. The cap is `max + 1` with this feat and `max` without, which C-24 drove from the other side |
+| F-44 | §8.5 | Your Release Technique's damage dice increase by two steps (d6→d10, d8→d12). | `test-soulbound` pins both of the guide's examples | ✅ | **Fixed; it did nothing, twice over.** `Beyond the Blade` shipped as **two** `damage-dice-faces` alterations, which reads exactly like the sentence and was worth **nothing at all**: pf2e's handler takes `itemType: ["weapon"]` and a Release Technique is a spell, so both were rejected outright. Even on a weapon the pair would have been worth one step, because that handler latches after the first upgrade on purpose. Live before, Senbonzakura read `2d6` — the pack's own base. Live after: **`2d10`**, which is the guide's own d6→d10 |
+
+## Borrowed Nature (guide §8.6)
+
+| ID | Guide | Clause | Static check | Status | Evidence |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| F-45 | §8.6 | Choose a Lineage other than your own. **This choice is permanent.** You learn that Lineage's free |  | ☐ |  |
+| F-46 | §8.6 | cantrip kidō — **Shō**, **Bala**, or **Heizen** — and it costs you no Reiatsu Point, exactly as it |  | ☐ |  |
+| F-47 | §8.6 | **Cost** 1 Reiatsu Point · **Frequency** once per encounter |  | ☐ |  |
+| F-48 | §8.6 | For **1 minute** you gain your borrowed Lineage's **Aspect**, below. While it is on, you take a |  | ☐ |  |
+| F-49 | §8.6 | **−1 status penalty to Will saves** |  | ☐ |  |
+| F-50 | §8.6 | You learn **one** kidō of your choice from §6.1–6.3 permanently, usable at its normal cost. While the Face is on, **every kidō you know costs no Reiatsu Point.** |  | ☐ |  |
+| F-51 | §8.6 | You gain **temporary Hit Points equal to your level**, **resistance to physical damage equal to a quarter of your level** (minimum 1), and a **+5-foot status bonus** to all your Speeds. |  | ☐ |  |
+| F-52 | §8.6 | You gain **Blut** as a free action once per round (§5.3), except that **Blut Vene** grants resistance equal to a **quarter** of your level rather than half. Your ranged Strikes ignore the target's cover. |  | ☐ |  |
+| F-53 | §8.6 | Don the Other Face **twice per encounter**, and your Aspect deepens: |  | ✅ | Live: an `ItemAlteration` raising `frequency-max` to **2** on `item:slug:don-the-other-face` — the Face twice per encounter, said to the action rather than to the feat that grants it |
+| F-54 | §8.6 | you learn a **second** kidō, and while the Face is on your |  | ☐ |  |
+| F-55 | §8.6 | temporary Hit Points equal to **twice your level**, resistance equal to |  | ☐ |  |
+| F-56 | §8.6 | Blut Vene's resistance becomes **half** your level, and once per |  | ☐ |  |
+| F-57 | §8.6 | not the 12th — is **always active**: no action, no Reiatsu Point, no duration, and **no Will |  | ☐ |  |
+| F-58 | §8.6 | No borrowed **Release**, **Release Technique**, **Full |  | ☐ |  |
+
 ---
-
-## Still to write
-
-`F-` (feats, §8) belongs in this file and is not in it yet. It is the last wave of the class tier; the
-counts below are the rows that exist.
-
-§6.4 (Cero and Bala) and §6.5 (Gintō) are **not** here on purpose: they are one Lineage's arts rather
-than the class's, and they are rows in `lineage-hollow.md` and `lineage-quincy.md`.
 
 ## Counts
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 0 |
-| ✅ | 67 |
+| ☐ | 33 |
+| ✅ | 92 |
 | ⚠️ | 5 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 0 |
-| **Total** | **72** |
+| **Total** | **130** |
