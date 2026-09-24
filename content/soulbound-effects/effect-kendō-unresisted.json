@@ -1,0 +1,61 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "bypass": [
+                {
+                    "immunity": {
+                        "mode": "ignore",
+                        "types": "all"
+                    },
+                    "predicate": [
+                        "item:tag:soulbound-spirit-weapon"
+                    ],
+                    "resistance": {
+                        "max": null,
+                        "types": "all"
+                    }
+                }
+            ]
+        }
+    },
+    "img": "icons/skills/melee/blade-tips-triple-steel.webp",
+    "name": "Effect: Kendō — Unresisted",
+    "system": {
+        "description": {
+            "value": "<p>Your next Strike with your spirit weapon <strong>ignores all resistances and immunities</strong> to its damage type.</p>"
+        },
+        "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 8
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

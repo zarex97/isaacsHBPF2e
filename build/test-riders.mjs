@@ -3216,7 +3216,7 @@ function documentedIn(readme, heading, nextHeading) {
         ["cero-oscuras.json", "galvano-javelin.json", "lanza-del-relampago.json"]);
     check("…and the Strike Techniques that still need the wide search", strikeSpells.wide.sort(),
         ["hitotsume-nadegiri.json", "ikkotsu.json", "ryusenka.json", "shitonegaeshi.json",
-            "shukei-hakuteiken.json"]);
+            "shukei-hakuteiken.json", "zanjutsu-kendo.json"]);
 }
 
 /* -------------------------------------------------------------------------------------------- */

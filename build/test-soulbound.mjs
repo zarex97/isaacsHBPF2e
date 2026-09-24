@@ -1871,6 +1871,90 @@ check("and it arrives with the Full Release, not with the 13th level",
 
 
 /* ---------------------------------------------------------------------------------------------- */
+/*  Feats: a Flash Step by another name, and a Technique that promised three things                 */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * F-13, F-27. "**Flash Step**, then **Strike**."
+ *
+ * The Flash Step a `Shunpo Strike` performs is a real one, and nothing downstream knew it had happened.
+ * Greater Flash Step's afterimage hangs off Flash Step's own `action-used` rider, and Ghost Step's
+ * permission was predicated on `item:slug:flash-step` — so a Soulbound who moved by Shunpo Strike left
+ * no afterimage and ignored no difficult terrain. An 11th-level feature and a 10th-level feat, both
+ * silently switched off by using a 4th-level one.
+ *
+ * Matched on a **tag** both actions carry, rather than on either one's slug, so a third way to Flash
+ * Step says so by declaring itself rather than by being named in two more predicates.
+ */
+const flashStepAction = contentDoc("soulbound-class-features/core/flash-step.json");
+const shunpoStrike = contentDoc("soulbound-feats/shunpo-strike.json");
+for (const [label, doc] of [["Flash Step", flashStepAction], ["Shunpo Strike", shunpoStrike]]) {
+    check(`${label} declares itself a Flash Step`,
+        (doc.system.traits.otherTags ?? []).includes("soulbound-flash-step"), true);
+}
+/**
+ * Both consequences of a Flash Step live on the **actions that perform it**, and neither could live
+ * anywhere else. `onActionUsed` reads `ridersOn(item)` — the riders of the item that was used — so a
+ * rider sitting on `Ghost Step` could never answer somebody else's Flash Step. Driven live: it never
+ * once fired, not even on a plain Flash Step, for as long as it existed.
+ */
+for (const [label, doc] of [["Flash Step", flashStepAction], ["Shunpo Strike", shunpoStrike]]) {
+    check(`${label} carries both, predicated on the feature that grants each`,
+        doc.flags["isaacs-hb-pf2e"].riders.map((r) => [r.event, r.predicate, r.self]),
+        [["action-used", ["feature:greater-flash-step"], true],
+         ["action-used", ["feat:ghost-step"], true]]);
+}
+check("…and Ghost Step itself grants no rider it cannot fire",
+    contentDoc("soulbound-feats/ghost-step.json").flags?.["isaacs-hb-pf2e"]?.riders, undefined);
+
+/**
+ * F-37 (#80). "Make one Strike. Before rolling, choose: it ignores all resistances and immunities to
+ * its damage type, **or** it treats the target's AC as 2 lower. On a hit, **+5d6**."
+ *
+ * Three promises, and the Technique shipped with `rules: []` and no riders at all — the only one of the
+ * six Zanjutsu with no automation whatever.
+ */
+const kendo = contentDoc("soulbound-techniques/zanjutsu-kendo.json");
+const kendoRiders = kendo.flags["isaacs-hb-pf2e"].riders;
+// "Before rolling" is the cast, not the Strike: both answers have to be worn before the die is thrown.
+check("Kendō asks before the roll", [kendoRiders[0].event, kendoRiders[0].apply.type, kendoRiders[0].self],
+    ["action-used", "choice", true]);
+check("…offering exactly the guide's two", kendoRiders[0].apply.options.length, 2);
+check("…and +5d6 on a hit, with the spirit weapon",
+    [kendoRiders[1].event, kendoRiders[1].apply.formula, kendoRiders[1].outcomes, kendoRiders[1].predicate],
+    ["strike-resolved", "5d6", ["success", "criticalSuccess"], ["item:tag:soulbound-spirit-weapon"]]);
+
+const unresisted = contentDoc("soulbound-effects/effect-kendō-unresisted.json");
+check("…the first answer ignores resistance and immunity alike",
+    unresisted.flags["isaacs-hb-pf2e"].bypass.map((b) => [b.resistance.types, b.immunity.mode, b.immunity.types]),
+    [["all", "ignore", "all"]]);
+// Capped at −2 on purpose — the guide says so, "so it cannot combine with flanking and a status penalty
+// to erase a boss's defence" — and circumstance, so a second circumstance penalty does not stack onto it.
+const guard = contentDoc("soulbound-effects/effect-guard-opened.json");
+/**
+ * Capped at −2 on purpose — the guide says so, "so it cannot combine with flanking and a status penalty
+ * to erase a boss's defence" — and a **circumstance** penalty, so a second one does not stack onto it.
+ *
+ * Unpredicated, and it has to be. The modifier sits on the **defender's** AC, where `item:` means the
+ * defender's own items, so no predicate written here can ask which weapon the attacker swung. Driven
+ * live both ways: on the `EphemeralEffect` the −2 reached a Hakuda fist it has no business touching,
+ * and on the modifier it reached nothing at all. The scope is the clause's own word instead — "make
+ * **one** Strike" — and the expire rider below is what enforces it.
+ */
+check("…and the second takes exactly 2 off the target's AC, as a circumstance penalty",
+    guard.system.rules.map((r) => [r.key, r.selector, r.type, r.value, r.predicate]),
+    [["FlatModifier", "ac", "circumstance", -2, undefined]]);
+check("…and both faces are retired the moment a Strike resolves",
+    [kendoRiders[2].event, kendoRiders[2].apply.type, kendoRiders[2].apply.effect.length],
+    ["strike-resolved", "expire", 2]);
+// Cover lives on the defender and so does AC: the penalty has to be handed to the target's own context.
+check("…carried onto the target's roll rather than onto the attacker's",
+    contentDoc("soulbound-effects/effect-kendō-opened-guard.json").system.rules
+        .map((r) => [r.key, r.selectors]),
+    [["EphemeralEffect", ["strike-attack-roll"]]]);
+
+
+/* ---------------------------------------------------------------------------------------------- */
 /*  Zanjutsu Mastery — a 15th-level capstone that was one unread string                             */
 /* ---------------------------------------------------------------------------------------------- */
 
@@ -1924,6 +2008,36 @@ check("Zanjutsu Mastery declares the step rather than naming the Techniques in c
  * Point; this ignores Rising Pressure's per-encounter cap." Word for word the clause `Unsealed` makes at
  * 19th, and the same mechanism — `pool` could only ever spend until `gain` existed.
  */
+/**
+ * F-44. "Your Release Technique's damage dice increase by **two steps** (d6→d10, d8→d12)."
+ *
+ * `Beyond the Blade` shipped as **two** `damage-dice-faces` alterations, which reads exactly like the
+ * sentence and was worth **nothing**: pf2e's handler takes `itemType: ["weapon"]` and a Release Technique
+ * is a spell, so both were rejected outright. Driven live at 18th, Senbonzakura read `2d6` — the pack's
+ * own base. And even on a weapon the pair would have been worth one step, because the handler latches
+ * after the first upgrade on purpose.
+ *
+ * So it uses the same declaration Zanjutsu Mastery does, asking for two steps instead of one.
+ */
+const beyondTheBlade = contentDoc("soulbound-feats/beyond-the-blade.json");
+check("Beyond the Blade steps a Technique twice, and no longer by an alteration that cannot work",
+    [beyondTheBlade.system.rules,
+     beyondTheBlade.flags["isaacs-hb-pf2e"].techniqueDieSteps],
+    [[], { tag: "sb-tier-release", value: 2 }]);
+{
+    const { applyTechniqueDieSteps } = await import("../scripts/soulbound/die-steps.mjs");
+    const spell = (formula) => ({
+        system: { traits: { otherTags: ["sb-tier-release"] }, damage: { 0: { formula } } },
+    });
+    const feature = { flags: { "isaacs-hb-pf2e": { techniqueDieSteps: { tag: "sb-tier-release", value: 2 } } } };
+    const six = spell("2d6");
+    const eight = spell("1d8");
+    applyTechniqueDieSteps({ items: [feature], itemTypes: { spell: [six, eight] } });
+    // The guide's own two examples.
+    check("…d6 → d10", six.system.damage[0].formula, "2d10");
+    check("…and d8 → d12", eight.system.damage[0].formula, "1d12");
+}
+
 const zmRefund = zmFlags.riders[0];
 check("…and a critical hit with the spirit weapon hands a point back",
     [zmRefund.event, zmRefund.apply.type, zmRefund.apply.gain, zmRefund.outcomes],
@@ -2874,8 +2988,32 @@ const SCRIPTS = (() => {
     return text;
 })();
 
+/** Every authored document, as one string, for the same question asked of the content. */
+const CONTENT = (() => {
+    let text = "";
+    (function walk(dir) {
+        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+            const full = path.join(dir, entry.name);
+            if (entry.isDirectory()) walk(full);
+            else if (entry.name.endsWith(".json")) text += fs.readFileSync(full, "utf8");
+        }
+    })(path.join(ROOT, "content"));
+    return text;
+})();
+
 const ENGINE_FLAGS = ["riders", "areaTargeting", "actionCost", "chargeSpend", "chargeRefresh", "bypass",
-    "lingering", "overlap", "freeCast", "releaseForm", "modeSwitch", "deepBreath"];
+    "lingering", "overlap", "freeCast", "releaseForm", "modeSwitch", "deepBreath", "techniqueDieSteps",
+    "refuseDeath"];
+
+/**
+ * A caveat this census cannot see, and `Beyond the Blade` is the proof.
+ *
+ * It asks whether a feat **has** a mechanism, not whether that mechanism can work. `Beyond the Blade`
+ * carried two `ItemAlteration`s and passed here for as long as it existed — while doing nothing at all,
+ * because pf2e's `damage-dice-faces` handler takes `itemType: ["weapon"]` and a Release Technique is a
+ * spell. A rule element pf2e rejects is indistinguishable from one it honours, from here. Only the live
+ * drive tells them apart, which is what `Docs/clauses/` is for.
+ */
 
 const inertFeats = [];
 for (const file of fs.readdirSync(path.join(ROOT, "content", "soulbound-feats"))) {
@@ -2891,8 +3029,17 @@ for (const file of fs.readdirSync(path.join(ROOT, "content", "soulbound-feats"))
         && (doc.system.frequency || doc.system.actions?.value)) continue;
     const slug = doc.system.slug ?? file.replace(/\.json$/, "");
     const options = rules.filter((r) => r.key === "RollOption").map((r) => r.option);
+    /**
+     * A feat is automated when **something** reads it, and that something need not be code.
+     *
+     * `Ghost Step` is the case that taught this: its permission is a rider on the two actions that
+     * perform a Flash Step, predicated on pf2e's own `feat:ghost-step`. Nothing in `scripts/` mentions
+     * it and nothing needs to — the content asks for it by name. Searching only the scripts called that
+     * inert, which would have pushed the rider back onto the feat, where it could never fire.
+     */
     const read = SCRIPTS.includes(`"${slug}"`) || SCRIPTS.includes(`feature:${slug}`)
-        || options.some((o) => SCRIPTS.includes(o));
+        || CONTENT.includes(`feat:${slug}`) || CONTENT.includes(`feature:${slug}`)
+        || options.some((o) => SCRIPTS.includes(o) || CONTENT.includes(o));
     if (!read) inertFeats.push(doc.name);
 }
 check("every Soulbound feat has a mechanism behind it", inertFeats, []);
