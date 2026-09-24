@@ -1,7 +1,24 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "freeCast": {
+                "fromBadge": true,
+                "label": "Gintō Reserve",
+                "predicate": [
+                    "item:slug:gritz"
+                ]
+            }
+        }
+    },
     "img": "icons/consumables/potions/bottle-conical-corked-blue.webp",
     "name": "Effect: Gintō Reserve",
     "system": {
+        "badge": {
+            "max": 3,
+            "min": 0,
+            "type": "counter",
+            "value": 3
+        },
         "description": {
             "value": "<p>Three silver tubes on your belt. The badge counts them; each is a free Gritz.</p>"
         },
@@ -35,12 +52,6 @@
             "value": [
                 "soulbound"
             ]
-        },
-        "badge": {
-            "max": 3,
-            "min": 0,
-            "type": "counter",
-            "value": 3
         }
     },
     "type": "effect"

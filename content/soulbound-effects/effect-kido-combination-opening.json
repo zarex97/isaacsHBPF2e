@@ -1,0 +1,50 @@
+{
+    "flags": {},
+    "img": "icons/magic/symbols/runes-carved-stone-purple.webp",
+    "name": "Effect: Kidō Combination — Opening",
+    "system": {
+        "description": {
+            "value": "<p>A Way of Destruction has just been spoken. Until the end of your turn a <strong>binding</strong> kidō costs you 1 Reiatsu Point fewer — once per encounter.</p>"
+        },
+        "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 6
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "domain": "all",
+                "key": "RollOption",
+                "option": "soulbound:after-destruction-kido",
+                "value": true
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": false
+        },
+        "traits": {
+            "otherTags": [
+                "soulbound-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "reiatsu",
+                "soulbound"
+            ]
+        }
+    },
+    "type": "effect"
+}

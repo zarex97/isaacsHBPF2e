@@ -963,7 +963,13 @@ function validateSouls(doc, where, errors) {
     }
 }
 
-/** The free-cast flag. Its allowance is the item's own frequency, so the item needs one. */
+/**
+ * The free-cast flag. Its allowance is the item's own frequency — or its counter badge.
+ *
+ * `Gintō Reserve` is why there are two: three prepared tubes are consumed and do not come back until
+ * the next daily preparations, which is a counter and not a frequency. A badge allowance says
+ * `fromBadge: true` and is counted from `system.badge.value`.
+ */
 function validateFreeCast(doc, where, errors) {
     const flag = doc.flags?.["isaacs-hb-pf2e"]?.freeCast;
     if (flag === undefined) return;
@@ -973,6 +979,15 @@ function validateFreeCast(doc, where, errors) {
     }
     // An unlimited allowance has nothing to spend by design — see `FreeCast.find`.
     if (flag.unlimited === true) return;
+    if (flag.fromBadge === true) {
+        const badge = doc.system?.badge;
+        if (badge?.type !== "counter" || !(Number(badge.max) > 0)) {
+            errors.push(
+                `${where}: freeCast says \`fromBadge\` but there is no counter badge to spend from`,
+            );
+        }
+        return;
+    }
     const frequency = doc.system?.frequency;
     if (!frequency || !(Number(frequency.max) > 0)) {
         errors.push(
