@@ -1,5 +1,5 @@
 import { describeActor, describeDamage } from "../lib/roll-options.mjs";
-import { wrap } from "../lib/wrap.mjs";
+import { DamageBus, PRIORITY } from "../lib/damage-bus.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 import {
     bypassEntriesOn,
@@ -78,7 +78,7 @@ export const Sources = {
         Hooks.on("pf2e.startTurn", (combatant) => Sources.onAuraTurn("turn-start", combatant));
         Hooks.on("createItem", (item, _options, userId) => Sources.onAuraTick(item, userId));
 
-        Sources.wrapApplyDamage();
+        Sources.registerDamageStages();
     },
 
     /**
@@ -368,59 +368,19 @@ export const Sources = {
     /**
      * Damage landing on someone.
      *
-     * `applyDamage` is wrapped rather than hooked because pf2e emits nothing here, and because its
-     * arguments carry the one thing a rider cannot work without: the item the damage came from, and so the
-     * actor responsible for it. Hit points are read either side of the call so "reduce a creature to 0"
-     * is a fact rather than an inference.
+     * pf2e emits nothing here, so these are stages on the damage bus rather than hooks. Their arguments
+     * carry the one thing a rider cannot work without: the item the damage came from, and so the actor
+     * responsible for it. The bus reads hit points either side of the call, so "reduce a creature to 0" is
+     * a fact rather than an inference.
      */
-    wrapApplyDamage() {
-        // `applyDamage` is declared on ActorPF2e and inherited by every actor type, so this is the one wrap
-        // in the module that asks for the plain prototype patch: libWrapper would define its override on
-        // the single subclass it was handed a path to, leaving NPCs — most of what a Technique is aimed at
-        // — unwrapped. `strategy: "prototype"` walks up to the prototype that declares it and patches there.
-        wrap(
-            "CONFIG.PF2E.Actor.documentClasses.character.prototype.applyDamage",
-            async function (wrapped, params) {
-                const before = this.hitPoints?.value ?? 0;
-                const restore = Sources.applyBypass(this, params);
-                let result;
-                try {
-                    result = await wrapped(params);
-                } finally {
-                    restore();
-                }
-                try {
-                    // Libra's crossed blades halve what any healing gives back, and there is no modifier
-                    // selector that multiplies — so the correction is made from the two readings above.
-                    if (game.user.isGM) await halveHealing(this, before);
-                } catch (error) {
-                    console.error("Isaac's Homebrew | The Crossing could not halve a heal", error);
-                }
-                try {
-                    // …and a wound that will not close refuses the rest. After the Crossing on purpose:
-                    // this one is absolute, so it undoes whatever half was left behind as well.
-                    const { Wound } = await import("../soulbound/wound.mjs");
-                    if (game.user.isGM) await Wound.refuse(this, before);
-                } catch (error) {
-                    console.error("Isaac's Homebrew | the wound could not refuse a heal", error);
-                }
-                try {
-                    await Sources.onDamage(this, params, before);
-                } catch (error) {
-                    console.error("Isaac's Homebrew | damage rider failed", error);
-                }
-                try {
-                    // A Hollow's Regeneración is switched off by the damage TYPE, which exists only here:
-                    // by the time hit points have changed, all that is left is a number.
-                    const { Regeneracion } = await import("../soulbound/regeneracion.mjs");
-                    await Regeneracion.onDamage(this, params);
-                } catch (error) {
-                    console.error("Isaac's Homebrew | Regeneración could not be suppressed", error);
-                }
-                return result;
-            },
-            { feature: "damage riders and IWR bypass", strategy: "prototype" },
-        );
+    registerDamageStages() {
+        DamageBus.before("the IWR bypass", PRIORITY.bypass, (actor, params) => Sources.applyBypass(actor, params));
+        // Libra's crossed blades halve what any healing gives back, and there is no modifier selector that
+        // multiplies — so the correction is made from the two readings the bus takes.
+        DamageBus.after("the Crossing's halved healing", PRIORITY.crossing, async (actor, _params, before) => {
+            if (game.user.isGM) await halveHealing(actor, before);
+        });
+        DamageBus.after("damage riders", PRIORITY.riders, (actor, params, before) => Sources.onDamage(actor, params, before));
     },
 
     /**

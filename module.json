@@ -1,7 +1,7 @@
 {
     "id": "isaacs-hb-pf2e",
-    "title": "Isaac's Homebrew (PF2e): The Saint and The Soulbound",
-    "description": "<p>Homebrew content for the Pathfinder Second Edition system. <strong>The Saint</strong>, a martial focus-user whose power answers to the sky: twelve Gold Cloths with four Techniques each, and a sky tracker that decides whose day it is. <strong>The Soulbound</strong>, a martial focus-user whose pool refills by fighting: three Lineages, fifteen Spirits with four-rung release ladders, the Kidō list, and a capstone that takes your powers when it is done.</p>",
+    "title": "Isaac's Homebrew (PF2e): The Saint, The Soulbound and The Assimilator",
+    "description": "<p>Homebrew content for the Pathfinder Second Edition system. <strong>The Saint</strong>, a martial focus-user whose power answers to the sky: twelve Gold Cloths with four Techniques each, and a sky tracker that decides whose day it is. <strong>The Soulbound</strong>, a martial focus-user whose pool refills by fighting: three Lineages, fifteen Spirits with four-rung release ladders, the Kidō list, and a capstone that takes your powers when it is done. <strong>The Assimilator</strong>, an unarmed martial worn by a symbiont that grows by eating: thirty-six Substrates fed to four Depths, nine Instincts, and thirty Bonds.</p>",
     "version": "99.0.0",
     "license": "./LICENSE",
     "authors": [
@@ -268,6 +268,110 @@
                 "ASSISTANT": "OWNER"
             },
             "flags": {}
+        },
+        {
+            "name": "assimilator-class",
+            "label": "The Assimilator: Class",
+            "path": "packs/assimilator-class",
+            "type": "Item",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/red.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "assimilator-class-features",
+            "label": "The Assimilator: Class Features",
+            "path": "packs/assimilator-class-features",
+            "type": "Item",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/red.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "assimilator-substrates",
+            "label": "The Assimilator: Substrates",
+            "path": "packs/assimilator-substrates",
+            "type": "Item",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/orange.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "assimilator-bonds",
+            "label": "The Assimilator: Bonds",
+            "path": "packs/assimilator-bonds",
+            "type": "Item",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/orange.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "assimilator-feats",
+            "label": "The Assimilator: Feats",
+            "path": "packs/assimilator-feats",
+            "type": "Item",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/red.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "assimilator-effects",
+            "label": "The Assimilator: Effects",
+            "path": "packs/assimilator-effects",
+            "type": "Item",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/green.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "assimilator-journals",
+            "label": "The Assimilator: Handbook",
+            "path": "packs/assimilator-journals",
+            "type": "JournalEntry",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/green.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "assimilator-macros",
+            "label": "The Assimilator: Macros",
+            "path": "packs/assimilator-macros",
+            "type": "Macro",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/green.webp",
+            "ownership": {
+                "PLAYER": "NONE",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
         }
     ],
     "packFolders": [
@@ -300,6 +404,21 @@
                 "soulbound-journals",
                 "soulbound-macros"
             ]
+        },
+        {
+            "name": "Isaac's Homebrew: The Assimilator",
+            "sorting": "m",
+            "color": "#7b3f00",
+            "packs": [
+                "assimilator-class",
+                "assimilator-class-features",
+                "assimilator-substrates",
+                "assimilator-bonds",
+                "assimilator-feats",
+                "assimilator-effects",
+                "assimilator-journals",
+                "assimilator-macros"
+            ]
         }
     ],
     "flags": {
@@ -313,6 +432,10 @@
                     "soulbound": {
                         "label": "Soulbound",
                         "description": "A creature, item, or ability of the Soulbound class."
+                    },
+                    "assimilator": {
+                        "label": "Assimilator",
+                        "description": "A creature, item, or ability of the Assimilator class."
                     }
                 },
                 "spellTraits": {
