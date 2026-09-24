@@ -1,4 +1,73 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "options": [
+                            {
+                                "label": "Lift the clumsiness",
+                                "predicate": [
+                                    "rider:target:condition:clumsy"
+                                ],
+                                "riders": [
+                                    {
+                                        "apply": {
+                                            "remove": true,
+                                            "slug": "clumsy",
+                                            "type": "condition"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "label": "Lift the enfeeblement",
+                                "predicate": [
+                                    "rider:target:condition:enfeebled"
+                                ],
+                                "riders": [
+                                    {
+                                        "apply": {
+                                            "remove": true,
+                                            "slug": "enfeebled",
+                                            "type": "condition"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "label": "Lift the stupefaction",
+                                "predicate": [
+                                    "rider:target:condition:stupefied"
+                                ],
+                                "riders": [
+                                    {
+                                        "apply": {
+                                            "remove": true,
+                                            "slug": "stupefied",
+                                            "type": "condition"
+                                        }
+                                    }
+                                ]
+                            }
+                        ],
+                        "prompt": "The weave closes. Lift one of these as well?",
+                        "type": "choice"
+                    },
+                    "event": "action-used",
+                    "note": "“At 9th level, also remove one of clumsy, enfeebled, or stupefied” — on the caster's level rather than on the kidō's rank, because the guide says 9th level and a kidō's rank is half of that. Each option is predicated on the condition actually being there, so the card offers what can be lifted and nothing else.",
+                    "predicate": [
+                        {
+                            "gte": [
+                                "self:level",
+                                9
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    },
     "folder": "Way of Mending (Kaidō)",
     "img": "icons/magic/life/heart-cross-green.webp",
     "name": "Kaidō — Mend the Weave",

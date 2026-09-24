@@ -32,6 +32,18 @@
                 "option": "soulbound:kido-focus",
                 "toggleable": true,
                 "value": false
+            },
+            {
+                "affects": "target",
+                "key": "EphemeralEffect",
+                "predicate": [
+                    "soulbound:kido-focus",
+                    "item:tag:sb-tier-kido"
+                ],
+                "selectors": [
+                    "saving-throw"
+                ],
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Kidō Focus"
             }
         ],
         "traits": {

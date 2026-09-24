@@ -963,7 +963,13 @@ function validateSouls(doc, where, errors) {
     }
 }
 
-/** The free-cast flag. Its allowance is the item's own frequency, so the item needs one. */
+/**
+ * The free-cast flag. Its allowance is the item's own frequency — or its counter badge.
+ *
+ * `Gintō Reserve` is why there are two: three prepared tubes are consumed and do not come back until
+ * the next daily preparations, which is a counter and not a frequency. A badge allowance says
+ * `fromBadge: true` and is counted from `system.badge.value`.
+ */
 function validateFreeCast(doc, where, errors) {
     const flag = doc.flags?.["isaacs-hb-pf2e"]?.freeCast;
     if (flag === undefined) return;
@@ -973,6 +979,15 @@ function validateFreeCast(doc, where, errors) {
     }
     // An unlimited allowance has nothing to spend by design — see `FreeCast.find`.
     if (flag.unlimited === true) return;
+    if (flag.fromBadge === true) {
+        const badge = doc.system?.badge;
+        if (badge?.type !== "counter" || !(Number(badge.max) > 0)) {
+            errors.push(
+                `${where}: freeCast says \`fromBadge\` but there is no counter badge to spend from`,
+            );
+        }
+        return;
+    }
     const frequency = doc.system?.frequency;
     if (!frequency || !(Number(frequency.max) > 0)) {
         errors.push(
@@ -1421,8 +1436,17 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0, inherit
             break;
         }
         case "pool":
-            // A price, and the one thing that makes it a price rather than a tax: how much.
-            if (!(Number(apply.spend) > 0)) {
+            // A price or a refund, and exactly one of the two: `spend` takes points out, `gain` puts them
+            // back. Both must be positive — a refund written as a negative `spend` falls straight through
+            // `applyPool`'s own guard and does nothing, silently, which is the failure this file exists
+            // to make loud.
+            if (apply.spend !== undefined && apply.gain !== undefined) {
+                errors.push(`${at} a pool rider is a \`spend\` or a \`gain\`, not both`);
+            } else if (apply.gain !== undefined) {
+                if (!(Number(apply.gain) > 0)) {
+                    errors.push(`${at} a pool rider needs a positive \`gain\` — got "${apply.gain}"`);
+                }
+            } else if (!(Number(apply.spend) > 0)) {
                 errors.push(`${at} a pool rider needs a positive \`spend\` — got "${apply.spend}"`);
             }
             break;

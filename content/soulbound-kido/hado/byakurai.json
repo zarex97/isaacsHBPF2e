@@ -1,4 +1,9 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "ignoresCover": "lesser"
+        }
+    },
     "folder": "Way of Destruction (Hadō)",
     "img": "icons/magic/lightning/bolt-strike-blue.webp",
     "name": "Byakurai — Pale Lightning",

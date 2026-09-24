@@ -1,0 +1,46 @@
+{
+    "flags": {},
+    "img": "icons/magic/symbols/runes-carved-stone-purple.webp",
+    "name": "Effect: Kidō Focus",
+    "system": {
+        "description": {
+            "value": "<p>A second beat of concentration went into the art that caught you: <strong>−1 circumstance penalty</strong> to this save.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 2
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Soulbound"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Kidō Focus",
+                "selector": "saving-throw",
+                "type": "circumstance",
+                "value": -1
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": false
+        },
+        "traits": {
+            "otherTags": [],
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

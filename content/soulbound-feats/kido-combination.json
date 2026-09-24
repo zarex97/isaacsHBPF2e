@@ -4,7 +4,8 @@
             "freeCast": {
                 "label": "Kidō Combination",
                 "predicate": [
-                    "item:tag:soulbound-kido-bakudo"
+                    "item:tag:soulbound-kido-bakudo",
+                    "soulbound:after-destruction-kido"
                 ]
             }
         }

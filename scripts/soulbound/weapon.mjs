@@ -39,8 +39,46 @@ export const SpiritWeapon = {
         return actor?.type === "character" && classSlugOf(actor) === "soulbound";
     },
 
+    /**
+     * Is the spirit weapon dissolved?
+     *
+     * > **Bonded.** You can manifest or dismiss it as a free action once per round. — guide §4.1
+     *
+     * There was no answer to this question at all, which mattered one clause later: §4.7 says *"you can't
+     * Release while your spirit weapon is dismissed"*, and `Release.release` carried a comment promising
+     * it refused while checking nothing, because there was no state to check. Dismissal was a card that
+     * described itself.
+     *
+     * The state is a flag rather than the weapon's `carryType`, because `reconcile` already writes
+     * `carryType` for a different reason — stowing the sealed profile while a released form stands — and
+     * two writers on one field is how a sealed Arrogante ended up holding a blade in zero hands.
+     */
+    isDismissed(actor) {
+        return actor?.getFlag?.(MODULE_ID, "weaponDismissed") === true;
+    },
+
+    /**
+     * **Manifest or Dismiss Spirit Weapon** [free-action] — guide §4.1.
+     *
+     * One action does both, so this toggles. pf2e counts the once-per-round itself, from the frequency on
+     * the action.
+     */
+    async toggle(actor) {
+        if (!this.isSoulbound(actor)) return false;
+        const dismissing = !this.isDismissed(actor);
+        await actor.setFlag(MODULE_ID, "weaponDismissed", dismissing);
+        await this.reconcile(actor);
+        ui.notifications.info(
+            dismissing
+                ? `${actor.name}'s spirit weapon dissolves. It cannot be Released while dismissed.`
+                : `${actor.name}'s spirit weapon appears in hand.`,
+        );
+        return true;
+    },
+
     /** The manifested spirit weapon, or null while it is dismissed — which is not an error. */
     weaponOf(actor) {
+        if (this.isDismissed(actor)) return null;
         if (!this.isSoulbound(actor)) return null;
         return (
             actor.itemTypes?.weapon?.find((w) => (w.system?.traits?.otherTags ?? []).includes(SPIRIT_WEAPON_TAG))
@@ -72,6 +110,15 @@ export const SpiritWeapon = {
         );
         const sealed = spirit.filter((w) => (w.system?.traits?.otherTags ?? []).includes(PROFILE_TAG));
         const released = spirit.filter((w) => !(w.system?.traits?.otherTags ?? []).includes(PROFILE_TAG));
+
+        // Dismissed beats everything below: there is nothing in hand to reconcile, released form or not.
+        if (this.isDismissed(actor)) {
+            const away = spirit
+                .filter((w) => w.system.equipped?.carryType !== "stowed")
+                .map((w) => ({ _id: w.id, "system.equipped.carryType": "stowed" }));
+            if (away.length > 0) await actor.updateEmbeddedDocuments("Item", away);
+            return;
+        }
 
         const updates = [];
         for (const weapon of sealed) {

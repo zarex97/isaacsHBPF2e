@@ -47,6 +47,23 @@
                             "not": "rider:target:effect:effect-steeled-against-pressure"
                         }
                     ]
+                },
+                {
+                    "apply": {
+                        "gain": 1,
+                        "type": "pool"
+                    },
+                    "event": "strike-resolved",
+                    "note": "Unsealed (19th): \"the first time each round you critically hit with your spirit weapon you regain 1 Reiatsu Point\". Authored on the effect rather than on Unsealed, because it is true only while the Full Release stands.",
+                    "oncePerRound": true,
+                    "outcomes": [
+                        "criticalSuccess"
+                    ],
+                    "predicate": [
+                        "feature:unsealed",
+                        "item:tag:soulbound-spirit-weapon"
+                    ],
+                    "self": true
                 }
             ]
         }
@@ -113,6 +130,13 @@
                     "fear",
                     "mental"
                 ]
+            },
+            {
+                "key": "Immunity",
+                "predicate": [
+                    "feature:unsealed"
+                ],
+                "type": "fear-effects"
             }
         ],
         "start": {

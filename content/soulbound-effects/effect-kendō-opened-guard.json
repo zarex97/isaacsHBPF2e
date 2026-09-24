@@ -1,16 +1,19 @@
 {
-    "img": "icons/magic/control/silhouette-hold-change-blue.webp",
-    "name": "Effect: Silenced Chain",
+    "flags": {},
+    "img": "icons/skills/melee/blade-tips-triple-steel.webp",
+    "name": "Effect: Kendō — Opened Guard",
     "system": {
         "description": {
-            "value": "<p>The seal sits on your voice. You can't cast spells or use kidō.</p>"
+            "value": "<p>Your next Strike with your spirit weapon treats the target's <strong>AC as 2 lower</strong>.</p>"
         },
         "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
             "unit": "rounds",
             "value": 1
         },
         "level": {
-            "value": 5
+            "value": 8
         },
         "publication": {
             "license": "ORC",
@@ -19,9 +22,11 @@
         },
         "rules": [
             {
-                "domain": "all",
-                "key": "RollOption",
-                "option": "soulbound:silenced"
+                "key": "EphemeralEffect",
+                "selectors": [
+                    "strike-attack-roll"
+                ],
+                "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Guard Opened"
             }
         ],
         "start": {
@@ -33,10 +38,11 @@
         },
         "traits": {
             "otherTags": [
-                "soulbound-effect"
+                "soulbound-feature"
             ],
             "rarity": "common",
             "value": [
+                "reiatsu",
                 "soulbound"
             ]
         }

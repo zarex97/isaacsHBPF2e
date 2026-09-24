@@ -1,4 +1,12 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "techniqueDieSteps": {
+                "tag": "sb-tier-release",
+                "value": 2
+            }
+        }
+    },
     "folder": "18th",
     "img": "icons/weapons/swords/sword-guard-purple.webp",
     "name": "Beyond the Blade",
@@ -24,26 +32,7 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Soulbound"
         },
-        "rules": [
-            {
-                "key": "ItemAlteration",
-                "itemType": "spell",
-                "mode": "upgrade",
-                "predicate": [
-                    "item:tag:sb-tier-release"
-                ],
-                "property": "damage-dice-faces"
-            },
-            {
-                "key": "ItemAlteration",
-                "itemType": "spell",
-                "mode": "upgrade",
-                "predicate": [
-                    "item:tag:sb-tier-release"
-                ],
-                "property": "damage-dice-faces"
-            }
-        ],
+        "rules": [],
         "traits": {
             "otherTags": [
                 "soulbound-feat"
