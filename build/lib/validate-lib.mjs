@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { ROOT, rel, sluggify } from "./pack.mjs";
+import { validateAssimilator } from "./validate-assimilator.mjs";
 
 const pf2e = JSON.parse(fs.readFileSync(path.join(ROOT, "build", "lib", "pf2e-traits.json"), "utf8"));
 /** pf2e's immunity/weakness/resistance dictionaries, snapshotted from a running 8.3.0. */
@@ -102,6 +103,7 @@ const SB_TIERS = new Set([...Object.keys(SB_TIER_RANK), "kido", "zanjutsu"]);
 const FAMILY_PREFIXES = [
     ["saint-", "saint"],
     ["soulbound-", "soulbound"],
+    ["assimilator-", "assimilator"],
 ];
 
 /**
@@ -146,6 +148,7 @@ export function validate(packs, { errors }) {
     validateSlugPredicates(packs, errors);
     validateAlterationProperties(packs, errors);
     validateCounterBadges(packs, errors);
+    validateAssimilator(packs, errors);
 }
 
 /**
@@ -1727,7 +1730,7 @@ function validateFeat(doc, where, errors, family) {
     if (!FEAT_CATEGORIES.has(system.category)) errors.push(`${where}: bad feat category "${system.category}"`);
     if (!system.actionType?.value) errors.push(`${where}: feat missing actionType.value`);
     if (system.category === "class") {
-        const trait = family === "soulbound" ? "soulbound" : "saint";
+        const trait = family ?? "saint";
         if (!(system.traits?.value ?? []).includes(trait)) {
             errors.push(`${where}: ${trait} class feat must carry the "${trait}" trait`);
         }
@@ -1758,6 +1761,13 @@ function validateSpell(doc, where, errors, family) {
     // The two classes diverge here. Everything above is true of any pf2e spell; everything below is the
     // Saint's own rank spine, which a Soulbound effect does not have and must not be measured against.
     if (family === "soulbound") return validateSoulboundSpell(doc, where, errors, rank);
+    // The Assimilator casts nothing (guide §1.6: "No spell slots, no focus pool"). A spell in its packs is
+    // a Substrate's once-a-day active written the easy way, and it would inherit pf2e's spell machinery —
+    // traditions, heightening, counteraction as a spell — that the guide never gave it.
+    if (family === "assimilator") {
+        errors.push(`${where}: the Assimilator has no spells (guide §1.6) — write this as an action or an effect`);
+        return;
+    }
 
     for (const required of ["focus", "cosmo", "saint"]) {
         if (!traits.includes(required)) errors.push(`${where}: Technique must carry the "${required}" trait`);
@@ -1861,8 +1871,8 @@ function validateEffect(doc, where, errors) {
 
 function validateClass(doc, where, errors, family) {
     const system = doc.system;
-    const expected = family === "soulbound" ? "soulbound" : "saint";
-    const dcName = family === "soulbound" ? "Reiatsu DC" : "Cosmo DC";
+    const expected = family ?? "saint";
+    const dcName = { soulbound: "Reiatsu DC", assimilator: "Assimilator DC" }[family] ?? "Cosmo DC";
     if (system.slug !== expected) {
         errors.push(`${where}: class slug must be "${expected}" (it keys the ${dcName})`);
     }

@@ -2,6 +2,7 @@ import { Astral } from "./astral.mjs";
 import { CastPipeline } from "./cast-pipeline.mjs";
 import { Cosmo } from "./cosmo.mjs";
 import { Deaths } from "./deaths.mjs";
+import { DamageBus, PRIORITY } from "./lib/damage-bus.mjs";
 import { Duplicate } from "./economy/duplicate.mjs";
 import { FreeCast } from "./economy/free-cast.mjs";
 import { Recharge } from "./economy/recharge.mjs";
@@ -24,6 +25,7 @@ import { RefuseDeath } from "./refuse-death.mjs";
 import { Charges } from "./soulbound/charges.mjs";
 import { Hypnosis } from "./soulbound/hypnosis.mjs";
 import { Modes } from "./soulbound/modes.mjs";
+import { Regeneracion } from "./soulbound/regeneracion.mjs";
 import { Reiatsu } from "./soulbound/reiatsu.mjs";
 import { Release } from "./soulbound/release.mjs";
 import { Severance } from "./soulbound/severance.mjs";
@@ -32,6 +34,7 @@ import { RisingPressure } from "./soulbound/rising-pressure.mjs";
 import { Scattered } from "./soulbound/scattered.mjs";
 import { Suppression } from "./soulbound/suppression.mjs";
 import { SpiritWeapon } from "./soulbound/weapon.mjs";
+import { Wound } from "./soulbound/wound.mjs";
 import { AreaTargeting } from "./targeting/index.mjs";
 import { registerRollBypass } from "./riders/bypass.mjs";
 import { registerEnemyTerrain } from "./targeting/enemy-terrain.mjs";
@@ -102,6 +105,12 @@ Hooks.once("init", () => {
     // The bridge from a used action to the state machine behind it. Without this the release
     // ladder is inert: `Release.enter()` has no other caller anywhere in the module.
     start("the Soulbound action bridge", () => SoulboundActions.registerHooks());
+    // Two Soulbound readings of damage that has just landed. Stages on the damage bus rather than calls
+    // from inside the rider engine, which is where they used to live.
+    start("the wound that will not close", () => DamageBus.after("the wound that will not close", PRIORITY.wound,
+        async (actor, _params, before) => { if (game.user.isGM) await Wound.refuse(actor, before); }));
+    start("Regeneración's suppression", () => DamageBus.after("Regeneración's suppression", PRIORITY.regeneracion,
+        (actor, params) => Regeneracion.onDamage(actor, params)));
     start("the sky tracker window", () => SkyTrackerApp.registerHooks());
 
     start("the sky tracker's settings menu", () => {
@@ -149,14 +158,16 @@ Hooks.once("init", () => {
         refuseDeath: RefuseDeath,
         hypnosis: Hypnosis,
         rig: SoulboundRig,
+        damageBus: DamageBus,
         open: () => new SkyTrackerApp().render(true),
         adjacentSigns,
     };
 });
 
 // After `init`, so the system's document classes exist to be wrapped: the cast pipeline wraps the
-// spellcasting entry's `cast` and an activity's `toMessage`, and the rider sources wrap `applyDamage`.
+// spellcasting entry's `cast` and an activity's `toMessage`, and the damage bus wraps `applyDamage`.
 Hooks.once("setup", () => {
+    start("the damage bus", () => DamageBus.install());
     start("the cast pipeline", () => CastPipeline.install());
     start("the reiatsu pool", () => Reiatsu.install());
     start("the rider engine", () => Riders.registerHooks());
