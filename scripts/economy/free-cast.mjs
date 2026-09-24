@@ -58,7 +58,9 @@ export const FreeCast = {
 
         options.consume = false;
         if (!allowance.unlimited) {
-            await allowance.item.update({ "system.frequency.value": allowance.remaining - 1 });
+            await allowance.item.update(allowance.fromBadge
+                ? { "system.badge.value": allowance.remaining - 1 }
+                : { "system.frequency.value": allowance.remaining - 1 });
         }
         await ChatMessage.create({
             speaker: ChatMessage.getSpeaker({ actor }),
@@ -84,9 +86,23 @@ export const FreeCast = {
             // counter to decrement, and the frequency check would otherwise refuse an item that has no
             // frequency to read, which is every effect that is not itself a once-per-day feat.
             if (flag.unlimited) return { item, remaining: Infinity, unlimited: true };
-            const remaining = item.system?.frequency?.value ?? 0;
+            /**
+             * Some allowances are **counted by a badge**, not by a frequency.
+             *
+             * > **Gintō Reserve.** You prepare **3 Gintō** during daily preparations. Each may be spent
+             * > as a free action to use **Gritz** without spending a Reiatsu Point. — guide §8.2
+             *
+             * Three prepared things are a counter, and pf2e's `frequency` cannot be one: it belongs to an
+             * item and recharges on a schedule, where these are consumed and simply do not come back
+             * until the next preparations. So the effect carries a counter badge — and `find` read only
+             * `system.frequency.value`, so the badge said 3 and the allowance said nothing. Driven live,
+             * every Gritz cost its Reiatsu Point with three tubes full on the sheet.
+             */
+            const remaining = flag.fromBadge
+                ? (item.system?.badge?.value ?? 0)
+                : (item.system?.frequency?.value ?? 0);
             if (remaining <= 0) continue;
-            return { item, remaining };
+            return { item, remaining, fromBadge: flag.fromBadge === true };
         }
         return null;
     },

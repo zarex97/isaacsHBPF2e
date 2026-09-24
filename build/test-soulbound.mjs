@@ -1871,6 +1871,127 @@ check("and it arrives with the Full Release, not with the 13th level",
 
 
 /* ---------------------------------------------------------------------------------------------- */
+/*  Don the Other Face — an action with nothing in it                                               */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * F-47, F-48. "**Cost** 1 Reiatsu Point · **Frequency** once per encounter. For **1 minute** you gain
+ * your borrowed Lineage's **Aspect**."
+ *
+ * The action shipped with `rules: []` and no flags — using it did nothing at all, and driven live it
+ * cost nothing and put nothing on. What made it look as though it worked is `Second Nature` (feat 18),
+ * which grants the 6th-level Aspect **permanently** by its own `GrantItem`: on a sheet carrying that,
+ * the mask is simply always there and the action changes nothing visible.
+ *
+ * It is routed by slug now, like every other action in the class, and reads which face to wear off the
+ * `ChoiceSet` answer `Borrowed Nature` already publishes.
+ */
+const donTheOtherFace = contentDoc("soulbound-class-features/actions/don-the-other-face.json");
+check("Don the Other Face is one action, once per encounter",
+    [donTheOtherFace.system.actions.value, donTheOtherFace.system.frequency],
+    [1, { max: 1, per: "PT10M", value: 1 }]);
+check("…and it is routed rather than carrying rules of its own",
+    [donTheOtherFace.system.rules,
+     fs.readFileSync(path.join(ROOT, "scripts", "soulbound", "actions.mjs"), "utf8")
+         .includes('"don-the-other-face"')],
+    [[], true]);
+
+// The three Aspects, each lasting the minute the action grants and each arguing with you until 18th.
+for (const [file, option] of [
+    ["effect-hollows-mask.json", "soulbound:aspect:hollow"],
+    ["effect-soul-reapers-discipline.json", "soulbound:aspect:soul-reaper"],
+    ["effect-quincys-discipline.json", "soulbound:aspect:quincy"],
+]) {
+    const aspect = contentDoc(`soulbound-effects/${file}`);
+    check(`${aspect.name} lasts a minute`, aspect.system.duration.unit, "minutes");
+    check("…and says which face it is", aspect.system.rules[0].option, option);
+    // "While it is on, you take a −1 status penalty to Will saves" — and Second Nature takes it away.
+    const will = aspect.system.rules.find((r) => r.key === "FlatModifier" && r.selector === "will");
+    check("…and argues, until Second Nature makes it yours",
+        [will?.value, will?.predicate], [-1, [{ not: "soulbound:second-nature" }]]);
+}
+
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  Gintō Reserve — three prepared things are a counter, not a frequency                            */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * F-12. "You prepare **3 Gintō** during daily preparations. Each may be spent as a free action to use
+ * **Gritz** without spending a Reiatsu Point."
+ *
+ * The tubes were real — a counter badge reading 3 of 3, on an effect lasting a day — and nothing could
+ * spend them. `FreeCast.find` read `system.frequency.value` and only that, so the badge said three and
+ * the allowance said nothing: driven live, every Gritz cost its Reiatsu Point with three full tubes on
+ * the sheet.
+ *
+ * pf2e's `frequency` is the wrong shape here and cannot be made right: it belongs to an item and
+ * *recharges* on a schedule, where these are consumed and do not come back until the next preparations.
+ */
+const gintoReserve = contentDoc("soulbound-effects/effect-ginto-reserve.json");
+check("three tubes, counted by a badge and lost with the day",
+    [gintoReserve.system.badge.type, gintoReserve.system.badge.max, gintoReserve.system.duration],
+    ["counter", 3, { expiry: null, sustained: false, unit: "days", value: 1 }]);
+check("…and each one pays for a Gritz",
+    gintoReserve.flags["isaacs-hb-pf2e"].freeCast,
+    { fromBadge: true, label: "Gintō Reserve", predicate: ["item:slug:gritz"] });
+
+
+/* ---------------------------------------------------------------------------------------------- */
+/*  Two feats whose conditions were not conditions                                                  */
+/* ---------------------------------------------------------------------------------------------- */
+
+/**
+ * F-10. "When you use a kidō, spend 1 additional action to give the target a **−1 circumstance
+ * penalty** to its save."
+ *
+ * The toggle was real and the penalty landed in exactly one place: the module's own `runSave`. Every
+ * kidō with a save declares `system.defense.save`, so **pf2e rolls all of them** from the spell card —
+ * and driven live the save came back carrying Dexterity and proficiency and nothing else. The feat
+ * applied to no kidō in the class.
+ *
+ * pf2e's own route for "a penalty to saves against your spells" is an `EphemeralEffect` handed to the
+ * target for that roll, which is what it has now. The `runSave` path stays for rider-rolled saves.
+ */
+const kidoFocus = contentDoc("soulbound-feats/kido-focus.json");
+const ephemeral = kidoFocus.system.rules.find((r) => r.key === "EphemeralEffect");
+check("Kidō Focus reaches a save pf2e rolls",
+    [ephemeral?.affects, ephemeral?.selectors, ephemeral?.predicate],
+    ["target", ["saving-throw"], ["soulbound:kido-focus", "item:tag:sb-tier-kido"]]);
+check("…as a −1 circumstance penalty, and only that",
+    contentDoc("soulbound-effects/effect-kido-focus.json").system.rules
+        .map((r) => [r.key, r.selector, r.type, r.value]),
+    [["FlatModifier", "saving-throw", "circumstance", -1]]);
+// It stays a toggle: the extra action is a choice made at the moment you cast.
+check("…and the extra action is still the player's to spend",
+    kidoFocus.system.rules.find((r) => r.key === "RollOption")?.toggleable, true);
+
+/**
+ * F-18. "**Immediately after using a destruction kidō**, use a binding kidō against the same target for
+ * 1 fewer Reiatsu Point."
+ *
+ * The discount was real; the **sequencing was not**. The free cast was predicated on the binding kidō
+ * alone, so a Soulbound who had spoken no Hadō at all still got their Bakudō free — driven live, a cold
+ * `Hainawa` came out costing nothing.
+ *
+ * The opening cannot be a rider: `onActionUsed` reads only the used item's riders, so a stamp on the
+ * feat could never answer a kidō's cast, and one on each destruction kidō would be authored eight times
+ * and forgotten a ninth. The cast pipeline sees every cast.
+ */
+const combination = contentDoc("soulbound-feats/kido-combination.json");
+check("Kidō Combination asks for the opening as well as the Way",
+    combination.flags["isaacs-hb-pf2e"].freeCast.predicate,
+    ["item:tag:soulbound-kido-bakudo", "soulbound:after-destruction-kido"]);
+check("…once per encounter, in the unit pf2e counts",
+    combination.system.frequency, { max: 1, per: "PT10M", value: 1 });
+const opening = contentDoc("soulbound-effects/effect-kido-combination-opening.json");
+check("…and the opening lasts until the end of your turn",
+    [opening.system.duration, opening.system.rules.map((r) => r.option)],
+    [{ expiry: "turn-end", sustained: false, unit: "rounds", value: 1 },
+     ["soulbound:after-destruction-kido"]]);
+
+
+/* ---------------------------------------------------------------------------------------------- */
 /*  Feats: a Flash Step by another name, and a Technique that promised three things                 */
 /* ---------------------------------------------------------------------------------------------- */
 
