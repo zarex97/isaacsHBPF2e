@@ -14,7 +14,7 @@
         }
     },
     "folder": "Blue",
-    "img": "icons/commodities/metal/ingot-tin.webp",
+    "img": "icons/commodities/metal/ingot-silver.webp",
     "name": "Substrate: Tin",
     "system": {
         "badge": {
@@ -164,7 +164,7 @@
                 "title": "Tin (Depth 3)"
             },
             {
-                "key": "Note",
+                "key": "FlatModifier",
                 "predicate": [
                     {
                         "not": "assimilator:suppressed"
@@ -175,11 +175,13 @@
                             4
                         ]
                     },
-                    "carapace:intact"
+                    "carapace:intact",
+                    "action:track"
                 ],
                 "selector": "survival",
-                "text": "Track any creature that passed within 30 feet of you in the last 24 hours with a +2 circumstance bonus.",
-                "title": "Tin (Depth 4)"
+                "slug": "tin-survival-4",
+                "type": "circumstance",
+                "value": 2
             }
         ],
         "start": {

@@ -78,6 +78,17 @@ check("a well-formed Substrate passes", errorsFor({ substrates: [ruby()] }), [])
     ]);
 }
 
+{
+    // Driven live: the Gland's 2d6 on a critical failure landed once, not twice — the ladder composed with 0.5.
+    const gland = (multiplier) => ({ name: "Gland", type: "action", system: { rules: [] }, flags: { [FLAG]: { riders: [
+        { event: "action-used", apply: { type: "save", statistic: "reflex", dc: "class", basic: true, riders: [
+            { apply: { type: "damage", formula: "2d6", damageType: "fire", ...(multiplier ? { multiplier } : {}) } }] } }] } } });
+    check("a basic save's damage takes no multiplier", errorsFor({ feats: [gland(0.5)] }), [
+        "a basic save's damage takes no multiplier — the ladder already halves and doubles it",
+    ]);
+    check("and without one it passes", errorsFor({ feats: [gland()] }), []);
+}
+
 check("the same Substrate twice is refused", errorsFor({ substrates: [ruby(), ruby()] }), [
     'Substrate "ruby" is declared twice',
 ]);

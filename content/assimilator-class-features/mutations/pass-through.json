@@ -14,7 +14,7 @@
         }
     },
     "folder": "Mutations",
-    "img": "icons/consumables/potions/bottle-round-corked-silver.webp",
+    "img": "icons/consumables/potions/vial-ornet-silver-black.webp",
     "name": "Pass Through",
     "system": {
         "actionType": {
@@ -23,7 +23,7 @@
         "actions": {
             "value": null
         },
-        "category": "classfeature",
+        "category": "interaction",
         "description": {
             "value": "<p><strong>Trigger</strong> You are hit.</p><hr /><p>Reduce the damage by your level as the blow passes through you.</p><p><em>Use it as the damage is rolled; it is taken off that damage as it lands. With Carapace Block or Symbiotic Reflex also armed, only the largest applies.</em></p>"
         },
@@ -31,12 +31,6 @@
             "max": 1,
             "per": "round",
             "value": 1
-        },
-        "level": {
-            "value": 11
-        },
-        "prerequisites": {
-            "value": []
         },
         "publication": {
             "license": "ORC",
@@ -55,5 +49,5 @@
             ]
         }
     },
-    "type": "feat"
+    "type": "action"
 }

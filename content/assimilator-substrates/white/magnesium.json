@@ -129,25 +129,8 @@
                 "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Flare"
             },
             {
-                "key": "Note",
-                "predicate": [
-                    {
-                        "not": "assimilator:suppressed"
-                    },
-                    {
-                        "gte": [
-                            "self:effect:substrate-magnesium",
-                            3
-                        ]
-                    },
-                    "carapace:intact"
-                ],
-                "selector": "all",
-                "text": "Flare: a failed save is blinded instead, and it deals fire damage equal to your level to creatures with light sensitivity or light blindness.",
-                "title": "Magnesium (Depth 3)"
-            },
-            {
-                "key": "Note",
+                "allowDuplicate": false,
+                "key": "GrantItem",
                 "predicate": [
                     {
                         "not": "assimilator:suppressed"
@@ -160,9 +143,25 @@
                     },
                     "carapace:intact"
                 ],
-                "selector": "all",
-                "text": "Flare: a 30-foot emanation that counteracts magical darkness; once per day it may instead heal each ally within it for your level.",
-                "title": "Magnesium (Depth 4)"
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Healing Flare"
+            },
+            {
+                "domain": "all",
+                "key": "RollOption",
+                "option": "assimilator:blinding-flare",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-magnesium",
+                            3
+                        ]
+                    },
+                    "carapace:intact"
+                ]
             }
         ],
         "start": {

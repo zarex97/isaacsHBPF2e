@@ -9,7 +9,7 @@
         }
     },
     "folder": "Core",
-    "img": "icons/creatures/abilities/dragon-scales-red.webp",
+    "img": "icons/creatures/abilities/fang-tooth-blood-red.webp",
     "name": "Growth (3rd)",
     "system": {
         "actionType": {

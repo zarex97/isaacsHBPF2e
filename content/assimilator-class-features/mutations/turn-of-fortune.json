@@ -1,6 +1,6 @@
 {
     "folder": "Mutations",
-    "img": "icons/commodities/gems/gem-faceted-round-yellow.webp",
+    "img": "icons/commodities/gems/gem-faceted-rough-yellow.webp",
     "name": "Turn of Fortune",
     "system": {
         "actionType": {
@@ -9,7 +9,7 @@
         "actions": {
             "value": null
         },
-        "category": "classfeature",
+        "category": "interaction",
         "description": {
             "value": "<p><strong>Trigger</strong> A d20 roll is made within 30 feet, and you see the result.</p><hr /><p>Change that roll by 5 in either direction &mdash; yours, an ally's, or an enemy's.</p>"
         },
@@ -17,12 +17,6 @@
             "max": 1,
             "per": "day",
             "value": 1
-        },
-        "level": {
-            "value": 17
-        },
-        "prerequisites": {
-            "value": []
         },
         "publication": {
             "license": "ORC",
@@ -41,5 +35,5 @@
             ]
         }
     },
-    "type": "feat"
+    "type": "action"
 }

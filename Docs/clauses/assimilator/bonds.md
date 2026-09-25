@@ -40,7 +40,7 @@ class tracker's (`A-47`–`A-50`).
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| B-01 | Molten Carapace (Ruby + Iron) | Your Carapace's Hardness increases by 5, and a creature that hits you with a melee unarmed or reach attack takes fire damage equal to half your level. |  | ⚠️ | Live: slotted, the plate's Hardness went **2 → 7**, and it fell back when Iron was shed below 2. The fire back at a melee attacker is a Note |
+| B-01 | Molten Carapace (Ruby + Iron) | Your Carapace's Hardness increases by 5, and a creature that hits you with a melee unarmed or reach attack takes fire damage equal to half your level. | `rig` | ✅ | Live: Hardness **2 → 7** slotted, back to 2 when Iron was shed. Rig: a melee unarmed Claw hit the Assimilator and the attacker took **8** fire — half of level 17. **Fixed while driving:** the retaliation was a Note on AC, which pf2e never rolls, so it was never shown; it is a damage-bus stage now |
 | B-02a | Conduction (Ruby + Copper) | Your fire damage counts as **fire and electricity**, using whichever resistance is lower. |  | ☐ |  |
 | B-02b | Conduction (Ruby + Copper) | Creatures in metal armour take +2 per damage die from it. |  | ☐ |  |
 | B-03a | Solar Core (Ruby + Gold) | Once per encounter as a two-action activity, ignite: for 1 minute your fire damage increases by one die size and you shed bright light 60 feet. |  | ☐ |  |
@@ -82,8 +82,8 @@ class tracker's (`A-47`–`A-50`).
 | Status | Count |
 | :-- | --: |
 | ☐ | 33 |
-| ✅ | 0 |
-| ⚠️ | 1 |
+| ✅ | 1 |
+| ⚠️ | 0 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 0 |

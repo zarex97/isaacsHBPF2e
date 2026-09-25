@@ -9,7 +9,7 @@
             }
         }
     },
-    "img": "icons/consumables/potions/bottle-round-corked-silver.webp",
+    "img": "icons/consumables/potions/vial-ornet-silver-black.webp",
     "name": "Effect: Pass Through",
     "system": {
         "description": {

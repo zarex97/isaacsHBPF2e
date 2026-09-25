@@ -11,7 +11,7 @@
         }
     },
     "folder": "Gold",
-    "img": "icons/commodities/gems/gem-faceted-round-yellow.webp",
+    "img": "icons/commodities/gems/gem-faceted-rough-yellow.webp",
     "name": "Substrate: Citrine",
     "system": {
         "badge": {
@@ -67,7 +67,7 @@
                 "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Gilded Chance"
             },
             {
-                "itemType": "feat",
+                "itemType": "action",
                 "key": "ItemAlteration",
                 "mode": "upgrade",
                 "predicate": [

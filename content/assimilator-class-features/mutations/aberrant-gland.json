@@ -1,0 +1,237 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "area": {
+                    "type": "cone",
+                    "value": 15
+                },
+                "includesSelf": false
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "basic": true,
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "fire",
+                                    "formula": "2d6",
+                                    "type": "damage"
+                                }
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        "assimilator:instinct:red"
+                    ]
+                },
+                {
+                    "apply": {
+                        "basic": true,
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "force",
+                                    "formula": "2d6",
+                                    "type": "damage"
+                                }
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        "assimilator:instinct:gold"
+                    ]
+                },
+                {
+                    "apply": {
+                        "basic": true,
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "electricity",
+                                    "formula": "2d6",
+                                    "type": "damage"
+                                }
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        "assimilator:instinct:orange"
+                    ]
+                },
+                {
+                    "apply": {
+                        "basic": true,
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "cold",
+                                    "formula": "2d6",
+                                    "type": "damage"
+                                }
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        "assimilator:instinct:blue"
+                    ]
+                },
+                {
+                    "apply": {
+                        "basic": true,
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "mental",
+                                    "formula": "2d6",
+                                    "type": "damage"
+                                }
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        "assimilator:instinct:purple"
+                    ]
+                },
+                {
+                    "apply": {
+                        "basic": true,
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "poison",
+                                    "formula": "2d6",
+                                    "type": "damage"
+                                }
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        "assimilator:instinct:green"
+                    ]
+                },
+                {
+                    "apply": {
+                        "basic": true,
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "void",
+                                    "formula": "2d6",
+                                    "type": "damage"
+                                }
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        "assimilator:instinct:black"
+                    ]
+                },
+                {
+                    "apply": {
+                        "basic": true,
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "vitality",
+                                    "formula": "2d6",
+                                    "type": "damage"
+                                }
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        "assimilator:instinct:white"
+                    ]
+                },
+                {
+                    "apply": {
+                        "basic": true,
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "bludgeoning",
+                                    "formula": "2d6",
+                                    "type": "damage"
+                                }
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        "assimilator:instinct:gray"
+                    ]
+                }
+            ]
+        }
+    },
+    "folder": "Mutations",
+    "img": "icons/magic/unholy/strike-body-explode-disintegrate.webp",
+    "name": "Aberrant Gland",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 2
+        },
+        "category": "interaction",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per encounter</p><hr /><p>A <strong>15-foot cone</strong> dealing <strong>2d6</strong> damage of your Instinct's type, basic Reflex save against your class DC.</p>"
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-mutation-action"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "action"
+}

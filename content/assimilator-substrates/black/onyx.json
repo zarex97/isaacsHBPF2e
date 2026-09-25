@@ -87,14 +87,7 @@
                             "carapace:intact"
                         ]
                     },
-                    {
-                        "or": [
-                            "lighting:dim",
-                            "lighting:darkness",
-                            "self:lighting:dim",
-                            "self:lighting:darkness"
-                        ]
-                    }
+                    "self:in-dim-light-or-darkness"
                 ],
                 "selector": "stealth",
                 "slug": "onyx-stealth-1",
@@ -130,7 +123,7 @@
                 "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Shadow Mantle"
             },
             {
-                "key": "Note",
+                "key": "FlatModifier",
                 "predicate": [
                     {
                         "not": "assimilator:suppressed"
@@ -141,11 +134,13 @@
                             3
                         ]
                     },
-                    "carapace:intact"
+                    "carapace:intact",
+                    "self:in-dim-light-or-darkness"
                 ],
-                "selector": "stealth",
-                "text": "In dim light or darkness you may Hide and Sneak without cover or concealment, and gain +1 circumstance to AC.",
-                "title": "Onyx (Depth 3)"
+                "selector": "ac",
+                "slug": "onyx-ac-3",
+                "type": "circumstance",
+                "value": 1
             },
             {
                 "allowDuplicate": false,

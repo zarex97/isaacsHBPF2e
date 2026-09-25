@@ -111,6 +111,12 @@ async function main() {
             "--remote-debugging-port=9222",
             `--user-data-dir=${PROFILE_DIR}`,
             "--window-size=1600,1000",
+            // A background or covered Chrome throttles its timers, and Foundry's startup waits on them: the world
+            // sat on a black screen until the window was forced to the front. The debug Chrome runs unattended,
+            // so it is told never to throttle.
+            "--disable-background-timer-throttling",
+            "--disable-backgrounding-occluded-windows",
+            "--disable-renderer-backgrounding",
             "--no-first-run",
             "--no-default-browser-check",
             FOUNDRY_URL,

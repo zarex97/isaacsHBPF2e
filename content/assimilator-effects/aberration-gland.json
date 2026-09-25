@@ -26,7 +26,13 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Assimilator"
         },
-        "rules": [],
+        "rules": [
+            {
+                "allowDuplicate": false,
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Aberrant Gland"
+            }
+        ],
         "start": {
             "initiative": null,
             "value": 0

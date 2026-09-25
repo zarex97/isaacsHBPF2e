@@ -21,7 +21,7 @@
         }
     },
     "folder": "Green",
-    "img": "icons/commodities/metal/ingot-shiny-steel.webp",
+    "img": "icons/commodities/metal/ingot-steel.webp",
     "name": "Substrate: Chromium",
     "system": {
         "badge": {

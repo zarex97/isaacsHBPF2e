@@ -1,7 +1,7 @@
 {
     "author": null,
     "command": "/** Open the Gullet for the selected token's Assimilator, or your own character's. */\nconst api = game.modules.get(\"isaacs-hb-pf2e\").api;\nconst actor = canvas.tokens.controlled[0]?.actor ?? game.user.character;\nif (!actor) ui.notifications.warn(\"Select an Assimilator's token, or assign yourself a character.\");\nelse api.assimilator.openGullet(actor);\n",
-    "img": "icons/consumables/food/meat-raw-red.webp",
+    "img": "icons/consumables/food/dried-meat-jerky-fish-red.webp",
     "name": "Assimilator: Open the Gullet",
     "scope": "global",
     "type": "script"

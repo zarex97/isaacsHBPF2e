@@ -75,6 +75,12 @@ export function describeActor(actor, prefix = "target") {
         if (hp.max > 0 && hp.value <= hp.max / 2) options.push(`${at}:hp-half-or-less`);
     }
 
+    // Light sensitivity is an ability on the stat block, not a trait, so pf2e emits nothing for it.
+    const LIGHT = ["light-blindness", "light-sensitivity", "light-sensitive"];
+    if (actor.items?.some((i) => LIGHT.includes(i.slug ?? game.pf2e?.system?.sluggify?.(i.name)))) {
+        options.push(`${at}:light-sensitive`);
+    }
+
     return options;
 }
 

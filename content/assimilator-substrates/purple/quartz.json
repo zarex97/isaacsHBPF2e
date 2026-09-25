@@ -106,7 +106,7 @@
                 "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Prism Counteract"
             },
             {
-                "itemType": "feat",
+                "itemType": "action",
                 "key": "ItemAlteration",
                 "mode": "upgrade",
                 "predicate": [

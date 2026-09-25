@@ -1,6 +1,6 @@
 {
     "folder": "Core",
-    "img": "icons/creatures/abilities/dragon-head-breath-green.webp",
+    "img": "icons/creatures/abilities/tail-swipe-green.webp",
     "name": "Alien Physiology",
     "system": {
         "actionType": {

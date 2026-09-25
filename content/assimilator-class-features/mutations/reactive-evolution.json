@@ -23,15 +23,9 @@
         "actions": {
             "value": null
         },
-        "category": "classfeature",
+        "category": "interaction",
         "description": {
             "value": "<p><strong>Trigger</strong> You take damage of a type.</p><hr /><p>Gain resistance to that type &mdash; <strong>2</strong> for 1 minute at Moonstone Depth 1 (once per encounter), <strong>5</strong> at Depth 2 (twice per encounter), <strong>8</strong> until the encounter ends at Depth 3 (two types at once), <strong>12</strong> at Depth 4 (unlimited, three types at once).</p>"
-        },
-        "level": {
-            "value": 1
-        },
-        "prerequisites": {
-            "value": []
         },
         "publication": {
             "license": "ORC",
@@ -50,5 +44,5 @@
             ]
         }
     },
-    "type": "feat"
+    "type": "action"
 }

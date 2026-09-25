@@ -1,6 +1,150 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "void",
+                                    "formula": "34",
+                                    "type": "damage"
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            }
+                        ],
+                        "statistic": "fortitude",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        "rider:target:hp-half-or-less",
+                        {
+                            "gte": [
+                                "self:level",
+                                17
+                            ]
+                        },
+                        {
+                            "lt": [
+                                "self:level",
+                                18
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "apply": {
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "void",
+                                    "formula": "36",
+                                    "type": "damage"
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            }
+                        ],
+                        "statistic": "fortitude",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        "rider:target:hp-half-or-less",
+                        {
+                            "gte": [
+                                "self:level",
+                                18
+                            ]
+                        },
+                        {
+                            "lt": [
+                                "self:level",
+                                19
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "apply": {
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "void",
+                                    "formula": "38",
+                                    "type": "damage"
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            }
+                        ],
+                        "statistic": "fortitude",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        "rider:target:hp-half-or-less",
+                        {
+                            "gte": [
+                                "self:level",
+                                19
+                            ]
+                        },
+                        {
+                            "lt": [
+                                "self:level",
+                                20
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "apply": {
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "void",
+                                    "formula": "40",
+                                    "type": "damage"
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            }
+                        ],
+                        "statistic": "fortitude",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        "rider:target:hp-half-or-less",
+                        {
+                            "gte": [
+                                "self:level",
+                                20
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    },
     "folder": "Mutations",
-    "img": "icons/commodities/gems/gem-rough-cushion-black.webp",
+    "img": "icons/commodities/gems/gem-faceted-cushion-teal-black.webp",
     "name": "Carrion Harvest",
     "system": {
         "actionType": {
@@ -9,7 +153,7 @@
         "actions": {
             "value": 2
         },
-        "category": "classfeature",
+        "category": "interaction",
         "description": {
             "value": "<p>A creature within 30 feet at or below half its Hit Points must succeed at a Fortitude save against your class DC or take <strong>void damage equal to twice your level</strong>.</p>"
         },
@@ -17,12 +161,6 @@
             "max": 1,
             "per": "day",
             "value": 1
-        },
-        "level": {
-            "value": 17
-        },
-        "prerequisites": {
-            "value": []
         },
         "publication": {
             "license": "ORC",
@@ -43,5 +181,5 @@
             ]
         }
     },
-    "type": "feat"
+    "type": "action"
 }

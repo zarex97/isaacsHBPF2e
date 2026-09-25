@@ -1,8 +1,10 @@
 import { Carapace } from "./assimilator/carapace.mjs";
 import { Engine as AssimilatorEngine } from "./assimilator/engine.mjs";
 import { GulletApp, registerGulletHooks } from "./assimilator/gullet.mjs";
+import { AssimilatorDamage } from "./assimilator/damage.mjs";
 import { Mutations } from "./assimilator/mutations.mjs";
 import { Red } from "./assimilator/red.mjs";
+import { AssimilatorRig } from "./assimilator/rig.mjs";
 import { Astral } from "./astral.mjs";
 import { CastPipeline } from "./cast-pipeline.mjs";
 import { Cosmo } from "./cosmo.mjs";
@@ -120,6 +122,7 @@ Hooks.once("init", () => {
     start("the Gullet", () => registerGulletHooks());
     start("Red's scripted riders", () => Red.registerHooks());
     start("the Mutations' clocks", () => Mutations.registerHooks());
+    start("the Mutations that answer damage", () => AssimilatorDamage.registerHooks());
     start("damaged this encounter", () => EncounterDamage.registerHooks());
     start("Regeneración's suppression", () => DamageBus.after("Regeneración's suppression", PRIORITY.regeneracion,
         (actor, params) => Regeneracion.onDamage(actor, params)));
@@ -177,6 +180,9 @@ Hooks.once("init", () => {
             openGullet: (actor) => GulletApp.open(actor),
             feed: (actor, slug, options) => AssimilatorEngine.feed(actor, slug, options),
             shed: (actor, slug, toDepth) => AssimilatorEngine.shed(actor, slug, toDepth),
+            rig: AssimilatorRig,
+            damage: AssimilatorDamage,
+            mend: (actor, itemId) => AssimilatorEngine.mend(actor, itemId),
         },
         open: () => new SkyTrackerApp().render(true),
         adjacentSigns,

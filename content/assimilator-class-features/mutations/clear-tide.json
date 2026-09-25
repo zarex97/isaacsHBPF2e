@@ -9,7 +9,7 @@
         "actions": {
             "value": null
         },
-        "category": "classfeature",
+        "category": "interaction",
         "description": {
             "value": "<p>Reduce the value of one of your conditions by 1.</p>"
         },
@@ -17,12 +17,6 @@
             "max": 1,
             "per": "day",
             "value": 1
-        },
-        "level": {
-            "value": 1
-        },
-        "prerequisites": {
-            "value": []
         },
         "publication": {
             "license": "ORC",
@@ -41,5 +35,5 @@
             ]
         }
     },
-    "type": "feat"
+    "type": "action"
 }
