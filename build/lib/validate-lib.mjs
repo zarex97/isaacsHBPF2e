@@ -1949,17 +1949,26 @@ const SOULBOUND_ADVANCEMENT = {
 /**
  * The Assimilator's advancement table (guide §3), grown phase by phase like the Soulbound's.
  *
- * Phase 1 is the chassis. Instinct, Assimilation, the Skins, the Growths, the Bonds, Symbiotic Reflex and
- * Apotheosis join when the engine that gives them meaning does — Phase 2, with the Red tracker.
+ * The whole of guide §3 since Phase 2. The Mass each feature grants is checked against §3.1's table by
+ * `build/test-assimilator.mjs`, which is the other half of the same promise.
  */
 const ASSIMILATOR_ADVANCEMENT = {
-    1: ["The Carapace"],
-    5: ["Carapace Expertise"],
-    7: ["Alertness", "Living Weapon"],
+    1: ["The Carapace", "Instinct", "Assimilation"],
+    3: ["Growth"],
+    4: ["First Bond"],
+    5: ["Second Skin", "Carapace Expertise"],
+    7: ["Symbiotic Reflex", "Alertness", "Living Weapon"],
+    8: ["Second Bond"],
     9: ["Assimilation Expertise", "Juggernaut", "Weapon Specialization"],
+    11: ["Third Skin"],
+    12: ["Third Bond"],
     13: ["Carapace Mastery", "Shell Mastery"],
+    14: ["Growth"],
     15: ["Alien Physiology"],
-    17: ["Assimilation Mastery", "Greater Weapon Specialization"],
+    16: ["Fourth Bond"],
+    17: ["Fourth Skin", "Assimilation Mastery", "Greater Weapon Specialization"],
+    19: ["Apotheosis"],
+    20: ["Fifth Bond"],
 };
 
 /**

@@ -1,0 +1,48 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "grants": {
+                    "gem": 1
+                }
+            }
+        }
+    },
+    "folder": "Core",
+    "img": "icons/creatures/abilities/dragon-scales-red.webp",
+    "name": "Growth (3rd)",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your Gem Mass increases by 1.</p>"
+        },
+        "level": {
+            "value": 3
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

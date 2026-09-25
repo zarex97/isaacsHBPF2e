@@ -1,0 +1,54 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "grants": {
+                    "gem": 3,
+                    "metal": 3
+                }
+            }
+        }
+    },
+    "folder": "Core",
+    "img": "icons/magic/light/explosion-star-large-orange.webp",
+    "name": "Apotheosis",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>The host and the thing stop being two things.</p><ul><li>Your <strong>Mass increases by 3</strong> in each track.</li><li>Once per day, as a <strong>free action</strong>, every bound Substrate manifests at your <strong>Depth cap</strong> for 1 minute, regardless of the Mass you actually paid.</li><li>Your Carapace can no longer be broken by physical damage alone; only an effect that would destroy an object outright can do it.</li></ul>"
+        },
+        "level": {
+            "value": 19
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Manifest the Apotheosis"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

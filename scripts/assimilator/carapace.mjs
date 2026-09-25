@@ -25,6 +25,7 @@ import { MODULE_ID } from "../sky/signs.mjs";
 
 const PLATE = "living-plate";
 const ARMED = "effect-carapace-block";
+const REFLEX = "effect-symbiotic-reflex";
 const BROKEN = "effect-carapace-broken";
 const EFFECTS = "isaacs-hb-pf2e.assimilator-effects";
 /** Guide §4.3: the trigger is *physical* damage. */
@@ -104,21 +105,36 @@ export const Carapace = {
         });
     },
 
-    /** Before-stage: when a block is armed and the damage is physical, take the plate's Hardness off the delta. */
+    /**
+     * Before-stage: take an armed Carapace Block or Symbiotic Reflex off the damage.
+     *
+     * Carapace Block answers physical damage and costs the plate what it turns. Symbiotic Reflex (a) answers
+     * any damage from a creature and costs nothing: resistance equal to twice the highest Depth. Guide §4.7:
+     * the two *"do not stack against the same damage"* — so with both armed only the larger applies, and both
+     * are spent, since both reactions were used on it.
+     */
     armBlock(actor, params) {
-        if (!physical(params?.damage)) return undefined;
-        const armed = actor.itemTypes?.effect?.find((e) => e.slug === ARMED);
+        if (!params?.damage || typeof params.damage === "number") return undefined;
+        const effects = actor.itemTypes?.effect ?? [];
         const plate = livingPlate(actor);
-        if (!armed || !plate) return undefined;
+        const block = physical(params.damage) && plate ? effects.find((e) => e.slug === ARMED) : null;
+        const reflex = params.item?.actor && params.item.actor !== actor ? effects.find((e) => e.slug === REFLEX) : null;
+        if (!block && !reflex) return undefined;
 
+        const highest = actor.flags?.[MODULE_ID]?.assimilator?.derived?.highestDepth ?? 0;
         const shadowed = Object.prototype.hasOwnProperty.call(actor, "calculateHealthDelta");
         const original = actor.calculateHealthDelta;
-        const state = { absorbed: 0, plateId: plate.id, armedId: armed.id };
+        const state = { absorbed: 0, plateId: plate?.id, spend: [block?.id, reflex?.id].filter(Boolean) };
         pending.set(actor, state);
         actor.calculateHealthDelta = function (args) {
-            const absorbed = blockAmount(args.delta, plate.hardness, plate.hitPoints.value);
-            state.absorbed = absorbed;
-            return original.call(this, { ...args, delta: args.delta - absorbed });
+            const blocked = block ? blockAmount(args.delta, plate.hardness, plate.hitPoints.value) : 0;
+            const resisted = reflex && args.delta > 0 ? Math.min(args.delta, 2 * highest) : 0;
+            const taken = Math.max(blocked, resisted);
+            // The plate pays only when it was the Block that turned the blow.
+            state.absorbed = blocked > 0 && blocked >= resisted ? blocked : 0;
+            state.reduced = taken;
+            state.by = taken === 0 ? null : state.absorbed ? "Carapace Block" : "Symbiotic Reflex";
+            return original.call(this, { ...args, delta: args.delta - taken });
         };
         return () => {
             if (shadowed) actor.calculateHealthDelta = original;
@@ -133,13 +149,24 @@ export const Carapace = {
         pending.delete(actor);
 
         const live = liveActor(actor, params);
-        const plate = live.items.get(state.plateId);
-        const armed = live.items.get(state.armedId);
-        if (armed) await armed.delete();
+        const spent = state.spend.map((id) => live.items.get(id)).filter(Boolean).map((e) => e.id);
+        if (spent.length) await live.deleteEmbeddedDocuments("Item", spent);
+        if (state.by === "Symbiotic Reflex") {
+            await ChatMessage.create({
+                speaker: ChatMessage.getSpeaker({ actor: live }),
+                content: `<p><strong>Symbiotic Reflex</strong>: the thing wearing ${live.name} resists `
+                    + `<strong>${state.reduced}</strong> of that damage.</p>`,
+            });
+        }
+        const plate = state.plateId ? live.items.get(state.plateId) : null;
         if (!plate || state.absorbed <= 0) return;
 
         const before = plate.hitPoints.value;
-        const after = Math.max(0, before - state.absorbed);
+        // Apotheosis: "can no longer be broken by physical damage alone". A block is the only physical blow the
+        // plate takes, so it stops one short of its Broken Threshold.
+        const unbreakable = live.itemTypes.feat.some((f) => f.slug === "apotheosis");
+        const floor = unbreakable ? Math.min(before, plate.hitPoints.brokenThreshold + 1) : 0;
+        const after = Math.max(floor, before - state.absorbed);
         await plate.update({ "system.hp.value": after });
         await ChatMessage.create({
             speaker: ChatMessage.getSpeaker({ actor: live }),

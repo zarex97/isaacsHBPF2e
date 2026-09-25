@@ -1,0 +1,39 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/perception/eye-ringed-glow-angry-red.webp",
+    "name": "Instinct",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your <strong>Instinct</strong> is the colour you have invested the most total Mass in, counting both tracks. It grants that colour's <strong>Instinct clause</strong>, which applies to <strong>every Mutation you have</strong>, including Mutations of other colours. Ties are broken by you, freely, at daily preparations.</p><p>Instinct is recalculated at daily preparations and costs nothing to change. It also sets <strong>your Instinct's damage type</strong>: Red fire, Gold force, Orange electricity, Blue cold, Purple mental, Green poison, Black void, White vitality, Gray bludgeoning.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

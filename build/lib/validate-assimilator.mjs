@@ -8,20 +8,23 @@ import { rel } from "./pack.mjs";
  * Substrate is, per `Docs/homebrewing/carapace-automation-programme.md` §9, so the first Substrate is
  * checked rather than the thirty-sixth.
  *
- * **The vocabulary they hold content to.** Class-derived state is `assimilator:`; the plate is
- * `carapace:`, because "the Carapace" now names only the plate (guide v1.1).
+ * **The vocabulary they hold content to.** A bound Substrate is an effect, `substrate-<slug>`, whose counter
+ * badge is its effective Depth; pf2e emits `self:effect:substrate-<slug>:<n>` for it, so a Depth is read with
+ * pf2e's own numeric predicates. The plate's state is `carapace:`, because "the Carapace" now names only the
+ * plate (guide v1.1).
  *
- *     assimilator:substrate:<slug>          bound at all
- *     assimilator:substrate:<slug>:<n>      one option per Depth reached, so predicates never need `gte`
- *     carapace:intact                       present while the Carapace is not broken
+ *     { gte: ["self:effect:substrate-<slug>", n] }   at Depth n or deeper
+ *     { lt:  ["self:effect:substrate-<slug>", n] }   shallower than n — how one tier stops the one below
+ *     carapace:intact                                 present while the Carapace is not broken
  *
+ * A rule with no Depth term at all is a Depth 1 rule: the effect exists only once the Substrate is bound.
  * A Substrate item declares itself with `flags["isaacs-hb-pf2e"].assimilator.substrate` —
  * `{ slug, colour, kind: "gem" | "metal" }` — and a Bond with `.bond` — `{ substrates: [a, b] }`.
  */
 
 const FLAG = "isaacs-hb-pf2e";
 export const INTACT = "carapace:intact";
-const DEPTH_OPTION = /^assimilator:substrate:([a-z0-9-]+):(\d+)$/;
+const DEPTH_OPTION = /^self:effect:substrate-([a-z0-9-]+)$/;
 
 /** Rule keys whose value is damage, and so must say which Substrate at which Depth produced it. */
 const PROVENANCE_KEYS = new Set(["DamageDice", "FlatModifier"]);
@@ -33,7 +36,7 @@ const PROVENANCE_KEYS = new Set(["DamageDice", "FlatModifier"]);
  * names; they are the same shape and join this list when their items exist.
  */
 const NON_STACKING = {
-    "two-instincts": "assimilator:substrate:electrum:3",
+    "two-instincts": "self:effect:instinct-alloyed",
     "apex-predator": "assimilator:instinct:gold",
 };
 
@@ -49,10 +52,24 @@ function optionsIn(predicate, out = []) {
     return out;
 }
 
-/** The positive (un-negated) options of a predicate — the ones a rule actually needs present. */
+/** The positive (un-negated) terms of a predicate — the ones a rule actually needs to hold. */
 function required(predicate) {
     if (!Array.isArray(predicate)) return [];
-    return predicate.flatMap((term) => (typeof term === "string" ? [term] : term?.and ? required(term.and) : []));
+    return predicate.flatMap((term) => (term?.and ? required(term.and) : [term]));
+}
+
+/** Every numeric Depth comparison in a predicate: `{ op, slug, n }`, wherever it sits. */
+function depthTerms(predicate, out = []) {
+    if (Array.isArray(predicate)) for (const p of predicate) depthTerms(p, out);
+    else if (predicate && typeof predicate === "object") {
+        for (const op of ["gte", "gt", "lt", "lte", "eq"]) {
+            const pair = predicate[op];
+            const match = Array.isArray(pair) ? DEPTH_OPTION.exec(pair[0]) : null;
+            if (match) out.push({ op, slug: match[1], n: Number(pair[1]) });
+        }
+        for (const [k, v] of Object.entries(predicate)) if (!["gte", "gt", "lt", "lte", "eq"].includes(k)) depthTerms(v, out);
+    }
+    return out;
 }
 
 function packOf(packs, name) {
@@ -96,38 +113,38 @@ function validateSubstrate(doc, slug, where, errors) {
     const reached = new Set();
     (doc.system?.rules ?? []).forEach((rule, i) => {
         const at = `${where} rule ${i} (${rule.key})`;
-        for (const option of optionsIn(rule.predicate)) {
-            const match = DEPTH_OPTION.exec(option);
-            if (!match) continue;
-            if (match[1] !== slug) {
-                errors.push(`${at}: predicates on another Substrate's Depth ("${option}") — a Substrate reads only its own`);
+        for (const term of depthTerms(rule.predicate)) {
+            if (term.slug !== slug) {
+                errors.push(`${at}: predicates on another Substrate's Depth ("substrate-${term.slug}") — a Substrate reads only its own`);
                 continue;
             }
-            const depth = Number(match[2]);
             // *Fifth Depth* (guide §8.10) is the feat's to implement — it doubles the Depth 4 rider and scales
             // the numbers — so no Substrate item carries a rung of its own above 4.
-            if (depth < 1 || depth > 4) errors.push(`${at}: names Depth ${depth}, which does not exist (1–4)`);
+            if (term.n < 1 || term.n > (term.op === "lt" ? 5 : 4)) {
+                errors.push(`${at}: names Depth ${term.n}, which does not exist (1–4)`);
+            }
         }
 
-        const needed = required(rule.predicate)
-            .map((o) => DEPTH_OPTION.exec(o))
-            .filter((m) => m && m[1] === slug)
-            .map((m) => Number(m[2]))
-            .filter((d) => d >= 1 && d <= 4);
-        const top = Math.max(0, ...needed);
-        if (top) reached.add(top);
+        // The Depth a rule needs: its top-level `gte`, or 1 when it names none.
+        const needed = depthTerms(required(rule.predicate).filter((t) => typeof t === "object" && t.gte))
+            .filter((t) => t.slug === slug && t.op === "gte" && t.n >= 1 && t.n <= 4)
+            .map((t) => t.n);
+        const top = needed.length ? Math.max(...needed) : 1;
+        reached.add(top);
         if (top >= 3 && !required(rule.predicate).includes(INTACT)) {
             errors.push(`${at}: needs Depth ${top} but not "${INTACT}", so a broken Carapace would keep it`);
         }
 
-        if (PROVENANCE_KEYS.has(rule.key)) {
+        // Only damage needs to say where it came from; Iron's Athletics bonus is not an Instinct's business.
+        const selectors = [rule.selector].flat().map(String);
+        if (PROVENANCE_KEYS.has(rule.key) && selectors.some((sel) => sel.endsWith("damage"))) {
             const tag = rule.flags?.[FLAG]?.assimilator;
-            if (rule.slug !== `substrate-${slug}`) {
-                errors.push(`${at}: slug must be "substrate-${slug}" so an Instinct can find it in the modifier list`);
+            if (rule.slug !== `substrate-${slug}` && !String(rule.slug).startsWith(`substrate-${slug}-`)) {
+                errors.push(`${at}: slug must be "substrate-${slug}" or begin "substrate-${slug}-" so an Instinct can find it`);
             }
             if (tag?.substrate !== slug || !Number.isInteger(tag?.depth)) {
                 errors.push(`${at}: must carry flags.${FLAG}.assimilator = { substrate: "${slug}", depth: <n> }`);
-            } else if (top && tag.depth !== top) {
+            } else if (tag.depth !== top) {
                 errors.push(`${at}: tagged Depth ${tag.depth} but predicated on Depth ${top}`);
             }
         }
@@ -135,7 +152,7 @@ function validateSubstrate(doc, slug, where, errors) {
 
     for (const depth of [1, 2, 3, 4]) {
         if (!reached.has(depth)) {
-            errors.push(`${where}: no rule requires "assimilator:substrate:${slug}:${depth}" — Depth ${depth} would do nothing`);
+            errors.push(`${where}: no rule needs Depth ${depth} — it would do nothing`);
         }
     }
 }

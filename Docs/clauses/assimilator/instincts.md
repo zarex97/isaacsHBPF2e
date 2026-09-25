@@ -54,8 +54,8 @@ the class tracker's (`A-43`–`A-46`). This file is what each one does once it i
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| I-1a | Red | When a Mutation deals damage, it deals **+1 damage per Depth** of its Substrate. |  | ☐ |  |
-| I-1b | Red | Against a creature that has already lost Hit Points this encounter, **double** that bonus. |  | ☐ |  |
+| I-1a | Red | When a Mutation deals damage, it deals **+1 damage per Depth** of its Substrate. | `test-assimilator` pins it | ⚠️ | Live: the breakdown reads **Red Instinct +1** with Iron at 1, **+4** with Ruby 2 and Iron 2 (Ruby at Depth 1 adds no damage and does not count), **+7** with Ruby 3, Iron 1, Garnet 3. **The gap:** the bonus is the sum of the Depths of every Mutation that *can* add damage to the Strike, so Garnet's 3 counted against a creature its die did not fire on. Exact per-roll provenance would need a damage-roll hook pf2e does not offer |
+| I-1b | Red | Against a creature that has already lost Hit Points this encounter, **double** that bonus. |  | ✅ | Live, the same Strike at the same target twice: **+1** before it lost Hit Points in the encounter, **+1 more** — *Red Instinct (already bloodied)* — after. **Fixed while driving:** the mark was written as `damaged-this-encounter`, which a target's options never carry (pf2e keeps only `self:` keys), and it also caught creatures outside the fight; it is now `self:damaged-this-encounter` and only on combatants |
 | I-2a | Gold | At daily preparations choose one bound Substrate; it counts as **one Depth higher** for its numeric effects, never above your Depth cap. |  | ☐ |  |
 | I-2b | Gold | When you critically hit, you may apply that Substrate's **Depth 4 rider** even if it isn't at Depth 4. |  | ☐ |  |
 | I-3a | Orange | The first time each round you Stride, Step or use a reaction, your next Mutation this round deals **+1d4** of its own damage type. |  | ☐ |  |
@@ -80,9 +80,9 @@ the class tracker's (`A-43`–`A-46`). This file is what each one does once it i
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 20 |
-| ✅ | 0 |
-| ⚠️ | 0 |
+| ☐ | 18 |
+| ✅ | 1 |
+| ⚠️ | 1 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 0 |

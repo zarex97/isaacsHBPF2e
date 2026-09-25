@@ -1,9 +1,13 @@
 import { Carapace } from "./assimilator/carapace.mjs";
+import { Engine as AssimilatorEngine } from "./assimilator/engine.mjs";
+import { GulletApp, registerGulletHooks } from "./assimilator/gullet.mjs";
+import { Red } from "./assimilator/red.mjs";
 import { Astral } from "./astral.mjs";
 import { CastPipeline } from "./cast-pipeline.mjs";
 import { Cosmo } from "./cosmo.mjs";
 import { Deaths } from "./deaths.mjs";
 import { DamageBus, PRIORITY } from "./lib/damage-bus.mjs";
+import { EncounterDamage } from "./lib/encounter-damage.mjs";
 import { Duplicate } from "./economy/duplicate.mjs";
 import { FreeCast } from "./economy/free-cast.mjs";
 import { Recharge } from "./economy/recharge.mjs";
@@ -111,6 +115,10 @@ Hooks.once("init", () => {
     start("the wound that will not close", () => DamageBus.after("the wound that will not close", PRIORITY.wound,
         async (actor, _params, before) => { if (game.user.isGM) await Wound.refuse(actor, before); }));
     start("the Carapace", () => Carapace.registerHooks());
+    start("the Assimilator engine", () => AssimilatorEngine.registerHooks());
+    start("the Gullet", () => registerGulletHooks());
+    start("Red's scripted riders", () => Red.registerHooks());
+    start("damaged this encounter", () => EncounterDamage.registerHooks());
     start("Regeneración's suppression", () => DamageBus.after("Regeneración's suppression", PRIORITY.regeneracion,
         (actor, params) => Regeneracion.onDamage(actor, params)));
     start("the sky tracker window", () => SkyTrackerApp.registerHooks());
@@ -162,6 +170,12 @@ Hooks.once("init", () => {
         rig: SoulboundRig,
         damageBus: DamageBus,
         carapace: Carapace,
+        assimilator: {
+            engine: AssimilatorEngine,
+            openGullet: (actor) => GulletApp.open(actor),
+            feed: (actor, slug, options) => AssimilatorEngine.feed(actor, slug, options),
+            shed: (actor, slug, toDepth) => AssimilatorEngine.shed(actor, slug, toDepth),
+        },
         open: () => new SkyTrackerApp().render(true),
         adjacentSigns,
     };

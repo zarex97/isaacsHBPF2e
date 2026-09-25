@@ -1,0 +1,103 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "bond": {
+                    "substrates": [
+                        "ruby",
+                        "iron"
+                    ]
+                }
+            }
+        }
+    },
+    "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
+    "name": "Molten Carapace",
+    "system": {
+        "description": {
+            "value": "<p><strong>Ruby + Iron.</strong> Your Carapace's Hardness increases by 5, and a creature that hits you with a melee unarmed or reach attack takes fire damage equal to half your level.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 4
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "itemType": "armor",
+                "key": "ItemAlteration",
+                "mode": "add",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-ruby",
+                            2
+                        ]
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-iron",
+                            2
+                        ]
+                    },
+                    "item:slug:living-plate"
+                ],
+                "property": "hardness",
+                "value": 5
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-ruby",
+                            2
+                        ]
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-iron",
+                            2
+                        ]
+                    }
+                ],
+                "selector": "ac",
+                "text": "A creature that hits you with a melee unarmed or reach attack takes fire damage equal to half your level.",
+                "title": "Molten Carapace"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-bond"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

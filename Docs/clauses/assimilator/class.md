@@ -93,35 +93,35 @@ this file.
 | A-31 | §4.3 | *Effect:* reduce the damage by your Carapace's Hardness. | `test-assimilator` pins it | ✅ | Live at 5th, the same 20 bludgeoning twice: **unarmed → 20 taken**, **armed → 18 taken**. The block is taken on the damage bus off the damage *after* IWR, by shadowing `calculateHealthDelta` for one application |
 | A-32 | §4.3 | The Carapace takes that much damage. | `test-assimilator` pins it | ✅ | Live: the plate went **35 → 33** — it takes what it blocked, not what got past it (pf2e's Shield Block does the latter, which is why the plate is not a shield). The armed effect was spent and a card names the amount |
 | A-33 | §4.3 | **While broken**, you lose Living Plate's rune benefits |  | ⚠️ | Live: broken, the plate's potency is overridden to **0** and AC fell **20 → 19**; repaired, **20** again. Resilient is overridden the same way. **Property runes are not removed** — pf2e has no alteration for them |
-| A-34 | §4.3 | **every Mutation at Depth 3 or higher switches off** until the Carapace is repaired |  | ⚠️ | Live: at **16/35** (threshold 17) *Effect: Carapace Broken* went on and **`carapace:intact` disappeared**; repaired to 35 the effect came off and the option returned. No Mutation exists yet to be switched off, and every Depth 3–4 rule is held by the validator to require the option |
+| A-34 | §4.3 | **every Mutation at Depth 3 or higher switches off** until the Carapace is repaired |  | ✅ | Live at 11th with Ruby at Depth 3: breaking the plate switched **the whole Mutation** off — the Strike lost its 1d6 fire **and** its versatile-fire trait, Ruby's resistance cut stopped (**20 fire → 10** taken instead of 15), and Red's bonus fell **+4 → +1** as Ruby left the sum. Repaired, all four came back. **Fixed while driving:** only Ruby's Depth 3–4 rules switched off at first, leaving its Depth 1–2 rules running; the guide says *every Mutation*, so every rule of a Substrate now holds only while it is below Depth 3 or the plate is whole |
 | A-35 | §4.3 | Repair is the Repair activity against its own Hardness, or one hour of Feeding it any Substrate you don't bind. |  | ☐ |  |
 
 ## Assimilation — Mass, Feed and Shed (guide §4.4, §3)
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| A-36 | §4.4 | You gain **Mass** in two separate pools (§3.1) and the two activities that manage them. |  | ☐ |  |
-| A-37 | §3.1 | A Substrate at **Depth N costs N Mass**. |  | ☐ |  |
-| A-38a | §4.4 | **Feed** ◆◆◆◆ *(10 minutes)* — Consume one Substrate you are holding. |  | ☐ |  |
-| A-38b | §4.4 | If you already hold it, its **Depth increases by 1**; otherwise it enters your Lattice at **Depth 1**. |  | ☐ |  |
-| A-38c | §4.4 | Either way it costs Mass equal to its new Depth, and the physical Substrate is destroyed. |  | ☐ |  |
-| A-39a | §4.4 | **Shed** — During your daily preparations only. |  | ☐ |  |
-| A-39b | §4.4 | Remove any Substrate, or reduce any Substrate's Depth, freeing that Mass. |  | ☐ |  |
-| A-39c | §4.4 | What you shed is destroyed, not recovered. |  | ☐ |  |
-| A-40a | §4.4 | **Depth 1–2 takes an ordinary specimen** |  | ☐ |  |
-| A-40b | §4.4 | **Depth 3–4 takes a quickened specimen** |  | ☐ |  |
-| A-41 | §4.4 | Every time your Mass increases, you gain **one free Substrate** of any kind you qualify for. |  | ☐ |  |
-| A-42a | §3 | **Growth** (Mass +1 Gem) |  | ☐ |  |
-| A-42b | §3 | **Second Bond** (Mass +2/+2) |  | ☐ |  |
-| A-42c | §3 | **Growth** (Mass +2/+2) |  | ☐ |  |
-| A-42d | §3 | **Fifth Bond** (Mass +2/+2) |  | ☐ |  |
+| A-36 | §4.4 | You gain **Mass** in two separate pools (§3.1) and the two activities that manage them. | `test-assimilator` pins it | ✅ | Live at 1st: **1 Gem / 1 Metal Mass**, and *Feed* and *Shed* granted |
+| A-37 | §3.1 | A Substrate at **Depth N costs N Mass**. | `test-assimilator` pins it | ✅ | Live: spending read **Gem 3/3, Metal 2/2** at 5th after Ruby 2 + Garnet 1 and Iron 2, and **Gem 7/14** at 19th — each Substrate costing its Depth |
+| A-38a | §4.4 | **Feed** ◆◆◆◆ *(10 minutes)* — Consume one Substrate you are holding. | `test-assimilator` pins it | ✅ | Live: feeding from a looted **Ruby** took the stack **2 → 1**. Refused mid-encounter: *"Feeding takes 10 minutes; it cannot be done in an encounter."* |
+| A-38b | §4.4 | If you already hold it, its **Depth increases by 1**; otherwise it enters your Lattice at **Depth 1**. | `test-assimilator` pins it | ✅ | Live: Ruby entered at **Depth 1**, then **1 → 2 → 3**; Garnet **1 → 2 → 3 → 4**, each Feed one step. The badge on *Substrate: Ruby* shows it |
+| A-38c | §4.4 | Either way it costs Mass equal to its new Depth, and the physical Substrate is destroyed. | `test-assimilator` pins it | ✅ | Live at 5th: feeding Garnet to Depth 2 with Gem 3/3 spent was **refused** — *"Not enough gem Mass: 3 of 3 spent, and Depth 2 costs one more."* The specimen fed is destroyed (the Ruby stack fell by one) |
+| A-39a | §4.4 | **Shed** — During your daily preparations only. |  | ✅ | Live: Shed was **refused** outside preparations; after **Rest for the Night** (pf2e's own macro) preparations were open and Shed worked |
+| A-39b | §4.4 | Remove any Substrate, or reduce any Substrate's Depth, freeing that Mass. |  | ✅ | Live: Iron shed **2 → 1** during preparations, freeing one Metal Mass that a later Feed spent |
+| A-39c | §4.4 | What you shed is destroyed, not recovered. |  | ✅ | Live: nothing came back to the inventory when Iron was shed |
+| A-40a | §4.4 | **Depth 1–2 takes an ordinary specimen** | `test-assimilator` pins it | ✅ | Live: an ordinary **Ruby** (a treasure by that name) fed Depth 1 and 2 |
+| A-40b | §4.4 | **Depth 3–4 takes a quickened specimen** | `test-assimilator` pins it | ✅ | Live at 11th: the ordinary Ruby was **refused** for Depth 3 — *"Depth 3 takes a quickened specimen"* — and a GM-marked *Heart-Ruby of the Breach* was accepted |
+| A-41 | §4.4 | Every time your Mass increases, you gain **one free Substrate** of any kind you qualify for. | `test-assimilator` pins it | ✅ | Live: **1** Vein grant at 1st (spent on Iron), **2** at 5th (Growth and Second Skin), **4** at 19th; *"The Vein has nothing left to give"* when spent. One per feature that raises Mass, counted from what the character owns. *Ruling to confirm:* the 1st-level pools count as the first increase, so a new character has one free Substrate |
+| A-42a | §3 | **Growth** (Mass +1 Gem) | `test-assimilator` pins it | ✅ | Live: **3 Gem / 2 Metal** at 5th includes the 3rd-level Growth; §3.1's table is pinned level by level against the features' own flags |
+| A-42b | §3 | **Second Bond** (Mass +2/+2) | `test-assimilator` pins it | ✅ | Live at 11th: **7 Gem / 5 Metal**, which includes the 8th-level +2/+2 |
+| A-42c | §3 | **Growth** (Mass +2/+2) | `test-assimilator` pins it | ✅ | Live at 19th: **14 Gem / 11 Metal** — 11/8 through 17th plus Apotheosis's 3/3 |
+| A-42d | §3 | **Fifth Bond** (Mass +2/+2) | `test-assimilator` pins it | ✅ | Pinned statically: 13 Gem / 10 Metal at 20th without Apotheosis, 16/13 with it |
 
 ## Instinct (guide §4.5)
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| A-43 | §4.5 | Your **Instinct** is the colour you have invested the most total Mass in, counting both tracks. |  | ☐ |  |
-| A-44 | §4.5 | It grants that colour's **Instinct clause** (§5), which applies to **every Mutation you have**, including Mutations of other colours. |  | ☐ |  |
+| A-43 | §4.5 | Your **Instinct** is the colour you have invested the most total Mass in, counting both tracks. | `test-assimilator` pins it | ✅ | Live: feeding the first Ruby put **Instinct: Red** on the sheet by itself, and `assimilator:instinct:red` in the roll options |
+| A-44 | §4.5 | It grants that colour's **Instinct clause** (§5), which applies to **every Mutation you have**, including Mutations of other colours. |  | ⚠️ | Live: Red's clause applied to Ruby, Iron and Garnet alike. Only Red Substrates exist yet, so a Mutation of **another** colour under a Red Instinct is untested |
 | A-45 | §4.5 | Ties are broken by you, freely, at daily preparations. |  | ☐ |  |
 | A-46 | §4.5 | Instinct is recalculated at daily preparations and costs nothing to change |  | ☐ |  |
 
@@ -129,28 +129,28 @@ this file.
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| A-47 | §7 | You gain Bond slots at **4th, 8th, 12th, 16th and 20th** — five in total. |  | ☐ |  |
-| A-48 | §7 | A Bond requires **both** its Substrates at **Depth 2 or higher**. |  | ☐ |  |
-| A-49 | §7 | Dropping either below Depth 2 suppresses the Bond until you feed it back; it is not lost. |  | ☐ |  |
-| A-50 | §7 | You choose a Bond when you gain the slot and may change it at daily preparations, provided the new Bond's requirements are met. |  | ☐ |  |
+| A-47 | §7 | You gain Bond slots at **4th, 8th, 12th, 16th and 20th** — five in total. | `test-assimilator` pins it | ✅ | Live: **1** Bond slot at 5th (First Bond, 4th), **2** at 11th, **4** at 19th |
+| A-48 | §7 | A Bond requires **both** its Substrates at **Depth 2 or higher**. |  | ✅ | Live: *Conduction* was **refused** — *"Conduction needs copper at Depth 2 or higher"* — and *Molten Carapace* (Ruby 2, Iron 2) slotted |
+| A-49 | §7 | Dropping either below Depth 2 suppresses the Bond until you feed it back; it is not lost. |  | ✅ | Live: shedding Iron to 1 kept *Molten Carapace* slotted but switched it off — the plate's Hardness **7 → 2**; feeding Iron back to 2 brought it back to **7** |
+| A-50 | §7 | You choose a Bond when you gain the slot and may change it at daily preparations, provided the new Bond's requirements are met. |  | ✅ | Live: emptying the filled slot outside preparations was **refused** — *"A Bond changes only at daily preparations."* The Gullet locks a filled slot's picker until then |
 
 ## The Skins and the Depth cap (guide §4.6, §6)
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| A-51a | §3 | **Second Skin** (Depth cap 2, Mass +1/+1) |  | ☐ |  |
-| A-51b | §3 | **Third Skin** (Depth cap 3, Mass +2/+1) |  | ☐ |  |
-| A-51c | §3 | **Fourth Skin** (Depth cap 4, Mass +2/+1) |  | ☐ |  |
-| A-52 | §6 | **Depth caps are the gate**, not level — a Substrate's Depth 4 entry is unreachable before 17th because the cap is |  | ☐ |  |
+| A-51a | §3 | **Second Skin** (Depth cap 2, Mass +1/+1) | `test-assimilator` pins it | ✅ | Live: Depth cap **2 at 5th** |
+| A-51b | §3 | **Third Skin** (Depth cap 3, Mass +2/+1) | `test-assimilator` pins it | ✅ | Live: Depth cap **3 at 11th** |
+| A-51c | §3 | **Fourth Skin** (Depth cap 4, Mass +2/+1) | `test-assimilator` pins it | ✅ | Live: Depth cap **4 at 19th** |
+| A-52 | §6 | **Depth caps are the gate**, not level — a Substrate's Depth 4 entry is unreachable before 17th because the cap is | `test-assimilator` pins it | ✅ | Live at 5th: Ruby to Depth 3 **refused** — *"your Depth cap is 2"* — however much Mass was free |
 
 ## Symbiotic Reflex (guide §4.7)
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| A-53 | §4.7 | 🜲 **Reaction** — *Trigger:* a creature you can see damages you. |  | ☐ |  |
-| A-54a | §4.7 | **(a)** gain resistance equal to **twice your highest Depth** against that damage |  | ☐ |  |
-| A-54b | §4.7 | **(b)** if the triggering creature is within your reach, make a **Carapace Strike** against it. |  | ☐ |  |
-| A-55 | §4.7 | Once per round, and it does not stack with Carapace Block against the same damage. |  | ☐ |  |
+| A-53 | §4.7 | 🜲 **Reaction** — *Trigger:* a creature you can see damages you. |  | ✅ | Live: armed, damage from the dummy's **Claw** was reduced; a hit with no source creature is left alone. The reaction carries `frequency 1/round` |
+| A-54a | §4.7 | **(a)** gain resistance equal to **twice your highest Depth** against that damage |  | ✅ | Live at 11th, highest Depth 3: the same 20 slashing from the Claw took **20** unarmed and **14** armed — resistance **6**, twice the highest Depth — and the reflex was spent |
+| A-54b | §4.7 | **(b)** if the triggering creature is within your reach, make a **Carapace Strike** against it. |  | ⚠️ | Text: choice (b) is a Strike the player makes; nothing arms it |
+| A-55 | §4.7 | Once per round, and it does not stack with Carapace Block against the same damage. |  | ✅ | Live: with Symbiotic Reflex (6) and Carapace Block (Hardness 2) **both** armed, 20 slashing took **14** — only the larger applied — the plate lost **0**, and **both** were spent |
 
 ## Alien Physiology (guide §4.8)
 
@@ -166,9 +166,9 @@ this file.
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| A-61 | §4.9 | Your **Mass increases by 3** in each track. |  | ☐ |  |
-| A-62 | §4.9 | Once per day, as a **free action**, every bound Substrate manifests at your **Depth cap** for 1 minute, regardless of the Mass you actually paid. |  | ☐ |  |
-| A-63 | §4.9 | Your Carapace can no longer be broken by physical damage alone; only an effect that would destroy an object outright can do it. |  | ☐ |  |
+| A-61 | §4.9 | Your **Mass increases by 3** in each track. | `test-assimilator` pins it | ✅ | Live at 19th: Mass **14 / 11** where 17th's is 11 / 8 |
+| A-62 | §4.9 | Once per day, as a **free action**, every bound Substrate manifests at your **Depth cap** for 1 minute, regardless of the Mass you actually paid. |  | ✅ | Live: *Manifest the Apotheosis* put every Substrate's badge at **4** (paid Ruby 3, Iron 2, Garnet 3) and the critical carried Depth 4 — Iron's extra die (**2d8**) and Ruby's **2d10 persistent fire**; ending the effect put them back to **3 / 2 / 3** |
+| A-63 | §4.9 | Your Carapace can no longer be broken by physical damage alone; only an effect that would destroy an object outright can do it. |  | ✅ | Live at 19th: a plate at **54** (Broken Threshold 52) blocked 7 and stopped at **53**, not broken; the same block without Apotheosis breaks it (A-34's drive) |
 
 ---
 
@@ -176,9 +176,9 @@ this file.
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 39 |
-| ✅ | 29 |
-| ⚠️ | 8 |
+| ☐ | 7 |
+| ✅ | 60 |
+| ⚠️ | 9 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 0 |

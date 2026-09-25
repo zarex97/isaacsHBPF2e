@@ -41,14 +41,14 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| RU-1a | Ruby D1 | Your Carapace Strikes may deal **fire** instead of their normal damage type. |  | ☐ |  |
-| RU-1b | Ruby D1 | You shed dim light in a 10-foot radius and cannot suppress it. |  | ☐ |  |
-| RU-2a | Ruby D2 | **+1d4 fire.** |  | ☐ |  |
-| RU-2b | Ruby D2 | On a critical hit, **1d4 persistent fire**. |  | ☐ |  |
-| RU-3a | Ruby D3 | **+1d6 fire.** |  | ☐ |  |
-| RU-3b | Ruby D3 | Fire damage you deal treats fire resistance as **5 lower**. |  | ☐ |  |
-| RU-4a | Ruby D4 | **+1d6 fire.** |  | ☐ |  |
-| RU-4b | Ruby D4 | On a critical hit, **2d10 persistent fire**, and the target's space burns — a creature ending its turn there takes 1d6 fire. |  | ☐ |  |
+| RU-1a | Ruby D1 | Your Carapace Strikes may deal **fire** instead of their normal damage type. |  | ✅ | Live: the Carapace Strike gained **versatile-fire** at Depth 1 |
+| RU-1b | Ruby D1 | You shed dim light in a 10-foot radius and cannot suppress it. |  | ✅ | Live: the token sheds **10-foot dim** light |
+| RU-2a | Ruby D2 | **+1d4 fire.** | `test-assimilator` pins it | ✅ | Live at Depth 2: **`+ 1d4 fire`**, labelled *Ruby +1d4 Fire* |
+| RU-2b | Ruby D2 | On a critical hit, **1d4 persistent fire**. |  | ✅ | Live: the critical carried **1d4 persistent fire** |
+| RU-3a | Ruby D3 | **+1d6 fire.** |  | ✅ | Live at Depth 3: **`+ 1d6 fire`**, and the d4 was gone |
+| RU-3b | Ruby D3 | Fire damage you deal treats fire resistance as **5 lower**. |  | ✅ | Live: the same 20 fire into resistance 10 — **10** with no source, **15** from the Strike |
+| RU-4a | Ruby D4 | **+1d6 fire.** |  | ✅ | Live under Apotheosis: the critical doubled **1d6 fire**, not 1d4 |
+| RU-4b | Ruby D4 | On a critical hit, **2d10 persistent fire**, and the target's space burns — a creature ending its turn there takes 1d6 fire. |  | ⚠️ | Live: the critical carried **2d10 persistent fire**. The burning space is a Note on the critical attack roll; nothing places it |
 
 ## 💎 Garnet — *Crimson Tendrils* (lexicon §5)
 
@@ -56,12 +56,12 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| GA-1a | Garnet D1 | Your Strikes deal **1 persistent bleed** on a critical hit. |  | ☐ |  |
-| GA-1b | Garnet D1 | You may Treat Wounds on yourself. |  | ☐ |  |
-| GA-2a | Garnet D2 | **+1d4** damage against any creature that has already lost Hit Points this encounter. |  | ☐ |  |
-| GA-2b | Garnet D2 | Critical hits deal **1d6 persistent bleed**. |  | ☐ |  |
-| GA-3a | Garnet D3 | At the start of your turn, gain **temporary Hit Points equal to half your level** if any creature within 30 feet is taking persistent bleed. |  | ☐ |  |
-| GA-4a | Garnet D4 | Creatures taking persistent bleed from you take **+2 damage per weapon damage die** from your Strikes. |  | ☐ |  |
+| GA-1a | Garnet D1 | Your Strikes deal **1 persistent bleed** on a critical hit. |  | ✅ | Live: a critical at Depth 1 carried **1 bleed** |
+| GA-1b | Garnet D1 | You may Treat Wounds on yourself. |  | — | Nothing to automate: pf2e's Treat Wounds already allows treating yourself |
+| GA-2a | Garnet D2 | **+1d4** damage against any creature that has already lost Hit Points this encounter. |  | ✅ | Live: **no Garnet die** against a creature unhurt in the encounter, **+1d4** against one that was |
+| GA-2b | Garnet D2 | Critical hits deal **1d6 persistent bleed**. |  | ✅ | Live: the critical carried **1d6 bleed** in place of the 1 |
+| GA-3a | Garnet D3 | At the start of your turn, gain **temporary Hit Points equal to half your level** if any creature within 30 feet is taking persistent bleed. |  | ✅ | Live at 11th: **5** temporary Hit Points with a bleeding creature within 30 feet, **0** without one. Driven through `Red.crimsonTendrils`, the function `pf2e.startTurn` calls, rather than by advancing a turn |
+| GA-4a | Garnet D4 | Creatures taking persistent bleed from you take **+2 damage per weapon damage die** from your Strikes. |  | ⚠️ | Live: **Garnet +2** (one die) against a bleeding target, off against one that is not. *From you* is not checked — any bleed counts. **Fixed while driving:** it predicated on `target:persistent-damage:bleed`; pf2e's option is `target:condition:persistent-damage:bleed` |
 | GA-4b | Garnet D4 | Once per day, drain a dying creature within 30 feet: it dies, you regain Hit Points equal to your level. |  | ☐ |  |
 
 ## ⚙️ Iron — *Dense Frame* (lexicon §5)
@@ -70,11 +70,11 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| IR-1a | Iron D1 | +1 item bonus to Athletics. |  | ☐ |  |
-| IR-1b | Iron D1 | Your unarmed Strikes deal **+1 bludgeoning**. |  | ☐ |  |
-| IR-2a | Iron D2 | +2 circumstance bonus to Athletics checks to Shove, Trip or Grapple a creature you have already damaged this encounter. |  | ☐ |  |
-| IR-3a | Iron D3 | Your unarmed Strikes gain the **shove** trait, and forced movement you cause increases by **5 feet**. |  | ☐ |  |
-| IR-4a | Iron D4 | **+1 damage die** on your unarmed Strikes. |  | ☐ |  |
+| IR-1a | Iron D1 | +1 item bonus to Athletics. |  | ✅ | Live: Athletics **+4** at 1st — trained +3 and **Iron +1 item** |
+| IR-1b | Iron D1 | Your unarmed Strikes deal **+1 bludgeoning**. |  | ✅ | Live: the breakdown reads **Iron +1** |
+| IR-2a | Iron D2 | +2 circumstance bonus to Athletics checks to Shove, Trip or Grapple a creature you have already damaged this encounter. |  | ✅ | Live, pf2e's own Grapple: the **+2 circumstance** is on against a creature that lost Hit Points this encounter and off against one that did not |
+| IR-3a | Iron D3 | Your unarmed Strikes gain the **shove** trait, and forced movement you cause increases by **5 feet**. |  | ⚠️ | Live: the Strike gained **shove** at Depth 3 (absent at 2). The extra 5 feet of forced movement is a Note |
+| IR-4a | Iron D4 | **+1 damage die** on your unarmed Strikes. |  | ✅ | Live under Apotheosis: the Strike's die went **1d8 → 2d8** |
 | IR-4b | Iron D4 | A creature you Shove into a wall, hazard or another creature takes bludgeoning damage equal to your level. |  | ☐ |  |
 
 ## ⚙️ Copper — *Conductive Filament* (lexicon §5)
@@ -94,10 +94,10 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 25 |
-| ✅ | 0 |
-| ⚠️ | 0 |
+| ☐ | 6 |
+| ✅ | 15 |
+| ⚠️ | 3 |
 | ❌ | 0 |
 | 🔧 | 0 |
-| — | 0 |
+| — | 1 |
 | **Total** | **25** |
