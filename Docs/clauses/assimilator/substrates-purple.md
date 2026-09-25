@@ -42,7 +42,7 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | AT-1a | Amethyst D1 | **Telepathy 30 feet** with willing creatures with whom you share a language. |  | ☐ |  |
-| AT-2a | Amethyst D2 | Your Strikes may deal **mental**; **+1d4 mental**. |  | ☐ |  |
+| AT-2a | Amethyst D2 | Your Strikes may deal **mental**; **+1d4 mental**. |  | ✅ | Live: **versatile-mental** and **`+ 1d4 mental`** |
 | AT-3a | Amethyst D3 | **+1d6 mental.** |  | ☐ |  |
 | AT-3b | Amethyst D3 | On a critical hit the target is **stupefied 1** until the end of its next turn. |  | ☐ |  |
 | AT-4a | Amethyst D4 | **+1d6 mental.** |  | ☐ |  |
@@ -54,10 +54,10 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| QZ-1a | Quartz D1 | +1 circumstance bonus to saves against magic, and you know when a spell is cast within 30 feet. |  | ☐ |  |
+| QZ-1a | Quartz D1 | +1 circumstance bonus to saves against magic, and you know when a spell is cast within 30 feet. |  | ⚠️ | Live: **+1 circumstance** to saves, predicated on a magical or spell source; not rolled against a spell. Knowing a spell is cast nearby is text |
 | QZ-2a | Quartz D2 | Once per day, **counteract** one magical effect (counteract rank = half your level; modifier = your class DC − 10). |  | ☐ |  |
 | QZ-3a | Quartz D3 | When you counteract an effect, or a spell fails against you, your next Strike deals **+2d6 force**. |  | ☐ |  |
-| QZ-4a | Quartz D4 | Twice per day counteract. |  | ☐ |  |
+| QZ-4a | Quartz D4 | Twice per day counteract. |  | ✅ | Live: *Prism Counteract* reads **max 2 per day** at Depth 4 |
 | QZ-4b | Quartz D4 | Once per day, **reflect** a spell that targets only you back at its caster (Will save against your class DC negates). |  | ☐ |  |
 
 ## ⚙️ Platinum — *Ascendant Plate* (lexicon §9)
@@ -67,10 +67,10 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | PT-1a | Platinum D1 | +1 circumstance bonus to saves against magic. |  | ☐ |  |
-| PT-2a | Platinum D2 | **Resistance 5** to your Instinct's damage type. |  | ☐ |  |
+| PT-2a | Platinum D2 | **Resistance 5** to your Instinct's damage type. |  | ✅ | Live: **mental 5** with a Purple Instinct — the Instinct's damage type, injected into the rule |
 | PT-2b | Platinum D2 | You no longer need to breathe. |  | ☐ |  |
 | PT-3a | Platinum D3 | Once per day, gain a **fly Speed equal to half your land Speed** for 1 minute. |  | ☐ |  |
-| PT-4a | Platinum D4 | Permanent **fly Speed equal to your land Speed**. |  | ☐ |  |
+| PT-4a | Platinum D4 | Permanent **fly Speed equal to your land Speed**. |  | ✅ | Live: fly Speed **20**, equal to the land Speed (25 less the Plate Aberration's 5) |
 | PT-4b | Platinum D4 | You cannot be slowed by magical effects. |  | ☐ |  |
 
 ## ⚙️ Nickel — *Unstable Growth* (lexicon §9)
@@ -79,17 +79,17 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| NI-1a | Aberrations | At daily preparations, gain one **Aberration** |  | ☐ |  |
-| NI-1b | Aberrations | **(1) A limb** — an additional unarmed Strike, agile, 1d6 of a physical type. |  | ☐ |  |
+| NI-1a | Aberrations | At daily preparations, gain one **Aberration** |  | ✅ | Live: the chosen Aberrations became effects on the sheet — *A Limb*, *A Plate*, *A Maw* |
+| NI-1b | Aberrations | **(1) A limb** — an additional unarmed Strike, agile, 1d6 of a physical type. |  | ⚠️ | Live: an **Aberrant Limb** Strike, agile, 1d6, versatile P and S. *"A physical type"* is bludgeoning with versatile P/S |
 | NI-1c | Aberrations | **(2) An organ** — one sense: darkvision, scent (imprecise 30 ft), or low-light plus +2 Perception. |  | ☐ |  |
 | NI-1d | Aberrations | **(3) A mode** — a climb or swim Speed equal to half your land Speed. |  | ☐ |  |
-| NI-1e | Aberrations | **(4) A plate** — Hardness +3 and a −5-foot Speed penalty. |  | ☐ |  |
+| NI-1e | Aberrations | **(4) A plate** — Hardness +3 and a −5-foot Speed penalty. |  | ✅ | Live: Hardness **2 → 5** (the Plate's +3 as a Substrate bonus) and land Speed **25 → 20** |
 | NI-1f | Aberrations | **(5) A gland** — once per encounter, a 15-foot cone dealing 2d6 of your Instinct's type, basic Reflex. |  | ☐ |  |
-| NI-1g | Aberrations | **(6) A maw** — your jaws gain the **deadly d8** trait. |  | ☐ |  |
+| NI-1g | Aberrations | **(6) A maw** — your jaws gain the **deadly d8** trait. |  | ⚠️ | Live: **deadly-d8** — on every unarmed Strike, since the Carapace has no separate jaws |
 | NI-1h | Nickel D1 | One Aberration. |  | ☐ |  |
 | NI-2a | Nickel D2 | **Two** Aberrations. |  | ☐ |  |
 | NI-3a | Nickel D3 | Once per encounter, as a single action, **re-roll all your Aberrations**. |  | ☐ |  |
-| NI-4a | Nickel D4 | **Three** Aberrations, and one of them may instead be the **Depth 4 rider of any other Purple Substrate**. |  | ☐ |  |
+| NI-4a | Nickel D4 | **Three** Aberrations, and one of them may instead be the **Depth 4 rider of any other Purple Substrate**. |  | ⚠️ | Live: **three** Aberrations held at Depth 4. The Purple Depth 4 rider in place of one is a Note |
 
 ---
 
@@ -97,9 +97,9 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 28 |
-| ✅ | 0 |
-| ⚠️ | 0 |
+| ☐ | 18 |
+| ✅ | 6 |
+| ⚠️ | 4 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 0 |

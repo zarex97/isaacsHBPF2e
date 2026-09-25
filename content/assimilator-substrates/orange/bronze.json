@@ -1,0 +1,162 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "orange",
+                    "kind": "metal",
+                    "slug": "bronze",
+                    "specimenNames": [
+                        "bronze ingot"
+                    ]
+                }
+            }
+        }
+    },
+    "folder": "Orange",
+    "img": "icons/commodities/metal/ingot-bronze.webp",
+    "name": "Substrate: Bronze",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Momentum / Combat &middot; <strong>Mutation:</strong> Battle Frame</p><p><em>Utilitarian, scarred, and it keeps re-forming the parts that break.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td>You are trained in improvised weapons as martial weapons, and take no penalty for using them.</td></tr><tr><td>2</td><td>If you Stride at least 10 feet, your next Strike this turn gains a <strong>+1 circumstance bonus to hit</strong>.</td></tr><tr><td>3</td><td>Once per round, make a Strike and then a Shove, Trip or Grapple as a <strong>single action</strong>.</td></tr><tr><td>4</td><td>On a critical hit, immediately <strong>Stride up to half your Speed</strong> toward a different enemy as a free action.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-bronze",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-bronze",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "strike-attack-roll",
+                "text": "You are trained in improvised weapons as martial weapons, and take no penalty for using them.",
+                "title": "Bronze (Depth 1)"
+            },
+            {
+                "key": "FlatModifier",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-bronze",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-bronze",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    },
+                    "self:moved-10-feet-this-turn"
+                ],
+                "selector": "strike-attack-roll",
+                "slug": "bronze-strike-attack-roll-2",
+                "type": "circumstance",
+                "value": 1
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-bronze",
+                            3
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "strike-attack-roll",
+                "text": "Once per round, make a Strike and then a Shove, Trip or Grapple as a single action.",
+                "title": "Bronze (Depth 3)"
+            },
+            {
+                "key": "Note",
+                "outcome": [
+                    "criticalSuccess"
+                ],
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-bronze",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-attack-roll",
+                "text": "Critical hit: Stride up to half your Speed toward a different enemy as a free action.",
+                "title": "Bronze (Depth 4)"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-orange"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

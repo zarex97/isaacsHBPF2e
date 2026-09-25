@@ -41,11 +41,11 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| HE-1a | Hematite D1 | +1 item bonus to Athletics. |  | ☐ |  |
-| HE-1b | Hematite D1 | You are immune to **persistent bleed**. |  | ☐ |  |
-| HE-2a | Hematite D2 | Gain **temporary Hit Points equal to your level** at the start of each encounter. |  | ☐ |  |
-| HE-3a | Hematite D3 | +2 status bonus to Fortitude saves. |  | ☐ |  |
-| HE-3b | Hematite D3 | You cannot be **drained**. |  | ☐ |  |
+| HE-1a | Hematite D1 | +1 item bonus to Athletics. |  | ✅ | Live: Athletics carries **Hematite +1** |
+| HE-1b | Hematite D1 | You are immune to **persistent bleed**. |  | ✅ | Live: immune to **bleed** |
+| HE-2a | Hematite D2 | Gain **temporary Hit Points equal to your level** at the start of each encounter. |  | ✅ | Live: starting an encounter gave **17** temporary Hit Points at 17th |
+| HE-3a | Hematite D3 | +2 status bonus to Fortitude saves. |  | ✅ | Live: Fortitude **+2 (status)** at Depth 3 |
+| HE-3b | Hematite D3 | You cannot be **drained**. |  | ✅ | Live: immune to **drained** |
 | HE-4a | Hematite D4 | Once per day, when you are reduced to 0 Hit Points, immediately stand with **Hit Points equal to your level**. |  | ☐ |  |
 
 ## 💎 Moonstone — *Reactive Evolution* (lexicon §13)
@@ -54,8 +54,8 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| MO-1a | Moonstone D1 | Once per encounter, as a reaction after taking damage of a type, gain **resistance 2** to that type for 1 minute. |  | ☐ |  |
-| MO-2a | Moonstone D2 | **Resistance 5**, twice per encounter. |  | ☐ |  |
+| MO-1a | Moonstone D1 | Once per encounter, as a reaction after taking damage of a type, gain **resistance 2** to that type for 1 minute. |  | ⚠️ | Live: *Reactive Evolution* granted; its effect's choice is the damage type. Once per encounter is text |
+| MO-2a | Moonstone D2 | **Resistance 5**, twice per encounter. |  | ✅ | Live: with **fire** chosen, **fire 5** at Depth 2 |
 | MO-3a | Moonstone D3 | **Resistance 8**, it lasts until the encounter ends, and you may hold **two** types at once. |  | ☐ |  |
 | MO-4a | Moonstone D4 | **Resistance 12**, unlimited uses, **three** types at once. |  | ☐ |  |
 | MO-4b | Moonstone D4 | The first time each encounter you would take damage of a type you already resist, you take **none**. |  | ☐ |  |
@@ -66,13 +66,13 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| ST-1a | Steel D1 | Carapace **Hardness +2**. |  | ☐ |  |
-| ST-1b | Steel D1 | Your unarmed Strikes' damage die increases one step. |  | ☐ |  |
+| ST-1a | Steel D1 | Carapace **Hardness +2**. |  | ✅ | Live: Hardness **2 → 4** with Steel alone at Depth 1 — pinned by the highest-bonus rule |
+| ST-1b | Steel D1 | Your unarmed Strikes' damage die increases one step. |  | ✅ | Live: the Carapace Strike's die **d8 → d10** |
 | ST-2a | Steel D2 | **Hardness +5.** |  | ☐ |  |
 | ST-3a | Steel D3 | **Hardness +8.** |  | ☐ |  |
-| ST-3b | Steel D3 | Your unarmed Strikes gain the **versatile P** and **versatile S** traits. |  | ☐ |  |
-| ST-4a | Steel D4 | **Hardness +12.** |  | ☐ |  |
-| ST-4b | Steel D4 | **+1 damage die** on your unarmed Strikes. |  | ☐ |  |
+| ST-3b | Steel D3 | Your unarmed Strikes gain the **versatile P** and **versatile S** traits. |  | ✅ | Live: **versatile-p** and **versatile-s** at Depth 3+ |
+| ST-4a | Steel D4 | **Hardness +12.** |  | ✅ | Live: Hardness **14** at Depth 4 |
+| ST-4b | Steel D4 | **+1 damage die** on your unarmed Strikes. |  | ✅ | Live: **2d10** — one more die |
 
 ## ⚙️ Silver — *Argent Edge* (lexicon §13)
 
@@ -80,10 +80,10 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| AG-1a | Silver D1 | Your Strikes count as **silver**. |  | ☐ |  |
+| AG-1a | Silver D1 | Your Strikes count as **silver**. |  | ✅ | Live: the Strike's material reads **silver** |
 | AG-2a | Silver D2 | **+1d4** damage against aberrations, fiends, undead and spirits. |  | ☐ |  |
 | AG-3a | Silver D3 | **+1d6** instead. |  | ☐ |  |
-| AG-3b | Silver D3 | Your Strikes affect incorporeal creatures as though they had the **ghost touch** rune. |  | ☐ |  |
+| AG-3b | Silver D3 | Your Strikes affect incorporeal creatures as though they had the **ghost touch** rune. |  | ✅ | Live: the Strike carries the **ghostTouch** property rune at Depth 3 |
 | AG-4a | Silver D4 | **+1d6.** |  | ☐ |  |
 | AG-4b | Silver D4 | A supernatural creature you critically hit cannot use **reactions or innate spells** until the end of its next turn. |  | ☐ |  |
 
@@ -93,9 +93,9 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 24 |
-| ✅ | 0 |
-| ⚠️ | 0 |
+| ☐ | 10 |
+| ✅ | 13 |
+| ⚠️ | 1 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 0 |

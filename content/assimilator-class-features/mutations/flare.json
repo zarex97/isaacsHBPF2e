@@ -1,0 +1,42 @@
+{
+    "folder": "Mutations",
+    "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+    "name": "Flare",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per encounter</p><hr /><p>Creatures in a <strong>15-foot emanation</strong> must succeed at a Fortitude save against your class DC or be <strong>dazzled</strong> for 1 round. At Magnesium Depth 3 a failure is <strong>blinded</strong> instead, and the flare deals fire damage equal to your level to creatures with light sensitivity or light blindness. At Depth 4 the emanation is 30 feet and counteracts magical darkness; once per day it may instead heal each ally within it for your level.</p>"
+        },
+        "level": {
+            "value": 5
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-mutation-action"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator",
+                "light",
+                "visual"
+            ]
+        }
+    },
+    "type": "feat"
+}

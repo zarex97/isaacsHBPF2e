@@ -1,0 +1,205 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "blue",
+                    "kind": "metal",
+                    "slug": "tin",
+                    "specimenNames": [
+                        "tin ingot"
+                    ]
+                }
+            }
+        }
+    },
+    "folder": "Blue",
+    "img": "icons/commodities/metal/ingot-tin.webp",
+    "name": "Substrate: Tin",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Sensitivity &middot; <strong>Mutation:</strong> Sensory Bloom</p><p><em>Fine hairs, pits and antennae across the plate. It is deeply unsettling to watch them move.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td><strong>Imprecise tremorsense 30 feet.</strong></td></tr><tr><td>2</td><td>You detect the presence of magic within 30 feet as an <strong>imprecise sense</strong>.</td></tr><tr><td>3</td><td>Tremorsense <strong>60 feet</strong>. Invisible creatures within 30 feet are <strong>concealed</strong> to you rather than undetected.</td></tr><tr><td>4</td><td><strong>Precise tremorsense 30 feet.</strong> You can track any creature that passed within 30 feet of you in the last 24 hours with a +2 circumstance bonus.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "acuity": "imprecise",
+                "key": "Sense",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-tin",
+                            1
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-tin",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-tin",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "range": 30,
+                "selector": "tremorsense"
+            },
+            {
+                "acuity": "imprecise",
+                "key": "Sense",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-tin",
+                            3
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-tin",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "range": 60,
+                "selector": "tremorsense"
+            },
+            {
+                "acuity": "precise",
+                "key": "Sense",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-tin",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "range": 30,
+                "selector": "tremorsense"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-tin",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-tin",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "perception",
+                "text": "You detect the presence of magic within 30 feet as an imprecise sense.",
+                "title": "Tin (Depth 2)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-tin",
+                            3
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "perception",
+                "text": "Invisible creatures within 30 feet are concealed to you rather than undetected.",
+                "title": "Tin (Depth 3)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-tin",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "survival",
+                "text": "Track any creature that passed within 30 feet of you in the last 24 hours with a +2 circumstance bonus.",
+                "title": "Tin (Depth 4)"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-blue"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

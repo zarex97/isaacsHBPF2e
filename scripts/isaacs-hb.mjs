@@ -1,6 +1,7 @@
 import { Carapace } from "./assimilator/carapace.mjs";
 import { Engine as AssimilatorEngine } from "./assimilator/engine.mjs";
 import { GulletApp, registerGulletHooks } from "./assimilator/gullet.mjs";
+import { Mutations } from "./assimilator/mutations.mjs";
 import { Red } from "./assimilator/red.mjs";
 import { Astral } from "./astral.mjs";
 import { CastPipeline } from "./cast-pipeline.mjs";
@@ -118,6 +119,7 @@ Hooks.once("init", () => {
     start("the Assimilator engine", () => AssimilatorEngine.registerHooks());
     start("the Gullet", () => registerGulletHooks());
     start("Red's scripted riders", () => Red.registerHooks());
+    start("the Mutations' clocks", () => Mutations.registerHooks());
     start("damaged this encounter", () => EncounterDamage.registerHooks());
     start("Regeneración's suppression", () => DamageBus.after("Regeneración's suppression", PRIORITY.regeneracion,
         (actor, params) => Regeneracion.onDamage(actor, params)));

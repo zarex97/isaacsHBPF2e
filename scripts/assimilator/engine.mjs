@@ -31,6 +31,16 @@ const PACKS = {
 export const COLOURS = ["red", "gold", "orange", "blue", "purple", "green", "black", "white", "gray"];
 export const SUBSTRATE_PREFIX = "substrate-";
 
+/** Guide §4.5 (v1.1, ruling on #82): the damage type each Instinct sets. */
+export const INSTINCT_TYPES = {
+    red: "fire", gold: "force", orange: "electricity", blue: "cold", purple: "mental",
+    green: "poison", black: "void", white: "vitality", gray: "bludgeoning",
+};
+
+/** Nickel's Aberrations held at each Depth (lexicon §9). */
+export const ABERRATION_COUNT = { 1: 1, 2: 2, 3: 2, 4: 3 };
+export const ABERRATIONS = ["limb", "organ", "mode", "plate", "gland", "maw"];
+
 /* -------------------------------------------------------------------------------------------- */
 /*  Pure rules — no Foundry, so the tests can hold them                                         */
 /* -------------------------------------------------------------------------------------------- */
@@ -71,6 +81,20 @@ export function damageFrom(rules = []) {
         .map((r) => r.flags?.[MODULE_ID]?.[KEY]?.depth)
         .filter(Number.isInteger);
     return depths.length ? Math.min(...depths) : null;
+}
+
+/**
+ * The Carapace's Hardness from Substrates: the **highest** single bonus, not the sum — guide §4.3 v1.1, ruled
+ * on #82. *Adamant Shell* is the one thing that makes them add.
+ */
+export function substrateHardness(effective, catalogue, { stack = false, extra = [] } = {}) {
+    const bonuses = [...extra];
+    for (const [slug, depth] of Object.entries(effective)) {
+        const ladder = catalogue[slug]?.hardness;
+        if (ladder) bonuses.push(ladder[Math.min(depth, 4)] ?? 0);
+    }
+    if (bonuses.length === 0) return 0;
+    return stack ? bonuses.reduce((a, b) => a + b, 0) : Math.max(...bonuses);
 }
 
 /**
@@ -160,6 +184,7 @@ export const Engine = {
         s.instinct ??= null;
         s.tiebreak ??= null;
         s.preparing ??= false;
+        s.choices ??= {};
         return s;
     },
 
@@ -208,6 +233,12 @@ export const Engine = {
             highestDepth: Math.max(0, ...Object.values(effective)),
             // A broken Carapace switches every Mutation at Depth 3+ off, so it deals no damage to count.
             mutationDepth: mutationDepth(Engine.workingDepths(actor, effective), catalogue),
+            instinctType: INSTINCT_TYPES[state.instinct] ?? "bludgeoning",
+            substrateHardness: substrateHardness(Engine.workingDepths(actor, effective), catalogue, {
+                stack: (state.bonds ?? []).includes("adamant-shell")
+                    && (actor.itemTypes?.effect ?? []).some((e) => e.slug === "adamant-shell"),
+                extra: (state.choices.nickel ?? []).includes("plate") && effective.nickel ? [3] : [],
+            }),
             pending: instinctOf(totals, state.tiebreak),
         };
     },
@@ -217,11 +248,21 @@ export const Engine = {
      * bound Substrate to the cap while its effect lasts (guide §4.9).
      */
     effectiveDepths(actor, state, grants) {
-        const apotheosis = actor.itemTypes?.effect?.some((e) => e.slug === "effect-apotheosis");
+        const effects = actor.itemTypes?.effect ?? [];
+        const apotheosis = effects.some((e) => e.slug === "effect-apotheosis");
         const out = {};
         for (const [slug, paid] of Object.entries(state.substrates)) {
             if (paid <= 0) continue;
             out[slug] = apotheosis ? grants.depthCap : Math.min(paid, grants.depthCap);
+        }
+        // Gold's Gilded Core: the chosen other Substrates count one Depth higher, never above the cap. One choice,
+        // two from Gold Depth 3 (lexicon §6).
+        const gold = out.gold ?? 0;
+        if (gold >= 1 && !apotheosis) {
+            const picks = (state.choices.gold ?? []).filter((s) => s !== "gold" && s in out).slice(0, gold >= 3 ? 2 : 1);
+            for (const slug of picks) out[slug] = Math.min(out[slug] + 1, grants.depthCap);
+            // Gilded Apotheosis: the first chosen manifests at Depth 4 for a minute.
+            if (picks[0] && effects.some((e) => e.slug === "effect-gilded-apotheosis")) out[picks[0]] = 4;
         }
         return out;
     },
@@ -233,8 +274,20 @@ export const Engine = {
         return Object.fromEntries(Object.entries(effective).filter(([, depth]) => depth < 3));
     },
 
+    /**
+     * Write the record. Foundry *merges* an object into a flag, so a key the new record no longer has — a
+     * Substrate shed to nothing, a choice cleared — would survive the write. Each one is deleted explicitly.
+     */
     async write(actor, state) {
-        await actor.update({ [`flags.${MODULE_ID}.${KEY}`]: state }, { assimilatorEngine: true });
+        const base = `flags.${MODULE_ID}.${KEY}`;
+        const before = actor.flags?.[MODULE_ID]?.[KEY] ?? {};
+        const update = { [base]: state };
+        for (const field of ["substrates", "choices"]) {
+            for (const key of Object.keys(before[field] ?? {})) {
+                if (!(key in (state[field] ?? {}))) update[`${base}.${field}.-=${key}`] = null;
+            }
+        }
+        await actor.update(update, { assimilatorEngine: true });
     },
 
     /** Queue a rebuild. Safe to call from any hook; only the writer client does anything. */
@@ -261,16 +314,20 @@ export const Engine = {
         const updates = [];
         const deletes = [];
 
-        // Substrates.
+        // Substrates. `intact` is written onto each so that breaking or mending the plate is an *update* of the
+        // Substrate — the event pf2e re-tests a `reevaluateOnUpdate` GrantItem on, which is how a Depth 3 action
+        // leaves the sheet with the plate and comes back with it.
+        const intact = !actor.itemTypes.effect.some((e) => e.slug === "effect-carapace-broken");
         const owned = actor.itemTypes.effect.filter((e) => e.flags?.[MODULE_ID]?.[KEY]?.substrate);
         for (const [slug, depth] of Object.entries(derived.effective)) {
             const have = owned.find((e) => e.flags[MODULE_ID][KEY].substrate.slug === slug);
             if (!have) {
                 const source = foundry.utils.deepClone(catalogue[slug].doc.toObject());
                 source.system.badge = { ...(source.system.badge ?? {}), type: "counter", value: depth };
+                foundry.utils.setProperty(source, `flags.${MODULE_ID}.${KEY}.intact`, intact);
                 creates.push(source);
-            } else if (have.system.badge?.value !== depth) {
-                updates.push({ _id: have.id, "system.badge.value": depth });
+            } else if (have.system.badge?.value !== depth || have.flags[MODULE_ID][KEY].intact !== intact) {
+                updates.push({ _id: have.id, "system.badge.value": depth, [`flags.${MODULE_ID}.${KEY}.intact`]: intact });
             }
         }
         for (const e of owned) if (!(e.flags[MODULE_ID][KEY].substrate.slug in derived.effective)) deletes.push(e.id);
@@ -295,6 +352,21 @@ export const Engine = {
             if (!bondEffects.some((e) => e.slug === slug) && bondCatalogue[slug]) creates.push(bondCatalogue[slug].doc.toObject());
         }
 
+        // Nickel's Aberrations: the chosen ones, as many as its Depth holds.
+        const aberrations = actor.itemTypes.effect.filter((e) => e.flags?.[MODULE_ID]?.[KEY]?.aberration);
+        const held = derived.effective.nickel
+            ? (state.choices.nickel ?? []).slice(0, ABERRATION_COUNT[Math.min(derived.effective.nickel, 4)] ?? 0)
+            : [];
+        for (const e of aberrations) if (!held.includes(e.flags[MODULE_ID][KEY].aberration)) deletes.push(e.id);
+        const missing = held.filter((k) => !aberrations.some((e) => e.flags[MODULE_ID][KEY].aberration === k));
+        if (missing.length) {
+            const docs = (await game.packs.get(PACKS.effects)?.getDocuments()) ?? [];
+            for (const key of missing) {
+                const doc = docs.find((d) => d.flags?.[MODULE_ID]?.[KEY]?.aberration === key);
+                if (doc) creates.push(doc.toObject());
+            }
+        }
+
         if (deletes.length) await actor.deleteEmbeddedDocuments("Item", [...new Set(deletes)]);
         if (updates.length) await actor.updateEmbeddedDocuments("Item", updates);
         if (creates.length) await actor.createEmbeddedDocuments("Item", creates);
@@ -302,6 +374,8 @@ export const Engine = {
         const derivedFlag = {
             mass: derived.mass, spent: derived.spent, depthCap: derived.depthCap, bondSlots: derived.bondSlots,
             vein: derived.vein, highestDepth: derived.highestDepth, mutationDepth: derived.mutationDepth,
+            // From the Instinct as this rebuild settled it, not as `derive` read it before the first binding set one.
+            instinctType: INSTINCT_TYPES[state.instinct] ?? "bludgeoning", substrateHardness: derived.substrateHardness,
             colours: derived.colours, effective: derived.effective,
         };
         const before = actor.flags?.[MODULE_ID]?.[KEY] ?? {};
@@ -345,7 +419,7 @@ export const Engine = {
     async feed(actor, slug, { itemId = null, vein = false } = {}) {
         const state = Engine.state(actor);
         const catalogue = await Engine.catalogue();
-        if (game.combat?.started && game.combat.combatants.some((c) => c.actor?.id === actor.id)) {
+        if (game.combats?.some((c) => c.started && c.combatants.some((x) => x.actor?.id === actor.id))) {
             return Engine._refuse("Feeding takes 10 minutes; it cannot be done in an encounter.");
         }
 
@@ -431,6 +505,44 @@ export const Engine = {
         return { ok: true };
     },
 
+    /**
+     * A daily choice: Gold's Substrates, Electrum's second colour, Zinc's energy type, Nickel's Aberrations.
+     * Made at daily preparations — or the first time, whenever it is first needed, since a Substrate fed in the
+     * afternoon should not wait a night to do anything.
+     */
+    async choose(actor, key, value) {
+        const state = Engine.state(actor);
+        const current = state.choices[key];
+        const first = current === undefined || current === null || (Array.isArray(current) && !current.length);
+        if (!state.preparing && !first) return Engine._refuse("That choice is made at daily preparations.");
+        if (key === "nickel") value = [value].flat().filter((k) => ABERRATIONS.includes(k));
+        if (key === "gold") value = [value].flat().filter((s) => s && s !== "gold" && s in state.substrates);
+        state.choices[key] = value;
+        await Engine.write(actor, state);
+        await Engine.rebuild(actor);
+        return { ok: true };
+    },
+
+    /** Nickel: roll the Aberrations — at daily preparations, or by the Depth 3 re-roll. */
+    async rollAberrations(actor, { reroll = false } = {}) {
+        const state = Engine.state(actor);
+        const depth = (await Engine.derive(actor, state)).effective.nickel ?? 0;
+        if (!depth) return Engine._refuse("Nickel is not bound.");
+        if (reroll && depth < 3) return Engine._refuse("Re-rolling your Aberrations takes Nickel at Depth 3.");
+        if (!reroll && !state.preparing && (state.choices.nickel ?? []).length) {
+            return Engine._refuse("Aberrations are rolled at daily preparations.");
+        }
+        const pool = [...ABERRATIONS];
+        const picked = [];
+        for (let i = 0; i < (ABERRATION_COUNT[Math.min(depth, 4)] ?? 1); i++) {
+            picked.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
+        }
+        state.choices.nickel = picked;
+        await Engine.write(actor, state);
+        await Engine.rebuild(actor);
+        return { ok: true, picked };
+    },
+
     /** Daily preparations open with Rest for the Night and close when the owner says so, or combat starts. */
     async beginPreparations(actor) {
         const state = Engine.state(actor);
@@ -475,7 +587,8 @@ export const Engine = {
         });
         const itemChanged = (item) => {
             const flag = item.flags?.[MODULE_ID]?.[KEY];
-            const moves = ["effect-apotheosis", "effect-carapace-broken"].includes(item.slug);
+            const moves = ["effect-apotheosis", "effect-carapace-broken", "effect-gilded-apotheosis", "adamant-shell"]
+                .includes(item.slug);
             if (flag?.grants || moves || item.type === "class") Engine.rebuild(item.actor);
         };
         Hooks.on("createItem", itemChanged);

@@ -1,0 +1,157 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "blue",
+                    "kind": "gem",
+                    "slug": "lapis-lazuli",
+                    "specimenNames": [
+                        "lapis"
+                    ]
+                }
+            }
+        }
+    },
+    "folder": "Blue",
+    "img": "icons/commodities/gems/gem-rough-cushion-blue.webp",
+    "name": "Substrate: Lapis Lazuli",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Knowledge &middot; <strong>Mutation:</strong> Reading Eye</p><p><em>A ring of small dark lenses around the skull, which track independently.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td>Once per round, <strong>Recall Knowledge</strong> about a creature you can see as a free action.</td></tr><tr><td>2</td><td>When you succeed at Recall Knowledge about a creature, allies gain <strong>+1 circumstance to attacks</strong> against it for 1 round.</td></tr><tr><td>3</td><td>You automatically learn one <strong>resistance, weakness or immunity</strong> of any creature you damage.</td></tr><tr><td>4</td><td>Once per encounter, name a creature's <strong>strongest save</strong>; for 1 minute your Mutations target its <strong>weakest</strong> instead.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "allowDuplicate": false,
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-lapis-lazuli",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-lapis-lazuli",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Reading Eye"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-lapis-lazuli",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-lapis-lazuli",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "skill-check",
+                "text": "When you succeed at Recall Knowledge about a creature, allies gain +1 circumstance to attacks against it for 1 round.",
+                "title": "Lapis Lazuli (Depth 2)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-lapis-lazuli",
+                            3
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-damage",
+                "text": "You learn one resistance, weakness or immunity of the creature you damaged.",
+                "title": "Lapis Lazuli (Depth 3)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-lapis-lazuli",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "all",
+                "text": "Once per encounter, name a creature's strongest save; for 1 minute your Mutations target its weakest instead.",
+                "title": "Lapis Lazuli (Depth 4)"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-blue"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

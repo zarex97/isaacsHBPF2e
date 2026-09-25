@@ -1,0 +1,312 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "purple",
+                    "kind": "gem",
+                    "slug": "amethyst"
+                }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "slug": "stupefied",
+                        "type": "condition",
+                        "value": 1
+                    },
+                    "duration": {
+                        "expiry": "turn-end",
+                        "unit": "rounds",
+                        "value": 1
+                    },
+                    "event": "strike-resolved",
+                    "note": "Amethyst Depth 3.",
+                    "outcomes": [
+                        "criticalSuccess"
+                    ],
+                    "predicate": [
+                        {
+                            "or": [
+                                "item:category:unarmed",
+                                "item:trait:unarmed"
+                            ]
+                        },
+                        {
+                            "not": "assimilator:suppressed"
+                        },
+                        {
+                            "gte": [
+                                "self:effect:substrate-amethyst",
+                                3
+                            ]
+                        },
+                        "carapace:intact"
+                    ]
+                },
+                {
+                    "apply": {
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "slug": "confused",
+                                    "type": "condition"
+                                },
+                                "duration": {
+                                    "expiry": "turn-end",
+                                    "unit": "rounds",
+                                    "value": 1
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            }
+                        ],
+                        "statistic": "will",
+                        "type": "save"
+                    },
+                    "event": "strike-resolved",
+                    "note": "Amethyst Depth 4: once per round.",
+                    "oncePerRound": true,
+                    "outcomes": [
+                        "success",
+                        "criticalSuccess"
+                    ],
+                    "predicate": [
+                        {
+                            "or": [
+                                "item:category:unarmed",
+                                "item:trait:unarmed"
+                            ]
+                        },
+                        {
+                            "not": "assimilator:suppressed"
+                        },
+                        {
+                            "gte": [
+                                "self:effect:substrate-amethyst",
+                                4
+                            ]
+                        },
+                        "carapace:intact"
+                    ]
+                }
+            ]
+        }
+    },
+    "folder": "Purple",
+    "img": "icons/commodities/gems/gem-faceted-octagon-purple.webp",
+    "name": "Substrate: Amethyst",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Psychic &middot; <strong>Mutation:</strong> Thought-Spines</p><p><em>Violet spines across the crown, and other people's dreams start including you.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td><strong>Telepathy 30 feet</strong> with willing creatures with whom you share a language.</td></tr><tr><td>2</td><td>Your Strikes may deal <strong>mental</strong>; <strong>+1d4 mental</strong>.</td></tr><tr><td>3</td><td><strong>+1d6 mental.</strong> On a critical hit the target is <strong>stupefied 1</strong> until the end of its next turn.</td></tr><tr><td>4</td><td><strong>+1d6 mental.</strong> Once per round, a creature you damage must succeed at a Will save against your class DC or be <strong>confused</strong> until the end of its next turn.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-amethyst",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-amethyst",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "all",
+                "text": "Telepathy 30 feet with willing creatures with whom you share a language.",
+                "title": "Amethyst (Depth 1)"
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "mode": "add",
+                "predicate": [
+                    "item:category:unarmed",
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-amethyst",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-amethyst",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "property": "traits",
+                "value": "versatile-mental"
+            },
+            {
+                "damageType": "mental",
+                "diceNumber": 1,
+                "dieSize": "d4",
+                "flags": {
+                    "isaacs-hb-pf2e": {
+                        "assimilator": {
+                            "depth": 2,
+                            "substrate": "amethyst"
+                        }
+                    }
+                },
+                "key": "DamageDice",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-amethyst",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-amethyst",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-amethyst",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "unarmed-damage",
+                "slug": "substrate-amethyst"
+            },
+            {
+                "damageType": "mental",
+                "diceNumber": 1,
+                "dieSize": "d6",
+                "flags": {
+                    "isaacs-hb-pf2e": {
+                        "assimilator": {
+                            "depth": 3,
+                            "substrate": "amethyst"
+                        }
+                    }
+                },
+                "key": "DamageDice",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-amethyst",
+                            3
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-amethyst",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "substrate-amethyst"
+            },
+            {
+                "damageType": "mental",
+                "diceNumber": 1,
+                "dieSize": "d6",
+                "flags": {
+                    "isaacs-hb-pf2e": {
+                        "assimilator": {
+                            "depth": 4,
+                            "substrate": "amethyst"
+                        }
+                    }
+                },
+                "key": "DamageDice",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-amethyst",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "substrate-amethyst"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-purple"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

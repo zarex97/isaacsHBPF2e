@@ -41,9 +41,9 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| ON-1a | Onyx D1 | **Darkvision.** |  | ☐ |  |
-| ON-1b | Onyx D1 | +1 item bonus to Stealth in dim light or darkness. |  | ☐ |  |
-| ON-2a | Onyx D2 | Once per day, create a 20-foot emanation of **magical darkness** for 1 minute. |  | ☐ |  |
+| ON-1a | Onyx D1 | **Darkvision.** |  | ✅ | Live: **darkvision** |
+| ON-1b | Onyx D1 | +1 item bonus to Stealth in dim light or darkness. |  | ⚠️ | Live: **Onyx +1 (item)** on Stealth, predicated on dim light or darkness; the lighting half not driven |
+| ON-2a | Onyx D2 | Once per day, create a 20-foot emanation of **magical darkness** for 1 minute. |  | ⚠️ | Live: *Shadow Mantle* granted at Depth 2, 1/day; the darkness itself is placed by hand |
 | ON-2b | Onyx D2 | You see through it normally. |  | ☐ |  |
 | ON-3a | Onyx D3 | In dim light or darkness you may **Hide and Sneak without cover or concealment**, and gain +1 circumstance to AC. |  | ☐ |  |
 | ON-4a | Onyx D4 | Once per round, as a single action, **teleport between two areas of darkness** within 60 feet. |  | ☐ |  |
@@ -54,11 +54,11 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| JE-1a | Jet D1 | Your Strikes may deal **void**. |  | ☐ |  |
+| JE-1a | Jet D1 | Your Strikes may deal **void**. |  | ✅ | Live: **versatile-void** |
 | JE-1b | Jet D1 | +1 item bonus to saves against death effects. |  | ☐ |  |
 | JE-2a | Jet D2 | **+1d4 void.** |  | ☐ |  |
 | JE-2b | Jet D2 | Gain **2 temporary Hit Points** when you reduce a creature to 0 Hit Points. |  | ☐ |  |
-| JE-3a | Jet D3 | **+1d6 void.** |  | ☐ |  |
+| JE-3a | Jet D3 | **+1d6 void.** |  | ✅ | Live: **`+ 1d6 void`** at Depth 3 |
 | JE-3b | Jet D3 | A creature you kill cannot be returned to life by magic below 6th rank. |  | ☐ |  |
 | JE-4a | Jet D4 | **+1d6 void.** |  | ☐ |  |
 | JE-4b | Jet D4 | Once per day, a creature within 30 feet at or below half Hit Points must succeed at a Fortitude save against your class DC or take **void damage equal to twice your level**. |  | ☐ |  |
@@ -81,7 +81,7 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| MN-1a | Manganese D1 | Your Strikes deal **1 persistent acid** on a critical hit. |  | ☐ |  |
+| MN-1a | Manganese D1 | Your Strikes deal **1 persistent acid** on a critical hit. |  | ✅ | Live: the critical carries **1 persistent acid** |
 | MN-2a | Manganese D2 | A creature you damage has **all its resistances reduced by 2** until the end of its next turn. |  | ☐ |  |
 | MN-3a | Manganese D3 | Reduced by **5**. |  | ☐ |  |
 | MN-3b | Manganese D3 | Objects you Strike take a cumulative **−1 item penalty** (to a maximum of −3) until Repaired. |  | ☐ |  |
@@ -94,9 +94,9 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 25 |
-| ✅ | 0 |
-| ⚠️ | 0 |
+| ☐ | 19 |
+| ✅ | 4 |
+| ⚠️ | 2 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 0 |

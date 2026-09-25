@@ -63,6 +63,16 @@
                 "value": "10 + 5 * @actor.level"
             },
             {
+                "itemType": "armor",
+                "key": "ItemAlteration",
+                "mode": "add",
+                "predicate": [
+                    "item:slug:living-plate"
+                ],
+                "property": "hardness",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.substrateHardness"
+            },
+            {
                 "domain": "all",
                 "key": "RollOption",
                 "option": "carapace:intact",

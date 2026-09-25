@@ -41,13 +41,13 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SA-1a | Sapphire D1 | Your Strikes may deal **cold**. |  | ☐ |  |
+| SA-1a | Sapphire D1 | Your Strikes may deal **cold**. |  | ✅ | Live: the Carapace Strike gained **versatile-cold** |
 | SA-1b | Sapphire D1 | +1 item bonus to saves against effects that would break your concentration. |  | ☐ |  |
-| SA-2a | Sapphire D2 | **+1d4 cold.** |  | ☐ |  |
+| SA-2a | Sapphire D2 | **+1d4 cold.** |  | ✅ | Live: **`+ 1d4 cold`** at Depth 2 |
 | SA-2b | Sapphire D2 | Critical hits reduce the target's Speeds by **5 feet** until the end of its next turn. |  | ☐ |  |
 | SA-3a | Sapphire D3 | **+1d6 cold.** |  | ☐ |  |
 | SA-3b | Sapphire D3 | Critical hits make the target **slowed 1** until the end of its next turn. |  | ☐ |  |
-| SA-4a | Sapphire D4 | **+1d6 cold.** |  | ☐ |  |
+| SA-4a | Sapphire D4 | **+1d6 cold.** |  | ✅ | Live: **1d6 cold** at Depth 4 — Arcane Channel read `5d6` cold (4d6 + Sapphire's 1d6) |
 | SA-4b | Sapphire D4 | Any creature you damage with cold must succeed at a Fortitude save against your class DC or be **slowed 1** until the end of its next turn. |  | ☐ |  |
 
 ## 💎 Lapis Lazuli — *Reading Eye* (lexicon §8)
@@ -56,7 +56,7 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| LA-1a | Lapis Lazuli D1 | Once per round, **Recall Knowledge** about a creature you can see as a free action. |  | ☐ |  |
+| LA-1a | Lapis Lazuli D1 | Once per round, **Recall Knowledge** about a creature you can see as a free action. |  | ✅ | Live: *Reading Eye* granted, **free**, **1/round** |
 | LA-2a | Lapis Lazuli D2 | When you succeed at Recall Knowledge about a creature, allies gain **+1 circumstance to attacks** against it for 1 round. |  | ☐ |  |
 | LA-3a | Lapis Lazuli D3 | You automatically learn one **resistance, weakness or immunity** of any creature you damage. |  | ☐ |  |
 | LA-4a | Lapis Lazuli D4 | Once per encounter, name a creature's **strongest save**; for 1 minute your Mutations target its **weakest** instead. |  | ☐ |  |
@@ -67,10 +67,10 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| CO-1a | Cobalt D1 | You gain a **30-foot ranged unarmed Strike** dealing **1d6** damage of your Instinct's type. |  | ☐ |  |
-| CO-2a | Cobalt D2 | Range **60 feet**; damage **2d6**. |  | ☐ |  |
-| CO-3a | Cobalt D3 | Your Mutations' energy damage counts as **magical**; +1 circumstance bonus to counteract checks. |  | ☐ |  |
-| CO-4a | Cobalt D4 | Range **120 feet**; damage **4d6**; once per round it may target **two** creatures. |  | ☐ |  |
+| CO-1a | Cobalt D1 | You gain a **30-foot ranged unarmed Strike** dealing **1d6** damage of your Instinct's type. |  | ✅ | Live: **Arcane Channel** appears as a ranged unarmed Strike |
+| CO-2a | Cobalt D2 | Range **60 feet**; damage **2d6**. |  | ✅ | Live at Depth 2: range **60**, **2d6**, in the Instinct's type — **cold** for a Blue Instinct. **Fixed while driving:** the damage type was read before the rebuild settled the Instinct, so the first rebuild dealt bludgeoning |
+| CO-3a | Cobalt D3 | Your Mutations' energy damage counts as **magical**; +1 circumstance bonus to counteract checks. |  | ⚠️ | Live: Arcane Channel gains the **magical** trait at Depth 3. The +1 to counteract checks is a Note |
+| CO-4a | Cobalt D4 | Range **120 feet**; damage **4d6**; once per round it may target **two** creatures. |  | ⚠️ | Live: range **120**, **4d6**. Two targets once per round is a Note |
 
 ## ⚙️ Tin — *Sensory Bloom* (lexicon §8)
 
@@ -78,11 +78,11 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SN-1a | Tin D1 | **Imprecise tremorsense 30 feet.** |  | ☐ |  |
+| SN-1a | Tin D1 | **Imprecise tremorsense 30 feet.** |  | ✅ | Pinned by the rule; live at Depth 3 the sheet read imprecise tremorsense 60, the next rung |
 | SN-2a | Tin D2 | You detect the presence of magic within 30 feet as an **imprecise sense**. |  | ☐ |  |
-| SN-3a | Tin D3 | Tremorsense **60 feet**. |  | ☐ |  |
+| SN-3a | Tin D3 | Tremorsense **60 feet**. |  | ✅ | Live: **tremorsense, imprecise, 60** |
 | SN-3b | Tin D3 | Invisible creatures within 30 feet are **concealed** to you rather than undetected. |  | ☐ |  |
-| SN-4a | Tin D4 | **Precise tremorsense 30 feet.** |  | ☐ |  |
+| SN-4a | Tin D4 | **Precise tremorsense 30 feet.** |  | ✅ | Live: **tremorsense, precise, 30** |
 | SN-4b | Tin D4 | You can track any creature that passed within 30 feet of you in the last 24 hours with a +2 circumstance bonus. |  | ☐ |  |
 
 ---
@@ -91,9 +91,9 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 22 |
-| ✅ | 0 |
-| ⚠️ | 0 |
+| ☐ | 11 |
+| ✅ | 9 |
+| ⚠️ | 2 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 0 |

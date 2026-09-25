@@ -1,0 +1,242 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "green",
+                    "hardness": {
+                        "1": 2,
+                        "2": 5,
+                        "3": 8,
+                        "4": 12
+                    },
+                    "kind": "metal",
+                    "slug": "chromium",
+                    "specimenNames": [
+                        "crocoite",
+                        "chrome"
+                    ]
+                }
+            }
+        }
+    },
+    "folder": "Green",
+    "img": "icons/commodities/metal/ingot-shiny-steel.webp",
+    "name": "Substrate: Chromium",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Armour / Regeneration &middot; <strong>Mutation:</strong> Lacquer Shell</p><p><em>A hard, bright, corrosion-proof lacquer over everything. It buffs out.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td>Carapace <strong>Hardness +2</strong>. <strong>Resistance 2</strong> to acid.</td></tr><tr><td>2</td><td><strong>Hardness +5</strong>, <strong>resistance 5</strong> to acid. Your Carapace repairs 1 Hit Point per hour on its own.</td></tr><tr><td>3</td><td><strong>Hardness +8</strong>, <strong>resistance 8</strong> to acid. You are immune to rust, corrosion and effects that damage your items with acid.</td></tr><tr><td>4</td><td><strong>Hardness +12</strong>, <strong>resistance 12</strong> to acid. Once per encounter, when your Carapace's Hardness would be reduced or bypassed, it isn't.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "Resistance",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-chromium",
+                            1
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-chromium",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-chromium",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "type": "acid",
+                "value": 2
+            },
+            {
+                "key": "Resistance",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-chromium",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-chromium",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-chromium",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "type": "acid",
+                "value": 5
+            },
+            {
+                "key": "Resistance",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-chromium",
+                            3
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-chromium",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "type": "acid",
+                "value": 8
+            },
+            {
+                "key": "Resistance",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-chromium",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "type": "acid",
+                "value": 12
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-chromium",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-chromium",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "all",
+                "text": "Your Carapace repairs 1 Hit Point per hour on its own.",
+                "title": "Chromium (Depth 2)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-chromium",
+                            3
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "saving-throw",
+                "text": "You are immune to rust, corrosion and effects that damage your items with acid.",
+                "title": "Chromium (Depth 3)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-chromium",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "all",
+                "text": "Once per encounter, when your Carapace's Hardness would be reduced or bypassed, it isn't.",
+                "title": "Chromium (Depth 4)"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-green"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

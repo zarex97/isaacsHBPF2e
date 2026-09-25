@@ -85,8 +85,8 @@ this file.
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| A-27a | §4.3 | **2**, plus the **highest** Hardness bonus among your bound Substrates (Diamond, Steel, Chromium), plus Gray's Instinct. | `test-assimilator` pins it | ⚠️ | Live: the plate's Hardness reads **2**. The *highest Substrate bonus* half waits on Substrates (Phase 2) |
-| A-27b | §4.3 | Substrate bonuses do not add together unless a Bond says so (*Adamant Shell*). |  | ☐ |  |
+| A-27a | §4.3 | **2**, plus the **highest** Hardness bonus among your bound Substrates (Diamond, Steel, Chromium), plus Gray's Instinct. | `test-assimilator` pins it | ⚠️ | Live: Hardness **2** bare; **4** with Chromium or Steel at 1; **10** with Diamond 3 beside Steel 1; **14** at a Depth 4 Hardness Substrate; **5** with Nickel's Plate Aberration. The engine takes the highest Substrate bonus and a rule adds it to the plate. Gray's Instinct term waits on Phase 4 |
+| A-27b | §4.3 | Substrate bonuses do not add together unless a Bond says so (*Adamant Shell*). |  | ✅ | Live: Diamond 3 (+8) and Steel 1 (+2) together gave Hardness **10**, not 12. *Adamant Shell*, which makes them add, is a Phase 5 Bond |
 | A-28 | §4.3 | **10 + 5 per level** | `test-assimilator` pins it | ✅ | Live: the plate's maximum reads **15 / 30 / 35 / … / 95 / 110** at 1st, 4th, 5th, 17th and 20th. A level keeps the plate's damage rather than repairing it: **12/15 at 1st → 32/35 at 5th** |
 | A-29 | §4.3 | Half its Hit Points |  | ✅ | Live: Broken Threshold **7** on a 15-point plate and **17** on a 35-point one — pf2e derives it as half when the `hp-max` alteration writes the maximum |
 | A-30 | §4.3 | **Carapace Block** 🜲 **Reaction** — *Trigger:* you take physical damage. | `test-assimilator` pins it | ✅ | Live at 5th: armed, **20 fire** was taken in full (**20**), the plate untouched, and the block **stayed armed**. It fires on physical damage only |
@@ -106,7 +106,7 @@ this file.
 | A-38b | §4.4 | If you already hold it, its **Depth increases by 1**; otherwise it enters your Lattice at **Depth 1**. | `test-assimilator` pins it | ✅ | Live: Ruby entered at **Depth 1**, then **1 → 2 → 3**; Garnet **1 → 2 → 3 → 4**, each Feed one step. The badge on *Substrate: Ruby* shows it |
 | A-38c | §4.4 | Either way it costs Mass equal to its new Depth, and the physical Substrate is destroyed. | `test-assimilator` pins it | ✅ | Live at 5th: feeding Garnet to Depth 2 with Gem 3/3 spent was **refused** — *"Not enough gem Mass: 3 of 3 spent, and Depth 2 costs one more."* The specimen fed is destroyed (the Ruby stack fell by one) |
 | A-39a | §4.4 | **Shed** — During your daily preparations only. |  | ✅ | Live: Shed was **refused** outside preparations; after **Rest for the Night** (pf2e's own macro) preparations were open and Shed worked |
-| A-39b | §4.4 | Remove any Substrate, or reduce any Substrate's Depth, freeing that Mass. |  | ✅ | Live: Iron shed **2 → 1** during preparations, freeing one Metal Mass that a later Feed spent |
+| A-39b | §4.4 | Remove any Substrate, or reduce any Substrate's Depth, freeing that Mass. |  | ✅ | Live: Iron shed **2 → 1** freed a Metal Mass, and Silver shed **to 0** left the record and the sheet. **Fixed while driving:** the record was written as an object, which Foundry *merges* — a Substrate removed from it survived the write, so shedding to nothing never removed anything; removed keys are now deleted explicitly |
 | A-39c | §4.4 | What you shed is destroyed, not recovered. |  | ✅ | Live: nothing came back to the inventory when Iron was shed |
 | A-40a | §4.4 | **Depth 1–2 takes an ordinary specimen** | `test-assimilator` pins it | ✅ | Live: an ordinary **Ruby** (a treasure by that name) fed Depth 1 and 2 |
 | A-40b | §4.4 | **Depth 3–4 takes a quickened specimen** | `test-assimilator` pins it | ✅ | Live at 11th: the ordinary Ruby was **refused** for Depth 3 — *"Depth 3 takes a quickened specimen"* — and a GM-marked *Heart-Ruby of the Breach* was accepted |
@@ -176,8 +176,8 @@ this file.
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 7 |
-| ✅ | 60 |
+| ☐ | 6 |
+| ✅ | 61 |
 | ⚠️ | 9 |
 | ❌ | 0 |
 | 🔧 | 0 |

@@ -20,6 +20,12 @@ import { DamageBus, PRIORITY } from "./damage-bus.mjs";
 export const OPTION = "self:damaged-this-encounter";
 const PATH = `flags.pf2e.rollOptions.all.${OPTION}`;
 
+/** The started encounter this creature is fighting in, if any. */
+export function encounterOf(actor) {
+    return game.combats?.find((c) => c.started
+        && c.combatants.some((x) => (x.token?.actor ?? x.actor) === actor || x.actor?.id === actor?.id)) ?? null;
+}
+
 /** `applyDamage` may run on a token's contextual clone; write to the document behind it. */
 function liveActor(actor, params) {
     const passed = params?.token?.document ?? params?.token ?? null;
@@ -29,12 +35,11 @@ function liveActor(actor, params) {
 export const EncounterDamage = {
     registerHooks() {
         DamageBus.after("damaged this encounter", PRIORITY.encounterDamage, async (actor, params, before) => {
-            if (!game.combat?.started) return;
             const live = liveActor(actor, params);
             if (!live?.isOwner) return;
-            // *This* encounter: a creature standing outside the fight is not in it, however it is hurt.
-            const inIt = game.combat.combatants.some((c) => (c.token?.actor ?? c.actor) === live || c.actor?.id === live.id);
-            if (!inIt) return;
+            // *This* encounter: one the creature is in and that has started. `game.combat` is whichever encounter
+            // the tracker happens to be showing, which in a world with two running is not necessarily its own.
+            if (!encounterOf(live)) return;
             const now = live.hitPoints?.value ?? before;
             if (now >= before || live.flags?.pf2e?.rollOptions?.all?.[OPTION]) return;
             await live.update({ [PATH]: true });

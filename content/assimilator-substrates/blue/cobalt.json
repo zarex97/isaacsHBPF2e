@@ -1,0 +1,273 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "blue",
+                    "kind": "metal",
+                    "slug": "cobalt",
+                    "specimenNames": [
+                        "smalt"
+                    ]
+                }
+            }
+        }
+    },
+    "folder": "Blue",
+    "img": "icons/commodities/metal/ingot-blue.webp",
+    "name": "Substrate: Cobalt",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Energy / Conductivity &middot; <strong>Mutation:</strong> Arcane Channel</p><p><em>A lash of blue-white energy that is not attached to anything and comes back anyway.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td>You gain a <strong>30-foot ranged unarmed Strike</strong> dealing <strong>1d6</strong> damage of your Instinct's type.</td></tr><tr><td>2</td><td>Range <strong>60 feet</strong>; damage <strong>2d6</strong>.</td></tr><tr><td>3</td><td>Your Mutations' energy damage counts as <strong>magical</strong>; +1 circumstance bonus to counteract checks.</td></tr><tr><td>4</td><td>Range <strong>120 feet</strong>; damage <strong>4d6</strong>; once per round it may target <strong>two</strong> creatures.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "category": "unarmed",
+                "damage": {
+                    "base": {
+                        "damageType": "{actor|flags.isaacs-hb-pf2e.assimilator.derived.instinctType}",
+                        "dice": 1,
+                        "die": "d6"
+                    }
+                },
+                "group": "brawling",
+                "img": "icons/magic/lightning/bolt-strike-blue.webp",
+                "key": "Strike",
+                "label": "Arcane Channel",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-cobalt",
+                            1
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-cobalt",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-cobalt",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "range": {
+                    "increment": 30
+                },
+                "slug": "arcane-channel",
+                "traits": [
+                    "unarmed"
+                ]
+            },
+            {
+                "category": "unarmed",
+                "damage": {
+                    "base": {
+                        "damageType": "{actor|flags.isaacs-hb-pf2e.assimilator.derived.instinctType}",
+                        "dice": 2,
+                        "die": "d6"
+                    }
+                },
+                "group": "brawling",
+                "img": "icons/magic/lightning/bolt-strike-blue.webp",
+                "key": "Strike",
+                "label": "Arcane Channel",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-cobalt",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-cobalt",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-cobalt",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "range": {
+                    "increment": 60
+                },
+                "slug": "arcane-channel",
+                "traits": [
+                    "unarmed"
+                ]
+            },
+            {
+                "category": "unarmed",
+                "damage": {
+                    "base": {
+                        "damageType": "{actor|flags.isaacs-hb-pf2e.assimilator.derived.instinctType}",
+                        "dice": 2,
+                        "die": "d6"
+                    }
+                },
+                "group": "brawling",
+                "img": "icons/magic/lightning/bolt-strike-blue.webp",
+                "key": "Strike",
+                "label": "Arcane Channel",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-cobalt",
+                            3
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-cobalt",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "range": {
+                    "increment": 60
+                },
+                "slug": "arcane-channel",
+                "traits": [
+                    "unarmed",
+                    "magical"
+                ]
+            },
+            {
+                "category": "unarmed",
+                "damage": {
+                    "base": {
+                        "damageType": "{actor|flags.isaacs-hb-pf2e.assimilator.derived.instinctType}",
+                        "dice": 4,
+                        "die": "d6"
+                    }
+                },
+                "group": "brawling",
+                "img": "icons/magic/lightning/bolt-strike-blue.webp",
+                "key": "Strike",
+                "label": "Arcane Channel",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-cobalt",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "range": {
+                    "increment": 120
+                },
+                "slug": "arcane-channel",
+                "traits": [
+                    "unarmed",
+                    "magical"
+                ]
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-cobalt",
+                            3
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "all",
+                "text": "+1 circumstance bonus to counteract checks.",
+                "title": "Cobalt (Depth 3)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-cobalt",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "arcane-channel-attack-roll",
+                "text": "Once per round, Arcane Channel may target two creatures.",
+                "title": "Cobalt (Depth 4)"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-blue"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}
