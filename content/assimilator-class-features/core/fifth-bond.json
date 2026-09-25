@@ -1,0 +1,50 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "grants": {
+                    "bondSlots": 1,
+                    "gem": 2,
+                    "metal": 2
+                }
+            }
+        }
+    },
+    "folder": "Core",
+    "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
+    "name": "Fifth Bond",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>You gain a fifth Bond slot, and your Gem Mass and Metal Mass each increase by 2.</p>"
+        },
+        "level": {
+            "value": 20
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

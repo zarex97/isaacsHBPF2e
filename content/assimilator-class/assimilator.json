@@ -80,6 +80,48 @@
                 "name": "Assimilation Mastery",
                 "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Assimilation Mastery"
             },
+            "apoth": {
+                "img": "icons/magic/light/explosion-star-large-orange.webp",
+                "level": 19,
+                "name": "Apotheosis",
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Apotheosis"
+            },
+            "assim": {
+                "img": "icons/magic/life/heart-cross-strong-flame-green.webp",
+                "level": 1,
+                "name": "Assimilation",
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Assimilation"
+            },
+            "bond1": {
+                "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
+                "level": 4,
+                "name": "First Bond",
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.First Bond"
+            },
+            "bond2": {
+                "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
+                "level": 8,
+                "name": "Second Bond",
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Second Bond"
+            },
+            "bond3": {
+                "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
+                "level": 12,
+                "name": "Third Bond",
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Third Bond"
+            },
+            "bond4": {
+                "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
+                "level": 16,
+                "name": "Fourth Bond",
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Fourth Bond"
+            },
+            "bond5": {
+                "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
+                "level": 20,
+                "name": "Fifth Bond",
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Fifth Bond"
+            },
             "carap": {
                 "img": "icons/creatures/claws/claw-talons-glowing-orange.webp",
                 "level": 1,
@@ -98,11 +140,29 @@
                 "name": "Carapace Mastery",
                 "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Carapace Mastery"
             },
+            "grow3": {
+                "img": "icons/creatures/abilities/dragon-scales-red.webp",
+                "level": 3,
+                "name": "Growth (3rd)",
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Growth (3rd)"
+            },
+            "grow4": {
+                "img": "icons/creatures/abilities/dragon-scales-red.webp",
+                "level": 14,
+                "name": "Growth (14th)",
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Growth (14th)"
+            },
             "gwspe": {
                 "img": "icons/skills/melee/hand-grip-sword-orange.webp",
                 "level": 17,
                 "name": "Greater Weapon Specialization",
                 "uuid": "Compendium.pf2e.classfeatures.Item.Greater Weapon Specialization"
+            },
+            "insti": {
+                "img": "icons/magic/perception/eye-ringed-glow-angry-red.webp",
+                "level": 1,
+                "name": "Instinct",
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Instinct"
             },
             "jugge": {
                 "img": "systems/pf2e/icons/features/classes/juggernaut.webp",
@@ -115,6 +175,30 @@
                 "level": 7,
                 "name": "Living Weapon",
                 "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Living Weapon"
+            },
+            "refle": {
+                "img": "icons/magic/defensive/shield-barrier-flaming-diamond-red.webp",
+                "level": 7,
+                "name": "Symbiotic Reflex",
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Symbiotic Reflex"
+            },
+            "skin2": {
+                "img": "icons/creatures/abilities/dragon-scales-red.webp",
+                "level": 5,
+                "name": "Second Skin",
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Second Skin"
+            },
+            "skin3": {
+                "img": "icons/creatures/abilities/dragon-scales-red.webp",
+                "level": 11,
+                "name": "Third Skin",
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Third Skin"
+            },
+            "skin4": {
+                "img": "icons/creatures/abilities/dragon-scales-red.webp",
+                "level": 17,
+                "name": "Fourth Skin",
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Fourth Skin"
             },
             "smast": {
                 "img": "icons/equipment/chest/breastplate-layered-leather-brown.webp",

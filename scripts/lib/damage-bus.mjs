@@ -35,6 +35,8 @@ export const PRIORITY = {
     wound: 20,
     /** `riders/sources.mjs` — the `damage-applied` rider event. */
     riders: 30,
+    /** `lib/encounter-damage.mjs` — marks a creature that has lost Hit Points in this encounter. */
+    encounterDamage: 35,
     /** `soulbound/regeneracion.mjs` — reads the damage type, which exists only here. */
     regeneracion: 40,
 };

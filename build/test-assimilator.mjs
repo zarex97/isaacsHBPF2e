@@ -36,7 +36,8 @@ function errorsFor({ substrates = [], bonds = [], feats = [] } = {}) {
 }
 
 const FLAG = "isaacs-hb-pf2e";
-const at = (slug, depth) => `assimilator:substrate:${slug}:${depth}`;
+const at = (slug, depth) => ({ gte: [`self:effect:substrate-${slug}`, depth] });
+const below = (slug, depth) => ({ lt: [`self:effect:substrate-${slug}`, depth] });
 const tag = (substrate, depth) => ({ [FLAG]: { assimilator: { substrate, depth } } });
 
 /** A Ruby written the way programme §7.2 says, with the vocabulary the validator holds it to. */
@@ -47,13 +48,13 @@ function ruby(overrides = {}) {
         flags: { [FLAG]: { assimilator: { substrate: { slug: "ruby", colour: "red", kind: "gem" } } } },
         system: {
             rules: overrides.rules ?? [
-                { key: "RollOption", domain: "all", option: "assimilator:furnace-light", predicate: [at("ruby", 1)] },
+                { key: "TokenLight", value: { dim: 10 } },
                 { key: "DamageDice", selector: "unarmed-damage", slug: "substrate-ruby", damageType: "fire",
                     diceNumber: 1, dieSize: "d4", flags: tag("ruby", 2),
-                    predicate: [at("ruby", 2), { not: at("ruby", 3) }] },
+                    predicate: [at("ruby", 2), below("ruby", 3)] },
                 { key: "DamageDice", selector: "unarmed-damage", slug: "substrate-ruby", damageType: "fire",
                     diceNumber: 1, dieSize: "d6", flags: tag("ruby", 3),
-                    predicate: [at("ruby", 3), { not: at("ruby", 4) }, "carapace:intact"] },
+                    predicate: [at("ruby", 3), below("ruby", 4), "carapace:intact"] },
                 { key: "DamageDice", selector: "unarmed-damage", slug: "substrate-ruby", damageType: "fire",
                     diceNumber: 1, dieSize: "d6", flags: tag("ruby", 4),
                     predicate: [at("ruby", 4), "carapace:intact"] },
@@ -85,13 +86,13 @@ check("the same Substrate twice is refused", errorsFor({ substrates: [ruby(), ru
     const doc = ruby();
     doc.system.rules.pop();
     check("a missing rung is Depth 4 doing nothing", errorsFor({ substrates: [doc] }), [
-        'no rule requires "assimilator:substrate:ruby:4" — Depth 4 would do nothing',
+        "no rule needs Depth 4 — it would do nothing",
     ]);
 }
 
 {
     const doc = ruby();
-    doc.system.rules[2].predicate = [at("ruby", 3), { not: at("ruby", 4) }];
+    doc.system.rules[2].predicate = [at("ruby", 3), below("ruby", 4)];
     check("Depth 3 without carapace:intact survives the plate breaking", errorsFor({ substrates: [doc] }), [
         'rule 2 (DamageDice): needs Depth 3 but not "carapace:intact", so a broken Carapace would keep it',
     ]);
@@ -109,7 +110,7 @@ check("the same Substrate twice is refused", errorsFor({ substrates: [ruby(), ru
     delete doc.system.rules[1].slug;
     delete doc.system.rules[1].flags;
     check("untagged damage loses its provenance", errorsFor({ substrates: [doc] }), [
-        'rule 1 (DamageDice): slug must be "substrate-ruby" so an Instinct can find it in the modifier list',
+        'rule 1 (DamageDice): slug must be "substrate-ruby" or begin "substrate-ruby-" so an Instinct can find it',
         "rule 1 (DamageDice): must carry flags.isaacs-hb-pf2e.assimilator = { substrate: \"ruby\", depth: <n> }",
     ]);
 }
@@ -134,7 +135,7 @@ check("the same Substrate twice is refused", errorsFor({ substrates: [ruby(), ru
     const doc = ruby();
     doc.system.rules.push({ key: "RollOption", domain: "all", option: "x", predicate: [at("iron", 2)] });
     check("a Substrate reads only its own Depth", errorsFor({ substrates: [doc] }), [
-        'rule 4 (RollOption): predicates on another Substrate\'s Depth ("assimilator:substrate:iron:2") — a Substrate reads only its own',
+        'rule 4 (RollOption): predicates on another Substrate\'s Depth ("substrate-iron") — a Substrate reads only its own',
     ]);
 }
 
@@ -283,6 +284,68 @@ check("the same Substrate twice is refused", errorsFor({ substrates: [ruby(), ru
     check("…nothing from a plate at 0 Hit Points", blockAmount(20, 8, 0), 0);
     check("…nothing from healing", blockAmount(-10, 8, 30), 0);
     check("A-32 a plate with fewer Hit Points than Hardness still turns its full Hardness", blockAmount(20, 8, 3), 8);
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  The engine's rules                                                                          */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    const fs = await import("node:fs");
+    const path = await import("node:path");
+    const { grantsOf, feedCheck, instinctOf, colourTotals, spentOf, mutationDepth, damageFrom } =
+        await import("../scripts/assimilator/engine.mjs");
+
+    // Guide §3.1, the table v1.1 made canon (#82): Mass and the Depth cap by level.
+    const TABLE = { 1: [1, 1, 1], 3: [2, 1, 1], 5: [3, 2, 2], 8: [5, 4, 2], 11: [7, 5, 3], 14: [9, 7, 3], 17: [11, 8, 4], 20: [13, 10, 4] };
+    const dir = new URL("../content/assimilator-class-features/core/", import.meta.url);
+    const features = fs.readdirSync(dir).map((f) => JSON.parse(fs.readFileSync(new URL(f, dir), "utf8")));
+    const grantsAt = (level, { apotheosis = false } = {}) => grantsOf(features
+        .filter((f) => f.system.level.value <= level && (apotheosis || f.system.slug !== "apotheosis" && f.name !== "Apotheosis"))
+        .map((f) => f.flags?.["isaacs-hb-pf2e"]?.assimilator?.grants));
+    for (const [level, [gem, metal, cap]] of Object.entries(TABLE)) {
+        const g = grantsAt(Number(level));
+        check(`A-42/A-51 §3.1 at ${level}th: ${gem} Gem, ${metal} Metal, Depth cap ${cap}`, [g.gem, g.metal, g.depthCap], [gem, metal, cap]);
+    }
+    check("A-61 Apotheosis adds 3 in each track at 19th", [grantsAt(20, { apotheosis: true }).gem, grantsAt(20, { apotheosis: true }).metal], [16, 13]);
+    check("A-47 five Bond slots, at 4th, 8th, 12th, 16th and 20th",
+        [3, 4, 8, 12, 16, 20].map((l) => grantsAt(l).bondSlots), [0, 1, 2, 3, 4, 5]);
+    check("A-41 the Vein: one grant per feature that raises Mass", [1, 3, 5, 8, 20].map((l) => grantsAt(l).sources), [1, 2, 3, 4, 8]);
+
+    const catalogue = {
+        ruby: { name: "Substrate: Ruby", colour: "red", kind: "gem", damageFrom: 2 },
+        iron: { name: "Substrate: Iron", colour: "red", kind: "metal", damageFrom: 1 },
+        copper: { name: "Substrate: Copper", colour: "red", kind: "metal", damageFrom: null },
+        sapphire: { name: "Substrate: Sapphire", colour: "blue", kind: "gem", damageFrom: 2 },
+    };
+    const at5 = { gem: 3, metal: 2, depthCap: 2 };
+    check("A-37 a Substrate at Depth N costs N", spentOf({ ruby: 2, iron: 1, copper: 1 }, catalogue), { gem: 2, metal: 2 });
+    check("A-38b a new Substrate enters at Depth 1",
+        feedCheck({ slug: "ruby", paid: {}, catalogue, grants: at5, specimen: "ordinary" }), { ok: true, depth: 1 });
+    check("A-38b feeding one you hold raises it by 1",
+        feedCheck({ slug: "ruby", paid: { ruby: 1 }, catalogue, grants: at5, specimen: "ordinary" }), { ok: true, depth: 2 });
+    check("A-52 the Depth cap is the gate",
+        feedCheck({ slug: "ruby", paid: { ruby: 2 }, catalogue, grants: at5, specimen: "quickened" }).ok, false);
+    check("A-38c the new Depth must fit the track's Mass",
+        feedCheck({ slug: "sapphire", paid: { ruby: 2, sapphire: 1 }, catalogue, grants: at5, specimen: "ordinary" }).ok, false);
+    check("A-40b Depth 3 takes a quickened specimen",
+        feedCheck({ slug: "ruby", paid: { ruby: 2 }, catalogue, grants: { gem: 7, metal: 5, depthCap: 3 }, specimen: "ordinary" }).ok, false);
+    check("…and a quickened one will do",
+        feedCheck({ slug: "ruby", paid: { ruby: 2 }, catalogue, grants: { gem: 7, metal: 5, depthCap: 3 }, specimen: "quickened" }).ok, true);
+    check("A-38a nothing to feed, no feeding",
+        feedCheck({ slug: "ruby", paid: {}, catalogue, grants: at5, specimen: null }).ok, false);
+
+    check("A-43 the Instinct is the colour with the most Mass",
+        instinctOf(colourTotals({ ruby: 2, sapphire: 1 }, catalogue)).instinct, "red");
+    check("A-45 a tie is the player's to break — unbroken, there is no Instinct",
+        instinctOf(colourTotals({ ruby: 1, sapphire: 1 }, catalogue)), { instinct: null, tied: ["red", "blue"] });
+    check("…and broken, it is theirs", instinctOf(colourTotals({ ruby: 1, sapphire: 1 }, catalogue), "blue").instinct, "blue");
+
+    check("I-1a Red sums the Depths of the Mutations adding damage", mutationDepth({ ruby: 3, iron: 2, copper: 2 }, catalogue), 5);
+    check("…and Ruby at Depth 1 adds no damage yet", mutationDepth({ ruby: 1 }, catalogue), 0);
+
+    const ruby = JSON.parse(fs.readFileSync(new URL("../content/assimilator-substrates/red/ruby.json", import.meta.url), "utf8"));
+    check("Ruby first adds damage at Depth 2 — its crit-only persistent does not count", damageFrom(ruby.system.rules), 2);
 }
 
 /* -------------------------------------------------------------------------------------------- */
