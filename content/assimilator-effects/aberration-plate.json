@@ -1,0 +1,57 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "aberration": "plate",
+                "hardness": 3
+            }
+        }
+    },
+    "img": "icons/magic/unholy/strike-body-explode-disintegrate.webp",
+    "name": "Aberration: A Plate",
+    "system": {
+        "description": {
+            "value": "<p>Hardness +3 and a &minus;5-foot Speed penalty.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "selector": "land-speed",
+                "slug": "aberrant-plate",
+                "value": -5
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-aberration"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

@@ -1,0 +1,59 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.assimilator-effects.Item.Effect: Pass Through"
+                    },
+                    "event": "action-used",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "folder": "Mutations",
+    "img": "icons/consumables/potions/bottle-round-corked-silver.webp",
+    "name": "Pass Through",
+    "system": {
+        "actionType": {
+            "value": "reaction"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>Trigger</strong> You are hit.</p><hr /><p>Reduce the damage by your level as the blow passes through you.</p><p><em>Use it as the damage is rolled; it is taken off that damage as it lands. With Carapace Block or Symbiotic Reflex also armed, only the largest applies.</em></p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "level": {
+            "value": 11
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-mutation-action"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

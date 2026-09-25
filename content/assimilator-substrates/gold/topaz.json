@@ -1,0 +1,235 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "gold",
+                    "kind": "gem",
+                    "slug": "topaz"
+                }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "slug": "frightened",
+                        "type": "condition",
+                        "value": 1
+                    },
+                    "event": "strike-resolved",
+                    "note": "Topaz Depth 3.",
+                    "outcomes": [
+                        "criticalSuccess"
+                    ],
+                    "predicate": [
+                        {
+                            "or": [
+                                "item:category:unarmed",
+                                "item:trait:unarmed"
+                            ]
+                        },
+                        {
+                            "not": "assimilator:suppressed"
+                        },
+                        {
+                            "gte": [
+                                "self:effect:substrate-topaz",
+                                3
+                            ]
+                        },
+                        "carapace:intact"
+                    ]
+                }
+            ]
+        }
+    },
+    "folder": "Gold",
+    "img": "icons/commodities/gems/gem-faceted-cushion-orange.webp",
+    "name": "Substrate: Topaz",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Power &middot; <strong>Mutation:</strong> Regal Aspect</p><p><em>The plate thickens into something ceremonial. It looks worn rather than grown.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td>+1 item bonus to Intimidation. Your critical hits deal <strong>+2 damage</strong>.</td></tr><tr><td>2</td><td>Your unarmed Strikes gain the <strong>critical specialization effect</strong> of the brawling group.</td></tr><tr><td>3</td><td>A creature you critically hit is <strong>frightened 1</strong>.</td></tr><tr><td>4</td><td>When you critically hit, apply the <strong>Depth 4 rider of one other bound Substrate</strong> to that Strike, whether or not it is at Depth 4.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-topaz",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-topaz",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "intimidation",
+                "slug": "topaz-intimidation-1",
+                "type": "item",
+                "value": 1
+            },
+            {
+                "critical": true,
+                "flags": {
+                    "isaacs-hb-pf2e": {
+                        "assimilator": {
+                            "depth": 1,
+                            "substrate": "topaz"
+                        }
+                    }
+                },
+                "key": "FlatModifier",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-topaz",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-topaz",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "unarmed-damage",
+                "slug": "substrate-topaz-crit",
+                "value": 2
+            },
+            {
+                "key": "CriticalSpecialization",
+                "predicate": [
+                    "item:category:unarmed",
+                    "item:group:brawling",
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-topaz",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-topaz",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "Note",
+                "outcome": [
+                    "criticalSuccess"
+                ],
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-topaz",
+                            3
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-topaz",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-attack-roll",
+                "text": "Regal Aspect: the creature you critically hit is frightened 1.",
+                "title": "Topaz (Depth 3)"
+            },
+            {
+                "key": "Note",
+                "outcome": [
+                    "criticalSuccess"
+                ],
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-topaz",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-attack-roll",
+                "text": "Regal Aspect: apply the Depth 4 rider of one other bound Substrate to this Strike.",
+                "title": "Topaz (Depth 4)"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-gold"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

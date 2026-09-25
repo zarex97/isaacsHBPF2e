@@ -1,0 +1,208 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "white",
+                    "kind": "metal",
+                    "slug": "aluminium",
+                    "specimenNames": [
+                        "alum"
+                    ]
+                }
+            }
+        }
+    },
+    "folder": "White",
+    "img": "icons/commodities/metal/ingot-worn-silver.webp",
+    "name": "Substrate: Aluminium",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Lightness &middot; <strong>Mutation:</strong> Hollow Frame</p><p><em>Almost nothing. The plate is there and it weighs less than the clothes underneath.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td>Your Carapace has <strong>no Bulk</strong> and imposes no penalties. <strong>+5 feet Speed</strong>.</td></tr><tr><td>2</td><td><strong>+10 feet Speed.</strong> You take no damage from falls of less than 30 feet.</td></tr><tr><td>3</td><td>You Leap twice as far. Once per day, <strong>Fly 30 feet</strong> as a single action.</td></tr><tr><td>4</td><td>Permanent <strong>fly Speed 20 feet</strong>. You may end your turn in midair without falling.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-aluminium",
+                            1
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-aluminium",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-aluminium",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "land-speed",
+                "slug": "aluminium-land-speed-1",
+                "value": 5
+            },
+            {
+                "key": "FlatModifier",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-aluminium",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-aluminium",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "land-speed",
+                "slug": "aluminium-land-speed-2",
+                "value": 10
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-aluminium",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-aluminium",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "all",
+                "text": "You take no damage from falls of less than 30 feet.",
+                "title": "Aluminium (Depth 2)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-aluminium",
+                            3
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "athletics",
+                "text": "You Leap twice as far.",
+                "title": "Aluminium (Depth 3)"
+            },
+            {
+                "allowDuplicate": false,
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-aluminium",
+                            3
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Hollow Flight"
+            },
+            {
+                "key": "BaseSpeed",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-aluminium",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "fly",
+                "value": 20
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-white"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

@@ -172,8 +172,9 @@ function validateBondClosure(bonds, known, errors) {
             if (!known.has(slug)) errors.push(`${where}: names Substrate "${slug}", which is not in the Substrates pack`);
         }
     }
-    // The lexicon's own closure holds only for the whole set, so it is asserted only once the set is whole.
-    if (known.size === 36 && bonds.length > 0) {
+    // The lexicon's own closure holds only for the whole set — all 36 Substrates and all thirty Bonds — so it is
+    // asserted only once both are whole (Phase 5); before that every unwritten Bond would read as a gap.
+    if (known.size === 36 && bonds.length >= 30) {
         for (const [slug, where] of known) {
             if (!used.has(slug)) errors.push(`${where}: Substrate "${slug}" appears in no Bond (lexicon §14.1 has one for each)`);
         }

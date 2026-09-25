@@ -31,6 +31,9 @@ const LIBRA_ARMS = new Set(["twin-swords", "tridents", "nunchaku", "shields", "s
 /** ItemAlteration properties whose pf2e handler declares `value` as required, so `upgrade` needs one. */
 const UPGRADE_TAKES_A_VALUE = new Set([
     "runes-potency", "runes-striking", "runes-resilient", "damage-dice-number", "hardness", "hp-max",
+    // `frequency-max`'s handler declares `value` required and accepts every mode; Citrine and Quartz raise a
+    // granted action's uses per day to 2 with `upgrade`.
+    "frequency-max",
 ]);
 const FEAT_CATEGORIES = new Set(["class", "classfeature", "general", "skill", "ancestry", "ancestryfeature", "bonus"]);
 const DAMAGE_TYPES = new Set(pf2e.damageTypes);
@@ -582,6 +585,10 @@ function validateItem(doc, where, errors, family) {
                 : rule.key === "Weakness" ? iwr.weakness : iwr.resistance;
             const types = Array.isArray(rule.type) ? rule.type : [rule.type];
             for (const type of types.filter(Boolean)) {
+                // An injected type — `{actor|…}`, `{item|…}` — is resolved by pf2e in `afterPrepareData`
+                // *before* it checks the dictionary, so it can only be judged at runtime. The Assimilator's
+                // chosen types (Zinc's, Moonstone's) and its Instinct's damage type are written this way.
+                if (/^\{(actor|item|rule)\|[^}]+\}$/.test(type)) continue;
                 if (!known.includes(type)) {
                     errors.push(
                         `${where}: rules[${i}] ${rule.key} type "${type}" is not a pf2e ` +

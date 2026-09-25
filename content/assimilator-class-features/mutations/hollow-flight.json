@@ -1,0 +1,46 @@
+{
+    "folder": "Mutations",
+    "img": "icons/commodities/metal/ingot-worn-silver.webp",
+    "name": "Hollow Flight",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Fly 30 feet.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
+        },
+        "level": {
+            "value": 11
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-mutation-action"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator",
+                "move"
+            ]
+        }
+    },
+    "type": "feat"
+}

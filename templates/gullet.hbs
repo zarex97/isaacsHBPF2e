@@ -21,6 +21,28 @@
     <p class="hint"><button type="button" data-action="beginPrep">Begin daily preparations</button> (Rest for the Night does this.)</p>
     {{/if}}
 
+    {{#if choices.length}}
+    <h3>Daily choices</h3>
+    {{#each choices}}
+    <div class="gullet-choice" data-choice>
+        <label>{{label}}</label>
+        <select {{#if multi}}multiple size="{{options.length}}"{{/if}}>
+            {{#each options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+        </select>
+        {{#if ../owner}}<button type="button" data-action="choose" data-key="{{key}}">Set</button>{{/if}}
+    </div>
+    {{/each}}
+    {{/if}}
+    {{#if nickel}}
+    <div class="gullet-choice" data-choice>
+        <label>Unstable Growth — Aberrations</label>
+        <select multiple size="6">{{#each nickel.options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
+        {{#if owner}}<button type="button" data-action="choose" data-key="nickel">Choose</button>
+        <button type="button" data-action="rollAberrations" data-reroll="false">Roll</button>
+        {{#if nickel.canReroll}}<button type="button" data-action="rollAberrations" data-reroll="true">Re-roll (once per encounter)</button>{{/if}}{{/if}}
+    </div>
+    {{/if}}
+
     <h3>Bound</h3>
     {{#if bound.length}}
     <table class="gullet-bound">

@@ -1,0 +1,188 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "white",
+                    "kind": "metal",
+                    "slug": "magnesium",
+                    "specimenNames": [
+                        "magnesia"
+                    ]
+                }
+            }
+        }
+    },
+    "folder": "White",
+    "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+    "name": "Substrate: Magnesium",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Radiance &middot; <strong>Mutation:</strong> Flare Core</p><p><em>It burns white and it does not care what it is burning.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td>You shed <strong>bright light in a 20-foot radius</strong> at will. +1 item bonus to saves against blindness and dazzle.</td></tr><tr><td>2</td><td>Once per encounter, as a single action: creatures in a <strong>15-foot emanation</strong> must succeed at a Fortitude save against your class DC or be <strong>dazzled</strong> for 1 round.</td></tr><tr><td>3</td><td>On a failed save they are <strong>blinded</strong> for 1 round instead. The flare deals <strong>fire damage equal to your level</strong> to creatures with light sensitivity or light blindness.</td></tr><tr><td>4</td><td>The emanation becomes <strong>30 feet</strong> and <strong>counteracts magical darkness</strong>. Once per day, it instead heals each ally within it for your level.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "TokenLight",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-magnesium",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-magnesium",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "value": {
+                    "bright": 20,
+                    "dim": 40
+                }
+            },
+            {
+                "key": "FlatModifier",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-magnesium",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-magnesium",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    },
+                    "item:trait:visual"
+                ],
+                "selector": "saving-throw",
+                "slug": "magnesium-saving-throw-1",
+                "type": "item",
+                "value": 1
+            },
+            {
+                "allowDuplicate": false,
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-magnesium",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-magnesium",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Flare"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-magnesium",
+                            3
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "all",
+                "text": "Flare: a failed save is blinded instead, and it deals fire damage equal to your level to creatures with light sensitivity or light blindness.",
+                "title": "Magnesium (Depth 3)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-magnesium",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "all",
+                "text": "Flare: a 30-foot emanation that counteracts magical darkness; once per day it may instead heal each ally within it for your level.",
+                "title": "Magnesium (Depth 4)"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-white"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

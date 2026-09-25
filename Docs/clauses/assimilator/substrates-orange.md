@@ -41,9 +41,9 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| CA-1a | Carnelian D1 | **+5 feet Speed.** |  | ☐ |  |
-| CA-2a | Carnelian D2 | If you moved at least 10 feet this turn before attacking, your Strike deals **+1d4**. |  | ☐ |  |
-| CA-3a | Carnelian D3 | **+10 feet Speed**, and the bonus becomes **+1d6**. |  | ☐ |  |
+| CA-1a | Carnelian D1 | **+5 feet Speed.** |  | ✅ | Live: land Speed **25 → 30** |
+| CA-2a | Carnelian D2 | If you moved at least 10 feet this turn before attacking, your Strike deals **+1d4**. |  | ✅ | Live in an encounter, on the Assimilator's turn: **5 feet** moved — not marked; **10 feet** — `self:moved-10-feet-this-turn` set and the Strike gained **+1d4**; the mark cleared when the turn ended. **Fixed while driving:** the tracker read `game.combat`, which is the encounter the tracker *shows*, not the one the token is in |
+| CA-3a | Carnelian D3 | **+10 feet Speed**, and the bonus becomes **+1d6**. |  | ✅ | Live: Speed **35** at Depth 3 (+10, not +15) |
 | CA-4a | Carnelian D4 | Once per round, after a Strike, **Stride up to half your Speed** as a free action. |  | ☐ |  |
 
 ## 💎 Amber — *Reservoir* (lexicon §7)
@@ -66,7 +66,7 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | BR-1a | Bronze D1 | You are trained in improvised weapons as martial weapons, and take no penalty for using them. |  | ☐ |  |
-| BR-2a | Bronze D2 | If you Stride at least 10 feet, your next Strike this turn gains a **+1 circumstance bonus to hit**. |  | ☐ |  |
+| BR-2a | Bronze D2 | If you Stride at least 10 feet, your next Strike this turn gains a **+1 circumstance bonus to hit**. |  | ✅ | Live, the same move: the Strike's attack **+23 → +24** once 10 feet were moved |
 | BR-3a | Bronze D3 | Once per round, make a Strike and then a Shove, Trip or Grapple as a **single action**. |  | ☐ |  |
 | BR-4a | Bronze D4 | On a critical hit, immediately **Stride up to half your Speed** toward a different enemy as a free action. |  | ☐ |  |
 
@@ -77,10 +77,10 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | HG-1a | Mercury D1 | You Squeeze at full Speed and are not off-guard while squeezing. |  | ☐ |  |
-| HG-2a | Mercury D2 | **Resistance 5** to bludgeoning, piercing and slashing. |  | ☐ |  |
-| HG-3a | Mercury D3 | Once per round, as a reaction when you are hit, **reduce the damage by your level** as the blow passes through you. |  | ☐ |  |
+| HG-2a | Mercury D2 | **Resistance 5** to bludgeoning, piercing and slashing. |  | ✅ | Live: **bludgeoning 5, piercing 5, slashing 5** |
+| HG-3a | Mercury D3 | Once per round, as a reaction when you are hit, **reduce the damage by your level** as the blow passes through you. |  | ✅ | Live at 17th: *Pass Through* granted at Depth 3; armed, 40 fire from a creature's Claw took **23** — **17** turned, equal to level — and the reaction was spent |
 | HG-4a | Mercury D4 | You move through gaps as small as an inch. |  | ☐ |  |
-| HG-4b | Mercury D4 | Once per day, become **amorphous** for 1 minute: immune to precision damage, and critical hits against you deal normal damage. |  | ☐ |  |
+| HG-4b | Mercury D4 | Once per day, become **amorphous** for 1 minute: immune to precision damage, and critical hits against you deal normal damage. |  | ✅ | Live: *Amorphous* granted at Depth 4; used, the actor is immune to **precision** and **critical-hits** for 1 minute |
 
 ---
 
@@ -88,8 +88,8 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 19 |
-| ✅ | 0 |
+| ☐ | 12 |
+| ✅ | 7 |
 | ⚠️ | 0 |
 | ❌ | 0 |
 | 🔧 | 0 |

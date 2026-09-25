@@ -117,23 +117,39 @@ export const Carapace = {
         if (!params?.damage || typeof params.damage === "number") return undefined;
         const effects = actor.itemTypes?.effect ?? [];
         const plate = livingPlate(actor);
+        const fromCreature = !!params.item?.actor && params.item.actor !== actor;
         const block = physical(params.damage) && plate ? effects.find((e) => e.slug === ARMED) : null;
-        const reflex = params.item?.actor && params.item.actor !== actor ? effects.find((e) => e.slug === REFLEX) : null;
-        if (!block && !reflex) return undefined;
+        const reflex = fromCreature ? effects.find((e) => e.slug === REFLEX) : null;
+        // Any other armed reduction a Mutation grants — Mercury's Pass Through is the first — declares itself.
+        const others = effects.filter((e) => {
+            const r = e.flags?.[MODULE_ID]?.assimilator?.reduction;
+            return r && (!r.fromCreature || fromCreature);
+        });
+        if (!block && !reflex && others.length === 0) return undefined;
 
         const highest = actor.flags?.[MODULE_ID]?.assimilator?.derived?.highestDepth ?? 0;
+        const amountOf = (e) => {
+            const a = e.flags[MODULE_ID].assimilator.reduction.amount;
+            return a === "level" ? actor.level : Number(a) || 0;
+        };
         const shadowed = Object.prototype.hasOwnProperty.call(actor, "calculateHealthDelta");
         const original = actor.calculateHealthDelta;
-        const state = { absorbed: 0, plateId: plate?.id, spend: [block?.id, reflex?.id].filter(Boolean) };
+        const state = { absorbed: 0, plateId: plate?.id, spend: [block, reflex, ...others].filter(Boolean).map((e) => e.id) };
         pending.set(actor, state);
         actor.calculateHealthDelta = function (args) {
-            const blocked = block ? blockAmount(args.delta, plate.hardness, plate.hitPoints.value) : 0;
-            const resisted = reflex && args.delta > 0 ? Math.min(args.delta, 2 * highest) : 0;
-            const taken = Math.max(blocked, resisted);
+            const candidates = [];
+            if (block) candidates.push({ by: "Carapace Block", amount: blockAmount(args.delta, plate.hardness, plate.hitPoints.value), plate: true });
+            if (reflex && args.delta > 0) candidates.push({ by: "Symbiotic Reflex", amount: Math.min(args.delta, 2 * highest) });
+            for (const e of others) {
+                if (args.delta > 0) candidates.push({ by: e.name.replace(/^Effect:\s*/, ""), amount: Math.min(args.delta, amountOf(e)) });
+            }
+            // Guide §4.7: these reactions "do not stack against the same damage" — the largest applies.
+            const best = candidates.sort((a, b) => b.amount - a.amount || (b.plate ? 1 : 0) - (a.plate ? 1 : 0))[0];
+            const taken = best?.amount ?? 0;
             // The plate pays only when it was the Block that turned the blow.
-            state.absorbed = blocked > 0 && blocked >= resisted ? blocked : 0;
+            state.absorbed = best?.plate ? taken : 0;
             state.reduced = taken;
-            state.by = taken === 0 ? null : state.absorbed ? "Carapace Block" : "Symbiotic Reflex";
+            state.by = taken === 0 ? null : best.by;
             return original.call(this, { ...args, delta: args.delta - taken });
         };
         return () => {
@@ -151,10 +167,10 @@ export const Carapace = {
         const live = liveActor(actor, params);
         const spent = state.spend.map((id) => live.items.get(id)).filter(Boolean).map((e) => e.id);
         if (spent.length) await live.deleteEmbeddedDocuments("Item", spent);
-        if (state.by === "Symbiotic Reflex") {
+        if (state.by && state.by !== "Carapace Block") {
             await ChatMessage.create({
                 speaker: ChatMessage.getSpeaker({ actor: live }),
-                content: `<p><strong>Symbiotic Reflex</strong>: the thing wearing ${live.name} resists `
+                content: `<p><strong>${state.by}</strong>: the thing wearing ${live.name} turns `
                     + `<strong>${state.reduced}</strong> of that damage.</p>`,
             });
         }

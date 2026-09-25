@@ -1,0 +1,188 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "gray",
+                    "hardness": {
+                        "1": 2,
+                        "2": 5,
+                        "3": 8,
+                        "4": 12
+                    },
+                    "kind": "metal",
+                    "slug": "steel",
+                    "specimenNames": [
+                        "steel ingot"
+                    ]
+                }
+            }
+        }
+    },
+    "folder": "Gray",
+    "img": "icons/commodities/metal/ingot-steel.webp",
+    "name": "Substrate: Steel",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Structure &middot; <strong>Mutation:</strong> True Plate</p><p><em>Straightforward. Nothing about this is strange and that is its whole appeal.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td>Carapace <strong>Hardness +2</strong>. Your unarmed Strikes' damage die increases one step.</td></tr><tr><td>2</td><td><strong>Hardness +5.</strong></td></tr><tr><td>3</td><td><strong>Hardness +8.</strong> Your unarmed Strikes gain the <strong>versatile P</strong> and <strong>versatile S</strong> traits.</td></tr><tr><td>4</td><td><strong>Hardness +12.</strong> <strong>+1 damage die</strong> on your unarmed Strikes.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "mode": "upgrade",
+                "predicate": [
+                    "item:category:unarmed",
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-steel",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-steel",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "property": "damage-dice-faces"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-steel",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-steel",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "all",
+                "text": "True Plate: Hardness +5 (the plate takes the highest Substrate bonus).",
+                "title": "Steel (Depth 2)"
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "mode": "add",
+                "predicate": [
+                    "item:category:unarmed",
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-steel",
+                            3
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "property": "traits",
+                "value": "versatile-p"
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "mode": "add",
+                "predicate": [
+                    "item:category:unarmed",
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-steel",
+                            3
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "property": "traits",
+                "value": "versatile-s"
+            },
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "mode": "add",
+                "predicate": [
+                    "item:category:unarmed",
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-steel",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "property": "damage-dice-number",
+                "value": 1
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-gray"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

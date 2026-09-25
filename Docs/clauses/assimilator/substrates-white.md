@@ -44,9 +44,9 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | DI-1a | Diamond D1 | Carapace **Hardness +2**. |  | ☐ |  |
 | DI-2a | Diamond D2 | **Hardness +5.** |  | ☐ |  |
 | DI-2b | Diamond D2 | Reduce persistent damage you take by 2. |  | ☐ |  |
-| DI-3a | Diamond D3 | **Hardness +8.** |  | ☐ |  |
+| DI-3a | Diamond D3 | **Hardness +8.** |  | ✅ | Live: Diamond 3 (+8) with Steel 1 (+2) — Hardness **10**, the highest bonus and not the sum |
 | DI-3b | Diamond D3 | Once per encounter, a critical hit against you deals **normal damage** instead. |  | ☐ |  |
-| DI-4a | Diamond D4 | **Hardness +12.** |  | ☐ |  |
+| DI-4a | Diamond D4 | **Hardness +12.** |  | ✅ | Live: Hardness **14** at Depth 4 |
 | DI-4b | Diamond D4 | Once per **round** instead of once per encounter. |  | ☐ |  |
 
 ## 💎 Pearl — *Clear Tide* (lexicon §12)
@@ -56,8 +56,8 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | PE-1a | Pearl D1 | +1 item bonus to saves against poison and disease. |  | ☐ |  |
-| PE-1b | Pearl D1 | Once per day, reduce one condition's value by 1. |  | ☐ |  |
-| PE-2a | Pearl D2 | Once per encounter, as a single action, **end one condition of value 1** on yourself or an adjacent ally. |  | ☐ |  |
+| PE-1b | Pearl D1 | Once per day, reduce one condition's value by 1. |  | ✅ | Live: *Clear Tide* granted, free, 1/day |
+| PE-2a | Pearl D2 | Once per encounter, as a single action, **end one condition of value 1** on yourself or an adjacent ally. |  | ⚠️ | Live: *Cleansing Tide* granted at Depth 2; once per encounter is text |
 | PE-3a | Pearl D3 | Range **30 feet**, and it may instead reduce one **affliction's stage** by 1. |  | ☐ |  |
 | PE-4a | Pearl D4 | **Twice** per encounter, and it may instead **counteract** one spell effect of 4th rank or lower. |  | ☐ |  |
 
@@ -68,12 +68,12 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | AL-1a | Aluminium D1 | Your Carapace has **no Bulk** and imposes no penalties. |  | ☐ |  |
-| AL-1b | Aluminium D1 | **+5 feet Speed**. |  | ☐ |  |
-| AL-2a | Aluminium D2 | **+10 feet Speed.** |  | ☐ |  |
+| AL-1b | Aluminium D1 | **+5 feet Speed**. |  | ✅ | Live: land Speed **30** |
+| AL-2a | Aluminium D2 | **+10 feet Speed.** |  | ✅ | Live: land Speed **35** at Depth 2+ |
 | AL-2b | Aluminium D2 | You take no damage from falls of less than 30 feet. |  | ☐ |  |
 | AL-3a | Aluminium D3 | You Leap twice as far. |  | ☐ |  |
 | AL-3b | Aluminium D3 | Once per day, **Fly 30 feet** as a single action. |  | ☐ |  |
-| AL-4a | Aluminium D4 | Permanent **fly Speed 20 feet**. |  | ☐ |  |
+| AL-4a | Aluminium D4 | Permanent **fly Speed 20 feet**. |  | ✅ | Live: **fly 20** at Depth 4 |
 | AL-4b | Aluminium D4 | You may end your turn in midair without falling. |  | ☐ |  |
 
 ## ⚙️ Magnesium — *Flare Core* (lexicon §12)
@@ -84,7 +84,7 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | MG-1a | Magnesium D1 | You shed **bright light in a 20-foot radius** at will. |  | ☐ |  |
 | MG-1b | Magnesium D1 | +1 item bonus to saves against blindness and dazzle. |  | ☐ |  |
-| MG-2a | Magnesium D2 | Once per encounter, as a single action: creatures in a **15-foot emanation** must succeed at a Fortitude save against your class DC or be **dazzled** for 1 round. |  | ☐ |  |
+| MG-2a | Magnesium D2 | Once per encounter, as a single action: creatures in a **15-foot emanation** must succeed at a Fortitude save against your class DC or be **dazzled** for 1 round. |  | ⚠️ | Live: *Flare* granted at Depth 2; the emanation and its save are resolved by hand |
 | MG-3a | Magnesium D3 | On a failed save they are **blinded** for 1 round instead. |  | ☐ |  |
 | MG-3b | Magnesium D3 | The flare deals **fire damage equal to your level** to creatures with light sensitivity or light blindness. |  | ☐ |  |
 | MG-4a | Magnesium D4 | The emanation becomes **30 feet** and **counteracts magical darkness**. |  | ☐ |  |
@@ -96,9 +96,9 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 27 |
-| ✅ | 0 |
-| ⚠️ | 0 |
+| ☐ | 19 |
+| ✅ | 6 |
+| ⚠️ | 2 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 0 |

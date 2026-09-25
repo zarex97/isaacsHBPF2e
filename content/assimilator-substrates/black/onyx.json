@@ -1,0 +1,189 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "black",
+                    "kind": "gem",
+                    "slug": "onyx"
+                }
+            }
+        }
+    },
+    "folder": "Black",
+    "img": "icons/commodities/gems/gem-faceted-round-black.webp",
+    "name": "Substrate: Onyx",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Darkness &middot; <strong>Mutation:</strong> Shadow Mantle</p><p><em>The plate stops returning light. Edges become genuinely hard to locate.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td><strong>Darkvision.</strong> +1 item bonus to Stealth in dim light or darkness.</td></tr><tr><td>2</td><td>Once per day, create a 20-foot emanation of <strong>magical darkness</strong> for 1 minute. You see through it normally.</td></tr><tr><td>3</td><td>In dim light or darkness you may <strong>Hide and Sneak without cover or concealment</strong>, and gain +1 circumstance to AC.</td></tr><tr><td>4</td><td>Once per round, as a single action, <strong>teleport between two areas of darkness</strong> within 60 feet.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "Sense",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-onyx",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-onyx",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "darkvision"
+            },
+            {
+                "key": "FlatModifier",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-onyx",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-onyx",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    },
+                    {
+                        "or": [
+                            "lighting:dim",
+                            "lighting:darkness",
+                            "self:lighting:dim",
+                            "self:lighting:darkness"
+                        ]
+                    }
+                ],
+                "selector": "stealth",
+                "slug": "onyx-stealth-1",
+                "type": "item",
+                "value": 1
+            },
+            {
+                "allowDuplicate": false,
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-onyx",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-onyx",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Shadow Mantle"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-onyx",
+                            3
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "stealth",
+                "text": "In dim light or darkness you may Hide and Sneak without cover or concealment, and gain +1 circumstance to AC.",
+                "title": "Onyx (Depth 3)"
+            },
+            {
+                "allowDuplicate": false,
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-onyx",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Shadow Step"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-black"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

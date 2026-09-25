@@ -1,0 +1,41 @@
+{
+    "folder": "Mutations",
+    "img": "icons/commodities/gems/gem-oval-yellow.webp",
+    "name": "Discharge",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 2
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>Cost</strong> 3 Reservoir charges</p><hr /><p>A <strong>30-foot line</strong> of <strong>6d6</strong> damage of the stored type, basic Reflex save against your class DC.</p>"
+        },
+        "level": {
+            "value": 17
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-mutation-action"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator",
+                "manipulate"
+            ]
+        }
+    },
+    "type": "feat"
+}

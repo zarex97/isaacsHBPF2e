@@ -1,5 +1,5 @@
 import { MODULE_ID } from "../sky/signs.mjs";
-import { COLOURS, Engine } from "./engine.mjs";
+import { ABERRATIONS, COLOURS, Engine } from "./engine.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -23,6 +23,8 @@ export class GulletApp extends HandlebarsApplicationMixin(ApplicationV2) {
             beginPrep: GulletApp.#onBeginPrep,
             endPrep: GulletApp.#onEndPrep,
             rebuild: GulletApp.#onRebuild,
+            choose: GulletApp.#onChoose,
+            rollAberrations: GulletApp.#onRollAberrations,
         },
     };
 
@@ -86,7 +88,32 @@ export class GulletApp extends HandlebarsApplicationMixin(ApplicationV2) {
             };
         });
 
+        // The daily choices each bound Substrate asks for (lexicon §6, §9, §10).
+        const choices = [];
+        const effective = derived.effective;
+        const others = bound.filter((b) => b.slug !== "gold");
+        if (effective.gold) {
+            const count = effective.gold >= 3 ? 2 : 1;
+            const picked = state.choices.gold ?? [];
+            choices.push({ key: "gold", label: `Gilded Core — ${count === 2 ? "two Substrates" : "one Substrate"}`,
+                multi: count, options: others.map((b) => ({ value: b.slug, label: b.name, selected: picked.includes(b.slug) })) });
+        }
+        if (effective.electrum) {
+            choices.push({ key: "electrum", label: "Alloyed Instinct — second colour",
+                options: COLOURS.filter((c) => c !== "gold").map((c) => ({ value: c, label: c, selected: state.choices.electrum === c })) });
+        }
+        if (effective.zinc) {
+            choices.push({ key: "zinc", label: "Shifting Tissue — energy type",
+                options: ["acid", "cold", "electricity", "fire", "sonic", "force", "vitality", "void"]
+                    .map((t) => ({ value: t, label: t, selected: state.choices.zinc === t })) });
+        }
+        const nickel = effective.nickel
+            ? { held: state.choices.nickel ?? [], canReroll: effective.nickel >= 3,
+                options: ABERRATIONS.map((a) => ({ value: a, label: a, selected: (state.choices.nickel ?? []).includes(a) })) }
+            : null;
+
         return {
+            choices, nickel,
             owner, isGM: game.user.isGM, preparing: state.preparing,
             mass: derived.mass, spent: derived.spent, depthCap: derived.depthCap, vein: derived.vein,
             instinct: state.instinct, pending: derived.pending, colours: derived.colours,
@@ -121,6 +148,16 @@ export class GulletApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
     static async #onEndPrep() {
         await Engine.endPreparations(this.actor);
+    }
+
+    static async #onChoose(_event, target) {
+        const select = target.closest("[data-choice]").querySelector("select");
+        const values = [...select.selectedOptions].map((o) => o.value);
+        await Engine.choose(this.actor, target.dataset.key, select.multiple ? values : values[0]);
+    }
+
+    static async #onRollAberrations(_event, target) {
+        await Engine.rollAberrations(this.actor, { reroll: target.dataset.reroll === "true" });
     }
 
     static async #onRebuild() {

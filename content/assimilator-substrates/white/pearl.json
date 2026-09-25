@@ -1,0 +1,198 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "white",
+                    "kind": "gem",
+                    "slug": "pearl",
+                    "specimenNames": [
+                        "pearl"
+                    ]
+                }
+            }
+        }
+    },
+    "folder": "White",
+    "img": "icons/commodities/gems/pearl-white-oval.webp",
+    "name": "Substrate: Pearl",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Purification &middot; <strong>Mutation:</strong> Clear Tide</p><p><em>Layers, laid down over an irritant. You are the irritant.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td>+1 item bonus to saves against poison and disease. Once per day, reduce one condition's value by 1.</td></tr><tr><td>2</td><td>Once per encounter, as a single action, <strong>end one condition of value 1</strong> on yourself or an adjacent ally.</td></tr><tr><td>3</td><td>Range <strong>30 feet</strong>, and it may instead reduce one <strong>affliction's stage</strong> by 1.</td></tr><tr><td>4</td><td><strong>Twice</strong> per encounter, and it may instead <strong>counteract</strong> one spell effect of 4th rank or lower.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-pearl",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-pearl",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    },
+                    {
+                        "or": [
+                            "item:trait:poison",
+                            "item:trait:disease"
+                        ]
+                    }
+                ],
+                "selector": "saving-throw",
+                "slug": "pearl-saving-throw-1",
+                "type": "item",
+                "value": 1
+            },
+            {
+                "allowDuplicate": false,
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-pearl",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-pearl",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Clear Tide"
+            },
+            {
+                "allowDuplicate": false,
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-pearl",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-pearl",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Cleansing Tide"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-pearl",
+                            3
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-pearl",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "all",
+                "text": "Cleansing Tide reaches 30 feet, and may instead reduce one affliction's stage by 1.",
+                "title": "Pearl (Depth 3)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-pearl",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "all",
+                "text": "Cleansing Tide twice per encounter, and it may instead counteract one spell effect of 4th rank or lower.",
+                "title": "Pearl (Depth 4)"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-white"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}
