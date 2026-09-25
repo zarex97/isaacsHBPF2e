@@ -1,0 +1,55 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.assimilator-effects.Item.Effect: Carapace Block"
+                    },
+                    "event": "action-used",
+                    "note": "Arms the block. `scripts/assimilator/carapace.mjs` spends it on the next physical damage, where the numbers exist.",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "folder": "Actions",
+    "img": "icons/equipment/shield/buckler-wooden-boss-glowing-blue.webp",
+    "name": "Carapace Block",
+    "system": {
+        "actionType": {
+            "value": "reaction"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>Trigger</strong> You take physical damage.</p><hr /><p>Reduce the damage by your Carapace's Hardness. The Carapace takes that much damage.</p><p><em>Use it when the damage is rolled, before it is applied: it arms the plate for the next physical damage you take this round, and the block is taken off that damage as it lands.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-carapace-block"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

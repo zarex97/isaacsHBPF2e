@@ -1,0 +1,17 @@
+[
+    {
+        "name": "Core",
+        "sorting": "m",
+        "type": "Item"
+    },
+    {
+        "name": "Actions",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "The Carapace",
+        "sorting": "a",
+        "type": "Item"
+    }
+]

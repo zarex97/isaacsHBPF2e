@@ -1,0 +1,98 @@
+{
+    "folder": "Core",
+    "img": "icons/creatures/claws/claw-talons-glowing-orange.webp",
+    "name": "The Carapace",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Something alive is wearing you. It is your weapon, your armour, and the thing that breaks.</p><p><strong>Carapace Strike.</strong> Your unarmed attack is the class. It deals <strong>1d8 bludgeoning</strong> damage, is in the <strong>brawling</strong> group, and has only the <strong>unarmed</strong> trait &mdash; it is not agile and it is not finesse. <em>Handwraps of mighty blows</em> work normally; the class grants no free fundamental runes.</p><p><strong>Living Plate.</strong> The symbiont is your armour and cannot be removed: explorer's clothing that is alive (AC item bonus +0, Dex cap +5, no check or Speed penalty, no Bulk). It accepts armour potency, resilient and property runes on the normal schedule. It has <strong>Hardness 2</strong> plus the highest Hardness bonus among your bound Substrates, <strong>10 + 5 per level</strong> Hit Points, and a Broken Threshold of half its Hit Points.</p><p><strong>Carapace Block</strong> is how the plate takes a blow for you. While the Carapace is broken, you lose Living Plate's rune benefits, and every Mutation at Depth 3 or higher switches off until it is repaired.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "category": "unarmed",
+                "damage": {
+                    "base": {
+                        "damageType": "bludgeoning",
+                        "dice": 1,
+                        "die": "d8"
+                    }
+                },
+                "group": "brawling",
+                "img": "icons/creatures/claws/claw-talons-glowing-orange.webp",
+                "key": "Strike",
+                "label": "Carapace Strike",
+                "replaceBasicUnarmed": true,
+                "slug": "carapace-strike",
+                "traits": [
+                    "unarmed"
+                ]
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Living Plate"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Carapace Block"
+            },
+            {
+                "itemType": "armor",
+                "key": "ItemAlteration",
+                "mode": "override",
+                "predicate": [
+                    "item:slug:living-plate"
+                ],
+                "property": "hp-max",
+                "value": "10 + 5 * @actor.level"
+            },
+            {
+                "domain": "all",
+                "key": "RollOption",
+                "option": "carapace:intact",
+                "predicate": [
+                    {
+                        "not": "self:effect:carapace-broken"
+                    }
+                ]
+            },
+            {
+                "domain": "all",
+                "key": "RollOption",
+                "option": "assimilator:suppressed",
+                "predicate": [
+                    {
+                        "not": "armor:slug:living-plate"
+                    }
+                ]
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-carapace"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

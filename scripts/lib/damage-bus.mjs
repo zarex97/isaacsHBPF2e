@@ -27,6 +27,8 @@ import { wrap } from "./wrap.mjs";
 export const PRIORITY = {
     /** `riders/sources.mjs` — origin bypasses, and the shadowing bypass cannot reach. */
     bypass: 0,
+    /** `assimilator/carapace.mjs` — Carapace Block takes the plate's Hardness off the damage, and the plate pays. */
+    carapaceBlock: 5,
     /** `riders/libra.mjs` — the Crossing halves whatever a heal gave. */
     crossing: 10,
     /** `soulbound/wound.mjs` — absolute, so after the Crossing: it undoes whatever half was left. */

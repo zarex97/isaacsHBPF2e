@@ -1,0 +1,60 @@
+{
+    "folder": "Core",
+    "img": "icons/creatures/abilities/dragon-head-breath-green.webp",
+    "name": "Alien Physiology",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>You are no longer entirely a person.</p><ul><li>You need neither food, drink nor air, and you are <strong>immune to disease</strong>.</li><li>You are <strong>immune to the drained condition</strong>, and to any effect that would alter your physical form against your will (petrification, polymorph, and the like) &mdash; the symbiont is already using that space.</li><li>You can be healed by <strong>Repair</strong> as well as by anything that heals a creature.</li><li>You no longer have a discernible anatomy: you are <strong>immune to precision damage</strong> and to critical specialization effects of the knife and pick groups.</li></ul>"
+        },
+        "level": {
+            "value": 15
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "Immunity",
+                "type": "disease"
+            },
+            {
+                "key": "Immunity",
+                "type": "drained"
+            },
+            {
+                "key": "Immunity",
+                "type": "petrified"
+            },
+            {
+                "key": "Immunity",
+                "type": "polymorph"
+            },
+            {
+                "key": "Immunity",
+                "type": "precision"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}
