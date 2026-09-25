@@ -1,3 +1,4 @@
+import { Carapace } from "./assimilator/carapace.mjs";
 import { Astral } from "./astral.mjs";
 import { CastPipeline } from "./cast-pipeline.mjs";
 import { Cosmo } from "./cosmo.mjs";
@@ -109,6 +110,7 @@ Hooks.once("init", () => {
     // from inside the rider engine, which is where they used to live.
     start("the wound that will not close", () => DamageBus.after("the wound that will not close", PRIORITY.wound,
         async (actor, _params, before) => { if (game.user.isGM) await Wound.refuse(actor, before); }));
+    start("the Carapace", () => Carapace.registerHooks());
     start("Regeneración's suppression", () => DamageBus.after("Regeneración's suppression", PRIORITY.regeneracion,
         (actor, params) => Regeneracion.onDamage(actor, params)));
     start("the sky tracker window", () => SkyTrackerApp.registerHooks());
@@ -159,6 +161,7 @@ Hooks.once("init", () => {
         hypnosis: Hypnosis,
         rig: SoulboundRig,
         damageBus: DamageBus,
+        carapace: Carapace,
         open: () => new SkyTrackerApp().render(true),
         adjacentSigns,
     };

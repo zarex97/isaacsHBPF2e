@@ -234,6 +234,58 @@ check("the same Substrate twice is refused", errorsFor({ substrates: [ruby(), ru
 }
 
 /* -------------------------------------------------------------------------------------------- */
+/*  The chassis, as authored                                                                    */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    const fs = await import("node:fs");
+    const read = (p) => JSON.parse(fs.readFileSync(new URL(`../content/${p}`, import.meta.url), "utf8"));
+    const cls = read("assimilator-class/assimilator.json").system;
+    check("A-01 key attribute is Strength or Dexterity", cls.keyAbility.value, ["str", "dex"]);
+    check("A-02 10 Hit Points per level", cls.hp, 10);
+    check("A-03 Perception trained", cls.perception, 1);
+    check("A-05 three Expert saves", cls.savingThrows, { fortitude: 2, reflex: 2, will: 2 });
+    check("A-07 Athletics plus 3 + Int", [cls.trainedSkills.value, cls.trainedSkills.additional], [["athletics"], 3]);
+    check("A-08 unarmed trained, no weapon proficiency of any kind",
+        [cls.attacks.unarmed, cls.attacks.simple, cls.attacks.martial, cls.attacks.advanced], [1, 0, 0, 0]);
+    check("A-11 unarmoured Expert, no armour proficiency of any kind",
+        [cls.defenses.unarmored, cls.defenses.light, cls.defenses.medium, cls.defenses.heavy], [2, 0, 0, 0]);
+    check("A-13 the class trait is what keys the Assimilator DC", [cls.slug, cls.traits.value], ["assimilator", ["assimilator"]]);
+
+    const carapace = read("assimilator-class-features/core/the-carapace.json").system.rules;
+    const strike = carapace.find((r) => r.key === "Strike");
+    check("A-19 the Carapace Strike: unarmed, 1d8 bludgeoning, brawling",
+        [strike.label, strike.category, strike.group, strike.damage.base], ["Carapace Strike", "unarmed", "brawling",
+            { damageType: "bludgeoning", dice: 1, die: "d8" }]);
+    check("A-20 its only trait is unarmed — not agile, not finesse", strike.traits, ["unarmed"]);
+    check("A-19 it replaces the basic unarmed attack: there is no second option", strike.replaceBasicUnarmed, true);
+    check("A-28 the plate's Hit Points are 10 + 5 per level",
+        carapace.find((r) => r.property === "hp-max")?.value, "10 + 5 * @actor.level");
+    check("A-34 carapace:intact is the broken effect's absence",
+        carapace.find((r) => r.option === "carapace:intact")?.predicate, [{ not: "self:effect:carapace-broken" }]);
+
+    const plate = read("assimilator-class-features/core/living-plate.json").system;
+    check("A-24 explorer's clothing that is alive",
+        [plate.category, plate.acBonus, plate.dexCap, plate.checkPenalty, plate.speedPenalty, plate.bulk.value],
+        ["unarmored", 0, 5, 0, 0, 0]);
+    check("A-27a the plate's own Hardness is 2", plate.hardness, 2);
+    check("A-23 the plate is granted worn, and invested so its runes work the moment it has any", plate.equipped, { carryType: "worn", handsHeld: 0, inSlot: true, invested: true });
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  Carapace Block                                                                              */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    const { blockAmount } = await import("../scripts/assimilator/carapace.mjs");
+    check("A-31 the block takes the plate's Hardness off", blockAmount(20, 8, 30), 8);
+    check("…never more than the damage", blockAmount(5, 8, 30), 5);
+    check("…nothing from a plate at 0 Hit Points", blockAmount(20, 8, 0), 0);
+    check("…nothing from healing", blockAmount(-10, 8, 30), 0);
+    check("A-32 a plate with fewer Hit Points than Hardness still turns its full Hardness", blockAmount(20, 8, 3), 8);
+}
+
+/* -------------------------------------------------------------------------------------------- */
 
 if (failures.length > 0) {
     console.error(`Assimilator tests failed: ${failures.length} of ${checks}.`);

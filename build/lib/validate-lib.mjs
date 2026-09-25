@@ -1947,6 +1947,22 @@ const SOULBOUND_ADVANCEMENT = {
 };
 
 /**
+ * The Assimilator's advancement table (guide §3), grown phase by phase like the Soulbound's.
+ *
+ * Phase 1 is the chassis. Instinct, Assimilation, the Skins, the Growths, the Bonds, Symbiotic Reflex and
+ * Apotheosis join when the engine that gives them meaning does — Phase 2, with the Red tracker.
+ */
+const ASSIMILATOR_ADVANCEMENT = {
+    1: ["The Carapace"],
+    5: ["Carapace Expertise"],
+    7: ["Alertness", "Living Weapon"],
+    9: ["Assimilation Expertise", "Juggernaut", "Weapon Specialization"],
+    13: ["Carapace Mastery", "Shell Mastery"],
+    15: ["Alien Physiology"],
+    17: ["Assimilation Mastery", "Greater Weapon Specialization"],
+};
+
+/**
  * A class item's grant levels must match its guide's advancement table.
  *
  * This is the single easiest thing to get wrong by hand and the hardest to notice in play: a feature
@@ -1984,5 +2000,11 @@ function validateAdvancementTable(packs, errors) {
         slug: "soulbound",
         table: SOULBOUND_ADVANCEMENT,
         guideRef: "guide §3.2",
+    });
+    checkAdvancement(packs, errors, {
+        pack: "assimilator-class",
+        slug: "assimilator",
+        table: ASSIMILATOR_ADVANCEMENT,
+        guideRef: "Assimilator guide §3",
     });
 }

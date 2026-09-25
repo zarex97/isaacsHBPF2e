@@ -1,0 +1,47 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/life/heart-cross-strong-flame-green.webp",
+    "name": "Assimilation Mastery",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your proficiency rank for your Assimilator DC increases to master.</p>"
+        },
+        "level": {
+            "value": 17
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "subfeatures": {
+            "proficiencies": {
+                "assimilator": {
+                    "attribute": null,
+                    "rank": 3
+                }
+            }
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

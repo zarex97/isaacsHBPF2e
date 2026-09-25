@@ -1,0 +1,66 @@
+{
+    "folder": "The Carapace",
+    "img": "icons/equipment/chest/breastplate-layered-leather-brown.webp",
+    "name": "Living Plate",
+    "system": {
+        "acBonus": 0,
+        "baseItem": null,
+        "bulk": {
+            "value": 0
+        },
+        "category": "unarmored",
+        "checkPenalty": 0,
+        "containerId": null,
+        "description": {
+            "value": "<p>The symbiont is your armour and cannot be removed. It functions as <strong>explorer's clothing that is alive</strong>: AC item bonus +0, Dex cap +5, no check penalty, no Speed penalty, no Bulk. It accepts armour potency, resilient and property runes, etched by feeding rather than by a smith.</p><p><strong>You cannot wear other armour.</strong> Attempting it suppresses Living Plate, every Mutation, and your Instinct until you take it off.</p><p>This is also <strong>the Carapace</strong>: its Hardness, Hit Points and Broken Threshold are the plate's. Repair it with the Repair activity.</p>"
+        },
+        "dexCap": 5,
+        "equipped": {
+            "carryType": "worn",
+            "handsHeld": 0,
+            "inSlot": true,
+            "invested": true
+        },
+        "grade": null,
+        "group": null,
+        "hardness": 2,
+        "hp": {
+            "max": 15,
+            "value": 15
+        },
+        "level": {
+            "value": 0
+        },
+        "material": {
+            "grade": null,
+            "type": null
+        },
+        "price": {
+            "value": {}
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "quantity": 1,
+        "rules": [],
+        "runes": {
+            "potency": 0,
+            "property": [],
+            "resilient": 0
+        },
+        "size": "med",
+        "slug": "living-plate",
+        "speedPenalty": 0,
+        "strength": null,
+        "traits": {
+            "otherTags": [
+                "assimilator-carapace"
+            ],
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "armor"
+}
