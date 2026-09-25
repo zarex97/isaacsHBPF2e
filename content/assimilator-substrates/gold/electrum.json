@@ -14,7 +14,7 @@
         }
     },
     "folder": "Gold",
-    "img": "icons/commodities/metal/ingot-worn-silver.webp",
+    "img": "icons/commodities/metal/ingot-silver.webp",
     "name": "Substrate: Electrum",
     "system": {
         "badge": {

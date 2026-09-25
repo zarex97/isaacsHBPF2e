@@ -56,29 +56,6 @@
                 ],
                 "property": "hardness",
                 "value": 5
-            },
-            {
-                "key": "Note",
-                "predicate": [
-                    {
-                        "not": "assimilator:suppressed"
-                    },
-                    {
-                        "gte": [
-                            "self:effect:substrate-ruby",
-                            2
-                        ]
-                    },
-                    {
-                        "gte": [
-                            "self:effect:substrate-iron",
-                            2
-                        ]
-                    }
-                ],
-                "selector": "ac",
-                "text": "A creature that hits you with a melee unarmed or reach attack takes fire damage equal to half your level.",
-                "title": "Molten Carapace"
             }
         ],
         "start": {

@@ -206,6 +206,24 @@
                 "selector": "unarmed-damage",
                 "slug": "substrate-garnet-sanguine",
                 "value": "2 * @weapon.system.damage.dice"
+            },
+            {
+                "allowDuplicate": false,
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-garnet",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Exsanguinate"
             }
         ],
         "start": {

@@ -9,7 +9,7 @@
         "actions": {
             "value": 1
         },
-        "category": "classfeature",
+        "category": "interaction",
         "description": {
             "value": "<p>Teleport from an area of darkness to another area of darkness within 60 feet.</p>"
         },
@@ -17,12 +17,6 @@
             "max": 1,
             "per": "round",
             "value": 1
-        },
-        "level": {
-            "value": 17
-        },
-        "prerequisites": {
-            "value": []
         },
         "publication": {
             "license": "ORC",
@@ -42,5 +36,5 @@
             ]
         }
     },
-    "type": "feat"
+    "type": "action"
 }

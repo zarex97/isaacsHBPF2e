@@ -56,7 +56,7 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | CI-1a | Citrine D1 | Once per day, reroll one failed check and take the second result. |  | ✅ | Live: *Gilded Chance* granted at Depth 1, **1/day** |
 | CI-2a | Citrine D2 | Twice per day. |  | ✅ | Live: at Depth 2 *Gilded Chance* reads **max 2 per day** |
 | CI-2b | Citrine D2 | The reroll gains a **+2 circumstance bonus**. |  | ⚠️ | Text on the action: the +2 circumstance bonus on the reroll is the player's to add |
-| CI-3a | Citrine D3 | Once per encounter, when an enemy within 30 feet critically succeeds at a save against you, it gets a success instead. |  | ☐ |  |
+| CI-3a | Citrine D3 | Once per encounter, when an enemy within 30 feet critically succeeds at a save against you, it gets a success instead. | `rig` | ⚠️ | Rig: the Note *Citrine (Depth 3)* appears on the Perception card. Text the table applies — nothing enforces it |
 | CI-4a | Citrine D4 | Once per day, after seeing the result, **change one d20 roll made within 30 feet by 5** in either direction — yours, an ally's, or an enemy's. |  | ✅ | Live: *Turn of Fortune* granted at Depth 4, **1/day** |
 
 ## ⚙️ Gold — *Gilded Core* (lexicon §6)
@@ -83,7 +83,7 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | EL-2a | Electrum D2 | Electrum may stand in for **either Substrate** of any one Bond you know. |  | ☐ |  |
 | EL-3a | Electrum D3 | You gain your second colour's **Instinct clause** as well — but both clauses operate at **half value** (round down, minimum 1). |  | ☐ |  |
 | EL-4a | Electrum D4 | Both Instinct clauses operate at **full value**. |  | ☐ |  |
-| EL-4b | Electrum D4 | You are two organisms sharing a host, and they do not always want the same thing. |  | ☐ |  |
+| EL-4b | Electrum D4 | You are two organisms sharing a host, and they do not always want the same thing. |  | — | Nothing to automate: the fiction of the clause before it |
 
 ---
 
@@ -91,10 +91,10 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 7 |
+| ☐ | 5 |
 | ✅ | 12 |
-| ⚠️ | 3 |
+| ⚠️ | 4 |
 | ❌ | 0 |
 | 🔧 | 0 |
-| — | 0 |
+| — | 1 |
 | **Total** | **22** |

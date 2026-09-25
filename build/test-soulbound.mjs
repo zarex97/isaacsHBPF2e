@@ -3345,6 +3345,10 @@ const SYSTEM_SLUGS = new Set([
     // pf2e grants this one itself when a target is behind something. Senbonzakura reads it to take
     // the bonus back out of the DC, which is the only way an attacker can ignore cover.
     "effect-cover",
+    // A pf2e condition the Assimilator rig reads off a target after a Flare.
+    "blinded",
+    // Not a document: the slug of the −1 Will modifier *Effect: Null Weight* puts on a save.
+    "null-weight",
 ]);
 
 const unresolvedInScripts = [];

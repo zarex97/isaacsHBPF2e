@@ -15,7 +15,7 @@
         }
     },
     "folder": "Green",
-    "img": "icons/commodities/metal/ingot-zinc.webp",
+    "img": "icons/commodities/metal/ingot-steel.webp",
     "name": "Substrate: Zinc",
     "system": {
         "badge": {
@@ -251,6 +251,34 @@
                 "selector": "all",
                 "text": "The reaction is unlimited, and you keep resistance to the previously chosen type as well.",
                 "title": "Zinc (Depth 4)"
+            },
+            {
+                "allowDuplicate": false,
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-zinc",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-zinc",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Shift Tissue"
             }
         ],
         "start": {

@@ -69,7 +69,7 @@
                 "uuid": "Compendium.pf2e.classfeatures.Item.Alertness"
             },
             "alien": {
-                "img": "icons/creatures/abilities/dragon-head-breath-green.webp",
+                "img": "icons/creatures/abilities/tail-swipe-green.webp",
                 "level": 15,
                 "name": "Alien Physiology",
                 "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Alien Physiology"
@@ -141,13 +141,13 @@
                 "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Carapace Mastery"
             },
             "grow3": {
-                "img": "icons/creatures/abilities/dragon-scales-red.webp",
+                "img": "icons/creatures/abilities/fang-tooth-blood-red.webp",
                 "level": 3,
                 "name": "Growth (3rd)",
                 "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Growth (3rd)"
             },
             "grow4": {
-                "img": "icons/creatures/abilities/dragon-scales-red.webp",
+                "img": "icons/creatures/abilities/fang-tooth-blood-red.webp",
                 "level": 14,
                 "name": "Growth (14th)",
                 "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Growth (14th)"
@@ -183,19 +183,19 @@
                 "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Symbiotic Reflex"
             },
             "skin2": {
-                "img": "icons/creatures/abilities/dragon-scales-red.webp",
+                "img": "icons/creatures/abilities/fang-tooth-blood-red.webp",
                 "level": 5,
                 "name": "Second Skin",
                 "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Second Skin"
             },
             "skin3": {
-                "img": "icons/creatures/abilities/dragon-scales-red.webp",
+                "img": "icons/creatures/abilities/fang-tooth-blood-red.webp",
                 "level": 11,
                 "name": "Third Skin",
                 "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Third Skin"
             },
             "skin4": {
-                "img": "icons/creatures/abilities/dragon-scales-red.webp",
+                "img": "icons/creatures/abilities/fang-tooth-blood-red.webp",
                 "level": 17,
                 "name": "Fourth Skin",
                 "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Fourth Skin"

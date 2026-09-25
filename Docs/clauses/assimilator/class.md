@@ -43,13 +43,13 @@ this file.
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| A-01 | §1.2 | Strength **or** Dexterity |  | ☐ |  |
+| A-01 | §1.2 | Strength **or** Dexterity | `rig`, `test-assimilator` | ✅ | Rig, live: the class item's key attribute reads **`["str", "dex"]`** |
 | A-02 | §3 | **HP** 10 + Con per level. | `test-assimilator` pins it | ✅ | Live: **10 / 40 / 50 / 200** Hit Points at levels 1, 4, 5 and 20 on a character with no ancestry and Constitution +0 — ten per level, flat |
 | A-03 | §3 | **Initial proficiencies:** Perception Trained | `test-assimilator` pins it | ✅ | Live: Perception rank **1** at 1st |
 | A-04 | §3 | **Alertness** (Perception Expert) |  | ✅ | Live at the boundary: Perception **1 at 6th**, **2 at 7th**, still 2 at 20th |
 | A-05 | §3 | Fortitude, Reflex and Will Expert | `test-assimilator` pins it | ✅ | Live: Fortitude, Reflex and Will all rank **2** at 1st; Reflex and Will **still 2 at 20th** |
 | A-06 | §3 | **Juggernaut** (Fortitude Master) |  | ✅ | Live at the boundary: Fortitude **2 at 8th**, **3 at 9th**. pf2e's own *Juggernaut* is granted, as the Soulbound's is, so it also turns a Fortitude success into a critical success — more than the ledger's 170 points buy; the Soulbound set the precedent |
-| A-07 | §1.2 | Athletics, plus 3 + Int |  | ☐ |  |
+| A-07 | §1.2 | Athletics, plus 3 + Int | `rig`, `test-assimilator` | ✅ | Rig, live: trained skills **`["athletics"]` + 3**, and Athletics rank **1** on the sheet at 1st |
 | A-08 | §1.2 | Unarmed Trained. **No weapon proficiency of any kind.** | `test-assimilator` pins it | ✅ | Live at 1st: unarmed **1**, simple **0**, martial **0**, and the sheet offers exactly **one** Strike, the Carapace Strike |
 | A-09 | §3 | **Carapace Expertise** (Unarmed Expert) |  | ✅ | Live at the boundary: unarmed **1 at 4th**, **2 at 5th**; the Strike's attack went **+3 → +9** from 1st to 5th |
 | A-10 | §3 | **Carapace Mastery** (Unarmed Master) |  | ✅ | Live at the boundary: unarmed **2 at 12th**, **3 at 13th**, and **3 at 20th** — never legendary |
@@ -94,7 +94,7 @@ this file.
 | A-32 | §4.3 | The Carapace takes that much damage. | `test-assimilator` pins it | ✅ | Live: the plate went **35 → 33** — it takes what it blocked, not what got past it (pf2e's Shield Block does the latter, which is why the plate is not a shield). The armed effect was spent and a card names the amount |
 | A-33 | §4.3 | **While broken**, you lose Living Plate's rune benefits |  | ⚠️ | Live: broken, the plate's potency is overridden to **0** and AC fell **20 → 19**; repaired, **20** again. Resilient is overridden the same way. **Property runes are not removed** — pf2e has no alteration for them |
 | A-34 | §4.3 | **every Mutation at Depth 3 or higher switches off** until the Carapace is repaired |  | ✅ | Live at 11th with Ruby at Depth 3: breaking the plate switched **the whole Mutation** off — the Strike lost its 1d6 fire **and** its versatile-fire trait, Ruby's resistance cut stopped (**20 fire → 10** taken instead of 15), and Red's bonus fell **+4 → +1** as Ruby left the sum. Repaired, all four came back. **Fixed while driving:** only Ruby's Depth 3–4 rules switched off at first, leaving its Depth 1–2 rules running; the guide says *every Mutation*, so every rule of a Substrate now holds only while it is below Depth 3 or the plate is whole |
-| A-35 | §4.3 | Repair is the Repair activity against its own Hardness, or one hour of Feeding it any Substrate you don't bind. |  | ☐ |  |
+| A-35 | §4.3 | Repair is the Repair activity against its own Hardness, or one hour of Feeding it any Substrate you don't bind. | `rig` | ✅ | Rig, live: feeding the plate a **Copper Ingot** (Copper unbound) mended it to full; a **Ruby** — bound — was refused. The first road, the Repair activity, is pf2e's own on the armour item |
 
 ## Assimilation — Mass, Feed and Shed (guide §4.4, §3)
 
@@ -122,8 +122,8 @@ this file.
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | A-43 | §4.5 | Your **Instinct** is the colour you have invested the most total Mass in, counting both tracks. | `test-assimilator` pins it | ✅ | Live: feeding the first Ruby put **Instinct: Red** on the sheet by itself, and `assimilator:instinct:red` in the roll options |
 | A-44 | §4.5 | It grants that colour's **Instinct clause** (§5), which applies to **every Mutation you have**, including Mutations of other colours. |  | ⚠️ | Live: Red's clause applied to Ruby, Iron and Garnet alike. Only Red Substrates exist yet, so a Mutation of **another** colour under a Red Instinct is untested |
-| A-45 | §4.5 | Ties are broken by you, freely, at daily preparations. |  | ☐ |  |
-| A-46 | §4.5 | Instinct is recalculated at daily preparations and costs nothing to change |  | ☐ |  |
+| A-45 | §4.5 | Ties are broken by you, freely, at daily preparations. | `rig` | ✅ | Rig, live: Ruby 1 and Sapphire 1 left the Instinct **null** — a tie unbroken — and breaking it for Blue set **blue** |
+| A-46 | §4.5 | Instinct is recalculated at daily preparations and costs nothing to change | `rig` | ✅ | Rig, live: Instinct **red** from Ruby 2; the record changed to Sapphire 2 mid-day and it stayed **red**; daily preparations made it **blue** |
 
 ## Bond slots (guide §7)
 
@@ -159,7 +159,7 @@ this file.
 | A-56 | §4.8 | You need neither food, drink nor air, and you are **immune to disease**. |  | ⚠️ | Live: **immune to disease** at 15th, **not at 14th**. Needing no food, drink or air is text |
 | A-57 | §4.8 | You are **immune to the drained condition** |  | ✅ | Live: **immune to drained** at 15th, not at 14th |
 | A-58 | §4.8 | and to any effect that would alter your physical form against your will (petrification, polymorph, and the like) |  | ⚠️ | Live: **immune to petrified and polymorph** at 15th, not at 14th — but unconditionally, where the guide says *against your will*: a willing polymorph is refused too |
-| A-59 | §4.8 | You can be healed by **Repair** as well as by anything that heals a creature. |  | ☐ |  |
+| A-59 | §4.8 | You can be healed by **Repair** as well as by anything that heals a creature. |  | — | Nothing to automate: pf2e's Repair activity targets objects, not creatures; that an Assimilator can be Repaired is the GM's ruling at the table |
 | A-60 | §4.8 | you are **immune to precision damage** and to critical specialization effects of the knife and pick groups. |  | ⚠️ | Live: **immune to precision** at 15th, not at 14th. Immunity to the knife and pick groups' critical specialization is text — pf2e has no immunity for it |
 
 ## Apotheosis (guide §4.9)
@@ -176,10 +176,10 @@ this file.
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 6 |
-| ✅ | 61 |
+| ☐ | 0 |
+| ✅ | 66 |
 | ⚠️ | 9 |
 | ❌ | 0 |
 | 🔧 | 0 |
-| — | 0 |
+| — | 1 |
 | **Total** | **76** |

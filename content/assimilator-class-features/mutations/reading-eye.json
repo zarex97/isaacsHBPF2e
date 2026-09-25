@@ -9,7 +9,7 @@
         "actions": {
             "value": null
         },
-        "category": "classfeature",
+        "category": "interaction",
         "description": {
             "value": "<p>Recall Knowledge about a creature you can see.</p>"
         },
@@ -17,12 +17,6 @@
             "max": 1,
             "per": "round",
             "value": 1
-        },
-        "level": {
-            "value": 1
-        },
-        "prerequisites": {
-            "value": []
         },
         "publication": {
             "license": "ORC",
@@ -43,5 +37,5 @@
             ]
         }
     },
-    "type": "feat"
+    "type": "action"
 }

@@ -369,3 +369,34 @@ Two more things about the placement loop:
 **If a placement does get stuck**, Escape usually clears it; reloading the page always does. A stuck
 placement makes the *next* cast look broken, so check `canvas.regions.preview.children.length` before
 believing a failure.
+
+### A cone or a line takes two clicks, and the extension can make both
+
+The table above predates reading pf2e's own override. `RegionLayerPF2e#placeRegion` gives an **aimable**
+shape — a cone or a line, on a square grid — a two-step protocol:
+
+1. The first click **fixes the apex** where the pointer is and starts *aiming*. It does not confirm.
+2. While aiming, the pointer sets the **facing**: the angle from the apex to the pointer, snapped to 45° for
+   a cone and 5° for a line.
+3. The second click confirms.
+
+So the extension's real pointer drives it with no synthetic events at all: `hover` the apex, `left_click`,
+`hover` a point along the facing you want, `left_click`. Read `canvas.regions.preview.children[0]
+.document.shapes[0]` between the steps — `x`, `y` and `rotation` say exactly what will be placed. Driven this
+way the Gland's cone and the Discharge's line (Assimilator, NI-1f and AM-4a) caught what they should.
+
+Three things that looked like bugs and are not:
+
+- **A single click leaves the preview up at 270°.** That is step 1 with the pointer on the apex, where there
+  is no angle to take. Moving the pointer fixes it.
+- **The extension's `left_click_drag` confirms a wrong facing.** Down, move and up arrive as one burst, so
+  the release lands before the move has been processed, and the area is placed at whatever it faced before.
+  pf2e then posts "Nothing in the area. Aim again?". Use two clicks, not a drag.
+- **The extension's wheel reaches nothing.** It neither rotates the preview (Shift) nor zooms. When a
+  rotation has to be set without the pointer, `canvas.regions._onMouseWheel(new WheelEvent("wheel",
+  { deltaY: 100, shiftKey: true }))` is Foundry's own handler and steps it 45°.
+
+**The canvas may not render at all until it gets pointer input.** A freshly loaded tab in the extension's
+window sat at 1 FPS with a black board, and `canvas.clientCoordinatesFromCanvas` returned coordinates from a
+stage transform that had never been updated — thousands of pixels off-screen. One `hover` over the board
+woke it. Take coordinates only after that, and check they fall inside the viewport.

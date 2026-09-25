@@ -46,7 +46,7 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | HE-2a | Hematite D2 | Gain **temporary Hit Points equal to your level** at the start of each encounter. |  | ✅ | Live: starting an encounter gave **17** temporary Hit Points at 17th |
 | HE-3a | Hematite D3 | +2 status bonus to Fortitude saves. |  | ✅ | Live: Fortitude **+2 (status)** at Depth 3 |
 | HE-3b | Hematite D3 | You cannot be **drained**. |  | ✅ | Live: immune to **drained** |
-| HE-4a | Hematite D4 | Once per day, when you are reduced to 0 Hit Points, immediately stand with **Hit Points equal to your level**. |  | ☐ |  |
+| HE-4a | Hematite D4 | Once per day, when you are reduced to 0 Hit Points, immediately stand with **Hit Points equal to your level**. | `rig` | ✅ | Rig, live: 500 damage at 30 Hit Points — the Assimilator stood at **17** |
 
 ## 💎 Moonstone — *Reactive Evolution* (lexicon §13)
 
@@ -56,9 +56,9 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | MO-1a | Moonstone D1 | Once per encounter, as a reaction after taking damage of a type, gain **resistance 2** to that type for 1 minute. |  | ⚠️ | Live: *Reactive Evolution* granted; its effect's choice is the damage type. Once per encounter is text |
 | MO-2a | Moonstone D2 | **Resistance 5**, twice per encounter. |  | ✅ | Live: with **fire** chosen, **fire 5** at Depth 2 |
-| MO-3a | Moonstone D3 | **Resistance 8**, it lasts until the encounter ends, and you may hold **two** types at once. |  | ☐ |  |
-| MO-4a | Moonstone D4 | **Resistance 12**, unlimited uses, **three** types at once. |  | ☐ |  |
-| MO-4b | Moonstone D4 | The first time each encounter you would take damage of a type you already resist, you take **none**. |  | ☐ |  |
+| MO-3a | Moonstone D3 | **Resistance 8**, it lasts until the encounter ends, and you may hold **two** types at once. | `rig` | ✅ | Rig, live: **fire 8** at Depth 3; it lasts until the encounter ends and two can be held |
+| MO-4a | Moonstone D4 | **Resistance 12**, unlimited uses, **three** types at once. | `rig` | ✅ | Rig, live: **fire 12** at Depth 4 |
+| MO-4b | Moonstone D4 | The first time each encounter you would take damage of a type you already resist, you take **none**. | `rig` | ✅ | Rig, live: the first 30 fire with fire resisted took **0**; the second took **18** (resistance 12) |
 
 ## ⚙️ Steel — *True Plate* (lexicon §13)
 
@@ -68,8 +68,8 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | ST-1a | Steel D1 | Carapace **Hardness +2**. |  | ✅ | Live: Hardness **2 → 4** with Steel alone at Depth 1 — pinned by the highest-bonus rule |
 | ST-1b | Steel D1 | Your unarmed Strikes' damage die increases one step. |  | ✅ | Live: the Carapace Strike's die **d8 → d10** |
-| ST-2a | Steel D2 | **Hardness +5.** |  | ☐ |  |
-| ST-3a | Steel D3 | **Hardness +8.** |  | ☐ |  |
+| ST-2a | Steel D2 | **Hardness +5.** | `rig` | ✅ | Rig, live: Hardness **7** |
+| ST-3a | Steel D3 | **Hardness +8.** | `rig` | ✅ | Rig, live: Hardness **10** |
 | ST-3b | Steel D3 | Your unarmed Strikes gain the **versatile P** and **versatile S** traits. |  | ✅ | Live: **versatile-p** and **versatile-s** at Depth 3+ |
 | ST-4a | Steel D4 | **Hardness +12.** |  | ✅ | Live: Hardness **14** at Depth 4 |
 | ST-4b | Steel D4 | **+1 damage die** on your unarmed Strikes. |  | ✅ | Live: **2d10** — one more die |
@@ -81,11 +81,11 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | AG-1a | Silver D1 | Your Strikes count as **silver**. |  | ✅ | Live: the Strike's material reads **silver** |
-| AG-2a | Silver D2 | **+1d4** damage against aberrations, fiends, undead and spirits. |  | ☐ |  |
-| AG-3a | Silver D3 | **+1d6** instead. |  | ☐ |  |
+| AG-2a | Silver D2 | **+1d4** damage against aberrations, fiends, undead and spirits. | `rig` | ✅ | Rig, live: **+1d4** against an undead target; **none** against a humanoid. **Fixed while driving:** the rig read damage with `getFormula`, which builds the roll without the target |
+| AG-3a | Silver D3 | **+1d6** instead. | `rig` | ✅ | Rig, live: **1d6** against a fiend, no d4 |
 | AG-3b | Silver D3 | Your Strikes affect incorporeal creatures as though they had the **ghost touch** rune. |  | ✅ | Live: the Strike carries the **ghostTouch** property rune at Depth 3 |
-| AG-4a | Silver D4 | **+1d6.** |  | ☐ |  |
-| AG-4b | Silver D4 | A supernatural creature you critically hit cannot use **reactions or innate spells** until the end of its next turn. |  | ☐ |  |
+| AG-4a | Silver D4 | **+1d6.** | `rig` | ✅ | Rig, live: **1d6** against a spirit |
+| AG-4b | Silver D4 | A supernatural creature you critically hit cannot use **reactions or innate spells** until the end of its next turn. | `rig` | ⚠️ | Rig: the Note *Silver (Depth 4)* appears on the critical Strike card. Text the table applies — nothing enforces it |
 
 ---
 
@@ -93,9 +93,9 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 10 |
-| ✅ | 13 |
-| ⚠️ | 1 |
+| ☐ | 0 |
+| ✅ | 22 |
+| ⚠️ | 2 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 0 |

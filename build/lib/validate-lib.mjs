@@ -1409,15 +1409,17 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0, inherit
         case "heal":
             // "Redirect that damage to yourself" gives the ally back exactly what landed on them, so the
             // amount is the blow's rather than a number written in advance.
-            if (apply.value !== "event.damage.total" && !(Number(apply.value) > 0)) {
+            if (!["event.damage.total", "origin.level"].includes(apply.value) && !(Number(apply.value) > 0)) {
                 errors.push(`${at} heal riders need a positive value — got "${apply.value}"`);
             }
             // The Saint is the one who heals, not the creature that failed its save. Landing this on the
             // target would hand an enemy hit points for surviving the Technique — **unless** the rider is
             // marked `trigger`, which sends it to the creature the event was about. The Balance's
             // Vollständig is the one case: the harm moves to the Quincy and the hit points move back.
-            if (rider.self !== true && !rider.trigger) {
-                errors.push(`${at} a heal rider must be \`self\` or \`trigger\``);
+            // An area that catches only allies is the other: its targets are the creatures meant to be healed.
+            const alliesOnly = doc?.flags?.["isaacs-hb-pf2e"]?.areaTargeting?.affects === "allies";
+            if (rider.self !== true && !rider.trigger && !alliesOnly) {
+                errors.push(`${at} a heal rider must be \`self\` or \`trigger\`, or ride an area that catches only allies`);
             }
             if (apply.maxPerCast !== undefined
                 && apply.maxPerCast !== "origin.level"
@@ -1590,7 +1592,8 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0, inherit
             // a per-step growth that has to be baked in before the rider ever fires, the same `{ base, … }`
             // shape a substitution's value already accepts.
             if (apply.formula && typeof apply.formula === "object" && !Array.isArray(apply.formula)) {
-                if (!DICE_FORMULA.test(String(apply.formula.base ?? ""))) {
+                // A flat number is a formula too: *Carrion Harvest* is "twice your level", a ladder of numbers.
+                if (!FLAT_OR_DICE.test(String(apply.formula.base ?? ""))) {
                     errors.push(`${at} ${apply.type} formula.base needs a formula like "1d6" — got "${apply.formula.base}"`);
                 }
                 if (apply.formula.perStep !== undefined && !DICE_FORMULA.test(String(apply.formula.perStep))) {
@@ -1604,7 +1607,7 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0, inherit
                             if (!(Number(level) > 0)) {
                                 errors.push(`${at} ${apply.type} formula.at has "${level}", which is not a character level`);
                             }
-                            if (!DICE_FORMULA.test(String(value))) {
+                            if (!FLAT_OR_DICE.test(String(value))) {
                                 errors.push(`${at} ${apply.type} formula.at["${level}"] needs a formula like "2d6" — got "${value}"`);
                             }
                         }
@@ -1629,7 +1632,9 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0, inherit
                     || /^origin\.libra\.dice\.d\d+$/.test(apply.formula)
                     // How much the blow was worth. The only question a rider may ask about the event
                     // itself, and the one a redirect cannot be written without.
-                    || apply.formula === "event.damage.total";
+                    || apply.formula === "event.damage.total"
+                    // "Fire damage equal to your level" — Magnesium's flare.
+                    || apply.formula === "origin.level";
                 if (isResolvable && !known) {
                     errors.push(`${at} unrecognised resolvable formula "${apply.formula}"`);
                 }

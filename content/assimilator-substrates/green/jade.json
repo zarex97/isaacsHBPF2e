@@ -11,7 +11,7 @@
         }
     },
     "folder": "Green",
-    "img": "icons/commodities/gems/gem-rough-rectangle-green.webp",
+    "img": "icons/commodities/gems/gem-raw-rough-green.webp",
     "name": "Substrate: Jade",
     "system": {
         "badge": {
@@ -193,6 +193,28 @@
                     "carapace:intact"
                 ],
                 "type": "enfeebled"
+            },
+            {
+                "adjustment": {
+                    "success": "one-degree-better"
+                },
+                "key": "AdjustDegreeOfSuccess",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-jade",
+                            3
+                        ]
+                    },
+                    "carapace:intact",
+                    {
+                        "not": "self:jade-spent"
+                    }
+                ],
+                "selector": "fortitude"
             }
         ],
         "start": {

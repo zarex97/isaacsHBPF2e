@@ -96,6 +96,7 @@ export function validateAssimilator(packs, errors) {
 
     validateBondClosure(bonds, known, errors);
     validateNonStacking(feats, errors);
+    validateBasicSaves(packs.filter(({ def }) => def.name.startsWith("assimilator-")).flatMap(({ docs }) => docs), errors);
 }
 
 /**
@@ -179,6 +180,29 @@ function validateBondClosure(bonds, known, errors) {
             if (!used.has(slug)) errors.push(`${where}: Substrate "${slug}" appears in no Bond (lexicon §14.1 has one for each)`);
         }
     }
+}
+
+/**
+ * A basic save's damage carries no multiplier of its own. `basicLadder` composes the ladder with one, so the
+ * Gland and the Discharge — both written with `multiplier: 0.5` — dealt half at every degree: driven live, a
+ * critical failure took the dice once instead of twice. The Assimilator has no fraction-of-damage clause for a
+ * multiplier to mean; the Soulbound's three genuine ones are outside this family.
+ */
+function validateBasicSaves(docs, errors) {
+    const visit = (node, where) => {
+        if (Array.isArray(node)) return node.forEach((n) => visit(n, where));
+        if (!node || typeof node !== "object") return;
+        const apply = node.apply;
+        if (apply?.type === "save" && apply.basic === true) {
+            for (const rider of apply.riders ?? []) {
+                if (rider?.apply?.type === "damage" && !rider.outcomes && rider.apply.multiplier !== undefined) {
+                    errors.push(`${where}: a basic save's damage takes no multiplier — the ladder already halves and doubles it`);
+                }
+            }
+        }
+        Object.values(node).forEach((v) => visit(v, where));
+    };
+    for (const { file, doc } of docs) visit(doc.flags?.[FLAG]?.riders ?? [], rel(file));
 }
 
 /** A declared non-stacking pair needs a predicate that refuses the second, not a sentence that asks nicely. */

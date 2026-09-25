@@ -14,7 +14,7 @@
         }
     },
     "folder": "Mutations",
-    "img": "icons/consumables/potions/bottle-round-corked-silver.webp",
+    "img": "icons/consumables/potions/vial-ornet-silver-black.webp",
     "name": "Amorphous",
     "system": {
         "actionType": {
@@ -23,7 +23,7 @@
         "actions": {
             "value": null
         },
-        "category": "classfeature",
+        "category": "interaction",
         "description": {
             "value": "<p>You become <strong>amorphous</strong> for 1 minute: immune to precision damage, and critical hits against you deal normal damage.</p>"
         },
@@ -31,12 +31,6 @@
             "max": 1,
             "per": "day",
             "value": 1
-        },
-        "level": {
-            "value": 17
-        },
-        "prerequisites": {
-            "value": []
         },
         "publication": {
             "license": "ORC",
@@ -55,5 +49,5 @@
             ]
         }
     },
-    "type": "feat"
+    "type": "action"
 }

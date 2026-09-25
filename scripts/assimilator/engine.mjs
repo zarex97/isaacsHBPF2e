@@ -378,10 +378,21 @@ export const Engine = {
             instinctType: INSTINCT_TYPES[state.instinct] ?? "bludgeoning", substrateHardness: derived.substrateHardness,
             colours: derived.colours, effective: derived.effective,
         };
-        const before = actor.flags?.[MODULE_ID]?.[KEY] ?? {};
-        if (JSON.stringify(before.derived) !== JSON.stringify(derivedFlag) || before.instinct !== state.instinct) {
-            await Engine.write(actor, { ...state, derived: derivedFlag });
+        // Write only what a rebuild owns — the derived picture and the Instinct it settled — never the record it
+        // read at the start. A rebuild awaits item work in between, and writing the whole record back clobbered
+        // anything written meanwhile: driven by the rig, a Zinc choice set while a rebuild was running vanished,
+        // and with it Shifting Tissue's resistance.
+        const now = actor.flags?.[MODULE_ID]?.[KEY] ?? {};
+        const update = {};
+        if (JSON.stringify(now.derived) !== JSON.stringify(derivedFlag)) {
+            update[`flags.${MODULE_ID}.${KEY}.derived`] = derivedFlag;
+            // `effective` is the one sparse field; a Substrate shed away must leave it, not merge past.
+            for (const slug of Object.keys(now.derived?.effective ?? {})) {
+                if (!(slug in derivedFlag.effective)) update[`flags.${MODULE_ID}.${KEY}.derived.effective.-=${slug}`] = null;
+            }
         }
+        if (now.instinct !== state.instinct) update[`flags.${MODULE_ID}.${KEY}.instinct`] = state.instinct;
+        if (Object.keys(update).length) await actor.update(update, { assimilatorEngine: true });
     },
 
     /* ---------------------------------------------------------------------------------------- */
@@ -456,6 +467,31 @@ export const Engine = {
         return { ok: true, depth: check.depth };
     },
 
+    /**
+     * Mend the Carapace by the second road guide §4.3 gives: *"one hour of Feeding it any Substrate you don't
+     * bind."* The specimen is consumed and the plate is whole. (The first road, the Repair activity, is pf2e's
+     * own on the Living Plate item.)
+     */
+    async mend(actor, itemId) {
+        const item = actor.items.get(itemId);
+        const catalogue = await Engine.catalogue();
+        const state = Engine.state(actor);
+        const match = [];
+        for (const slug of Object.keys(catalogue)) {
+            if (slug in state.substrates) continue;
+            if ((await Engine.specimensFor(actor, slug)).some((s) => s.id === itemId)) match.push(slug);
+        }
+        if (!item || !match.length) return Engine._refuse("Mending takes a specimen of a Substrate you do not bind.");
+        const plate = actor.itemTypes.armor.find((a) => a.slug === "living-plate");
+        if (!plate) return Engine._refuse("There is no Carapace to mend.");
+        if ((item.quantity ?? 1) > 1) await item.update({ "system.quantity": item.quantity - 1 });
+        else await item.delete();
+        await plate.update({ "system.hp.value": plate.hitPoints.max });
+        await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<p><strong>The Carapace mends</strong>: an hour of feeding it ${item.name}.</p>` });
+        return { ok: true };
+    },
+
     /** Shed — during daily preparations only. Lower a Substrate's Depth (to 0 removes it); it is destroyed. */
     async shed(actor, slug, toDepth = 0) {
         const state = Engine.state(actor);
@@ -514,7 +550,10 @@ export const Engine = {
         const state = Engine.state(actor);
         const current = state.choices[key];
         const first = current === undefined || current === null || (Array.isArray(current) && !current.length);
-        if (!state.preparing && !first) return Engine._refuse("That choice is made at daily preparations.");
+        // Zinc Depth 2's *Shift Tissue* lets the type change once, whenever; its use sets `zincShift`.
+        const shifting = key === "zinc" && actor.flags?.[MODULE_ID]?.[KEY]?.zincShift;
+        if (!state.preparing && !first && !shifting) return Engine._refuse("That choice is made at daily preparations.");
+        if (shifting) state.zincShift = false;
         if (key === "nickel") value = [value].flat().filter((k) => ABERRATIONS.includes(k));
         if (key === "gold") value = [value].flat().filter((s) => s && s !== "gold" && s in state.substrates);
         state.choices[key] = value;

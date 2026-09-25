@@ -15,7 +15,7 @@
         }
     },
     "folder": "Black",
-    "img": "icons/commodities/metal/ingot-lead.webp",
+    "img": "icons/commodities/metal/ingot-worn-steel.webp",
     "name": "Substrate: Lead",
     "system": {
         "badge": {

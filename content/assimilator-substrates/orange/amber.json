@@ -11,7 +11,7 @@
         }
     },
     "folder": "Orange",
-    "img": "icons/commodities/gems/gem-oval-yellow.webp",
+    "img": "icons/commodities/gems/gem-rough-square-yellow.webp",
     "name": "Substrate: Amber",
     "system": {
         "badge": {
@@ -129,6 +129,84 @@
                 ],
                 "reevaluateOnUpdate": true,
                 "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Discharge"
+            },
+            {
+                "allowDuplicate": false,
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-amber",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-amber",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Draw on the Reservoir"
+            },
+            {
+                "domain": "all",
+                "key": "RollOption",
+                "option": "assimilator:reservoir:{actor|flags.isaacs-hb-pf2e.assimilator.reservoir.type}",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-amber",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-amber",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ]
+            },
+            {
+                "domain": "all",
+                "key": "RollOption",
+                "option": "assimilator:reservoir-charged",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-amber",
+                            4
+                        ]
+                    },
+                    "carapace:intact",
+                    {
+                        "gte": [
+                            "self:reservoir-charges",
+                            3
+                        ]
+                    }
+                ]
             }
         ],
         "start": {

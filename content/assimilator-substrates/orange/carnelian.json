@@ -7,11 +7,45 @@
                     "kind": "gem",
                     "slug": "carnelian"
                 }
-            }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "text": "Kinetic Spurs: you may Stride up to half your Speed as a free action.",
+                        "type": "prompt"
+                    },
+                    "event": "strike-resolved",
+                    "oncePerRound": true,
+                    "outcomes": [
+                        "success",
+                        "criticalSuccess",
+                        "failure"
+                    ],
+                    "predicate": [
+                        {
+                            "or": [
+                                "item:category:unarmed",
+                                "item:trait:unarmed"
+                            ]
+                        },
+                        {
+                            "not": "assimilator:suppressed"
+                        },
+                        {
+                            "gte": [
+                                "self:effect:substrate-carnelian",
+                                4
+                            ]
+                        },
+                        "carapace:intact"
+                    ],
+                    "self": true
+                }
+            ]
         }
     },
     "folder": "Orange",
-    "img": "icons/commodities/gems/gem-rough-navette-orange.webp",
+    "img": "icons/commodities/gems/gem-rough-oval-orange.webp",
     "name": "Substrate: Carnelian",
     "system": {
         "badge": {

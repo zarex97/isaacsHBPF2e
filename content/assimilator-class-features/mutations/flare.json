@@ -1,4 +1,136 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "all",
+                "alternateArea": {
+                    "area": {
+                        "type": "emanation",
+                        "value": 30
+                    },
+                    "predicate": [
+                        {
+                            "gte": [
+                                "self:effect:substrate-magnesium",
+                                4
+                            ]
+                        },
+                        "carapace:intact"
+                    ]
+                },
+                "area": {
+                    "type": "emanation",
+                    "value": 15
+                },
+                "includesSelf": false
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "slug": "dazzled",
+                                    "type": "condition"
+                                },
+                                "duration": {
+                                    "expiry": "turn-end",
+                                    "unit": "rounds",
+                                    "value": 1
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            }
+                        ],
+                        "statistic": "fortitude",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        {
+                            "lt": [
+                                "self:effect:substrate-magnesium",
+                                3
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "apply": {
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "slug": "blinded",
+                                    "type": "condition"
+                                },
+                                "duration": {
+                                    "expiry": "turn-end",
+                                    "unit": "rounds",
+                                    "value": 1
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            },
+                            {
+                                "apply": {
+                                    "damageType": "fire",
+                                    "formula": "origin.level",
+                                    "type": "damage"
+                                },
+                                "outcomes": [
+                                    "success",
+                                    "criticalSuccess",
+                                    "failure",
+                                    "criticalFailure"
+                                ],
+                                "predicate": [
+                                    "rider:target:light-sensitive"
+                                ]
+                            }
+                        ],
+                        "statistic": "fortitude",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        {
+                            "gte": [
+                                "self:effect:substrate-magnesium",
+                                3
+                            ]
+                        },
+                        "carapace:intact"
+                    ]
+                },
+                {
+                    "apply": {
+                        "includesSelf": false,
+                        "traits": [
+                            "darkness"
+                        ],
+                        "type": "counteract"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        {
+                            "gte": [
+                                "self:effect:substrate-magnesium",
+                                4
+                            ]
+                        },
+                        "carapace:intact"
+                    ],
+                    "self": true
+                }
+            ]
+        }
+    },
     "folder": "Mutations",
     "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
     "name": "Flare",
@@ -9,15 +141,9 @@
         "actions": {
             "value": 1
         },
-        "category": "classfeature",
+        "category": "interaction",
         "description": {
             "value": "<p><strong>Frequency</strong> once per encounter</p><hr /><p>Creatures in a <strong>15-foot emanation</strong> must succeed at a Fortitude save against your class DC or be <strong>dazzled</strong> for 1 round. At Magnesium Depth 3 a failure is <strong>blinded</strong> instead, and the flare deals fire damage equal to your level to creatures with light sensitivity or light blindness. At Depth 4 the emanation is 30 feet and counteracts magical darkness; once per day it may instead heal each ally within it for your level.</p>"
-        },
-        "level": {
-            "value": 5
-        },
-        "prerequisites": {
-            "value": []
         },
         "publication": {
             "license": "ORC",
@@ -38,5 +164,5 @@
             ]
         }
     },
-    "type": "feat"
+    "type": "action"
 }

@@ -10,11 +10,36 @@
                         "bronze ingot"
                     ]
                 }
-            }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "text": "Battle Frame: Stride up to half your Speed toward a different enemy as a free action.",
+                        "type": "prompt"
+                    },
+                    "event": "strike-resolved",
+                    "outcomes": [
+                        "criticalSuccess"
+                    ],
+                    "predicate": [
+                        {
+                            "not": "assimilator:suppressed"
+                        },
+                        {
+                            "gte": [
+                                "self:effect:substrate-bronze",
+                                4
+                            ]
+                        },
+                        "carapace:intact"
+                    ],
+                    "self": true
+                }
+            ]
         }
     },
     "folder": "Orange",
-    "img": "icons/commodities/metal/ingot-bronze.webp",
+    "img": "icons/commodities/metal/ingot-stamped-bronze.webp",
     "name": "Substrate: Bronze",
     "system": {
         "badge": {
