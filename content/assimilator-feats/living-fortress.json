@@ -1,0 +1,52 @@
+{
+    "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
+    "name": "Living Fortress",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>If you did not move on your last turn, your Carapace's <strong>Hardness doubles</strong> until you do.</p>"
+        },
+        "level": {
+            "value": 12
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "itemType": "armor",
+                "key": "ItemAlteration",
+                "mode": "multiply",
+                "predicate": [
+                    "item:slug:living-plate",
+                    "assimilator:still"
+                ],
+                "priority": 200,
+                "property": "hardness",
+                "value": 2
+            }
+        ],
+        "slug": "living-fortress",
+        "traits": {
+            "otherTags": [
+                "assimilator-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

@@ -167,13 +167,22 @@ check("the same Substrate twice is refused", errorsFor({ substrates: [ruby(), ru
 }
 
 {
-    const feat = (rules) => ({ name: "Apex Predator", system: { slug: "apex-predator", rules } });
-    check("a declared non-stacking pair with no refusal is caught", errorsFor({ feats: [feat([])] }), [
-        'the guide says this does not stack; some rule must predicate { not: "assimilator:instinct:gold" }',
+    const feat = (flags) => ({ name: "Apex Predator", system: { slug: "apex-predator", rules: [] }, flags });
+    check("a declared non-stacking pair that does not say so is caught", errorsFor({ feats: [feat(undefined)] }), [
+        'the guide says this does not stack; declare flags.isaacs-hb-pf2e.assimilator.doesNotStackWith = "gold-instinct"',
     ]);
-    check("…and passes once the predicate refuses it", errorsFor({
-        feats: [feat([{ key: "RollOption", domain: "all", option: "x", predicate: [{ not: "assimilator:instinct:gold" }] }])],
+    check("…and passes once it declares it", errorsFor({
+        feats: [feat({ [FLAG]: { assimilator: { doesNotStackWith: "gold-instinct" } } })],
     }), []);
+    // AF-22c: Two Instincts and Electrum each offer a second clause; the better stands, never both.
+    const { instinctsOf: pick } = await import("../scripts/assimilator/engine.mjs");
+    check("AF-22c Two Instincts beside Electrum 4: Electrum's full clause stands", pick("red", 4, "green", false, { twoInstincts: "blue" }),
+        { primary: "red", secondary: "green", scale: 1 });
+    check("…beside Electrum 3: the two halves are equal, one clause only", pick("red", 3, "green", false, { twoInstincts: "blue" }).scale, 0.5);
+    check("AF-22a/b Two Instincts alone: the chosen clause at half", pick("red", 0, null, false, { twoInstincts: "blue" }),
+        { primary: "red", secondary: "blue", scale: 0.5 });
+    check("AF-35b Instinct Fusion: full value", pick("red", 0, null, false, { twoInstincts: "blue", fusion: true }).scale, 1);
+    check("AF-43a Omnivore: two Instincts at full value", pick("red", 0, null, false, { twoInstincts: "blue", omnivore: true }).scale, 1);
 }
 
 /* -------------------------------------------------------------------------------------------- */
@@ -395,6 +404,18 @@ check("the same Substrate twice is refused", errorsFor({ substrates: [ruby(), ru
     check("…not for a Bond it does not name", activeBonds(["molten-carapace"], { ruby: 2, electrum: 2 }, pairs, "conduction"), []);
     check("…not for both halves at once", activeBonds(["molten-carapace"], { electrum: 4 }, pairs, "molten-carapace"), []);
     check("…and not below Depth 2", activeBonds(["molten-carapace"], { ruby: 2, electrum: 1 }, pairs, "molten-carapace"), []);
+    // Phase 6: the feats the engine reads.
+    const cap5 = { gem: 3, metal: 2, depthCap: 2 };
+    check("AF-14b Deep Vein: one Substrate past the cap", [
+        feedCheck({ slug: "ruby", paid: { ruby: 2 }, catalogue, grants: cap5, specimen: "quickened", caps: { ruby: 3 } }).ok,
+        feedCheck({ slug: "ruby", paid: { ruby: 2 }, catalogue, grants: cap5, specimen: "quickened" }).ok], [true, false]);
+    check("AF-43a Omnivore: one pool", [
+        feedCheck({ slug: "ruby", paid: { ruby: 1, sapphire: 2 }, catalogue, grants: { gem: 3, metal: 2, depthCap: 4 }, specimen: "ordinary" }).ok,
+        feedCheck({ slug: "ruby", paid: { ruby: 1, sapphire: 2 }, catalogue, grants: { gem: 3, metal: 2, depthCap: 4, merged: true }, specimen: "ordinary" }).ok],
+    [false, true]);
+    check("AF-21 Bonded Deep: its Bond at Depth 1", [
+        activeBonds(["molten-carapace"], { ruby: 1, iron: 1 }, pairs, null, "molten-carapace"),
+        activeBonds(["molten-carapace"], { ruby: 1, iron: 1 }, pairs)], [["molten-carapace"], []]);
     check("B-11 Transmutation: three-quarters, rounded up", [instinctsOf("red", 3, "green", true).scale, scaled(5, 0.75), scaled(1, 0.75)], [0.75, 4, 1]);
 }
 

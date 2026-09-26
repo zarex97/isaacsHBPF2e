@@ -36,8 +36,8 @@ const PROVENANCE_KEYS = new Set(["DamageDice", "FlatModifier"]);
  * names; they are the same shape and join this list when their items exist.
  */
 const NON_STACKING = {
-    "two-instincts": "self:effect:instinct-alloyed",
-    "apex-predator": "assimilator:instinct:gold",
+    "two-instincts": "electrum-alloyed-instinct",
+    "apex-predator": "gold-instinct",
 };
 
 function assimilator(doc) {
@@ -205,15 +205,18 @@ function validateBasicSaves(docs, errors) {
     for (const { file, doc } of docs) visit(doc.flags?.[FLAG]?.riders ?? [], rel(file));
 }
 
-/** A declared non-stacking pair needs a predicate that refuses the second, not a sentence that asks nicely. */
+/**
+ * A declared non-stacking pair has to say so on the feat, where the code that takes the better one reads it — not in a
+ * sentence that asks nicely. Both pairs are the engine's to settle: Two Instincts and Electrum each offer a second
+ * Instinct clause and `instinctsOf` keeps the better; Apex Predator and Gold's Instinct each offer a Depth 4 rider on
+ * a critical and one card is posted. `test-assimilator` pins both.
+ */
 function validateNonStacking(feats, errors) {
     for (const { file, doc } of feats) {
-        const refuses = NON_STACKING[doc.system?.slug];
-        if (!refuses) continue;
-        const refused = (doc.system?.rules ?? []).some((rule) =>
-            optionsIn(rule.predicate?.filter?.((t) => typeof t === "object" && "not" in t) ?? []).includes(refuses));
-        if (!refused) {
-            errors.push(`${rel(file)}: the guide says this does not stack; some rule must predicate { not: "${refuses}" }`);
+        const expected = NON_STACKING[doc.system?.slug];
+        if (!expected) continue;
+        if (assimilator(doc).doesNotStackWith !== expected) {
+            errors.push(`${rel(file)}: the guide says this does not stack; declare flags.${FLAG}.assimilator.doesNotStackWith = "${expected}"`);
         }
     }
 }

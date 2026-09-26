@@ -5,6 +5,7 @@ import { AssimilatorDamage } from "./assimilator/damage.mjs";
 import { Mutations } from "./assimilator/mutations.mjs";
 import { Instincts } from "./assimilator/instincts.mjs";
 import { Bonds } from "./assimilator/bonds.mjs";
+import { Feats } from "./assimilator/feats.mjs";
 import { Red } from "./assimilator/red.mjs";
 import { AssimilatorRig } from "./assimilator/rig.mjs";
 import { Astral } from "./astral.mjs";
@@ -127,6 +128,7 @@ Hooks.once("init", () => {
     start("the Mutations that answer damage", () => AssimilatorDamage.registerHooks());
     start("the Instincts", () => Instincts.registerHooks());
     start("the Bonds", () => Bonds.registerHooks());
+    start("the Assimilator feats", () => Feats.registerHooks());
     start("damaged this encounter", () => EncounterDamage.registerHooks());
     start("Regeneración's suppression", () => DamageBus.after("Regeneración's suppression", PRIORITY.regeneracion,
         (actor, params) => Regeneracion.onDamage(actor, params)));
@@ -188,6 +190,7 @@ Hooks.once("init", () => {
             damage: AssimilatorDamage,
             instincts: Instincts,
             bonds: Bonds,
+            feats: Feats,
             mend: (actor, itemId) => AssimilatorEngine.mend(actor, itemId),
         },
         open: () => new SkyTrackerApp().render(true),

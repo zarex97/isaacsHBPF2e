@@ -44,7 +44,7 @@
                     "item:slug:living-plate"
                 ],
                 "property": "hardness",
-                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.fastHealing"
+                "value": "ceil(@actor.flags.isaacs-hb-pf2e.assimilator.derived.fastHealing * @actor.flags.isaacs-hb-pf2e.assimilator.derived.gb.chitin_bloom)"
             }
         ],
         "slug": "chitin-bloom",

@@ -184,7 +184,15 @@ export const Carapace = {
         // Apotheosis: "can no longer be broken by physical damage alone". A block is the only physical blow the
         // plate takes, so it stops one short of its Broken Threshold.
         const unbreakable = live.itemTypes.feat.some((f) => f.slug === "apotheosis");
-        const floor = unbreakable ? Math.min(before, plate.hitPoints.brokenThreshold + 1) : 0;
+        let floor = unbreakable ? Math.min(before, plate.hitPoints.brokenThreshold + 1) : 0;
+        // Unbreakable Shell: once a day, a blow that would take the plate below its Broken Threshold stops at it.
+        const threshold = plate.hitPoints.brokenThreshold;
+        const day = live.flags?.[MODULE_ID]?.assimilator?.day ?? 0;
+        if (before - state.absorbed < threshold && before >= threshold && live.itemTypes.feat.some((f) => f.slug === "unbreakable-shell")
+            && live.flags?.[MODULE_ID]?.assimilator?.used?.unbreakableShell !== day) {
+            floor = Math.max(floor, threshold);
+            await live.update({ [`flags.${MODULE_ID}.assimilator.used.unbreakableShell`]: day });
+        }
         const after = Math.max(floor, before - state.absorbed);
         await plate.update({ "system.hp.value": after });
         await ChatMessage.create({

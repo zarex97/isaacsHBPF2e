@@ -1,0 +1,71 @@
+{
+    "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
+    "name": "Spit",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>◆ A <strong>ranged unarmed Strike</strong>, range 20 feet, <strong>1d6</strong> damage of your Instinct's type. It uses your Carapace Strike's attack bonus and counts toward your multiple attack penalty.</p>"
+        },
+        "level": {
+            "value": 2
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "category": "unarmed",
+                "damage": {
+                    "base": {
+                        "damageType": "{actor|flags.isaacs-hb-pf2e.assimilator.derived.instinctType}",
+                        "dice": 1,
+                        "die": "d6"
+                    }
+                },
+                "group": "brawling",
+                "img": "icons/magic/acid/projectile-glowing-bubbles.webp",
+                "key": "Strike",
+                "label": "Spit",
+                "range": {
+                    "increment": 20
+                },
+                "slug": "spit",
+                "traits": [
+                    "unarmed"
+                ]
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Carapace Strike's bonus",
+                "predicate": [
+                    "item:slug:spit"
+                ],
+                "selector": "strike-attack-roll",
+                "slug": "spit-carapace-bonus",
+                "value": "@actor.abilities.str.mod - @actor.abilities.dex.mod"
+            }
+        ],
+        "slug": "spit",
+        "traits": {
+            "otherTags": [
+                "assimilator-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

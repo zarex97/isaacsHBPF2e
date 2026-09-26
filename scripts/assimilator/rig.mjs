@@ -1,4 +1,4 @@
-import { Engine } from "./engine.mjs";
+import { Engine, feedCheck } from "./engine.mjs";
 
 /**
  * The Assimilator's test rig: build one character, bind Substrates, and read each clause off the sheet.
@@ -639,7 +639,8 @@ const BOND_CHECKS = [
     { id: "B-07", lv: 17, b: { garnet: 2, emerald: 2 }, bonds: ["second-heart"], act: async (a) => {
         await game.actors.get(a.id).update({ "system.attributes.hp.value": 0, "flags.isaacs-hb-pf2e.assimilator.-=used": null });
         await game.actors.get(a.id).increaseCondition("dying", { value: 4 });
-        await wait(2000);
+        await until(() => game.actors.get(a.id).itemTypes.condition.some((c) => c.slug === "stunned")
+            && !game.actors.get(a.id).itemTypes.condition.some((c) => c.slug === "dying"), 10000);
         const me = game.actors.get(a.id);
         return [me.hitPoints.value, me.itemTypes.condition.some((c) => c.slug === "stunned"), me.itemTypes.condition.some((c) => c.slug === "dying")];
     }, want: [1, true, false] },
@@ -827,6 +828,353 @@ const BOND_CHECKS = [
     note: "Liquid Form's reaction has no per-round limit" },
     { id: "B-08", lv: 17, b: { iron: 2, steel: 2 }, bonds: ["siege-frame"], act: (a, t, ctx) => noteShown(a, t, ctx,
         { roll: "skill:athletics", title: "Siege Frame" }), want: true, note: "Note: Siege Frame on the Athletics roll" },
+];
+
+/* -------------------------------------------------------------------------------------------- */
+/*  Phase 6: the feats                                                                          */
+/* -------------------------------------------------------------------------------------------- */
+
+const featItem = (a, slug) => game.actors.get(a.id).items.find((i) => i.slug === slug);
+const use = async (a, slug, ms = 1500) => { game.pf2e.rollItemMacro(featItem(a, slug).uuid); await wait(ms); };
+const lastWhisper = (text) => game.messages.contents.slice(-6).reverse().find((m) => m.content?.includes(text));
+const plate = (a) => game.actors.get(a.id).itemTypes.armor.find((x) => x.slug === "living-plate");
+const bind = async (a, patch) => {
+    const st = Engine.state(game.actors.get(a.id)); Object.assign(st, patch);
+    await Engine.write(game.actors.get(a.id), st); await Engine.rebuild(game.actors.get(a.id)); await wait(400);
+};
+async function giveItem(a, pack, name, patch = {}) {
+    const p = game.packs.get(pack);
+    const src = (await p.getDocument((await p.getIndex()).find((e) => e.name === name)._id)).toObject();
+    foundry.utils.mergeObject(src, patch);
+    const [item] = await game.actors.get(a.id).createEmbeddedDocuments("Item", [src]);
+    return item;
+}
+async function clickFeatCard(text) {
+    const card = await until(() => lastWhisper(text));
+    await wait(400);
+    const button = card && document.querySelector(`[data-message-id="${card.id}"] button[data-action="isaacs-hb-feat"]`);
+    if (!button) return false;
+    button.click();
+    await wait(1200);
+    return true;
+}
+
+const FEAT_CHECKS = [
+    // Mass and slots move the pools the Gullet spends.
+    { id: "AF-01", lv: 17, b: { ruby: 1 }, feats: ["second-stomach"], act: async (a) => derived(a).mass.gem, want: 12,
+        note: "11 at 17th, +1" },
+    { id: "AF-02", lv: 17, b: { ruby: 1 }, feats: ["iron-gullet"], act: async (a) => derived(a).mass.metal, want: 9 },
+    { id: "AF-18", lv: 17, b: { ruby: 1 }, feats: ["mass-growth"], act: async (a) => [derived(a).mass.gem, derived(a).mass.metal], want: [12, 9] },
+    { id: "AF-26", lv: 17, b: { ruby: 1 }, feats: ["greater-mass-growth"], act: async (a) => [derived(a).mass.gem, derived(a).mass.metal], want: [13, 10] },
+    { id: "AF-34", lv: 17, b: { ruby: 1 }, feats: ["legendary-mass"], act: async (a) => [derived(a).mass.gem, derived(a).mass.metal], want: [14, 11] },
+    { id: "AF-11b", lv: 17, b: { ruby: 1 }, feats: ["additional-bond"], act: async (a) => derived(a).bondSlots, want: 5 },
+
+    // Strikes.
+    { id: "AF-03b", lv: 17, b: { ruby: 1 }, feats: ["grasping-plates"], act: async (a) => {
+        const t = read.strike(game.actors.get(a.id), "Talons");
+        const d = t?.item?.system?.damage;
+        const traits = t?.item?.system?.traits?.value ?? [];
+        return [!!read.strike(game.actors.get(a.id)), ["agile", "finesse", "unarmed"].every((x) => traits.includes(x)), `${d?.dice}${d?.die} ${d?.damageType}`, t?.item?.system?.group];
+    }, want: [true, true, "1d6 slashing", "brawling"], note: "Talons beside the Carapace Strike (Ruby adds versatile fire to both)" },
+    { id: "AF-04", lv: 17, b: { ruby: 1 }, feats: ["reach-of-the-thing"], act: async (a, t, ctx) => {
+        canvas.scene.tokens.get(ctx.targetTokenId).object?.setTarget(true, { user: game.user, releaseOthers: true });
+        canvas.scene.tokens.get(ctx.tokenId).object?.control({ releaseOthers: true });
+        await use(a, "reach-of-the-thing");
+        const reach = read.traits(game.actors.get(a.id), "Carapace Strike").includes("reach");
+        await read.strike(game.actors.get(a.id)).attack({ skipDialog: true }); await wait(1500);
+        return [reach, read.traits(game.actors.get(a.id), "Carapace Strike").includes("reach")];
+    }, want: [true, false], note: "reach 10 for the next Strike, spent by it" },
+    { id: "AF-08a", lv: 17, b: { sapphire: 2 }, feats: ["spit"], act: async (a) => {
+        const s = read.strike(game.actors.get(a.id), "Spit");
+        return [s?.item?.system?.range?.increment ?? s?.item?.range?.increment, `${s?.item?.system?.damage?.dice}${s?.item?.system?.damage?.die} ${s?.item?.system?.damage?.damageType}`];
+    }, want: [20, "1d6 cold"], note: "20 feet, 1d6 of the Blue Instinct's cold" },
+    { id: "AF-08b", lv: 17, b: { sapphire: 2 }, feats: ["spit"], act: async (a) =>
+        read.strike(game.actors.get(a.id), "Spit")?.totalModifier === read.strike(game.actors.get(a.id))?.totalModifier, want: true,
+    note: "the Carapace Strike's attack bonus" },
+    { id: "AF-36", lv: 17, b: { ruby: 1 }, feats: ["grasping-plates", "living-weapon-feat"], act: async (a) => {
+        const f = async (label) => { await read.strike(game.actors.get(a.id), label).damage({ skipDialog: true }); await wait(900); return game.messages.contents.at(-1).rolls[0].formula; };
+        return [/2d8/.test(await f("Carapace Strike")), /2d6/.test(await f("Talons"))];
+    }, want: [true, true], note: "one more die on each" },
+
+    // Actions that place an effect.
+    { id: "AF-07a", lv: 17, b: { ruby: 1 }, feats: ["plated-guard"], act: async (a) => {
+        const before = game.actors.get(a.id).armorClass.value;
+        await use(a, "plated-guard");
+        return game.actors.get(a.id).armorClass.value - before;
+    }, want: 2 },
+    { id: "AF-07b", lv: 17, b: { ruby: 1 }, feats: ["plated-guard"], act: async (a) => {
+        await use(a, "plated-guard");
+        const before = game.messages.size;
+        await use(a, "carapace-block");
+        return game.messages.size - before;
+    }, want: 0, note: "Carapace Block's card is refused while it lasts" },
+    { id: "AF-17", lv: 17, b: { ruby: 3 }, feats: ["instinctive-surge"], act: async (a, t, ctx) => inCombat(ctx, async () => {
+        const base = derived(a).iv.red.ruby;
+        await use(a, "instinctive-surge"); await wait(800);
+        const surged = derived(a).iv.red.ruby;
+        for (const e of game.actors.get(a.id).itemTypes.effect.filter((x) => x.slug === "effect-instinctive-surge")) await e.delete();
+        const before = game.messages.size;
+        await use(a, "instinctive-surge");
+        return [base, surged, game.messages.size - before];
+    }), want: [3, 4, 0], note: "Ruby 3 counts as 4 for the Red clause; once per encounter" },
+
+    // Damage.
+    { id: "AF-05b", lv: 17, b: { ruby: 2 }, feats: ["taste-for-it"], act: async (a, t, ctx) => inCombat(ctx, async () => {
+        await hitWith(a, t, ctx, "5[slashing]");
+        const first = [effects(game.actors.get(a.id), /taste-for-it/).length, !!lastWhisper("Taste for It")];
+        for (const e of game.actors.get(a.id).itemTypes.effect.filter((x) => x.slug === "effect-taste-for-it")) await e.delete();
+        await hitWith(a, t, ctx, "5[slashing]");
+        return [...first, effects(game.actors.get(a.id), /taste-for-it/).length];
+    }), want: [1, true, 0], note: "a +2 circumstance Recall Knowledge, once per encounter" },
+    { id: "AF-13", lv: 17, b: { ruby: 3 }, feats: ["barbed-growth"], act: async (a, t, ctx) => {
+        await hitSelf(a, t, ctx, "1[slashing]");
+        const [wall] = await game.actors.get(a.id).createEmbeddedDocuments("Item", [{ name: "ZZ Rig AC", type: "effect",
+            system: { rules: [{ key: "FlatModifier", selector: "ac", value: 200 }] } }]);
+        await game.actors.get(t.id).update({ "system.attributes.hp.value": 900 });
+        canvas.scene.tokens.get(ctx.tokenId).object?.setTarget(true, { user: game.user, releaseOthers: true });
+        const claw = () => game.actors.get(t.id).system.actions.find((s) => s.label === "Claw");
+        for (let i = 0; i < 6; i++) {
+            await claw().attack({ skipDialog: true });
+            const c = await until(() => game.messages.contents.at(-1)?.flags?.pf2e?.context?.type === "attack-roll" && game.messages.contents.at(-1).flags.pf2e.context);
+            if (c.outcome === "criticalFailure") break;
+        }
+        await wait(1500);
+        await wall.delete();
+        return 900 - game.actors.get(t.id).hitPoints.value;
+    }, want: 6, note: "twice Ruby 3, in the Red Instinct's fire" },
+    { id: "AF-23", lv: 17, b: { steel: 3 }, feats: ["rampart"], act: async (a, t, ctx) => inCombat(ctx, async () => {
+        const by = game.actors.get(ctx.bystanderId);
+        await by.update({ "system.details.alliance": "party" });
+        await place(ctx, ctx.bystanderTokenId, -1);
+        const resist = Math.min(5, Math.floor(plate(a).hardness / 2));
+        const hit = async () => { await by.update({ "system.attributes.hp.value": 100 });
+            const roll = await new (DamageRoll())("10[slashing]").evaluate();
+            await by.applyDamage({ damage: roll, token: canvas.scene.tokens.get(ctx.bystanderTokenId) }); await wait(1000);
+            return 100 - game.actors.get(by.id).hitPoints.value; };
+        const first = await hit();
+        const second = await hit();
+        await by.update({ "system.details.alliance": "opposition" });
+        await place(ctx, ctx.bystanderTokenId, 2);
+        return [resist, first, second];
+    }), want: (v) => v[0] > 0 && v[1] === 10 - v[0] && v[2] === 10, note: "the adjacent ally resists half the plate's Hardness (max 5), once a round" },
+    { id: "AF-40", lv: 17, b: { ruby: 2 }, feats: ["devouring-plate"], act: async (a, t, ctx) => {
+        await hitWith(a, t, ctx, "20[slashing]", { hp: 5 });
+        const clicked = await clickFeatCard("Devouring Plate");
+        const answered = await answerDialog("Substrate: Jade");
+        await wait(1000);
+        return [clicked, answered, derived(a).effective.jade, derived(a).spent.gem];
+    }, want: [true, true, 2, 2], note: "a kill: Jade at Depth 2 for the day, costing no Mass (Ruby's 2 only)" },
+
+    // Pickers.
+    { id: "AF-06b", lv: 17, b: { ruby: 1 }, feats: ["devour"], act: async (a) => {
+        await game.actors.get(a.id).update({ "system.attributes.hp.temp": 0 });
+        const chalk = await giveItem(a, "pf2e.equipment-srd", "Chalk", { system: { equipped: { carryType: "held", handsHeld: 1 } } });
+        const had = chalk.quantity;
+        use(a, "devour", 0);
+        const answered = await answerDialog("Chalk");
+        await wait(1000);
+        const me = game.actors.get(a.id);
+        return [answered, had - (me.items.get(chalk.id)?.quantity ?? 0) === 1, me.attributes.hp.temp, effects(me, /effect-devour/).length,
+            featItem(a, "devour").system.frequency.value];
+    }, want: [true, true, 17, 1, 0], note: "one chalk eaten; 17 temporary Hit Points for a minute; once per 10 minutes" },
+    { id: "AF-09", lv: 17, b: { zinc: 2 }, c: { zinc: "fire" }, feats: ["sympathetic-growth"], act: async (a, t, ctx) => {
+        const by = game.actors.get(ctx.bystanderId);
+        canvas.scene.tokens.get(ctx.bystanderTokenId).object?.setTarget(true, { user: game.user, releaseOthers: true });
+        use(a, "sympathetic-growth", 0);
+        const answered = await answerDialog("fire 5");
+        await wait(1500);
+        return [answered, read.resist(game.actors.get(by.id), "fire")];
+    }, want: [true, 2], note: "fire 5, at half, for the ally" },
+    { id: "AF-12b", lv: 17, b: { ruby: 1 }, feats: ["wall-of-me"], act: async (a, t, ctx) => inCombat(ctx, async () => {
+        const hard = plate(a).hardness;
+        await use(a, "wall-of-me", 3000);
+        const wall = game.actors.find((x) => x.name.startsWith("Wall of Me"));
+        const hardAfter = plate(a).hardness;
+        const before = game.messages.size;
+        await use(a, "wall-of-me");
+        const refused = game.messages.size === before;
+        for (const e of game.actors.get(a.id).itemTypes.effect.filter((x) => x.slug === "effect-wall-of-me")) await e.delete();
+        await wait(1500);
+        return [wall?.system.attributes.hardness.value ?? wall?.hardness, wall?.hitPoints?.max, hard - hardAfter, refused,
+            !game.actors.some((x) => x.name.startsWith("Wall of Me"))];
+    }), want: [17, 85, 2, true, true], note: "Hardness 17, 85 Hit Points; the plate −2; once per encounter; gone when it ends" },
+    { id: "AF-16", lv: 17, b: { ruby: 1 }, feats: ["digest"], act: async (a) => {
+        const [aff] = await game.actors.get(a.id).createEmbeddedDocuments("Item", [{ name: "ZZ Rig Poison", type: "effect",
+            system: { badge: { type: "counter", value: 3 }, traits: { value: ["poison"] } } }]);
+        use(a, "digest", 0);
+        const answered = await answerDialog("ZZ Rig Poison (stage 3)");
+        await wait(1000);
+        return [answered, game.actors.get(a.id).items.get(aff.id)?.system.badge?.value];
+    }, want: [true, 1] },
+    { id: "AF-24a", lv: 17, b: { ruby: 2 }, feats: ["consume-the-fallen"], act: async (a) => {
+        await game.actors.get(a.id).update({ "system.attributes.hp.temp": 0 });
+        use(a, "consume-the-fallen", 0);
+        const answered = await answerDialog("Substrate: Ruby");
+        await wait(1500);
+        return [answered, game.actors.get(a.id).attributes.hp.temp, derived(a).effective.ruby];
+    }, want: [true, 34, 3], note: "34 temporary Hit Points; Ruby one Depth higher until preparations" },
+    { id: "AF-28a", lv: 17, b: { ruby: 1 }, feats: ["assimilate"], act: async (a, t, ctx) => {
+        await game.actors.get(t.id).update({ "system.attributes.resistances": [{ type: "cold", value: 5 }], "system.details.level.value": 10 });
+        canvas.scene.tokens.get(ctx.targetTokenId).object?.setTarget(true, { user: game.user, releaseOthers: true });
+        use(a, "assimilate", 0);
+        const offered = await until(() => [...document.querySelectorAll(".application button")].map((b) => b.textContent.trim()).filter((x) => x), 4000);
+        const answered = await answerDialog("Resistance cold 5");
+        await wait(1200);
+        await game.actors.get(t.id).update({ "system.attributes.resistances": [] });
+        return [answered, read.resist(game.actors.get(a.id), "cold"), offered.some((x) => /Strike|spell/i.test(x))];
+    }, want: [true, 5, false], note: "cold 5 taken; no Strike and no spell was offered" },
+    { id: "AF-39b", lv: 17, b: { ruby: 1 }, feats: ["assimilate", "total-assimilation"], act: async (a, t, ctx) => {
+        await game.actors.get(t.id).update({ "system.attributes.resistances": [{ type: "acid", value: 5 }], "system.details.level.value": 10 });
+        canvas.scene.tokens.get(ctx.targetTokenId).object?.setTarget(true, { user: game.user, releaseOthers: true });
+        use(a, "assimilate", 0);
+        await answerDialog("Resistance acid 5");
+        await answerDialog("Permanent");
+        await wait(1200);
+        Hooks.callAll("pf2e.restForTheNight", game.actors.get(a.id));
+        await wait(1500);
+        await game.actors.get(t.id).update({ "system.attributes.resistances": [] });
+        return read.resist(game.actors.get(a.id), "acid");
+    }, want: 5, note: "made permanent: it survives the night" },
+    { id: "AF-31", lv: 17, b: { ruby: 2 }, feats: ["regurgitate"], act: async (a) => {
+        await game.actors.get(a.id).createEmbeddedDocuments("Item", [{ name: "Copper Ingot", type: "treasure" }]);
+        use(a, "regurgitate", 0);
+        const out = await answerDialog("Substrate: Ruby");
+        const inn = await answerDialog("Substrate: Copper — Copper Ingot");
+        await wait(1500);
+        const st = Engine.state(game.actors.get(a.id));
+        return [out, inn, st.substrates.ruby ?? 0, st.substrates.copper];
+    }, want: [true, true, 0, 1] },
+    { id: "AF-37a", lv: 17, b: { ruby: 2 }, feats: ["second-hunger"], act: async (a) => {
+        use(a, "second-hunger", 0);
+        const answered = await answerDialog("Substrate: Ruby");
+        await wait(1500);
+        const deep = derived(a).effective.ruby;
+        for (const e of game.actors.get(a.id).itemTypes.effect.filter((x) => x.slug === "effect-second-hunger")) await e.delete();
+        await wait(1500);
+        return [answered, deep, derived(a).effective.ruby];
+    }, want: [true, 4, 2], note: "Ruby 2 → 4 for the minute, then back" },
+    { id: "AF-41", lv: 17, b: { ruby: 2 }, feats: ["shared-symbiosis"], act: async (a, t, ctx) => {
+        canvas.scene.tokens.get(ctx.bystanderTokenId).object?.setTarget(true, { user: game.user, releaseOthers: true });
+        use(a, "shared-symbiosis", 0);
+        const answered = await answerDialog("Substrate: Ruby");
+        await wait(1500);
+        const got = game.actors.get(ctx.bystanderId).itemTypes.effect.find((e) => e.name === "Substrate: Ruby");
+        return [answered, got?.system.badge?.value, got?.system.duration?.value, got?.system.duration?.unit];
+    }, want: [true, 1, 10, "minutes"] },
+    { id: "AF-45b", lv: 17, b: { ruby: 1 }, feats: ["eat-the-world"], act: async (a) => {
+        const potion = await giveItem(a, "pf2e.equipment-srd", "Healing Potion (Minor)");
+        const gem = derived(a).mass.gem;
+        use(a, "eat-the-world", 0);
+        const first = await answerDialog(`${potion.name} (level ${potion.level})`);
+        const second = await answerDialog("Gem");
+        await wait(1500);
+        return [first, second, !game.actors.get(a.id).items.get(potion.id), derived(a).mass.gem - gem, derived(a).vein];
+    }, want: (v) => v[0] && v[1] && v[2] && v[3] === 4, note: "the potion is gone; +4 Gem Mass (and no Vein grant for it)" },
+
+    // Reactions and prompts.
+    { id: "AF-19a", lv: 17, b: { ruby: 1 }, feats: ["shed-skin"], act: async (a) => {
+        await plate(a).update({ "system.hp.value": plate(a).hitPoints.max });
+        const hp = plate(a).hitPoints.value;
+        await game.actors.get(a.id).increaseCondition("frightened", { value: 2 });
+        const clicked = await clickFeatCard("Shed Skin");
+        await wait(1000);
+        return [clicked, game.actors.get(a.id).itemTypes.condition.some((c) => c.slug === "frightened"), hp - plate(a).hitPoints.value];
+    }, want: [true, false, 10], note: "frightened 2 ends; the Carapace takes 10" },
+    { id: "AF-29a", lv: 17, b: { ruby: 1 }, feats: ["perfect-adaptation"], act: async (a) => {
+        const granted = await until(() => !!featItem(a, "reactive-evolution"));
+        return granted;
+    }, want: true, note: "Reactive Evolution without Moonstone" },
+    { id: "AF-30a", lv: 17, b: { ruby: 2, sapphire: 2 }, feats: ["apex-predator"], crit: true, act: async () => {
+        const card = await until(() => game.messages.contents.slice(-8).find((m) => m.content?.includes("Apex Predator")));
+        return !!card && /Ruby/.test(card.content) && /Sapphire/.test(card.content);
+    }, want: true, note: "a critical: each Mutation's Depth 4 rider is offered" },
+    { id: "AF-30b", lv: 17, b: { citrine: 3, ruby: 2 }, c: { goldInstinct: "ruby" }, feats: ["apex-predator"], crit: true, act: async () => {
+        await wait(1500);
+        const cards = game.messages.contents.slice(-8);
+        return [cards.some((m) => m.content?.includes("Apex Predator")), cards.some((m) => m.content?.includes("Gold Instinct"))];
+    }, want: [true, false], note: "with Gold's Instinct too, one card: the better" },
+
+    { id: "AF-15a", lv: 17, b: { ruby: 1 }, feats: ["twin-maw"], act: async (a, t, ctx) => {
+        canvas.scene.tokens.get(ctx.targetTokenId).object?.setTarget(true, { user: game.user, releaseOthers: true });
+        canvas.scene.tokens.get(ctx.tokenId).object?.control({ releaseOthers: true });
+        const before = game.messages.size;
+        await use(a, "twin-maw", 4000);
+        const rolls = game.messages.contents.slice(before - game.messages.size)
+            .filter((m) => m.flags?.pf2e?.context?.type === "attack-roll");
+        return [rolls.length, new Set(rolls.map((m) => m.flags.pf2e.context.target?.token)).size];
+    }, want: [2, 1], note: "two Carapace Strikes, one creature" },
+
+    // Engine feats.
+    { id: "AF-14b", lv: 5, b: { ruby: 3 }, c: { deepVein: "ruby" }, feats: ["deep-vein"], act: async (a) => {
+        const vein = derived(a).effective.ruby;
+        await bind(a, { choices: {} });
+        return [vein, derived(a).effective.ruby, derived(a).spent.gem];
+    }, want: [3, 2, 3], note: "Depth cap 2 at 5th: Ruby to 3; without the choice, 2; its 3 Mass still paid" },
+    { id: "AF-21", lv: 17, b: { ruby: 1, iron: 1 }, bonds: ["molten-carapace"], c: { bondedDeep: "molten-carapace" }, feats: ["bonded-deep"],
+        act: async (a) => bondOn(a, "molten-carapace"), want: true, note: "Ruby 1 + Iron 1 are enough" },
+    { id: "AF-22b", lv: 17, b: { ruby: 3 }, c: { twoInstincts: "green" }, feats: ["two-instincts"], act: async (a) =>
+        [instinctEffects(a), derived(a).iv.scale], want: [["green", "red"], 0.5] },
+    { id: "AF-22c", lv: 17, b: { ruby: 4, iron: 1, electrum: 4 }, c: { twoInstincts: "green", electrum: "blue" }, feats: ["two-instincts"],
+        act: async (a) => [instinctEffects(a), derived(a).iv.scale], want: [["blue", "red"], 1],
+        note: "Electrum 4's full clause beats Two Instincts' half; never both" },
+    { id: "AF-35b", lv: 17, b: { ruby: 3 }, c: { twoInstincts: "green" }, feats: ["two-instincts", "instinct-fusion"],
+        act: async (a) => derived(a).iv.scale, want: 1 },
+    { id: "AF-20b", lv: 17, b: { iron: 2 }, feats: ["burrower"], act: async (a) => {
+        const dug = read.speed(game.actors.get(a.id), "burrow");
+        await bind(a, { substrates: { iron: 1 } });
+        return [dug, read.speed(game.actors.get(a.id), "burrow")];
+    }, want: [15, null], note: "a metal at 2: burrow 15; at 1, none" },
+    { id: "AF-25b", lv: 17, b: { ruby: 2, iron: 2 }, bonds: ["molten-carapace"], c: { greaterBond: "molten-carapace" }, feats: ["greater-bond"],
+        act: async (a, t, ctx) => {
+            const hard = plate(a).hardness - (plate(a)._source.system.hardness ?? 0) - derived(a).substrateHardness;
+            await game.actors.get(t.id).update({ "system.attributes.hp.value": 900 });
+            await hitSelf(game.actors.get(a.id), t, ctx, "5[slashing]");
+            return [hard, 900 - game.actors.get(t.id).hitPoints.value];
+        }, want: [8, 12], note: "Molten Carapace's +5 Hardness is 8, its 8 fire is 12" },
+    { id: "AF-27", lv: 17, b: { steel: 2 }, feats: ["living-fortress"], act: async (a, t, ctx) => inCombat(ctx, async (combat) => {
+        const hard = plate(a).hardness;
+        await combat.nextTurn(); await wait(1500);
+        const still = plate(a).hardness;
+        const tok = canvas.scene.tokens.get(ctx.tokenId);
+        await tok.update({ y: tok._source.y + canvas.grid.size }, { animate: false }); await wait(1200);
+        return [still / hard, plate(a).hardness / hard];
+    }), want: [2, 1], note: "a turn without moving doubles it; moving ends it" },
+    { id: "AF-32", lv: 17, b: { ruby: 1 }, feats: ["unbreakable-shell"], apply: "effect-carapace-block", act: async (a, t, ctx) => {
+        await game.actors.get(a.id).update({ "flags.isaacs-hb-pf2e.assimilator.-=used": null });
+        const bt = plate(a).hitPoints.brokenThreshold;
+        await plate(a).update({ "system.hp.value": bt + 1 });
+        await hitSelf(game.actors.get(a.id), t, ctx, "200[bludgeoning]");
+        return plate(a).hitPoints.value - bt;
+    }, want: 0, note: "a Block that would break it stops at the Broken Threshold" },
+    { id: "AF-33", lv: 17, b: { ruby: 1 }, c: { nickel: ["limb", "organ"] }, feats: ["chimeric-frame"], act: async (a) =>
+        game.actors.get(a.id).itemTypes.effect.filter((e) => e.flags?.["isaacs-hb-pf2e"]?.assimilator?.aberration).length, want: 2 },
+    { id: "AF-38a", lv: 17, b: { ruby: 5 }, c: { fifthDepth: "ruby" }, feats: ["fifth-depth"], act: async (a) => [derived(a).effective.ruby, derived(a).spent.gem],
+        want: [5, 5], note: "Ruby at Depth 5, 5 Mass" },
+    { id: "AF-42", lv: 17, b: { ruby: 1, iron: 2 }, feats: ["perfect-organism"], act: async (a) => [derived(a).effective.ruby, derived(a).effective.iron, derived(a).spent.gem],
+        want: [4, 4, 1], note: "everything at the cap; Mass paid is still 1" },
+    { id: "AF-43a", lv: 17, b: { ruby: 3 }, c: { twoInstincts: "green" }, feats: ["omnivore"], act: async (a) => {
+        const merged = Engine.grants(game.actors.get(a.id)).merged;
+        const catalogue = await Engine.catalogue();
+        const gemsFull = { ruby: 4, garnet: 4, carnelian: 3 };
+        const ok = feedCheck({ slug: "amber", paid: gemsFull, catalogue, grants: Engine.grants(game.actors.get(a.id)), specimen: "ordinary" }).ok;
+        return [merged, derived(a).iv.scale, ok];
+    }, want: [true, 1, true], note: "one pool: a 12th Gem Mass spent from the Metal side; two Instincts at full" },
+
+    // The Thing That Wears You.
+    { id: "AF-44b", lv: 17, b: { ruby: 2 }, feats: ["the-thing-that-wears-you"], act: async (a, t, ctx) => inCombat(ctx, async (combat) => {
+        await use(a, "the-thing-that-wears-you", 1000);
+        await until(() => game.actors.get(a.id).getRollOptions().includes("assimilator:suppressed")
+            && game.actors.find((x) => x.name.startsWith("The Thing That Wears")), 12000);
+        const thing = game.actors.find((x) => x.name.startsWith("The Thing That Wears"));
+        const me = game.actors.get(a.id);
+        const mine = combat.combatants.find((c) => c.actorId === a.id);
+        const its = combat.combatants.find((c) => c.actorId === thing?.id);
+        const out = [thing?.hitPoints.value === me.hitPoints.value, its ? mine.initiative - its.initiative : null,
+            me.getRollOptions().includes("assimilator:suppressed"), plate(a).hardness];
+        for (const e of me.itemTypes.effect.filter((x) => x.slug === "effect-worn-no-longer")) await e.delete();
+        const gone = await until(() => !game.actors.some((x) => x.name.startsWith("The Thing That Wears")), 10000);
+        return [...out, gone];
+    }), want: [true, 5, true, 0, true], note: "its Hit Points, initiative −5; you unmutated and unplated; it returns" },
 ];
 
 const effects = (actor, re) => actor.itemTypes.effect.filter((e) => re.test(e.slug)).map((e) => e.slug);
@@ -1228,6 +1576,7 @@ export const AssimilatorRig = {
     SCENARIOS,
     INSTINCTS,
     BOND_CHECKS,
+    FEAT_CHECKS,
     NOTES,
     CHECKS,
 
@@ -1235,7 +1584,7 @@ export const AssimilatorRig = {
         const results = [];
         const ctx = await AssimilatorRig.setup();
         try {
-            for (const check of [...CHECKS, ...SCENARIOS, ...NOTES, ...INSTINCTS, ...BOND_CHECKS].filter((c) => !only || only.test(c.id))) {
+            for (const check of [...CHECKS, ...SCENARIOS, ...NOTES, ...INSTINCTS, ...BOND_CHECKS, ...FEAT_CHECKS].filter((c) => !only || only.test(c.id))) {
                 results.push(await AssimilatorRig.one(check, ctx));
             }
         } finally {
@@ -1305,6 +1654,10 @@ export const AssimilatorRig = {
         const messages = game.messages.filter((m) => names.includes(m.speaker?.alias) || names.some((n) => m.content?.includes(n)));
         await ChatMessage.deleteDocuments(messages.map((m) => m.id));
         for (const a of game.actors.filter((x) => names.includes(x.name))) await a.delete();
+        // What the feats spawn: the Wall of Me and the Thing That Wears You, with their tokens.
+        const spawned = game.actors.filter((x) => /^(Wall of Me|The Thing That Wears) .*ZZ Rig/.test(x.name));
+        await canvas.scene.deleteEmbeddedDocuments("Token", canvas.scene.tokens.filter((t) => spawned.some((x) => x.id === t.actorId)).map((t) => t.id));
+        for (const a of spawned) await a.delete();
     },
 
     async one(check, ctx) {
@@ -1314,8 +1667,18 @@ export const AssimilatorRig = {
             await actor().update({ "system.details.level.value": check.lv });
             await wait(400);
         }
+        const wanted = check.feats ?? [];
+        const extra = actor().itemTypes.feat.filter((f) => f.system.traits.otherTags?.includes("assimilator-feat") && !wanted.includes(f.slug));
+        if (extra.length) await actor().deleteEmbeddedDocuments("Item", extra.map((f) => f.id));
+        const missing = wanted.filter((slug) => !actor().itemTypes.feat.some((f) => f.slug === slug));
+        if (missing.length) {
+            const docs = await game.packs.get("isaacs-hb-pf2e.assimilator-feats").getDocuments();
+            await actor().createEmbeddedDocuments("Item", missing.map((slug) => docs.find((d) => d.system.slug === slug).toObject()));
+            await wait(500);
+        }
         const state = Engine.state(actor());
         state.substrates = check.b;
+        state.temporary = {};
         state.choices = check.c ?? {};
         state.instinct = null;
         state.bonds = check.bonds ?? [];
@@ -1330,12 +1693,28 @@ export const AssimilatorRig = {
             if (check.resolve) src.system.rules.find((r) => r.key === "ChoiceSet").selection = check.resolve;
             await actor().createEmbeddedDocuments("Item", [src]);
         }
-        await target().update({ "system.traits.value": check.targetTraits ?? ["humanoid"], "system.attributes.hp.temp": 0 });
+        // Every check starts from the setup's creatures: a long run otherwise leaks one check's state into the next.
+        await target().update({ "system.traits.value": check.targetTraits ?? ["humanoid"], "system.attributes.hp.temp": 0,
+            "system.attributes.ac.value": 1, "system.attributes.resistances": [], "system.attributes.immunities": [] });
+        const bystander = game.actors.get(ctx.bystanderId);
+        if (bystander) {
+            await bystander.update({ "system.attributes.hp.value": 100, "system.attributes.hp.temp": 0,
+                "system.details.alliance": "opposition" });
+            const stray = bystander.items.filter((i) => i.type === "effect" || i.type === "condition");
+            if (stray.length) await bystander.deleteEmbeddedDocuments("Item", stray.map((i) => i.id));
+        }
+        await actor().update({ "system.attributes.hp.temp": 0 });
+        const livingPlate = actor().itemTypes.armor.find((x) => x.slug === "living-plate");
+        if (livingPlate && livingPlate.hitPoints.value < livingPlate.hitPoints.max) {
+            await livingPlate.update({ "system.hp.value": livingPlate.hitPoints.max });
+            await wait(300);
+        }
         // Garnet's drain kills the target, and pf2e ignores damage to the dead: every later check would hit a corpse.
         if (target().statuses?.has("dead")) await target().toggleStatusEffect("dead", { active: false });
         for (const e of target().itemTypes.effect.filter((x) => /studied|siphon/.test(x.slug))) await e.delete();
         // Anchored: the Bond effects are slugged `solar-core` too, and an unanchored match deleted the Bond itself.
-        for (const e of actor().itemTypes.effect.filter((x) => /^effect-(siphon|kinetic-surge|integrated-plating|knitting-surge|solar-core|imperial|shadow-mantle)/.test(x.slug))) await e.delete();
+        for (const e of actor().itemTypes.effect.filter((x) => /^effect-(siphon|kinetic-surge|integrated-plating|knitting-surge|solar-core|imperial|shadow-mantle|plated-guard|instinctive-surge|taste-for-it|devour|second-hunger|reach-of-the-thing|wall-of-me|worn-no-longer)/.test(x.slug)
+            || /^(Assimilated|Eat the World|ZZ Rig)/.test(x.name))) await e.delete();
         for (const e of target().itemTypes.effect.filter((x) => /cold-reading|mindstorm|corroded|hunted-in-darkness/.test(x.slug))) await e.delete();
         for (const x of target().itemTypes.armor) await x.delete();
         await actor().update({ "flags.pf2e.rollOptions.all.-=assimilator:living-flame": null });

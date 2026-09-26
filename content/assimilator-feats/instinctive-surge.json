@@ -1,0 +1,53 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.assimilator-effects.Item.Effect: Instinctive Surge"
+                    },
+                    "event": "action-used",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
+    "name": "Instinctive Surge",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p><strong>Free action</strong>, once per encounter: until the end of your turn, your <strong>Instinct clause treats every Substrate as one Depth higher</strong>.</p>"
+        },
+        "level": {
+            "value": 6
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "slug": "instinctive-surge",
+        "traits": {
+            "otherTags": [
+                "assimilator-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

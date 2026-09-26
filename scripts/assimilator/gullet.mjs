@@ -121,6 +121,21 @@ export class GulletApp extends HandlebarsApplicationMixin(ApplicationV2) {
                 options: ["acid", "cold", "electricity", "fire", "sonic", "force", "vitality", "void", ...immune]
                     .map((t) => ({ value: t, label: t, selected: state.choices.zinc === t })) });
         }
+        // The feats that ask for a choice.
+        const has = (slug) => Engine.hasFeat(actor, slug);
+        const pickSubstrate = (key, label) => choices.push({ key, label, options: [{ value: "", label: "— none —", selected: !state.choices[key] },
+            ...bound.map((b) => ({ value: b.slug, label: b.name, selected: state.choices[key] === b.slug }))] });
+        const pickBond = (key, label) => choices.push({ key, label, options: [{ value: "", label: "— none —", selected: !state.choices[key] },
+            ...state.bonds.map((slug) => ({ value: slug, label: bonds[slug]?.name ?? slug, selected: state.choices[key] === slug }))] });
+        if (has("deep-vein")) pickSubstrate("deepVein", "Deep Vein — one past your Depth cap");
+        if (has("fifth-depth")) pickSubstrate("fifthDepth", "Fifth Depth — may reach Depth 5");
+        if (has("bonded-deep")) pickBond("bondedDeep", "Bonded Deep — works at Depth 1");
+        if (has("greater-bond")) pickBond("greaterBond", "Greater Bond — half again");
+        if (has("two-instincts") || has("omnivore")) {
+            choices.push({ key: "twoInstincts", label: "Two Instincts — second clause",
+                options: [{ value: "", label: "— none —", selected: !state.choices.twoInstincts },
+                    ...COLOURS.map((c) => ({ value: c, label: c, selected: state.choices.twoInstincts === c }))] });
+        }
         // Electrum Depth 2: it may stand in for either Substrate of one Bond you know.
         if ((effective.electrum ?? 0) >= 2) {
             choices.push({ key: "electrumBond", label: "Electrum — stands in for a Bond",
@@ -128,8 +143,8 @@ export class GulletApp extends HandlebarsApplicationMixin(ApplicationV2) {
                     ...Object.entries(bonds).map(([slug, b]) => ({ value: slug, label: `${b.name} (${b.substrates.join(" + ")})`,
                         selected: state.choices.electrumBond === slug }))] });
         }
-        const nickel = effective.nickel
-            ? { held: state.choices.nickel ?? [], canReroll: effective.nickel >= 3,
+        const nickel = effective.nickel || Engine.hasFeat(actor, "chimeric-frame")
+            ? { held: state.choices.nickel ?? [], canReroll: (effective.nickel ?? 0) >= 3,
                 options: ABERRATIONS.map((a) => ({ value: a, label: a, selected: (state.choices.nickel ?? []).includes(a) })) }
             : null;
 

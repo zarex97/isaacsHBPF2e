@@ -23,6 +23,11 @@ function isWriter() {
     return game.users?.activeGM ? game.users.activeGM.isSelf : game.user.isGM;
 }
 
+/** Greater Bond: ×1.5 on the chosen Bond's numbers (rounded up where they are used), 1 otherwise. */
+export function greater(actor, slug) {
+    return actor?.flags?.[MODULE_ID]?.[KEY]?.derived?.gb?.[slug.replace(/-/g, "_")] ?? 1;
+}
+
 /** Is this Bond in force on this creature? */
 export function bondActive(actor, slug) {
     const options = actor?.getRollOptions?.() ?? [];
@@ -155,18 +160,21 @@ export const Bonds = {
         // Rot (Jet + Manganese): persistent acid from the Assimilator lowers every resistance by another 5, while it lasts.
         const rotting = (actor.itemTypes?.condition ?? []).some((c) => c.slug === "persistent-damage"
             && c.system?.persistent?.damageType === "acid" && bondActive(persistentOrigin(c), "rot"));
-        if (rotting) undo.push(shadowTarget(actor, { reduction: 5 }));
+        if (rotting) {
+            const from = (actor.itemTypes?.condition ?? []).map(persistentOrigin).find((o) => bondActive(o, "rot"));
+            undo.push(shadowTarget(actor, { reduction: Math.ceil(5 * greater(from, "rot")) }));
+        }
 
         const origin = params?.item?.actor;
         if (origin && origin.id !== actor.id) {
             if (types.includes("fire") && bondActive(origin, "conduction")) {
                 undo.push(dualType(actor, "fire", "electricity"));
-                if (wearsMetal(actor)) undo.push(addDamage(actor, 2 * fireDice(damage), "Conduction", notes));
+                if (wearsMetal(actor)) undo.push(addDamage(actor, Math.ceil(2 * greater(origin, "conduction")) * fireDice(damage), "Conduction", notes));
             }
             if (types.includes("fire") && bondActive(origin, "blackfire")) undo.push(dualType(actor, "fire", "void"));
             // Siege Frame: "You ignore an object's Hardness up to 10."
             if (bondActive(origin, "siege-frame") && isObject(actor) && actor.hardness > 0) {
-                undo.push(shadowTarget(actor, { hardness: 10 }));
+                undo.push(shadowTarget(actor, { hardness: Math.ceil(10 * greater(origin, "siege-frame")) }));
             }
             // Reaper's Edge: void ignores an incorporeal undead's resistances and immunities entirely.
             const traits = actor.system?.traits?.value ?? [];
@@ -216,7 +224,7 @@ export const Bonds = {
             await Bonds.stampPersistent(target, origin);
             // Blackfire: "When it kills a creature, you regain Hit Points equal to your level."
             if (types.fire && bondActive(origin, "blackfire") && before > 0 && after === 0) {
-                const healed = await heal(origin, origin.level);
+                const healed = await heal(origin, Math.ceil(origin.level * greater(origin, "blackfire")));
                 if (healed) await say(origin, `<strong>Blackfire</strong>: ${origin.name} regains ${healed} Hit Points.`);
             }
             if (originItem?.slug === "arcane-channel" && lost > 0) {
@@ -257,7 +265,7 @@ export const Bonds = {
         const originToken = origin.getActiveTokens?.(true, true)?.[0]?.id;
         const next = canvas.tokens.placeables.find((t) => t.actor && t !== from && t.document.id !== originToken
             && t.actor.id !== target.id && canvas.grid.measurePath([from.center, t.center]).distance <= 15);
-        const half = Math.floor((Number(params?.damage?.total) || 0) / 2);
+        const half = Math.floor((Number(params?.damage?.total) || 0) * 0.5 * greater(origin, "lightning-lash"));
         if (!next || half <= 0) return;
         const roll = await new (DamageRoll())(`${half}[${type}]`).evaluate();
         await next.actor.applyDamage({ damage: roll, token: next.document, item: params.item, lashed: true });
@@ -268,7 +276,7 @@ export const Bonds = {
         const half = actor.hitPoints.max / 2;
         if (!(before >= half && after < half) || !bondActive(actor, "runaway-growth")) return;
         await Engine.rollAberrations(actor, { reroll: true, forced: true });
-        const healed = await heal(live(actor), 2 * actor.level);
+        const healed = await heal(live(actor), Math.ceil(2 * actor.level * greater(actor, "runaway-growth")));
         await say(actor, `<strong>Runaway Growth</strong>: ${actor.name}'s Aberrations re-roll, and they regain ${healed} Hit Points.`);
     },
 

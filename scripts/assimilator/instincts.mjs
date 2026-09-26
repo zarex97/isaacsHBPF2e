@@ -82,8 +82,11 @@ function mutationsIn(params, origin) {
     return Object.keys(fromRoll).length ? fromRoll : mutationOfAction(params?.item);
 }
 
-function deepest(mutations) {
-    return Math.max(0, ...Object.values(mutations));
+function deepest(mutations, actor = null) {
+    // Instinctive Surge: until the end of the turn, the Instinct clause treats every Substrate as one Depth higher.
+    const surge = actor?.itemTypes?.effect?.some((e) => e.slug === "effect-instinctive-surge") ? 1 : 0;
+    const depth = Math.max(0, ...Object.values(mutations));
+    return depth ? depth + surge : 0;
 }
 
 function tokenOf(actor) {
@@ -171,7 +174,7 @@ export const Instincts = {
         const after = target.hitPoints?.value ?? before;
         if (!(after < before)) return;
         const mutations = mutationsIn(params, origin);
-        const depth = deepest(mutations);
+        const depth = deepest(mutations, origin);
         if (!depth) return;
         const scale = scaleOf(origin);
 
@@ -288,7 +291,7 @@ export const Instincts = {
             const used = context?.type === "damage-roll"
                 ? mutationsInRoll(message.rolls?.[0], actor, context.outcome)
                 : (!context ? mutationOfAction(item) : {});
-            const depth = deepest(used);
+            const depth = deepest(used, actor);
             if (depth) await Instincts.plate(actor, scaled(depth, scaleOf(actor)));
         }
         // Orange: a reaction is a use of the round's first surge too.
@@ -323,6 +326,8 @@ export const Instincts = {
     },
 
     async goldenCritical(actor) {
+        // "Does not stack with Gold's Instinct clause — take the better": Apex Predator's card names every Mutation.
+        if ((actor.itemTypes?.feat ?? []).some((f) => f.slug === "apex-predator")) return;
         const pick = record(actor).choices?.goldInstinct;
         const substrate = pick && actor.itemTypes.effect.find((e) => e.flags?.[MODULE_ID]?.[KEY]?.substrate?.slug === pick);
         if (!substrate) return;

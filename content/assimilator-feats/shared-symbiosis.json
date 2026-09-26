@@ -1,0 +1,44 @@
+{
+    "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
+    "name": "Shared Symbiosis",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 2
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Once per day, ◆◆ <em>(touch)</em>: a willing ally gains one of your <strong>Mutations at Depth 1</strong> for 10 minutes. They also gain a small piece of the thing's opinions.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
+        },
+        "level": {
+            "value": 18
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "slug": "shared-symbiosis",
+        "traits": {
+            "otherTags": [
+                "assimilator-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}
