@@ -1,0 +1,51 @@
+{
+    "img": "icons/magic/lightning/bolt-forked-orange.webp",
+    "name": "Effect: Kinetic Surge",
+    "system": {
+        "description": {
+            "value": "<p><strong>Orange Instinct.</strong> You moved or reacted: your next Mutation this round deals <strong>+1d4</strong> of its own damage type.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "damageType": "{actor|flags.isaacs-hb-pf2e.assimilator.derived.mutationType}",
+                "diceNumber": 1,
+                "dieSize": "d4",
+                "key": "DamageDice",
+                "label": "Kinetic Surge",
+                "selector": "unarmed-damage",
+                "slug": "kinetic-surge"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

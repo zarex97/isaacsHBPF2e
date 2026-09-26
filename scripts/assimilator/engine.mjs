@@ -37,6 +37,11 @@ export const INSTINCT_TYPES = {
     green: "poison", black: "void", white: "vitality", gray: "bludgeoning",
 };
 
+/** Emerald's own fast healing by Depth (lexicon §8), against which the Green Instinct's is compared. */
+export const EMERALD_FAST_HEALING = { 1: 1, 2: 2, 3: 5, 4: 10 };
+/** On while the Green Instinct's fast healing is the higher: only the highest of two applies (duplicate effects). */
+export const GREEN_OUTHEALS = "assimilator:green-fast-healing";
+
 /** Nickel's Aberrations held at each Depth (lexicon §9). */
 export const ABERRATION_COUNT = { 1: 1, 2: 2, 3: 2, 4: 3 };
 export const ABERRATIONS = ["limb", "organ", "mode", "plate", "gland", "maw"];
@@ -83,6 +88,26 @@ export function damageFrom(rules = []) {
     return depths.length ? Math.min(...depths) : null;
 }
 
+/** The damage type a Substrate's Mutation adds: its first typed, non-critical damage die. */
+export function damageTypeOf(rules = []) {
+    return rules.find((r) => r.key === "DamageDice" && !r.critical && r.damageType && !String(r.damageType).startsWith("{")
+        && [r.selector].flat().some((s) => String(s).endsWith("damage")))?.damageType ?? null;
+}
+
+/**
+ * "Its own damage type" — Orange's +1d4 on a Strike that may carry several Mutations. The deepest one adding
+ * damage decides; with none, the Instinct's own type.
+ */
+export function mutationTypeOf(effective, catalogue, fallback) {
+    let best = null;
+    for (const [slug, depth] of Object.entries(effective)) {
+        const entry = catalogue[slug];
+        if (!entry?.damageType || entry.damageFrom === null || entry.damageFrom === undefined || depth < entry.damageFrom) continue;
+        if (!best || depth > best.depth) best = { depth, type: entry.damageType };
+    }
+    return best?.type ?? fallback;
+}
+
 /**
  * The Carapace's Hardness from Substrates: the **highest** single bonus, not the sum — guide §4.3 v1.1, ruled
  * on #82. *Adamant Shell* is the one thing that makes them add.
@@ -118,6 +143,56 @@ export function colourTotals(paid, catalogue) {
         if (colour) totals[colour] += depth;
     }
     return totals;
+}
+
+/**
+ * Bound Substrates per colour — a count, not Mass: "+5 feet Speed per bound Orange Substrate", "fast healing equal
+ * to the number of bound Green Substrates". Electrum *also* counts as its second colour (lexicon §6, ruled on #82),
+ * while its Mass stays Gold's.
+ */
+export function colourCounts(effective, catalogue, electrumColour = null) {
+    const counts = Object.fromEntries(COLOURS.map((c) => [c, 0]));
+    for (const [slug, depth] of Object.entries(effective)) {
+        if (!(depth > 0)) continue;
+        const colour = catalogue[slug]?.colour;
+        if (colour) counts[colour] += 1;
+        if (slug === "electrum" && COLOURS.includes(electrumColour) && electrumColour !== colour) counts[electrumColour] += 1;
+    }
+    return counts;
+}
+
+/**
+ * The Instinct clauses in force. Electrum Depth 3 adds the second colour's clause — "but both clauses operate at
+ * half value"; Depth 4, "both at full value". A second colour that *is* the Instinct adds nothing.
+ */
+export function instinctsOf(primary, electrumDepth = 0, electrumColour = null) {
+    const secondary = primary && electrumDepth >= 3 && COLOURS.includes(electrumColour) && electrumColour !== primary
+        ? electrumColour : null;
+    return { primary: primary ?? null, secondary, scale: secondary && electrumDepth < 4 ? 0.5 : 1 };
+}
+
+/** "Half value (round down, minimum 1)" — and nothing halved is still nothing. */
+export function scaled(n, scale = 1) {
+    if (!(n > 0)) return 0;
+    return scale === 1 ? n : Math.max(1, Math.floor(n * scale));
+}
+
+/** The numbers the Instinct effects read (guide §5.1), at the value the clauses currently operate at. */
+export function instinctValues({ effective, catalogue, counts, scale = 1 }) {
+    const depths = Object.entries(effective).filter(([, d]) => d > 0);
+    const highest = Math.max(0, ...depths.map(([, d]) => d));
+    const metal = depths.filter(([s]) => catalogue[s]?.kind === "metal").reduce((sum, [, d]) => sum + d, 0);
+    return {
+        scale,
+        // Red: "+1 damage per Depth of its Substrate" — one figure per Substrate, for the modifier its own damage fires.
+        red: Object.fromEntries(depths.map(([s, d]) => [s, scaled(d, scale)])),
+        orangeSpeed: 5 * scaled(counts.orange, scale),
+        blueReduction: scaled(2 * highest, scale),
+        blueAc: scaled(1, scale),
+        greenHealing: scaled(counts.green, scale),
+        whiteUses: scaled(highest, scale),
+        grayHardness: scaled(metal, scale),
+    };
 }
 
 /**
@@ -196,7 +271,8 @@ export const Engine = {
         for (const doc of docs) {
             const s = doc.flags?.[MODULE_ID]?.[KEY]?.substrate;
             if (s?.slug) {
-                catalogueCache[s.slug] = { ...s, name: doc.name, uuid: doc.uuid, doc, damageFrom: damageFrom(doc.system.rules) };
+                catalogueCache[s.slug] = { ...s, name: doc.name, uuid: doc.uuid, doc, damageFrom: damageFrom(doc.system.rules),
+                    damageType: damageTypeOf(doc.system.rules) };
             }
         }
         return catalogueCache;
@@ -222,7 +298,13 @@ export const Engine = {
         const grants = Engine.grants(actor);
         const effective = Engine.effectiveDepths(actor, state, grants);
         const totals = colourTotals(state.substrates, catalogue);
+        const electrumColour = state.choices.electrum ?? null;
+        const counts = colourCounts(effective, catalogue, electrumColour);
+        const instincts = instinctsOf(state.instinct, effective.electrum ?? 0, electrumColour);
         return {
+            colourCount: counts,
+            instincts,
+            iv: instinctValues({ effective, catalogue, counts, scale: instincts.scale }),
             mass: { gem: grants.gem, metal: grants.metal },
             spent: spentOf(state.substrates, catalogue),
             depthCap: grants.depthCap,
@@ -264,6 +346,24 @@ export const Engine = {
             // Gilded Apotheosis: the first chosen manifests at Depth 4 for a minute.
             if (picks[0] && effects.some((e) => e.slug === "effect-gilded-apotheosis")) out[picks[0]] = 4;
         }
+        // The Instincts that move a Depth. Electrum's second colour is in force from Electrum Depth 3; "+1" at half
+        // value is still 1, so the scale changes nothing here.
+        const active = new Set([state.instinct, (out.electrum ?? 0) >= 3 ? state.choices.electrum : null].filter(Boolean));
+        if (!apotheosis && active.has("gold")) {
+            // Gold: "one Depth higher for its numeric effects, never above your Depth cap."
+            const pick = state.choices.goldInstinct;
+            if (pick in out) out[pick] = Math.min(out[pick] + 1, grants.depthCap);
+        }
+        if (!apotheosis && active.has("purple")) {
+            // Purple: one of your choice manifests one higher — the clause names no cap but the ladder's own top —
+            // and one other, rolled at preparations, one lower. A Depth 1 Substrate lowered does not manifest today.
+            const { purpleUp: up, purpleDown: down } = state.choices;
+            if (up in out) out[up] = Math.min(out[up] + 1, 4);
+            if (down in out && down !== up) {
+                out[down] -= 1;
+                if (out[down] <= 0) delete out[down];
+            }
+        }
         return out;
     },
 
@@ -303,12 +403,15 @@ export const Engine = {
     async _rebuild(actor) {
         const state = Engine.state(actor);
         const catalogue = await Engine.catalogue();
-        const derived = await Engine.derive(actor, state);
+        let derived = await Engine.derive(actor, state);
 
         // The first time anything is bound, the Instinct is read at once rather than waiting a night;
         // after that it moves only at daily preparations.
+        const was = state.instinct;
         if (state.instinct === null && derived.pending.instinct) state.instinct = derived.pending.instinct;
         if (state.preparing) state.instinct = derived.pending.instinct;
+        // Gold and Purple move Depths, so an Instinct that has just settled changes what everything manifests at.
+        if (state.instinct !== was) derived = await Engine.derive(actor, state);
 
         const creates = [];
         const updates = [];
@@ -332,14 +435,20 @@ export const Engine = {
         }
         for (const e of owned) if (!(e.flags[MODULE_ID][KEY].substrate.slug in derived.effective)) deletes.push(e.id);
 
-        // The Instinct: exactly one effect, the recorded colour's.
+        // The Instinct: the recorded colour's effect, and from Electrum Depth 3 the second colour's beside it. The
+        // effect is the clause; which one is *the* Instinct — the damage type, `assimilator:instinct:<colour>` — is
+        // the primary's alone, so that option is written below rather than by the effect.
+        const settled = instinctsOf(state.instinct, derived.effective.electrum ?? 0, state.choices.electrum ?? null);
         const instincts = actor.itemTypes.effect.filter((e) => e.flags?.[MODULE_ID]?.[KEY]?.instinct);
-        const wanted = state.instinct;
-        for (const e of instincts) if (e.flags[MODULE_ID][KEY].instinct !== wanted) deletes.push(e.id);
-        if (wanted && !instincts.some((e) => e.flags[MODULE_ID][KEY].instinct === wanted)) {
-            const doc = (await game.packs.get(PACKS.effects)?.getDocuments())
-                ?.find((d) => d.flags?.[MODULE_ID]?.[KEY]?.instinct === wanted);
-            if (doc) creates.push(doc.toObject());
+        const wantedColours = [settled.primary, settled.secondary].filter(Boolean);
+        for (const e of instincts) if (!wantedColours.includes(e.flags[MODULE_ID][KEY].instinct)) deletes.push(e.id);
+        const missingColours = wantedColours.filter((c) => !instincts.some((e) => e.flags[MODULE_ID][KEY].instinct === c));
+        if (missingColours.length) {
+            const docs = (await game.packs.get(PACKS.effects)?.getDocuments()) ?? [];
+            for (const colour of missingColours) {
+                const doc = docs.find((d) => d.flags?.[MODULE_ID]?.[KEY]?.instinct === colour);
+                if (doc) creates.push(doc.toObject());
+            }
         }
 
         // Bonds: the slotted ones, as many as there are slots. Suppression below Depth 2 is each Bond's own
@@ -377,6 +486,10 @@ export const Engine = {
             // From the Instinct as this rebuild settled it, not as `derive` read it before the first binding set one.
             instinctType: INSTINCT_TYPES[state.instinct] ?? "bludgeoning", substrateHardness: derived.substrateHardness,
             colours: derived.colours, effective: derived.effective,
+            colourCount: derived.colourCount, instincts: settled,
+            mutationType: mutationTypeOf(Engine.workingDepths(actor, derived.effective), catalogue,
+                INSTINCT_TYPES[state.instinct] ?? "bludgeoning"),
+            iv: instinctValues({ effective: derived.effective, catalogue, counts: derived.colourCount, scale: settled.scale }),
         };
         // Write only what a rebuild owns — the derived picture and the Instinct it settled — never the record it
         // read at the start. A rebuild awaits item work in between, and writing the whole record back clobbered
@@ -390,8 +503,21 @@ export const Engine = {
             for (const slug of Object.keys(now.derived?.effective ?? {})) {
                 if (!(slug in derivedFlag.effective)) update[`flags.${MODULE_ID}.${KEY}.derived.effective.-=${slug}`] = null;
             }
+            for (const slug of Object.keys(now.derived?.iv?.red ?? {})) {
+                if (!(slug in derivedFlag.iv.red)) update[`flags.${MODULE_ID}.${KEY}.derived.iv.red.-=${slug}`] = null;
+            }
         }
         if (now.instinct !== state.instinct) update[`flags.${MODULE_ID}.${KEY}.instinct`] = state.instinct;
+        const toggles = actor.flags?.pf2e?.rollOptions?.all ?? {};
+        const emerald = EMERALD_FAST_HEALING[Math.min(Engine.workingDepths(actor, derived.effective).emerald ?? 0, 4)] ?? 0;
+        const outheals = [settled.primary, settled.secondary].includes("green") && derivedFlag.iv.greenHealing > emerald;
+        if (outheals && !toggles[GREEN_OUTHEALS]) update[`flags.pf2e.rollOptions.all.${GREEN_OUTHEALS}`] = true;
+        if (!outheals && toggles[GREEN_OUTHEALS]) update[`flags.pf2e.rollOptions.all.-=${GREEN_OUTHEALS}`] = null;
+        for (const colour of COLOURS) {
+            const option = `assimilator:instinct:${colour}`;
+            if (colour === settled.primary && !toggles[option]) update[`flags.pf2e.rollOptions.all.${option}`] = true;
+            if (colour !== settled.primary && toggles[option]) update[`flags.pf2e.rollOptions.all.-=${option}`] = null;
+        }
         if (Object.keys(update).length) await actor.update(update, { assimilatorEngine: true });
     },
 
@@ -556,7 +682,12 @@ export const Engine = {
         if (shifting) state.zincShift = false;
         if (key === "nickel") value = [value].flat().filter((k) => ABERRATIONS.includes(k));
         if (key === "gold") value = [value].flat().filter((s) => s && s !== "gold" && s in state.substrates);
+        if ((key === "goldInstinct" || key === "purpleUp") && !(value in state.substrates)) {
+            return Engine._refuse("Choose a Substrate you bind.");
+        }
         state.choices[key] = value;
+        // Purple: the other one is not chosen. It is rolled when the first is, and again each morning.
+        if (key === "purpleUp") state.choices.purpleDown = Engine.rollPurpleDown(state);
         await Engine.write(actor, state);
         await Engine.rebuild(actor);
         return { ok: true };
@@ -582,6 +713,12 @@ export const Engine = {
         return { ok: true, picked };
     },
 
+    /** Purple: "one other, randomly determined" — any bound Substrate but the one raised. */
+    rollPurpleDown(state) {
+        const pool = Object.keys(state.substrates).filter((s) => s !== state.choices.purpleUp && state.substrates[s] > 0);
+        return pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
+    },
+
     /** Daily preparations open with Rest for the Night and close when the owner says so, or combat starts. */
     async beginPreparations(actor) {
         const state = Engine.state(actor);
@@ -603,7 +740,10 @@ export const Engine = {
         await Engine.rebuild(actor);
         const settled = Engine.state(actor);
         settled.preparing = false;
+        // A new morning rolls Purple's lowered Substrate again.
+        if (settled.choices.purpleUp) settled.choices.purpleDown = Engine.rollPurpleDown(settled);
         await Engine.write(actor, settled);
+        await Engine.rebuild(actor);
     },
 
     _refuse(reason) {

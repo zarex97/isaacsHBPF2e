@@ -1,0 +1,63 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "instinct": "purple"
+            }
+        }
+    },
+    "img": "icons/magic/symbols/runes-star-magenta.webp",
+    "name": "Instinct: Purple",
+    "system": {
+        "description": {
+            "value": "<p><em>Mutate / Transcend.</em></p><p>Your Mutations count as <strong>magical</strong>. At daily preparations one Substrate of your choice manifests <strong>one Depth higher</strong>, and one other, randomly determined, manifests <strong>one Depth lower</strong>.</p><p><em>Your Instinct's damage type is mental.</em> Under Electrum Depth 3 this clause may be a second one, at half value.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "definition": [
+                    "item:category:unarmed"
+                ],
+                "key": "AdjustStrike",
+                "mode": "add",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    }
+                ],
+                "property": "weapon-traits",
+                "value": "magical"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

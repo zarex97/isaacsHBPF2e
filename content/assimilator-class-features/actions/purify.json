@@ -1,0 +1,39 @@
+{
+    "folder": "Actions",
+    "img": "icons/magic/holy/prayer-hands-glowing-yellow-white.webp",
+    "name": "Purify",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "interaction",
+        "description": {
+            "value": "<p><strong>White Instinct.</strong> End one condition on yourself or an ally. A number of times per day equal to your highest Depth.</p><p><em>Target the ally first; with no target it is you.</em></p>"
+        },
+        "frequency": {
+            "max": 4,
+            "per": "day",
+            "value": 4
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-mutation-action"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "action"
+}

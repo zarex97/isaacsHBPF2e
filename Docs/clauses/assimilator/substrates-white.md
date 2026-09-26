@@ -57,7 +57,7 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | PE-1a | Pearl D1 | +1 item bonus to saves against poison and disease. | `rig` | ✅ | Rig, live: Fortitude carries **Pearl +1 item**, predicated on poison or disease |
 | PE-1b | Pearl D1 | Once per day, reduce one condition's value by 1. |  | ✅ | Live: *Clear Tide* granted, free, 1/day |
-| PE-2a | Pearl D2 | Once per encounter, as a single action, **end one condition of value 1** on yourself or an adjacent ally. | `rig` | ⚠️ | Live: *Cleansing Tide* granted at Depth 2. Rig, in an encounter: **one** use, the second refused (and **two** at Depth 4). Which value-1 condition ends is the player's pick on the card. **Fixed while driving:** "once per encounter" was printed and nothing enforced it — pf2e's Frequency has no encounter interval. The use card is now refused once the encounter's uses are spent |
+| PE-2a | Pearl D2 | Once per encounter, as a single action, **end one condition of value 1** on yourself or an adjacent ally. | `rig` | ✅ | Rig, live: *Cleansing Tide* opened the condition picker offering **only value-1 conditions** (frightened 1, not clumsy 2); picking it ended frightened. In an encounter a second use was refused. **Fixed while driving:** "once per encounter" was printed and not enforced |
 | PE-3a | Pearl D3 | Range **30 feet**, and it may instead reduce one **affliction's stage** by 1. | `rig` | ⚠️ | Rig: the Note *Pearl (Depth 3)* appears on the Perception card. Text the table applies — nothing enforces it |
 | PE-4a | Pearl D4 | **Twice** per encounter, and it may instead **counteract** one spell effect of 4th rank or lower. | `rig` | ⚠️ | Rig: the Note *Pearl (Depth 4)* appears on the Perception card. Text the table applies — nothing enforces it |
 
@@ -97,8 +97,8 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | Status | Count |
 | :-- | --: |
 | ☐ | 0 |
-| ✅ | 21 |
-| ⚠️ | 5 |
+| ✅ | 22 |
+| ⚠️ | 4 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 1 |

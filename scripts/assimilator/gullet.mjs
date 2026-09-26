@@ -102,6 +102,18 @@ export class GulletApp extends HandlebarsApplicationMixin(ApplicationV2) {
             choices.push({ key: "electrum", label: "Alloyed Instinct — second colour",
                 options: COLOURS.filter((c) => c !== "gold").map((c) => ({ value: c, label: c, selected: state.choices.electrum === c })) });
         }
+        // The Instincts that ask for a Substrate each morning: Gold's raised one, Purple's raised one (the lowered one
+        // is rolled). Electrum's second colour counts from Depth 3.
+        const instincts = new Set([state.instinct, (effective.electrum ?? 0) >= 3 ? state.choices.electrum : null]);
+        if (instincts.has("gold")) {
+            choices.push({ key: "goldInstinct", label: "Gold Instinct — one Depth higher",
+                options: bound.map((b) => ({ value: b.slug, label: b.name, selected: state.choices.goldInstinct === b.slug })) });
+        }
+        if (instincts.has("purple")) {
+            const down = state.choices.purpleDown;
+            choices.push({ key: "purpleUp", label: `Purple Instinct — one Depth higher${down ? ` (lowered today: ${catalogue[down]?.name ?? down})` : ""}`,
+                options: bound.map((b) => ({ value: b.slug, label: b.name, selected: state.choices.purpleUp === b.slug })) });
+        }
         if (effective.zinc) {
             choices.push({ key: "zinc", label: "Shifting Tissue — energy type",
                 options: ["acid", "cold", "electricity", "fire", "sonic", "force", "vitality", "void"]

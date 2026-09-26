@@ -357,6 +357,32 @@ check("the same Substrate twice is refused", errorsFor({ substrates: [ruby(), ru
 
     const ruby = JSON.parse(fs.readFileSync(new URL("../content/assimilator-substrates/red/ruby.json", import.meta.url), "utf8"));
     check("Ruby first adds damage at Depth 2 — its crit-only persistent does not count", damageFrom(ruby.system.rules), 2);
+
+    // Phase 4: the Instincts.
+    const { colourCounts, instinctsOf, scaled, instinctValues, mutationTypeOf, damageTypeOf } =
+        await import("../scripts/assimilator/engine.mjs");
+    const cat = { ...catalogue,
+        electrum: { colour: "gold", kind: "metal", damageFrom: null },
+        emerald: { colour: "green", kind: "gem", damageFrom: null },
+        carnelian: { colour: "orange", kind: "gem", damageFrom: null } };
+    check("EL-1b Electrum also counts as its second colour",
+        colourCounts({ electrum: 1, emerald: 2 }, cat, "green"), { red: 0, gold: 1, orange: 0, blue: 0, purple: 0, green: 2, black: 0, white: 0, gray: 0 });
+    check("EL-3a at Electrum 3 a second clause, both at half", instinctsOf("red", 3, "green"), { primary: "red", secondary: "green", scale: 0.5 });
+    check("EL-4a at Electrum 4 both at full", instinctsOf("red", 4, "green").scale, 1);
+    check("…below 3 no second clause", instinctsOf("red", 2, "green").secondary, null);
+    check("…and the Instinct's own colour adds nothing", instinctsOf("green", 4, "green").secondary, null);
+    check("half value rounds down, minimum 1; nothing stays nothing", [scaled(5, 0.5), scaled(1, 0.5), scaled(0, 0.5), scaled(4, 1)], [2, 1, 0, 4]);
+    const iv = instinctValues({ effective: { ruby: 3, iron: 2, emerald: 1, carnelian: 2 }, catalogue: cat,
+        counts: colourCounts({ ruby: 3, iron: 2, emerald: 1, carnelian: 2 }, cat), scale: 1 });
+    check("I-1a Red: each Substrate's own Depth", iv.red, { ruby: 3, iron: 2, emerald: 1, carnelian: 2 });
+    check("I-3b Orange: +5 feet per bound Orange Substrate", iv.orangeSpeed, 5);
+    check("I-4b Blue: twice the highest Depth", iv.blueReduction, 6);
+    check("I-6b Green: fast healing per bound Green Substrate", iv.greenHealing, 1);
+    check("I-8b White: uses equal to the highest Depth", iv.whiteUses, 3);
+    check("I-9a Gray: the total Depth of bound metals", iv.grayHardness, 2);
+    check("I-3a Orange's +1d4 is the deepest damaging Mutation's type",
+        mutationTypeOf({ ruby: 3, iron: 2 }, { ruby: { damageFrom: 2, damageType: "fire" }, iron: { damageFrom: 1, damageType: "bludgeoning" } }, "electricity"), "fire");
+    check("Ruby's Mutation is fire", damageTypeOf(ruby.system.rules), "fire");
 }
 
 /* -------------------------------------------------------------------------------------------- */
