@@ -1,0 +1,46 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "doesNotStackWith": "gold-instinct"
+            }
+        }
+    },
+    "img": "icons/creatures/abilities/fang-tooth-blood-red.webp",
+    "name": "Apex Predator",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>When you critically hit with a Mutation, apply that Substrate's <strong>Depth 4 rider</strong>, whether or not it is at Depth 4. <em>Does not stack with Gold's Instinct clause — take the better.</em></p>"
+        },
+        "level": {
+            "value": 14
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "slug": "apex-predator",
+        "traits": {
+            "otherTags": [
+                "assimilator-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

@@ -1,0 +1,44 @@
+{
+    "img": "icons/magic/life/ankh-gold-blue.webp",
+    "name": "Sympathetic Growth",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Once per day, ◆ <em>(touch)</em>: an ally gains <strong>one resistance you have, at half value</strong>, for 10 minutes. A piece of the thing goes with them, and it comes back.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
+        },
+        "level": {
+            "value": 2
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "slug": "sympathetic-growth",
+        "traits": {
+            "otherTags": [
+                "assimilator-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

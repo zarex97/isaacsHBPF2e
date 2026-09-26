@@ -1,0 +1,47 @@
+{
+    "folder": "Core",
+    "img": "icons/creatures/claws/claw-talons-glowing-orange.webp",
+    "name": "Living Weapon",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>You gain the critical specialization effect of the <strong>brawling</strong> group for your unarmed attacks.</p>"
+        },
+        "level": {
+            "value": 7
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "CriticalSpecialization",
+                "predicate": [
+                    "item:category:unarmed",
+                    "item:group:brawling"
+                ]
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

@@ -1,0 +1,39 @@
+{
+    "img": "icons/commodities/leather/scale-chitin-grey.webp",
+    "name": "Shed Skin",
+    "system": {
+        "actionType": {
+            "value": "reaction"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>🜲 <strong>Reaction</strong> — <em>Trigger:</em> you gain a condition of value 2 or lower. <em>Effect:</em> end it. Your Carapace takes damage equal to <strong>five times the condition's value</strong>.</p>"
+        },
+        "level": {
+            "value": 8
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "slug": "shed-skin",
+        "traits": {
+            "otherTags": [
+                "assimilator-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

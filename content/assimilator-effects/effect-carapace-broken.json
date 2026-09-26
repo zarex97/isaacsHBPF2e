@@ -1,0 +1,62 @@
+{
+    "img": "icons/equipment/chest/breastplate-layered-leather-brown.webp",
+    "name": "Effect: Carapace Broken",
+    "system": {
+        "description": {
+            "value": "<p>The Carapace is broken. You lose Living Plate's rune benefits, and every Mutation at Depth 3 or higher is switched off until the Carapace is repaired &mdash; with the Repair activity against its own Hardness, or one hour of Feeding it any Substrate you don't bind.</p><p><em>Put on and taken off by the module as the plate's Hit Points cross its Broken Threshold.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "itemType": "armor",
+                "key": "ItemAlteration",
+                "mode": "override",
+                "predicate": [
+                    "item:slug:living-plate"
+                ],
+                "property": "runes-potency",
+                "value": 0
+            },
+            {
+                "itemType": "armor",
+                "key": "ItemAlteration",
+                "mode": "override",
+                "predicate": [
+                    "item:slug:living-plate"
+                ],
+                "property": "runes-resilient",
+                "value": 0
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

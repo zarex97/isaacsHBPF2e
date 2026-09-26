@@ -1,0 +1,69 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "bond": {
+                    "substrates": [
+                        "platinum",
+                        "aluminium"
+                    ]
+                }
+            }
+        }
+    },
+    "img": "icons/magic/air/weather-wind-gust.webp",
+    "name": "Ascension",
+    "system": {
+        "description": {
+            "value": "<p><strong>Platinum + Aluminium.</strong> Your fly Speed increases by 20 feet and you may hover. Falling is something that happens to other people.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 4
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Ascension",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    "assimilator:bond:ascension"
+                ],
+                "selector": "fly-speed",
+                "slug": "ascension",
+                "value": "ceil(20 * @actor.flags.isaacs-hb-pf2e.assimilator.derived.gb.ascension)"
+            }
+        ],
+        "slug": "ascension",
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-bond"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

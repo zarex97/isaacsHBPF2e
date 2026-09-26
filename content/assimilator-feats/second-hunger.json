@@ -1,0 +1,39 @@
+{
+    "img": "icons/creatures/abilities/mouth-teeth-crooked-blue.webp",
+    "name": "Second Hunger",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p><strong>Free action</strong>, once per encounter: gain <strong>2 Mass</strong> in one track for 1 minute, which you must spend immediately to deepen a bound Substrate. When it ends, that Substrate returns to its real Depth.</p>"
+        },
+        "level": {
+            "value": 16
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "slug": "second-hunger",
+        "traits": {
+            "otherTags": [
+                "assimilator-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

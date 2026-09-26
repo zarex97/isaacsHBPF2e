@@ -1,0 +1,41 @@
+{
+    "folder": "Mutations",
+    "img": "icons/commodities/gems/gem-faceted-diamond-pink.webp",
+    "name": "Prism Counteract",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "interaction",
+        "description": {
+            "value": "<p>Counteract one magical effect: counteract rank equal to half your level, counteract modifier equal to your class DC &minus; 10. Twice per day at Quartz Depth 4.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-mutation-action"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator",
+                "concentrate",
+                "manipulate"
+            ]
+        }
+    },
+    "type": "action"
+}

@@ -1,0 +1,46 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "doesNotStackWith": "electrum-alloyed-instinct"
+            }
+        }
+    },
+    "img": "icons/magic/symbols/elements-air-earth-fire-water.webp",
+    "name": "Two Instincts",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>You gain a <strong>second Instinct clause</strong> of your choice. Both operate at <strong>half value</strong> (round down, minimum 1). <em>This does not stack with Electrum's Alloyed Instinct — take the better.</em></p>"
+        },
+        "level": {
+            "value": 10
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "slug": "two-instincts",
+        "traits": {
+            "otherTags": [
+                "assimilator-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

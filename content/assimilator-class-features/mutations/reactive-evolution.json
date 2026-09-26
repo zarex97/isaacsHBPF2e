@@ -1,0 +1,48 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.assimilator-effects.Item.Effect: Reactive Evolution"
+                    },
+                    "event": "action-used",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "folder": "Mutations",
+    "img": "icons/commodities/gems/gem-faceted-round-white.webp",
+    "name": "Reactive Evolution",
+    "system": {
+        "actionType": {
+            "value": "reaction"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "interaction",
+        "description": {
+            "value": "<p><strong>Trigger</strong> You take damage of a type.</p><hr /><p>Gain resistance to that type &mdash; <strong>2</strong> for 1 minute at Moonstone Depth 1 (once per encounter), <strong>5</strong> at Depth 2 (twice per encounter), <strong>8</strong> until the encounter ends at Depth 3 (two types at once), <strong>12</strong> at Depth 4 (unlimited, three types at once).</p>"
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-mutation-action"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "action"
+}

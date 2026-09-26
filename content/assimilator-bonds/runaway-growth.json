@@ -1,0 +1,55 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "bond": {
+                    "substrates": [
+                        "nickel",
+                        "emerald"
+                    ]
+                }
+            }
+        }
+    },
+    "img": "icons/magic/nature/root-vine-barrier-wall-brown.webp",
+    "name": "Runaway Growth",
+    "system": {
+        "description": {
+            "value": "<p><strong>Nickel + Emerald.</strong> Your Aberrations re-roll automatically whenever you drop below half Hit Points, and doing so restores Hit Points equal to twice your level.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 4
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "slug": "runaway-growth",
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-bond"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

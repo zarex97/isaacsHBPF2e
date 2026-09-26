@@ -1,0 +1,41 @@
+{
+    "folder": "Mutations",
+    "img": "icons/commodities/gems/gem-rough-cushion-blue.webp",
+    "name": "Reading Eye",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "interaction",
+        "description": {
+            "value": "<p>Recall Knowledge about a creature you can see.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-mutation-action"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator",
+                "concentrate",
+                "secret"
+            ]
+        }
+    },
+    "type": "action"
+}

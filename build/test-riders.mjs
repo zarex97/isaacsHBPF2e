@@ -8,7 +8,8 @@
  * shipped content rather than a copy of it — an edit that breaks the ordering fails the build.
  *
  * `game.pf2e.Predicate` is stubbed, because the real one lives in the system. The stand-in implements the
- * subset the content actually uses (plain statements, `not`, `or`, `and`) and nothing more, so a rider
+ * subset the content actually uses (plain statements, `not`, `or`, `and`, and the numeric comparisons the
+ * Assimilator's Depths are written in) and nothing more, so a rider
  * written with a predicate form beyond that subset will throw here rather than quietly pass.
  */
 import fs from "node:fs";
@@ -36,6 +37,14 @@ function evaluate(statement, options) {
         if ("not" in statement) return !evaluate(statement.not, options);
         if ("or" in statement) return statement.or.some((s) => evaluate(s, options));
         if ("and" in statement) return statement.and.every((s) => evaluate(s, options));
+        // pf2e's numeric comparisons: `{ gte: ["self:effect:substrate-ruby", 3] }` is true when an option
+        // `self:effect:substrate-ruby:<n>` is present with n >= 3.
+        const COMPARE = { gt: (a, b) => a > b, gte: (a, b) => a >= b, lt: (a, b) => a < b, lte: (a, b) => a <= b, eq: (a, b) => a === b };
+        const op = Object.keys(COMPARE).find((k) => k in statement);
+        if (op) {
+            const [key, value] = statement[op];
+            return [...options].some((o) => o.startsWith(`${key}:`) && COMPARE[op](Number(o.slice(key.length + 1)), Number(value)));
+        }
     }
     throw new Error(`predicate form not supported by the test stub: ${JSON.stringify(statement)}`);
 }

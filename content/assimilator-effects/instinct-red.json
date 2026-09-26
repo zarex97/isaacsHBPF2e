@@ -1,0 +1,1110 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "instinct": "red"
+            }
+        }
+    },
+    "img": "icons/magic/fire/flame-burning-hand-orange.webp",
+    "name": "Instinct: Red",
+    "system": {
+        "description": {
+            "value": "<p><em>Consume / Destroy.</em></p><p>When a Mutation deals damage, it deals <strong>+1 damage per Depth</strong> of its Substrate. Against a creature that has already lost Hit Points this encounter, <strong>double</strong> that bonus.</p><p><em>Your Instinct's damage type is fire.</em> Under Electrum Depth 3 this clause may be a second one, at half value.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Jet)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-jet",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-jet",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-jet",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-jet",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.jet"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Jet, bloodied)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-jet",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-jet",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-jet",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    },
+                    "target:damaged-this-encounter"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-jet-bloodied",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.jet"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Jet)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-jet",
+                            3
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-jet",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-jet",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.jet"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Jet, bloodied)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-jet",
+                            3
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-jet",
+                            4
+                        ]
+                    },
+                    "carapace:intact",
+                    "target:damaged-this-encounter"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-jet-bloodied",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.jet"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Jet)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-jet",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-jet",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.jet"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Jet, bloodied)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-jet",
+                            4
+                        ]
+                    },
+                    "carapace:intact",
+                    "target:damaged-this-encounter"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-jet-bloodied",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.jet"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Sapphire)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-sapphire",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-sapphire",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-sapphire",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-sapphire",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.sapphire"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Sapphire, bloodied)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-sapphire",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-sapphire",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-sapphire",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    },
+                    "target:damaged-this-encounter"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-sapphire-bloodied",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.sapphire"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Sapphire)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-sapphire",
+                            3
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-sapphire",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-sapphire",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.sapphire"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Sapphire, bloodied)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-sapphire",
+                            3
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-sapphire",
+                            4
+                        ]
+                    },
+                    "carapace:intact",
+                    "target:damaged-this-encounter"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-sapphire-bloodied",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.sapphire"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Sapphire)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-sapphire",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-sapphire",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.sapphire"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Sapphire, bloodied)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-sapphire",
+                            4
+                        ]
+                    },
+                    "carapace:intact",
+                    "target:damaged-this-encounter"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-sapphire-bloodied",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.sapphire"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Silver)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-silver",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-silver",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-silver",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    },
+                    {
+                        "or": [
+                            "target:trait:aberration",
+                            "target:trait:fiend",
+                            "target:trait:undead",
+                            "target:trait:spirit"
+                        ]
+                    }
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-silver",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.silver"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Silver, bloodied)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-silver",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-silver",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-silver",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    },
+                    {
+                        "or": [
+                            "target:trait:aberration",
+                            "target:trait:fiend",
+                            "target:trait:undead",
+                            "target:trait:spirit"
+                        ]
+                    },
+                    "target:damaged-this-encounter"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-silver-bloodied",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.silver"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Silver)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-silver",
+                            3
+                        ]
+                    },
+                    "carapace:intact",
+                    {
+                        "or": [
+                            "target:trait:aberration",
+                            "target:trait:fiend",
+                            "target:trait:undead",
+                            "target:trait:spirit"
+                        ]
+                    }
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-silver",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.silver"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Silver, bloodied)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-silver",
+                            3
+                        ]
+                    },
+                    "carapace:intact",
+                    {
+                        "or": [
+                            "target:trait:aberration",
+                            "target:trait:fiend",
+                            "target:trait:undead",
+                            "target:trait:spirit"
+                        ]
+                    },
+                    "target:damaged-this-encounter"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-silver-bloodied",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.silver"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Carnelian)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-carnelian",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-carnelian",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-carnelian",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    },
+                    "self:moved-10-feet-this-turn"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-carnelian",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.carnelian"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Carnelian, bloodied)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-carnelian",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-carnelian",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-carnelian",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    },
+                    "self:moved-10-feet-this-turn",
+                    "target:damaged-this-encounter"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-carnelian-bloodied",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.carnelian"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Carnelian)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-carnelian",
+                            3
+                        ]
+                    },
+                    "carapace:intact",
+                    "self:moved-10-feet-this-turn"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-carnelian",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.carnelian"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Carnelian, bloodied)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-carnelian",
+                            3
+                        ]
+                    },
+                    "carapace:intact",
+                    "self:moved-10-feet-this-turn",
+                    "target:damaged-this-encounter"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-carnelian-bloodied",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.carnelian"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Amethyst)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-amethyst",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-amethyst",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-amethyst",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-amethyst",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.amethyst"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Amethyst, bloodied)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-amethyst",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-amethyst",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-amethyst",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    },
+                    "target:damaged-this-encounter"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-amethyst-bloodied",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.amethyst"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Amethyst)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-amethyst",
+                            3
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-amethyst",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-amethyst",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.amethyst"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Amethyst, bloodied)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-amethyst",
+                            3
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-amethyst",
+                            4
+                        ]
+                    },
+                    "carapace:intact",
+                    "target:damaged-this-encounter"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-amethyst-bloodied",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.amethyst"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Amethyst)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-amethyst",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-amethyst",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.amethyst"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Amethyst, bloodied)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-amethyst",
+                            4
+                        ]
+                    },
+                    "carapace:intact",
+                    "target:damaged-this-encounter"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-amethyst-bloodied",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.amethyst"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Garnet)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-garnet",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-garnet",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    },
+                    "target:damaged-this-encounter"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-garnet",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.garnet"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Garnet, bloodied)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-garnet",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-garnet",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    },
+                    "target:damaged-this-encounter",
+                    "target:damaged-this-encounter"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-garnet-bloodied",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.garnet"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Garnet)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-garnet",
+                            4
+                        ]
+                    },
+                    "carapace:intact",
+                    "target:condition:persistent-damage:bleed"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-garnet",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.garnet"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Garnet, bloodied)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-garnet",
+                            4
+                        ]
+                    },
+                    "carapace:intact",
+                    "target:condition:persistent-damage:bleed",
+                    "target:damaged-this-encounter"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-garnet-bloodied",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.garnet"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Iron)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-iron",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-iron",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-iron",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.iron"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Iron, bloodied)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-iron",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-iron",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    },
+                    "target:damaged-this-encounter"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-iron-bloodied",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.iron"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Ruby)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-ruby",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-ruby",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-ruby",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-ruby",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.ruby"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Ruby, bloodied)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-ruby",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-ruby",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-ruby",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    },
+                    "target:damaged-this-encounter"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-ruby-bloodied",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.ruby"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Ruby)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-ruby",
+                            3
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-ruby",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-ruby",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.ruby"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Ruby, bloodied)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-ruby",
+                            3
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-ruby",
+                            4
+                        ]
+                    },
+                    "carapace:intact",
+                    "target:damaged-this-encounter"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-ruby-bloodied",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.ruby"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Ruby)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-ruby",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-ruby",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.ruby"
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Red Instinct (Ruby, bloodied)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-ruby",
+                            4
+                        ]
+                    },
+                    "carapace:intact",
+                    "target:damaged-this-encounter"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "instinct-red-ruby-bloodied",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.red.ruby"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

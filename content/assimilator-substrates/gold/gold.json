@@ -1,0 +1,170 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "gold",
+                    "kind": "metal",
+                    "slug": "gold",
+                    "specimenNames": [
+                        "gold ingot",
+                        "gold nugget"
+                    ]
+                }
+            }
+        }
+    },
+    "folder": "Gold",
+    "img": "icons/commodities/metal/ingot-gold.webp",
+    "name": "Substrate: Gold",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Amplification &middot; <strong>Mutation:</strong> Gilded Core</p><p><em>Everything already there gets brighter and slower and more certain of itself.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td>At daily preparations, choose one other bound Substrate. It counts as <strong>one Depth higher</strong> for its numeric effects. This can never exceed your level's Depth cap.</td></tr><tr><td>2</td><td>The chosen Substrate also gains the <strong>rider</strong> of that higher Depth, not only the numbers.</td></tr><tr><td>3</td><td>Choose <strong>two</strong> Substrates instead of one.</td></tr><tr><td>4</td><td>Once per day, as a free action, one chosen Substrate manifests at <strong>Depth 4</strong> for 1 minute regardless of its real Depth. <em>Apotheosis.</em></td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-gold",
+                            1
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-gold",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-gold",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "all",
+                "text": "Gilded Core: your chosen Substrate counts as one Depth higher. Choose it in the Gullet at daily preparations.",
+                "title": "Gold (Depth 1)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-gold",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-gold",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-gold",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "all",
+                "text": "Gilded Core: the chosen Substrate gains the higher Depth's rider as well as its numbers.",
+                "title": "Gold (Depth 2)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-gold",
+                            3
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "all",
+                "text": "Gilded Core: choose two Substrates.",
+                "title": "Gold (Depth 3)"
+            },
+            {
+                "allowDuplicate": false,
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-gold",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Gilded Apotheosis"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-gold"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

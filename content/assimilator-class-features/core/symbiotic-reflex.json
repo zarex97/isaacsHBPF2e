@@ -1,0 +1,59 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.assimilator-effects.Item.Effect: Symbiotic Reflex"
+                    },
+                    "event": "action-used",
+                    "note": "Arms (a). `scripts/assimilator/carapace.mjs` takes it off the next damage, where the numbers exist.",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "folder": "Core",
+    "img": "icons/magic/defensive/shield-barrier-flaming-diamond-red.webp",
+    "name": "Symbiotic Reflex",
+    "system": {
+        "actionType": {
+            "value": "reaction"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per round; <strong>Trigger</strong> A creature you can see damages you.</p><hr /><p>Choose one &mdash; <strong>(a)</strong> gain resistance equal to <strong>twice your highest Depth</strong> against that damage, or <strong>(b)</strong> if the triggering creature is within your reach, make a <strong>Carapace Strike</strong> against it. It does not stack with Carapace Block against the same damage.</p><p><em>Use it as the damage is rolled. Choice (a) arms the plate for the next damage you take this round and is taken off it as it lands &mdash; with Carapace Block also armed, only the larger of the two applies. For (b), Strike.</em></p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "level": {
+            "value": 7
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

@@ -1,0 +1,39 @@
+{
+    "img": "icons/magic/nature/root-vine-entwined-thorns.webp",
+    "name": "Barbed Growth",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>A creature that <strong>critically fails</strong> a melee Strike against you takes damage equal to <strong>twice your highest Depth</strong>, of your Instinct's damage type.</p>"
+        },
+        "level": {
+            "value": 4
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "slug": "barbed-growth",
+        "traits": {
+            "otherTags": [
+                "assimilator-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

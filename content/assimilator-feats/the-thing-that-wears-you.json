@@ -1,0 +1,44 @@
+{
+    "img": "icons/creatures/abilities/mouth-teeth-long-red.webp",
+    "name": "The Thing That Wears You",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 3
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Once per day, ◆◆◆: the Carapace separates for 1 minute. It acts on your initiative − 5 with your Strikes, your Mutations and your Assimilator DC, and it has your Hit Points as its own. While it is away you are unarmoured, unmutated, and a person again. You had forgotten.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
+        },
+        "level": {
+            "value": 20
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "slug": "the-thing-that-wears-you",
+        "traits": {
+            "otherTags": [
+                "assimilator-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

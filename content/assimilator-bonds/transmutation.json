@@ -1,0 +1,55 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "bond": {
+                    "substrates": [
+                        "gold",
+                        "electrum"
+                    ]
+                }
+            }
+        }
+    },
+    "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
+    "name": "Transmutation",
+    "system": {
+        "description": {
+            "value": "<p><strong>Gold + Electrum.</strong> Gilded Core may name a Substrate of your <strong>second</strong> Instinct, and Alloyed Instinct's half-value clause becomes three-quarters (round up).</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 4
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "slug": "transmutation",
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-bond"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

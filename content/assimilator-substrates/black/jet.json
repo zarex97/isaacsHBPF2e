@@ -1,0 +1,292 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "black",
+                    "kind": "gem",
+                    "slug": "jet"
+                }
+            }
+        }
+    },
+    "folder": "Black",
+    "img": "icons/commodities/gems/gem-faceted-cushion-teal-black.webp",
+    "name": "Substrate: Jet",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Death &middot; <strong>Mutation:</strong> Carrion Bloom</p><p><em>Fossilised organic matter &mdash; which is what the symbiont is doing to you, slowly.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td>Your Strikes may deal <strong>void</strong>. +1 item bonus to saves against death effects.</td></tr><tr><td>2</td><td><strong>+1d4 void.</strong> Gain <strong>2 temporary Hit Points</strong> when you reduce a creature to 0 Hit Points.</td></tr><tr><td>3</td><td><strong>+1d6 void.</strong> A creature you kill cannot be returned to life by magic below 6th rank.</td></tr><tr><td>4</td><td><strong>+1d6 void.</strong> Once per day, a creature within 30 feet at or below half Hit Points must succeed at a Fortitude save against your class DC or take <strong>void damage equal to twice your level</strong>.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "mode": "add",
+                "predicate": [
+                    "item:category:unarmed",
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-jet",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-jet",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "property": "traits",
+                "value": "versatile-void"
+            },
+            {
+                "key": "FlatModifier",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-jet",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-jet",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    },
+                    "item:trait:death"
+                ],
+                "selector": "saving-throw",
+                "slug": "jet-saving-throw-1",
+                "type": "item",
+                "value": 1
+            },
+            {
+                "damageType": "void",
+                "diceNumber": 1,
+                "dieSize": "d4",
+                "flags": {
+                    "isaacs-hb-pf2e": {
+                        "assimilator": {
+                            "depth": 2,
+                            "substrate": "jet"
+                        }
+                    }
+                },
+                "key": "DamageDice",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-jet",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-jet",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-jet",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "unarmed-damage",
+                "slug": "substrate-jet"
+            },
+            {
+                "damageType": "void",
+                "diceNumber": 1,
+                "dieSize": "d6",
+                "flags": {
+                    "isaacs-hb-pf2e": {
+                        "assimilator": {
+                            "depth": 3,
+                            "substrate": "jet"
+                        }
+                    }
+                },
+                "key": "DamageDice",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-jet",
+                            3
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-jet",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "substrate-jet"
+            },
+            {
+                "damageType": "void",
+                "diceNumber": 1,
+                "dieSize": "d6",
+                "flags": {
+                    "isaacs-hb-pf2e": {
+                        "assimilator": {
+                            "depth": 4,
+                            "substrate": "jet"
+                        }
+                    }
+                },
+                "key": "DamageDice",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-jet",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "substrate-jet"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-jet",
+                            3
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-damage",
+                "text": "A creature you kill cannot be returned to life by magic below 6th rank.",
+                "title": "Jet (Depth 3)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-jet",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-jet",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "unarmed-damage",
+                "text": "When this reduces a creature to 0 Hit Points, you gain 2 temporary Hit Points.",
+                "title": "Jet (Depth 2)"
+            },
+            {
+                "allowDuplicate": false,
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-jet",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Carrion Harvest"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-black"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

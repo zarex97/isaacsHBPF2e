@@ -1,0 +1,68 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "bond": {
+                    "substrates": [
+                        "iron",
+                        "steel"
+                    ]
+                }
+            }
+        }
+    },
+    "img": "icons/weapons/hammers/hammer-double-bronze.webp",
+    "name": "Siege Frame",
+    "system": {
+        "description": {
+            "value": "<p><strong>Iron + Steel.</strong> You ignore an object's Hardness up to 10, and forced movement you cause increases by an additional 10 feet.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 4
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    "assimilator:bond:siege-frame"
+                ],
+                "selector": "athletics",
+                "text": "Forced movement you cause increases by an additional 10 feet.",
+                "title": "Siege Frame"
+            }
+        ],
+        "slug": "siege-frame",
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-bond"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

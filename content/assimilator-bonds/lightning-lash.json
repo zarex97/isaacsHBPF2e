@@ -1,0 +1,55 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "bond": {
+                    "substrates": [
+                        "copper",
+                        "cobalt"
+                    ]
+                }
+            }
+        }
+    },
+    "img": "icons/magic/lightning/bolt-forked-blue-yellow.webp",
+    "name": "Lightning Lash",
+    "system": {
+        "description": {
+            "value": "<p><strong>Copper + Cobalt.</strong> Your ranged Arcane Channel Strike conducts: it chains to a second creature within 15 feet of the first for half damage.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 4
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "slug": "lightning-lash",
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-bond"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

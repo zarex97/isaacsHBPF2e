@@ -1,0 +1,50 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "grants": {
+                    "depthCap": 3,
+                    "gem": 2,
+                    "metal": 1
+                }
+            }
+        }
+    },
+    "folder": "Core",
+    "img": "icons/creatures/abilities/fang-tooth-blood-red.webp",
+    "name": "Third Skin",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your <strong>Depth cap</strong> becomes 3. Your Gem Mass increases by 2 and your Metal Mass by 1.</p>"
+        },
+        "level": {
+            "value": 11
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

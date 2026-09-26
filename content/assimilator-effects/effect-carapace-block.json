@@ -1,0 +1,41 @@
+{
+    "img": "icons/equipment/shield/buckler-wooden-boss-glowing-blue.webp",
+    "name": "Effect: Carapace Block",
+    "system": {
+        "description": {
+            "value": "<p>The plate is set. The next physical damage you take is reduced by your Carapace's Hardness, and the Carapace takes that much damage. Spent when it lands.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

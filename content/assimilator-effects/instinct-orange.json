@@ -1,0 +1,61 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "instinct": "orange"
+            }
+        }
+    },
+    "img": "icons/magic/lightning/bolt-forked-orange.webp",
+    "name": "Instinct: Orange",
+    "system": {
+        "description": {
+            "value": "<p><em>Move / React.</em></p><p>The first time each round you Stride, Step or use a reaction, your next Mutation this round deals <strong>+1d4</strong> of its own damage type. <strong>+5 feet Speed</strong> per bound Orange Substrate.</p><p><em>Your Instinct's damage type is electricity.</em> Under Electrum Depth 3 this clause may be a second one, at half value.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Orange Instinct",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    }
+                ],
+                "selector": "land-speed",
+                "slug": "instinct-orange-speed",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.orangeSpeed"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

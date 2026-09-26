@@ -1,0 +1,47 @@
+[
+    {
+        "name": "Red",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "Gold",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "Orange",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "Blue",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "Purple",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "Green",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "Black",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "White",
+        "sorting": "a",
+        "type": "Item"
+    },
+    {
+        "name": "Gray",
+        "sorting": "a",
+        "type": "Item"
+    }
+]

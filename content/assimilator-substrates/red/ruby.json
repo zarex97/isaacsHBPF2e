@@ -1,0 +1,349 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "red",
+                    "kind": "gem",
+                    "slug": "ruby"
+                }
+            },
+            "bypass": [
+                {
+                    "predicate": [
+                        {
+                            "gte": [
+                                "self:effect:substrate-ruby",
+                                3
+                            ]
+                        },
+                        "carapace:intact",
+                        {
+                            "not": "assimilator:suppressed"
+                        }
+                    ],
+                    "resistance": {
+                        "max": 5,
+                        "types": [
+                            "fire"
+                        ]
+                    }
+                }
+            ]
+        }
+    },
+    "folder": "Red",
+    "img": "icons/commodities/gems/gem-faceted-rough-red.webp",
+    "name": "Substrate: Ruby",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Flame &middot; <strong>Mutation:</strong> Furnace Veins</p><p><em>Glowing red veins; cracks of internal fire that open wider as the fight goes on.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td>Your Carapace Strikes may deal <strong>fire</strong> instead of their normal damage type. You shed dim light in a 10-foot radius and cannot suppress it.</td></tr><tr><td>2</td><td><strong>+1d4 fire.</strong> On a critical hit, <strong>1d4 persistent fire</strong>.</td></tr><tr><td>3</td><td><strong>+1d6 fire.</strong> Fire damage you deal treats fire resistance as <strong>5 lower</strong>.</td></tr><tr><td>4</td><td><strong>+1d6 fire.</strong> On a critical hit, <strong>2d10 persistent fire</strong>, and the target's space burns &mdash; a creature ending its turn there takes 1d6 fire.</td></tr></tbody></table><p><em>Depth is this effect's badge. Depth 3 and 4 switch off while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "mode": "add",
+                "predicate": [
+                    "item:category:unarmed",
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-ruby",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-ruby",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "property": "traits",
+                "value": "versatile-fire"
+            },
+            {
+                "key": "TokenLight",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-ruby",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-ruby",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    },
+                    {
+                        "not": "assimilator:bond:blackfire"
+                    }
+                ],
+                "value": {
+                    "bright": 0,
+                    "dim": 10
+                }
+            },
+            {
+                "damageType": "fire",
+                "diceNumber": 1,
+                "dieSize": "d4",
+                "flags": {
+                    "isaacs-hb-pf2e": {
+                        "assimilator": {
+                            "depth": 2,
+                            "substrate": "ruby"
+                        }
+                    }
+                },
+                "key": "DamageDice",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-ruby",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-ruby",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-ruby",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "unarmed-damage",
+                "slug": "substrate-ruby"
+            },
+            {
+                "category": "persistent",
+                "critical": true,
+                "damageType": "fire",
+                "diceNumber": 1,
+                "dieSize": "d4",
+                "flags": {
+                    "isaacs-hb-pf2e": {
+                        "assimilator": {
+                            "depth": 2,
+                            "substrate": "ruby"
+                        }
+                    }
+                },
+                "key": "DamageDice",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-ruby",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-ruby",
+                            4
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-ruby",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "unarmed-damage",
+                "slug": "substrate-ruby-persistent"
+            },
+            {
+                "damageType": "fire",
+                "diceNumber": 1,
+                "dieSize": "d6",
+                "flags": {
+                    "isaacs-hb-pf2e": {
+                        "assimilator": {
+                            "depth": 3,
+                            "substrate": "ruby"
+                        }
+                    }
+                },
+                "key": "DamageDice",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-ruby",
+                            3
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-ruby",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "substrate-ruby"
+            },
+            {
+                "damageType": "fire",
+                "diceNumber": 1,
+                "dieSize": "d6",
+                "flags": {
+                    "isaacs-hb-pf2e": {
+                        "assimilator": {
+                            "depth": 4,
+                            "substrate": "ruby"
+                        }
+                    }
+                },
+                "key": "DamageDice",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-ruby",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "substrate-ruby"
+            },
+            {
+                "category": "persistent",
+                "critical": true,
+                "damageType": "fire",
+                "diceNumber": 2,
+                "dieSize": "d10",
+                "flags": {
+                    "isaacs-hb-pf2e": {
+                        "assimilator": {
+                            "depth": 4,
+                            "substrate": "ruby"
+                        }
+                    }
+                },
+                "key": "DamageDice",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-ruby",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "substrate-ruby-persistent"
+            },
+            {
+                "key": "Note",
+                "outcome": [
+                    "criticalSuccess"
+                ],
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-ruby",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-attack-roll",
+                "text": "The target's space burns: a creature ending its turn there takes 1d6 fire.",
+                "title": "Ruby (Depth 4)"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-red"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

@@ -1,0 +1,62 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "instinct": "gray"
+            }
+        }
+    },
+    "img": "icons/magic/defensive/shield-barrier-blue.webp",
+    "name": "Instinct: Gray",
+    "system": {
+        "description": {
+            "value": "<p><em>Harden / Integrate.</em></p><p>Your Carapace's <strong>Hardness increases by the total Depth of your bound metals</strong>. When you use a Mutation, gain <strong>resistance equal to its Depth</strong> to all physical damage until the start of your next turn.</p><p><em>Your Instinct's damage type is bludgeoning.</em> Under Electrum Depth 3 this clause may be a second one, at half value.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "itemType": "armor",
+                "key": "ItemAlteration",
+                "mode": "add",
+                "predicate": [
+                    "item:slug:living-plate",
+                    {
+                        "not": "assimilator:suppressed"
+                    }
+                ],
+                "property": "hardness",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.grayHardness"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

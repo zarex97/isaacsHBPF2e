@@ -1,7 +1,19 @@
+import { Carapace } from "./assimilator/carapace.mjs";
+import { Engine as AssimilatorEngine } from "./assimilator/engine.mjs";
+import { GulletApp, registerGulletHooks } from "./assimilator/gullet.mjs";
+import { AssimilatorDamage } from "./assimilator/damage.mjs";
+import { Mutations } from "./assimilator/mutations.mjs";
+import { Instincts } from "./assimilator/instincts.mjs";
+import { Bonds } from "./assimilator/bonds.mjs";
+import { Feats } from "./assimilator/feats.mjs";
+import { Red } from "./assimilator/red.mjs";
+import { AssimilatorRig } from "./assimilator/rig.mjs";
 import { Astral } from "./astral.mjs";
 import { CastPipeline } from "./cast-pipeline.mjs";
 import { Cosmo } from "./cosmo.mjs";
 import { Deaths } from "./deaths.mjs";
+import { DamageBus, PRIORITY } from "./lib/damage-bus.mjs";
+import { EncounterDamage } from "./lib/encounter-damage.mjs";
 import { Duplicate } from "./economy/duplicate.mjs";
 import { FreeCast } from "./economy/free-cast.mjs";
 import { Recharge } from "./economy/recharge.mjs";
@@ -24,6 +36,7 @@ import { RefuseDeath } from "./refuse-death.mjs";
 import { Charges } from "./soulbound/charges.mjs";
 import { Hypnosis } from "./soulbound/hypnosis.mjs";
 import { Modes } from "./soulbound/modes.mjs";
+import { Regeneracion } from "./soulbound/regeneracion.mjs";
 import { Reiatsu } from "./soulbound/reiatsu.mjs";
 import { Release } from "./soulbound/release.mjs";
 import { Severance } from "./soulbound/severance.mjs";
@@ -32,6 +45,7 @@ import { RisingPressure } from "./soulbound/rising-pressure.mjs";
 import { Scattered } from "./soulbound/scattered.mjs";
 import { Suppression } from "./soulbound/suppression.mjs";
 import { SpiritWeapon } from "./soulbound/weapon.mjs";
+import { Wound } from "./soulbound/wound.mjs";
 import { AreaTargeting } from "./targeting/index.mjs";
 import { registerRollBypass } from "./riders/bypass.mjs";
 import { registerEnemyTerrain } from "./targeting/enemy-terrain.mjs";
@@ -102,6 +116,22 @@ Hooks.once("init", () => {
     // The bridge from a used action to the state machine behind it. Without this the release
     // ladder is inert: `Release.enter()` has no other caller anywhere in the module.
     start("the Soulbound action bridge", () => SoulboundActions.registerHooks());
+    // Two Soulbound readings of damage that has just landed. Stages on the damage bus rather than calls
+    // from inside the rider engine, which is where they used to live.
+    start("the wound that will not close", () => DamageBus.after("the wound that will not close", PRIORITY.wound,
+        async (actor, _params, before) => { if (game.user.isGM) await Wound.refuse(actor, before); }));
+    start("the Carapace", () => Carapace.registerHooks());
+    start("the Assimilator engine", () => AssimilatorEngine.registerHooks());
+    start("the Gullet", () => registerGulletHooks());
+    start("Red's scripted riders", () => Red.registerHooks());
+    start("the Mutations' clocks", () => Mutations.registerHooks());
+    start("the Mutations that answer damage", () => AssimilatorDamage.registerHooks());
+    start("the Instincts", () => Instincts.registerHooks());
+    start("the Bonds", () => Bonds.registerHooks());
+    start("the Assimilator feats", () => Feats.registerHooks());
+    start("damaged this encounter", () => EncounterDamage.registerHooks());
+    start("Regeneración's suppression", () => DamageBus.after("Regeneración's suppression", PRIORITY.regeneracion,
+        (actor, params) => Regeneracion.onDamage(actor, params)));
     start("the sky tracker window", () => SkyTrackerApp.registerHooks());
 
     start("the sky tracker's settings menu", () => {
@@ -149,14 +179,29 @@ Hooks.once("init", () => {
         refuseDeath: RefuseDeath,
         hypnosis: Hypnosis,
         rig: SoulboundRig,
+        damageBus: DamageBus,
+        carapace: Carapace,
+        assimilator: {
+            engine: AssimilatorEngine,
+            openGullet: (actor) => GulletApp.open(actor),
+            feed: (actor, slug, options) => AssimilatorEngine.feed(actor, slug, options),
+            shed: (actor, slug, toDepth) => AssimilatorEngine.shed(actor, slug, toDepth),
+            rig: AssimilatorRig,
+            damage: AssimilatorDamage,
+            instincts: Instincts,
+            bonds: Bonds,
+            feats: Feats,
+            mend: (actor, itemId) => AssimilatorEngine.mend(actor, itemId),
+        },
         open: () => new SkyTrackerApp().render(true),
         adjacentSigns,
     };
 });
 
 // After `init`, so the system's document classes exist to be wrapped: the cast pipeline wraps the
-// spellcasting entry's `cast` and an activity's `toMessage`, and the rider sources wrap `applyDamage`.
+// spellcasting entry's `cast` and an activity's `toMessage`, and the damage bus wraps `applyDamage`.
 Hooks.once("setup", () => {
+    start("the damage bus", () => DamageBus.install());
     start("the cast pipeline", () => CastPipeline.install());
     start("the reiatsu pool", () => Reiatsu.install());
     start("the rider engine", () => Riders.registerHooks());

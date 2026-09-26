@@ -1,0 +1,224 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "gray",
+                    "kind": "metal",
+                    "slug": "silver",
+                    "specimenNames": [
+                        "silver ingot",
+                        "silver bar"
+                    ]
+                }
+            }
+        }
+    },
+    "folder": "Gray",
+    "img": "icons/commodities/metal/ingot-silver.webp",
+    "name": "Substrate: Silver",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Suppression / Supernatural Integration &middot; <strong>Mutation:</strong> Argent Edge</p><p><em>White is purity. Gray is the thing you actually use on a werewolf.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td>Your Strikes count as <strong>silver</strong>.</td></tr><tr><td>2</td><td><strong>+1d4</strong> damage against aberrations, fiends, undead and spirits.</td></tr><tr><td>3</td><td><strong>+1d6</strong> instead. Your Strikes affect incorporeal creatures as though they had the <strong>ghost touch</strong> rune.</td></tr><tr><td>4</td><td><strong>+1d6.</strong> A supernatural creature you critically hit cannot use <strong>reactions or innate spells</strong> until the end of its next turn.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "mode": "override",
+                "predicate": [
+                    "item:category:unarmed",
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-silver",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-silver",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "property": "material-type",
+                "value": "silver"
+            },
+            {
+                "diceNumber": 1,
+                "dieSize": "d4",
+                "flags": {
+                    "isaacs-hb-pf2e": {
+                        "assimilator": {
+                            "depth": 2,
+                            "substrate": "silver"
+                        }
+                    }
+                },
+                "key": "DamageDice",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-silver",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-silver",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-silver",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    },
+                    {
+                        "or": [
+                            "target:trait:aberration",
+                            "target:trait:fiend",
+                            "target:trait:undead",
+                            "target:trait:spirit"
+                        ]
+                    }
+                ],
+                "selector": "unarmed-damage",
+                "slug": "substrate-silver"
+            },
+            {
+                "diceNumber": 1,
+                "dieSize": "d6",
+                "flags": {
+                    "isaacs-hb-pf2e": {
+                        "assimilator": {
+                            "depth": 3,
+                            "substrate": "silver"
+                        }
+                    }
+                },
+                "key": "DamageDice",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-silver",
+                            3
+                        ]
+                    },
+                    "carapace:intact",
+                    {
+                        "or": [
+                            "target:trait:aberration",
+                            "target:trait:fiend",
+                            "target:trait:undead",
+                            "target:trait:spirit"
+                        ]
+                    }
+                ],
+                "selector": "unarmed-damage",
+                "slug": "substrate-silver"
+            },
+            {
+                "definition": [
+                    "item:category:unarmed"
+                ],
+                "key": "AdjustStrike",
+                "mode": "add",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-silver",
+                            3
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "property": "property-runes",
+                "value": "ghostTouch"
+            },
+            {
+                "key": "Note",
+                "outcome": [
+                    "criticalSuccess"
+                ],
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-silver",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-attack-roll",
+                "text": "A supernatural creature you critically hit cannot use reactions or innate spells until the end of its next turn.",
+                "title": "Silver (Depth 4)"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-gray"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

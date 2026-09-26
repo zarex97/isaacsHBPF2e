@@ -1,0 +1,232 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "orange",
+                    "kind": "gem",
+                    "slug": "amber"
+                }
+            }
+        }
+    },
+    "folder": "Orange",
+    "img": "icons/commodities/gems/gem-rough-square-yellow.webp",
+    "name": "Substrate: Amber",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Stored Energy &middot; <strong>Mutation:</strong> Reservoir</p><p><em>A translucent sac at the sternum that fills visibly and drains visibly.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td>When you take energy damage, store <strong>1 charge</strong> (max 3). Spend 1 as a free action to add <strong>1d4</strong> of that type to a Strike.</td></tr><tr><td>2</td><td>Max <strong>5 charges</strong>. Spending 2 adds <strong>1d6 + 2</strong> instead.</td></tr><tr><td>3</td><td>You also store a charge whenever you <strong>deal</strong> energy damage, once per round.</td></tr><tr><td>4</td><td>Spend 3 charges as a two-action activity: a <strong>30-foot line</strong>, <strong>6d6</strong> of the stored type, basic Reflex against your class DC.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-amber",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-amber",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "all",
+                "text": "Reservoir: when you take energy damage, store 1 charge (max 3; 5 at Depth 2). Spend 1 as a free action for +1d4 of that type on a Strike; at Depth 2, spend 2 for +1d6 + 2.",
+                "title": "Amber (Depth 1)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-amber",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-amber",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "all",
+                "text": "Reservoir: max 5 charges; spend 2 for +1d6 + 2.",
+                "title": "Amber (Depth 2)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-amber",
+                            3
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "all",
+                "text": "You also store a charge whenever you deal energy damage, once per round.",
+                "title": "Amber (Depth 3)"
+            },
+            {
+                "allowDuplicate": false,
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-amber",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Discharge"
+            },
+            {
+                "allowDuplicate": false,
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-amber",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-amber",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Draw on the Reservoir"
+            },
+            {
+                "domain": "all",
+                "key": "RollOption",
+                "option": "assimilator:reservoir:{actor|flags.isaacs-hb-pf2e.assimilator.reservoir.type}",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-amber",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-amber",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ]
+            },
+            {
+                "domain": "all",
+                "key": "RollOption",
+                "option": "assimilator:reservoir-charged",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-amber",
+                            4
+                        ]
+                    },
+                    "carapace:intact",
+                    {
+                        "gte": [
+                            "self:reservoir-charges",
+                            3
+                        ]
+                    }
+                ]
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-orange"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

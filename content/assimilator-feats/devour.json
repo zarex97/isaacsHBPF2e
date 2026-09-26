@@ -1,0 +1,45 @@
+{
+    "img": "icons/consumables/food/bowl-ribs-meat-rice-mash-brown-white.webp",
+    "name": "Devour",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>◆ <em>(Interact)</em> Consume an object of light Bulk or less that you are holding. Gain <strong>temporary Hit Points equal to your level</strong>, lasting 1 minute. Once per 10 minutes. The object is gone; be careful whose it was.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "PT10M",
+            "value": 1
+        },
+        "level": {
+            "value": 2
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "slug": "devour",
+        "traits": {
+            "otherTags": [
+                "assimilator-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator",
+                "manipulate"
+            ]
+        }
+    },
+    "type": "feat"
+}

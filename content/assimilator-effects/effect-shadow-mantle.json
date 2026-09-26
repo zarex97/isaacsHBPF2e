@@ -1,0 +1,49 @@
+{
+    "img": "icons/magic/unholy/orb-glowing-purple.webp",
+    "name": "Effect: Shadow Mantle",
+    "system": {
+        "description": {
+            "value": "<p>A 20-foot emanation of magical darkness surrounds you for 1 minute. You see through it normally.</p>"
+        },
+        "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 2
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "TokenLight",
+                "value": {
+                    "dim": 20,
+                    "negative": true
+                }
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

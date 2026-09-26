@@ -1,0 +1,48 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "instinct": "gold"
+            }
+        }
+    },
+    "img": "icons/magic/light/explosion-star-glow-yellow.webp",
+    "name": "Instinct: Gold",
+    "system": {
+        "description": {
+            "value": "<p><em>Amplify / Dominate.</em></p><p>At daily preparations choose one bound Substrate; it counts as <strong>one Depth higher</strong> for its numeric effects, never above your Depth cap. When you critically hit, you may apply that Substrate's <strong>Depth 4 rider</strong> even if it isn't at Depth 4.</p><p><em>Your Instinct's damage type is force.</em> Under Electrum Depth 3 this clause may be a second one, at half value.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

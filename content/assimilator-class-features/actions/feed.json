@@ -1,0 +1,48 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "opensGullet": "feed"
+            }
+        }
+    },
+    "folder": "Actions",
+    "img": "icons/consumables/food/dried-meat-jerky-fish-red.webp",
+    "name": "Feed",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>Activity</strong> (10 minutes)</p><hr /><p>Consume one Substrate you are holding. If you already hold it, its <strong>Depth increases by 1</strong>; otherwise it enters your Lattice at <strong>Depth 1</strong>. Either way it costs Mass equal to its new Depth, and the physical Substrate is destroyed.</p><p><em>Using it opens the Gullet, where the Substrate and the specimen are chosen and the Mass is checked.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator",
+                "exploration",
+                "manipulate"
+            ]
+        }
+    },
+    "type": "feat"
+}

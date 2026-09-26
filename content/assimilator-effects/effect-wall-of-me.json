@@ -1,0 +1,41 @@
+{
+    "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
+    "name": "Effect: Wall of Me",
+    "system": {
+        "description": {
+            "value": "<p>Your wall of Carapace stands for 1 minute or until destroyed; your own Carapace's Hardness is 2 lower while it does.</p>"
+        },
+        "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 4
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

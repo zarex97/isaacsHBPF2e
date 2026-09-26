@@ -1,0 +1,63 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "allies",
+                "area": {
+                    "type": "emanation",
+                    "value": 30
+                },
+                "includesSelf": false
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "type": "heal",
+                        "value": "origin.level"
+                    },
+                    "event": "action-used"
+                }
+            ]
+        }
+    },
+    "folder": "Mutations",
+    "img": "icons/magic/light/explosion-star-glow-yellow.webp",
+    "name": "Healing Flare",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "interaction",
+        "description": {
+            "value": "<p><strong>Magnesium Depth 4.</strong> Once per day your Flare instead heals each ally in a 30-foot emanation for Hit Points equal to your level.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-mutation-action"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator",
+                "light",
+                "healing",
+                "vitality"
+            ]
+        }
+    },
+    "type": "action"
+}

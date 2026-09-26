@@ -1,0 +1,41 @@
+{
+    "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
+    "name": "Effect: Instinctive Surge",
+    "system": {
+        "description": {
+            "value": "<p>Until the end of your turn, your Instinct clause treats every Substrate as one Depth higher.</p>"
+        },
+        "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 0
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

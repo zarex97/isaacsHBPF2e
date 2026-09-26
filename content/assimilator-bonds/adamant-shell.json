@@ -1,0 +1,68 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "bond": {
+                    "substrates": [
+                        "diamond",
+                        "steel"
+                    ]
+                }
+            }
+        }
+    },
+    "img": "icons/magic/defensive/armor-green-hex.webp",
+    "name": "Adamant Shell",
+    "system": {
+        "description": {
+            "value": "<p><strong>Diamond + Steel.</strong> Your Hardness bonuses stack fully rather than taking the higher, and you cannot be <strong>off-guard</strong> from flanking.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 4
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "ActiveEffectLike",
+                "mode": "override",
+                "path": "system.attributes.flanking.offGuardable",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    "assimilator:bond:adamant-shell"
+                ],
+                "value": false
+            }
+        ],
+        "slug": "adamant-shell",
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-bond"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

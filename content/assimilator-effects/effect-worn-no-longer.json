@@ -1,0 +1,67 @@
+{
+    "img": "icons/creatures/abilities/mouth-teeth-long-red.webp",
+    "name": "Effect: Worn No Longer",
+    "system": {
+        "description": {
+            "value": "<p>The Carapace is away for 1 minute. You are unarmoured, unmutated, and a person again.</p>"
+        },
+        "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 20
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "domain": "all",
+                "key": "RollOption",
+                "option": "assimilator:suppressed"
+            },
+            {
+                "itemType": "armor",
+                "key": "ItemAlteration",
+                "mode": "override",
+                "predicate": [
+                    "item:slug:living-plate"
+                ],
+                "property": "ac-bonus",
+                "value": 0
+            },
+            {
+                "itemType": "armor",
+                "key": "ItemAlteration",
+                "mode": "override",
+                "predicate": [
+                    "item:slug:living-plate"
+                ],
+                "property": "hardness",
+                "value": 0
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

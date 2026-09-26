@@ -1,0 +1,180 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "black",
+                    "kind": "metal",
+                    "slug": "manganese",
+                    "specimenNames": [
+                        "pyrolusite"
+                    ]
+                }
+            }
+        }
+    },
+    "folder": "Black",
+    "img": "icons/commodities/metal/ingot-worn-steel.webp",
+    "name": "Substrate: Manganese",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Corrosion &middot; <strong>Mutation:</strong> Rot Touch</p><p><em>A dark violet-black bloom that leaves pitting on everything it has touched.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td>Your Strikes deal <strong>1 persistent acid</strong> on a critical hit.</td></tr><tr><td>2</td><td>A creature you damage has <strong>all its resistances reduced by 2</strong> until the end of its next turn.</td></tr><tr><td>3</td><td>Reduced by <strong>5</strong>. Objects you Strike take a cumulative <strong>&minus;1 item penalty</strong> (to a maximum of &minus;3) until Repaired.</td></tr><tr><td>4</td><td>Reduced by <strong>10</strong>. A creature that ends its turn adjacent to you takes <strong>1d6 persistent acid</strong>.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "critical": true,
+                "damageCategory": "persistent",
+                "damageType": "acid",
+                "flags": {
+                    "isaacs-hb-pf2e": {
+                        "assimilator": {
+                            "depth": 1,
+                            "substrate": "manganese"
+                        }
+                    }
+                },
+                "key": "FlatModifier",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-manganese",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-manganese",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "unarmed-damage",
+                "slug": "substrate-manganese-acid",
+                "value": 1
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-manganese",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-manganese",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-manganese",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "unarmed-damage",
+                "text": "The creature you damaged has all its resistances reduced by 2 until the end of its next turn.",
+                "title": "Manganese (Depth 2)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-manganese",
+                            3
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-manganese",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-damage",
+                "text": "The creature you damaged has all its resistances reduced by 5 until the end of its next turn. Objects you Strike take a cumulative -1 item penalty (max -3) until Repaired.",
+                "title": "Manganese (Depth 3)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-manganese",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-damage",
+                "text": "The creature you damaged has all its resistances reduced by 10 until the end of its next turn. A creature that ends its turn adjacent to you takes 1d6 persistent acid.",
+                "title": "Manganese (Depth 4)"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-black"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

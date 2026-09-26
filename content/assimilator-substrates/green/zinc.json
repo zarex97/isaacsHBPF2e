@@ -1,0 +1,304 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "green",
+                    "kind": "metal",
+                    "slug": "zinc",
+                    "specimenNames": [
+                        "zinc ingot",
+                        "calamine"
+                    ]
+                }
+            }
+        }
+    },
+    "folder": "Green",
+    "img": "icons/commodities/metal/ingot-steel.webp",
+    "name": "Substrate: Zinc",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Biological Adaptation &middot; <strong>Mutation:</strong> Shifting Tissue</p><p><em>The surface changes texture depending on what last hurt it, and does not change back.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td>At daily preparations, choose one energy damage type. Gain <strong>resistance 2</strong> to it.</td></tr><tr><td>2</td><td><strong>Resistance 5.</strong> Change the chosen type as a single action, once per day.</td></tr><tr><td>3</td><td><strong>Resistance 8.</strong> Once per round, as a reaction when you take energy damage, change the chosen type <strong>to that type</strong> &mdash; after learning the type, before damage applies.</td></tr><tr><td>4</td><td><strong>Resistance 12.</strong> The reaction is unlimited, and you keep resistance to the previously chosen type as well.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "Resistance",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-zinc",
+                            1
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-zinc",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-zinc",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "type": "{actor|flags.isaacs-hb-pf2e.assimilator.choices.zinc}",
+                "value": 2
+            },
+            {
+                "key": "Resistance",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-zinc",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-zinc",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-zinc",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "type": "{actor|flags.isaacs-hb-pf2e.assimilator.choices.zinc}",
+                "value": 5
+            },
+            {
+                "key": "Resistance",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-zinc",
+                            3
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-zinc",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "type": "{actor|flags.isaacs-hb-pf2e.assimilator.choices.zinc}",
+                "value": 8
+            },
+            {
+                "key": "Resistance",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-zinc",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "type": "{actor|flags.isaacs-hb-pf2e.assimilator.choices.zinc}",
+                "value": 12
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-zinc",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-zinc",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "all",
+                "text": "Shifting Tissue: choose the energy type in the Gullet at daily preparations.",
+                "title": "Zinc (Depth 1)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-zinc",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-zinc",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-zinc",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "all",
+                "text": "Change the chosen type as a single action, once per day (the Gullet).",
+                "title": "Zinc (Depth 2)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-zinc",
+                            3
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-zinc",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "all",
+                "text": "Once per round, as a reaction when you take energy damage, change the chosen type to that type before damage applies.",
+                "title": "Zinc (Depth 3)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-zinc",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "all",
+                "text": "The reaction is unlimited, and you keep resistance to the previously chosen type as well.",
+                "title": "Zinc (Depth 4)"
+            },
+            {
+                "allowDuplicate": false,
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-zinc",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-zinc",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Shift Tissue"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-green"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

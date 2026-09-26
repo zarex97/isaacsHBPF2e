@@ -1,0 +1,198 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "gray",
+                    "kind": "gem",
+                    "slug": "hematite"
+                }
+            }
+        }
+    },
+    "folder": "Gray",
+    "img": "icons/commodities/gems/gem-fragments-rough-grey.webp",
+    "name": "Substrate: Hematite",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Blood / Iron &middot; <strong>Mutation:</strong> Ferrous Blood</p><p><em>Iron-grey, blood-red when scratched. The bridge between Red, Green and Gray.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td>+1 item bonus to Athletics. You are immune to <strong>persistent bleed</strong>.</td></tr><tr><td>2</td><td>Gain <strong>temporary Hit Points equal to your level</strong> at the start of each encounter.</td></tr><tr><td>3</td><td>+2 status bonus to Fortitude saves. You cannot be <strong>drained</strong>.</td></tr><tr><td>4</td><td>Once per day, when you are reduced to 0 Hit Points, immediately stand with <strong>Hit Points equal to your level</strong>.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-hematite",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-hematite",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "athletics",
+                "slug": "hematite-athletics-1",
+                "type": "item",
+                "value": 1
+            },
+            {
+                "key": "Immunity",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-hematite",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-hematite",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "type": "bleed"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-hematite",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-hematite",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "all",
+                "text": "Gain temporary Hit Points equal to your level at the start of each encounter.",
+                "title": "Hematite (Depth 2)"
+            },
+            {
+                "key": "FlatModifier",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-hematite",
+                            3
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "fortitude",
+                "slug": "hematite-fortitude-3",
+                "type": "status",
+                "value": 2
+            },
+            {
+                "key": "Immunity",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-hematite",
+                            3
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "type": "drained"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-hematite",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "all",
+                "text": "Once per day, when you are reduced to 0 Hit Points, immediately stand with Hit Points equal to your level.",
+                "title": "Hematite (Depth 4)"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-gray"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

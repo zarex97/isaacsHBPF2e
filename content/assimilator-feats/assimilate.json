@@ -1,0 +1,44 @@
+{
+    "img": "icons/magic/life/cross-worn-green.webp",
+    "name": "Assimilate",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 3
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Once per day, ◆◆◆ <em>(10 minutes, over the remains of a creature of your level or lower)</em>: gain <strong>one of its resistances, senses, or movement modes</strong> until your next daily preparations. Not its spells and not its Strikes.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
+        },
+        "level": {
+            "value": 12
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "slug": "assimilate",
+        "traits": {
+            "otherTags": [
+                "assimilator-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

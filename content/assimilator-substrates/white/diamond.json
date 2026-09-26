@@ -1,0 +1,166 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "white",
+                    "hardness": {
+                        "1": 2,
+                        "2": 5,
+                        "3": 8,
+                        "4": 12
+                    },
+                    "kind": "gem",
+                    "slug": "diamond"
+                }
+            }
+        }
+    },
+    "folder": "White",
+    "img": "icons/commodities/gems/gem-faceted-diamond-silver-.webp",
+    "name": "Substrate: Diamond",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Hardness &middot; <strong>Mutation:</strong> Adamant Skin</p><p><em>Colourless, flawless, and it does not deform. Neither do you, now.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td>Carapace <strong>Hardness +2</strong>.</td></tr><tr><td>2</td><td><strong>Hardness +5.</strong> Reduce persistent damage you take by 2.</td></tr><tr><td>3</td><td><strong>Hardness +8.</strong> Once per encounter, a critical hit against you deals <strong>normal damage</strong> instead.</td></tr><tr><td>4</td><td><strong>Hardness +12.</strong> Once per <strong>round</strong> instead of once per encounter.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-diamond",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-diamond",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "all",
+                "text": "Adamant Skin: your Carapace's Hardness bonus from Diamond is +2 / +5 / +8 / +12 by Depth; the plate takes the highest Substrate bonus.",
+                "title": "Diamond (Depth 1)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-diamond",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-diamond",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "all",
+                "text": "Reduce persistent damage you take by 2.",
+                "title": "Diamond (Depth 2)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-diamond",
+                            3
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-diamond",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "all",
+                "text": "Once per encounter, a critical hit against you deals normal damage instead.",
+                "title": "Diamond (Depth 3)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-diamond",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "all",
+                "text": "Once per round, a critical hit against you deals normal damage instead.",
+                "title": "Diamond (Depth 4)"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-white"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

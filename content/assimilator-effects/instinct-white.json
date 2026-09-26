@@ -1,0 +1,64 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "instinct": "white"
+            }
+        }
+    },
+    "img": "icons/magic/holy/prayer-hands-glowing-yellow-white.webp",
+    "name": "Instinct: White",
+    "system": {
+        "description": {
+            "value": "<p><em>Preserve / Purify.</em></p><p>When a Mutation deals damage, one ally within 30 feet gains <strong>temporary Hit Points equal to its Depth</strong>. <strong>A number of times per day equal to your highest Depth</strong>, end one condition on yourself or an ally as a free action.</p><p><em>Your Instinct's damage type is vitality.</em> Under Electrum Depth 3 this clause may be a second one, at half value.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "allowDuplicate": false,
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Purify"
+            },
+            {
+                "itemType": "action",
+                "key": "ItemAlteration",
+                "mode": "override",
+                "predicate": [
+                    "item:slug:purify"
+                ],
+                "property": "frequency-max",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.iv.whiteUses"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

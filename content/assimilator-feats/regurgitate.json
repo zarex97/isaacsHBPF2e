@@ -1,0 +1,44 @@
+{
+    "img": "icons/magic/acid/dissolve-bone-ribs-skull.webp",
+    "name": "Regurgitate",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p><strong>Free action</strong>, once per day: <strong>Shed</strong> one Substrate and immediately <strong>Feed</strong> a Substrate you are carrying, at Depth 1. The whole thing takes no time and is extremely unpleasant to watch.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
+        },
+        "level": {
+            "value": 14
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "slug": "regurgitate",
+        "traits": {
+            "otherTags": [
+                "assimilator-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

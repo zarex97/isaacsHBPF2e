@@ -1,0 +1,63 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "type": "death"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        "target:condition:dying"
+                    ]
+                },
+                {
+                    "apply": {
+                        "type": "heal",
+                        "value": "origin.level"
+                    },
+                    "event": "action-used",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "folder": "Mutations",
+    "img": "icons/commodities/gems/gem-rough-cushion-red.webp",
+    "name": "Exsanguinate",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "interaction",
+        "description": {
+            "value": "<p>Drain a dying creature within 30 feet: it dies, and you regain Hit Points equal to your level.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-mutation-action"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator",
+                "death"
+            ]
+        }
+    },
+    "type": "action"
+}

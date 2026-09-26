@@ -1,0 +1,67 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "bond": {
+                    "substrates": [
+                        "ruby",
+                        "emerald"
+                    ]
+                }
+            }
+        }
+    },
+    "img": "icons/magic/life/heart-area-circle-red-green.webp",
+    "name": "Living Flame",
+    "system": {
+        "description": {
+            "value": "<p><strong>Ruby + Emerald.</strong> While you are taking persistent fire damage, or dealing it to anyone, your fast healing increases by 5. You burn what you are, and it grows back.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 4
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "FastHealing",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    "assimilator:bond:living-flame",
+                    "assimilator:living-flame"
+                ],
+                "value": "ceil(5 * @actor.flags.isaacs-hb-pf2e.assimilator.derived.gb.living_flame)"
+            }
+        ],
+        "slug": "living-flame",
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-bond"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

@@ -1,0 +1,34 @@
+{
+    "folder": "Mutations",
+    "img": "icons/commodities/gems/gem-rough-square-yellow.webp",
+    "name": "Draw on the Reservoir",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "interaction",
+        "description": {
+            "value": "<p>Spend 1 Reservoir charge: your next Strike deals <strong>+1d4</strong> of the stored type. At Amber Depth 2, if you have 2 charges, spend 2 instead for <strong>+1d6 + 2</strong>.</p>"
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-mutation-action"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "action"
+}

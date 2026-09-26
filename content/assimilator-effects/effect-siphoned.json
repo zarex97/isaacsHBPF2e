@@ -1,0 +1,50 @@
+{
+    "img": "icons/magic/unholy/orb-hands-pink.webp",
+    "name": "Effect: Siphoned",
+    "system": {
+        "description": {
+            "value": "<p>A Black Instinct Mutation drank from this creature: a status penalty to one check or DC until the end of its next turn.</p>"
+        },
+        "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Siphoned",
+                "selector": "{item|flags.pf2e.rulesSelections.siphon}",
+                "slug": "siphoned",
+                "type": "status",
+                "value": "@item.flags.pf2e.rulesSelections.amount"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

@@ -1,0 +1,105 @@
+{
+    "_id": "asmhandbook00001",
+    "img": "icons/sundries/books/book-embossed-roots-green.webp",
+    "name": "The Assimilator: Handbook",
+    "pages": [
+        {
+            "_id": "asmhandbookp0100",
+            "name": "The Assimilator at a glance",
+            "sort": 100,
+            "text": {
+                "content": "<p>Something alive is wearing you, and it grows by <strong>eating</strong>. Feed it a ruby and it learns to burn; feed it iron and the limbs get heavier; feed it nickel and neither of you knows what you will have on Tuesday. Your build is not a list of choices made at creation. It is a stomach, and its contents are visible on you.</p> <p>Mechanically: 10 Hit Points per level, expert in all three saves, unarmoured expert, unarmed attacks only — the <strong>Carapace Strike</strong> (1d8 bludgeoning) — and an <strong>Assimilator DC</strong> keyed to Strength or Dexterity. Constitution is your most important secondary attribute.</p> <h2>The three things a new player should know</h2> <ul> <li><strong>Open the Gullet.</strong> Everything you have eaten, every choice it asks of you each morning, and the Feed and Shed buttons live in one window: the <em>Open the Gullet</em> macro, or the Feed and Shed actions on your sheet.</li> <li><strong>Depth is the number that matters.</strong> Each Substrate's effect shows as a counter on its effect — that is its Depth, 1 to 4 — and every Mutation, Instinct and Bond reads it.</li> <li><strong>The plate can break.</strong> Carapace Block turns physical damage with your Hardness and the plate pays for it. A broken Carapace switches off every Mutation at Depth 3 or higher until you mend it.</li> </ul>",
+                "format": 1
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text"
+        },
+        {
+            "_id": "asmhandbookp0200",
+            "name": "Eating: Mass, Depth and the Gullet",
+            "sort": 200,
+            "text": {
+                "content": "<p>You have two pools of <strong>Mass</strong>, Gem and Metal. A Substrate at <strong>Depth N costs N Mass</strong> in its own pool. Wide or deep is your call, asked once per pool.</p> <table><thead><tr><th>Level</th><th>1</th><th>3</th><th>5</th><th>8</th><th>11</th><th>14</th><th>17</th><th>20</th></tr></thead> <tbody><tr><td><strong>Gem Mass</strong></td><td>1</td><td>2</td><td>3</td><td>5</td><td>7</td><td>9</td><td>11</td><td>13</td></tr> <tr><td><strong>Metal Mass</strong></td><td>1</td><td>1</td><td>2</td><td>4</td><td>5</td><td>7</td><td>8</td><td>10</td></tr> <tr><td><strong>Depth cap</strong></td><td>1</td><td>1</td><td>2</td><td>2</td><td>3</td><td>3</td><td>4</td><td>4</td></tr></tbody></table> <h2>Feed and Shed</h2> <ul> <li><strong>Feed</strong> (10 minutes) consumes a Substrate you are carrying — a specimen whose name is the Substrate's, like a looted ruby or a copper ingot — and raises that Substrate's Depth by 1 (a new one enters at Depth 1). The Gullet lists the specimens you carry for each. It is refused in an encounter.</li> <li><strong>Depth 3–4 takes a quickened specimen</strong>, which only the GM can mark. Ordinary ones stop at Depth 2.</li> <li><strong>The Vein</strong>: each time your Mass grows you get one free Substrate — the Gullet offers it as a source.</li> <li><strong>Shed</strong> lowers or removes a Substrate, during daily preparations only. What you shed is destroyed.</li> </ul> <h2>Every morning</h2> <p>Rest for the Night opens daily preparations in the Gullet. That is when you Shed, break an Instinct tie, change a Bond, and make the day's choices your Substrates and feats ask for (Gold's pick, Electrum's second colour, Zinc's energy type, Nickel's Aberrations, and the rest). <em>Finish preparing</em> settles your Instinct.</p>",
+                "format": 1
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text"
+        },
+        {
+            "_id": "asmhandbookp0300",
+            "name": "The Carapace",
+            "sort": 300,
+            "text": {
+                "content": "<ul> <li><strong>Carapace Strike</strong> — unarmed, 1d8 bludgeoning, brawling. Handwraps of Mighty Blows work normally; buy them.</li> <li><strong>Living Plate</strong> — your armour, alive: explorer's clothing that takes armour runes. You cannot wear other armour.</li> <li><strong>Hardness</strong> 2, plus the <em>highest</em> Hardness bonus among your Substrates (Adamant Shell makes them add), plus the Gray Instinct's. <strong>Hit Points</strong> 10 + 5 per level; <strong>Broken Threshold</strong> half of that.</li> <li><strong>Carapace Block</strong> (reaction): against physical damage, reduce it by the plate's Hardness; the plate takes that much. Use the action on your sheet to arm it; it answers the next physical blow and is spent.</li> <li><strong>Broken</strong>: every Mutation at Depth 3+ switches off, and its actions leave your sheet until the plate is mended. <strong>Mend</strong> it with the Repair activity, or an hour feeding it a Substrate you don't bind (<em>Mend</em> in the Gullet).</li> </ul>",
+                "format": 1
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text"
+        },
+        {
+            "_id": "asmhandbookp0400",
+            "name": "The nine Instincts",
+            "sort": 400,
+            "text": {
+                "content": "<p>Your <strong>Instinct</strong> is the colour with the most total Mass, both pools together; ties are yours to break at daily preparations. Its clause applies to <em>every</em> Mutation you have, whatever its colour, and it sets your <strong>Instinct's damage type</strong>. It moves only at daily preparations (or the first time you bind anything).</p> <table><thead><tr><th>Instinct</th><th>Type</th><th>Clause</th></tr></thead><tbody><tr><td><strong>Red</strong><br><em>Consume / Destroy</em></td><td>fire</td><td>When a Mutation deals damage, it deals <strong>+1 damage per Depth</strong> of its Substrate. Against a creature that has already lost Hit Points this encounter, <strong>double</strong> that bonus.</td></tr><tr><td><strong>Gold</strong><br><em>Amplify / Dominate</em></td><td>force</td><td>At daily preparations choose one bound Substrate; it counts as <strong>one Depth higher</strong> for its numeric effects, never above your Depth cap. When you critically hit, you may apply that Substrate's <strong>Depth 4 rider</strong> even if it isn't at Depth 4.</td></tr><tr><td><strong>Orange</strong><br><em>Move / React</em></td><td>electricity</td><td>The first time each round you Stride, Step or use a reaction, your next Mutation this round deals <strong>+1d4</strong> of its own damage type. <strong>+5 feet Speed</strong> per bound Orange Substrate.</td></tr><tr><td><strong>Blue</strong><br><em>Adapt / Understand</em></td><td>cold</td><td><strong>Study</strong> a creature (one action). Until the encounter ends, your Mutations treat its resistances as <strong>lower by twice your highest Depth</strong>, and you gain <strong>+1 circumstance to AC</strong> against it. One creature at a time.</td></tr><tr><td><strong>Purple</strong><br><em>Mutate / Transcend</em></td><td>mental</td><td>Your Mutations count as <strong>magical</strong>. At daily preparations one Substrate of your choice manifests <strong>one Depth higher</strong>, and one other, randomly determined, manifests <strong>one Depth lower</strong>.</td></tr><tr><td><strong>Green</strong><br><em>Grow / Reproduce</em></td><td>poison</td><td>When a Mutation deals damage, gain <strong>temporary Hit Points equal to its Depth</strong>. <strong>Fast healing equal to the number of bound Green Substrates.</strong></td></tr><tr><td><strong>Black</strong><br><em>Consume / Corrupt</em></td><td>void</td><td>When a Mutation damages a creature, it takes a <strong>−1 status penalty</strong> to one check or DC of your choice until the end of its next turn, and <strong>you gain +1 status to the same thing</strong>. At Depth 3+ the penalty and bonus become <strong>−2 / +2</strong>.</td></tr><tr><td><strong>White</strong><br><em>Preserve / Purify</em></td><td>vitality</td><td>When a Mutation deals damage, one ally within 30 feet gains <strong>temporary Hit Points equal to its Depth</strong>. <strong>A number of times per day equal to your highest Depth</strong>, end one condition on yourself or an ally as a free action.</td></tr><tr><td><strong>Gray</strong><br><em>Harden / Integrate</em></td><td>bludgeoning</td><td>Your Carapace's <strong>Hardness increases by the total Depth of your bound metals</strong>. When you use a Mutation, gain <strong>resistance equal to its Depth</strong> to all physical damage until the start of your next turn.</td></tr></tbody></table> <p><strong>Electrum</strong> at Depth 3 adds its second colour's clause beside yours, both at half value; at Depth 4 both at full. <em>Two Instincts</em> does the same at half — you get the better of the two, never both.</p>",
+                "format": 1
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text"
+        },
+        {
+            "_id": "asmhandbookp0500",
+            "name": "Substrates and Bonds",
+            "sort": 500,
+            "text": {
+                "content": "<p>Thirty-six Substrates, four per colour. Each is an effect whose counter is its Depth; its description lists what every Depth does. Their actions — Flare, Discharge, Shadow Step, Reactive Evolution — appear on your sheet when their Depth is reached.</p> <table><thead><tr><th>Colour</th><th>Gems</th><th>Metals</th></tr></thead><tbody><tr><td><strong>Red</strong></td><td>Garnet, Ruby</td><td>Copper, Iron</td></tr><tr><td><strong>Gold</strong></td><td>Citrine, Topaz</td><td>Electrum, Gold</td></tr><tr><td><strong>Orange</strong></td><td>Amber, Carnelian</td><td>Bronze, Mercury</td></tr><tr><td><strong>Blue</strong></td><td>Lapis Lazuli, Sapphire</td><td>Cobalt, Tin</td></tr><tr><td><strong>Purple</strong></td><td>Amethyst, Quartz</td><td>Nickel, Platinum</td></tr><tr><td><strong>Green</strong></td><td>Emerald, Jade</td><td>Chromium, Zinc</td></tr><tr><td><strong>Black</strong></td><td>Jet, Onyx</td><td>Lead, Manganese</td></tr><tr><td><strong>White</strong></td><td>Diamond, Pearl</td><td>Aluminium, Magnesium</td></tr><tr><td><strong>Gray</strong></td><td>Hematite, Moonstone</td><td>Silver, Steel</td></tr></tbody></table> <h2>Bonds</h2> <p>A <strong>Bond</strong> needs both its Substrates at <strong>Depth 2 or higher</strong> and a Bond slot (the first at 4th, then 8th, 12th, 16th, 20th). Slot it in the Gullet; it changes only at daily preparations. If either Substrate drops below Depth 2 the Bond is suppressed, not lost, and comes back when you feed it again. <strong>Electrum</strong> at Depth 2 may stand in for either Substrate of one Bond you name.</p> <table><thead><tr><th>Bond</th><th>Substrates</th></tr></thead><tbody><tr><td>Adamant Shell</td><td>Diamond + Steel</td></tr><tr><td>Ascension</td><td>Platinum + Aluminium</td></tr><tr><td>Blackfire</td><td>Ruby + Onyx</td></tr><tr><td>Blind Hunter</td><td>Tin + Onyx</td></tr><tr><td>Chimera</td><td>Electrum + Nickel</td></tr><tr><td>Chitin Bloom</td><td>Emerald + Chromium</td></tr><tr><td>Cleansing Light</td><td>Pearl + Magnesium</td></tr><tr><td>Cold Reading</td><td>Sapphire + Lapis Lazuli</td></tr><tr><td>Conduction</td><td>Ruby + Copper</td></tr><tr><td>Crowned Fortune</td><td>Topaz + Citrine</td></tr><tr><td>Exsanguinary</td><td>Garnet + Jet</td></tr><tr><td>Hammerform</td><td>Bronze + Iron</td></tr><tr><td>Immune System</td><td>Jade + Zinc</td></tr><tr><td>Impossible Body</td><td>Diamond + Mercury</td></tr><tr><td>Lightning Lash</td><td>Copper + Cobalt</td></tr><tr><td>Living Armour</td><td>Hematite + Moonstone</td></tr><tr><td>Living Flame</td><td>Ruby + Emerald</td></tr><tr><td>Mindstorm</td><td>Amethyst + Quartz</td></tr><tr><td>Molten Carapace</td><td>Ruby + Iron</td></tr><tr><td>Null Shroud</td><td>Onyx + Lead</td></tr><tr><td>Quicksilver Gait</td><td>Carnelian + Mercury</td></tr><tr><td>Reaper's Edge</td><td>Silver + Jet</td></tr><tr><td>Rime Flow</td><td>Sapphire + Mercury</td></tr><tr><td>Rot</td><td>Jet + Manganese</td></tr><tr><td>Runaway Growth</td><td>Nickel + Emerald</td></tr><tr><td>Second Heart</td><td>Garnet + Emerald</td></tr><tr><td>Siege Frame</td><td>Iron + Steel</td></tr><tr><td>Solar Core</td><td>Ruby + Gold</td></tr><tr><td>Storm Battery</td><td>Amber + Cobalt</td></tr><tr><td>Transmutation</td><td>Gold + Electrum</td></tr></tbody></table>",
+                "format": 1
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text"
+        },
+        {
+            "_id": "asmhandbookp0600",
+            "name": "What the module does, and what it leaves to you",
+            "sort": 600,
+            "text": {
+                "content": "<p>Almost everything the class does happens by itself. A few things ask you, and a few are left to the table on purpose.</p> <h2>It happens by itself</h2> <ul> <li>Every number: Mutations' damage and resistances, Instinct clauses, Bonds, Hardness, fast healing, Speeds.</li> <li>What a Mutation does when it deals damage, when you are hit, at the start of a turn, when you move — Red's bonus, Green's temporary Hit Points, Copper's arcs, Amber's charges, Manganese's corrosion, Molten Carapace's burn.</li> <li>Once-per-encounter and once-per-round limits: a spent action's card is refused with a notice.</li> <li>Areas: Flare, Null Field and the Healing Flare are emanations and need only a <em>Confirm targets</em> click. The Gland's cone and the Discharge's line are aimed: click where the area starts, point the way it faces, click again.</li> </ul> <h2>It asks you</h2> <ul> <li><strong>Cards in chat</strong> with buttons: the Black Instinct's check or DC, the White Instinct's ally, Shed Skin, Devouring Plate, Cleansing Light when an ally holds several conditions.</li> <li><strong>Pickers</strong> when you use an action: which condition Purify or Cleansing Tide ends, what Devour eats, what Assimilate takes, what Sympathetic Growth shares.</li> <li><strong>Prompts</strong> for your choices at the moment they arise: Kinetic Spurs, Battle Frame, Living Armour's Reactive Evolution, Apex Predator's Depth 4 riders.</li> </ul> <h2>It leaves to the table</h2> <ul> <li>Movement it cannot see: teleporting between areas of darkness, hovering, moving through a creature's space, where the Wall of Me stands and the cover it gives.</li> <li>Notes shown on a roll that nothing enforces: a Mutation's situational bonus, a flat check an enemy owes.</li> <li>Rulings: what counts as a corpse or a quickened specimen, and \"one of its abilities\" from Eat the World.</li> </ul>",
+                "format": 1
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text"
+        },
+        {
+            "_id": "asmhandbookp0700",
+            "name": "GM notes",
+            "sort": 700,
+            "text": {
+                "content": "<ul> <li><strong>Substrates are your lever.</strong> The player's build is what they have eaten; what you put in the world decides what they can become. Ordinary specimens are shop goods and loot; <strong>quickened</strong> ones never are.</li> <li><strong>Marking a quickened specimen.</strong> On the item, set the flag <code>flags.isaacs-hb-pf2e.assimilator.specimen = { substrate: \"&lt;slug&gt;\", quickened: true }</code> — for example <code>{ substrate: \"ruby\", quickened: true }</code>. The Gullet then offers it for Depth 3–4.</li> <li><strong>The Carapace breaking is a scene, not a punishment.</strong> A broken plate at 17th loses its Depth 4 riders; give the player a way to mend it that is worth an hour.</li> <li><strong>Feeding happens in downtime.</strong> Feed is 10 minutes and is refused in an encounter.</li> <li><strong>Rulings the module took</strong>, which you may overrule: Purple's raised Substrate may pass the Depth cap (never above 4); a lowered Depth 1 Substrate does not manifest that day; Mindstorm's stupefied lasts until the end of the creature's next turn; Moonstone's Reactive Evolution is the player's reaction to take.</li> </ul>",
+                "format": 1
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text"
+        }
+    ]
+}

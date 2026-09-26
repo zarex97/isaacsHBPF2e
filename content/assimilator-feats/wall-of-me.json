@@ -1,0 +1,51 @@
+{
+    "img": "icons/environment/settlement/city-wall.webp",
+    "name": "Wall of Me",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 2
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>◆◆, once per encounter. Extrude a 10-foot line of Carapace in your space or adjacent to it. It provides <strong>standard cover</strong>, has <strong>Hardness equal to your level</strong> and <strong>Hit Points equal to five times your level</strong>, and lasts 1 minute or until destroyed. While it stands, your own Carapace's Hardness is reduced by 2.</p>"
+        },
+        "level": {
+            "value": 4
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "itemType": "armor",
+                "key": "ItemAlteration",
+                "mode": "subtract",
+                "predicate": [
+                    "item:slug:living-plate",
+                    "assimilator:wall-standing"
+                ],
+                "property": "hardness",
+                "value": 2
+            }
+        ],
+        "slug": "wall-of-me",
+        "traits": {
+            "otherTags": [
+                "assimilator-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

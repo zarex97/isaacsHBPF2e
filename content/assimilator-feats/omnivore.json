@@ -1,0 +1,48 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "grants": {
+                    "merged": true
+                }
+            }
+        }
+    },
+    "img": "icons/consumables/food/berries-cream-bowl-mint-red.webp",
+    "name": "Omnivore",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>You have <strong>two Instincts at full value</strong>, and your Gem Mass and Metal Mass <strong>merge into a single pool</strong> of their combined size. Gems and metals no longer compete for separate space — the distinction stops meaning anything to you.</p>"
+        },
+        "level": {
+            "value": 20
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "slug": "omnivore",
+        "traits": {
+            "otherTags": [
+                "assimilator-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

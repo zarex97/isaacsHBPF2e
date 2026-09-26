@@ -1,0 +1,72 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "bond": {
+                    "substrates": [
+                        "bronze",
+                        "iron"
+                    ]
+                }
+            }
+        }
+    },
+    "img": "icons/weapons/hammers/hammer-double-engraved-gold.webp",
+    "name": "Hammerform",
+    "system": {
+        "description": {
+            "value": "<p><strong>Bronze + Iron.</strong> Your unarmed Strikes gain the <strong>fatal d10</strong> trait when you have Stridden at least 10 feet this turn.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 4
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "definition": [
+                    "item:category:unarmed"
+                ],
+                "key": "AdjustStrike",
+                "mode": "add",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    "assimilator:bond:hammerform",
+                    "self:moved-10-feet-this-turn"
+                ],
+                "property": "weapon-traits",
+                "value": "fatal-d10"
+            }
+        ],
+        "slug": "hammerform",
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-bond"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}
