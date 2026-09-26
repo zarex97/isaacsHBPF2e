@@ -514,6 +514,321 @@ async function until(fn, ms = 8000) {
     return value;
 }
 
+/* -------------------------------------------------------------------------------------------- */
+/*  Phase 5: the Bonds                                                                          */
+/* -------------------------------------------------------------------------------------------- */
+
+const bondOn = (a, slug) => game.actors.get(a.id).getRollOptions().includes(`assimilator:bond:${slug}`);
+const strikeItem = (a, label) => read.strike(game.actors.get(a.id), label)?.item;
+
+/** Apply `formula` to the target as the Assimilator's (named) Strike; return what it lost. */
+async function hitWith(a, t, ctx, formula, { label, hp = 900, tokenId } = {}) {
+    const victim = tokenId ? canvas.scene.tokens.get(tokenId).actor : game.actors.get(t.id);
+    await victim.update({ "system.attributes.hp.value": hp });
+    const roll = await new (DamageRoll())(formula).evaluate();
+    await victim.applyDamage({ damage: roll, token: canvas.scene.tokens.get(tokenId ?? ctx.targetTokenId), item: strikeItem(a, label) });
+    await wait(1200);
+    return hp - (tokenId ? canvas.scene.tokens.get(tokenId).actor : game.actors.get(t.id)).hitPoints.value;
+}
+
+async function setResist(t, resistances = [], immunities = []) {
+    await game.actors.get(t.id).update({ "system.attributes.resistances": resistances, "system.attributes.immunities": immunities });
+}
+
+const BOND_PAIRS = [
+    ["molten-carapace", "ruby", "iron"], ["conduction", "ruby", "copper"], ["solar-core", "ruby", "gold"],
+    ["living-flame", "ruby", "emerald"], ["blackfire", "ruby", "onyx"], ["exsanguinary", "garnet", "jet"],
+    ["second-heart", "garnet", "emerald"], ["siege-frame", "iron", "steel"], ["lightning-lash", "copper", "cobalt"],
+    ["crowned-fortune", "topaz", "citrine"], ["transmutation", "gold", "electrum"], ["chimera", "electrum", "nickel"],
+    ["quicksilver-gait", "carnelian", "mercury"], ["storm-battery", "amber", "cobalt"], ["hammerform", "bronze", "iron"],
+    ["cold-reading", "sapphire", "lapis-lazuli"], ["rime-flow", "sapphire", "mercury"], ["blind-hunter", "tin", "onyx"],
+    ["mindstorm", "amethyst", "quartz"], ["ascension", "platinum", "aluminium"], ["runaway-growth", "nickel", "emerald"],
+    ["chitin-bloom", "emerald", "chromium"], ["immune-system", "jade", "zinc"], ["null-shroud", "onyx", "lead"],
+    ["rot", "jet", "manganese"], ["adamant-shell", "diamond", "steel"], ["cleansing-light", "pearl", "magnesium"],
+    ["living-armour", "hematite", "moonstone"], ["reapers-edge", "silver", "jet"], ["impossible-body", "diamond", "mercury"],
+];
+
+const BOND_CHECKS = [
+    // Every Bond: in force with both at 2 and slotted; suppressed with either at 1; back when fed again.
+    { id: "B-all", lv: 17, b: { ruby: 1 }, act: async (a) => {
+        const wrong = [];
+        for (const [slug, x, y] of BOND_PAIRS) {
+            for (const [depths, want] of [[{ [x]: 2, [y]: 2 }, true], [{ [x]: 1, [y]: 2 }, false], [{ [x]: 2, [y]: 2 }, true]]) {
+                const st = Engine.state(game.actors.get(a.id));
+                st.substrates = depths; st.bonds = [slug]; st.instinct = null; st.choices = {};
+                await Engine.write(game.actors.get(a.id), st); await Engine.rebuild(game.actors.get(a.id));
+                if (bondOn(a, slug) !== want) wrong.push(`${slug}:${JSON.stringify(depths)}`);
+            }
+        }
+        return wrong;
+    }, want: [], note: "all thirty: in force, suppressed below Depth 2, back when fed" },
+    { id: "EL-2a", lv: 17, b: { ruby: 2, electrum: 2 }, bonds: ["molten-carapace"], c: { electrumBond: "molten-carapace" },
+        act: async (a) => {
+            const standing = bondOn(a, "molten-carapace");
+            const st = Engine.state(game.actors.get(a.id)); st.choices = {};
+            await Engine.write(game.actors.get(a.id), st); await Engine.rebuild(game.actors.get(a.id));
+            return [standing, bondOn(a, "molten-carapace")];
+        }, want: [true, false], note: "Electrum stands in for Iron when it names Molten Carapace; not otherwise" },
+
+    { id: "B-02a", lv: 17, b: { ruby: 2, copper: 2 }, bonds: ["conduction"], act: async (a, t, ctx) => {
+        await setResist(t, [{ type: "fire", value: 10 }]);
+        const none = await hitWith(a, t, ctx, "10[fire]");
+        await setResist(t, [{ type: "fire", value: 10 }, { type: "electricity", value: 5 }]);
+        const lower = await hitWith(a, t, ctx, "10[fire]");
+        await setResist(t);
+        return [none, lower];
+    }, want: [10, 5], note: "fire resistance 10 meets electricity's 0, then its 5" },
+    { id: "B-02b", lv: 17, b: { ruby: 2, copper: 2 }, bonds: ["conduction"], act: async (a, t, ctx) => {
+        const bare = await hitWith(a, t, ctx, "1d1[fire]");
+        const pack = game.packs.get("pf2e.equipment-srd");
+        const src = (await pack.getDocument((await pack.getIndex()).find((e) => e.name === "Chain Mail")._id)).toObject();
+        src.system.equipped = { carryType: "worn", invested: null, inSlot: true };
+        const [mail] = await game.actors.get(t.id).createEmbeddedDocuments("Item", [src]);
+        const armoured = await hitWith(a, t, ctx, "1d1[fire]");
+        await mail.delete();
+        return [bare, armoured];
+    }, want: [1, 3], note: "one fire die: +2 against chain mail" },
+    { id: "B-03a", lv: 17, b: { ruby: 2, gold: 2 }, bonds: ["solar-core"], act: async (a, t, ctx) => inCombat(ctx, async () => {
+        canvas.scene.tokens.get(ctx.tokenId).object?.control({ releaseOthers: true });
+        const ignite = () => game.actors.get(a.id).items.find((i) => i.slug === "ignite-the-solar-core");
+        await game.pf2e.rollItemMacro(ignite().uuid); await wait(2000);
+        const lit = effects(game.actors.get(a.id), /effect-solar-core/).length;
+        const light = canvas.scene.tokens.get(ctx.tokenId).light.bright;
+        const f = (await strikeRoll(a)).rolls[0].formula;
+        await game.pf2e.rollItemMacro(ignite().uuid); await wait(1500);
+        return [lit, light, /1d6 fire/.test(f), effects(game.actors.get(a.id), /effect-solar-core/).length];
+    }), want: [1, 60, true, 1], note: "Ruby's d4 is a d6; bright 60; a second ignition this encounter is refused" },
+    { id: "B-03b", lv: 17, b: { ruby: 2, gold: 2 }, bonds: ["solar-core"], act: async (a, t, ctx) => inCombat(ctx, async (combat) => {
+        await AssimilatorDamageRef().mark(game.actors.get(a.id), "effect-solar-core");
+        await game.actors.get(a.id).update({ "system.attributes.hp.value": 100 });
+        await combat.nextRound(); await wait(2500);
+        const lost = 100 - game.actors.get(a.id).hitPoints.value;
+        return lost >= 1 && lost <= 6;
+    }), want: true, note: "1d6 fire at the start of its turn" },
+    { id: "B-04", lv: 17, b: { ruby: 2, emerald: 2 }, bonds: ["living-flame"], act: async (a, t, ctx) => {
+        const before = read.fastHealing(game.actors.get(a.id));
+        await hitWith(a, t, ctx, "1d6[persistent,fire]");
+        await wait(1000);
+        const dealing = read.fastHealing(game.actors.get(a.id));
+        for (const c of game.actors.get(t.id).itemTypes.condition) await c.delete();
+        await wait(800);
+        return [before, dealing, read.fastHealing(game.actors.get(a.id))];
+    }, want: [[2], [2, 5], [2]], note: "+5 while its persistent fire burns someone; gone when it ends" },
+    { id: "B-05a", lv: 17, b: { ruby: 2, onyx: 2 }, bonds: ["blackfire"], act: async (a, t, ctx) => {
+        await setResist(t, [{ type: "fire", value: 10 }]);
+        const taken = await hitWith(a, t, ctx, "10[fire]");
+        await setResist(t);
+        const light = canvas.scene.tokens.get(ctx.tokenId).light;
+        return [taken, !!light.negative];
+    }, want: [10, true], note: "fire meets void's resistance; the light is darkness" },
+    { id: "B-05b", lv: 17, b: { ruby: 2, onyx: 2 }, bonds: ["blackfire"], act: async (a, t, ctx) => {
+        await game.actors.get(a.id).update({ "system.attributes.hp.value": 50 });
+        await hitWith(a, t, ctx, "10[fire]", { hp: 5 });
+        return game.actors.get(a.id).hitPoints.value - 50;
+    }, want: 17, note: "a kill by fire heals the level" },
+    { id: "B-06", lv: 17, b: { garnet: 2, jet: 2 }, bonds: ["exsanguinary"], act: async (a, t, ctx) => {
+        await hitWith(a, t, ctx, "1d6[persistent,bleed]");
+        const bleed = game.actors.get(t.id).itemTypes.condition.find((c) => c.slug === "persistent-damage");
+        await game.actors.get(a.id).update({ "system.attributes.hp.value": 50 });
+        // The tick is the condition's own persistent roll: bleed outside persistent damage deals nothing in pf2e.
+        const roll = await bleed.system.persistent.damage.clone().evaluate();
+        await game.actors.get(t.id).applyDamage({ damage: roll, token: canvas.scene.tokens.get(ctx.targetTokenId), item: bleed });
+        await wait(1200);
+        return [game.actors.get(a.id).hitPoints.value - 50 === roll.total, roll.total > 0];
+    }, want: [true, true], note: "a bleed tick heals exactly what it dealt" },
+    { id: "B-07", lv: 17, b: { garnet: 2, emerald: 2 }, bonds: ["second-heart"], act: async (a) => {
+        await game.actors.get(a.id).update({ "system.attributes.hp.value": 0, "flags.isaacs-hb-pf2e.assimilator.-=used": null });
+        await game.actors.get(a.id).increaseCondition("dying", { value: 4 });
+        await wait(2000);
+        const me = game.actors.get(a.id);
+        return [me.hitPoints.value, me.itemTypes.condition.some((c) => c.slug === "stunned"), me.itemTypes.condition.some((c) => c.slug === "dying")];
+    }, want: [1, true, false] },
+    { id: "B-08", lv: 17, b: { iron: 2, steel: 2 }, bonds: ["siege-frame"], act: async (a, t, ctx) => {
+        const [wall] = await Actor.create([{ name: "ZZ Rig — Wall", type: "hazard",
+            system: { attributes: { hp: { value: 100, max: 100 }, hardness: 15 } } }]);
+        const me = canvas.scene.tokens.get(ctx.tokenId);
+        const [tok] = await canvas.scene.createEmbeddedDocuments("Token", [(await wall.getTokenDocument({ x: me.x, y: me.y + canvas.grid.size })).toObject()]);
+        const roll = await new (DamageRoll())("20[bludgeoning]").evaluate();
+        await wall.applyDamage({ damage: roll, token: tok, item: strikeItem(a) });
+        await wait(1200);
+        const lost = 100 - game.actors.get(wall.id).hitPoints.value;
+        await canvas.scene.deleteEmbeddedDocuments("Token", [tok.id]); await wall.delete();
+        return lost;
+    }, want: 15, note: "Hardness 15 counts as 5 against 20" },
+    { id: "B-09", lv: 17, b: { copper: 2, cobalt: 2 }, bonds: ["lightning-lash"], act: async (a, t, ctx) => {
+        const by = game.actors.get(ctx.bystanderId);
+        await by.update({ "system.attributes.hp.value": 100 });
+        await hitWith(a, t, ctx, "10[cold]", { label: "Arcane Channel" });
+        await wait(800);
+        return 100 - game.actors.get(by.id).hitPoints.value;
+    }, want: 5, note: "the creature beside the target takes half" },
+    { id: "B-10a", lv: 17, b: { topaz: 2, citrine: 2 }, bonds: ["crowned-fortune"], act: async (a, t, ctx) => inCombat(ctx, async () => {
+        canvas.scene.tokens.get(ctx.tokenId).object?.control({ releaseOthers: true });
+        const imperial = () => game.actors.get(a.id).items.find((i) => i.slug === "imperial-strike");
+        await game.pf2e.rollItemMacro(imperial().uuid); await wait(1500);
+        const declared = effects(game.actors.get(a.id), /imperial/).length;
+        for (const e of game.actors.get(a.id).itemTypes.effect.filter((x) => x.slug === "effect-imperial")) await e.delete();
+        await game.pf2e.rollItemMacro(imperial().uuid); await wait(1500);
+        return [declared, effects(game.actors.get(a.id), /imperial/).length];
+    }), want: [1, 0], note: "declared once; a second declaration this encounter is refused" },
+    { id: "B-10b", lv: 17, b: { topaz: 2, citrine: 2 }, bonds: ["crowned-fortune"], act: async (a, t, ctx) => {
+        canvas.scene.tokens.get(ctx.targetTokenId).object?.setTarget(true, { user: game.user, releaseOthers: true });
+        canvas.scene.tokens.get(ctx.tokenId).object?.control({ releaseOthers: true });
+        const mod = read.strike(game.actors.get(a.id)).totalModifier;
+        await game.actors.get(t.id).update({ "system.attributes.ac.value": mod + 11 });
+        for (let i = 0; i < 15; i++) {
+            await AssimilatorDamageRef().mark(game.actors.get(a.id), "effect-imperial");
+            await read.strike(game.actors.get(a.id)).attack({ skipDialog: true });
+            const c = await until(() => game.messages.contents.at(-1)?.flags?.pf2e?.context?.type === "attack-roll" && game.messages.contents.at(-1).flags.pf2e.context);
+            if (c?.unadjustedOutcome === "success") {
+                await wait(800);
+                return [c.outcome, effects(game.actors.get(a.id), /imperial/).length];
+            }
+        }
+        return "no success rolled";
+    }, want: ["criticalSuccess", 0], note: "a success counts as a critical; the declaration is spent" },
+    { id: "B-11", lv: 17, b: { gold: 2, electrum: 3, ruby: 4 }, bonds: ["transmutation"], c: { electrum: "red" },
+        act: async (a) => [derived(a).instincts.primary, derived(a).instincts.secondary, derived(a).iv.scale, derived(a).iv.red.ruby],
+        want: ["gold", "red", 0.75, 3], note: "Red as the second clause at three-quarters: Ruby 4 gives 3" },
+    { id: "B-12", lv: 17, b: { electrum: 2, nickel: 2 }, bonds: ["chimera"], c: { nickel: ["limb", "organ", "mode"] },
+        act: async (a) => game.actors.get(a.id).itemTypes.effect.filter((e) => e.flags?.["isaacs-hb-pf2e"]?.assimilator?.aberration).length,
+        want: 3, note: "Nickel 2 holds two; Chimera a third" },
+    { id: "B-14", lv: 17, b: { amber: 2, cobalt: 2 }, bonds: ["storm-battery"], act: async (a, t, ctx) => {
+        await AssimilatorDamageRef().setReservoir(game.actors.get(a.id), 0, null);
+        await hitWith(a, t, ctx, "6[cold]", { label: "Arcane Channel" });
+        await wait(800);
+        const stored = game.actors.get(a.id).flags["isaacs-hb-pf2e"].assimilator.reservoir;
+        return [stored.charges, stored.type, !!game.actors.get(a.id).items.find((i) => i.slug === "storm-channel")];
+    }, want: [1, "cold", true], note: "its own ranged Strike charged the Reservoir; Storm Channel granted" },
+    { id: "B-15", lv: 17, b: { bronze: 2, iron: 2 }, bonds: ["hammerform"], act: async (a) => {
+        const traits = () => read.traits(game.actors.get(a.id), "Carapace Strike");
+        await game.actors.get(a.id).update({ "flags.pf2e.rollOptions.all.self:moved-10-feet-this-turn": true }); await wait(300);
+        const moved = traits().includes("fatal-d10");
+        await game.actors.get(a.id).update({ "flags.pf2e.rollOptions.all.-=self:moved-10-feet-this-turn": null }); await wait(300);
+        return [moved, traits().includes("fatal-d10")];
+    }, want: [true, false] },
+    { id: "B-16", lv: 17, b: { sapphire: 2, "lapis-lazuli": 2 }, bonds: ["cold-reading"], act: async (a, t, ctx) => {
+        await game.actors.get(a.id).update({ "flags.isaacs-hb-pf2e.assimilator.used.-=coldReading": null });
+        await AssimilatorDamageRef().mark(game.actors.get(t.id), "effect-studied");
+        await hitWith(a, t, ctx, "5[slashing]");
+        const slowed = game.actors.get(t.id).itemTypes.condition.some((c) => c.slug === "slowed");
+        for (const e of game.actors.get(t.id).itemTypes.effect.filter((x) => x.slug === "effect-cold-reading")) await e.delete();
+        await hitWith(a, t, ctx, "5[slashing]");
+        return [slowed, game.actors.get(t.id).itemTypes.condition.some((c) => c.slug === "slowed")];
+    }, want: [true, false], note: "slowed the first time; not again the same round" },
+    { id: "B-17", lv: 17, b: { sapphire: 2, mercury: 3 }, bonds: ["rime-flow"], apply: "effect-pass-through", act: async (a, t, ctx) => {
+        await game.actors.get(t.id).update({ "system.attributes.hp.value": 900 });
+        await hitSelf(game.actors.get(a.id), t, ctx, "20[slashing]");
+        await wait(1500);
+        return 900 - game.actors.get(t.id).hitPoints.value;
+    }, want: 15, note: "Mercury's resistance 5 took the first 5; Pass Through turned the other 15; the attacker took 15 cold" },
+    { id: "B-18", lv: 17, b: { tin: 2, onyx: 2 }, bonds: ["blind-hunter"], act: async (a, t, ctx) => {
+        canvas.scene.tokens.get(ctx.targetTokenId).object?.setTarget(true, { user: game.user, releaseOthers: true });
+        canvas.scene.tokens.get(ctx.tokenId).object?.control({ releaseOthers: true });
+        const dc = async () => {
+            await read.strike(game.actors.get(a.id)).attack({ skipDialog: true });
+            return (await until(() => game.messages.contents.at(-1)?.flags?.pf2e?.context?.type === "attack-roll"
+                && game.messages.contents.at(-1).flags.pf2e.context)).dc?.value;
+        };
+        const plain = await dc();
+        await AssimilatorDamageRef().mark(game.actors.get(a.id), "effect-shadow-mantle");
+        // The darkness is an Aura: pf2e marks the enemies inside it.
+        const marked = await until(() => effects(game.actors.get(t.id), /hunted-in-darkness/).length, 6000);
+        const sense = game.actors.get(a.id).system.perception.senses.find((s) => s.type === "tremorsense");
+        const dark = await dc();
+        return [sense?.acuity, sense?.range, marked, dark - plain];
+    }, want: ["precise", 30, 1, -2], note: "precise tremorsense; the target 5 feet away is inside the darkness and off-guard" },
+    { id: "B-19", lv: 17, b: { amethyst: 4, quartz: 2 }, bonds: ["mindstorm"], act: async (a, t, ctx) => {
+        await game.actors.get(t.id).update({ "system.saves.will.value": -40 });
+        canvas.scene.tokens.get(ctx.targetTokenId).object?.setTarget(true, { user: game.user, releaseOthers: true });
+        canvas.scene.tokens.get(ctx.tokenId).object?.control({ releaseOthers: true });
+        await read.strike(game.actors.get(a.id)).attack({ skipDialog: true });
+        return until(() => {
+            const tt = game.actors.get(t.id);
+            const s = tt.itemTypes.condition.find((c) => c.slug === "stupefied");
+            return effects(tt, /mindstorm/).length && s ? [1, s.value] : null;
+        }, 10000);
+    }, want: [1, 1], note: "failed Amethyst's save: Mindstorm, stupefied 1" },
+    { id: "B-20", lv: 17, b: { platinum: 4, aluminium: 2 }, bonds: ["ascension"], act: async (a) =>
+        (game.actors.get(a.id).system.movement.speeds.fly?.modifiers ?? []).find((m) => m.slug === "ascension" && m.enabled)?.modifier ?? 0,
+    want: 20 },
+    { id: "B-21", lv: 17, b: { nickel: 2, emerald: 2 }, bonds: ["runaway-growth"], c: { nickel: ["limb", "organ"] }, act: async (a, t, ctx) => {
+        const max = game.actors.get(a.id).hitPoints.max;
+        const before = game.messages.size;
+        const blow = Math.ceil(max / 2) + 10;
+        const lost = await hitSelf(game.actors.get(a.id), t, ctx, `${blow}[slashing]`);
+        await wait(1500);
+        const said = game.messages.contents.slice(before - game.messages.size).some((m) => m.content?.includes("Runaway Growth"));
+        // Mercury is not bound, so nothing else turns the blow; what it did not cost came back.
+        return [said, blow - lost];
+    }, want: [true, 34], note: "below half: re-rolled, and 34 (twice level 17) back" },
+    { id: "B-22", lv: 17, b: { emerald: 2, chromium: 2 }, bonds: ["chitin-bloom"], act: async (a, t, ctx) => inCombat(ctx, async (combat) => {
+        const plate = () => game.actors.get(a.id).itemTypes.armor.find((x) => x.slug === "living-plate");
+        const hardness = plate().system.hardness - (plate()._source.system.hardness ?? 0) - derived(a).substrateHardness;
+        await plate().update({ "system.hp.value": 10 });
+        await combat.nextRound(); await wait(2500);
+        return [derived(a).fastHealing, hardness, plate().hitPoints.value - 10];
+    }), want: [2, 2, 2], note: "fast healing 2: +2 Hardness, and the plate knits 2" },
+    { id: "B-23", lv: 17, b: { jade: 2, zinc: 2 }, bonds: ["immune-system"], c: { zinc: "poison" }, act: async (a) => {
+        const app = await game.modules.get("isaacs-hb-pf2e").api.assimilator.openGullet(game.actors.get(a.id)); await wait(800);
+        const offered = [...app.element.querySelectorAll(".gullet-choice option")].some((o) => o.value === "poison");
+        await app.close();
+        return [offered, read.resist(game.actors.get(a.id), "poison")];
+    }, want: [true, 5], note: "poison offered and resisted at Zinc 2" },
+    { id: "B-24", lv: 17, b: { onyx: 2, lead: 2 }, bonds: ["null-shroud"], act: async (a, t, ctx) => {
+        canvas.scene.tokens.get(ctx.tokenId).object?.control({ releaseOthers: true });
+        await AssimilatorRig.useWithArea(game.actors.get(a.id).items.find((i) => i.slug === "shadow-mantle"));
+        return [effects(game.actors.get(a.id), /shadow-mantle/).length,
+            game.messages.contents.slice(-5).some((m) => /counteract/i.test(m.content ?? ""))];
+    }, want: [1, true], note: "the darkness settles, and suppresses the magic inside it" },
+    { id: "B-25", lv: 17, b: { jet: 2, manganese: 2 }, bonds: ["rot"], act: async (a, t, ctx) => {
+        await hitWith(a, t, ctx, "1d6[persistent,acid]");
+        for (const e of game.actors.get(t.id).itemTypes.effect.filter((x) => x.slug === "effect-corroded")) await e.delete();
+        await setResist(t, [{ type: "fire", value: 10 }]);
+        const roll = await new (DamageRoll())("10[fire]").evaluate();
+        await game.actors.get(t.id).update({ "system.attributes.hp.value": 900 });
+        await game.actors.get(t.id).applyDamage({ damage: roll, token: canvas.scene.tokens.get(ctx.targetTokenId) });
+        await wait(1000);
+        await setResist(t);
+        return 900 - game.actors.get(t.id).hitPoints.value;
+    }, want: 5, note: "anyone's 10 fire against resistance 10 while its acid burns: 5" },
+    { id: "B-26", lv: 17, b: { diamond: 2, steel: 2 }, bonds: ["adamant-shell"], act: async (a) =>
+        [game.actors.get(a.id).system.attributes.flanking.offGuardable, derived(a).substrateHardness],
+    want: [false, 10], note: "not off-guard from flanking; Diamond's +5 and Steel's +5 stack (5 alone)" },
+    { id: "B-27", lv: 17, b: { pearl: 2, magnesium: 2 }, bonds: ["cleansing-light"], act: async (a, t, ctx) => {
+        const by = game.actors.get(ctx.bystanderId);
+        await by.update({ "system.details.alliance": "party" });
+        await by.increaseCondition("frightened", { value: 1 });
+        canvas.scene.tokens.get(ctx.tokenId).object?.control({ releaseOthers: true });
+        await AssimilatorRig.useWithArea(game.actors.get(a.id).items.find((i) => i.slug === "flare"));
+        const still = game.actors.get(by.id).itemTypes.condition.some((c) => c.slug === "frightened");
+        await by.update({ "system.details.alliance": "opposition" });
+        return still;
+    }, want: false, note: "the ally in the Flare is no longer frightened 1" },
+    { id: "B-28", lv: 17, b: { hematite: 2, moonstone: 2 }, bonds: ["living-armour"], act: async (a, t, ctx) => {
+        const by = game.actors.get(ctx.bystanderId);
+        await by.update({ "system.details.alliance": "party" });
+        await place(ctx, ctx.bystanderTokenId, 2);
+        const before = game.messages.size;
+        const roll = await new (DamageRoll())("5[fire]").evaluate();
+        await by.applyDamage({ damage: roll, token: canvas.scene.tokens.get(ctx.bystanderTokenId) });
+        await wait(1200);
+        await by.update({ "system.details.alliance": "opposition" });
+        return game.messages.contents.slice(before - game.messages.size).some((m) => m.content?.includes("Living Armour"));
+    }, want: true, note: "an ally 10 feet away took fire: Reactive Evolution is offered" },
+    { id: "B-29", lv: 17, b: { silver: 2, jet: 2 }, bonds: ["reapers-edge"], targetTraits: ["undead", "incorporeal"], act: async (a, t, ctx) => {
+        await setResist(t, [{ type: "void", value: 10 }], [{ type: "void" }]);
+        const taken = await hitWith(a, t, ctx, "10[void]");
+        await setResist(t);
+        return taken;
+    }, want: 10, note: "void through an incorporeal undead's immunity and resistance" },
+    { id: "B-30", lv: 17, b: { diamond: 2, mercury: 3 }, bonds: ["impossible-body"], act: async (a) =>
+        until(() => game.actors.get(a.id).items.find((i) => i.slug === "pass-through")?.system.frequency?.max), want: 99,
+    note: "Liquid Form's reaction has no per-round limit" },
+    { id: "B-08", lv: 17, b: { iron: 2, steel: 2 }, bonds: ["siege-frame"], act: (a, t, ctx) => noteShown(a, t, ctx,
+        { roll: "skill:athletics", title: "Siege Frame" }), want: true, note: "Note: Siege Frame on the Athletics roll" },
+];
+
 const effects = (actor, re) => actor.itemTypes.effect.filter((e) => re.test(e.slug)).map((e) => e.slug);
 
 const SCENARIOS = [
@@ -912,6 +1227,7 @@ const SCENARIOS = [
 export const AssimilatorRig = {
     SCENARIOS,
     INSTINCTS,
+    BOND_CHECKS,
     NOTES,
     CHECKS,
 
@@ -919,7 +1235,7 @@ export const AssimilatorRig = {
         const results = [];
         const ctx = await AssimilatorRig.setup();
         try {
-            for (const check of [...CHECKS, ...SCENARIOS, ...NOTES, ...INSTINCTS].filter((c) => !only || only.test(c.id))) {
+            for (const check of [...CHECKS, ...SCENARIOS, ...NOTES, ...INSTINCTS, ...BOND_CHECKS].filter((c) => !only || only.test(c.id))) {
                 results.push(await AssimilatorRig.one(check, ctx));
             }
         } finally {
@@ -1018,7 +1334,11 @@ export const AssimilatorRig = {
         // Garnet's drain kills the target, and pf2e ignores damage to the dead: every later check would hit a corpse.
         if (target().statuses?.has("dead")) await target().toggleStatusEffect("dead", { active: false });
         for (const e of target().itemTypes.effect.filter((x) => /studied|siphon/.test(x.slug))) await e.delete();
-        for (const e of actor().itemTypes.effect.filter((x) => /siphon|kinetic-surge|integrated-plating|knitting-surge/.test(x.slug))) await e.delete();
+        // Anchored: the Bond effects are slugged `solar-core` too, and an unanchored match deleted the Bond itself.
+        for (const e of actor().itemTypes.effect.filter((x) => /^effect-(siphon|kinetic-surge|integrated-plating|knitting-surge|solar-core|imperial|shadow-mantle)/.test(x.slug))) await e.delete();
+        for (const e of target().itemTypes.effect.filter((x) => /cold-reading|mindstorm|corroded|hunted-in-darkness/.test(x.slug))) await e.delete();
+        for (const x of target().itemTypes.armor) await x.delete();
+        await actor().update({ "flags.pf2e.rollOptions.all.-=assimilator:living-flame": null });
         for (const c of actor().itemTypes.condition) await c.delete();
         for (const c of target().itemTypes.condition) await c.delete();
         const targetToken = canvas.scene.tokens.get(ctx.targetTokenId);

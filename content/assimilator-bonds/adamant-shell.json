@@ -33,29 +33,19 @@
         },
         "rules": [
             {
-                "key": "Note",
+                "key": "ActiveEffectLike",
+                "mode": "override",
+                "path": "system.attributes.flanking.offGuardable",
                 "predicate": [
                     {
                         "not": "assimilator:suppressed"
                     },
-                    {
-                        "gte": [
-                            "self:effect:substrate-diamond",
-                            2
-                        ]
-                    },
-                    {
-                        "gte": [
-                            "self:effect:substrate-steel",
-                            2
-                        ]
-                    }
+                    "assimilator:bond:adamant-shell"
                 ],
-                "selector": "ac",
-                "text": "You cannot be off-guard from flanking.",
-                "title": "Adamant Shell"
+                "value": false
             }
         ],
+        "slug": "adamant-shell",
         "start": {
             "initiative": null,
             "value": 0

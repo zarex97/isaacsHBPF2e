@@ -227,9 +227,8 @@ export const AssimilatorDamage = {
         // Molten Carapace (Ruby + Iron): the melee unarmed or reach attacker burns for half your level.
         const weapon = params?.item;
         const attacker = weapon?.actor;
-        const moltenOn = live.itemTypes.effect.some((e) => e.slug === "molten-carapace")
-            && live.getRollOptions().some((o) => /^self:effect:substrate-ruby:[2-9]/.test(o))
-            && live.getRollOptions().some((o) => /^self:effect:substrate-iron:[2-9]/.test(o));
+        // In force as the engine reckons it: slotted, and Ruby and Iron at 2+ (or Electrum standing in).
+        const moltenOn = live.getRollOptions().includes("assimilator:bond:molten-carapace");
         const traits = weapon?.system?.traits?.value ?? [];
         const meleeUnarmedOrReach = weapon && (weapon.isMelee ?? weapon.system?.range == null)
             && (traits.includes("unarmed") || traits.some((t) => t.startsWith("reach")) || weapon.category === "unarmed");

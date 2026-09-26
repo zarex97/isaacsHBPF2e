@@ -400,3 +400,8 @@ Three things that looked like bugs and are not:
 window sat at 1 FPS with a black board, and `canvas.clientCoordinatesFromCanvas` returned coordinates from a
 stage transform that had never been updated — thousands of pixels off-screen. One `hover` over the board
 woke it. Take coordinates only after that, and check they fall inside the viewport.
+
+**The extension's window can stop loading Foundry altogether.** Late in a long session, the Foundry tab in the
+Claude-in-Chrome extension's own window sat on a black page with `game.ready` never true, through reloads and
+pointer nudges. The same world loaded normally in the debug Chrome's first window. Treat it as a known outage
+rather than a module fault: run the rig from the debug window, and leave real-pointer aims for a fresh session.

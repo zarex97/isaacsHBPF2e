@@ -4,18 +4,18 @@
             "assimilator": {
                 "bond": {
                     "substrates": [
-                        "ruby",
-                        "copper"
+                        "diamond",
+                        "mercury"
                     ]
                 }
             }
         }
     },
     "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
-    "name": "Conduction",
+    "name": "Impossible Body",
     "system": {
         "description": {
-            "value": "<p><strong>Ruby + Copper.</strong> Your fire damage counts as <strong>fire and electricity</strong>, using whichever resistance is lower. Creatures in metal armour take +2 per damage die from it.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
+            "value": "<p><strong>Diamond + Mercury.</strong> You are simultaneously rigid and fluid: keep your Hardness while amorphous, and Liquid Form's reaction has no per-round limit.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
         },
         "duration": {
             "expiry": null,
@@ -31,8 +31,23 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Assimilator"
         },
-        "rules": [],
-        "slug": "conduction",
+        "rules": [
+            {
+                "itemType": "action",
+                "key": "ItemAlteration",
+                "mode": "override",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    "assimilator:bond:impossible-body",
+                    "item:slug:pass-through"
+                ],
+                "property": "frequency-max",
+                "value": 99
+            }
+        ],
+        "slug": "impossible-body",
         "start": {
             "initiative": null,
             "value": 0

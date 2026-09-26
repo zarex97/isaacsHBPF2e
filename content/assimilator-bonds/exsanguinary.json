@@ -4,18 +4,18 @@
             "assimilator": {
                 "bond": {
                     "substrates": [
-                        "ruby",
-                        "copper"
+                        "garnet",
+                        "jet"
                     ]
                 }
             }
         }
     },
     "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
-    "name": "Conduction",
+    "name": "Exsanguinary",
     "system": {
         "description": {
-            "value": "<p><strong>Ruby + Copper.</strong> Your fire damage counts as <strong>fire and electricity</strong>, using whichever resistance is lower. Creatures in metal armour take +2 per damage die from it.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
+            "value": "<p><strong>Garnet + Jet.</strong> Persistent bleed you inflict also heals you for the same amount each time it ticks.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
         },
         "duration": {
             "expiry": null,
@@ -32,7 +32,7 @@
             "title": "Isaac's Homebrew: The Assimilator"
         },
         "rules": [],
-        "slug": "conduction",
+        "slug": "exsanguinary",
         "start": {
             "initiative": null,
             "value": 0

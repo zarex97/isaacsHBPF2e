@@ -18,5 +18,10 @@
         "name": "Mutations",
         "sorting": "a",
         "type": "Item"
+    },
+    {
+        "name": "Bonds",
+        "sorting": "a",
+        "type": "Item"
     }
 ]

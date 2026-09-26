@@ -4,18 +4,18 @@
             "assimilator": {
                 "bond": {
                     "substrates": [
-                        "ruby",
-                        "copper"
+                        "amber",
+                        "cobalt"
                     ]
                 }
             }
         }
     },
     "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
-    "name": "Conduction",
+    "name": "Storm Battery",
     "system": {
         "description": {
-            "value": "<p><strong>Ruby + Copper.</strong> Your fire damage counts as <strong>fire and electricity</strong>, using whichever resistance is lower. Creatures in metal armour take +2 per damage die from it.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
+            "value": "<p><strong>Amber + Cobalt.</strong> Your Reservoir stores charges from your <strong>own</strong> ranged Strikes, and spending 3 charges lets Arcane Channel target every creature in a 15-foot cone.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
         },
         "duration": {
             "expiry": null,
@@ -31,8 +31,21 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Assimilator"
         },
-        "rules": [],
-        "slug": "conduction",
+        "rules": [
+            {
+                "allowDuplicate": false,
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    "assimilator:bond:storm-battery"
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Storm Channel"
+            }
+        ],
+        "slug": "storm-battery",
         "start": {
             "initiative": null,
             "value": 0

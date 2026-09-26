@@ -4,18 +4,18 @@
             "assimilator": {
                 "bond": {
                     "substrates": [
-                        "ruby",
-                        "copper"
+                        "emerald",
+                        "chromium"
                     ]
                 }
             }
         }
     },
     "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
-    "name": "Conduction",
+    "name": "Chitin Bloom",
     "system": {
         "description": {
-            "value": "<p><strong>Ruby + Copper.</strong> Your fire damage counts as <strong>fire and electricity</strong>, using whichever resistance is lower. Creatures in metal armour take +2 per damage die from it.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
+            "value": "<p><strong>Emerald + Chromium.</strong> Your fast healing also repairs your Carapace, and your Hardness increases by your fast healing value.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
         },
         "duration": {
             "expiry": null,
@@ -31,8 +31,23 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Assimilator"
         },
-        "rules": [],
-        "slug": "conduction",
+        "rules": [
+            {
+                "itemType": "armor",
+                "key": "ItemAlteration",
+                "mode": "add",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    "assimilator:bond:chitin-bloom",
+                    "item:slug:living-plate"
+                ],
+                "property": "hardness",
+                "value": "@actor.flags.isaacs-hb-pf2e.assimilator.derived.fastHealing"
+            }
+        ],
+        "slug": "chitin-bloom",
         "start": {
             "initiative": null,
             "value": 0

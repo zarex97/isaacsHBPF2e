@@ -35,6 +35,9 @@ const PER_ENCOUNTER = {
     "null-field": { key: "null-field" },
     // Pearl Depth 4: "Twice per encounter."
     "cleansing-tide": { key: "cleansing-tide", max: (actor) => (depthOf(actor, "pearl") >= 4 ? 2 : 1) },
+    // The Bonds' own once-per-encounter actions.
+    "ignite-the-solar-core": { key: "solar-core" },
+    "imperial-strike": { key: "imperial-strike" },
 };
 
 /** Distance moved this turn, by token id, stamped with the turn it belongs to. */

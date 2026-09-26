@@ -383,6 +383,19 @@ check("the same Substrate twice is refused", errorsFor({ substrates: [ruby(), ru
     check("I-3a Orange's +1d4 is the deepest damaging Mutation's type",
         mutationTypeOf({ ruby: 3, iron: 2 }, { ruby: { damageFrom: 2, damageType: "fire" }, iron: { damageFrom: 1, damageType: "bludgeoning" } }, "electricity"), "fire");
     check("Ruby's Mutation is fire", damageTypeOf(ruby.system.rules), "fire");
+
+    // Phase 5: the Bonds.
+    const { activeBonds } = await import("../scripts/assimilator/engine.mjs");
+    const pairs = { "molten-carapace": ["ruby", "iron"], transmutation: ["gold", "electrum"] };
+    check("A Bond is in force with both Substrates at 2+", activeBonds(["molten-carapace"], { ruby: 2, iron: 2 }, pairs), ["molten-carapace"]);
+    check("…and suppressed when either drops below 2", activeBonds(["molten-carapace"], { ruby: 2, iron: 1 }, pairs), []);
+    check("…and only while slotted", activeBonds([], { ruby: 2, iron: 2 }, pairs), []);
+    check("EL-2a Electrum 2 stands in for the missing half of the Bond it names",
+        activeBonds(["molten-carapace"], { ruby: 2, electrum: 2 }, pairs, "molten-carapace"), ["molten-carapace"]);
+    check("…not for a Bond it does not name", activeBonds(["molten-carapace"], { ruby: 2, electrum: 2 }, pairs, "conduction"), []);
+    check("…not for both halves at once", activeBonds(["molten-carapace"], { electrum: 4 }, pairs, "molten-carapace"), []);
+    check("…and not below Depth 2", activeBonds(["molten-carapace"], { ruby: 2, electrum: 1 }, pairs, "molten-carapace"), []);
+    check("B-11 Transmutation: three-quarters, rounded up", [instinctsOf("red", 3, "green", true).scale, scaled(5, 0.75), scaled(1, 0.75)], [0.75, 4, 1]);
 }
 
 /* -------------------------------------------------------------------------------------------- */

@@ -1,4 +1,44 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "all",
+                "area": {
+                    "type": "emanation",
+                    "value": 20
+                },
+                "includesSelf": false
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.assimilator-effects.Item.Effect: Shadow Mantle"
+                    },
+                    "event": "action-used",
+                    "self": true
+                },
+                {
+                    "apply": {
+                        "includesSelf": false,
+                        "traits": [
+                            "magical",
+                            "arcane",
+                            "divine",
+                            "occult",
+                            "primal"
+                        ],
+                        "type": "counteract"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        "assimilator:bond:null-shroud"
+                    ],
+                    "self": true
+                }
+            ]
+        }
+    },
     "folder": "Mutations",
     "img": "icons/commodities/gems/gem-faceted-round-black.webp",
     "name": "Shadow Mantle",

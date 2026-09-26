@@ -1,0 +1,137 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "bond": {
+                    "substrates": [
+                        "tin",
+                        "onyx"
+                    ]
+                }
+            }
+        }
+    },
+    "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
+    "name": "Blind Hunter",
+    "system": {
+        "description": {
+            "value": "<p><strong>Tin + Onyx.</strong> Inside your own magical darkness, your tremorsense becomes <strong>precise</strong> and enemies within it are off-guard to you.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 4
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "acuity": "precise",
+                "key": "Sense",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    "assimilator:bond:blind-hunter",
+                    "self:effect:shadow-mantle",
+                    {
+                        "lt": [
+                            "self:effect:substrate-tin",
+                            3
+                        ]
+                    }
+                ],
+                "range": 30,
+                "selector": "tremorsense"
+            },
+            {
+                "acuity": "precise",
+                "key": "Sense",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    "assimilator:bond:blind-hunter",
+                    "self:effect:shadow-mantle",
+                    {
+                        "gte": [
+                            "self:effect:substrate-tin",
+                            3
+                        ]
+                    }
+                ],
+                "range": 60,
+                "selector": "tremorsense"
+            },
+            {
+                "effects": [
+                    {
+                        "affects": "enemies",
+                        "events": [
+                            "enter"
+                        ],
+                        "removeOnExit": true,
+                        "uuid": "Compendium.isaacs-hb-pf2e.assimilator-effects.Item.Effect: Hunted in Darkness"
+                    }
+                ],
+                "key": "Aura",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    "assimilator:bond:blind-hunter",
+                    "self:effect:shadow-mantle"
+                ],
+                "radius": 20,
+                "slug": "blind-hunter",
+                "traits": [
+                    "darkness"
+                ]
+            },
+            {
+                "affects": "target",
+                "key": "EphemeralEffect",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    "assimilator:bond:blind-hunter",
+                    "self:effect:shadow-mantle",
+                    "target:effect:hunted-in-darkness"
+                ],
+                "selectors": [
+                    "strike-attack-roll",
+                    "attack-roll",
+                    "spell-attack-roll"
+                ],
+                "uuid": "Compendium.pf2e.conditionitems.Item.AJh5ex99aV6VTggg"
+            }
+        ],
+        "slug": "blind-hunter",
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-bond"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

@@ -5,17 +5,17 @@
                 "bond": {
                     "substrates": [
                         "ruby",
-                        "copper"
+                        "gold"
                     ]
                 }
             }
         }
     },
     "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
-    "name": "Conduction",
+    "name": "Solar Core",
     "system": {
         "description": {
-            "value": "<p><strong>Ruby + Copper.</strong> Your fire damage counts as <strong>fire and electricity</strong>, using whichever resistance is lower. Creatures in metal armour take +2 per damage die from it.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
+            "value": "<p><strong>Ruby + Gold.</strong> Once per encounter as a two-action activity, ignite: for 1 minute your fire damage increases by one die size and you shed bright light 60 feet. You take 1d6 fire at the start of each of your turns.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
         },
         "duration": {
             "expiry": null,
@@ -31,8 +31,21 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Assimilator"
         },
-        "rules": [],
-        "slug": "conduction",
+        "rules": [
+            {
+                "allowDuplicate": false,
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    "assimilator:bond:solar-core"
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Ignite the Solar Core"
+            }
+        ],
+        "slug": "solar-core",
         "start": {
             "initiative": null,
             "value": 0

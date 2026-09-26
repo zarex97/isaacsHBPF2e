@@ -173,6 +173,9 @@ export const Carapace = {
                 content: `<p><strong>${state.by}</strong>: the thing wearing ${live.name} turns `
                     + `<strong>${state.reduced}</strong> of that damage.</p>`,
             });
+            // What a reduction turned, for anything that answers it — Rime Flow freezes the attacker for it.
+            Hooks.callAll("isaacsHb.assimilatorReduced", live, { by: state.by, amount: state.reduced,
+                attacker: params?.item?.actor ?? null });
         }
         const plate = state.plateId ? live.items.get(state.plateId) : null;
         if (!plate || state.absorbed <= 0) return;

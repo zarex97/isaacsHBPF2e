@@ -5,17 +5,17 @@
                 "bond": {
                     "substrates": [
                         "ruby",
-                        "copper"
+                        "onyx"
                     ]
                 }
             }
         }
     },
     "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
-    "name": "Conduction",
+    "name": "Blackfire",
     "system": {
         "description": {
-            "value": "<p><strong>Ruby + Copper.</strong> Your fire damage counts as <strong>fire and electricity</strong>, using whichever resistance is lower. Creatures in metal armour take +2 per damage die from it.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
+            "value": "<p><strong>Ruby + Onyx.</strong> Your fire damage becomes <strong>void and fire</strong>, and sheds <em>darkness</em> rather than light. When it kills a creature, you regain Hit Points equal to your level.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
         },
         "duration": {
             "expiry": null,
@@ -31,8 +31,22 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Assimilator"
         },
-        "rules": [],
-        "slug": "conduction",
+        "rules": [
+            {
+                "key": "TokenLight",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    "assimilator:bond:blackfire"
+                ],
+                "value": {
+                    "dim": 10,
+                    "negative": true
+                }
+            }
+        ],
+        "slug": "blackfire",
         "start": {
             "initiative": null,
             "value": 0

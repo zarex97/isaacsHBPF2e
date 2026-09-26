@@ -40,24 +40,14 @@
                     {
                         "not": "assimilator:suppressed"
                     },
-                    {
-                        "gte": [
-                            "self:effect:substrate-ruby",
-                            2
-                        ]
-                    },
-                    {
-                        "gte": [
-                            "self:effect:substrate-iron",
-                            2
-                        ]
-                    },
+                    "assimilator:bond:molten-carapace",
                     "item:slug:living-plate"
                 ],
                 "property": "hardness",
                 "value": 5
             }
         ],
+        "slug": "molten-carapace",
         "start": {
             "initiative": null,
             "value": 0

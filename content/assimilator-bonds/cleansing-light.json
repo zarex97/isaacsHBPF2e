@@ -4,18 +4,18 @@
             "assimilator": {
                 "bond": {
                     "substrates": [
-                        "ruby",
-                        "copper"
+                        "pearl",
+                        "magnesium"
                     ]
                 }
             }
         }
     },
     "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
-    "name": "Conduction",
+    "name": "Cleansing Light",
     "system": {
         "description": {
-            "value": "<p><strong>Ruby + Copper.</strong> Your fire damage counts as <strong>fire and electricity</strong>, using whichever resistance is lower. Creatures in metal armour take +2 per damage die from it.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
+            "value": "<p><strong>Pearl + Magnesium.</strong> Your Flare Core also ends one condition of value 1 on every ally inside the emanation.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
         },
         "duration": {
             "expiry": null,
@@ -32,7 +32,7 @@
             "title": "Isaac's Homebrew: The Assimilator"
         },
         "rules": [],
-        "slug": "conduction",
+        "slug": "cleansing-light",
         "start": {
             "initiative": null,
             "value": 0

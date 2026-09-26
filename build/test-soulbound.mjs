@@ -3355,6 +3355,8 @@ const SYSTEM_SLUGS = new Set([
     "instinct-orange-speed", "kinetic-surge",
     // A pf2e condition the rig puts on and the White Instinct's picker ends.
     "frightened",
+    // Cobalt's synthetic Strike (a Strike rule's slug, not a document), and pf2e conditions the Bonds read.
+    "arcane-channel", "stunned", "slowed", "stupefied",
 ]);
 
 const unresolvedInScripts = [];

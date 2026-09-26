@@ -162,19 +162,41 @@ export function colourCounts(effective, catalogue, electrumColour = null) {
 }
 
 /**
+ * Which slotted Bonds are in force (lexicon §14): both Substrates at Depth 2 or higher. Electrum Depth 2 "may stand in
+ * for either Substrate of any one Bond you know" — so for the one Bond named, Electrum at 2+ covers a missing half.
+ */
+export function activeBonds(slotted, effective, pairs, standIn = null) {
+    const deep = (slug) => (effective[slug] ?? 0) >= 2;
+    return slotted.filter((slug) => {
+        const pair = pairs[slug];
+        if (!pair) return false;
+        const met = pair.filter(deep).length;
+        if (met === 2) return true;
+        return met === 1 && standIn === slug && deep("electrum") && !pair.includes("electrum");
+    });
+}
+
+/** The option a Bond's rules and code key off while it is in force. */
+export const bondOption = (slug) => `assimilator:bond:${slug}`;
+
+/**
  * The Instinct clauses in force. Electrum Depth 3 adds the second colour's clause — "but both clauses operate at
  * half value"; Depth 4, "both at full value". A second colour that *is* the Instinct adds nothing.
  */
-export function instinctsOf(primary, electrumDepth = 0, electrumColour = null) {
+export function instinctsOf(primary, electrumDepth = 0, electrumColour = null, transmutation = false) {
     const secondary = primary && electrumDepth >= 3 && COLOURS.includes(electrumColour) && electrumColour !== primary
         ? electrumColour : null;
-    return { primary: primary ?? null, secondary, scale: secondary && electrumDepth < 4 ? 0.5 : 1 };
+    // Transmutation (Gold + Electrum): "Alloyed Instinct's half-value clause becomes three-quarters (round up)."
+    const partial = transmutation ? 0.75 : 0.5;
+    return { primary: primary ?? null, secondary, scale: secondary && electrumDepth < 4 ? partial : 1 };
 }
 
 /** "Half value (round down, minimum 1)" — and nothing halved is still nothing. */
 export function scaled(n, scale = 1) {
     if (!(n > 0)) return 0;
-    return scale === 1 ? n : Math.max(1, Math.floor(n * scale));
+    if (scale === 1) return n;
+    // Half rounds down; Transmutation's three-quarters rounds up. Both are at least 1.
+    return Math.max(1, scale === 0.75 ? Math.ceil(n * scale) : Math.floor(n * scale));
 }
 
 /** The numbers the Instinct effects read (guide §5.1), at the value the clauses currently operate at. */
@@ -238,6 +260,7 @@ export function feedCheck({ slug, paid, catalogue, grants, specimen }) {
 /* -------------------------------------------------------------------------------------------- */
 
 let catalogueCache = null;
+let bondCache = null;
 
 /** One writer per actor at a time: rebuilds queue behind each other rather than interleaving. */
 const queues = new WeakMap();
@@ -278,13 +301,23 @@ export const Engine = {
         return catalogueCache;
     },
 
+    /** Each Bond's two Substrates, keyed by the Bond's slug. */
+    async bondPairs() {
+        const out = {};
+        for (const [slug, bond] of Object.entries(await Engine.bondCatalogue())) out[slug] = bond.substrates;
+        return out;
+    },
+
     async bondCatalogue() {
+        // Read once: every rebuild asks which Bonds are in force, and the pack does not change mid-session.
+        if (bondCache) return bondCache;
         const docs = (await game.packs.get(PACKS.bonds)?.getDocuments()) ?? [];
         const out = {};
         for (const doc of docs) {
             const b = doc.flags?.[MODULE_ID]?.[KEY]?.bond;
             if (b?.substrates) out[doc.system.slug ?? doc.slug] = { ...b, name: doc.name, uuid: doc.uuid, doc };
         }
+        bondCache = out;
         return out;
     },
 
@@ -300,8 +333,11 @@ export const Engine = {
         const totals = colourTotals(state.substrates, catalogue);
         const electrumColour = state.choices.electrum ?? null;
         const counts = colourCounts(effective, catalogue, electrumColour);
-        const instincts = instinctsOf(state.instinct, effective.electrum ?? 0, electrumColour);
+        const bonds = activeBonds(state.bonds.slice(0, grants.bondSlots), effective, await Engine.bondPairs(),
+            state.choices.electrumBond ?? null);
+        const instincts = instinctsOf(state.instinct, effective.electrum ?? 0, electrumColour, bonds.includes("transmutation"));
         return {
+            bonds,
             colourCount: counts,
             instincts,
             iv: instinctValues({ effective, catalogue, counts, scale: instincts.scale }),
@@ -317,8 +353,7 @@ export const Engine = {
             mutationDepth: mutationDepth(Engine.workingDepths(actor, effective), catalogue),
             instinctType: INSTINCT_TYPES[state.instinct] ?? "bludgeoning",
             substrateHardness: substrateHardness(Engine.workingDepths(actor, effective), catalogue, {
-                stack: (state.bonds ?? []).includes("adamant-shell")
-                    && (actor.itemTypes?.effect ?? []).some((e) => e.slug === "adamant-shell"),
+                stack: bonds.includes("adamant-shell"),
                 extra: (state.choices.nickel ?? []).includes("plate") && effective.nickel ? [3] : [],
             }),
             pending: instinctOf(totals, state.tiebreak),
@@ -438,7 +473,8 @@ export const Engine = {
         // The Instinct: the recorded colour's effect, and from Electrum Depth 3 the second colour's beside it. The
         // effect is the clause; which one is *the* Instinct — the damage type, `assimilator:instinct:<colour>` — is
         // the primary's alone, so that option is written below rather than by the effect.
-        const settled = instinctsOf(state.instinct, derived.effective.electrum ?? 0, state.choices.electrum ?? null);
+        const settled = instinctsOf(state.instinct, derived.effective.electrum ?? 0, state.choices.electrum ?? null,
+            derived.bonds.includes("transmutation"));
         const instincts = actor.itemTypes.effect.filter((e) => e.flags?.[MODULE_ID]?.[KEY]?.instinct);
         const wantedColours = [settled.primary, settled.secondary].filter(Boolean);
         for (const e of instincts) if (!wantedColours.includes(e.flags[MODULE_ID][KEY].instinct)) deletes.push(e.id);
@@ -464,7 +500,7 @@ export const Engine = {
         // Nickel's Aberrations: the chosen ones, as many as its Depth holds.
         const aberrations = actor.itemTypes.effect.filter((e) => e.flags?.[MODULE_ID]?.[KEY]?.aberration);
         const held = derived.effective.nickel
-            ? (state.choices.nickel ?? []).slice(0, ABERRATION_COUNT[Math.min(derived.effective.nickel, 4)] ?? 0)
+            ? (state.choices.nickel ?? []).slice(0, Engine.aberrationCount(derived.effective.nickel, derived.bonds))
             : [];
         for (const e of aberrations) if (!held.includes(e.flags[MODULE_ID][KEY].aberration)) deletes.push(e.id);
         const missing = held.filter((k) => !aberrations.some((e) => e.flags[MODULE_ID][KEY].aberration === k));
@@ -486,7 +522,12 @@ export const Engine = {
             // From the Instinct as this rebuild settled it, not as `derive` read it before the first binding set one.
             instinctType: INSTINCT_TYPES[state.instinct] ?? "bludgeoning", substrateHardness: derived.substrateHardness,
             colours: derived.colours, effective: derived.effective,
-            colourCount: derived.colourCount, instincts: settled,
+            colourCount: derived.colourCount, instincts: settled, bonds: derived.bonds,
+            fastHealing: Math.max(
+                EMERALD_FAST_HEALING[Math.min(Engine.workingDepths(actor, derived.effective).emerald ?? 0, 4)] ?? 0,
+                [settled.primary, settled.secondary].includes("green")
+                    ? instinctValues({ effective: derived.effective, catalogue, counts: derived.colourCount, scale: settled.scale }).greenHealing
+                    : 0),
             mutationType: mutationTypeOf(Engine.workingDepths(actor, derived.effective), catalogue,
                 INSTINCT_TYPES[state.instinct] ?? "bludgeoning"),
             iv: instinctValues({ effective: derived.effective, catalogue, counts: derived.colourCount, scale: settled.scale }),
@@ -503,6 +544,9 @@ export const Engine = {
             for (const slug of Object.keys(now.derived?.effective ?? {})) {
                 if (!(slug in derivedFlag.effective)) update[`flags.${MODULE_ID}.${KEY}.derived.effective.-=${slug}`] = null;
             }
+            if (JSON.stringify(now.derived?.bonds) !== JSON.stringify(derivedFlag.bonds)) {
+                update[`flags.${MODULE_ID}.${KEY}.derived.bonds`] = derivedFlag.bonds;
+            }
             for (const slug of Object.keys(now.derived?.iv?.red ?? {})) {
                 if (!(slug in derivedFlag.iv.red)) update[`flags.${MODULE_ID}.${KEY}.derived.iv.red.-=${slug}`] = null;
             }
@@ -513,6 +557,13 @@ export const Engine = {
         const outheals = [settled.primary, settled.secondary].includes("green") && derivedFlag.iv.greenHealing > emerald;
         if (outheals && !toggles[GREEN_OUTHEALS]) update[`flags.pf2e.rollOptions.all.${GREEN_OUTHEALS}`] = true;
         if (!outheals && toggles[GREEN_OUTHEALS]) update[`flags.pf2e.rollOptions.all.-=${GREEN_OUTHEALS}`] = null;
+        // The Bonds in force, one option each: every Bond rule and every line of Bond code keys off it.
+        for (const slug of Object.keys(await Engine.bondPairs())) {
+            const option = bondOption(slug);
+            const on = derived.bonds.includes(slug);
+            if (on && !toggles[option]) update[`flags.pf2e.rollOptions.all.${option}`] = true;
+            if (!on && toggles[option]) update[`flags.pf2e.rollOptions.all.-=${option}`] = null;
+        }
         for (const colour of COLOURS) {
             const option = `assimilator:instinct:${colour}`;
             if (colour === settled.primary && !toggles[option]) update[`flags.pf2e.rollOptions.all.${option}`] = true;
@@ -656,8 +707,11 @@ export const Engine = {
         if (slug) {
             const bond = (await Engine.bondCatalogue())[slug];
             if (!bond) return Engine._refuse(`There is no Bond called "${slug}".`);
-            const unmet = bond.substrates.filter((s) => (derived.effective[s] ?? 0) < 2);
-            if (unmet.length) return Engine._refuse(`${bond.name} needs ${unmet.join(" and ")} at Depth 2 or higher.`);
+            const met = activeBonds([slug], derived.effective, { [slug]: bond.substrates }, state.choices.electrumBond ?? null);
+            if (!met.length) {
+                const unmet = bond.substrates.filter((s) => (derived.effective[s] ?? 0) < 2);
+                return Engine._refuse(`${bond.name} needs ${unmet.join(" and ")} at Depth 2 or higher.`);
+            }
             if (state.bonds.includes(slug)) return Engine._refuse(`${bond.name} is already slotted.`);
         }
         state.bonds[index] = slug ?? null;
@@ -681,6 +735,7 @@ export const Engine = {
         if (!state.preparing && !first && !shifting) return Engine._refuse("That choice is made at daily preparations.");
         if (shifting) state.zincShift = false;
         if (key === "nickel") value = [value].flat().filter((k) => ABERRATIONS.includes(k));
+        if (key === "electrumBond" && value && !(await Engine.bondCatalogue())[value]) return Engine._refuse(`There is no Bond called "${value}".`);
         if (key === "gold") value = [value].flat().filter((s) => s && s !== "gold" && s in state.substrates);
         if ((key === "goldInstinct" || key === "purpleUp") && !(value in state.substrates)) {
             return Engine._refuse("Choose a Substrate you bind.");
@@ -694,17 +749,24 @@ export const Engine = {
     },
 
     /** Nickel: roll the Aberrations — at daily preparations, or by the Depth 3 re-roll. */
-    async rollAberrations(actor, { reroll = false } = {}) {
+    /** Aberrations held at a Nickel Depth; Chimera (Electrum + Nickel) holds one more. */
+    aberrationCount(depth, bonds = []) {
+        return (ABERRATION_COUNT[Math.min(depth, 4)] ?? 0) + (bonds.includes("chimera") ? 1 : 0);
+    },
+
+    async rollAberrations(actor, { reroll = false, forced = false } = {}) {
         const state = Engine.state(actor);
-        const depth = (await Engine.derive(actor, state)).effective.nickel ?? 0;
+        const derived = await Engine.derive(actor, state);
+        const depth = derived.effective.nickel ?? 0;
         if (!depth) return Engine._refuse("Nickel is not bound.");
-        if (reroll && depth < 3) return Engine._refuse("Re-rolling your Aberrations takes Nickel at Depth 3.");
+        // `forced`: Runaway Growth re-rolls them by itself, whatever Nickel's Depth.
+        if (reroll && !forced && depth < 3) return Engine._refuse("Re-rolling your Aberrations takes Nickel at Depth 3.");
         if (!reroll && !state.preparing && (state.choices.nickel ?? []).length) {
             return Engine._refuse("Aberrations are rolled at daily preparations.");
         }
         const pool = [...ABERRATIONS];
         const picked = [];
-        for (let i = 0; i < (ABERRATION_COUNT[Math.min(depth, 4)] ?? 1); i++) {
+        for (let i = 0; i < Engine.aberrationCount(depth, derived.bonds); i++) {
             picked.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
         }
         state.choices.nickel = picked;

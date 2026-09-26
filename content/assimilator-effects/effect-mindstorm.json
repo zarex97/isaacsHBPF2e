@@ -1,0 +1,63 @@
+{
+    "img": "icons/magic/control/hypnosis-mesmerism-swirl.webp",
+    "name": "Effect: Mindstorm",
+    "system": {
+        "description": {
+            "value": "<p>Stupefied 1 by Mindstorm until the end of its next turn. <strong>Its next spell requires a DC 5 flat check.</strong></p>"
+        },
+        "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 4
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "allowDuplicate": false,
+                "alterations": [
+                    {
+                        "mode": "override",
+                        "property": "badge-value",
+                        "value": 1
+                    }
+                ],
+                "key": "GrantItem",
+                "uuid": "Compendium.pf2e.conditionitems.Item.e1XGnhKNSQIm5IXg"
+            },
+            {
+                "key": "Note",
+                "selector": [
+                    "spell-attack-roll",
+                    "spell-dc"
+                ],
+                "text": "This creature's next spell requires a DC 5 flat check.",
+                "title": "Mindstorm"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

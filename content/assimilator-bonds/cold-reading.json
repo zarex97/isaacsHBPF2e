@@ -4,18 +4,18 @@
             "assimilator": {
                 "bond": {
                     "substrates": [
-                        "ruby",
-                        "copper"
+                        "sapphire",
+                        "lapis-lazuli"
                     ]
                 }
             }
         }
     },
     "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
-    "name": "Conduction",
+    "name": "Cold Reading",
     "system": {
         "description": {
-            "value": "<p><strong>Ruby + Copper.</strong> Your fire damage counts as <strong>fire and electricity</strong>, using whichever resistance is lower. Creatures in metal armour take +2 per damage die from it.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
+            "value": "<p><strong>Sapphire + Lapis Lazuli.</strong> Your Studied creature is also <strong>slowed 1</strong> the first time you damage it each round, with no save.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
         },
         "duration": {
             "expiry": null,
@@ -32,7 +32,7 @@
             "title": "Isaac's Homebrew: The Assimilator"
         },
         "rules": [],
-        "slug": "conduction",
+        "slug": "cold-reading",
         "start": {
             "initiative": null,
             "value": 0

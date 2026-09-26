@@ -5,17 +5,17 @@
                 "bond": {
                     "substrates": [
                         "ruby",
-                        "copper"
+                        "emerald"
                     ]
                 }
             }
         }
     },
     "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
-    "name": "Conduction",
+    "name": "Living Flame",
     "system": {
         "description": {
-            "value": "<p><strong>Ruby + Copper.</strong> Your fire damage counts as <strong>fire and electricity</strong>, using whichever resistance is lower. Creatures in metal armour take +2 per damage die from it.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
+            "value": "<p><strong>Ruby + Emerald.</strong> While you are taking persistent fire damage, or dealing it to anyone, your fast healing increases by 5. You burn what you are, and it grows back.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
         },
         "duration": {
             "expiry": null,
@@ -31,8 +31,20 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Assimilator"
         },
-        "rules": [],
-        "slug": "conduction",
+        "rules": [
+            {
+                "key": "FastHealing",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    "assimilator:bond:living-flame",
+                    "assimilator:living-flame"
+                ],
+                "value": 5
+            }
+        ],
+        "slug": "living-flame",
         "start": {
             "initiative": null,
             "value": 0

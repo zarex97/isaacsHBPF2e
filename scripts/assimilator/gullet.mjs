@@ -115,9 +115,18 @@ export class GulletApp extends HandlebarsApplicationMixin(ApplicationV2) {
                 options: bound.map((b) => ({ value: b.slug, label: b.name, selected: state.choices.purpleUp === b.slug })) });
         }
         if (effective.zinc) {
+            // Immune System (Jade + Zinc): Shifting Tissue may also name poison.
+            const immune = (derived.bonds ?? []).includes("immune-system") ? ["poison"] : [];
             choices.push({ key: "zinc", label: "Shifting Tissue — energy type",
-                options: ["acid", "cold", "electricity", "fire", "sonic", "force", "vitality", "void"]
+                options: ["acid", "cold", "electricity", "fire", "sonic", "force", "vitality", "void", ...immune]
                     .map((t) => ({ value: t, label: t, selected: state.choices.zinc === t })) });
+        }
+        // Electrum Depth 2: it may stand in for either Substrate of one Bond you know.
+        if ((effective.electrum ?? 0) >= 2) {
+            choices.push({ key: "electrumBond", label: "Electrum — stands in for a Bond",
+                options: [{ value: "", label: "— none —", selected: !state.choices.electrumBond },
+                    ...Object.entries(bonds).map(([slug, b]) => ({ value: slug, label: `${b.name} (${b.substrates.join(" + ")})`,
+                        selected: state.choices.electrumBond === slug }))] });
         }
         const nickel = effective.nickel
             ? { held: state.choices.nickel ?? [], canReroll: effective.nickel >= 3,
