@@ -1,8 +1,8 @@
 /**
  * Hold the clause trackers to the guide.
  *
- * A clause is one independently-failable declaration the Soulbound guide makes, tracked as a row in
- * `Docs/clauses/*.md`. The rows are the spec restated as a checklist, and a checklist restating a
+ * A clause is one independently-failable declaration a class guide makes, tracked as a row in
+ * `Docs/clauses/*.md` (the Soulbound) or `Docs/clauses/assimilator/*.md` (the Assimilator). The rows are the spec restated as a checklist, and a checklist restating a
  * document is a second copy of it — which drifts. `Docs/soulbound-verification-checklist.md` was
  * written that way, by hand, from the guide, and nothing has ever checked that its 269 rows still say
  * what the guide says.
@@ -24,6 +24,10 @@ import { ROOT } from "./lib/pack.mjs";
 
 const CLAUSE_DIR = path.join(ROOT, "Docs", "clauses");
 const GUIDE = path.join(ROOT, "Docs", "soulbound-guide-v1.md");
+const ASSIMILATOR_DIR = path.join(CLAUSE_DIR, "assimilator");
+const ASSIMILATOR_GUIDE = path.join(ROOT, "Docs", "assimilator-guide-v1.md");
+/** The guide's §6 makes the lexicon its Chapter 5 and does not reprint it, so Substrates and Bonds quote it. */
+const ASSIMILATOR_LEXICON = path.join(ROOT, "Docs", "homebrewing", "carapace-material-lexicon-v3.md");
 
 /** The six marks, and nothing else. `—` means "nothing to automate", not "not done". */
 const MARKS = new Set(["☐", "✅", "⚠️", "❌", "🔧", "—"]);
@@ -46,6 +50,29 @@ const PREFIXES = {
 };
 /** Every `spirit-*.md` tracks its Spirit's §7 rungs and its one §9 Severing Art. */
 const SPIRIT_PREFIXES = ["S", "R"];
+
+/**
+ * The Assimilator's trackers, and which document each one quotes.
+ *
+ * A Substrate's ID is its two-letter code and its Depth — `RU-3b` is Ruby's Depth 3, second clause — so
+ * each colour's file may use only its own four codes. IDs share one namespace with the Soulbound's, which
+ * is why none of these reuses `C`, `K`, `F`, `X`, `S`, `R`, `SR`, `H` or `Q`.
+ */
+const ASSIMILATOR = {
+    "class.md": { prefixes: ["A"], source: ASSIMILATOR_GUIDE },
+    "instincts.md": { prefixes: ["I"], source: ASSIMILATOR_GUIDE },
+    "feats.md": { prefixes: ["AF"], source: ASSIMILATOR_GUIDE },
+    "bonds.md": { prefixes: ["B"], source: ASSIMILATOR_LEXICON },
+    "substrates-red.md": { prefixes: ["RU", "GA", "IR", "CU"], source: ASSIMILATOR_LEXICON },
+    "substrates-gold.md": { prefixes: ["TO", "CI", "AU", "EL"], source: ASSIMILATOR_LEXICON },
+    "substrates-orange.md": { prefixes: ["CA", "AM", "BR", "HG"], source: ASSIMILATOR_LEXICON },
+    "substrates-blue.md": { prefixes: ["SA", "LA", "CO", "SN"], source: ASSIMILATOR_LEXICON },
+    "substrates-purple.md": { prefixes: ["AT", "QZ", "PT", "NI"], source: ASSIMILATOR_LEXICON },
+    "substrates-green.md": { prefixes: ["EM", "JA", "ZN", "CR"], source: ASSIMILATOR_LEXICON },
+    "substrates-black.md": { prefixes: ["ON", "JE", "PB", "MN"], source: ASSIMILATOR_LEXICON },
+    "substrates-white.md": { prefixes: ["DI", "PE", "AL", "MG"], source: ASSIMILATOR_LEXICON },
+    "substrates-gray.md": { prefixes: ["HE", "MO", "ST", "AG"], source: ASSIMILATOR_LEXICON },
+};
 
 const failures = [];
 let clauses = 0;
@@ -75,7 +102,12 @@ function normalise(text) {
         .trim();
 }
 
-const guide = normalise(fs.readFileSync(GUIDE, "utf8"));
+/** Each source is read and normalised once, however many trackers quote it. */
+const sources = new Map();
+function source(file) {
+    if (!sources.has(file)) sources.set(file, normalise(fs.readFileSync(file, "utf8")));
+    return sources.get(file);
+}
 
 if (!fs.existsSync(CLAUSE_DIR)) {
     console.log("No Docs/clauses yet — nothing to check.");
@@ -84,15 +116,32 @@ if (!fs.existsSync(CLAUSE_DIR)) {
 
 const seen = new Map();
 
+/** Every tracker file, with the prefixes it may use and the document its clauses must quote. */
+const trackers = [];
 for (const name of fs.readdirSync(CLAUSE_DIR).filter((n) => n.endsWith(".md")).sort()) {
     const allowed = PREFIXES[name] ?? (name.startsWith("spirit-") ? SPIRIT_PREFIXES : null);
     if (!allowed) {
         fail(name, null, "not a known tracker file — expected class.md, lineage-*.md or spirit-*.md");
         continue;
     }
+    trackers.push({ name, file: path.join(CLAUSE_DIR, name), allowed, guide: source(GUIDE) });
+}
+if (fs.existsSync(ASSIMILATOR_DIR)) {
+    for (const name of fs.readdirSync(ASSIMILATOR_DIR).filter((n) => n.endsWith(".md")).sort()) {
+        const tier = ASSIMILATOR[name];
+        const label = `assimilator/${name}`;
+        if (!tier) {
+            fail(label, null, `not a known tracker file — expected one of ${Object.keys(ASSIMILATOR).join(", ")}`);
+            continue;
+        }
+        trackers.push({ name: label, file: path.join(ASSIMILATOR_DIR, name), allowed: tier.prefixes, guide: source(tier.source) });
+    }
+}
+
+for (const { name, file, allowed, guide } of trackers) {
 
     const counted = { "☐": 0, "✅": 0, "⚠️": 0, "❌": 0, "🔧": 0, "—": 0 };
-    const text = fs.readFileSync(path.join(CLAUSE_DIR, name), "utf8");
+    const text = fs.readFileSync(file, "utf8");
 
     for (const line of text.split("\n")) {
         // A clause row, as opposed to the legend or the counts table: six cells, and the first is an ID.
@@ -125,7 +174,7 @@ for (const name of fs.readdirSync(CLAUSE_DIR).filter((n) => n.endsWith(".md")).s
         if (clause === "") {
             fail(name, id, "empty clause");
         } else if (!guide.includes(normalise(clause))) {
-            fail(name, id, `clause is not a verbatim fragment of the guide: "${clause}"`);
+            fail(name, id, `clause is not a verbatim fragment of its source: "${clause}"`);
         }
 
         if (MARKS.has(status)) counted[status] += 1;

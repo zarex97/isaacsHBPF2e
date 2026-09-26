@@ -1,0 +1,35 @@
+{
+    "folder": "Mutations",
+    "img": "icons/commodities/gems/pearl-white-oval.webp",
+    "name": "Cleansing Tide",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "interaction",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per encounter (twice at Pearl Depth 4)</p><hr /><p>End one condition of value 1 on yourself or an adjacent ally. At Depth 3 the range is 30 feet and it may instead reduce one affliction's stage by 1; at Depth 4 it may instead counteract one spell effect of 4th rank or lower.</p>"
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-mutation-action"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator",
+                "manipulate"
+            ]
+        }
+    },
+    "type": "action"
+}

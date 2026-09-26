@@ -1,0 +1,181 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "purple",
+                    "kind": "metal",
+                    "slug": "platinum",
+                    "specimenNames": [
+                        "platina"
+                    ]
+                }
+            }
+        }
+    },
+    "folder": "Purple",
+    "img": "icons/commodities/metal/ingot-silver.webp",
+    "name": "Substrate: Platinum",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Transcendence &middot; <strong>Mutation:</strong> Ascendant Plate</p><p><em>It stops being a colour and starts being a quality of light. Extremely rare.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td>+1 circumstance bonus to saves against magic.</td></tr><tr><td>2</td><td><strong>Resistance 5</strong> to your Instinct's damage type. You no longer need to breathe.</td></tr><tr><td>3</td><td>Once per day, gain a <strong>fly Speed equal to half your land Speed</strong> for 1 minute.</td></tr><tr><td>4</td><td>Permanent <strong>fly Speed equal to your land Speed</strong>. You cannot be slowed by magical effects.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-platinum",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-platinum",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    },
+                    {
+                        "or": [
+                            "item:trait:magical",
+                            "item:type:spell",
+                            "origin:item:type:spell"
+                        ]
+                    }
+                ],
+                "selector": "saving-throw",
+                "slug": "platinum-saving-throw-1",
+                "type": "circumstance",
+                "value": 1
+            },
+            {
+                "key": "Resistance",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-platinum",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-platinum",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "type": "{actor|flags.isaacs-hb-pf2e.assimilator.derived.instinctType}",
+                "value": 5
+            },
+            {
+                "allowDuplicate": false,
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-platinum",
+                            3
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Ascendant Flight"
+            },
+            {
+                "key": "BaseSpeed",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-platinum",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "fly",
+                "value": "@actor.attributes.speed.total"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-platinum",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "saving-throw",
+                "text": "You cannot be slowed by magical effects.",
+                "title": "Platinum (Depth 4)"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-purple"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

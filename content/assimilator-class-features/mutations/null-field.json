@@ -1,0 +1,65 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "all",
+                "area": {
+                    "type": "emanation",
+                    "value": 15
+                },
+                "includesSelf": false
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "includesSelf": true,
+                        "traits": [
+                            "magical",
+                            "arcane",
+                            "divine",
+                            "occult",
+                            "primal"
+                        ],
+                        "type": "counteract"
+                    },
+                    "event": "action-used",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "folder": "Mutations",
+    "img": "icons/commodities/metal/ingot-worn-steel.webp",
+    "name": "Null Field",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 2
+        },
+        "category": "interaction",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per encounter</p><hr /><p>Suppress magical effects in a 15-foot emanation for 1 round: attempt to counteract each, counteract rank equal to half your level.</p>"
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-mutation-action"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator",
+                "concentrate",
+                "manipulate"
+            ]
+        }
+    },
+    "type": "action"
+}

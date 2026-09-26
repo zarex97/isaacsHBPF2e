@@ -1,0 +1,175 @@
+{
+    "img": "icons/commodities/gems/gem-faceted-round-white.webp",
+    "name": "Effect: Reactive Evolution",
+    "system": {
+        "description": {
+            "value": "<p>Resistance to the damage type you chose, by your Moonstone's Depth.</p>"
+        },
+        "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "choices": [
+                    {
+                        "label": "PF2E.TraitAcid",
+                        "value": "acid"
+                    },
+                    {
+                        "label": "PF2E.TraitBludgeoning",
+                        "value": "bludgeoning"
+                    },
+                    {
+                        "label": "PF2E.TraitCold",
+                        "value": "cold"
+                    },
+                    {
+                        "label": "PF2E.TraitElectricity",
+                        "value": "electricity"
+                    },
+                    {
+                        "label": "PF2E.TraitFire",
+                        "value": "fire"
+                    },
+                    {
+                        "label": "PF2E.TraitForce",
+                        "value": "force"
+                    },
+                    {
+                        "label": "PF2E.TraitMental",
+                        "value": "mental"
+                    },
+                    {
+                        "label": "PF2E.TraitPiercing",
+                        "value": "piercing"
+                    },
+                    {
+                        "label": "PF2E.TraitPoison",
+                        "value": "poison"
+                    },
+                    {
+                        "label": "PF2E.TraitSlashing",
+                        "value": "slashing"
+                    },
+                    {
+                        "label": "PF2E.TraitSonic",
+                        "value": "sonic"
+                    },
+                    {
+                        "label": "PF2E.TraitSpirit",
+                        "value": "spirit"
+                    },
+                    {
+                        "label": "PF2E.TraitVitality",
+                        "value": "vitality"
+                    },
+                    {
+                        "label": "PF2E.TraitVoid",
+                        "value": "void"
+                    }
+                ],
+                "flag": "type",
+                "key": "ChoiceSet",
+                "prompt": "Resist which damage type?"
+            },
+            {
+                "key": "Resistance",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:effect:substrate-moonstone",
+                            1
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-moonstone",
+                            2
+                        ]
+                    }
+                ],
+                "type": "{item|flags.pf2e.rulesSelections.type}",
+                "value": 2
+            },
+            {
+                "key": "Resistance",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:effect:substrate-moonstone",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-moonstone",
+                            3
+                        ]
+                    }
+                ],
+                "type": "{item|flags.pf2e.rulesSelections.type}",
+                "value": 5
+            },
+            {
+                "key": "Resistance",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:effect:substrate-moonstone",
+                            3
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-moonstone",
+                            4
+                        ]
+                    }
+                ],
+                "type": "{item|flags.pf2e.rulesSelections.type}",
+                "value": 8
+            },
+            {
+                "key": "Resistance",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:effect:substrate-moonstone",
+                            4
+                        ]
+                    }
+                ],
+                "type": "{item|flags.pf2e.rulesSelections.type}",
+                "value": 12
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

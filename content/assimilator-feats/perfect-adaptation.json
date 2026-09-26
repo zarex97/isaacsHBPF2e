@@ -1,0 +1,51 @@
+{
+    "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+    "name": "Perfect Adaptation",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>You gain <strong>Moonstone's Reactive Evolution at Depth 2</strong> without binding Moonstone. If you already hold Moonstone, treat it as <strong>one Depth higher</strong> for this Mutation only.</p>"
+        },
+        "level": {
+            "value": 12
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "allowDuplicate": false,
+                "key": "GrantItem",
+                "predicate": [
+                    {
+                        "not": "self:effect:substrate-moonstone"
+                    }
+                ],
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Reactive Evolution"
+            }
+        ],
+        "slug": "perfect-adaptation",
+        "traits": {
+            "otherTags": [
+                "assimilator-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

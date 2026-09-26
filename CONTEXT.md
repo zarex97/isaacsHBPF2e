@@ -2,7 +2,7 @@
 
 Two homebrew classes for the Pathfinder 2e system on Foundry VTT — **The Saint** and
 **The Soulbound** — and the shared machinery that automates them. Three further classes
-(the Stargazer, the Breath Slayer, the Carapace) exist only as guides in `Docs/` and ship
+(the Stargazer, the Breath Slayer, the Assimilator) exist only as guides in `Docs/` and ship
 no content; terms below describe what is built.
 
 ## Language

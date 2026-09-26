@@ -1,0 +1,98 @@
+<section class="gullet">
+    <header class="gullet-pools">
+        <div><strong>Gem Mass</strong> {{spent.gem}} / {{mass.gem}}</div>
+        <div><strong>Metal Mass</strong> {{spent.metal}} / {{mass.metal}}</div>
+        <div><strong>Depth cap</strong> {{depthCap}}</div>
+        <div><strong>The Vein</strong> {{vein}}</div>
+    </header>
+
+    <p class="gullet-instinct">
+        <strong>Instinct:</strong> {{#if instinct}}{{instinct}}{{else}}<em>none yet</em>{{/if}}
+        {{#if preparing}}{{#if pending.instinct}}<span class="hint">&mdash; tomorrow: {{pending.instinct}}</span>{{/if}}{{/if}}
+    </p>
+    {{#if tied.length}}
+    <p class="gullet-tie">Tied between {{#each tied}}<button type="button" data-action="breakTie" data-colour="{{this}}">{{this}}</button>{{/each}}</p>
+    {{/if}}
+
+    {{#if preparing}}
+    <p class="gullet-prep"><strong>Daily preparations.</strong> You may Shed, break a tie and change Bonds.
+        {{#if owner}}<button type="button" data-action="endPrep">Finish preparing</button>{{/if}}</p>
+    {{else if isGM}}
+    <p class="hint"><button type="button" data-action="beginPrep">Begin daily preparations</button> (Rest for the Night does this.)</p>
+    {{/if}}
+
+    {{#if choices.length}}
+    <h3>Daily choices</h3>
+    {{#each choices}}
+    <div class="gullet-choice" data-choice>
+        <label>{{label}}</label>
+        <select {{#if multi}}multiple size="{{options.length}}"{{/if}}>
+            {{#each options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+        </select>
+        {{#if ../owner}}<button type="button" data-action="choose" data-key="{{key}}">Set</button>{{/if}}
+    </div>
+    {{/each}}
+    {{/if}}
+    {{#if nickel}}
+    <div class="gullet-choice" data-choice>
+        <label>Unstable Growth — Aberrations</label>
+        <select multiple size="6">{{#each nickel.options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
+        {{#if owner}}<button type="button" data-action="choose" data-key="nickel">Choose</button>
+        <button type="button" data-action="rollAberrations" data-reroll="false">Roll</button>
+        {{#if nickel.canReroll}}<button type="button" data-action="rollAberrations" data-reroll="true">Re-roll (once per encounter)</button>{{/if}}{{/if}}
+    </div>
+    {{/if}}
+
+    {{#if carapace}}
+    <p class="gullet-carapace"><strong>Carapace</strong> {{carapace.hp}} / {{carapace.max}}{{#if carapace.broken}} &mdash; <strong>broken</strong>{{/if}}</p>
+    {{#if carapace.menders.length}}{{#if owner}}
+    <div class="gullet-mend" data-mend>
+        <select>{{#each carapace.menders}}<option value="{{id}}">{{label}}</option>{{/each}}</select>
+        <button type="button" data-action="mend">Mend <span class="hint">(1 hour)</span></button>
+    </div>
+    {{/if}}{{/if}}
+    {{/if}}
+
+    <h3>Bound</h3>
+    {{#if bound.length}}
+    <table class="gullet-bound">
+        <thead><tr><th>Substrate</th><th>Track</th><th>Depth</th>{{#if preparing}}<th>Shed to</th>{{/if}}</tr></thead>
+        <tbody>
+        {{#each bound}}
+            <tr>
+                <td>{{name}} <span class="hint">({{colour}})</span></td>
+                <td>{{kind}}</td>
+                <td>{{effective}}{{#unless (eq effective paid)}} <span class="hint">(paid {{paid}})</span>{{/unless}}</td>
+                {{#if ../preparing}}<td>{{#each lower}}<button type="button" data-action="shed" data-slug="{{../slug}}" data-to="{{this}}">{{this}}</button>{{/each}}</td>{{/if}}
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    {{else}}<p class="hint">Nothing yet. It is hungry.</p>{{/if}}
+
+    {{#if owner}}
+    <h3>Feed <span class="hint">(10 minutes)</span></h3>
+    <div class="gullet-feed" data-feed>
+        <select name="substrate">
+            {{#each feedable}}<option value="{{slug}}">{{name}} — {{colour}} {{kind}}{{#if paid}}, Depth {{paid}}{{/if}}</option>{{/each}}
+        </select>
+        <select name="source"></select>
+        <button type="button" data-action="feed">Feed</button>
+    </div>
+    {{/if}}
+
+    <h3>Bonds</h3>
+    {{#if slots.length}}
+    {{#each slots}}
+    <div class="gullet-slot" data-slot>
+        <select {{#if locked}}disabled{{/if}}>
+            <option value="">&mdash; empty &mdash;</option>
+            {{#each choices}}<option value="{{slug}}" {{#if selected}}selected{{/if}} {{#unless met}}disabled{{/unless}}>{{name}} ({{pair}})</option>{{/each}}
+        </select>
+        {{#if ../owner}}{{#unless locked}}<button type="button" data-action="setBond" data-index="{{index}}">Set</button>{{/unless}}{{/if}}
+    </div>
+    {{/each}}
+    {{else}}<p class="hint">Your first Bond slot comes at 4th level.</p>{{/if}}
+
+    {{#if isGM}}<p class="hint"><button type="button" data-action="rebuild">Rebuild</button></p>{{/if}}
+</section>

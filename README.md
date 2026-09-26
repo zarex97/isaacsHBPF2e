@@ -1,4 +1,4 @@
-# Isaac's Homebrew (PF2e): The Saint and The Soulbound
+# Isaac's Homebrew (PF2e): The Saint, The Soulbound and The Assimilator
 
 A Foundry VTT module for the **Pathfinder Second Edition** system that adds two martial focus-users:
 **The Saint**, whose power answers to the sky, and **The Soulbound**, whose pool refills by fighting.

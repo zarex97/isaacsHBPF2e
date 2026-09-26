@@ -1,0 +1,48 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.assimilator-effects.Item.Effect: Studied"
+                    },
+                    "event": "action-used"
+                }
+            ]
+        }
+    },
+    "folder": "Actions",
+    "img": "icons/magic/perception/eye-ringed-glow-angry-small-teal.webp",
+    "name": "Study",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "interaction",
+        "description": {
+            "value": "<p><strong>Blue Instinct.</strong> You Study a creature. Until the encounter ends, your Mutations treat its resistances as lower by twice your highest Depth, and you gain a +1 circumstance bonus to AC against it. One creature at a time: Studying another ends the first.</p>"
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-mutation-action"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator",
+                "concentrate"
+            ]
+        }
+    },
+    "type": "action"
+}

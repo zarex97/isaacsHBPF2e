@@ -1,0 +1,51 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "reduction": {
+                    "amount": "level",
+                    "fromCreature": true
+                }
+            }
+        }
+    },
+    "img": "icons/consumables/potions/vial-ornet-silver-black.webp",
+    "name": "Effect: Pass Through",
+    "system": {
+        "description": {
+            "value": "<p>The next damage from a creature is reduced by your level. Spent when it lands.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 11
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

@@ -1,0 +1,46 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "opensGullet": "shed"
+            }
+        }
+    },
+    "folder": "Actions",
+    "img": "icons/consumables/food/shank-meat-bone-glazed-red.webp",
+    "name": "Shed",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>During your daily preparations only.</strong></p><hr /><p>Remove any Substrate, or reduce any Substrate's Depth, freeing that Mass. What you shed is destroyed, not recovered.</p><p><em>Using it opens the Gullet, where the Substrate and the specimen are chosen and the Mass is checked.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

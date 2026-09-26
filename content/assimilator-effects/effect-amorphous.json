@@ -1,0 +1,50 @@
+{
+    "img": "icons/consumables/potions/vial-ornet-silver-black.webp",
+    "name": "Effect: Amorphous",
+    "system": {
+        "description": {
+            "value": "<p>Immune to precision damage; critical hits against you deal normal damage.</p>"
+        },
+        "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 17
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "Immunity",
+                "type": "precision"
+            },
+            {
+                "key": "Immunity",
+                "type": "critical-hits"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

@@ -1,0 +1,163 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "purple",
+                    "kind": "metal",
+                    "slug": "nickel",
+                    "specimenNames": [
+                        "kupfernickel"
+                    ]
+                }
+            }
+        }
+    },
+    "folder": "Purple",
+    "img": "icons/commodities/metal/ingot-silver.webp",
+    "name": "Substrate: Nickel",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Mutation &middot; <strong>Mutation:</strong> Unstable Growth</p><p><em>You do not know what it will be tomorrow. Neither does it.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td>At daily preparations, gain one <strong>Aberration</strong> &mdash; roll or choose: <strong>(1) A limb</strong>, <strong>(2) An organ</strong>, <strong>(3) A mode</strong>, <strong>(4) A plate</strong>, <strong>(5) A gland</strong>, <strong>(6) A maw</strong>. One Aberration.</td></tr><tr><td>2</td><td><strong>Two</strong> Aberrations.</td></tr><tr><td>3</td><td>Once per encounter, as a single action, <strong>re-roll all your Aberrations</strong>.</td></tr><tr><td>4</td><td><strong>Three</strong> Aberrations, and one of them may instead be the <strong>Depth 4 rider of any other Purple Substrate</strong>.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-nickel",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-nickel",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "all",
+                "text": "Unstable Growth: choose or roll your Aberrations in the Gullet at daily preparations.",
+                "title": "Nickel (Depth 1)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-nickel",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-nickel",
+                            4
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-nickel",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "all",
+                "text": "Unstable Growth: two Aberrations.",
+                "title": "Nickel (Depth 2)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-nickel",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "all",
+                "text": "Unstable Growth: three Aberrations, and one may instead be the Depth 4 rider of any other Purple Substrate.",
+                "title": "Nickel (Depth 4)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-nickel",
+                            3
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "all",
+                "text": "Once per encounter, as a single action, re-roll all your Aberrations (the Gullet's Re-roll).",
+                "title": "Nickel (Depth 3)"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-purple"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

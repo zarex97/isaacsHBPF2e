@@ -1,0 +1,43 @@
+{
+    "img": "icons/magic/symbols/circle-ouroboros.webp",
+    "name": "Instinct Fusion",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p><em>Prerequisite: Two Instincts, or Electrum at Depth 3.</em> Both of your Instinct clauses operate at <strong>full value</strong>. You are two organisms sharing a host and they do not always agree.</p>"
+        },
+        "level": {
+            "value": 16
+        },
+        "prerequisites": {
+            "value": [
+                {
+                    "value": "Two Instincts, or Electrum at Depth 3"
+                }
+            ]
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "slug": "instinct-fusion",
+        "traits": {
+            "otherTags": [
+                "assimilator-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

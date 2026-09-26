@@ -1,0 +1,39 @@
+{
+    "img": "icons/creatures/abilities/fangs-teeth-bite.webp",
+    "name": "Devouring Plate",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>When you reduce a creature to 0 Hit Points with a Carapace Strike, you may <strong>Feed</strong> on it as a free action: gain a <strong>temporary Substrate of any kind at Depth 2</strong> until your next daily preparations, costing no Mass.</p>"
+        },
+        "level": {
+            "value": 18
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "slug": "devouring-plate",
+        "traits": {
+            "otherTags": [
+                "assimilator-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

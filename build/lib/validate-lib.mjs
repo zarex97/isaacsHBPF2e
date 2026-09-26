@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { ROOT, rel, sluggify } from "./pack.mjs";
+import { validateAssimilator } from "./validate-assimilator.mjs";
 
 const pf2e = JSON.parse(fs.readFileSync(path.join(ROOT, "build", "lib", "pf2e-traits.json"), "utf8"));
 /** pf2e's immunity/weakness/resistance dictionaries, snapshotted from a running 8.3.0. */
@@ -30,6 +31,9 @@ const LIBRA_ARMS = new Set(["twin-swords", "tridents", "nunchaku", "shields", "s
 /** ItemAlteration properties whose pf2e handler declares `value` as required, so `upgrade` needs one. */
 const UPGRADE_TAKES_A_VALUE = new Set([
     "runes-potency", "runes-striking", "runes-resilient", "damage-dice-number", "hardness", "hp-max",
+    // `frequency-max`'s handler declares `value` required and accepts every mode; Citrine and Quartz raise a
+    // granted action's uses per day to 2 with `upgrade`.
+    "frequency-max",
 ]);
 const FEAT_CATEGORIES = new Set(["class", "classfeature", "general", "skill", "ancestry", "ancestryfeature", "bonus"]);
 const DAMAGE_TYPES = new Set(pf2e.damageTypes);
@@ -102,6 +106,7 @@ const SB_TIERS = new Set([...Object.keys(SB_TIER_RANK), "kido", "zanjutsu"]);
 const FAMILY_PREFIXES = [
     ["saint-", "saint"],
     ["soulbound-", "soulbound"],
+    ["assimilator-", "assimilator"],
 ];
 
 /**
@@ -146,6 +151,7 @@ export function validate(packs, { errors }) {
     validateSlugPredicates(packs, errors);
     validateAlterationProperties(packs, errors);
     validateCounterBadges(packs, errors);
+    validateAssimilator(packs, errors);
 }
 
 /**
@@ -259,6 +265,41 @@ function validateGrantedWeaponsCascade(packs, errors) {
 }
 
 /**
+ * Paths into Foundry's own library and into pf2e's, checked against the local install when there is one.
+ *
+ * The rule below leaves those alone because someone else's install is not ours to assume — and it still is not: with
+ * no install on the machine this does nothing. But on the one machine that builds this module there is an install,
+ * and the Assimilator's pass found three of these that read like real files and were not (`juggernaut.webp`,
+ * `orb-smoking-purple.webp`, `shield-barrier-green.webp`), each rendering as a broken image. Every string in a
+ * document is checked, not only `img`: a Strike rule carries its own picture.
+ *
+ * `FOUNDRY_PUBLIC` and `FOUNDRY_DATA` point elsewhere when the install is not in its default place.
+ */
+function validateLibraryImages(packs, errors) {
+    const home = process.env.LOCALAPPDATA ?? path.join(process.env.HOME ?? "", "AppData", "Local");
+    const roots = {
+        icons: process.env.FOUNDRY_PUBLIC ?? "C:/Program Files/Foundry Virtual Tabletop/resources/app/public",
+        systems: process.env.FOUNDRY_DATA ?? path.join(home, "FoundryVTT", "Data"),
+    };
+    const usable = Object.fromEntries(Object.entries(roots).map(([k, r]) => [k, fs.existsSync(path.join(r, k)) ? r : null]));
+    if (!usable.icons && !usable.systems) return;
+    const pattern = /"((icons|systems)\/[^"]+\.(?:webp|svg|png|jpe?g))"/g;
+    for (const { docs } of packs) {
+        for (const { file, doc } of docs) {
+            const seen = new Set();
+            for (const [, img, kind] of JSON.stringify(doc).matchAll(pattern)) {
+                const root = usable[kind];
+                if (!root || seen.has(img)) continue;
+                seen.add(img);
+                if (!fs.existsSync(path.join(root, img))) {
+                    errors.push(`${rel(file)}: image "${img}" is not in the local ${kind === "icons" ? "Foundry" : "system"} install`);
+                }
+            }
+        }
+    }
+}
+
+/**
  * Every icon the module points at must exist.
  *
  * All of this module's art used to reference Foundry's own library, and **eighty-nine of those paths
@@ -272,6 +313,7 @@ function validateGrantedWeaponsCascade(packs, errors) {
  * alone, because someone else's install is not ours to assume.
  */
 function validateIconsExist(packs, errors) {
+    validateLibraryImages(packs, errors);
     const prefix = "modules/isaacs-hb-pf2e/";
     for (const { docs } of packs) {
         for (const { file, doc } of docs) {
@@ -445,6 +487,9 @@ function validateSlugPredicates(packs, errors) {
     for (const { docs } of packs) {
         for (const { doc } of docs) {
             if (doc.system?.slug) known.add(doc.system.slug);
+            // A Strike rule makes a weapon with its own slug — the Carapace Strike, Talons, Spit — and pf2e emits
+            // `item:slug:<it>` for it like any other.
+            for (const rule of doc.system?.rules ?? []) if (rule?.key === "Strike" && rule.slug) known.add(rule.slug);
         }
     }
     // `self:effect:<x>` names an EFFECT, and pf2e publishes that option with the leading `effect-`
@@ -579,6 +624,10 @@ function validateItem(doc, where, errors, family) {
                 : rule.key === "Weakness" ? iwr.weakness : iwr.resistance;
             const types = Array.isArray(rule.type) ? rule.type : [rule.type];
             for (const type of types.filter(Boolean)) {
+                // An injected type — `{actor|…}`, `{item|…}` — is resolved by pf2e in `afterPrepareData`
+                // *before* it checks the dictionary, so it can only be judged at runtime. The Assimilator's
+                // chosen types (Zinc's, Moonstone's) and its Instinct's damage type are written this way.
+                if (/^\{(actor|item|rule)\|[^}]+\}$/.test(type)) continue;
                 if (!known.includes(type)) {
                     errors.push(
                         `${where}: rules[${i}] ${rule.key} type "${type}" is not a pf2e ` +
@@ -1399,15 +1448,17 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0, inherit
         case "heal":
             // "Redirect that damage to yourself" gives the ally back exactly what landed on them, so the
             // amount is the blow's rather than a number written in advance.
-            if (apply.value !== "event.damage.total" && !(Number(apply.value) > 0)) {
+            if (!["event.damage.total", "origin.level"].includes(apply.value) && !(Number(apply.value) > 0)) {
                 errors.push(`${at} heal riders need a positive value — got "${apply.value}"`);
             }
             // The Saint is the one who heals, not the creature that failed its save. Landing this on the
             // target would hand an enemy hit points for surviving the Technique — **unless** the rider is
             // marked `trigger`, which sends it to the creature the event was about. The Balance's
             // Vollständig is the one case: the harm moves to the Quincy and the hit points move back.
-            if (rider.self !== true && !rider.trigger) {
-                errors.push(`${at} a heal rider must be \`self\` or \`trigger\``);
+            // An area that catches only allies is the other: its targets are the creatures meant to be healed.
+            const alliesOnly = doc?.flags?.["isaacs-hb-pf2e"]?.areaTargeting?.affects === "allies";
+            if (rider.self !== true && !rider.trigger && !alliesOnly) {
+                errors.push(`${at} a heal rider must be \`self\` or \`trigger\`, or ride an area that catches only allies`);
             }
             if (apply.maxPerCast !== undefined
                 && apply.maxPerCast !== "origin.level"
@@ -1580,7 +1631,8 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0, inherit
             // a per-step growth that has to be baked in before the rider ever fires, the same `{ base, … }`
             // shape a substitution's value already accepts.
             if (apply.formula && typeof apply.formula === "object" && !Array.isArray(apply.formula)) {
-                if (!DICE_FORMULA.test(String(apply.formula.base ?? ""))) {
+                // A flat number is a formula too: *Carrion Harvest* is "twice your level", a ladder of numbers.
+                if (!FLAT_OR_DICE.test(String(apply.formula.base ?? ""))) {
                     errors.push(`${at} ${apply.type} formula.base needs a formula like "1d6" — got "${apply.formula.base}"`);
                 }
                 if (apply.formula.perStep !== undefined && !DICE_FORMULA.test(String(apply.formula.perStep))) {
@@ -1594,7 +1646,7 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0, inherit
                             if (!(Number(level) > 0)) {
                                 errors.push(`${at} ${apply.type} formula.at has "${level}", which is not a character level`);
                             }
-                            if (!DICE_FORMULA.test(String(value))) {
+                            if (!FLAT_OR_DICE.test(String(value))) {
                                 errors.push(`${at} ${apply.type} formula.at["${level}"] needs a formula like "2d6" — got "${value}"`);
                             }
                         }
@@ -1619,7 +1671,9 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0, inherit
                     || /^origin\.libra\.dice\.d\d+$/.test(apply.formula)
                     // How much the blow was worth. The only question a rider may ask about the event
                     // itself, and the one a redirect cannot be written without.
-                    || apply.formula === "event.damage.total";
+                    || apply.formula === "event.damage.total"
+                    // "Fire damage equal to your level" — Magnesium's flare.
+                    || apply.formula === "origin.level";
                 if (isResolvable && !known) {
                     errors.push(`${at} unrecognised resolvable formula "${apply.formula}"`);
                 }
@@ -1727,7 +1781,7 @@ function validateFeat(doc, where, errors, family) {
     if (!FEAT_CATEGORIES.has(system.category)) errors.push(`${where}: bad feat category "${system.category}"`);
     if (!system.actionType?.value) errors.push(`${where}: feat missing actionType.value`);
     if (system.category === "class") {
-        const trait = family === "soulbound" ? "soulbound" : "saint";
+        const trait = family ?? "saint";
         if (!(system.traits?.value ?? []).includes(trait)) {
             errors.push(`${where}: ${trait} class feat must carry the "${trait}" trait`);
         }
@@ -1758,6 +1812,13 @@ function validateSpell(doc, where, errors, family) {
     // The two classes diverge here. Everything above is true of any pf2e spell; everything below is the
     // Saint's own rank spine, which a Soulbound effect does not have and must not be measured against.
     if (family === "soulbound") return validateSoulboundSpell(doc, where, errors, rank);
+    // The Assimilator casts nothing (guide §1.6: "No spell slots, no focus pool"). A spell in its packs is
+    // a Substrate's once-a-day active written the easy way, and it would inherit pf2e's spell machinery —
+    // traditions, heightening, counteraction as a spell — that the guide never gave it.
+    if (family === "assimilator") {
+        errors.push(`${where}: the Assimilator has no spells (guide §1.6) — write this as an action or an effect`);
+        return;
+    }
 
     for (const required of ["focus", "cosmo", "saint"]) {
         if (!traits.includes(required)) errors.push(`${where}: Technique must carry the "${required}" trait`);
@@ -1861,8 +1922,8 @@ function validateEffect(doc, where, errors) {
 
 function validateClass(doc, where, errors, family) {
     const system = doc.system;
-    const expected = family === "soulbound" ? "soulbound" : "saint";
-    const dcName = family === "soulbound" ? "Reiatsu DC" : "Cosmo DC";
+    const expected = family ?? "saint";
+    const dcName = { soulbound: "Reiatsu DC", assimilator: "Assimilator DC" }[family] ?? "Cosmo DC";
     if (system.slug !== expected) {
         errors.push(`${where}: class slug must be "${expected}" (it keys the ${dcName})`);
     }
@@ -1937,6 +1998,31 @@ const SOULBOUND_ADVANCEMENT = {
 };
 
 /**
+ * The Assimilator's advancement table (guide §3), grown phase by phase like the Soulbound's.
+ *
+ * The whole of guide §3 since Phase 2. The Mass each feature grants is checked against §3.1's table by
+ * `build/test-assimilator.mjs`, which is the other half of the same promise.
+ */
+const ASSIMILATOR_ADVANCEMENT = {
+    1: ["The Carapace", "Instinct", "Assimilation"],
+    3: ["Growth"],
+    4: ["First Bond"],
+    5: ["Second Skin", "Carapace Expertise"],
+    7: ["Symbiotic Reflex", "Alertness", "Living Weapon"],
+    8: ["Second Bond"],
+    9: ["Assimilation Expertise", "Juggernaut", "Weapon Specialization"],
+    11: ["Third Skin"],
+    12: ["Third Bond"],
+    13: ["Carapace Mastery", "Shell Mastery"],
+    14: ["Growth"],
+    15: ["Alien Physiology"],
+    16: ["Fourth Bond"],
+    17: ["Fourth Skin", "Assimilation Mastery", "Greater Weapon Specialization"],
+    19: ["Apotheosis"],
+    20: ["Fifth Bond"],
+};
+
+/**
  * A class item's grant levels must match its guide's advancement table.
  *
  * This is the single easiest thing to get wrong by hand and the hardest to notice in play: a feature
@@ -1974,5 +2060,11 @@ function validateAdvancementTable(packs, errors) {
         slug: "soulbound",
         table: SOULBOUND_ADVANCEMENT,
         guideRef: "guide §3.2",
+    });
+    checkAdvancement(packs, errors, {
+        pack: "assimilator-class",
+        slug: "assimilator",
+        table: ASSIMILATOR_ADVANCEMENT,
+        guideRef: "Assimilator guide §3",
     });
 }

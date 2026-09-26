@@ -1,0 +1,62 @@
+{
+    "img": "icons/creatures/claws/claw-talons-glowing-orange.webp",
+    "name": "Living Weapon",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Your Carapace Strike and Talons each gain <strong>one additional damage die</strong>.</p>"
+        },
+        "level": {
+            "value": 16
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "diceNumber": 1,
+                "dieSize": "d8",
+                "key": "DamageDice",
+                "label": "Living Weapon",
+                "predicate": [
+                    "item:slug:carapace-strike"
+                ],
+                "selector": "strike-damage",
+                "slug": "living-weapon"
+            },
+            {
+                "diceNumber": 1,
+                "dieSize": "d6",
+                "key": "DamageDice",
+                "label": "Living Weapon",
+                "predicate": [
+                    "item:slug:talons"
+                ],
+                "selector": "strike-damage",
+                "slug": "living-weapon-talons"
+            }
+        ],
+        "slug": "living-weapon-feat",
+        "traits": {
+            "otherTags": [
+                "assimilator-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

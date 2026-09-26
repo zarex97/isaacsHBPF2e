@@ -1,0 +1,70 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "bond": {
+                    "substrates": [
+                        "ruby",
+                        "iron"
+                    ]
+                }
+            }
+        }
+    },
+    "img": "icons/magic/fire/barrier-shield-explosion-yellow.webp",
+    "name": "Molten Carapace",
+    "system": {
+        "description": {
+            "value": "<p><strong>Ruby + Iron.</strong> Your Carapace's Hardness increases by 5, and a creature that hits you with a melee unarmed or reach attack takes fire damage equal to half your level.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 4
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "itemType": "armor",
+                "key": "ItemAlteration",
+                "mode": "add",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    "assimilator:bond:molten-carapace",
+                    "item:slug:living-plate"
+                ],
+                "property": "hardness",
+                "value": "ceil(5 * @actor.flags.isaacs-hb-pf2e.assimilator.derived.gb.molten_carapace)"
+            }
+        ],
+        "slug": "molten-carapace",
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-bond"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

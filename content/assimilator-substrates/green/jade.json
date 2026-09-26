@@ -1,0 +1,240 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "green",
+                    "kind": "gem",
+                    "slug": "jade"
+                }
+            }
+        }
+    },
+    "folder": "Green",
+    "img": "icons/commodities/gems/gem-raw-rough-green.webp",
+    "name": "Substrate: Jade",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Vitality &middot; <strong>Mutation:</strong> Deep Root</p><p><em>Dense, cool, and very slightly translucent. It is thicker over the organs.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td>+1 item bonus to Fortitude saves.</td></tr><tr><td>2</td><td><strong>Resistance 5</strong> to poison. You are immune to disease.</td></tr><tr><td>3</td><td>Once per day, when you roll a success on a Fortitude save, get a <strong>critical success</strong> instead.</td></tr><tr><td>4</td><td>Once per <strong>round</strong> instead of once per day. You cannot be <strong>drained</strong> or <strong>enfeebled</strong>.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-jade",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-jade",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "fortitude",
+                "slug": "jade-fortitude-1",
+                "type": "item",
+                "value": 1
+            },
+            {
+                "key": "Resistance",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-jade",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-jade",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "type": "poison",
+                "value": 5
+            },
+            {
+                "key": "Immunity",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-jade",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-jade",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "type": "disease"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-jade",
+                            3
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-jade",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "fortitude",
+                "text": "Once per day, when you roll a success on a Fortitude save, get a critical success instead.",
+                "title": "Jade (Depth 3)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-jade",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "fortitude",
+                "text": "Once per round, when you roll a success on a Fortitude save, get a critical success instead.",
+                "title": "Jade (Depth 4)"
+            },
+            {
+                "key": "Immunity",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-jade",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "type": "drained"
+            },
+            {
+                "key": "Immunity",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-jade",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "type": "enfeebled"
+            },
+            {
+                "adjustment": {
+                    "success": "one-degree-better"
+                },
+                "key": "AdjustDegreeOfSuccess",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-jade",
+                            3
+                        ]
+                    },
+                    "carapace:intact",
+                    {
+                        "not": "self:jade-spent"
+                    }
+                ],
+                "selector": "fortitude"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-green"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

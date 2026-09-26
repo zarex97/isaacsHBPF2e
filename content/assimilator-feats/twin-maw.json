@@ -1,0 +1,58 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "sameTarget": true
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "count": 2,
+                        "option": "twin-maw",
+                        "strike": "carapace-strike",
+                        "type": "strikes"
+                    },
+                    "event": "action-used",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "img": "icons/creatures/abilities/mouth-teeth-fire-orange.webp",
+    "name": "Twin Maw",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 2
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>◆◆ Make two Carapace Strikes against the same creature. Both count toward your multiple attack penalty as normal, and if both hit, <strong>combine their damage before applying resistance</strong>.</p>"
+        },
+        "level": {
+            "value": 6
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "slug": "twin-maw",
+        "traits": {
+            "otherTags": [
+                "assimilator-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

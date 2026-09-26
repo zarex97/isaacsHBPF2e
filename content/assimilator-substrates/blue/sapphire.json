@@ -1,0 +1,394 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "blue",
+                    "kind": "gem",
+                    "slug": "sapphire"
+                }
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.assimilator-effects.Item.Effect: Glacial Chill"
+                    },
+                    "event": "strike-resolved",
+                    "note": "Sapphire Depth 2.",
+                    "outcomes": [
+                        "criticalSuccess"
+                    ],
+                    "predicate": [
+                        {
+                            "or": [
+                                "item:category:unarmed",
+                                "item:trait:unarmed"
+                            ]
+                        },
+                        {
+                            "not": "assimilator:suppressed"
+                        },
+                        {
+                            "gte": [
+                                "self:effect:substrate-sapphire",
+                                2
+                            ]
+                        },
+                        {
+                            "lt": [
+                                "self:effect:substrate-sapphire",
+                                3
+                            ]
+                        },
+                        {
+                            "or": [
+                                {
+                                    "lt": [
+                                        "self:effect:substrate-sapphire",
+                                        3
+                                    ]
+                                },
+                                "carapace:intact"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "apply": {
+                        "slug": "slowed",
+                        "type": "condition",
+                        "value": 1
+                    },
+                    "duration": {
+                        "expiry": "turn-end",
+                        "unit": "rounds",
+                        "value": 1
+                    },
+                    "event": "strike-resolved",
+                    "note": "Sapphire Depth 3.",
+                    "outcomes": [
+                        "criticalSuccess"
+                    ],
+                    "predicate": [
+                        {
+                            "or": [
+                                "item:category:unarmed",
+                                "item:trait:unarmed"
+                            ]
+                        },
+                        {
+                            "not": "assimilator:suppressed"
+                        },
+                        {
+                            "gte": [
+                                "self:effect:substrate-sapphire",
+                                3
+                            ]
+                        },
+                        "carapace:intact"
+                    ]
+                },
+                {
+                    "apply": {
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "slug": "slowed",
+                                    "type": "condition",
+                                    "value": 1
+                                },
+                                "duration": {
+                                    "expiry": "turn-end",
+                                    "unit": "rounds",
+                                    "value": 1
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ]
+                            }
+                        ],
+                        "statistic": "fortitude",
+                        "type": "save"
+                    },
+                    "event": "strike-resolved",
+                    "note": "Sapphire Depth 4: every Carapace Strike that hits deals cold.",
+                    "outcomes": [
+                        "success",
+                        "criticalSuccess"
+                    ],
+                    "predicate": [
+                        {
+                            "or": [
+                                "item:category:unarmed",
+                                "item:trait:unarmed"
+                            ]
+                        },
+                        {
+                            "not": "assimilator:suppressed"
+                        },
+                        {
+                            "gte": [
+                                "self:effect:substrate-sapphire",
+                                4
+                            ]
+                        },
+                        "carapace:intact"
+                    ]
+                }
+            ]
+        }
+    },
+    "folder": "Blue",
+    "img": "icons/commodities/gems/gem-faceted-radiant-blue.webp",
+    "name": "Substrate: Sapphire",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Ice / Focus &middot; <strong>Mutation:</strong> Glacial Lattice</p><p><em>Faceted blue growth along the spine and jaw; the breath fogs indoors.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td>Your Strikes may deal <strong>cold</strong>. +1 item bonus to saves against effects that would break your concentration.</td></tr><tr><td>2</td><td><strong>+1d4 cold.</strong> Critical hits reduce the target's Speeds by <strong>5 feet</strong> until the end of its next turn.</td></tr><tr><td>3</td><td><strong>+1d6 cold.</strong> Critical hits make the target <strong>slowed 1</strong> until the end of its next turn.</td></tr><tr><td>4</td><td><strong>+1d6 cold.</strong> Any creature you damage with cold must succeed at a Fortitude save against your class DC or be <strong>slowed 1</strong> until the end of its next turn.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "itemType": "weapon",
+                "key": "ItemAlteration",
+                "mode": "add",
+                "predicate": [
+                    "item:category:unarmed",
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-sapphire",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-sapphire",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "property": "traits",
+                "value": "versatile-cold"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-sapphire",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-sapphire",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "saving-throw",
+                "text": "+1 item bonus to saves against effects that would break your concentration.",
+                "title": "Sapphire (Depth 1)"
+            },
+            {
+                "damageType": "cold",
+                "diceNumber": 1,
+                "dieSize": "d4",
+                "flags": {
+                    "isaacs-hb-pf2e": {
+                        "assimilator": {
+                            "depth": 2,
+                            "substrate": "sapphire"
+                        }
+                    }
+                },
+                "key": "DamageDice",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-sapphire",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-sapphire",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-sapphire",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "unarmed-damage",
+                "slug": "substrate-sapphire"
+            },
+            {
+                "damageType": "cold",
+                "diceNumber": 1,
+                "dieSize": "d6",
+                "flags": {
+                    "isaacs-hb-pf2e": {
+                        "assimilator": {
+                            "depth": 3,
+                            "substrate": "sapphire"
+                        }
+                    }
+                },
+                "key": "DamageDice",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-sapphire",
+                            3
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-sapphire",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "substrate-sapphire"
+            },
+            {
+                "damageType": "cold",
+                "diceNumber": 1,
+                "dieSize": "d6",
+                "flags": {
+                    "isaacs-hb-pf2e": {
+                        "assimilator": {
+                            "depth": 4,
+                            "substrate": "sapphire"
+                        }
+                    }
+                },
+                "key": "DamageDice",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-sapphire",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "unarmed-damage",
+                "slug": "substrate-sapphire"
+            },
+            {
+                "key": "Note",
+                "outcome": [
+                    "criticalSuccess"
+                ],
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-sapphire",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-sapphire",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-sapphire",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "unarmed-attack-roll",
+                "text": "Glacial Lattice: a critical hit slows the target's Speeds by 5 feet.",
+                "title": "Sapphire (Depth 2)"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-blue"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

@@ -1,0 +1,240 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "substrate": {
+                    "colour": "green",
+                    "kind": "gem",
+                    "slug": "emerald"
+                }
+            }
+        }
+    },
+    "folder": "Green",
+    "img": "icons/commodities/gems/gem-cut-square-green.webp",
+    "name": "Substrate: Emerald",
+    "system": {
+        "badge": {
+            "max": 5,
+            "min": 1,
+            "type": "counter",
+            "value": 1
+        },
+        "description": {
+            "value": "<p><strong>Essence:</strong> Regeneration &middot; <strong>Mutation:</strong> Knitting Flesh</p><p><em>Open seams that close while you watch, leaving pale green scar tissue that also closes.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td><strong>Fast healing 1</strong> while you have at least 1 Hit Point and are below your maximum.</td></tr><tr><td>2</td><td><strong>Fast healing 2.</strong> Once per day, regrow a severed part over 1 hour.</td></tr><tr><td>3</td><td><strong>Fast healing 5.</strong> You stabilize automatically when dying.</td></tr><tr><td>4</td><td><strong>Fast healing 10.</strong> Once per day, when reduced to 0 Hit Points, be reduced to 1 instead and gain fast healing 15 for 1 minute.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "FastHealing",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-emerald",
+                            1
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-emerald",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-emerald",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    },
+                    {
+                        "not": "assimilator:green-fast-healing"
+                    }
+                ],
+                "value": 1
+            },
+            {
+                "key": "FastHealing",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-emerald",
+                            2
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-emerald",
+                            3
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-emerald",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    },
+                    {
+                        "not": "assimilator:green-fast-healing"
+                    }
+                ],
+                "value": 2
+            },
+            {
+                "key": "FastHealing",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-emerald",
+                            3
+                        ]
+                    },
+                    {
+                        "lt": [
+                            "self:effect:substrate-emerald",
+                            4
+                        ]
+                    },
+                    "carapace:intact",
+                    {
+                        "not": "assimilator:green-fast-healing"
+                    }
+                ],
+                "value": 5
+            },
+            {
+                "key": "FastHealing",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-emerald",
+                            4
+                        ]
+                    },
+                    "carapace:intact",
+                    {
+                        "not": "assimilator:green-fast-healing"
+                    }
+                ],
+                "value": 10
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-emerald",
+                            2
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-emerald",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ],
+                "selector": "all",
+                "text": "Once per day, regrow a severed part over 1 hour.",
+                "title": "Emerald (Depth 2)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-emerald",
+                            3
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "all",
+                "text": "You stabilize automatically when dying.",
+                "title": "Emerald (Depth 3)"
+            },
+            {
+                "key": "Note",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-emerald",
+                            4
+                        ]
+                    },
+                    "carapace:intact"
+                ],
+                "selector": "all",
+                "text": "Once per day, when reduced to 0 Hit Points, be reduced to 1 instead and gain fast healing 15 for 1 minute.",
+                "title": "Emerald (Depth 4)"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-substrate",
+                "assimilator-green"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

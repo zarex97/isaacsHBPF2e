@@ -1,0 +1,59 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "grants": {
+                    "depthCap": 1,
+                    "gem": 1,
+                    "metal": 1
+                }
+            }
+        }
+    },
+    "folder": "Core",
+    "img": "icons/magic/life/heart-cross-strong-flame-green.webp",
+    "name": "Assimilation",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>You gain <strong>Mass</strong> in two separate pools &mdash; <strong>1 Gem Mass</strong> and <strong>1 Metal Mass</strong> at 1st level &mdash; and the two activities that manage them, <em>Feed</em> and <em>Shed</em>. A Substrate at <strong>Depth N costs N Mass</strong>, and your <strong>Depth cap</strong> is 1.</p><p><strong>Depth 1&ndash;2 takes an ordinary specimen</strong> &mdash; a looted ruby, a copper ingot, a pearl off a necklace. <strong>Depth 3&ndash;4 takes a quickened specimen</strong>, one that grew somewhere the mundane world doesn't reach; those are never shop inventory.</p><p><strong>The Vein provides.</strong> Every time your Mass increases, you gain <strong>one free Substrate</strong> of any kind you qualify for.</p><p><em>Everything you have eaten is kept in the Gullet, which Feed and Shed open.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Feed"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Shed"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

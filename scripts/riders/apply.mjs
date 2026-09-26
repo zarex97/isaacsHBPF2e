@@ -1597,10 +1597,16 @@ async function applyCondition(rider, context) {
                   && e.flags?.[MODULE_ID]?.rider?.source === source,
           )
         : null;
-    if (standing) {
+    // Only a grant still holding its condition is refreshed. One whose condition was taken off by hand — or
+    // by a rider that removes it — is a hollow timer: refreshing it left the Flare's second blinding a no-op
+    // on every creature the first one had caught. A hollow one is replaced.
+    const holding = standing
+        && Object.values(standing.flags?.pf2e?.itemGrants ?? {}).some((g) => context.actor.items.has(g.id));
+    if (holding) {
         await standing.update({ "system.start.value": game.time.worldTime });
         return;
     }
+    if (standing) await standing.delete();
 
     const grant = { key: "GrantItem", uuid: conditionUuid, allowDuplicate: false };
     if (value) grant.alterations = [{ mode: "override", property: "badge-value", value }];

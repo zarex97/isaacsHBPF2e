@@ -1,0 +1,41 @@
+{
+    "img": "icons/magic/acid/dissolve-bone-white.webp",
+    "name": "Effect: Corroded",
+    "system": {
+        "description": {
+            "value": "<p>Rot Touch has pitted this creature: <strong>all its resistances are lower</strong> by the amount named, against anyone's damage, until the end of its next turn.</p>"
+        },
+        "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 5
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

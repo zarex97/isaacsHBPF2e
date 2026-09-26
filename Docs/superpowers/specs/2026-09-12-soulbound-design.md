@@ -329,8 +329,8 @@ Balance and The Miracle all waiting on the same mechanism.
 
 ## 7. Out of scope
 
-- The Breath Slayer (`Docs/breath-slayer-guide-v4.md`, `-v5.md`) and the Carapace
-  (`Docs/carapace-guide-v1.md`) remain docs-only. This work does not start them, and does not
+- The Breath Slayer (`Docs/breath-slayer-guide-v4.md`, `-v5.md`) and the Assimilator
+  (`Docs/assimilator-guide-v1.md`) remain docs-only. This work does not start them, and does not
   refactor shared code in anticipation of them.
 - No extraction of `scripts/core/`. Approach C is recorded in §2.1 as the thing to do if a third
   class is ever built on the same engine.

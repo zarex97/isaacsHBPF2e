@@ -1,0 +1,39 @@
+{
+    "img": "icons/creatures/abilities/mouth-teeth-human.webp",
+    "name": "Taste for It",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>You can identify any Substrate by touch. When you deal damage to a creature, you may <strong>Recall Knowledge</strong> about it as a free action once per encounter, with a <strong>+2 circumstance bonus</strong>.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "slug": "taste-for-it",
+        "traits": {
+            "otherTags": [
+                "assimilator-feat"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "feat"
+}

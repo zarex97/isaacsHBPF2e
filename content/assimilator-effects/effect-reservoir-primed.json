@@ -1,0 +1,57 @@
+{
+    "img": "icons/commodities/gems/gem-rough-square-yellow.webp",
+    "name": "Effect: Reservoir Primed",
+    "system": {
+        "description": {
+            "value": "<p>Your next Strike carries the Reservoir's stored energy.</p>"
+        },
+        "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "damageType": "{item|flags.isaacs-hb-pf2e.assimilator.type}",
+                "diceNumber": 1,
+                "dieSize": "{item|flags.isaacs-hb-pf2e.assimilator.die}",
+                "key": "DamageDice",
+                "selector": "strike-damage",
+                "slug": "reservoir-primed"
+            },
+            {
+                "damageType": "{item|flags.isaacs-hb-pf2e.assimilator.type}",
+                "key": "FlatModifier",
+                "selector": "strike-damage",
+                "slug": "reservoir-primed-bonus",
+                "value": "@item.flags.isaacs-hb-pf2e.assimilator.bonus"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

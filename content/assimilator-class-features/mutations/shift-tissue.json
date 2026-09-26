@@ -1,0 +1,40 @@
+{
+    "folder": "Mutations",
+    "img": "icons/commodities/metal/ingot-steel.webp",
+    "name": "Shift Tissue",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "interaction",
+        "description": {
+            "value": "<p>Change the energy type Shifting Tissue resists. Using this opens the Gullet with the change allowed.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-mutation-action"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator",
+                "manipulate"
+            ]
+        }
+    },
+    "type": "action"
+}

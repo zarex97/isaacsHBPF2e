@@ -1,0 +1,40 @@
+{
+    "folder": "Mutations",
+    "img": "icons/commodities/gems/gem-faceted-round-black.webp",
+    "name": "Shadow Step",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "interaction",
+        "description": {
+            "value": "<p>Teleport from an area of darkness to another area of darkness within 60 feet.</p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-mutation-action"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator",
+                "teleportation"
+            ]
+        }
+    },
+    "type": "action"
+}

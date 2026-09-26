@@ -1,0 +1,225 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "area": {
+                    "type": "line",
+                    "value": 30
+                },
+                "includesSelf": false
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "basic": true,
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "acid",
+                                    "formula": "6d6",
+                                    "type": "damage"
+                                }
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        "assimilator:reservoir-charged",
+                        "assimilator:reservoir:acid"
+                    ]
+                },
+                {
+                    "apply": {
+                        "basic": true,
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "cold",
+                                    "formula": "6d6",
+                                    "type": "damage"
+                                }
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        "assimilator:reservoir-charged",
+                        "assimilator:reservoir:cold"
+                    ]
+                },
+                {
+                    "apply": {
+                        "basic": true,
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "electricity",
+                                    "formula": "6d6",
+                                    "type": "damage"
+                                }
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        "assimilator:reservoir-charged",
+                        "assimilator:reservoir:electricity"
+                    ]
+                },
+                {
+                    "apply": {
+                        "basic": true,
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "fire",
+                                    "formula": "6d6",
+                                    "type": "damage"
+                                }
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        "assimilator:reservoir-charged",
+                        "assimilator:reservoir:fire"
+                    ]
+                },
+                {
+                    "apply": {
+                        "basic": true,
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "sonic",
+                                    "formula": "6d6",
+                                    "type": "damage"
+                                }
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        "assimilator:reservoir-charged",
+                        "assimilator:reservoir:sonic"
+                    ]
+                },
+                {
+                    "apply": {
+                        "basic": true,
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "force",
+                                    "formula": "6d6",
+                                    "type": "damage"
+                                }
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        "assimilator:reservoir-charged",
+                        "assimilator:reservoir:force"
+                    ]
+                },
+                {
+                    "apply": {
+                        "basic": true,
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "vitality",
+                                    "formula": "6d6",
+                                    "type": "damage"
+                                }
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        "assimilator:reservoir-charged",
+                        "assimilator:reservoir:vitality"
+                    ]
+                },
+                {
+                    "apply": {
+                        "basic": true,
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "damageType": "void",
+                                    "formula": "6d6",
+                                    "type": "damage"
+                                }
+                            }
+                        ],
+                        "statistic": "reflex",
+                        "type": "save"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        "assimilator:reservoir-charged",
+                        "assimilator:reservoir:void"
+                    ]
+                }
+            ]
+        }
+    },
+    "folder": "Mutations",
+    "img": "icons/commodities/gems/gem-rough-square-yellow.webp",
+    "name": "Discharge",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 2
+        },
+        "category": "interaction",
+        "description": {
+            "value": "<p><strong>Cost</strong> 3 Reservoir charges</p><hr /><p>A <strong>30-foot line</strong> of <strong>6d6</strong> damage of the stored type, basic Reflex save against your class DC.</p>"
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-mutation-action"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator",
+                "manipulate"
+            ]
+        }
+    },
+    "type": "action"
+}

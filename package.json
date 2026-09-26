@@ -1,7 +1,7 @@
 {
   "name": "isaacs-hb-pf2e",
   "version": "0.4.1",
-  "description": "Isaac's homebrew content for the Pathfinder 2e system on Foundry VTT: The Saint and The Soulbound.",
+  "description": "Isaac's homebrew content for the Pathfinder 2e system on Foundry VTT: The Saint, The Soulbound and The Assimilator.",
   "private": true,
   "type": "module",
   "scripts": {
@@ -13,9 +13,10 @@
     "extract": "node build/extract-packs.mjs",
     "validate": "node build/validate.mjs",
     "check:roundtrip": "node build/check-roundtrip.mjs",
-    "test": "npm run validate && npm run check:clauses && npm run test:riders && npm run test:soulbound && npm run build && npm run check:roundtrip",
+    "test": "npm run validate && npm run check:clauses && npm run test:riders && npm run test:soulbound && npm run test:assimilator && npm run build && npm run check:roundtrip",
     "test:riders": "node build/test-riders.mjs",
     "test:soulbound": "node build/test-soulbound.mjs",
+    "test:assimilator": "node build/test-assimilator.mjs",
     "icons": "node build/make-icons.mjs",
     "check:clauses": "node build/check-clauses.mjs"
   },

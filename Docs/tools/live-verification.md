@@ -159,6 +159,7 @@ worked. Only the DC said whether it had.
 | The extension's own click does not confirm a Region placement | The preview follows the cursor and never commits. Dispatch a synthetic `PointerEvent` at `canvas.app.view` instead — see §10 |
 | `evaluate_script` has a **60-second** protocol timeout | Anything that opens a dialog blocks every `await` behind it and surfaces as a timeout, never as "a dialog is open". See §7 |
 | `canvas.animatePan` never returns while a placement is standing | The script channel times out. `canvas.pan` returns immediately and is the one to use |
+| A **hidden** tab never finishes loading the world | After a launch or reload `game.ready` stays `undefined` and the page is black for minutes. Chrome throttles a background tab's timers, and Foundry's startup waits on them. Bring the window forward from PowerShell — `SetForegroundWindow` alone is refused, a synthetic Alt press first gets past Windows' focus lock — and it loads in seconds. The same throttling makes long `setTimeout` waits inside one script time out the channel: drive in short calls |
 
 ### The world
 
@@ -202,6 +203,7 @@ World `pf` is not a clean room. It is a working world with years of fixtures in 
 | `game.user.updateTokenTargets` does not exist | Use `token.object.setTarget(true, { user, releaseOthers })` |
 | A damage card has **two** apply buttons | `data-action="applyDamage"` applies to the **selected** token; `data-action="target-applyDamage"` applies to the card's target. Driving a Strike leaves the *attacker* selected, so the first one damages the attacker and the target's hit points never move — which reads exactly like a resistance bypass that failed |
 | A combatant ends its turn **once per round** | pf2e's `_onEndTurn` skips everything when `roundOfLastTurnEnd === context.round`, so `pf2e.endTurn` does not fire and nothing measured in turns advances. A rig that jumps `combat.turn` back and forth inside one round will watch a one-turn window never close. Advance the **round** first |
+| A creature's persistent roll option reaches rolls against it only if it begins `self:` | `getSelfRollOptions("target")` keeps `self:` keys and renames them `target:`. An option written as `flags.pf2e.rollOptions.all.damaged-this-encounter` is on the creature and never in a Strike's context — the mark was set and Red's doubling still did not fire |
 | A **negated** predicate on a Speed modifier is shown and not added | `{not: "x"}` on a `FlatModifier` to `speed` came back `enabled: true`, `ignored: false`, printed in the breakdown — and excluded from the total, while a plain positive predicate on the same effect summed correctly. Author two positive rules that stack rather than one negated and one positive |
 | A frequency is only spent through the sheet's **use** button | `item.toMessage()` posts the card without calling `createUseActionMessage`, so a drive by API leaves `frequency.value` untouched. Read a frequency's behaviour from `[data-action="use-action"]`, not from `toMessage` |
 | A penalty of a type the target already has is **swallowed** | pf2e keeps only the worst modifier of each type. A −2 **circumstance** penalty to AC vanishes against a target that is already off-guard, and the reading looks exactly like a rule that failed. Probe with an `untyped` modifier first to tell the two apart |
@@ -367,3 +369,39 @@ Two more things about the placement loop:
 **If a placement does get stuck**, Escape usually clears it; reloading the page always does. A stuck
 placement makes the *next* cast look broken, so check `canvas.regions.preview.children.length` before
 believing a failure.
+
+### A cone or a line takes two clicks, and the extension can make both
+
+The table above predates reading pf2e's own override. `RegionLayerPF2e#placeRegion` gives an **aimable**
+shape — a cone or a line, on a square grid — a two-step protocol:
+
+1. The first click **fixes the apex** where the pointer is and starts *aiming*. It does not confirm.
+2. While aiming, the pointer sets the **facing**: the angle from the apex to the pointer, snapped to 45° for
+   a cone and 5° for a line.
+3. The second click confirms.
+
+So the extension's real pointer drives it with no synthetic events at all: `hover` the apex, `left_click`,
+`hover` a point along the facing you want, `left_click`. Read `canvas.regions.preview.children[0]
+.document.shapes[0]` between the steps — `x`, `y` and `rotation` say exactly what will be placed. Driven this
+way the Gland's cone and the Discharge's line (Assimilator, NI-1f and AM-4a) caught what they should.
+
+Three things that looked like bugs and are not:
+
+- **A single click leaves the preview up at 270°.** That is step 1 with the pointer on the apex, where there
+  is no angle to take. Moving the pointer fixes it.
+- **The extension's `left_click_drag` confirms a wrong facing.** Down, move and up arrive as one burst, so
+  the release lands before the move has been processed, and the area is placed at whatever it faced before.
+  pf2e then posts "Nothing in the area. Aim again?". Use two clicks, not a drag.
+- **The extension's wheel reaches nothing.** It neither rotates the preview (Shift) nor zooms. When a
+  rotation has to be set without the pointer, `canvas.regions._onMouseWheel(new WheelEvent("wheel",
+  { deltaY: 100, shiftKey: true }))` is Foundry's own handler and steps it 45°.
+
+**The canvas may not render at all until it gets pointer input.** A freshly loaded tab in the extension's
+window sat at 1 FPS with a black board, and `canvas.clientCoordinatesFromCanvas` returned coordinates from a
+stage transform that had never been updated — thousands of pixels off-screen. One `hover` over the board
+woke it. Take coordinates only after that, and check they fall inside the viewport.
+
+**The extension's window can stop loading Foundry altogether.** Late in a long session, the Foundry tab in the
+Claude-in-Chrome extension's own window sat on a black page with `game.ready` never true, through reloads and
+pointer nudges. The same world loaded normally in the debug Chrome's first window. Treat it as a known outage
+rather than a module fault: run the rig from the debug window, and leave real-pointer aims for a fresh session.

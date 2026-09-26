@@ -1,0 +1,70 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "aberration": "limb"
+            }
+        }
+    },
+    "img": "icons/magic/unholy/strike-body-explode-disintegrate.webp",
+    "name": "Aberration: A Limb",
+    "system": {
+        "description": {
+            "value": "<p>An additional unarmed Strike, agile, 1d6 of a physical type.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "category": "unarmed",
+                "damage": {
+                    "base": {
+                        "damageType": "bludgeoning",
+                        "dice": 1,
+                        "die": "d6"
+                    }
+                },
+                "group": "brawling",
+                "key": "Strike",
+                "label": "Aberrant Limb",
+                "slug": "aberrant-limb",
+                "traits": [
+                    "agile",
+                    "unarmed",
+                    "versatile-p",
+                    "versatile-s"
+                ]
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect",
+                "assimilator-aberration"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

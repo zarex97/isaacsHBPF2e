@@ -36,6 +36,14 @@ export const Relay = {
         });
     },
 
+    /**
+     * Add a handler from outside the riders — the Assimilator's Instinct cards. The same trust boundary holds: the
+     * payload names a message and a pick, and the handler re-reads what that message offered.
+     */
+    register(action, handler) {
+        if (!(action in HANDLERS)) HANDLERS[action] = handler;
+    },
+
     async request(payload) {
         const handler = HANDLERS[payload?.action];
         if (!handler) return;
