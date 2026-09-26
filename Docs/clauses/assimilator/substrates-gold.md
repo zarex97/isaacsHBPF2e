@@ -78,11 +78,11 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| EL-1a | Electrum D1 | Choose a second colour. |  | ☐ |  |
-| EL-1b | Electrum D1 | Electrum also **counts as a Substrate of that colour** for any effect that counts your bound Substrates of a colour; its Mass still counts toward Gold. |  | ☐ |  |
+| EL-1a | Electrum D1 | Choose a second colour. | `rig` | ✅ | Rig, live: the second colour is chosen in the Gullet (daily); first set whenever Electrum is first bound |
+| EL-1b | Electrum D1 | Electrum also **counts as a Substrate of that colour** for any effect that counts your bound Substrates of a colour; its Mass still counts toward Gold. | `rig`, `test-assimilator` | ✅ | Rig, live: Carnelian 2 + Electrum 1 as Orange — the Instinct is **Orange**, the Orange count is **2** (Speed **+10**), and Electrum's Mass still counts toward Gold |
 | EL-2a | Electrum D2 | Electrum may stand in for **either Substrate** of any one Bond you know. |  | ☐ |  |
-| EL-3a | Electrum D3 | You gain your second colour's **Instinct clause** as well — but both clauses operate at **half value** (round down, minimum 1). |  | ☐ |  |
-| EL-4a | Electrum D4 | Both Instinct clauses operate at **full value**. |  | ☐ |  |
+| EL-3a | Electrum D3 | You gain your second colour's **Instinct clause** as well — but both clauses operate at **half value** (round down, minimum 1). | `rig`, `test-assimilator` | ✅ | Rig, live: Ruby 4 + Electrum 3 as Green — both *Instinct: Red* and *Instinct: Green*; Ruby's Red bonus **2** and **2** temporary Hit Points (half of 4 each) |
+| EL-4a | Electrum D4 | Both Instinct clauses operate at **full value**. | `rig`, `test-assimilator` | ✅ | Rig, live: Ruby 4 + Iron 1 + Electrum 4 as Green — both at full: Red **5** (4 + 1), **4** temporary Hit Points |
 | EL-4b | Electrum D4 | You are two organisms sharing a host, and they do not always want the same thing. |  | — | Nothing to automate: the fiction of the clause before it |
 
 ---
@@ -91,8 +91,8 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 5 |
-| ✅ | 12 |
+| ☐ | 1 |
+| ✅ | 16 |
 | ⚠️ | 4 |
 | ❌ | 0 |
 | 🔧 | 0 |

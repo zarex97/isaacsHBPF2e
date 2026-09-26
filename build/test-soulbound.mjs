@@ -3349,6 +3349,12 @@ const SYSTEM_SLUGS = new Set([
     "blinded",
     // Not a document: the slug of the −1 Will modifier *Effect: Null Weight* puts on a save.
     "null-weight",
+    // The Assimilator's Substrate catalogue is keyed by its own slug ("electrum"), not the effect's document slug.
+    "electrum",
+    // Not documents: the Orange Instinct's Speed modifier and Kinetic Surge's damage die, read off a roll.
+    "instinct-orange-speed", "kinetic-surge",
+    // A pf2e condition the rig puts on and the White Instinct's picker ends.
+    "frightened",
 ]);
 
 const unresolvedInScripts = [];

@@ -66,6 +66,9 @@
                             },
                             "carapace:intact"
                         ]
+                    },
+                    {
+                        "not": "assimilator:green-fast-healing"
                     }
                 ],
                 "value": 1
@@ -98,6 +101,9 @@
                             },
                             "carapace:intact"
                         ]
+                    },
+                    {
+                        "not": "assimilator:green-fast-healing"
                     }
                 ],
                 "value": 2
@@ -120,7 +126,10 @@
                             4
                         ]
                     },
-                    "carapace:intact"
+                    "carapace:intact",
+                    {
+                        "not": "assimilator:green-fast-healing"
+                    }
                 ],
                 "value": 5
             },
@@ -136,7 +145,10 @@
                             4
                         ]
                     },
-                    "carapace:intact"
+                    "carapace:intact",
+                    {
+                        "not": "assimilator:green-fast-healing"
+                    }
                 ],
                 "value": 10
             },

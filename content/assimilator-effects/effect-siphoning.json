@@ -1,0 +1,50 @@
+{
+    "img": "icons/magic/unholy/orb-hands-pink.webp",
+    "name": "Effect: Siphoning",
+    "system": {
+        "description": {
+            "value": "<p>You took what the Black Instinct drank: a status bonus to the same check or DC.</p>"
+        },
+        "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Siphoning",
+                "selector": "{item|flags.pf2e.rulesSelections.siphon}",
+                "slug": "siphoning",
+                "type": "status",
+                "value": "@item.flags.pf2e.rulesSelections.amount"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

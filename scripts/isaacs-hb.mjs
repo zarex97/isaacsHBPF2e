@@ -3,6 +3,7 @@ import { Engine as AssimilatorEngine } from "./assimilator/engine.mjs";
 import { GulletApp, registerGulletHooks } from "./assimilator/gullet.mjs";
 import { AssimilatorDamage } from "./assimilator/damage.mjs";
 import { Mutations } from "./assimilator/mutations.mjs";
+import { Instincts } from "./assimilator/instincts.mjs";
 import { Red } from "./assimilator/red.mjs";
 import { AssimilatorRig } from "./assimilator/rig.mjs";
 import { Astral } from "./astral.mjs";
@@ -123,6 +124,7 @@ Hooks.once("init", () => {
     start("Red's scripted riders", () => Red.registerHooks());
     start("the Mutations' clocks", () => Mutations.registerHooks());
     start("the Mutations that answer damage", () => AssimilatorDamage.registerHooks());
+    start("the Instincts", () => Instincts.registerHooks());
     start("damaged this encounter", () => EncounterDamage.registerHooks());
     start("Regeneración's suppression", () => DamageBus.after("Regeneración's suppression", PRIORITY.regeneracion,
         (actor, params) => Regeneracion.onDamage(actor, params)));
@@ -182,6 +184,7 @@ Hooks.once("init", () => {
             shed: (actor, slug, toDepth) => AssimilatorEngine.shed(actor, slug, toDepth),
             rig: AssimilatorRig,
             damage: AssimilatorDamage,
+            instincts: Instincts,
             mend: (actor, itemId) => AssimilatorEngine.mend(actor, itemId),
         },
         open: () => new SkyTrackerApp().render(true),

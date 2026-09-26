@@ -17,7 +17,8 @@ const MOVED = "self:moved-10-feet-this-turn";
 const DARK = "self:in-dim-light-or-darkness";
 const MODULE = "isaacs-hb-pf2e";
 /** Effects that ride one Strike and are spent by its damage roll. */
-const ONE_STRIKE = ["effect-reservoir-primed", "effect-conductive-charge-fire", "effect-conductive-charge-electricity"];
+const ONE_STRIKE = ["effect-reservoir-primed", "effect-conductive-charge-fire", "effect-conductive-charge-electricity",
+    "effect-kinetic-surge"];
 /** Moonstone: resistances held at once, and uses per encounter, by Depth (lexicon §13). */
 const MOONSTONE_HELD = { 1: 1, 2: 1, 3: 2, 4: 3 };
 const MOONSTONE_USES = { 1: 1, 2: 2, 3: 2, 4: Infinity };

@@ -1,0 +1,48 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "assimilator": {
+                "instinct": "black"
+            }
+        }
+    },
+    "img": "icons/magic/unholy/orb-hands-pink.webp",
+    "name": "Instinct: Black",
+    "system": {
+        "description": {
+            "value": "<p><em>Consume / Corrupt.</em></p><p>When a Mutation damages a creature, it takes a <strong>−1 status penalty</strong> to one check or DC of your choice until the end of its next turn, and <strong>you gain +1 status to the same thing</strong>. At Depth 3+ the penalty and bonus become <strong>−2 / +2</strong>.</p><p><em>Your Instinct's damage type is void.</em> Under Electrum Depth 3 this clause may be a second one, at half value.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

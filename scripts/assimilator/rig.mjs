@@ -113,8 +113,9 @@ const CHECKS = [
     { id: "MG-1b", lv: 17, b: { magnesium: 1 }, get: (a) => read.mod(a.saves.fortitude, "magnesium"), want: ["1 item"] },
 
     // Gray.
-    { id: "ST-2a", lv: 17, b: { steel: 2 }, get: (a) => read.hardness(a), want: 7 },
-    { id: "ST-3a", lv: 17, b: { steel: 3 }, get: (a) => read.hardness(a), want: 10 },
+    // Ruby holds the Instinct, so the Gray Instinct's own metal bonus does not muddy Steel's.
+    { id: "ST-2a", lv: 17, b: { steel: 2, ruby: 3 }, get: (a) => read.hardness(a), want: 7 },
+    { id: "ST-3a", lv: 17, b: { steel: 3, ruby: 4 }, get: (a) => read.hardness(a), want: 10 },
     { id: "MO-3a", lv: 17, b: { moonstone: 3 }, resolve: "fire", apply: "effect-reactive-evolution", get: (a) => read.resist(a, "fire"), want: 8 },
     { id: "MO-4a", lv: 17, b: { moonstone: 4 }, resolve: "fire", apply: "effect-reactive-evolution", get: (a) => read.resist(a, "fire"), want: 12 },
     { id: "AG-2a", lv: 17, b: { silver: 2 }, targetTraits: ["undead"], get: (a) => formula(a), want: (f) => /1d4/.test(f) },
@@ -224,6 +225,293 @@ async function place(ctx, tokenId, dx) {
     await canvas.scene.tokens.get(tokenId).update({ x: me._source.x + dx * canvas.grid.size, y: me._source.y },
         { animate: false });
     await wait(300);
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/*  Phase 4: the Instincts                                                                      */
+/* -------------------------------------------------------------------------------------------- */
+
+/** Roll the Carapace Strike's damage at the target; return the message. */
+async function strikeRoll(a, { crit = false } = {}) {
+    const s = read.strike(a);
+    const before = game.messages.size;
+    await (crit ? s.critical({ skipDialog: true }) : s.damage({ skipDialog: true }));
+    await wait(900);
+    // The damage roll itself, not whatever was posted last: in a long run an Instinct card can land after it.
+    return game.messages.contents.slice(before - game.messages.size).find((m) => m.flags?.pf2e?.context?.type === "damage-roll")
+        ?? game.messages.contents.at(-1);
+}
+
+/** Apply a Strike damage message to the target the way the card's button does; return what it lost. */
+async function applyStrike(a, t, ctx, message, { hp = 900 } = {}) {
+    await game.actors.get(t.id).update({ "system.attributes.hp.value": hp });
+    await game.actors.get(t.id).applyDamage({ damage: message.rolls[0], token: canvas.scene.tokens.get(ctx.targetTokenId),
+        item: read.strike(game.actors.get(a.id))?.item, outcome: message.flags.pf2e?.context?.outcome ?? "success" });
+    await wait(1500);
+    return hp - game.actors.get(t.id).hitPoints.value;
+}
+
+const AssimilatorDamageRef = () => game.modules.get("isaacs-hb-pf2e").api.assimilator.damage;
+const InstinctsRef = () => game.modules.get("isaacs-hb-pf2e").api.assimilator.instincts;
+const redOn = (m) => (m.flags.pf2e.modifiers ?? []).filter((x) => x.slug.startsWith("instinct-red") && x.enabled)
+    .reduce((sum, x) => sum + x.modifier, 0);
+const derived = (a) => game.actors.get(a.id).flags["isaacs-hb-pf2e"].assimilator.derived;
+const instinctEffects = (a) => game.actors.get(a.id).itemTypes.effect
+    .map((e) => e.flags?.["isaacs-hb-pf2e"]?.assimilator?.instinct).filter(Boolean).sort();
+
+/** Click a button on a chat card, as the player would. */
+async function clickCard(message, value) {
+    await wait(400);
+    const button = document.querySelector(`[data-message-id="${message.id}"] button[data-value="${value}"]`);
+    if (!button) return false;
+    button.click();
+    await wait(1500);
+    return true;
+}
+
+/** Answer the condition picker's dialog with the named condition. */
+async function answerDialog(name) {
+    for (let i = 0; i < 20; i++) {
+        await wait(250);
+        const button = [...document.querySelectorAll(".application button")].find((b) => b.textContent.trim() === name);
+        if (button) { button.click(); await wait(1500); return true; }
+    }
+    return false;
+}
+
+const orangeSpeed = (a) => (game.actors.get(a.id).system.movement.speeds.land.modifiers ?? [])
+    .find((m) => m.slug === "instinct-orange-speed" && m.enabled)?.modifier ?? 0;
+const untarget = () => { for (const t of [...game.user.targets]) t.setTarget(false, { user: game.user, releaseOthers: false }); };
+const lastCard = (kind) => game.messages.contents.slice(-6).reverse().find((m) => m.flags?.["isaacs-hb-pf2e"]?.assimilatorCard?.kind === kind);
+
+const INSTINCTS = [
+    { id: "I-0", lv: 17, b: { sapphire: 1 }, act: async (a) => {
+        const types = [];
+        for (const b of [{ ruby: 1 }, { sapphire: 1 }, { onyx: 1 }, { pearl: 1 }]) {
+            const st = Engine.state(game.actors.get(a.id)); st.substrates = b; st.instinct = null; st.choices = {};
+            await Engine.write(game.actors.get(a.id), st); await Engine.rebuild(game.actors.get(a.id)); await wait(300);
+            types.push(derived(a).instinctType);
+        }
+        return types;
+    }, want: ["fire", "cold", "void", "vitality"] },
+
+    // Red, now one modifier per Substrate, gated as that Substrate's damage is.
+    { id: "I-1a", lv: 17, b: { ruby: 3, iron: 2, garnet: 2 }, act: async (a) => redOn(await strikeRoll(a)),
+        want: 5, note: "Ruby 3 + Iron 2; Garnet's die does not fire on a creature that is not dying, so it adds nothing" },
+    { id: "I-1a", lv: 17, b: { ruby: 3, silver: 2 }, targetTraits: ["undead", "fiend"], act: async (a) => redOn(await strikeRoll(a)),
+        want: 5, note: "Silver's two rules both fire on an undead fiend; it is still one Mutation (+2)" },
+    { id: "I-1b", lv: 17, b: { ruby: 3, iron: 2 }, act: async (a, t, ctx) => inCombat(ctx, async () => {
+        const rolled = await strikeRoll(a);
+        const first = redOn(rolled);
+        const lost = await applyStrike(a, t, ctx, rolled);
+        await wait(600);
+        const second = redOn(await strikeRoll(a));
+        if (second === 2 * first) return [first, second];
+        const live = game.actors.get(t.id);
+        return [first, second, { lost, temp: live.attributes.hp.temp, marked: live.getRollOptions().includes("self:damaged-this-encounter"),
+            inCombat: !!game.combats.find((c) => c.combatants.some((x) => x.actorId === t.id)), hp: [live.hitPoints.value, live.hitPoints.max] }];
+    }), want: [5, 10] },
+
+    // Gold.
+    { id: "I-2a", lv: 17, b: { citrine: 2, ruby: 1 }, c: { goldInstinct: "ruby" }, act: async (a) => derived(a).effective.ruby,
+        want: 2 },
+    { id: "I-2a", lv: 17, b: { citrine: 4, gold: 1, ruby: 4 }, c: { goldInstinct: "ruby" }, act: async (a) => derived(a).effective.ruby,
+        want: 4, note: "never above the Depth cap" },
+    { id: "I-2b", lv: 17, b: { citrine: 2, sapphire: 1 }, c: { goldInstinct: "sapphire" }, crit: true, act: async () => {
+        const card = await until(() => game.messages.contents.slice(-8).find((m) => m.content?.includes("Gold Instinct")));
+        return !!card && /Sapphire/.test(card.content) && /slowed/.test(card.content);
+    }, want: true, note: "the card quotes Sapphire's Depth 4 row" },
+
+    // Orange.
+    { id: "I-3a", lv: 17, b: { carnelian: 3, ruby: 2 }, act: async (a, t, ctx) => inCombat(ctx, async () => {
+        const tok = canvas.scene.tokens.get(ctx.tokenId);
+        await tok.update({ y: tok._source.y + canvas.grid.size }, { animate: false });
+        await wait(1200);
+        const primed = effects(game.actors.get(a.id), /kinetic-surge/).length;
+        await tok.update({ y: tok._source.y - canvas.grid.size }, { animate: false });
+        await wait(1200);
+        const once = game.messages.contents.slice(-4).filter((m) => m.content?.includes("Orange Instinct")).length;
+        const m = await strikeRoll(a);
+        // pf2e merges it with Ruby's d4 into "2d4 fire", so the die is read off the roll, not the formula.
+        const die = (m.flags.pf2e.dice ?? []).find((d) => d.slug === "kinetic-surge" && d.enabled);
+        return [primed, once, die ? `${die.diceNumber}${die.dieSize} ${die.damageType}` : null, effects(game.actors.get(a.id), /kinetic-surge/).length];
+    }), want: [1, 1, "1d4 fire", 0], note: "primed by the first Stride, not the second; +1d4 of Ruby's fire; spent" },
+    { id: "I-3b", lv: 17, b: { carnelian: 1, amber: 1, ruby: 1 }, act: async (a) => orangeSpeed(a), want: 10,
+        note: "two bound Orange Substrates, beside Carnelian's own +5" },
+
+    // Blue.
+    { id: "I-4a", lv: 17, b: { sapphire: 3, ruby: 2 }, act: async (a, t, ctx) => {
+        for (const e of t.itemTypes.effect.filter((x) => x.slug === "effect-studied")) await e.delete();
+        canvas.scene.tokens.get(ctx.targetTokenId).object?.setTarget(true, { user: game.user, releaseOthers: true });
+        canvas.scene.tokens.get(ctx.tokenId).object?.control({ releaseOthers: true });
+        await game.pf2e.rollItemMacro(game.actors.get(a.id).items.find((i) => i.slug === "study").uuid);
+        await wait(2000);
+        return effects(game.actors.get(t.id), /effect-studied/).length;
+    }, want: 1 },
+    { id: "I-4b", lv: 17, b: { sapphire: 3, ruby: 2 }, act: async (a, t, ctx) => {
+        await t.update({ "system.attributes.resistances": [{ type: "physical", value: 10 }] });
+        for (const e of t.itemTypes.effect.filter((x) => x.slug === "effect-studied")) await e.delete();
+        const m = await strikeRoll(a);
+        const plain = await applyStrike(a, t, ctx, m);
+        await AssimilatorDamageRef().mark(game.actors.get(t.id), "effect-studied");
+        const studied = await applyStrike(a, t, ctx, m);
+        await game.actors.get(t.id).update({ "system.attributes.resistances": [] });
+        // Resistance takes no more than there is: what 10 → 4 should give back depends on the physical rolled.
+        const physical = m.rolls[0].instances.filter((i) => ["bludgeoning", "piercing", "slashing"].includes(i.type))
+            .reduce((sum, i) => sum + i.total, 0);
+        return [studied - plain, Math.min(10, physical) - Math.min(4, physical)];
+    }, want: (v) => v[0] === v[1] && v[1] > 0, note: "physical resistance 10 counts 6 lower (twice Sapphire 3) against the same Strike" },
+    { id: "I-4b", lv: 17, b: { sapphire: 3, ruby: 2 }, act: async (a, t, ctx) => {
+        await hitSelf(a, t, ctx, "1[slashing]");
+        const claw = () => game.actors.get(t.id).system.actions.find((s) => s.label === "Claw");
+        canvas.scene.tokens.get(ctx.tokenId).object?.setTarget(true, { user: game.user, releaseOthers: true });
+        for (const e of t.itemTypes.effect.filter((x) => x.slug === "effect-studied")) await e.delete();
+        await claw().attack({ skipDialog: true }); await wait(800);
+        const before = game.messages.contents.at(-1).flags.pf2e.context.dc.value;
+        await AssimilatorDamageRef().mark(game.actors.get(t.id), "effect-studied"); await wait(500);
+        await claw().attack({ skipDialog: true }); await wait(800);
+        const after = game.messages.contents.at(-1).flags.pf2e.context.dc.value;
+        return after - before;
+    }, want: 1, note: "+1 circumstance to AC against the Studied creature's attack" },
+    { id: "I-4c", lv: 17, b: { sapphire: 3, ruby: 2 }, act: async (a, t, ctx) => {
+        const study = async (tokenId) => {
+            canvas.scene.tokens.get(tokenId).object?.setTarget(true, { user: game.user, releaseOthers: true });
+            canvas.scene.tokens.get(ctx.tokenId).object?.control({ releaseOthers: true });
+            await game.pf2e.rollItemMacro(game.actors.get(a.id).items.find((i) => i.slug === "study").uuid);
+            await wait(2500);
+        };
+        await study(ctx.targetTokenId);
+        await study(ctx.bystanderTokenId);
+        return [effects(game.actors.get(ctx.bystanderId), /effect-studied/).length, effects(game.actors.get(t.id), /effect-studied/).length];
+    }, want: [1, 0], note: "Studying the bystander ends the target's" },
+
+    // Purple.
+    { id: "I-5a", lv: 17, b: { amethyst: 2, ruby: 1 }, act: async (a) => read.strike(a).item.system.traits.value.includes("magical"),
+        want: true },
+    { id: "I-5b", lv: 17, b: { amethyst: 3, ruby: 1, iron: 1 }, c: { purpleUp: "ruby", purpleDown: "iron" },
+        act: async (a) => [derived(a).effective.ruby, derived(a).effective.iron ?? 0, derived(a).effective.amethyst],
+        want: [2, 0, 3], note: "Ruby one higher; Iron, rolled, one lower (Depth 1 → not today)" },
+    { id: "I-5b", lv: 17, b: { amethyst: 3, ruby: 1, iron: 1 }, c: { purpleUp: "ruby" }, act: async (a) => {
+        const rolled = new Set();
+        for (let i = 0; i < 30; i++) rolled.add(Engine.rollPurpleDown(Engine.state(game.actors.get(a.id))));
+        return [...rolled].sort();
+    }, want: ["amethyst", "iron"], note: "the lowered one is rolled among the others, never the raised one" },
+
+    // Green.
+    { id: "I-6a", lv: 17, b: { emerald: 3, ruby: 2 }, act: async (a, t, ctx) => {
+        await game.actors.get(a.id).update({ "system.attributes.hp.temp": 0 });
+        await applyStrike(a, t, ctx, await strikeRoll(a));
+        return game.actors.get(a.id).attributes.hp.temp;
+    }, want: 2, note: "Ruby 2 dealt the damage; Emerald adds none" },
+    { id: "I-6b", lv: 17, b: { jade: 3, chromium: 1, ruby: 2 }, act: async (a, t, ctx) => inCombat(ctx, async (combat) => {
+        const before = game.messages.size;
+        await combat.nextRound(); await wait(3000);
+        // pf2e posts fast healing as a healing roll at the start of the turn, for the table to apply.
+        const roll = game.messages.contents.slice(before - game.messages.size).find((m) => m.speaker?.actor === a.id
+            && /fast healing/i.test(m.flavor ?? "") && /Green/.test(m.flavor ?? ""));
+        return roll?.rolls[0].total ?? null;
+    }), want: 2, note: "two bound Green Substrates: pf2e's fast healing roll at the start of its turn" },
+    { id: "I-6b", lv: 17, b: { emerald: 1, jade: 2, chromium: 1 }, get: (a) => read.fastHealing(a), want: [3],
+        note: "only the higher of the Instinct's 3 and Emerald's 1 applies" },
+    { id: "I-6b", lv: 17, b: { emerald: 3, jade: 1 }, get: (a) => read.fastHealing(a), want: [5],
+        note: "…and Emerald's 5 over the Instinct's 2" },
+
+    // Black.
+    { id: "I-7a", lv: 17, b: { onyx: 3, ruby: 2 }, act: async (a, t, ctx) => {
+        await applyStrike(a, t, ctx, await strikeRoll(a));
+        const card = lastCard("siphon");
+        if (!card || !(await clickCard(card, "will"))) return "no card";
+        const mod = (x) => x.saves.will.modifiers.filter((m) => m.slug.startsWith("siphon") && m.enabled).reduce((s, m) => s + m.modifier, 0);
+        return [mod(game.actors.get(t.id)), mod(game.actors.get(a.id))];
+    }, want: [-1, 1] },
+    { id: "I-7b", lv: 17, b: { onyx: 4, ruby: 3 }, act: async (a, t, ctx) => {
+        await applyStrike(a, t, ctx, await strikeRoll(a));
+        const card = lastCard("siphon");
+        if (!card || !(await clickCard(card, "ac"))) return "no card";
+        const mod = (x) => x.armorClass.modifiers.filter((m) => m.slug.startsWith("siphon") && m.enabled).reduce((s, m) => s + m.modifier, 0);
+        return [mod(game.actors.get(t.id)), mod(game.actors.get(a.id))];
+    }, want: [-2, 2], note: "Ruby 3 dealt it: −2 / +2, chosen as AC" },
+
+    // White.
+    { id: "I-8a", lv: 17, b: { pearl: 3, ruby: 2 }, act: async (a, t, ctx) => {
+        const by = game.actors.get(ctx.bystanderId);
+        await by.update({ "system.details.alliance": "party", "system.attributes.hp.temp": 0 });
+        await applyStrike(a, t, ctx, await strikeRoll(a));
+        const temp = game.actors.get(by.id).attributes.hp.temp;
+        await by.update({ "system.details.alliance": "opposition" });
+        return temp;
+    }, want: 2, note: "the one ally within 30 feet" },
+    { id: "I-8b", lv: 17, b: { pearl: 3, ruby: 2 }, act: async (a, t, ctx) => {
+        const me = game.actors.get(a.id);
+        await me.increaseCondition("frightened", { value: 2 });
+        untarget();
+        const purify = () => game.actors.get(a.id).items.find((i) => i.slug === "purify");
+        const max = purify().system.frequency.max;
+        game.pf2e.rollItemMacro(purify().uuid);
+        const answered = await answerDialog("Frightened 2") || await answerDialog("Frightened");
+        return [max, answered, game.actors.get(a.id).itemTypes.condition.some((c) => c.slug === "frightened"),
+            purify().system.frequency.value];
+    }, want: [3, true, false, 2], note: "three a day at highest Depth 3; one spent ending frightened on itself" },
+
+    // Gray.
+    { id: "I-9a", lv: 17, b: { steel: 3, iron: 2 }, act: async (a) => {
+        const plate = game.actors.get(a.id).itemTypes.armor.find((x) => x.slug === "living-plate");
+        return plate.system.hardness - (plate._source.system.hardness ?? 0) - derived(a).substrateHardness;
+    }, want: 5, note: "Steel 3 + Iron 2, over the Substrates' own Hardness" },
+    { id: "I-9b", lv: 17, b: { steel: 3, ruby: 2 }, act: async (a, t, ctx) => {
+        for (const e of game.actors.get(a.id).itemTypes.effect.filter((x) => x.slug === "effect-integrated-plating")) await e.delete();
+        const m = await strikeRoll(a); await wait(600);
+        const plating = game.actors.get(a.id).itemTypes.effect.find((x) => x.slug === "effect-integrated-plating");
+        const inRoll = Math.max(0, ...Object.values(InstinctsRef().mutationsInRoll(m.rolls[0], game.actors.get(a.id))));
+        const taken = await hitSelf(game.actors.get(a.id), t, ctx, "10[slashing]");
+        return [plating?.system.badge?.value, inRoll, taken];
+    }, want: (v) => v[0] === v[1] && v[0] >= 2 && v[2] === 10 - v[0], note: "resistance equal to the deepest Mutation in the Strike" },
+
+    // Electrum.
+    { id: "EL-1a", lv: 17, b: { electrum: 1, ruby: 2 }, act: async (a) => {
+        const ok = (await Engine.choose(game.actors.get(a.id), "electrum", "green")).ok;
+        return [ok, Engine.state(game.actors.get(a.id)).choices.electrum];
+    }, want: [true, "green"] },
+    { id: "EL-1b", lv: 17, b: { carnelian: 2, electrum: 1 }, c: { electrum: "orange" }, act: async (a) =>
+        [derived(a).instincts.primary, derived(a).colourCount.orange, orangeSpeed(a)], want: ["orange", 2, 10],
+    note: "Electrum counts as Orange for the Speed; its Mass stays Gold's" },
+    { id: "EL-3a", lv: 17, b: { ruby: 4, electrum: 3 }, c: { electrum: "green" }, act: async (a, t, ctx) => {
+        await game.actors.get(a.id).update({ "system.attributes.hp.temp": 0 });
+        const m = await strikeRoll(a);
+        await applyStrike(a, t, ctx, m);
+        return [instinctEffects(a), redOn(m), game.actors.get(a.id).attributes.hp.temp];
+    }, want: [["green", "red"], 2, 2], note: "Red and Green both, at half: Ruby 4 gives +2 and 2 temporary Hit Points" },
+    { id: "EL-4a", lv: 17, b: { ruby: 4, iron: 1, electrum: 4 }, c: { electrum: "green" }, act: async (a, t, ctx) => {
+        await game.actors.get(a.id).update({ "system.attributes.hp.temp": 0 });
+        const m = await strikeRoll(a);
+        await applyStrike(a, t, ctx, m);
+        return [instinctEffects(a), redOn(m), game.actors.get(a.id).attributes.hp.temp];
+    }, want: [["green", "red"], 5, 4], note: "both at full: Ruby 4 + Iron 1, and 4 temporary Hit Points" },
+
+    // Pearl's Cleansing Tide, through the same picker.
+    { id: "PE-2a", lv: 17, b: { pearl: 2 }, act: async (a) => {
+        const me = game.actors.get(a.id);
+        await me.increaseCondition("frightened", { value: 1 });
+        await me.increaseCondition("clumsy", { value: 2 });
+        untarget();
+        game.pf2e.rollItemMacro(me.items.find((i) => i.slug === "cleansing-tide").uuid);
+        await wait(800);
+        const offered = [...document.querySelectorAll(".application button")].map((b) => b.textContent.trim());
+        const answered = await answerDialog("Frightened 1") || await answerDialog("Frightened");
+        return [offered.some((x) => /Clumsy/.test(x)), answered,
+            game.actors.get(a.id).itemTypes.condition.map((c) => c.slug).sort()];
+    }, want: [false, true, ["clumsy"]], note: "only value-1 conditions are offered; frightened 1 ends" },
+];
+
+/** Poll `fn` until it is truthy or `ms` has passed; return its last value. */
+async function until(fn, ms = 8000) {
+    const end = Date.now() + ms;
+    let value = await fn();
+    while (!value && Date.now() < end) {
+        await wait(250);
+        value = await fn();
+    }
+    return value;
 }
 
 const effects = (actor, re) => actor.itemTypes.effect.filter((e) => re.test(e.slug)).map((e) => e.slug);
@@ -423,15 +711,13 @@ const SCENARIOS = [
         canvas.scene.tokens.get(ctx.targetTokenId).object?.setTarget(true, { user: game.user, releaseOthers: true });
         canvas.scene.tokens.get(ctx.tokenId).object?.control({ releaseOthers: true });
         await read.strike(a)?.attack({ skipDialog: true });
-        await wait(2000);
-        return game.messages.contents.slice(-4).some((m) => m.content?.includes("Kinetic Spurs"));
+        return until(() => game.messages.contents.slice(-8).some((m) => m.content?.includes("Kinetic Spurs")));
     }, want: true },
     { id: "BR-4a", lv: 17, b: { bronze: 4 }, act: async (a, t, ctx) => {
         canvas.scene.tokens.get(ctx.targetTokenId).object?.setTarget(true, { user: game.user, releaseOthers: true });
         canvas.scene.tokens.get(ctx.tokenId).object?.control({ releaseOthers: true });
         await read.strike(a)?.attack({ skipDialog: true });
-        await wait(2000);
-        return game.messages.contents.slice(-4).some((m) => m.content?.includes("Battle Frame"));
+        return until(() => game.messages.contents.slice(-8).some((m) => m.content?.includes("Battle Frame")));
     }, want: true, note: "AC 1: every Strike is a critical" },
 
     // Jet's harvest: a creature at or below half its Hit Points.
@@ -451,8 +737,7 @@ const SCENARIOS = [
         canvas.scene.tokens.get(ctx.targetTokenId).object?.setTarget(true, { user: game.user, releaseOthers: true });
         canvas.scene.tokens.get(ctx.tokenId).object?.control({ releaseOthers: true });
         await read.strike(a).attack({ skipDialog: true });
-        await wait(2500);
-        return game.actors.get(t.id).itemTypes.condition.map((c) => c.slug).includes("slowed");
+        return until(() => game.actors.get(t.id).itemTypes.condition.map((c) => c.slug).includes("slowed"));
     }, want: true },
     { id: "AT-4b", lv: 17, b: { amethyst: 4 }, act: async (a, t, ctx) => {
         await t.update({ "system.saves.will.value": -40 });
@@ -460,8 +745,7 @@ const SCENARIOS = [
         canvas.scene.tokens.get(ctx.targetTokenId).object?.setTarget(true, { user: game.user, releaseOthers: true });
         canvas.scene.tokens.get(ctx.tokenId).object?.control({ releaseOthers: true });
         await read.strike(a).attack({ skipDialog: true });
-        await wait(2500);
-        return game.actors.get(t.id).itemTypes.condition.map((c) => c.slug).includes("confused");
+        return until(() => game.actors.get(t.id).itemTypes.condition.map((c) => c.slug).includes("confused"));
     }, want: true },
     { id: "SA-2b", lv: 17, b: { sapphire: 2 }, act: async (a, t, ctx) => {
         for (const e of t.itemTypes.effect) await e.delete();
@@ -627,6 +911,7 @@ const SCENARIOS = [
 
 export const AssimilatorRig = {
     SCENARIOS,
+    INSTINCTS,
     NOTES,
     CHECKS,
 
@@ -634,7 +919,7 @@ export const AssimilatorRig = {
         const results = [];
         const ctx = await AssimilatorRig.setup();
         try {
-            for (const check of [...CHECKS, ...SCENARIOS, ...NOTES].filter((c) => !only || only.test(c.id))) {
+            for (const check of [...CHECKS, ...SCENARIOS, ...NOTES, ...INSTINCTS].filter((c) => !only || only.test(c.id))) {
                 results.push(await AssimilatorRig.one(check, ctx));
             }
         } finally {
@@ -729,7 +1014,12 @@ export const AssimilatorRig = {
             if (check.resolve) src.system.rules.find((r) => r.key === "ChoiceSet").selection = check.resolve;
             await actor().createEmbeddedDocuments("Item", [src]);
         }
-        await target().update({ "system.traits.value": check.targetTraits ?? ["humanoid"] });
+        await target().update({ "system.traits.value": check.targetTraits ?? ["humanoid"], "system.attributes.hp.temp": 0 });
+        // Garnet's drain kills the target, and pf2e ignores damage to the dead: every later check would hit a corpse.
+        if (target().statuses?.has("dead")) await target().toggleStatusEffect("dead", { active: false });
+        for (const e of target().itemTypes.effect.filter((x) => /studied|siphon/.test(x.slug))) await e.delete();
+        for (const e of actor().itemTypes.effect.filter((x) => /siphon|kinetic-surge|integrated-plating|knitting-surge/.test(x.slug))) await e.delete();
+        for (const c of actor().itemTypes.condition) await c.delete();
         for (const c of target().itemTypes.condition) await c.delete();
         const targetToken = canvas.scene.tokens.get(ctx.targetTokenId);
         targetToken.object?.setTarget(true, { user: game.user, releaseOthers: true });
