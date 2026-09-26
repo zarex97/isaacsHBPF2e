@@ -458,6 +458,13 @@ const INSTINCTS = [
         const plate = game.actors.get(a.id).itemTypes.armor.find((x) => x.slug === "living-plate");
         return plate.system.hardness - (plate._source.system.hardness ?? 0) - derived(a).substrateHardness;
     }, want: 5, note: "Steel 3 + Iron 2, over the Substrates' own Hardness" },
+    // The class's whole Hardness line at once: Hematite tips the Instinct from White to Gray.
+    { id: "A-27a", lv: 17, b: { diamond: 3, steel: 2, hematite: 2 }, act: async (a) =>
+        [derived(a).instincts.primary, game.actors.get(a.id).itemTypes.armor.find((x) => x.slug === "living-plate").system.hardness],
+    want: ["gray", 12], note: "2 + Diamond's 8 (the highest, not 8 + 5) + Steel's metal Depth 2" },
+    { id: "A-27a", lv: 17, b: { diamond: 3, steel: 2 }, act: async (a) =>
+        [derived(a).instincts.primary, game.actors.get(a.id).itemTypes.armor.find((x) => x.slug === "living-plate").system.hardness],
+    want: ["white", 10], note: "control: without Hematite the Instinct is White and the Gray term is gone" },
     { id: "I-9b", lv: 17, b: { steel: 3, ruby: 2 }, act: async (a, t, ctx) => {
         for (const e of game.actors.get(a.id).itemTypes.effect.filter((x) => x.slug === "effect-integrated-plating")) await e.delete();
         const m = await strikeRoll(a); await wait(600);
