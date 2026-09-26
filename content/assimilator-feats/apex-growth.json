@@ -1,6 +1,7 @@
 {
+    "_id": "FgFrDU1AXwSdLTw2",
     "img": "icons/creatures/claws/claw-talons-glowing-orange.webp",
-    "name": "Living Weapon",
+    "name": "Apex Growth",
     "system": {
         "actionType": {
             "value": "passive"
@@ -28,26 +29,26 @@
                 "diceNumber": 1,
                 "dieSize": "d8",
                 "key": "DamageDice",
-                "label": "Living Weapon",
+                "label": "Apex Growth",
                 "predicate": [
                     "item:slug:carapace-strike"
                 ],
                 "selector": "strike-damage",
-                "slug": "living-weapon"
+                "slug": "apex-growth"
             },
             {
                 "diceNumber": 1,
                 "dieSize": "d6",
                 "key": "DamageDice",
-                "label": "Living Weapon",
+                "label": "Apex Growth",
                 "predicate": [
                     "item:slug:talons"
                 ],
                 "selector": "strike-damage",
-                "slug": "living-weapon-talons"
+                "slug": "apex-growth-talons"
             }
         ],
-        "slug": "living-weapon-feat",
+        "slug": "apex-growth",
         "traits": {
             "otherTags": [
                 "assimilator-feat"

@@ -898,10 +898,14 @@ const FEAT_CHECKS = [
     { id: "AF-08b", lv: 17, b: { sapphire: 2 }, feats: ["spit"], act: async (a) =>
         read.strike(game.actors.get(a.id), "Spit")?.totalModifier === read.strike(game.actors.get(a.id))?.totalModifier, want: true,
     note: "the Carapace Strike's attack bonus" },
-    { id: "AF-36", lv: 17, b: { ruby: 1 }, feats: ["grasping-plates", "living-weapon-feat"], act: async (a) => {
+    { id: "AF-36", lv: 17, b: { ruby: 1 }, feats: ["grasping-plates", "apex-growth"], act: async (a) => {
         const f = async (label) => { await read.strike(game.actors.get(a.id), label).damage({ skipDialog: true }); await wait(900); return game.messages.contents.at(-1).rolls[0].formula; };
         return [/2d8/.test(await f("Carapace Strike")), /2d6/.test(await f("Talons"))];
     }, want: [true, true], note: "one more die on each" },
+    { id: "AF-36", lv: 17, b: { ruby: 1 }, feats: ["grasping-plates"], act: async (a) => {
+        const f = async (label) => { await read.strike(game.actors.get(a.id), label).damage({ skipDialog: true }); await wait(900); return game.messages.contents.at(-1).rolls[0].formula; };
+        return [/2d8/.test(await f("Carapace Strike")), /2d6/.test(await f("Talons"))];
+    }, want: [false, false], note: "control: without Apex Growth, one die each" },
 
     // Actions that place an effect.
     { id: "AF-07a", lv: 17, b: { ruby: 1 }, feats: ["plated-guard"], act: async (a) => {

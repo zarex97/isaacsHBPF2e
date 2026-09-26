@@ -9,8 +9,9 @@ lexicon and the automation programme still use the old class name.*
 *v1.1 records four rulings (issue #82): Mass follows the §3.1 table, Substrate Hardness takes the
 highest, every Instinct has a damage type, and Electrum's Depth 1 counts it as a second colour.
 v1.2 closes the rest of that issue: a Bond slot is priced at 30 wherever it lands (§2.2), and
-White's vitality is said out loud to be narrow (§4.5), and §4.1 and §9.2 name v3's Steel where they
-named three v2 materials.*
+White's vitality is said out loud to be narrow (§4.5), §4.1 and §9.2 name v3's Steel where they
+named three v2 materials, and the 16th-level feat that shared the 7th-level feature's name is now
+*Apex Growth* (§8.9).*
 
 *The complete class: chassis, the 2100-point ledger, advancement table, every core feature, the nine
 Instincts, the Bond rules, and forty-five class feats from 1st to 20th. The thirty-six Substrates and
@@ -584,7 +585,7 @@ re-chosen at each daily preparations.
 **Instinct Fusion** · *Prerequisite: Two Instincts, or Electrum at Depth 3.* Both of your Instinct
 clauses operate at **full value**. You are two organisms sharing a host and they do not always agree.
 
-**Living Weapon** · Your Carapace Strike and Talons each gain **one additional damage die**.
+**Apex Growth** · Your Carapace Strike and Talons each gain **one additional damage die**.
 
 **Second Hunger** · **Free action**, once per encounter: gain **2 Mass** in one track for 1 minute,
 which you must spend immediately to deepen a bound Substrate. When it ends, that Substrate returns to
