@@ -1,11 +1,16 @@
-# The Carapace — Material Lexicon, **Version 3**
+# The Assimilator — Material Lexicon, **Version 3.1**
 
 ### *The symbiont class · Substrate · Essence · Mutation*
 
-> **An alternative to v2, not a replacement.** v2 and v3 solve the same problem two different ways and
-> both are on the table. v2 invented 72 materials that exist only for this class and used colour as a
-> *sorting* label. **v3 uses 36 real, recognisable materials and makes colour a mechanical layer of its
-> own.** §14 compares them honestly so you can pick. Delete the loser when you've decided.
+> **Chosen over v2, and now the class's Chapter 5.** v2 invented 72 materials that exist only for this
+> class and used colour as a *sorting* label. **v3 uses 36 real, recognisable materials and makes colour
+> a mechanical layer of its own**, and it is the one the Assimilator was built on
+> (`Docs/assimilator-guide-v1.md`). The class was called *the Carapace* when this was written; it is
+> **the Assimilator** now, and "the Carapace" names only the living plate it wears. §16–18 record the
+> choice as it was put, and are kept as history rather than as open questions.
+>
+> **v3.1** takes the guide's §5.2 amendments into §2.1 — Blue's and White's clauses key off Depth, and
+> Black gains a Depth step — so the two documents say the same thing (issue #82).
 
 **The structural rule this whole document is built on:**
 
@@ -73,11 +78,11 @@ differently" true rather than merely stated.
 | 🔴 **Red** | *Everything you grow is a weapon.* When a Mutation deals damage, it deals **+1 damage per Depth** of its Substrate. Against a creature that has already lost Hit Points this encounter, **double** that bonus. |
 | 🟡 **Gold** | *One thing, made imperial.* At daily preparations choose one bound Substrate; it counts as **one Depth higher** for its numeric effects (never above your level's Depth cap). When you critically hit, you may apply the **Depth 4 rider** of that Substrate even if you haven't reached Depth 4. |
 | 🟠 **Orange** | *Nothing you grow is still.* The first time each round you Stride, Step, or use a reaction, your next Mutation this round deals **+1d4** of its own damage type. You gain **+5 feet Speed** per bound Orange Substrate. |
-| 🔵 **Blue** | *It learns the thing before it kills it.* Study a creature (one action, Perception or a relevant Recall Knowledge). Until the encounter ends, your Mutations treat that creature's resistances as **5 lower** and you gain **+1 circumstance to AC** against it. One creature at a time. |
+| 🔵 **Blue** | *It learns the thing before it kills it.* Study a creature (one action, Perception or a relevant Recall Knowledge). Until the encounter ends, your Mutations treat that creature's resistances as **lower by twice your highest Depth** and you gain **+1 circumstance to AC** against it. One creature at a time. |
 | 🟣 **Purple** | *It does not stay the same shape twice.* Your Mutations count as **magical**. At daily preparations, one Substrate of your choice manifests **one Depth higher** — and one other, randomly determined, manifests **one Depth lower**. You never quite know what you woke up as. |
 | 🟢 **Green** | *Every wound is material.* When a Mutation deals damage, gain **temporary Hit Points equal to its Substrate's Depth**. You have **fast healing equal to the number of bound Green Substrates**. |
-| ⚫ **Black** | *It takes what it touches.* When a Mutation damages a creature, that creature takes a **−1 status penalty** to a check or DC of your choice until the end of its next turn, and **you gain a +1 status bonus to the same thing**. What it loses, you get. |
-| ⚪ **White** | *It will not let you die.* When a Mutation deals damage, one ally within 30 feet gains **temporary Hit Points equal to its Depth**. Once per day, end one condition on yourself or an ally as a free action. |
+| ⚫ **Black** | *It takes what it touches.* When a Mutation damages a creature, that creature takes a **−1 status penalty** to a check or DC of your choice until the end of its next turn, and **you gain a +1 status bonus to the same thing**. At Depth 3+ the penalty and bonus become **−2 / +2**. What it loses, you get. |
+| ⚪ **White** | *It will not let you die.* When a Mutation deals damage, one ally within 30 feet gains **temporary Hit Points equal to its Depth**. **A number of times per day equal to your highest Depth**, end one condition on yourself or an ally as a free action. |
 | ⚙️ **Gray** | *The host and the thing agree.* Your Carapace's **Hardness increases by the total Depth of your bound metals**. When you use a Mutation, gain **resistance equal to its Depth** to all physical damage until the start of your next turn. |
 
 **Worked example — the same Substrate under two Instincts.** *Ruby, Depth 3.* Base: +1d6 fire, and
@@ -85,8 +90,8 @@ fire resistance counts 5 lower.
 - Under **Red**: +1d6 fire, **+3 damage**, **+6** against anything already bloodied. Ruby is a furnace.
 - Under **Green**: +1d6 fire, and **3 temporary Hit Points every time it burns something**. Ruby is a
   metabolism.
-- Under **Black**: +1d6 fire, and every burn imposes **−1** on a save of your choosing while **you**
-  get +1 to the matching thing. Ruby is an act of theft.
+- Under **Black**: +1d6 fire, and every burn imposes **−2** on a save of your choosing while **you**
+  get +2 to the matching thing. Ruby is an act of theft.
 
 Same gem. Three different creatures.
 
@@ -111,7 +116,7 @@ Instead of counting slots, each track has a pool of **Mass**. A Substrate at **D
 | **Metal Mass** | 1 | 1 | 2 | 4 | 5 | 7 | 8 | 10 |
 | **Depth cap** | 1 | 1 | 2 | 2 | 3 | 3 | 4 | 4 |
 
-So a 20th-level Carapace has 13 Gem Mass: three gems at Depth 4 and one at Depth 1, or thirteen gems
+So a 20th-level Assimilator has 13 Gem Mass: three gems at Depth 4 and one at Depth 1, or thirteen gems
 at Depth 1, or anything between. **Wide or deep is the build question**, and it's asked twice — once
 for each track.
 
@@ -140,13 +145,13 @@ The general ladder. Individual Substrates in §5 use it or state their own.
 
 Honest against the rune curve and slightly behind it: *flaming* is +1d6 at item level 8, *greater
 flaming* is +1d6 plus 2d10 persistent at 15. Depth 3 lands at 11th and Depth 4's rider at 17th. The
-Carapace is unarmed and will never own a rune, so paying two or three levels of lateness for a
+Assimilator is unarmed and will never own a rune, so paying two or three levels of lateness for a
 rune-equivalent is roughly the right trade.
 
 ### 3.5 Bonds
 
 **Bond slots: 1 at 4th, then 8th, 12th, 16th, 20th — five total.** A Bond requires **both** its
-Substrates at **Depth 2 or higher**. Bonds are listed in §13, with a recipe for building new ones.
+Substrates at **Depth 2 or higher**. Bonds are listed in §14, with a recipe for building new ones.
 A Bond should be worth roughly a class feat; that's the budget.
 
 ---
@@ -336,7 +341,7 @@ does, and a four-step Depth ladder. Depth 1 is always available; the rest unlock
 
 ### ⚙️ Cobalt — Essence: **Energy / Conductivity**
 *A lash of blue-white energy that is not attached to anything and comes back anyway.*
-**Mutation — Arcane Channel.** *Blue's ranged option, and the only Substrate that makes the Carapace a ranged class.*
+**Mutation — Arcane Channel.** *Blue's ranged option, and the only Substrate that makes the Assimilator a ranged class.*
 
 | D | |
 | :-: | :-- |
@@ -717,7 +722,7 @@ already precious materials. A player *will* ask whether the 100 gp ruby they jus
 That gives the class cheap, fun, shoppable progression at low levels, keeps the high end firmly in the
 GM's gift, and means the treasure table and the class table never fight. **The class also hands you one
 free Substrate every time your Mass increases**, so a forgetful GM or a low-magic campaign can never
-leave a Carapace below its own chassis. Found material is *variety*; the free grants are the *floor*.
+leave an Assimilator below its own chassis. Found material is *variety*; the free grants are the *floor*.
 
 Nothing in this document changes what an ordinary ruby, or silver, or cold iron **does** for anybody
 else. Feeding one to a symbiont is a new use, not a new rule for the item.
@@ -772,10 +777,10 @@ than it sounds.
 
 ## 17 — Open questions
 
-1. **Is the Carapace unarmed?** Assumed yes throughout — the symbiont *is* the weapon. If it holds a
+1. **Is the Assimilator unarmed?** Assumed yes throughout — the symbiont *is* the weapon. If it holds a
    weapon instead, roughly a third of the Depth ladders need re-pointing.
 2. **Can Instinct change mid-adventure?** It's currently recalculated at daily preparations, which
-   means a Carapace who sheds material can flip Instinct overnight. Cheap and flexible, or should
+   means an Assimilator who sheds material can flip Instinct overnight. Cheap and flexible, or should
    flipping cost something?
 3. **Electrum at Depth 4 gives two full Instinct clauses.** That is the strongest thing in the
    document and I put it at 17th on purpose — but it may want to be a capstone feat rather than a
