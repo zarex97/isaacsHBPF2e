@@ -451,6 +451,9 @@ function validateSlugPredicates(packs, errors) {
     for (const { docs } of packs) {
         for (const { doc } of docs) {
             if (doc.system?.slug) known.add(doc.system.slug);
+            // A Strike rule makes a weapon with its own slug — the Carapace Strike, Talons, Spit — and pf2e emits
+            // `item:slug:<it>` for it like any other.
+            for (const rule of doc.system?.rules ?? []) if (rule?.key === "Strike" && rule.slug) known.add(rule.slug);
         }
     }
     // `self:effect:<x>` names an EFFECT, and pf2e publishes that option with the leading `effect-`

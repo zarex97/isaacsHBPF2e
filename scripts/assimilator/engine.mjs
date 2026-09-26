@@ -52,15 +52,18 @@ export const ABERRATIONS = ["limb", "organ", "mode", "plate", "gland", "maw"];
 
 /** Sum every `grants` block the character owns. The Depth cap is the highest granted, not a sum. */
 export function grantsOf(blocks) {
-    const out = { gem: 0, metal: 0, depthCap: 0, bondSlots: 0, sources: 0 };
+    const out = { gem: 0, metal: 0, depthCap: 0, bondSlots: 0, sources: 0, merged: false };
     for (const g of blocks) {
         if (!g) continue;
+        // Omnivore: "your Gem Mass and Metal Mass merge into a single pool of their combined size."
+        if (g.merged) out.merged = true;
         out.gem += g.gem ?? 0;
         out.metal += g.metal ?? 0;
         out.bondSlots += g.bondSlots ?? 0;
         out.depthCap = Math.max(out.depthCap, g.depthCap ?? 0);
-        // "Every time your Mass increases, you gain one free Substrate" — one per feature that raises it.
-        if ((g.gem ?? 0) > 0 || (g.metal ?? 0) > 0) out.sources += 1;
+        // "Every time your Mass increases, you gain one free Substrate" — one per feature that raises it. Borrowed Mass
+        // (Eat the World's four) is not an increase of that kind.
+        if (((g.gem ?? 0) > 0 || (g.metal ?? 0) > 0) && !g.temporary) out.sources += 1;
     }
     return out;
 }
@@ -165,14 +168,16 @@ export function colourCounts(effective, catalogue, electrumColour = null) {
  * Which slotted Bonds are in force (lexicon §14): both Substrates at Depth 2 or higher. Electrum Depth 2 "may stand in
  * for either Substrate of any one Bond you know" — so for the one Bond named, Electrum at 2+ covers a missing half.
  */
-export function activeBonds(slotted, effective, pairs, standIn = null) {
-    const deep = (slug) => (effective[slug] ?? 0) >= 2;
+export function activeBonds(slotted, effective, pairs, standIn = null, bondedDeep = null) {
     return slotted.filter((slug) => {
         const pair = pairs[slug];
         if (!pair) return false;
+        // Bonded Deep: "One Bond you know functions with its Substrates at Depth 1 instead of Depth 2."
+        const need = slug === bondedDeep ? 1 : 2;
+        const deep = (s) => (effective[s] ?? 0) >= need;
         const met = pair.filter(deep).length;
         if (met === 2) return true;
-        return met === 1 && standIn === slug && deep("electrum") && !pair.includes("electrum");
+        return met === 1 && standIn === slug && (effective.electrum ?? 0) >= Math.min(need, 2) && !pair.includes("electrum");
     });
 }
 
@@ -183,12 +188,22 @@ export const bondOption = (slug) => `assimilator:bond:${slug}`;
  * The Instinct clauses in force. Electrum Depth 3 adds the second colour's clause — "but both clauses operate at
  * half value"; Depth 4, "both at full value". A second colour that *is* the Instinct adds nothing.
  */
-export function instinctsOf(primary, electrumDepth = 0, electrumColour = null, transmutation = false) {
-    const secondary = primary && electrumDepth >= 3 && COLOURS.includes(electrumColour) && electrumColour !== primary
-        ? electrumColour : null;
-    // Transmutation (Gold + Electrum): "Alloyed Instinct's half-value clause becomes three-quarters (round up)."
-    const partial = transmutation ? 0.75 : 0.5;
-    return { primary: primary ?? null, secondary, scale: secondary && electrumDepth < 4 ? partial : 1 };
+export function instinctsOf(primary, electrumDepth = 0, electrumColour = null, transmutation = false, feats = {}) {
+    const valid = (c) => primary && COLOURS.includes(c) && c !== primary;
+    const offers = [];
+    // Electrum Depth 3: the second colour's clause, at half (three-quarters under Transmutation); Depth 4, full.
+    if (electrumDepth >= 3 && valid(electrumColour)) {
+        offers.push({ colour: electrumColour, scale: electrumDepth >= 4 ? 1 : (transmutation ? 0.75 : 0.5) });
+    }
+    // Two Instincts: a second clause of your choice at half value; Omnivore: two Instincts at full value.
+    if (feats.twoInstincts && valid(feats.twoInstincts)) {
+        offers.push({ colour: feats.twoInstincts, scale: feats.omnivore ? 1 : 0.5 });
+    }
+    // "This does not stack with Electrum's Alloyed Instinct — take the better." One second clause, the better one.
+    const best = offers.sort((a, b) => b.scale - a.scale)[0] ?? null;
+    // Instinct Fusion: "Both of your Instinct clauses operate at full value."
+    const scale = best ? (feats.fusion ? 1 : best.scale) : 1;
+    return { primary: primary ?? null, secondary: best?.colour ?? null, scale };
 }
 
 /** "Half value (round down, minimum 1)" — and nothing halved is still nothing. */
@@ -236,15 +251,17 @@ export function instinctOf(totals, tiebreak = null) {
  * Depth rises by one; the cost is the Mass of the **new** Depth in total, so the step itself costs one more
  * in its track. The cap is the level's; a specimen for Depth 3–4 must be quickened (guide §4.4).
  */
-export function feedCheck({ slug, paid, catalogue, grants, specimen }) {
+export function feedCheck({ slug, paid, catalogue, grants, specimen, caps = {} }) {
     const entry = catalogue[slug];
     if (!entry) return { ok: false, reason: `There is no Substrate called "${slug}".` };
     const depth = (paid[slug] ?? 0) + 1;
-    if (depth > grants.depthCap) {
-        return { ok: false, reason: `${entry.name} would reach Depth ${depth}; your Depth cap is ${grants.depthCap}.` };
+    const cap = caps[slug] ?? grants.depthCap;
+    if (depth > cap) {
+        return { ok: false, reason: `${entry.name} would reach Depth ${depth}; its Depth cap is ${cap}.` };
     }
-    const spent = spentOf(paid, catalogue)[entry.kind];
-    const pool = grants[entry.kind];
+    const spentBy = spentOf(paid, catalogue);
+    const spent = grants.merged ? spentBy.gem + spentBy.metal : spentBy[entry.kind];
+    const pool = grants.merged ? grants.gem + grants.metal : grants[entry.kind];
     if (spent + 1 > pool) {
         return { ok: false, reason: `Not enough ${entry.kind} Mass: ${spent} of ${pool} spent, and Depth ${depth} costs one more.` };
     }
@@ -283,6 +300,7 @@ export const Engine = {
         s.tiebreak ??= null;
         s.preparing ??= false;
         s.choices ??= {};
+        s.temporary ??= {};
         return s;
     },
 
@@ -325,6 +343,45 @@ export const Engine = {
         return grantsOf(actor.items.contents.map((i) => i.flags?.[MODULE_ID]?.[KEY]?.grants));
     },
 
+    /** Does the character have this Assimilator feat? */
+    hasFeat(actor, slug) {
+        return (actor?.itemTypes?.feat ?? []).some((f) => f.slug === slug);
+    },
+
+    /** The Depth cap per Substrate where a feat moves it: Deep Vein one past the cap (to 4), Fifth Depth to 5. */
+    caps(actor, state, grants) {
+        const caps = {};
+        const vein = state.choices.deepVein;
+        if (vein && Engine.hasFeat(actor, "deep-vein")) caps[vein] = Math.min(4, grants.depthCap + 1);
+        const fifth = state.choices.fifthDepth;
+        if (fifth && Engine.hasFeat(actor, "fifth-depth")) caps[fifth] = 5;
+        return caps;
+    },
+
+    /** Instinctive Surge: for the Instinct clause, every Substrate one Depth higher while its effect lasts. */
+    surged(actor, effective) {
+        if (!(actor?.itemTypes?.effect ?? []).some((e) => e.slug === "effect-instinctive-surge")) return effective;
+        return Object.fromEntries(Object.entries(effective).map(([s, d]) => [s, Math.min(d + 1, 5)]));
+    },
+
+    /** The feats that shape the Instinct clauses. */
+    instinctFeats(actor, state) {
+        const omnivore = Engine.hasFeat(actor, "omnivore");
+        return {
+            twoInstincts: Engine.hasFeat(actor, "two-instincts") || omnivore ? state.choices.twoInstincts ?? null : null,
+            fusion: Engine.hasFeat(actor, "instinct-fusion"),
+            omnivore,
+        };
+    },
+
+    /** Greater Bond: the chosen Bond's numbers ×1.5, keyed with underscores so a formula can read them. */
+    greaterBond(actor, state) {
+        const chosen = Engine.hasFeat(actor, "greater-bond") ? state.choices.greaterBond : null;
+        const out = {};
+        for (const slug of state.bonds ?? []) out[slug.replace(/-/g, "_")] = slug === chosen ? 1.5 : 1;
+        return out;
+    },
+
     /** Everything the Gullet shows and the rules read, computed from the record and the owned features. */
     async derive(actor, state = Engine.state(actor)) {
         const catalogue = await Engine.catalogue();
@@ -334,8 +391,9 @@ export const Engine = {
         const electrumColour = state.choices.electrum ?? null;
         const counts = colourCounts(effective, catalogue, electrumColour);
         const bonds = activeBonds(state.bonds.slice(0, grants.bondSlots), effective, await Engine.bondPairs(),
-            state.choices.electrumBond ?? null);
-        const instincts = instinctsOf(state.instinct, effective.electrum ?? 0, electrumColour, bonds.includes("transmutation"));
+            state.choices.electrumBond ?? null, Engine.hasFeat(actor, "bonded-deep") ? state.choices.bondedDeep ?? null : null);
+        const instincts = instinctsOf(state.instinct, effective.electrum ?? 0, electrumColour, bonds.includes("transmutation"),
+            Engine.instinctFeats(actor, state));
         return {
             bonds,
             colourCount: counts,
@@ -368,9 +426,25 @@ export const Engine = {
         const effects = actor.itemTypes?.effect ?? [];
         const apotheosis = effects.some((e) => e.slug === "effect-apotheosis");
         const out = {};
+        const caps = Engine.caps(actor, state, grants);
+        const capOf = (slug) => caps[slug] ?? grants.depthCap;
+        // Perfect Organism: "Every bound Substrate counts as being at your Depth cap."
+        const organism = Engine.hasFeat(actor, "perfect-organism");
         for (const [slug, paid] of Object.entries(state.substrates)) {
             if (paid <= 0) continue;
-            out[slug] = apotheosis ? grants.depthCap : Math.min(paid, grants.depthCap);
+            out[slug] = apotheosis || organism ? Math.max(Math.min(paid, capOf(slug)), grants.depthCap) : Math.min(paid, capOf(slug));
+        }
+        // Devouring Plate: a temporary Substrate at Depth 2 until the next daily preparations, costing no Mass.
+        for (const [slug, depth] of Object.entries(state.temporary ?? {})) {
+            if (!(slug in out)) out[slug] = Math.min(depth, grants.depthCap);
+        }
+        // Consume the Fallen: one bound Substrate one Depth higher until the next preparations, never above the cap.
+        const fallen = state.choices.fallen;
+        if (fallen && fallen in out) out[fallen] = Math.min(out[fallen] + 1, capOf(fallen));
+        // Second Hunger: two Mass spent at once to deepen a bound Substrate, for as long as its effect lasts.
+        for (const hunger of effects.filter((e) => e.slug === "effect-second-hunger")) {
+            const slug = hunger.flags?.[MODULE_ID]?.[KEY]?.hungerFor;
+            if (slug in out) out[slug] = Math.min(out[slug] + 2, capOf(slug));
         }
         // Gold's Gilded Core: the chosen other Substrates count one Depth higher, never above the cap. One choice,
         // two from Gold Depth 3 (lexicon §6).
@@ -417,7 +491,7 @@ export const Engine = {
         const base = `flags.${MODULE_ID}.${KEY}`;
         const before = actor.flags?.[MODULE_ID]?.[KEY] ?? {};
         const update = { [base]: state };
-        for (const field of ["substrates", "choices"]) {
+        for (const field of ["substrates", "choices", "temporary"]) {
             for (const key of Object.keys(before[field] ?? {})) {
                 if (!(key in (state[field] ?? {}))) update[`${base}.${field}.-=${key}`] = null;
             }
@@ -474,7 +548,7 @@ export const Engine = {
         // effect is the clause; which one is *the* Instinct — the damage type, `assimilator:instinct:<colour>` — is
         // the primary's alone, so that option is written below rather than by the effect.
         const settled = instinctsOf(state.instinct, derived.effective.electrum ?? 0, state.choices.electrum ?? null,
-            derived.bonds.includes("transmutation"));
+            derived.bonds.includes("transmutation"), Engine.instinctFeats(actor, state));
         const instincts = actor.itemTypes.effect.filter((e) => e.flags?.[MODULE_ID]?.[KEY]?.instinct);
         const wantedColours = [settled.primary, settled.secondary].filter(Boolean);
         for (const e of instincts) if (!wantedColours.includes(e.flags[MODULE_ID][KEY].instinct)) deletes.push(e.id);
@@ -499,9 +573,10 @@ export const Engine = {
 
         // Nickel's Aberrations: the chosen ones, as many as its Depth holds.
         const aberrations = actor.itemTypes.effect.filter((e) => e.flags?.[MODULE_ID]?.[KEY]?.aberration);
-        const held = derived.effective.nickel
-            ? (state.choices.nickel ?? []).slice(0, Engine.aberrationCount(derived.effective.nickel, derived.bonds))
-            : [];
+        // Chimeric Frame: "two of Nickel's Aberrations without binding Nickel" — in addition to any Nickel holds.
+        const frame = Engine.hasFeat(actor, "chimeric-frame") ? 2 : 0;
+        const holds = (derived.effective.nickel ? Engine.aberrationCount(derived.effective.nickel, derived.bonds) : 0) + frame;
+        const held = (state.choices.nickel ?? []).slice(0, holds);
         for (const e of aberrations) if (!held.includes(e.flags[MODULE_ID][KEY].aberration)) deletes.push(e.id);
         const missing = held.filter((k) => !aberrations.some((e) => e.flags[MODULE_ID][KEY].aberration === k));
         if (missing.length) {
@@ -523,6 +598,7 @@ export const Engine = {
             instinctType: INSTINCT_TYPES[state.instinct] ?? "bludgeoning", substrateHardness: derived.substrateHardness,
             colours: derived.colours, effective: derived.effective,
             colourCount: derived.colourCount, instincts: settled, bonds: derived.bonds,
+            gb: Engine.greaterBond(actor, state),
             fastHealing: Math.max(
                 EMERALD_FAST_HEALING[Math.min(Engine.workingDepths(actor, derived.effective).emerald ?? 0, 4)] ?? 0,
                 [settled.primary, settled.secondary].includes("green")
@@ -530,7 +606,8 @@ export const Engine = {
                     : 0),
             mutationType: mutationTypeOf(Engine.workingDepths(actor, derived.effective), catalogue,
                 INSTINCT_TYPES[state.instinct] ?? "bludgeoning"),
-            iv: instinctValues({ effective: derived.effective, catalogue, counts: derived.colourCount, scale: settled.scale }),
+            iv: instinctValues({ effective: Engine.surged(actor, derived.effective), catalogue, counts: derived.colourCount,
+                scale: settled.scale }),
         };
         // Write only what a rebuild owns — the derived picture and the Instinct it settled — never the record it
         // read at the start. A rebuild awaits item work in between, and writing the whole record back clobbered
@@ -557,6 +634,10 @@ export const Engine = {
         const outheals = [settled.primary, settled.secondary].includes("green") && derivedFlag.iv.greenHealing > emerald;
         if (outheals && !toggles[GREEN_OUTHEALS]) update[`flags.pf2e.rollOptions.all.${GREEN_OUTHEALS}`] = true;
         if (!outheals && toggles[GREEN_OUTHEALS]) update[`flags.pf2e.rollOptions.all.-=${GREEN_OUTHEALS}`] = null;
+        // Burrower: "a metal Substrate at Depth 2 or higher".
+        const metal2 = Object.entries(derived.effective).some(([s, d]) => catalogue[s]?.kind === "metal" && d >= 2);
+        if (metal2 && !toggles["assimilator:metal-2"]) update["flags.pf2e.rollOptions.all.assimilator:metal-2"] = true;
+        if (!metal2 && toggles["assimilator:metal-2"]) update["flags.pf2e.rollOptions.all.-=assimilator:metal-2"] = null;
         // The Bonds in force, one option each: every Bond rule and every line of Bond code keys off it.
         for (const slug of Object.keys(await Engine.bondPairs())) {
             const option = bondOption(slug);
@@ -624,7 +705,8 @@ export const Engine = {
             specimen = "ordinary";
         }
 
-        const check = feedCheck({ slug, paid: state.substrates, catalogue, grants: Engine.grants(actor), specimen });
+        const grants = Engine.grants(actor);
+        const check = feedCheck({ slug, paid: state.substrates, catalogue, grants, specimen, caps: Engine.caps(actor, state, grants) });
         if (!check.ok) return Engine._refuse(check.reason);
 
         if (item) {
@@ -737,6 +819,13 @@ export const Engine = {
         if (key === "nickel") value = [value].flat().filter((k) => ABERRATIONS.includes(k));
         if (key === "electrumBond" && value && !(await Engine.bondCatalogue())[value]) return Engine._refuse(`There is no Bond called "${value}".`);
         if (key === "gold") value = [value].flat().filter((s) => s && s !== "gold" && s in state.substrates);
+        if (["deepVein", "fifthDepth", "fallen"].includes(key) && value && !(value in state.substrates)) {
+            return Engine._refuse("Choose a Substrate you bind.");
+        }
+        if (["bondedDeep", "greaterBond"].includes(key) && value && !state.bonds.includes(value)) {
+            return Engine._refuse("Choose a Bond you know.");
+        }
+        if (key === "twoInstincts" && value && !COLOURS.includes(value)) return Engine._refuse(`"${value}" is not an Instinct.`);
         if ((key === "goldInstinct" || key === "purpleUp") && !(value in state.substrates)) {
             return Engine._refuse("Choose a Substrate you bind.");
         }
@@ -758,7 +847,8 @@ export const Engine = {
         const state = Engine.state(actor);
         const derived = await Engine.derive(actor, state);
         const depth = derived.effective.nickel ?? 0;
-        if (!depth) return Engine._refuse("Nickel is not bound.");
+        const frame = Engine.hasFeat(actor, "chimeric-frame") ? 2 : 0;
+        if (!depth && !frame) return Engine._refuse("Nickel is not bound.");
         // `forced`: Runaway Growth re-rolls them by itself, whatever Nickel's Depth.
         if (reroll && !forced && depth < 3) return Engine._refuse("Re-rolling your Aberrations takes Nickel at Depth 3.");
         if (!reroll && !state.preparing && (state.choices.nickel ?? []).length) {
@@ -766,7 +856,8 @@ export const Engine = {
         }
         const pool = [...ABERRATIONS];
         const picked = [];
-        for (let i = 0; i < Engine.aberrationCount(depth, derived.bonds); i++) {
+        const count = (depth ? Engine.aberrationCount(depth, derived.bonds) : 0) + frame;
+        for (let i = 0; i < count; i++) {
             picked.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
         }
         state.choices.nickel = picked;
@@ -804,6 +895,9 @@ export const Engine = {
         settled.preparing = false;
         // A new morning rolls Purple's lowered Substrate again.
         if (settled.choices.purpleUp) settled.choices.purpleDown = Engine.rollPurpleDown(settled);
+        // "Until your next daily preparations": Consume the Fallen's Depth and Devouring Plate's Substrates end.
+        delete settled.choices.fallen;
+        settled.temporary = {};
         await Engine.write(actor, settled);
         await Engine.rebuild(actor);
     },
@@ -828,9 +922,11 @@ export const Engine = {
         });
         const itemChanged = (item) => {
             const flag = item.flags?.[MODULE_ID]?.[KEY];
-            const moves = ["effect-apotheosis", "effect-carapace-broken", "effect-gilded-apotheosis", "adamant-shell"]
-                .includes(item.slug);
-            if (flag?.grants || moves || item.type === "class") Engine.rebuild(item.actor);
+            const moves = ["effect-apotheosis", "effect-carapace-broken", "effect-gilded-apotheosis", "adamant-shell",
+                "effect-instinctive-surge", "effect-second-hunger"].includes(item.slug);
+            // An Assimilator feat can move the engine's numbers (Deep Vein, Two Instincts, Perfect Organism, …).
+            const feat = item.type === "feat" && item.system?.traits?.value?.includes?.("assimilator");
+            if (flag?.grants || moves || feat || item.type === "class") Engine.rebuild(item.actor);
         };
         Hooks.on("createItem", itemChanged);
         Hooks.on("deleteItem", itemChanged);

@@ -233,7 +233,8 @@ export const AssimilatorDamage = {
         const meleeUnarmedOrReach = weapon && (weapon.isMelee ?? weapon.system?.range == null)
             && (traits.includes("unarmed") || traits.some((t) => t.startsWith("reach")) || weapon.category === "unarmed");
         if (after < before && moltenOn && attacker && attacker !== live && meleeUnarmedOrReach) {
-            const amount = Math.floor(live.level / 2);
+            // Greater Bond: half again on the chosen Bond's numbers.
+            const amount = Math.ceil(Math.floor(live.level / 2) * (live.flags?.[MODULE_ID]?.[KEY]?.derived?.gb?.molten_carapace ?? 1));
             const token = attacker.getActiveTokens?.(true, true)[0];
             const roll = await new (CONFIG.Dice.rolls.find((c) => c.name === "DamageRoll"))(`${amount}[fire]`).evaluate();
             await attacker.applyDamage({ damage: roll, token });

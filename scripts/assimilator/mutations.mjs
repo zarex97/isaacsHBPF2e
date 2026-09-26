@@ -173,7 +173,10 @@ export const Mutations = {
     /** Enforce Reactive Evolution's limits on the effect just created. */
     async reactive(item) {
         const actor = item.actor;
-        const d = Math.min(depth(actor, "moonstone"), 4);
+        // Perfect Adaptation: Reactive Evolution at Depth 2 without Moonstone; with it, one Depth higher for this alone.
+        const adapted = (actor?.itemTypes?.feat ?? []).some((f) => f.slug === "perfect-adaptation");
+        const moon = depth(actor, "moonstone");
+        const d = Math.min(adapted ? (moon ? moon + 1 : 2) : moon, 4);
         if (!d) return item.delete();
         const combat = encounterOf(actor);
         const key = combat?.id ?? "none";

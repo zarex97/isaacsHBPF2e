@@ -3357,6 +3357,8 @@ const SYSTEM_SLUGS = new Set([
     "frightened",
     // Cobalt's synthetic Strike (a Strike rule's slug, not a document), and pf2e conditions the Bonds read.
     "arcane-channel", "stunned", "slowed", "stupefied",
+    // The Carapace Strike is a Strike rule's weapon, not a document.
+    "carapace-strike",
 ]);
 
 const unresolvedInScripts = [];

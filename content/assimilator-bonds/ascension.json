@@ -43,7 +43,7 @@
                 ],
                 "selector": "fly-speed",
                 "slug": "ascension",
-                "value": 20
+                "value": "ceil(20 * @actor.flags.isaacs-hb-pf2e.assimilator.derived.gb.ascension)"
             }
         ],
         "slug": "ascension",

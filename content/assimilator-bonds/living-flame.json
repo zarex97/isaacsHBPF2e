@@ -41,7 +41,7 @@
                     "assimilator:bond:living-flame",
                     "assimilator:living-flame"
                 ],
-                "value": 5
+                "value": "ceil(5 * @actor.flags.isaacs-hb-pf2e.assimilator.derived.gb.living_flame)"
             }
         ],
         "slug": "living-flame",
