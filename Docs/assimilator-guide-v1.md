@@ -9,7 +9,8 @@ lexicon and the automation programme still use the old class name.*
 *v1.1 records four rulings (issue #82): Mass follows the §3.1 table, Substrate Hardness takes the
 highest, every Instinct has a damage type, and Electrum's Depth 1 counts it as a second colour.
 v1.2 closes the rest of that issue: a Bond slot is priced at 30 wherever it lands (§2.2), and
-White's vitality is said out loud to be narrow (§4.5).*
+White's vitality is said out loud to be narrow (§4.5), and §4.1 and §9.2 name v3's Steel where they
+named three v2 materials.*
 
 *The complete class: chassis, the 2100-point ledger, advancement table, every core feature, the nine
 Instincts, the Bond rules, and forty-five class feats from 1st to 20th. The thirty-six Substrates and
@@ -242,7 +243,8 @@ Your unarmed attack is the class. There is no second option and no upgrade path 
 It is not agile and it is not finesse; it is a heavy thing at the end of a heavier arm. Two 1st-level
 feats change that if you want them to (*Grasping Plates* makes it 1d6 agile finesse; *Reach of the
 Thing* gives it reach on demand), and several Substrates reshape it further — Steel raises its die,
-Black's Voidsteel makes it slashing, Gray's Anvilstar adds a die.
+makes it versatile P and S at Depth 3 and adds a die at Depth 4, and every offensive Substrate lets it
+deal that Substrate's damage type.
 
 **Handwraps of Mighty Blows work normally**, and you should buy them. The class grants no free
 fundamental runes. This is deliberate: a class that hands out its own potency and striking runes has
@@ -646,8 +648,8 @@ Weak to anything with fire immunity and nothing to say to a flying enemy.
 Hardness 2 + 8 (Diamond) + 8 (Steel) + 5 (Chromium) + 5 (Gray's total metal Depth) = **28**, doubled
 to 56 with *Living Fortress* if it doesn't move, and stacking fully thanks to *Adamant Shell*. A
 critical hit becomes a normal hit once per encounter. Moonstone means the second round against any
-damage type is better than the first. Damage output is the worst in the class, and Gray's Edge —
-counting as silver and cold iron, resistances 5 lower — is the only reason it isn't embarrassing.
+damage type is better than the first. Damage output is the worst in the class, and Steel —
+a die step up and versatile P and S at Depth 3 — is the only reason it isn't embarrassing.
 
 ### 9.3 The Thing In The Dark — Black Instinct, Purple second
 
