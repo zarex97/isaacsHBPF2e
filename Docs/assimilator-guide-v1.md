@@ -3,15 +3,15 @@
 ### *The symbiont · Substrate · Essence · Mutation*
 
 *Formerly **The Carapace**. The class is now **the Assimilator**; "the Carapace" names only the living
-plate it wears — hence Carapace Strike, Carapace Block, and your Carapace's Hardness. The companion
-lexicon and the automation programme still use the old class name.*
+plate it wears — hence Carapace Strike, Carapace Block, and your Carapace's Hardness. The automation
+programme still uses the old class name.*
 
 *v1.1 records four rulings (issue #82): Mass follows the §3.1 table, Substrate Hardness takes the
 highest, every Instinct has a damage type, and Electrum's Depth 1 counts it as a second colour.
 v1.2 closes the rest of that issue: a Bond slot is priced at 30 wherever it lands (§2.2), and
 White's vitality is said out loud to be narrow (§4.5), §4.1 and §9.2 name v3's Steel where they
 named three v2 materials, and the 16th-level feat that shared the 7th-level feature's name is now
-*Apex Growth* (§8.9).*
+*Apex Growth* (§8.9). Lexicon v3.1 now carries §5.2's amendments.*
 
 *The complete class: chassis, the 2100-point ledger, advancement table, every core feature, the nine
 Instincts, the Bond rules, and forty-five class feats from 1st to 20th. The thirty-six Substrates and
@@ -393,7 +393,7 @@ merely stated.
 ### 5.2 Two amendments to lexicon v3
 
 Blue's and White's clauses did not key off Depth, which broke the rule §1.4 depends on. Both are fixed
-above and the lexicon should be amended to match:
+above, and lexicon **v3.1** carries the same wording in its §2.1:
 
 - **Blue** — *"resistances 5 lower"* becomes **"lower by twice your highest Depth"** (4 → 8 across the
   Depth ladder, so slightly stronger late and weaker early, which is the correct shape).
