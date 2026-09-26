@@ -8,7 +8,7 @@
             }
         }
     },
-    "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
+    "img": "icons/consumables/food/berries-ration-round-red.webp",
     "name": "Second Stomach",
     "system": {
         "actionType": {
