@@ -1,4 +1,4 @@
-# The Assimilator — PF2e Class Guide, **Version 1.1**
+# The Assimilator — PF2e Class Guide, **Version 1.2**
 
 ### *The symbiont · Substrate · Essence · Mutation*
 
@@ -7,7 +7,8 @@ plate it wears — hence Carapace Strike, Carapace Block, and your Carapace's Ha
 lexicon and the automation programme still use the old class name.*
 
 *v1.1 records four rulings (issue #82): Mass follows the §3.1 table, Substrate Hardness takes the
-highest, every Instinct has a damage type, and Electrum's Depth 1 counts it as a second colour.*
+highest, every Instinct has a damage type, and Electrum's Depth 1 counts it as a second colour.
+v1.2 closes the rest of that issue: a Bond slot is priced at 30 wherever it lands (§2.2).*
 
 *The complete class: chassis, the 2100-point ledger, advancement table, every core feature, the nine
 Instincts, the Bond rules, and forty-five class feats from 1st to 20th. The thirty-six Substrates and
@@ -148,10 +149,10 @@ Assimilator's defence actually lives; the chassis only buys the right to stand i
 | 1 | **The Carapace** — Carapace Strike + Living Plate + Carapace Block | 30 |
 | 1 | **Assimilation** — Mass, Depth 1, the Feed and Shed activities | 30 |
 | 3 | **Growth** (+1 Gem) | 10 |
-| 4 | **First Bond** | 50 |
+| 4 | **First Bond** | 30 |
 | 5 | **Second Skin** — Depth cap 2, Mass +1/+1 | 110 |
 | 7 | **Symbiotic Reflex** | 50 |
-| 8 | **Second Bond**, Mass +2/+2 | 30 |
+| 8 | **Second Bond**, Mass +2/+2 | 40 |
 | 11 | **Third Skin** — Depth cap 3, Mass +2/+1 | 110 |
 | 12 | **Third Bond** | 30 |
 | 14 | **Growth** (+2/+2) | 10 |
@@ -159,7 +160,7 @@ Assimilator's defence actually lives; the chassis only buys the right to stand i
 | 16 | **Fourth Bond** | 30 |
 | 17 | **Fourth Skin** — Depth cap 4, Mass +2/+1 | 110 |
 | 19 | **Apotheosis** | 110 |
-| 20 | **Fifth Bond**, Mass +2/+2 | 30 |
+| 20 | **Fifth Bond**, Mass +2/+2 | 40 |
 | **Subtotal** | | **840** |
 
 ### **TOTAL 1260 + 840 = 2100** ✅
@@ -177,6 +178,11 @@ the Assimilator has no focus pool, no spell slots, no weapon proficiency and no 
 those four absences are worth roughly what the Skins cost. If playtest says otherwise, the first lever
 is moving the Depth-4 cap from 17th to 19th, which costs the class its whole top-end spike and is
 therefore a real correction rather than a nudge.
+
+**Bonds and Mass are priced separately.** A Bond slot is **30** wherever it lands; **Mass +2/+2** is
+**10**, the price Growth pays at 14th — so the Second and Fifth Bonds, which carry both, are 40.
+Growth at 3rd pays the same 10 for **+1 Gem** alone, and that is deliberate: a point of Mass at 3rd is
+a third of everything you hold, and at 14th it is a ninth.
 
 ---
 
