@@ -43,6 +43,16 @@
     </div>
     {{/if}}
 
+    {{#if carapace}}
+    <p class="gullet-carapace"><strong>Carapace</strong> {{carapace.hp}} / {{carapace.max}}{{#if carapace.broken}} &mdash; <strong>broken</strong>{{/if}}</p>
+    {{#if carapace.menders.length}}{{#if owner}}
+    <div class="gullet-mend" data-mend>
+        <select>{{#each carapace.menders}}<option value="{{id}}">{{label}}</option>{{/each}}</select>
+        <button type="button" data-action="mend">Mend <span class="hint">(1 hour)</span></button>
+    </div>
+    {{/if}}{{/if}}
+    {{/if}}
+
     <h3>Bound</h3>
     {{#if bound.length}}
     <table class="gullet-bound">

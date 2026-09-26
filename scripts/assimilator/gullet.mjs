@@ -25,6 +25,7 @@ export class GulletApp extends HandlebarsApplicationMixin(ApplicationV2) {
             rebuild: GulletApp.#onRebuild,
             choose: GulletApp.#onChoose,
             rollAberrations: GulletApp.#onRollAberrations,
+            mend: GulletApp.#onMend,
         },
     };
 
@@ -148,8 +149,19 @@ export class GulletApp extends HandlebarsApplicationMixin(ApplicationV2) {
                 options: ABERRATIONS.map((a) => ({ value: a, label: a, selected: (state.choices.nickel ?? []).includes(a) })) }
             : null;
 
+        // Mending the Carapace: an hour feeding it any Substrate you do not bind (guide §4.3).
+        const plate = actor.itemTypes.armor.find((a) => a.slug === "living-plate");
+        const menders = [];
+        if (plate && plate.hitPoints.value < plate.hitPoints.max) {
+            for (const [slug, entry] of Object.entries(catalogue)) {
+                if (slug in state.substrates) continue;
+                for (const s of await Engine.specimensFor(actor, slug)) menders.push({ id: s.id, label: `${s.name} (${entry.name})` });
+            }
+        }
+        const carapace = plate ? { hp: plate.hitPoints.value, max: plate.hitPoints.max, broken: plate.isBroken, menders } : null;
+
         return {
-            choices, nickel,
+            choices, nickel, carapace,
             owner, isGM: game.user.isGM, preparing: state.preparing,
             mass: derived.mass, spent: derived.spent, depthCap: derived.depthCap, vein: derived.vein,
             instinct: state.instinct, pending: derived.pending, colours: derived.colours,
@@ -194,6 +206,11 @@ export class GulletApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
     static async #onRollAberrations(_event, target) {
         await Engine.rollAberrations(this.actor, { reroll: target.dataset.reroll === "true" });
+    }
+
+    static async #onMend(_event, target) {
+        const select = target.closest("[data-mend]").querySelector("select");
+        if (select?.value) await Engine.mend(this.actor, select.value);
     }
 
     static async #onRebuild() {

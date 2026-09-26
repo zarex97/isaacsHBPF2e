@@ -13,7 +13,7 @@
             ]
         }
     },
-    "img": "icons/magic/symbols/chevron-elipse-circle-blue.webp",
+    "img": "icons/magic/control/debuff-energy-hold-blue-yellow.webp",
     "name": "Instinctive Surge",
     "system": {
         "actionType": {

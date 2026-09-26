@@ -265,6 +265,41 @@ function validateGrantedWeaponsCascade(packs, errors) {
 }
 
 /**
+ * Paths into Foundry's own library and into pf2e's, checked against the local install when there is one.
+ *
+ * The rule below leaves those alone because someone else's install is not ours to assume — and it still is not: with
+ * no install on the machine this does nothing. But on the one machine that builds this module there is an install,
+ * and the Assimilator's pass found three of these that read like real files and were not (`juggernaut.webp`,
+ * `orb-smoking-purple.webp`, `shield-barrier-green.webp`), each rendering as a broken image. Every string in a
+ * document is checked, not only `img`: a Strike rule carries its own picture.
+ *
+ * `FOUNDRY_PUBLIC` and `FOUNDRY_DATA` point elsewhere when the install is not in its default place.
+ */
+function validateLibraryImages(packs, errors) {
+    const home = process.env.LOCALAPPDATA ?? path.join(process.env.HOME ?? "", "AppData", "Local");
+    const roots = {
+        icons: process.env.FOUNDRY_PUBLIC ?? "C:/Program Files/Foundry Virtual Tabletop/resources/app/public",
+        systems: process.env.FOUNDRY_DATA ?? path.join(home, "FoundryVTT", "Data"),
+    };
+    const usable = Object.fromEntries(Object.entries(roots).map(([k, r]) => [k, fs.existsSync(path.join(r, k)) ? r : null]));
+    if (!usable.icons && !usable.systems) return;
+    const pattern = /"((icons|systems)\/[^"]+\.(?:webp|svg|png|jpe?g))"/g;
+    for (const { docs } of packs) {
+        for (const { file, doc } of docs) {
+            const seen = new Set();
+            for (const [, img, kind] of JSON.stringify(doc).matchAll(pattern)) {
+                const root = usable[kind];
+                if (!root || seen.has(img)) continue;
+                seen.add(img);
+                if (!fs.existsSync(path.join(root, img))) {
+                    errors.push(`${rel(file)}: image "${img}" is not in the local ${kind === "icons" ? "Foundry" : "system"} install`);
+                }
+            }
+        }
+    }
+}
+
+/**
  * Every icon the module points at must exist.
  *
  * All of this module's art used to reference Foundry's own library, and **eighty-nine of those paths
@@ -278,6 +313,7 @@ function validateGrantedWeaponsCascade(packs, errors) {
  * alone, because someone else's install is not ours to assume.
  */
 function validateIconsExist(packs, errors) {
+    validateLibraryImages(packs, errors);
     const prefix = "modules/isaacs-hb-pf2e/";
     for (const { docs } of packs) {
         for (const { file, doc } of docs) {
