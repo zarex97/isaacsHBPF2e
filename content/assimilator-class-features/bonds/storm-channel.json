@@ -1,0 +1,66 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "area": {
+                    "type": "cone",
+                    "value": 15
+                },
+                "includesSelf": false
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "option": "storm-channel",
+                        "strike": "arcane-channel",
+                        "type": "strikes"
+                    },
+                    "event": "action-used",
+                    "predicate": [
+                        {
+                            "gte": [
+                                "self:reservoir-charges",
+                                3
+                            ]
+                        }
+                    ],
+                    "self": true
+                }
+            ]
+        }
+    },
+    "folder": "Bonds",
+    "img": "icons/magic/lightning/bolt-forked-large-orange.webp",
+    "name": "Storm Channel",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "interaction",
+        "description": {
+            "value": "<p><strong>Storm Battery (Amber + Cobalt).</strong> Spend 3 charges from your Reservoir: make your Arcane Channel Strike against every creature in a 15-foot cone.</p>"
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "slug": "storm-channel",
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-bond-action"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "action"
+}

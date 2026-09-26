@@ -112,6 +112,9 @@
                             },
                             "carapace:intact"
                         ]
+                    },
+                    {
+                        "not": "assimilator:bond:blackfire"
                     }
                 ],
                 "value": {

@@ -1,0 +1,49 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.assimilator-effects.Item.Effect: Solar Core"
+                    },
+                    "event": "action-used",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "folder": "Bonds",
+    "img": "icons/magic/fire/explosion-fireball-large-orange.webp",
+    "name": "Ignite the Solar Core",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 2
+        },
+        "category": "interaction",
+        "description": {
+            "value": "<p><strong>Solar Core (Ruby + Gold).</strong> Once per encounter, ignite: for 1 minute your fire damage increases by one die size and you shed bright light 60 feet. You take 1d6 fire at the start of each of your turns.</p>"
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "slug": "ignite-the-solar-core",
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-bond-action"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "action"
+}

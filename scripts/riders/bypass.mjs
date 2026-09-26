@@ -213,7 +213,7 @@ export function ignoresHardness(entries) {
  *
  * Returns a function that undoes everything it did.
  */
-export function shadowTarget(actor, { reduction = 0, hardness = false, immunities = [] } = {}) {
+export function shadowTarget(actor, { reduction = 0, hardness = false, immunities = [], types = null } = {}) {
     const undo = [];
 
     // Taken out of the live array rather than filtered into a new one: `attributes.immunities` is read
@@ -235,8 +235,10 @@ export function shadowTarget(actor, { reduction = 0, hardness = false, immunitie
         }
     }
 
+    // `true` ignores Hardness; a number ignores that much of it ("ignore an object's Hardness up to 10").
     if (hardness && actor.hardness > 0) {
-        Object.defineProperty(actor, "hardness", { value: 0, configurable: true, writable: true });
+        const left = hardness === true ? 0 : Math.max(0, actor.hardness - Number(hardness));
+        Object.defineProperty(actor, "hardness", { value: left, configurable: true, writable: true });
         undo.push(() => delete actor.hardness);
     }
 
@@ -244,6 +246,8 @@ export function shadowTarget(actor, { reduction = 0, hardness = false, immunitie
         for (const resistance of actor.attributes?.resistances ?? []) {
             const was = resistance.value;
             if (typeof was !== "number") continue;
+            // `types` narrows the reduction to those resistances: "use whichever resistance is lower" lowers fire's alone.
+            if (Array.isArray(types) && !types.includes(resistance.type)) continue;
             resistance.value = Math.max(0, was - reduction);
             undo.push(() => {
                 resistance.value = was;

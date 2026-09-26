@@ -1,0 +1,49 @@
+{
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.assimilator-effects.Item.Effect: Imperial"
+                    },
+                    "event": "action-used",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "folder": "Bonds",
+    "img": "icons/commodities/currency/coin-embossed-crown-gold.webp",
+    "name": "Imperial Strike",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "interaction",
+        "description": {
+            "value": "<p><strong>Crowned Fortune (Topaz + Citrine).</strong> Once per encounter, declare your next Strike <strong>imperial</strong> before rolling. On a success it counts as a critical success.</p>"
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "slug": "imperial-strike",
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-bond-action"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "action"
+}
