@@ -8,7 +8,8 @@ lexicon and the automation programme still use the old class name.*
 
 *v1.1 records four rulings (issue #82): Mass follows the §3.1 table, Substrate Hardness takes the
 highest, every Instinct has a damage type, and Electrum's Depth 1 counts it as a second colour.
-v1.2 closes the rest of that issue: a Bond slot is priced at 30 wherever it lands (§2.2).*
+v1.2 closes the rest of that issue: a Bond slot is priced at 30 wherever it lands (§2.2), and
+White's vitality is said out loud to be narrow (§4.5).*
 
 *The complete class: chassis, the 2100-point ledger, advancement table, every core feature, the nine
 Instincts, the Bond rules, and forty-five class feats from 1st to 20th. The thirty-six Substrates and
@@ -314,6 +315,11 @@ Mutations of other colours. Ties are broken by you, freely, at daily preparation
 Your Instinct also sets **your Instinct's damage type**, which any rule asking for it uses: Red
 **fire**, Gold **force**, Orange **electricity**, Blue **cold**, Purple **mental**, Green **poison**,
 Black **void**, White **vitality**, Gray **bludgeoning**.
+
+White's is meant to be narrow. Vitality harms the undead and nothing living, so under White *Spit*,
+Cobalt's Strike and Nickel's gland are an undead-hunter's tools, and Platinum's resistance answers a
+damage type almost nothing deals. A White Assimilator who wants a ranged attack for every fight
+should take it from somewhere other than the Instinct.
 
 Instinct is recalculated at daily preparations and costs nothing to change — an Assimilator who sheds
 material can be a different creature in the morning. That is intentional. The cost of changing
