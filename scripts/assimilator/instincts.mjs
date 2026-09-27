@@ -287,6 +287,17 @@ export const Instincts = {
             }
             return;
         }
+        // Moonstone Depth 1's offer (#93): the type picked, adapted to — Reactive Evolution's own limits then apply.
+        if (card.kind === "moonstone") {
+            const doc = await effectDoc("effect-reactive-evolution");
+            if (!doc || !origin) return;
+            const source = foundry.utils.deepClone(doc.toObject());
+            const choice = source.system.rules.find((r) => r.key === "ChoiceSet");
+            if (choice) choice.selection = value;
+            await origin.createEmbeddedDocuments("Item", [source]);
+            await say(origin, `<strong>Reactive Evolution</strong>: ${origin.name} adapts to ${value}.`);
+            return;
+        }
         if (card.kind === "siphon") {
             const target = await fromUuid(card.target);
             const victim = target?.actor ?? target;
