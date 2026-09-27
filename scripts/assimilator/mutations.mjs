@@ -13,6 +13,7 @@ import { Engine } from "./engine.mjs";
 import { GulletApp } from "./gullet.mjs";
 import { encounterOf } from "../lib/encounter-damage.mjs";
 import { Relay } from "../riders/relay.mjs";
+import { wrap } from "../lib/wrap.mjs";
 
 const MOVED = "self:moved-10-feet-this-turn";
 const DARK = "self:in-dim-light-or-darkness";
@@ -34,6 +35,8 @@ const PER_ENCOUNTER = {
     "healing-flare": { key: "flare" },
     "aberrant-gland": { key: "gland" },
     "null-field": { key: "null-field" },
+    // Lapis Lazuli Depth 4: "Once per encounter".
+    "lay-bare": { key: "lay-bare" },
     // Pearl Depth 4: "Twice per encounter."
     "cleansing-tide": { key: "cleansing-tide", max: (actor) => (depthOf(actor, "pearl") >= 4 ? 2 : 1) },
     // The Bonds' own once-per-encounter actions.
@@ -61,9 +64,81 @@ function depthOf(actor, slug) {
 
 const TOPAZ = "assimilatorTopaz";
 const RUSH = "assimilatorFrameRush";
+const BARE = "assimilatorLayBare";
+const LAPIS = "assimilatorLapisInsight";
+const EFFECTS_PACK = "isaacs-hb-pf2e.assimilator-effects";
+
+async function effectDoc(slug) {
+    return ((await game.packs.get(EFFECTS_PACK)?.getDocuments()) ?? []).find((d) => d.slug === slug) ?? null;
+}
 const MANOEUVRES = { shove: "Shove", trip: "Trip", grapple: "Grapple" };
 
 export const Mutations = {
+    /**
+     * Lapis Lazuli Depth 2: *"When you succeed at Recall Knowledge about a creature, allies gain +1 circumstance to
+     * attacks against it for 1 round"* (#88). pf2e gives no roll option for alliance, so the bonus goes to the allies
+     * rather than onto the creature: each creature on the scene of the Assimilator's alliance, not the Assimilator,
+     * gets *Lapis Insight* aimed at the creature's signature.
+     */
+    async lapisInsight(message) {
+        const context = message.flags?.pf2e?.context;
+        const actor = message.actor;
+        if (context?.type !== "skill-check" || !["success", "criticalSuccess"].includes(context.outcome)) return null;
+        if (!(context.options ?? []).includes("action:recall-knowledge") || depth(actor, "lapis-lazuli") < 2) return null;
+        const creature = (context.target?.actor ? fromUuidSync(context.target.actor) : null) ?? [...game.user.targets][0]?.actor ?? null;
+        if (!creature || creature.id === actor.id) return null;
+        return Relay.request({ action: LAPIS, origin: actor.uuid, creature: creature.uuid });
+    },
+
+    /** The GM gives each ally on the scene Lapis Insight aimed at the creature. */
+    async grantInsight({ origin, creature: creatureUuid }) {
+        const actor = await fromUuid(origin);
+        const creature = await fromUuid(creatureUuid);
+        const alliance = actor?.system?.details?.alliance;
+        if (!actor || !creature || !alliance) return null;
+        const doc = await effectDoc("effect-lapis-insight");
+        if (!doc) return null;
+        const allies = [...new Set(canvas.scene.tokens.map((t) => t.actor).filter((a) => a && a.id !== actor.id
+            && a.id !== creature.id && a.system?.details?.alliance === alliance))];
+        for (const ally of allies) {
+            const source = foundry.utils.deepClone(doc.toObject());
+            source.name = `Effect: Lapis Insight (${creature.name})`;
+            foundry.utils.setProperty(source, `flags.${MODULE}.assimilator.lapis`, creature.signature);
+            await ally.createEmbeddedDocuments("Item", [source]);
+        }
+        return allies.length;
+    },
+
+    /** Lapis Lazuli Depth 4, *Lay Bare*: the target's strongest and weakest saves, marked for this Assimilator. */
+    async layBare(actor) {
+        const target = [...game.user.targets][0]?.actor ?? null;
+        if (!target) {
+            ui.notifications.warn("Lay Bare: target the creature first.");
+            return null;
+        }
+        return Relay.request({ action: BARE, origin: actor.uuid, target: target.uuid });
+    },
+
+    async markBare({ origin, target }) {
+        const actor = await fromUuid(origin);
+        const creature = await fromUuid(target);
+        const saves = ["fortitude", "reflex", "will"].map((s) => [s, creature?.saves?.[s]?.mod ?? null]).filter(([, m]) => m !== null);
+        if (!actor || saves.length < 2) return null;
+        const strongest = saves.reduce((a, b) => (b[1] > a[1] ? b : a))[0];
+        const weakest = saves.reduce((a, b) => (b[1] < a[1] ? b : a))[0];
+        const doc = await effectDoc("effect-laid-bare");
+        if (!doc) return null;
+        for (const old of creature.itemTypes.effect.filter((e) => e.flags?.[MODULE]?.laidBare?.origin === origin)) await old.delete();
+        const source = foundry.utils.deepClone(doc.toObject());
+        source.name = `Effect: Laid Bare (${strongest} → ${weakest})`;
+        foundry.utils.setProperty(source, `flags.${MODULE}.laidBare`, { origin, strongest, weakest });
+        await creature.createEmbeddedDocuments("Item", [source]);
+        await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<p><strong>Lay Bare</strong>: ${creature.name}'s strongest save is <strong>${strongest}</strong>; `
+                + `for 1 minute ${actor.name}'s Mutations target its <strong>${weakest}</strong> instead.</p>` });
+        return { strongest, weakest };
+    },
+
     /**
      * Bronze Depth 3, *Frame Rush*: "make a Strike and then a Shove, Trip or Grapple as a single action" (#87). The
      * Carapace Strike is rolled against the target — followed through to damage, as every scripted Strike is — and a
@@ -191,6 +266,24 @@ export const Mutations = {
         Hooks.on("createChatMessage", (message) => {
             if (isWriter()) Mutations.topazCritical(message).catch((e) => console.error("Isaac's Homebrew | Topaz", e));
         });
+        // Lapis Depth 2 is asked for by the roller's own client: a bare skill roll records no target, and only that client
+        // knows what its user had targeted.
+        Hooks.on("createChatMessage", (message, _o, userId) => {
+            if (userId === game.user.id) Mutations.lapisInsight(message).catch((e) => console.error("Isaac's Homebrew | Lapis", e));
+        });
+        Relay.register?.(LAPIS, (payload) => Mutations.grantInsight(payload));
+        // Tin Depth 3: "Invisible creatures within 30 feet are concealed to you" — pf2e's see-invisibility, which pf2e
+        // hands Foundry at an unlimited range. When Tin is where the sense came from, its range is Tin's 30 feet.
+        wrap("CONFIG.Token.documentClass.prototype._prepareDetectionModes", function (wrapped, ...args) {
+            const result = wrapped(...args);
+            const sense = this.actor?.perception?.senses?.get?.("see-invisibility");
+            if (sense?.source === "Substrate: Tin" && this.detectionModes?.seeInvisibility) {
+                // Detection ranges are in the scene's distance units — feet, as pf2e's own senses are given.
+                this.detectionModes.seeInvisibility.range = 30;
+            }
+            return result;
+        }, { feature: "Tin's 30-foot see-invisibility", type: "WRAPPER" });
+        Relay.register?.(BARE, (payload) => Mutations.markBare(payload));
         Hooks.on("renderChatMessageHTML", (message, html) => Mutations.bindTopaz(message, html));
         Hooks.on("renderChatMessageHTML", (message, html) => Mutations.bindRush(message, html));
         Hooks.on("preUpdateToken", (token, change) => {
@@ -219,6 +312,7 @@ export const Mutations = {
             const slug = message.item?.slug;
             const actor = message.actor;
             if (!actor?.isOwner) return;
+            if (slug === "lay-bare" && !message.flags?.pf2e?.context) Mutations.layBare(actor).catch((e) => console.error("Isaac's Homebrew | Lay Bare", e));
             if (slug === "frame-rush" && !message.flags?.pf2e?.context) Mutations.frameRush(actor).catch((e) => console.error("Isaac's Homebrew | Frame Rush", e));
             if (slug === "draw-on-the-reservoir") AssimilatorDamage.draw(actor);
             if (slug === "discharge") setTimeout(() => AssimilatorDamage.discharge(actor), 1500);

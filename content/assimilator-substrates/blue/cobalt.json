@@ -214,7 +214,11 @@
                 ]
             },
             {
-                "key": "Note",
+                "key": "FlatModifier",
+                "selector": "counteract-check",
+                "slug": "cobalt-counteract",
+                "type": "circumstance",
+                "value": 1,
                 "predicate": [
                     {
                         "not": "assimilator:suppressed"
@@ -226,13 +230,31 @@
                         ]
                     },
                     "carapace:intact"
-                ],
-                "selector": "all",
-                "text": "+1 circumstance bonus to counteract checks.",
-                "title": "Cobalt (Depth 3)"
+                ]
             },
             {
-                "key": "Note",
+                "key": "FlatModifier",
+                "selector": "all",
+                "slug": "cobalt-counteract-module",
+                "type": "circumstance",
+                "value": 1,
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-cobalt",
+                            3
+                        ]
+                    },
+                    "carapace:intact",
+                    "isaacs-hb-pf2e:counteract"
+                ]
+            },
+            {
+                "allowDuplicate": false,
+                "key": "GrantItem",
                 "predicate": [
                     {
                         "not": "assimilator:suppressed"
@@ -245,9 +267,8 @@
                     },
                     "carapace:intact"
                 ],
-                "selector": "arcane-channel-attack-roll",
-                "text": "Once per round, Arcane Channel may target two creatures.",
-                "title": "Cobalt (Depth 4)"
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Forked Channel"
             }
         ],
         "start": {

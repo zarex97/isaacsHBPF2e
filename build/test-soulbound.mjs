@@ -3366,6 +3366,8 @@ const SYSTEM_SLUGS = new Set([
     "substrate-garnet-sanguine",
     // pf2e's improvised-weapon penalty, read off a Strike by the rig.
     "improvised",
+    // Cobalt Depth 3's two counteract modifiers, read off rolls by the rig.
+    "cobalt-counteract", "cobalt-counteract-module",
 ]);
 
 const unresolvedInScripts = [];

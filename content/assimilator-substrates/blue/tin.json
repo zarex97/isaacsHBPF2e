@@ -146,7 +146,9 @@
                 "title": "Tin (Depth 2)"
             },
             {
-                "key": "Note",
+                "key": "Sense",
+                "selector": "see-invisibility",
+                "range": 30,
                 "predicate": [
                     {
                         "not": "assimilator:suppressed"
@@ -158,10 +160,7 @@
                         ]
                     },
                     "carapace:intact"
-                ],
-                "selector": "perception",
-                "text": "Invisible creatures within 30 feet are concealed to you rather than undetected.",
-                "title": "Tin (Depth 3)"
+                ]
             },
             {
                 "key": "FlatModifier",
