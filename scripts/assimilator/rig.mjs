@@ -849,6 +849,21 @@ const INSTINCTS = [
         const held = game.actors.get(a.id).itemTypes.effect.filter((e) => e.flags?.["isaacs-hb-pf2e"]?.assimilator?.aberration).length;
         return [derived(a).effective.quartz, held];
     }, want: [1, 3], note: "control: nothing chosen, Quartz 1 and three Aberrations" },
+    // Chromium 2: the plate mends 1 Hit Point per hour of the world's clock (#90). Driven with clock values rather than
+    // by advancing the world's own time, which would expire effects on the world's fixtures.
+    ...[[{ chromium: 2 }, 3 * 3600, 3, "three hours: 3 Hit Points"], [{ chromium: 2 }, 3540, 0, "control: 59 minutes, none"],
+        [{ chromium: 1 }, 3 * 3600, 0, "control: Chromium 1, none"]].map(([b, seconds, want, note]) => ({ id: "CR-2b", lv: 17, b, want, note,
+        act: async (a) => {
+            const C = game.modules.get("isaacs-hb-pf2e").api.assimilator.carapace;
+            const plateOf = () => game.actors.get(a.id).itemTypes.armor.find((x) => x.slug === "living-plate");
+            const now = game.time.worldTime;
+            await plateOf().update({ "system.hp.value": plateOf().hitPoints.max - 5, "flags.isaacs-hb-pf2e.assimilator.repairedAt": now });
+            const hp = plateOf().hitPoints.value;
+            await C.selfRepair(game.actors.get(a.id), now + seconds);
+            const mended = plateOf().hitPoints.value - hp;
+            await plateOf().update({ "system.hp.value": plateOf().hitPoints.max, "flags.isaacs-hb-pf2e.assimilator.repairedAt": now });
+            return mended;
+        } })),
     // Guide §4.5: the Instinct clause applies to "every Mutation you have, including Mutations of other colours".
     { id: "A-44", lv: 17, b: { ruby: 3, sapphire: 2 }, act: async (a) => [derived(a).instincts.primary, redOn(await strikeRoll(a))],
         want: ["red", 5], note: "Red Instinct; Blue's Sapphire 2 takes Red's +2 beside Ruby's +3" },
