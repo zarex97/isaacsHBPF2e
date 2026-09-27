@@ -1,0 +1,41 @@
+{
+    "folder": "Mutations",
+    "img": "icons/skills/melee/unarmed-punch-fist.webp",
+    "name": "Frame Rush",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><strong>Bronze, Depth 3.</strong> Make a Strike and then a Shove, Trip or Grapple, as a single action.</p><p><em>Target a creature and use it: the Carapace Strike is rolled against it, then a card asks which of the three follows, at the next step of your multiple attack penalty.</em></p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-mutation-action"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator",
+                "attack",
+                "flourish"
+            ]
+        }
+    },
+    "type": "action"
+}

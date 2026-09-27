@@ -60,8 +60,61 @@ function depthOf(actor, slug) {
 }
 
 const TOPAZ = "assimilatorTopaz";
+const RUSH = "assimilatorFrameRush";
+const MANOEUVRES = { shove: "Shove", trip: "Trip", grapple: "Grapple" };
 
 export const Mutations = {
+    /**
+     * Bronze Depth 3, *Frame Rush*: "make a Strike and then a Shove, Trip or Grapple as a single action" (#87). The
+     * Carapace Strike is rolled against the target — followed through to damage, as every scripted Strike is — and a
+     * card asks which manoeuvre follows. pf2e counts no attacks, so the Strike takes no multiple attack penalty and
+     * the manoeuvre takes the next step: the combo as the turn's first attacks.
+     */
+    async frameRush(actor) {
+        const target = [...game.user.targets][0] ?? null;
+        const strike = actor.system.actions?.find((s) => s.slug === "carapace-strike" || s.label === "Carapace Strike");
+        if (!target || !strike) {
+            ui.notifications.warn("Frame Rush: target the creature first.");
+            return null;
+        }
+        await strike.variants[0].roll({ target, options: ["frame-rush"], createMessage: true });
+        const outcome = [...game.messages].reverse().find((m) => m.flags?.pf2e?.context?.type === "attack-roll")?.flags?.pf2e?.context?.outcome;
+        if (outcome === "criticalSuccess") await strike.critical({ target, options: ["frame-rush"], createMessage: true });
+        else if (outcome === "success") await strike.damage({ target, options: ["frame-rush"], createMessage: true });
+        const buttons = Object.entries(MANOEUVRES).map(([slug, label]) =>
+            `<button type="button" data-action="isaacs-hb-rush" data-value="${slug}">${label}</button>`).join("");
+        return ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            flags: { [MODULE]: { [RUSH]: { origin: actor.uuid, target: target.document.uuid } } },
+            content: `<p><strong>Frame Rush</strong>: and then — against ${target.name}, at the next multiple attack penalty.</p>${buttons}`,
+        });
+    },
+
+    bindRush(message, html) {
+        const card = message?.flags?.[MODULE]?.[RUSH];
+        if (!card || !html?.querySelectorAll || html.dataset?.isaacsHbRushBound) return;
+        html.dataset.isaacsHbRushBound = "1";
+        const buttons = [...html.querySelectorAll(`[data-action="isaacs-hb-rush"]`)];
+        for (const button of buttons) {
+            if (card.used || !message.isOwner) button.disabled = true;
+            button.addEventListener("click", async () => {
+                for (const b of buttons) b.disabled = true;
+                await Mutations.rushManoeuvre(message, button.dataset.value);
+            });
+        }
+    },
+
+    /** The manoeuvre, rolled by the owner through pf2e's own action — a Shove still gets its Push card. */
+    async rushManoeuvre(message, slug) {
+        const card = message.flags?.[MODULE]?.[RUSH];
+        if (!card || card.used || !(slug in MANOEUVRES)) return null;
+        await message.update({ [`flags.${MODULE}.${RUSH}.used`]: slug });
+        const actor = await fromUuid(card.origin);
+        const target = (await fromUuid(card.target))?.object;
+        if (target && !target.isTargeted) target.setTarget(true, { user: game.user, releaseOthers: true });
+        return game.pf2e.actions.get(slug).use({ actors: [actor], multipleAttackPenalty: 1 });
+    },
+
     /**
      * Topaz Depth 4: *"When you critically hit, one other bound Substrate counts as Depth 4 for that Strike"* (#86).
      * The card lists the others; the pick is the GM's to apply, through the relay, and only once.
@@ -139,6 +192,7 @@ export const Mutations = {
             if (isWriter()) Mutations.topazCritical(message).catch((e) => console.error("Isaac's Homebrew | Topaz", e));
         });
         Hooks.on("renderChatMessageHTML", (message, html) => Mutations.bindTopaz(message, html));
+        Hooks.on("renderChatMessageHTML", (message, html) => Mutations.bindRush(message, html));
         Hooks.on("preUpdateToken", (token, change) => {
             if ("x" in change || "y" in change) origins.set(token.id, { x: token._source.x, y: token._source.y });
         });
@@ -165,6 +219,7 @@ export const Mutations = {
             const slug = message.item?.slug;
             const actor = message.actor;
             if (!actor?.isOwner) return;
+            if (slug === "frame-rush" && !message.flags?.pf2e?.context) Mutations.frameRush(actor).catch((e) => console.error("Isaac's Homebrew | Frame Rush", e));
             if (slug === "draw-on-the-reservoir") AssimilatorDamage.draw(actor);
             if (slug === "discharge") setTimeout(() => AssimilatorDamage.discharge(actor), 1500);
             if (slug === "shift-tissue") {

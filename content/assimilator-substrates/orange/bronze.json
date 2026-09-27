@@ -67,7 +67,13 @@
         },
         "rules": [
             {
-                "key": "Note",
+                "key": "MartialProficiency",
+                "slug": "improvised-weapons",
+                "label": "Improvised Weapons (Bronze)",
+                "definition": [
+                    "item:tag:improvised"
+                ],
+                "value": 1,
                 "predicate": [
                     {
                         "not": "assimilator:suppressed"
@@ -89,10 +95,34 @@
                             "carapace:intact"
                         ]
                     }
-                ],
-                "selector": "strike-attack-roll",
-                "text": "You are trained in improvised weapons as martial weapons, and take no penalty for using them.",
-                "title": "Bronze (Depth 1)"
+                ]
+            },
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "self:ignore-improvised-penalty",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    {
+                        "gte": [
+                            "self:effect:substrate-bronze",
+                            1
+                        ]
+                    },
+                    {
+                        "or": [
+                            {
+                                "lt": [
+                                    "self:effect:substrate-bronze",
+                                    3
+                                ]
+                            },
+                            "carapace:intact"
+                        ]
+                    }
+                ]
             },
             {
                 "key": "FlatModifier",
@@ -125,7 +155,8 @@
                 "value": 1
             },
             {
-                "key": "Note",
+                "allowDuplicate": false,
+                "key": "GrantItem",
                 "predicate": [
                     {
                         "not": "assimilator:suppressed"
@@ -138,9 +169,8 @@
                     },
                     "carapace:intact"
                 ],
-                "selector": "strike-attack-roll",
-                "text": "Once per round, make a Strike and then a Shove, Trip or Grapple as a single action.",
-                "title": "Bronze (Depth 3)"
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Frame Rush"
             },
             {
                 "key": "Note",
