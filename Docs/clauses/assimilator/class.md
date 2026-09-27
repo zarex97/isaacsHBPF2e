@@ -121,7 +121,7 @@ this file.
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | A-43 | §4.5 | Your **Instinct** is the colour you have invested the most total Mass in, counting both tracks. | `test-assimilator` pins it | ✅ | Live: feeding the first Ruby put **Instinct: Red** on the sheet by itself, and `assimilator:instinct:red` in the roll options |
-| A-44 | §4.5 | It grants that colour's **Instinct clause** (§5), which applies to **every Mutation you have**, including Mutations of other colours. |  | ⚠️ | Live: Red's clause applied to Ruby, Iron and Garnet alike. Only Red Substrates exist yet, so a Mutation of **another** colour under a Red Instinct is untested |
+| A-44 | §4.5 | It grants that colour's **Instinct clause** (§5), which applies to **every Mutation you have**, including Mutations of other colours. | `rig` | ✅ | Rig, live: a **Red** Instinct over Ruby 3 and **Blue**'s Sapphire 2 adds Red's **+5** — Sapphire takes its +2 beside Ruby's +3. Control: Ruby alone, **+3** |
 | A-45 | §4.5 | Ties are broken by you, freely, at daily preparations. | `rig` | ✅ | Rig, live: Ruby 1 and Sapphire 1 left the Instinct **null** — a tie unbroken — and breaking it for Blue set **blue** |
 | A-46 | §4.5 | Instinct is recalculated at daily preparations and costs nothing to change | `rig` | ✅ | Rig, live: Instinct **red** from Ruby 2; the record changed to Sapphire 2 mid-day and it stayed **red**; daily preparations made it **blue** |
 
@@ -178,8 +178,8 @@ this file.
 | Status | Count |
 | :-- | --: |
 | ☐ | 0 |
-| ✅ | 68 |
-| ⚠️ | 7 |
+| ✅ | 69 |
+| ⚠️ | 6 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 2 |

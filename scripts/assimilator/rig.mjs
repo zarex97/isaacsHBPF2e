@@ -296,6 +296,11 @@ const INSTINCTS = [
     }, want: ["fire", "cold", "void", "vitality"] },
 
     // Red, now one modifier per Substrate, gated as that Substrate's damage is.
+    // Guide §4.5: the Instinct clause applies to "every Mutation you have, including Mutations of other colours".
+    { id: "A-44", lv: 17, b: { ruby: 3, sapphire: 2 }, act: async (a) => [derived(a).instincts.primary, redOn(await strikeRoll(a))],
+        want: ["red", 5], note: "Red Instinct; Blue's Sapphire 2 takes Red's +2 beside Ruby's +3" },
+    { id: "A-44", lv: 17, b: { ruby: 3 }, act: async (a) => [derived(a).instincts.primary, redOn(await strikeRoll(a))],
+        want: ["red", 3], note: "control: Ruby alone, +3" },
     { id: "I-1a", lv: 17, b: { ruby: 3, iron: 2, garnet: 2 }, act: async (a) => redOn(await strikeRoll(a)),
         want: 5, note: "Ruby 3 + Iron 2; Garnet's die does not fire on a creature that is not dying, so it adds nothing" },
     { id: "I-1a", lv: 17, b: { ruby: 3, silver: 2 }, targetTraits: ["undead", "fiend"], act: async (a) => redOn(await strikeRoll(a)),
