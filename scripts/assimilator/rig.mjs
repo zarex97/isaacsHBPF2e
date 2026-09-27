@@ -389,8 +389,6 @@ async function noteShown(a, t, ctx, { roll, title }) {
 const NOTES = [
     ["IR-4b", { iron: 4 }, "skill:athletics", "Iron (Depth 4)"],
     ["CI-3a", { citrine: 3 }, "perception", "Citrine (Depth 3)"],
-    ["BR-1a", { bronze: 1 }, "attack", "Bronze (Depth 1)"],
-    ["BR-3a", { bronze: 3 }, "attack", "Bronze (Depth 3)"],
     ["HG-1a", { mercury: 1 }, "skill:acrobatics", "Mercury (Depth 1)"],
     ["SA-1b", { sapphire: 1 }, "save:will", "Sapphire (Depth 1)"],
     ["LA-2a", { "lapis-lazuli": 2 }, "skill:arcana", "Lapis Lazuli (Depth 2)"],
@@ -604,6 +602,42 @@ const INSTINCTS = [
             }
         }, want: true,
     })),
+    // Bronze Depth 1: "trained in improvised weapons as martial weapons, and take no penalty for using them" (#87).
+    ...[[{ bronze: 1 }, [true, false], "Bronze 1: an improvised chair leg is trained, and its −2 is gone"],
+        [{ ruby: 1 }, [false, true], "control: without Bronze, untrained and −2"]].map(([b, want, note]) => ({
+        id: "BR-1a", lv: 17, b, note, want, act: async (a) => {
+            const me = () => game.actors.get(a.id);
+            for (const w of me().itemTypes.weapon.filter((x) => x.name === "ZZ Chair Leg")) await w.delete();
+            await me().createEmbeddedDocuments("Item", [{ name: "ZZ Chair Leg", type: "weapon", system: {
+                category: "simple", group: "club", damage: { dice: 1, die: "d6", damageType: "bludgeoning" },
+                traits: { value: [], otherTags: ["improvised"] }, equipped: { carryType: "held", handsHeld: 1 } } }]);
+            await wait(800);
+            const strike = me().system.actions.find((x) => x.label === "ZZ Chair Leg");
+            const trained = (strike?.modifiers ?? []).some((m) => m.type === "proficiency" && m.modifier > 0);
+            const penalty = (strike?.modifiers ?? []).some((m) => m.slug === "improvised" && m.enabled);
+            for (const w of me().itemTypes.weapon.filter((x) => x.name === "ZZ Chair Leg")) await w.delete();
+            return [trained, penalty];
+        },
+    })),
+    // Bronze Depth 3: Frame Rush — "a Strike and then a Shove, Trip or Grapple as a single action" (#87).
+    { id: "BR-3a", lv: 17, b: { bronze: 3 }, act: async (a, t, ctx) => {
+        const me = () => game.actors.get(a.id);
+        const target = canvas.scene.tokens.get(ctx.targetTokenId).object;
+        untarget(); target.setTarget(true, { user: game.user, releaseOthers: true });
+        canvas.scene.tokens.get(ctx.tokenId).object.control({ releaseOthers: true });
+        const since = game.messages.size;
+        await use(a, "frame-rush", 3500);
+        const fresh = () => game.messages.contents.slice(since - game.messages.size);
+        const struck = fresh().some((m) => m.flags?.pf2e?.context?.type === "attack-roll" && m.item?.slug === "carapace-strike");
+        const card = await until(() => fresh().find((m) => m.flags?.["isaacs-hb-pf2e"]?.assimilatorFrameRush), 6000);
+        document.querySelector(`li.chat-message[data-message-id="${card?.id}"] button[data-value="trip"]`)?.click();
+        const trip = await until(() => fresh().find((m) => (m.flags?.pf2e?.context?.options ?? []).includes("action:trip")), 6000);
+        const map = (trip?.flags?.pf2e?.modifiers ?? []).find((m) => /MultipleAttackPenalty|multiple attack/i.test(m.label ?? m.slug ?? ""))?.modifier ?? null;
+        untarget();
+        return [!!me().items.find((i) => i.slug === "frame-rush"), struck, !!card, !!trip, map];
+    }, want: [true, true, true, true, -5], note: "the Carapace Strike, then the card's Trip at −5" },
+    { id: "BR-3a", lv: 17, b: { bronze: 2 }, act: async (a) => !!game.actors.get(a.id).items.find((i) => i.slug === "frame-rush"),
+        want: false, note: "control: Bronze 2 has no Frame Rush" },
     // Guide §4.5: the Instinct clause applies to "every Mutation you have, including Mutations of other colours".
     { id: "A-44", lv: 17, b: { ruby: 3, sapphire: 2 }, act: async (a) => [derived(a).instincts.primary, redOn(await strikeRoll(a))],
         want: ["red", 5], note: "Red Instinct; Blue's Sapphire 2 takes Red's +2 beside Ruby's +3" },

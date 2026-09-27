@@ -3364,6 +3364,8 @@ const SYSTEM_SLUGS = new Set([
     "critical-specialization", "leather-armor", "spell-effect-animal-form-ape",
     // Garnet Depth 4's modifier, read off a damage roll by the rig.
     "substrate-garnet-sanguine",
+    // pf2e's improvised-weapon penalty, read off a Strike by the rig.
+    "improvised",
 ]);
 
 const unresolvedInScripts = [];
