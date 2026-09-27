@@ -1,4 +1,4 @@
-# The Assimilator — PF2e Class Guide, **Version 1.2**
+# The Assimilator — PF2e Class Guide, **Version 1.3**
 
 ### *The symbiont · Substrate · Essence · Mutation*
 
@@ -11,7 +11,9 @@ highest, every Instinct has a damage type, and Electrum's Depth 1 counts it as a
 v1.2 closes the rest of that issue: a Bond slot is priced at 30 wherever it lands (§2.2), and
 White's vitality is said out loud to be narrow (§4.5), §4.1 and §9.2 name v3's Steel where they
 named three v2 materials, and the 16th-level feat that shared the 7th-level feature's name is now
-*Apex Growth* (§8.9). Lexicon v3.1 now carries §5.2's amendments.*
+*Apex Growth* (§8.9). Lexicon v3.1 now carries §5.2's amendments.
+v1.3 records a ruling from issue #86: **a Depth is indivisible.** "One Depth higher" raises the whole Depth,
+riders with it, and "apply its Depth 4 rider" becomes "counts as Depth 4 for that Strike" (§5.1 Gold, §8.8).*
 
 *The complete class: chassis, the 2100-point ledger, advancement table, every core feature, the nine
 Instincts, the Bond rules, and forty-five class feats from 1st to 20th. The thirty-six Substrates and
@@ -381,7 +383,7 @@ merely stated.
 | Instinct | Clause |
 | :-- | :-- |
 | 🔴 **Red — Consume / Destroy** | When a Mutation deals damage, it deals **+1 damage per Depth** of its Substrate. Against a creature that has already lost Hit Points this encounter, **double** that bonus. |
-| 🟡 **Gold — Amplify / Dominate** | At daily preparations choose one bound Substrate; it counts as **one Depth higher** for its numeric effects, never above your Depth cap. When you critically hit, you may apply that Substrate's **Depth 4 rider** even if it isn't at Depth 4. |
+| 🟡 **Gold — Amplify / Dominate** | At daily preparations choose one bound Substrate; it counts as **one Depth higher**, never above your Depth cap. When you critically hit, that Substrate counts as **Depth 4 for that Strike** even if it isn't at Depth 4. |
 | 🟠 **Orange — Move / React** | The first time each round you Stride, Step or use a reaction, your next Mutation this round deals **+1d4** of its own damage type. **+5 feet Speed** per bound Orange Substrate. |
 | 🔵 **Blue — Adapt / Understand** | **Study** a creature (one action). Until the encounter ends, your Mutations treat its resistances as **lower by twice your highest Depth**, and you gain **+1 circumstance to AC** against it. One creature at a time. |
 | 🟣 **Purple — Mutate / Transcend** | Your Mutations count as **magical**. At daily preparations one Substrate of your choice manifests **one Depth higher**, and one other, randomly determined, manifests **one Depth lower**. |
@@ -565,8 +567,8 @@ Moonstone. If you already hold Moonstone, treat it as **one Depth higher** for t
 
 ### 8.8 — 14th level
 
-**Apex Predator** · When you critically hit with a Mutation, apply that Substrate's **Depth 4 rider**,
-whether or not it is at Depth 4. *Does not stack with Gold's Instinct clause — take the better.*
+**Apex Predator** · When you critically hit with a Mutation, that Substrate counts as **Depth 4 for that
+Strike**, whether or not it is at Depth 4. *Does not stack with Gold's Instinct clause — take the better.*
 
 **Regurgitate** · **Free action**, once per day: **Shed** one Substrate and immediately **Feed** a
 Substrate you are carrying, at Depth 1. The whole thing takes no time and is extremely unpleasant to

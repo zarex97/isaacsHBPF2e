@@ -12,6 +12,7 @@ import { AssimilatorDamage, depthOf as depth, suppressed } from "./damage.mjs";
 import { Engine } from "./engine.mjs";
 import { GulletApp } from "./gullet.mjs";
 import { encounterOf } from "../lib/encounter-damage.mjs";
+import { Relay } from "../riders/relay.mjs";
 
 const MOVED = "self:moved-10-feet-this-turn";
 const DARK = "self:in-dim-light-or-darkness";
@@ -58,7 +59,56 @@ function depthOf(actor, slug) {
     return m ? Number(m[1]) : 0;
 }
 
+const TOPAZ = "assimilatorTopaz";
+
 export const Mutations = {
+    /**
+     * Topaz Depth 4: *"When you critically hit, one other bound Substrate counts as Depth 4 for that Strike"* (#86).
+     * The card lists the others; the pick is the GM's to apply, through the relay, and only once.
+     */
+    async topazCritical(message) {
+        const context = message.flags?.pf2e?.context;
+        const actor = message.actor;
+        if (context?.type !== "attack-roll" || context.outcome !== "criticalSuccess" || depth(actor, "topaz") < 4) return null;
+        if (actor.itemTypes.effect.some((e) => e.slug === "effect-carapace-broken")) return null;
+        const catalogue = await Engine.catalogue();
+        const others = Object.keys(Engine.state(actor).substrates).filter((slug) => slug !== "topaz");
+        if (!others.length) return null;
+        const buttons = others.map((slug) => `<button type="button" data-action="isaacs-hb-topaz" data-value="${slug}">`
+            + `${catalogue[slug]?.name?.replace(/^Substrate:\s*/, "") ?? slug}</button>`).join("");
+        return ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            flags: { [MODULE]: { [TOPAZ]: { origin: actor.uuid, madeBy: message.id, options: others } } },
+            content: `<p><strong>Topaz</strong>: a critical hit — one other Substrate counts as <strong>Depth 4</strong> for this Strike.</p>${buttons}`,
+        });
+    },
+
+    bindTopaz(message, html) {
+        const card = message?.flags?.[MODULE]?.[TOPAZ];
+        if (!card || !html?.querySelectorAll || html.dataset?.isaacsHbTopazBound) return;
+        html.dataset.isaacsHbTopazBound = "1";
+        const buttons = [...html.querySelectorAll(`[data-action="isaacs-hb-topaz"]`)];
+        for (const button of buttons) {
+            if (card.used || !message.isOwner) button.disabled = true;
+            button.addEventListener("click", async () => {
+                for (const b of buttons) b.disabled = true;
+                await Relay.request({ action: TOPAZ, messageId: message.id, value: button.dataset.value });
+            });
+        }
+    },
+
+    async topazPick({ messageId, value }) {
+        const message = game.messages.get(messageId);
+        const card = message?.flags?.[MODULE]?.[TOPAZ];
+        if (!card || card.used || !card.options?.includes(value)) return null;
+        await message.update({ [`flags.${MODULE}.${TOPAZ}.used`]: value });
+        const actor = await fromUuid(card.origin);
+        const raised = await Engine.depthFour(actor, [value], { madeBy: card.madeBy, why: "topaz" });
+        if (raised) await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<p><strong>Topaz</strong>: ${raised.join(", ")} counts as <strong>Depth 4</strong> for this Strike.</p>` });
+        return raised;
+    },
+
     /** Returns false — cancelling the card — when this encounter's uses of the action are spent. */
     gateEncounterUse(data) {
         const uuid = data?.flags?.pf2e?.origin?.uuid;
@@ -83,6 +133,12 @@ export const Mutations = {
     registerHooks() {
         // The use card is the use: refusing to post it is refusing the action, before any rider can fire.
         Hooks.on("preCreateChatMessage", (message, data) => Mutations.gateEncounterUse(data));
+        // Topaz Depth 4: a critical hit asks which other Substrate counts as Depth 4 for the Strike.
+        Relay.register?.(TOPAZ, (payload) => Mutations.topazPick(payload));
+        Hooks.on("createChatMessage", (message) => {
+            if (isWriter()) Mutations.topazCritical(message).catch((e) => console.error("Isaac's Homebrew | Topaz", e));
+        });
+        Hooks.on("renderChatMessageHTML", (message, html) => Mutations.bindTopaz(message, html));
         Hooks.on("preUpdateToken", (token, change) => {
             if ("x" in change || "y" in change) origins.set(token.id, { x: token._source.x, y: token._source.y });
         });

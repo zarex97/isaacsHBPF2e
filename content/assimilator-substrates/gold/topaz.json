@@ -53,7 +53,7 @@
             "value": 1
         },
         "description": {
-            "value": "<p><strong>Essence:</strong> Power &middot; <strong>Mutation:</strong> Regal Aspect</p><p><em>The plate thickens into something ceremonial. It looks worn rather than grown.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td>+1 item bonus to Intimidation. Your critical hits deal <strong>+2 damage</strong>.</td></tr><tr><td>2</td><td>Your unarmed Strikes gain the <strong>critical specialization effect</strong> of the brawling group.</td></tr><tr><td>3</td><td>A creature you critically hit is <strong>frightened 1</strong>.</td></tr><tr><td>4</td><td>When you critically hit, apply the <strong>Depth 4 rider of one other bound Substrate</strong> to that Strike, whether or not it is at Depth 4.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
+            "value": "<p><strong>Essence:</strong> Power &middot; <strong>Mutation:</strong> Regal Aspect</p><p><em>The plate thickens into something ceremonial. It looks worn rather than grown.</em></p><table><thead><tr><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td>+1 item bonus to Intimidation. Your critical hits deal <strong>+2 damage</strong>.</td></tr><tr><td>2</td><td>Your unarmed Strikes gain the <strong>critical specialization effect</strong> of the brawling group.</td></tr><tr><td>3</td><td>A creature you critically hit is <strong>frightened 1</strong>.</td></tr><tr><td>4</td><td>When you critically hit, <strong>one other bound Substrate counts as Depth 4 for that Strike</strong>, whether or not it is at Depth 4.</td></tr></tbody></table><p><em>Depth is this effect's badge. The whole Mutation switches off at Depth 3+ while the Carapace is broken.</em></p>"
         },
         "duration": {
             "expiry": null,
@@ -208,7 +208,7 @@
                     "carapace:intact"
                 ],
                 "selector": "unarmed-attack-roll",
-                "text": "Regal Aspect: apply the Depth 4 rider of one other bound Substrate to this Strike.",
+                "text": "Regal Aspect: one other bound Substrate counts as Depth 4 for this Strike — pick it on the Topaz card.",
                 "title": "Topaz (Depth 4)"
             }
         ],
