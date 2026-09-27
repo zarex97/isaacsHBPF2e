@@ -406,8 +406,6 @@ const NOTES = [
     ["MN-4b", { manganese: 4 }, "damage", "Manganese (Depth 4)"],
     ["AL-2b", { aluminium: 2 }, "perception", "Aluminium (Depth 2)"],
     ["AL-3a", { aluminium: 3 }, "skill:athletics", "Aluminium (Depth 3)"],
-    ["PE-3a", { pearl: 3 }, "perception", "Pearl (Depth 3)"],
-    ["PE-4a", { pearl: 4 }, "perception", "Pearl (Depth 4)"],
     ["AG-4b", { silver: 4 }, "attack", "Silver (Depth 4)"],
     ["ZN-4b", { zinc: 4 }, "perception", "Zinc (Depth 4)"],
 ].map(([id, b, roll, title]) => ({ id, lv: 17, b, note: `Note: ${title}`, act: (a, t, ctx) => noteShown(a, t, ctx, { roll, title }), want: true }));
@@ -1247,7 +1245,65 @@ const INSTINCTS = [
         return [offered.some((x) => /Clumsy/.test(x)), answered,
             game.actors.get(a.id).itemTypes.condition.map((c) => c.slug).sort()];
     }, want: [false, true, ["clumsy"]], note: "only value-1 conditions are offered; frightened 1 ends" },
+    // Pearl 3: Cleansing Tide reaches 30 feet, and may lower an affliction's stage by 1 (#92).
+    ...[[{ pearl: 3 }, [false, true, true, 2], "Pearl 3: 40 feet refused; at 30 feet the poison is offered and eases from stage 3 to 2"],
+        [{ pearl: 2 }, [false, false, false, 3], "control: Pearl 2 — 30 feet refused; adjacent, no affliction is offered"]].map(([b, want, note]) => ({
+        id: "PE-3a", lv: 17, b, want, note, act: async (a, t, ctx) => {
+            const target = () => game.actors.get(t.id);
+            for (const e of target().itemTypes.effect.filter((x) => x.name === "ZZ Rig Poison")) await e.delete();
+            const [poison] = await target().createEmbeddedDocuments("Item", [{ name: "ZZ Rig Poison", type: "effect",
+                system: { badge: { type: "counter", value: 3 }, traits: { value: ["poison"] } } }]);
+            try {
+                const far = await tide(a, ctx, 8);
+                const thirty = await tide(a, ctx, 6);
+                if (!thirty) await tide(a, ctx, 1);
+                const offered = await answerDialog("ZZ Rig Poison (stage 3)");
+                await wait(800);
+                return [far, thirty, offered, target().items.get(poison.id)?.system.badge?.value ?? 0];
+            } finally {
+                closeTide(); untarget();
+                for (const e of target().itemTypes.effect.filter((x) => x.name === "ZZ Rig Poison")) await e.delete();
+                await place(ctx, ctx.targetTokenId, 1);
+            }
+        } })),
+    // Pearl 4: Cleansing Tide may counteract a spell effect of 4th rank or lower (#92).
+    ...[[{ pearl: 4 }, [true, false, true], "Pearl 4: the rank-2 spell effect is offered and counteracted; the rank-5 one is not offered"],
+        [{ pearl: 3 }, [false, false, false], "control: Pearl 3 offers no spell effect"]].map(([b, want, note]) => ({
+        id: "PE-4a", lv: 17, b, want, note, act: async (a, t, ctx) => {
+            const target = () => game.actors.get(t.id);
+            const spells = () => target().itemTypes.effect.filter((x) => /ZZ (Ward|Aegis)/.test(x.name));
+            for (const e of spells()) await e.delete();
+            const [ward] = await target().createEmbeddedDocuments("Item", [2, 5].map((rank) => ({
+                name: `Spell Effect: ZZ ${rank === 2 ? "Ward" : "Aegis"}`, type: "effect",
+                system: { level: { value: rank }, fromSpell: true, duration: { value: 10, unit: "minutes" } } })));
+            try {
+                await tide(a, ctx, 1);
+                await wait(400);
+                const offered = [...document.querySelectorAll(".application button")].map((x) => x.textContent.trim());
+                const aegis = offered.some((x) => /ZZ Aegis/.test(x));
+                const picked = await answerDialog("Counteract Spell Effect: ZZ Ward (rank 2)");
+                const gone = picked && !!(await until(() => !target().items.get(ward.id), 6000));
+                return [picked, aegis, gone];
+            } finally {
+                closeTide(); untarget();
+                for (const e of spells()) await e.delete();
+            }
+        } })),
 ];
+
+/** Target the rig's target `dx` squares off and use Cleansing Tide; true when its card posted — the use was not refused. */
+async function tide(a, ctx, dx) {
+    closeTide();
+    await place(ctx, ctx.targetTokenId, dx);
+    untarget();
+    canvas.scene.tokens.get(ctx.targetTokenId).object.setTarget(true, { user: game.user, releaseOthers: true });
+    const since = game.messages.size;
+    game.pf2e.rollItemMacro(game.actors.get(a.id).items.find((i) => i.slug === "cleansing-tide").uuid);
+    await wait(1200);
+    return game.messages.contents.slice(since).some((m) => m.item?.slug === "cleansing-tide");
+}
+const closeTide = () => [...foundry.applications.instances.values()]
+    .filter((x) => x.options?.window?.title?.startsWith("Cleansing Tide")).forEach((x) => x.close());
 
 /** Poll `fn` until it is truthy or `ms` has passed; return its last value. */
 async function until(fn, ms = 8000) {
