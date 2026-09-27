@@ -201,7 +201,7 @@
                         ]
                     },
                     "carapace:intact",
-                    "target:condition:persistent-damage:bleed"
+                    "target:assimilator:bleeding-from:{actor|id}"
                 ],
                 "selector": "unarmed-damage",
                 "slug": "substrate-garnet-sanguine",

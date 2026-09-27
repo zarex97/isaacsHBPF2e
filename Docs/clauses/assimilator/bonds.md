@@ -49,7 +49,7 @@ class tracker's (`A-47`–`A-50`).
 | B-05b | Blackfire (Ruby + Onyx) | When it kills a creature, you regain Hit Points equal to your level. | `rig` | ✅ | Rig, live: a fire kill healed the Assimilator **17** (its level) |
 | B-06 | Exsanguinary (Garnet + Jet) | Persistent bleed you inflict also heals you for the same amount each time it ticks. | `rig` | ✅ | Rig, live: the target's bleed, stamped as the Assimilator's, ticked and healed it **exactly what it dealt**. pf2e does not record who inflicted persistent damage, so the module stamps it when it lands |
 | B-07 | Second Heart (Garnet + Emerald) | Once per day, when you would die, you don't — you drop to 1 Hit Point and are stunned 1 as the second heart takes over. | `rig` | ✅ | Rig, live: dying 4 left the Assimilator at **1** Hit Point, **stunned**, not dying; once a day |
-| B-08 | Siege Frame (Iron + Steel) | You ignore an object's Hardness up to 10, and forced movement you cause increases by an additional 10 feet. | `rig` | ⚠️ | Rig, live: a hazard with Hardness 15 took **15** of 20 (Hardness ignored up to 10). **The gap:** "forced movement +10 feet" is a Note on the Athletics roll (shown) — the table moves the creature |
+| B-08 | Siege Frame (Iron + Steel) | You ignore an object's Hardness up to 10, and forced movement you cause increases by an additional 10 feet. | `rig` | ✅ | Rig, live: a hazard with Hardness 15 took **15** of 20 (Hardness ignored up to 10). Through the Push card after a real Shove, Siege Frame's creature travelled **20 feet** on a critical success (15 on a success) — the Shove's 10 (5) and **10 more**; without the Bond, the Shove's own (#85, Q6) |
 | B-09 | Lightning Lash (Copper + Cobalt) | Your ranged Arcane Channel Strike conducts: it chains to a second creature within 15 feet of the first for half damage. | `rig` | ✅ | Rig, live: 10 from the Arcane Channel — the creature beside the target took **5** |
 | B-10a | Crowned Fortune (Topaz + Citrine) | Once per encounter, declare a Strike **imperial** before rolling. | `rig` | ✅ | Rig, live, in an encounter: *Imperial Strike* (granted) declared it; a second declaration that encounter was **refused** |
 | B-10b | Crowned Fortune (Topaz + Citrine) | On a success it counts as a critical success. | `rig` | ✅ | Rig, live: an unadjusted **success** came out a **critical success**, and the declaration was spent |
@@ -81,8 +81,8 @@ class tracker's (`A-47`–`A-50`).
 | Status | Count |
 | :-- | --: |
 | ☐ | 0 |
-| ✅ | 26 |
-| ⚠️ | 7 |
+| ✅ | 27 |
+| ⚠️ | 6 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 1 |
