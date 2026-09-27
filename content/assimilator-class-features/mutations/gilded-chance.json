@@ -11,7 +11,7 @@
         },
         "category": "interaction",
         "description": {
-            "value": "<p><strong>Trigger</strong> You fail a check.</p><hr /><p>Reroll the check and take the second result. At Citrine Depth 2 you may do this twice per day, and the reroll gains a <strong>+2 circumstance bonus</strong>.</p>"
+            "value": "<p><strong>Trigger</strong> You fail a check.</p><hr /><p>Reroll the check and take the second result. At Citrine Depth 2 you may do this twice per day, and the reroll gains a <strong>+2 circumstance bonus</strong>.</p><p><em>Using it rerolls your most recent failed check for you, keeping the new result, with the +2 added at Depth 2.</em></p>"
         },
         "frequency": {
             "max": 1,

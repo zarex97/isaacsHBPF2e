@@ -1,0 +1,41 @@
+{
+    "img": "icons/magic/light/explosion-star-glow-yellow.webp",
+    "name": "Effect: Depth 4 for This Strike",
+    "system": {
+        "description": {
+            "value": "<p><strong>A critical hit.</strong> The Substrates named here count as <strong>Depth 4 for this Strike</strong> — its damage and whatever answers it landing — whether or not they are at Depth 4. Gold's Instinct, Topaz at Depth 4 and <em>Apex Predator</em> make it. It ends when your next attack is rolled, or at the end of your turn. Not while the Carapace is broken, which switches every Mutation at Depth 3 or higher off.</p>"
+        },
+        "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 0
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        },
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        }
+    },
+    "type": "effect"
+}
