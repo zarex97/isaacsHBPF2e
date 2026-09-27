@@ -200,6 +200,7 @@ Hooks.once("init", () => {
             shove: Shove,
             citrine: Citrine,
             purple: Purple,
+            carapace: Carapace,
             mend: (actor, itemId) => AssimilatorEngine.mend(actor, itemId),
         },
         open: () => new SkyTrackerApp().render(true),
