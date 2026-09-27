@@ -1,0 +1,52 @@
+{
+    "img": "icons/magic/control/debuff-chains-ropes-purple.webp",
+    "name": "Effect: Argent-Bound",
+    "system": {
+        "description": {
+            "value": "<p><strong>Silver, Depth 4.</strong> Critically hit by an Assimilator's Argent Edge: this creature <strong>cannot use reactions or innate spells</strong> until the end of its next turn.</p>"
+        },
+        "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "self:cannot-react"
+            },
+            {
+                "key": "RollOption",
+                "domain": "all",
+                "option": "self:cannot-cast-innate"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

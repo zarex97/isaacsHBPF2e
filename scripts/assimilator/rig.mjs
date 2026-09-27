@@ -406,7 +406,6 @@ const NOTES = [
     ["MN-4b", { manganese: 4 }, "damage", "Manganese (Depth 4)"],
     ["AL-2b", { aluminium: 2 }, "perception", "Aluminium (Depth 2)"],
     ["AL-3a", { aluminium: 3 }, "skill:athletics", "Aluminium (Depth 3)"],
-    ["AG-4b", { silver: 4 }, "attack", "Silver (Depth 4)"],
     ["ZN-4b", { zinc: 4 }, "perception", "Zinc (Depth 4)"],
 ].map(([id, b, roll, title]) => ({ id, lv: 17, b, note: `Note: ${title}`, act: (a, t, ctx) => noteShown(a, t, ctx, { roll, title }), want: true }));
 
@@ -2140,6 +2139,72 @@ const SCENARIOS = [
         await a.update({ "flags.isaacs-hb-pf2e.assimilator.-=used": null });
         return [await hitSelf(a, t, ctx, "30[fire]"), await hitSelf(game.actors.get(a.id), t, ctx, "30[fire]")];
     }, want: [0, 18], note: "none the first time; resistance 12 after" },
+    // Moonstone 1: Reactive Evolution answers damage just taken — its card offers that damage's types (#93).
+    ...[[{ moonstone: 1 }, [true, 2, true, true, false], "Moonstone 1: fire offered and taken, fire 2; outside an encounter cold is offered again; in one, the first use spends it"],
+        [{ ruby: 1 }, [false, 0, false, false, false], "control: no Moonstone, no card"]].map(([b, want, note]) => ({ id: "MO-1a", lv: 17, b, want, note,
+        act: async (a, t, ctx) => {
+            const me = () => game.actors.get(a.id);
+            const clear = async () => {
+                const ids = me().itemTypes.effect.filter((x) => x.slug === "effect-reactive-evolution").map((x) => x.id);
+                if (ids.length) await me().deleteEmbeddedDocuments("Item", ids);
+            };
+            await clear();
+            await me().update({ "flags.isaacs-hb-pf2e.assimilator.-=moonstoneUses": null });
+            const offer = async (formula, type) => {
+                const since = game.messages.size;
+                await hitSelf(me(), game.actors.get(t.id), ctx, formula);
+                const card = await until(() => game.messages.contents.slice(since)
+                    .find((m) => m.flags?.["isaacs-hb-pf2e"]?.assimilatorCard?.kind === "moonstone"), 2500);
+                return card?.flags["isaacs-hb-pf2e"].assimilatorCard.options.includes(type) ? card : null;
+            };
+            // The owner's click, on the card in the chat log.
+            const take = async (card, type) => {
+                await wait(300);
+                document.querySelector(`[data-message-id="${card.id}"] [data-value="${type}"]`)?.click();
+                await until(() => me().itemTypes.effect.some((x) => x.slug === "effect-reactive-evolution"
+                    && x.flags?.pf2e?.rulesSelections?.type === type), 4000);
+            };
+            const fire = await offer("10[fire]", "fire");
+            if (fire) await take(fire, "fire");
+            const resist = read.resist(me(), "fire") ?? 0;
+            const again = !!(await offer("10[cold]", "cold"));
+            await clear();
+            const fought = await inCombat(ctx, async () => {
+                const first = await offer("10[acid]", "acid");
+                if (first) await take(first, "acid");
+                return [!!first, !!(await offer("10[sonic]", "sonic"))];
+            });
+            await clear();
+            return [!!fire, resist, again, ...fought];
+        } })),
+    // Silver 4: a critical Strike binds a supernatural creature — its reaction and innate spell cards are refused (#93).
+    ...[[{ silver: 4 }, ["undead"], [true, false, false, true], "Silver 4, an undead critically hit: bound; its reaction and innate spell refused; a prepared spell still posts"],
+        [{ silver: 4 }, ["humanoid"], [false, true, true, true], "control: a humanoid critically hit is not bound"],
+        [{ silver: 3 }, ["undead"], [false, true, true, true], "control: Silver 3"]].map(([b, targetTraits, want, note]) => ({
+        id: "AG-4b", lv: 17, b, targetTraits, crit: true, want, note, act: async (a, t) => {
+            const target = () => game.actors.get(t.id);
+            const expected = b.silver >= 4 && targetTraits.includes("undead");
+            const bound = !!(await until(() => target().itemTypes.effect.some((x) => x.slug === "effect-argent-bound"), expected ? 5000 : 1500));
+            const made = await target().createEmbeddedDocuments("Item", [
+                { name: "ZZ Riposte", type: "action", system: { actionType: { value: "reaction" } } },
+                { name: "ZZ Innate", type: "spellcastingEntry", system: { prepared: { value: "innate" }, tradition: { value: "arcane" }, ability: { value: "cha" } } },
+                { name: "ZZ Prepared", type: "spellcastingEntry", system: { prepared: { value: "prepared" }, tradition: { value: "arcane" }, ability: { value: "int" } } }]);
+            const spells = await target().createEmbeddedDocuments("Item", made.slice(1).map((e) => ({ name: `ZZ Spark (${e.name})`, type: "spell",
+                system: { level: { value: 1 }, traits: { value: ["concentrate", "manipulate"] }, time: { value: "2" }, location: { value: e.id } } })));
+            const posted = async (id) => {
+                const item = target().items.get(id);
+                const since = game.messages.size;
+                await item.toMessage(null, { create: true });
+                await wait(600);
+                return game.messages.contents.slice(since).some((m) => m.flags?.pf2e?.origin?.uuid === item.uuid);
+            };
+            try {
+                return [bound, await posted(made[0].id), await posted(spells[0].id), await posted(spells[1].id)];
+            } finally {
+                await target().deleteEmbeddedDocuments("Item", [...made, ...spells].map((x) => x.id).filter((id) => target().items.has(id)));
+                for (const e of target().itemTypes.effect.filter((x) => x.slug === "effect-argent-bound")) await e.delete();
+            }
+        } })),
     { id: "ZN-3b", lv: 17, b: { zinc: 3 }, c: { zinc: "fire" }, act: async (a, t, ctx) => {
         await a.update({ "flags.isaacs-hb-pf2e.assimilator.-=used": null });
         const took = await hitSelf(a, t, ctx, "20[cold]");
