@@ -135,7 +135,9 @@
                 "title": "Lead (Depth 2)"
             },
             {
-                "key": "Note",
+                "key": "Aura",
+                "slug": "null-weight-aura",
+                "radius": 10,
                 "predicate": [
                     {
                         "not": "assimilator:suppressed"
@@ -148,9 +150,13 @@
                     },
                     "carapace:intact"
                 ],
-                "selector": "all",
-                "text": "Creatures within 10 feet of you take a -1 status penalty to spell attack rolls and spell DCs.",
-                "title": "Lead (Depth 3)"
+                "effects": [
+                    {
+                        "uuid": "Compendium.isaacs-hb-pf2e.assimilator-effects.Item.Effect: Null Weight Aura",
+                        "affects": "all",
+                        "includesSelf": false
+                    }
+                ]
             },
             {
                 "allowDuplicate": false,

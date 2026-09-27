@@ -1,0 +1,53 @@
+{
+    "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+    "name": "Effect: Null Weight Aura",
+    "system": {
+        "description": {
+            "value": "<p><strong>Lead, Depth 3.</strong> Within 10 feet of an Assimilator's Null Weight: <strong>−1 status to spell attack rolls and spell DCs</strong>.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "selector": [
+                    "spell-attack-roll",
+                    "spell-dc"
+                ],
+                "slug": "null-weight-aura",
+                "type": "status",
+                "value": -1,
+                "label": "Null Weight"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

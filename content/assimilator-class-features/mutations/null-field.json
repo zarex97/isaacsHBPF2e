@@ -20,7 +20,9 @@
                             "occult",
                             "primal"
                         ],
-                        "type": "counteract"
+                        "type": "counteract",
+                        "auto": true,
+                        "suppress": "any"
                     },
                     "event": "action-used",
                     "self": true

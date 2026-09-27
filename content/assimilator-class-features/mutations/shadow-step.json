@@ -11,7 +11,7 @@
         },
         "category": "interaction",
         "description": {
-            "value": "<p>Teleport from an area of darkness to another area of darkness within 60 feet.</p>"
+            "value": "<p>Teleport from an area of darkness to another area of darkness within 60 feet.</p><p><em>Use it, then click the destination: both squares must be in darkness — a dark scene, or inside a darkness such as Shadow Mantle's — and within 60 feet.</em></p>"
         },
         "frequency": {
             "max": 1,

@@ -3370,6 +3370,8 @@ const SYSTEM_SLUGS = new Set([
     "cobalt-counteract", "cobalt-counteract-module",
     // Nickel's Organ modifier, read off Perception by the rig.
     "aberrant-organ",
+    // Onyx Depth 1's Stealth modifier, read off the skill by the rig.
+    "onyx-stealth-1",
 ]);
 
 const unresolvedInScripts = [];
