@@ -78,8 +78,8 @@ this file.
 | A-23 | §4.2 | The symbiont is your armour and cannot be removed. |  | ✅ | Live: an update stowing the plate is **refused** — it read `worn` after, with a notification. **Deleting** it is not refused: that is how pf2e removes granted items when the class goes, and blocking it would break that |
 | A-24 | §4.2 | It functions as **explorer's clothing that is alive**: AC item bonus +0, Dex cap +5, no check penalty, no Speed penalty, Bulk —. | `test-assimilator` pins it | ✅ | Live at 1st: AC **15** with the plate worn — exactly unarmoured Expert with a +0 item bonus. Dex cap and the zero penalties are pinned statically |
 | A-25 | §4.2 | **It accepts armour potency, resilient and property runes** |  | ✅ | Live at 5th: a **+1 potency** rune on the plate took AC **19 → 20**. Like any magic armour it must be invested; the plate is now granted invested |
-| A-26a | §4.2 | **You cannot wear other armour.** |  | ⚠️ | Live: other armour **can** be worn — through the sheet's own path (`changeCarryType`) leather went on and pf2e unslotted the plate. That is the guide's *"Attempting it"*, so the next row carries the consequence; nothing refuses the attempt itself |
-| A-26b | §4.2 | Attempting it suppresses Living Plate, every Mutation, and your Instinct until you take it off. |  | ⚠️ | Live: with leather worn the plate is **unslotted** (its rune gone, AC **20 → 11**) and **`assimilator:suppressed`** is emitted; taking it off restores AC 20 and clears the option. Mutations and the Instinct do not exist until Phase 2, so the half of the clause that suppresses them waits on them predicating on that option |
+| A-26a | §4.2 | **You cannot wear other armour.** | `rig` | ✅ | Rig, live: wearing leather over the plate is **allowed** — through the sheet's own `changeCarryType` — and posts *The symbiont does not share*; taking it off posts *The symbiont wakes*. The guide's next sentence begins *"Attempting it"*, so "cannot" is its consequence (A-26b), not a refusal (#84, Q1) |
+| A-26b | §4.2 | Attempting it suppresses Living Plate, every Mutation, and your Instinct until you take it off. | `rig` | ✅ | Rig, live, each read before, while worn and after: **Red** (Ruby 2 + Amber 1) — the Instinct, Amber's granted *Draw on the Reservoir* and Ruby's fire on the Strike all go (`assimilator:suppressed` on, highest Depth 0) and all come back. **Orange** (Carnelian 2) — the Instinct and its Speed go and return. **White** (Pearl 2) — the Instinct and *Cleansing Tide* go; the uses a day stay 2, so nothing reads as spent. **Carapace Block**: armed and hit for 20, the plate takes its Hardness; suppressed it takes 0 and all 20 land; back on, it blocks again. The engine's derived picture goes dark while the items stay, gated by their own predicates (#84, Q6–Q7) |
 
 ## Carapace Block and the broken state (guide §4.3)
 
@@ -92,7 +92,7 @@ this file.
 | A-30 | §4.3 | **Carapace Block** 🜲 **Reaction** — *Trigger:* you take physical damage. | `test-assimilator` pins it | ✅ | Live at 5th: armed, **20 fire** was taken in full (**20**), the plate untouched, and the block **stayed armed**. It fires on physical damage only |
 | A-31 | §4.3 | *Effect:* reduce the damage by your Carapace's Hardness. | `test-assimilator` pins it | ✅ | Live at 5th, the same 20 bludgeoning twice: **unarmed → 20 taken**, **armed → 18 taken**. The block is taken on the damage bus off the damage *after* IWR, by shadowing `calculateHealthDelta` for one application |
 | A-32 | §4.3 | The Carapace takes that much damage. | `test-assimilator` pins it | ✅ | Live: the plate went **35 → 33** — it takes what it blocked, not what got past it (pf2e's Shield Block does the latter, which is why the plate is not a shield). The armed effect was spent and a card names the amount |
-| A-33 | §4.3 | **While broken**, you lose Living Plate's rune benefits |  | ⚠️ | Live: broken, the plate's potency is overridden to **0** and AC fell **20 → 19**; repaired, **20** again. Resilient is overridden the same way. **Property runes are not removed** — pf2e has no alteration for them |
+| A-33 | §4.3 | **While broken**, you lose Living Plate's rune benefits | `rig` | ✅ | Rig, live: *slick*'s `armor:rune:property:slick` is on whole; broken, it is **off** and the plate's property list is empty, set aside in a flag; mended, it is back beside *shadow*, a rune etched while broken. Potency and resilient are overridden to 0 as before |
 | A-34 | §4.3 | **every Mutation at Depth 3 or higher switches off** until the Carapace is repaired |  | ✅ | Live at 11th with Ruby at Depth 3: breaking the plate switched **the whole Mutation** off — the Strike lost its 1d6 fire **and** its versatile-fire trait, Ruby's resistance cut stopped (**20 fire → 10** taken instead of 15), and Red's bonus fell **+4 → +1** as Ruby left the sum. Repaired, all four came back. **Fixed while driving:** only Ruby's Depth 3–4 rules switched off at first, leaving its Depth 1–2 rules running; the guide says *every Mutation*, so every rule of a Substrate now holds only while it is below Depth 3 or the plate is whole |
 | A-35 | §4.3 | Repair is the Repair activity against its own Hardness, or one hour of Feeding it any Substrate you don't bind. | `rig` | ✅ | Rig, live: feeding the plate a **Copper Ingot** (Copper unbound) mended it to full; a **Ruby** — bound — was refused. The first road, the Repair activity, is pf2e's own on the armour item |
 
@@ -149,7 +149,7 @@ this file.
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | A-53 | §4.7 | 🜲 **Reaction** — *Trigger:* a creature you can see damages you. |  | ✅ | Live: armed, damage from the dummy's **Claw** was reduced; a hit with no source creature is left alone. The reaction carries `frequency 1/round` |
 | A-54a | §4.7 | **(a)** gain resistance equal to **twice your highest Depth** against that damage |  | ✅ | Live at 11th, highest Depth 3: the same 20 slashing from the Claw took **20** unarmed and **14** armed — resistance **6**, twice the highest Depth — and the reflex was spent |
-| A-54b | §4.7 | **(b)** if the triggering creature is within your reach, make a **Carapace Strike** against it. |  | ⚠️ | Text: choice (b) is a Strike the player makes; nothing arms it |
+| A-54b | §4.7 | **(b)** if the triggering creature is within your reach, make a **Carapace Strike** against it. | `rig` | ✅ | Rig, live: using it asks which, and offers only what can happen. Adjacent: both are offered, and **Carapace Strike** rolls against the targeted creature. 20 feet off, past the reach pf2e reports: only **(a)**. Suppressed: only **(b)**, there being no Depth for (a) (#84, Q3, Q15–Q16) |
 | A-55 | §4.7 | Once per round, and it does not stack with Carapace Block against the same damage. |  | ✅ | Live: with Symbiotic Reflex (6) and Carapace Block (Hardness 2) **both** armed, 20 slashing took **14** — only the larger applied — the plate lost **0**, and **both** were spent |
 
 ## Alien Physiology (guide §4.8)
@@ -159,9 +159,9 @@ this file.
 | A-56a | §4.8 | You need neither food, drink nor air |  | — | Nothing to automate: pf2e has no hunger, thirst or breathing to switch off. Split from A-56 (#84) |
 | A-56b | §4.8 | you are **immune to disease**. |  | ✅ | Live: **immune to disease** at 15th, **not at 14th** |
 | A-57 | §4.8 | You are **immune to the drained condition** |  | ✅ | Live: **immune to drained** at 15th, not at 14th |
-| A-58 | §4.8 | and to any effect that would alter your physical form against your will (petrification, polymorph, and the like) |  | ⚠️ | Live: **immune to petrified and polymorph** at 15th, not at 14th — but unconditionally, where the guide says *against your will*: a willing polymorph is refused too |
+| A-58 | §4.8 | and to any effect that would alter your physical form against your will (petrification, polymorph, and the like) | `rig` | ✅ | Rig, live: pf2e's own `polymorph` immunity is **unimplemented** — its predicate is `unhandled:polymorph` and matches nothing — so it is a custom immunity matching the polymorph trait on the effect or on the spell it came from. Unwilling: immune, and *Animal Form*'s effect as its chat card applies it is **refused**. *Accept a transformation* on: petrified still immune, the form **lands**. Off again: immune. The toggle must be on before the effect lands; switching it off does not end one already on you (#84, Q8) |
 | A-59 | §4.8 | You can be healed by **Repair** as well as by anything that heals a creature. |  | — | Nothing to automate: pf2e's Repair activity targets objects, not creatures; that an Assimilator can be Repaired is the GM's ruling at the table |
-| A-60 | §4.8 | you are **immune to precision damage** and to critical specialization effects of the knife and pick groups. |  | ⚠️ | Live: **immune to precision** at 15th, not at 14th. Immunity to the knife and pick groups' critical specialization is text — pf2e has no immunity for it |
+| A-60 | §4.8 | you are **immune to precision damage** and to critical specialization effects of the knife and pick groups. | `rig` | ✅ | Rig, live, a real pf2e critical from a character with a dagger and a light pick and critical specialization for both: at 17th the **knife**'s persistent bleed is removed as it lands and the **pick**'s `2 × dice` does not land; at 14th, before Alien Physiology, both do. Precision immunity as before. The pick's amount comes off the post-IWR figure, exact unless a resistance or weakness to that instance's type moved it first |
 
 ## Apotheosis (guide §4.9)
 
@@ -178,8 +178,8 @@ this file.
 | Status | Count |
 | :-- | --: |
 | ☐ | 0 |
-| ✅ | 69 |
-| ⚠️ | 6 |
+| ✅ | 75 |
+| ⚠️ | 0 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 2 |

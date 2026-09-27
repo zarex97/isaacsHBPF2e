@@ -16,11 +16,22 @@ import { MODULE_ID } from "../sky/signs.mjs";
 const ENERGY = new Set(["acid", "cold", "electricity", "fire", "sonic", "force", "vitality", "void"]);
 const KEY = "assimilator";
 
+/**
+ * Guide §4.2: other armour worn over the plate *"suppresses Living Plate, every Mutation, and your Instinct until
+ * you take it off."* The Carapace sets this option whenever the plate is out of its slot, and every scripted
+ * Mutation, Instinct and plate reaction asks it before acting — the rule elements carry it as a predicate.
+ */
+export const SUPPRESSED = "assimilator:suppressed";
+
+export function suppressed(actor) {
+    return !!actor?.getRollOptions?.().includes(SUPPRESSED);
+}
+
 /** The effective Depth of a bound Substrate on this creature, 0 if unbound or switched off by a broken plate. */
 export function depthOf(actor, slug) {
     if (!actor?.getRollOptions) return 0;
     const options = actor.getRollOptions();
-    if (options.includes("assimilator:suppressed")) return 0;
+    if (options.includes(SUPPRESSED)) return 0;
     const m = options.map((o) => new RegExp(`^self:effect:substrate-${slug}:(\\d+)$`).exec(o)).find(Boolean);
     const depth = m ? Number(m[1]) : 0;
     return depth >= 3 && !options.includes("carapace:intact") ? 0 : depth;
@@ -65,11 +76,40 @@ async function spend(actor, key, per) {
     await actor.update({ [`flags.${MODULE_ID}.${KEY}.used.${key}`]: stampFor(per, actor) });
 }
 
+/** The persistent-damage conditions an Assimilator had before a knife's critical landed, keyed by the actor. */
+const knifeWatch = new WeakMap();
+
+/**
+ * A knife's or pick's critical specialization in damage an Alien Physiology Assimilator is taking, or null.
+ * `pick` is the flat amount; `soleBleed` says the knife's die is the only bleed in the roll.
+ */
+function critSpecOf(actor, params) {
+    const damage = params?.damage;
+    if (!damage || typeof damage === "number" || params.outcome !== "criticalSuccess") return null;
+    if (!actor.itemTypes?.feat?.some((f) => f.slug === "alien-physiology")) return null;
+    const weapon = params.item;
+    const group = weapon?.group ?? weapon?.system?.group ?? null;
+    if (group !== "knife" && group !== "pick") return null;
+    const parts = damage.options?.damage?.damage;
+    if (!parts) return null;
+    const live = [...(parts.dice ?? []), ...(parts.modifiers ?? [])].filter((p) => p?.enabled !== false && p?.critical !== false);
+    const spec = live.filter((p) => p.slug === "critical-specialization");
+    if (!spec.length) return null;
+    if (group === "pick") return { group, pick: spec.reduce((n, p) => n + (Number(p.modifier ?? p.value) || 0), 0) };
+    const bleedElsewhere = live.some((p) => p.slug !== "critical-specialization" && p.damageType === "bleed")
+        || parts.base?.some?.((b) => b.damageType === "bleed");
+    return { group, soleBleed: !bleedElsewhere };
+}
+
 export const AssimilatorDamage = {
     registerHooks() {
         DamageBus.before("the Assimilator's passive defences", PRIORITY.carapaceBlock + 1,
             (actor, params) => AssimilatorDamage.defend(actor, params));
         DamageBus.before("Manganese's corrosion", PRIORITY.bypass + 1, (actor) => AssimilatorDamage.corroded(actor));
+        DamageBus.before("Alien Physiology", PRIORITY.carapaceBlock + 2,
+            (actor, params) => AssimilatorDamage.noAnatomy(actor, params));
+        DamageBus.after("Alien Physiology's bleed", PRIORITY.carapaceBlock + 2,
+            (actor, params) => AssimilatorDamage.noAnatomyAfter(actor, params));
         DamageBus.after("Mutations that answer damage dealt", PRIORITY.riders + 2,
             (actor, params, before) => AssimilatorDamage.dealt(actor, params, before));
         DamageBus.after("Mutations that answer damage taken", PRIORITY.riders + 3,
@@ -166,6 +206,55 @@ export const AssimilatorDamage = {
         };
     },
 
+    /**
+     * Alien Physiology (guide §4.8): *"immune … to critical specialization effects of the knife and pick groups."*
+     *
+     * pf2e builds both into the damage roll under the slug `critical-specialization`. The **pick**'s is a flat
+     * `2 × dice` folded into the weapon's own instance, so it cannot be lifted out of the roll: it comes off the
+     * post-IWR figure here instead, which is exact unless a resistance or weakness to that instance's type moved
+     * the total first. The **knife**'s is 1d6 persistent bleed, its own instance, which only ever *creates* a
+     * persistent-damage condition; the after stage removes the one it created — and only when it was the roll's
+     * sole bleed, since a bleed from anything else is not the symbiont's to refuse.
+     */
+    noAnatomy(actor, params) {
+        const found = critSpecOf(actor, params);
+        if (!found) return undefined;
+        if (found.group === "knife") {
+            const bleeds = (actor.itemTypes?.condition ?? []).filter((c) => c.slug === "persistent-damage")
+                .map((c) => c.id);
+            if (found.soleBleed) knifeWatch.set(actor, new Set(bleeds));
+            return undefined;
+        }
+        const amount = found.pick;
+        if (!(amount > 0)) return undefined;
+        const shadowed = Object.prototype.hasOwnProperty.call(actor, "calculateHealthDelta");
+        const original = actor.calculateHealthDelta;
+        let turned = 0;
+        actor.calculateHealthDelta = function (args) {
+            turned = args.delta > 0 ? Math.min(args.delta, amount) : 0;
+            return original.call(this, { ...args, delta: args.delta - turned });
+        };
+        return () => {
+            if (shadowed) actor.calculateHealthDelta = original;
+            else delete actor.calculateHealthDelta;
+            if (turned) say(liveActor(actor, params), `<strong>Alien Physiology</strong>: there is nowhere for the pick to `
+                + `find; its critical specialization's <strong>${turned}</strong> does not land.`);
+        };
+    },
+
+    async noAnatomyAfter(actor, params) {
+        const had = knifeWatch.get(actor);
+        if (!had) return;
+        knifeWatch.delete(actor);
+        const live = liveActor(actor, params);
+        const fresh = live.itemTypes.condition.filter((c) => c.slug === "persistent-damage" && !had.has(c.id)
+            && c.system.persistent?.damageType === "bleed");
+        if (!fresh.length) return;
+        await live.deleteEmbeddedDocuments("Item", fresh.map((c) => c.id));
+        await say(live, "<strong>Alien Physiology</strong>: there is no artery to open; the knife's critical "
+            + "specialization bleed does not take.");
+    },
+
     /** Manganese's corrosion lowers every resistance the creature has, against anyone's damage, while it lasts. */
     corroded(actor) {
         const effects = actor.itemTypes?.effect?.filter((e) => e.slug === "effect-corroded") ?? [];
@@ -228,7 +317,7 @@ export const AssimilatorDamage = {
         const weapon = params?.item;
         const attacker = weapon?.actor;
         // In force as the engine reckons it: slotted, and Ruby and Iron at 2+ (or Electrum standing in).
-        const moltenOn = live.getRollOptions().includes("assimilator:bond:molten-carapace");
+        const moltenOn = live.getRollOptions().includes("assimilator:bond:molten-carapace") && !suppressed(live);
         const traits = weapon?.system?.traits?.value ?? [];
         const meleeUnarmedOrReach = weapon && (weapon.isMelee ?? weapon.system?.range == null)
             && (traits.includes("unarmed") || traits.some((t) => t.startsWith("reach")) || weapon.category === "unarmed");
@@ -301,6 +390,7 @@ export const AssimilatorDamage = {
 
     /** Draw on the Reservoir: 1 charge for +1d4, or at Amber Depth 2 with 2 to spare, 2 for +1d6 + 2. */
     async draw(actor) {
+        if (suppressed(actor)) return say(actor, "<strong>Reservoir</strong>: the symbiont is suppressed.");
         const state = actor.flags?.[MODULE_ID]?.[KEY]?.reservoir ?? { charges: 0 };
         if (!state.charges) return say(actor, "<strong>Reservoir</strong>: empty.");
         const big = depthOf(actor, "amber") >= 2 && state.charges >= 2;
@@ -313,6 +403,7 @@ export const AssimilatorDamage = {
 
     /** Discharge: the riders fire on the use; the cost is taken once they have. */
     async discharge(actor) {
+        if (suppressed(actor)) return say(actor, "<strong>Discharge</strong>: the symbiont is suppressed.");
         const state = actor.flags?.[MODULE_ID]?.[KEY]?.reservoir ?? { charges: 0 };
         if (state.charges < 3) return say(actor, "<strong>Discharge</strong> needs 3 charges; the Reservoir has "
             + `${state.charges}.`);

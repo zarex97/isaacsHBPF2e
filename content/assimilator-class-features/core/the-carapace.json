@@ -91,6 +91,16 @@
                         "not": "armor:slug:living-plate"
                     }
                 ]
+            },
+            {
+                "domain": "all",
+                "key": "RollOption",
+                "option": "self:assimilator:suppressed",
+                "predicate": [
+                    {
+                        "not": "armor:slug:living-plate"
+                    }
+                ]
             }
         ],
         "traits": {

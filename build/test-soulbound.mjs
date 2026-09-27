@@ -3359,6 +3359,9 @@ const SYSTEM_SLUGS = new Set([
     "arcane-channel", "stunned", "slowed", "stupefied",
     // The Carapace Strike is a Strike rule's weapon, not a document.
     "carapace-strike",
+    // pf2e's own: the damage partial Alien Physiology refuses, and the armour and polymorph effect the rig
+    // puts on to drive the suppression and the willing transformation.
+    "critical-specialization", "leather-armor", "spell-effect-animal-form-ape",
 ]);
 
 const unresolvedInScripts = [];
