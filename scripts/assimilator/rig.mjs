@@ -55,7 +55,9 @@ const read = {
     freq: (a, slug) => a.items.find((i) => i.slug === slug)?.system.frequency?.max ?? null,
     hardness: (a) => a.itemTypes.armor.find((i) => i.slug === "living-plate")?.hardness ?? null,
     strike: (a, label = "Carapace Strike") => a.system.actions.find((s) => s.label === label),
-    fastHealing: (a) => a.rules.filter((r) => r.key === "FastHealing" && !r.ignored && r.test()).map((r) => r.resolveValue(r.value)),
+    // Sorted: the rules come in item order, which is not stable, and B-04 once read [5, 2] for [2, 5] (#101).
+    fastHealing: (a) => a.rules.filter((r) => r.key === "FastHealing" && !r.ignored && r.test()).map((r) => r.resolveValue(r.value))
+        .sort((x, y) => x - y),
     traits: (a, label) => read.strike(a, label)?.item.system.traits.value ?? [],
 };
 
@@ -1817,7 +1819,15 @@ export const AssimilatorRig = {
         const ctx = await AssimilatorRig.setup();
         try {
             for (const check of [...CHECKS, ...SCENARIOS, ...NOTES, ...INSTINCTS, ...BOND_CHECKS, ...FEAT_CHECKS].filter((c) => !only || only.test(c.id))) {
-                results.push(await AssimilatorRig.one(check, ctx));
+                // A check that throws outside its own reading — in the reset before it — is that check's failure,
+                // not the run's: recorded against its id, and the run goes on (#101).
+                try {
+                    results.push(await AssimilatorRig.one(check, ctx));
+                } catch (error) {
+                    console.error(`Isaac's Homebrew | rig: ${check.id} threw`, error);
+                    results.push({ id: check.id, note: check.note ?? "", pass: false, actual: `threw: ${error.message}`,
+                        want: typeof check.want === "function" ? check.want.toString().slice(0, 60) : JSON.stringify(check.want) });
+                }
             }
         } finally {
             await AssimilatorRig.teardown(ctx);
