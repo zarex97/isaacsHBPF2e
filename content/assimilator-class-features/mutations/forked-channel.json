@@ -1,0 +1,61 @@
+{
+    "folder": "Mutations",
+    "img": "icons/magic/lightning/bolt-forked-blue.webp",
+    "name": "Forked Channel",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><strong>Cobalt, Depth 4.</strong> Arcane Channel targets <strong>two</strong> creatures within 120 feet: one Strike at each.</p><p><em>Choose up to two targets and use it; the Channel is rolled at each, at the same multiple attack penalty.</em></p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "round",
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-mutation-action"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator",
+                "attack"
+            ]
+        }
+    },
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "maxTargets": 2,
+                "range": 120
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "option": "forked-channel",
+                        "strike": "arcane-channel",
+                        "type": "strikes"
+                    },
+                    "event": "action-used",
+                    "note": "Arcane Channel at each confirmed target (#88).",
+                    "self": true
+                }
+            ]
+        }
+    },
+    "type": "action"
+}

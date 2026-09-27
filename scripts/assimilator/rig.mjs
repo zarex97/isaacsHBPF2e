@@ -391,10 +391,7 @@ const NOTES = [
     ["CI-3a", { citrine: 3 }, "perception", "Citrine (Depth 3)"],
     ["HG-1a", { mercury: 1 }, "skill:acrobatics", "Mercury (Depth 1)"],
     ["SA-1b", { sapphire: 1 }, "save:will", "Sapphire (Depth 1)"],
-    ["LA-2a", { "lapis-lazuli": 2 }, "skill:arcana", "Lapis Lazuli (Depth 2)"],
-    ["LA-4a", { "lapis-lazuli": 4 }, "perception", "Lapis Lazuli (Depth 4)"],
     ["SN-2a", { tin: 2 }, "perception", "Tin (Depth 2)"],
-    ["SN-3b", { tin: 3 }, "perception", "Tin (Depth 3)"],
     ["AT-1a", { amethyst: 1 }, "perception", "Amethyst (Depth 1)"],
     ["QZ-3a", { quartz: 3 }, "perception", "Quartz (Depth 3)"],
     ["QZ-4b", { quartz: 4 }, "save:will", "Quartz (Depth 4)"],
@@ -638,6 +635,114 @@ const INSTINCTS = [
     }, want: [true, true, true, true, -5], note: "the Carapace Strike, then the card's Trip at −5" },
     { id: "BR-3a", lv: 17, b: { bronze: 2 }, act: async (a) => !!game.actors.get(a.id).items.find((i) => i.slug === "frame-rush"),
         want: false, note: "control: Bronze 2 has no Frame Rush" },
+    // Tin Depth 3: "Invisible creatures within 30 feet are concealed to you rather than undetected" — see-invisibility.
+    // pf2e gives see-invisibility an unlimited range; what Foundry's vision uses is the token's detection mode, which
+    // the module holds to Tin's 30 feet.
+    ...[[{ tin: 3 }, [true, 30], "Tin 3: see-invisibility, its detection held to 30 feet"],
+        [{ tin: 2 }, [false, null], "control: Tin 2 has none"]].map(([b, want, note]) => ({ id: "SN-3b", lv: 17, b, want, note,
+        act: async (a, t, ctx) => {
+            // pf2e hands senses to Foundry's vision only on a scene with rules-based vision; switched on for the reading.
+            const scene = canvas.scene;
+            const was = { rbv: scene.flags?.pf2e?.rulesBasedVision, vision: scene.tokenVision };
+            await scene.update({ "flags.pf2e.rulesBasedVision": true, tokenVision: true });
+            try {
+                const tok = scene.tokens.get(ctx.tokenId);
+                tok.reset?.();
+                return [!!game.actors.get(a.id).perception.senses.get("see-invisibility"), tok.detectionModes?.seeInvisibility?.range ?? null];
+            } finally {
+                await scene.update({ tokenVision: was.vision, ...(was.rbv === undefined
+                    ? { "flags.pf2e.-=rulesBasedVision": null } : { "flags.pf2e.rulesBasedVision": was.rbv }) });
+            }
+        } })),
+    // Cobalt Depth 3: "+1 circumstance bonus to counteract checks" — pf2e's and the module's (#88).
+    ...[[{ cobalt: 3 }, [true, true, false], "Cobalt 3: +1 on the module's counteract roll and in pf2e's counteract domain; not on another roll"],
+        [{ cobalt: 2 }, [false, false, false], "control: Cobalt 2"]].map(([b, want, note]) => ({ id: "CO-3a", lv: 17, b, want, note,
+        act: async (a) => {
+            const me = game.actors.get(a.id);
+            const stat = me.getStatistic(me.class.slug) ?? me.classDC;
+            const has = async (extra) => {
+                await stat.roll({ dc: { value: 10 }, skipDialog: true, extraRollOptions: extra });
+                await wait(600);
+                return (game.messages.contents.at(-1).flags.pf2e.modifiers ?? []).some((m) => m.slug === "cobalt-counteract-module" && m.enabled);
+            };
+            const moduleRoll = await has(["isaacs-hb-pf2e:counteract"]);
+            // pf2e's spell counteract rolls in the `counteract-check` domain: the modifier is there, and its predicate holds.
+            const options = me.getRollOptions();
+            const spellDomain = (me.synthetics.modifiers["counteract-check"] ?? []).map((f) => f({}))
+                .some((m) => m?.slug === "cobalt-counteract" && (m.predicate?.test?.(options) ?? true));
+            const plain = await has([]);
+            return [moduleRoll, spellDomain, plain];
+        } })),
+    // Cobalt Depth 4: Forked Channel — "once per round it may target two creatures" (#88).
+    ...[[2, 2, "two targets: an Arcane Channel at each"], [1, 1, "control: one target, one Strike"]].map(([n, want, note]) => ({
+        id: "CO-4a", lv: 17, b: { cobalt: 4 }, want, note, act: async (a, t, ctx) => {
+            const by = game.actors.get(ctx.bystanderId);
+            await by.update({ "system.details.alliance": "opposition" });
+            untarget();
+            const tokens = [ctx.targetTokenId, ctx.bystanderTokenId].slice(0, n).map((id) => canvas.scene.tokens.get(id).object);
+            tokens.forEach((tk) => tk.setTarget(true, { user: game.user, releaseOthers: false }));
+            canvas.scene.tokens.get(ctx.tokenId).object.control({ releaseOthers: true });
+            const since = game.messages.size;
+            await AssimilatorRig.useWithArea(game.actors.get(a.id).items.find((i) => i.slug === "forked-channel"));
+            await wait(1500);
+            untarget();
+            return game.messages.contents.slice(since - game.messages.size)
+                .filter((m) => m.flags?.pf2e?.context?.type === "attack-roll" && /Arcane Channel/.test(m.flavor ?? "")).length;
+        } })),
+    // Lapis Depth 2: a successful Recall Knowledge gives allies +1 circumstance to attacks against the creature (#88).
+    ...[[1, true, "success: the ally gets Lapis Insight aimed at the creature, and the Assimilator does not"],
+        [99, false, "control: a failed Recall Knowledge gives nothing"]].map(([dc, want, note]) => ({
+        id: "LA-2a", lv: 17, b: { "lapis-lazuli": 2 }, note, want: want ? [true, true, false] : [false, false, false], act: async (a, t, ctx) => {
+            const by = () => game.actors.get(ctx.bystanderId);
+            await by().update({ "system.details.alliance": game.actors.get(a.id).system.details.alliance });
+            for (const e of by().itemTypes.effect.filter((x) => x.slug === "effect-lapis-insight")) await e.delete();
+            untarget(); canvas.scene.tokens.get(ctx.targetTokenId).object.setTarget(true, { user: game.user, releaseOthers: true });
+            await game.pf2e.actions.get("recall-knowledge").use({ actors: [game.actors.get(a.id)], statistic: "arcana",
+                difficultyClass: { value: dc }, skipDialog: true });
+            // Every ally on the scene gets it — a fixture-heavy scene has dozens — so the Bystander's may be a while.
+            await until(() => by().itemTypes.effect.some((x) => x.slug === "effect-lapis-insight"), dc > 50 ? 3000 : 30000);
+            const insight = by().itemTypes.effect.find((x) => x.slug === "effect-lapis-insight");
+            const aimed = insight?.flags?.["isaacs-hb-pf2e"]?.assimilator?.lapis === game.actors.get(t.id).signature;
+            const self = game.actors.get(a.id).itemTypes.effect.some((x) => x.slug === "effect-lapis-insight");
+            // And off every one of them again: the world's own creatures are not the rig's to leave marked.
+            await wait(dc > 50 ? 0 : 8000);
+            const marked = new Set();
+            for (const tk of canvas.scene.tokens) {
+                const who = tk.actor;
+                if (!who || marked.has(who.uuid)) continue;
+                marked.add(who.uuid);
+                const ids = who.itemTypes.effect.filter((x) => x.slug === "effect-lapis-insight").map((x) => x.id);
+                if (ids.length) await who.deleteEmbeddedDocuments("Item", ids);
+            }
+            await by().update({ "system.details.alliance": "opposition" });
+            untarget();
+            return [!!insight, !!aimed, self];
+        } })),
+    // Lapis Depth 4: Lay Bare — the Mutations' save that asks for the strongest rolls the weakest (#88).
+    ...[[true, "will", "laid bare: Flare's Fortitude save is rolled as Will, the weakest"],
+        [false, "fortitude", "control: not laid bare, Fortitude"]].map(([bare, want, note]) => ({
+        id: "LA-4a", lv: 17, b: { "lapis-lazuli": 4, magnesium: 2 }, want, note, act: async (a, t, ctx) => {
+            const creature = () => game.actors.get(t.id);
+            await creature().update({ "system.saves.fortitude.value": 30, "system.saves.reflex.value": 10, "system.saves.will.value": 5,
+                "system.details.alliance": "opposition" });
+            for (const e of creature().itemTypes.effect.filter((x) => x.slug === "effect-laid-bare")) await e.delete();
+            await game.actors.get(a.id).update({ "flags.isaacs-hb-pf2e.assimilator.-=encounterUses": null });
+            untarget(); canvas.scene.tokens.get(ctx.targetTokenId).object.setTarget(true, { user: game.user, releaseOthers: true });
+            canvas.scene.tokens.get(ctx.tokenId).object.control({ releaseOthers: true });
+            if (bare) {
+                await use(a, "lay-bare", 2500);
+                await until(() => creature().itemTypes.effect.some((x) => x.slug === "effect-laid-bare"), 6000);
+            }
+            const since = game.messages.size;
+            await AssimilatorRig.useWithArea(game.actors.get(a.id).items.find((i) => i.slug === "flare"));
+            await wait(1500);
+            const save = game.messages.contents.slice(since - game.messages.size)
+                .find((m) => m.flags?.pf2e?.context?.type === "saving-throw" && m.actor?.id === t.id);
+            for (const e of creature().itemTypes.effect.filter((x) => x.slug === "effect-laid-bare")) await e.delete();
+            await creature().update({ "system.saves.fortitude.value": 10, "system.saves.will.value": 10 });
+            untarget();
+            return ["fortitude", "reflex", "will"].find((s) => save?.flags?.pf2e?.context?.domains?.includes(s)) ?? null;
+        } })),
     // Guide §4.5: the Instinct clause applies to "every Mutation you have, including Mutations of other colours".
     { id: "A-44", lv: 17, b: { ruby: 3, sapphire: 2 }, act: async (a) => [derived(a).instincts.primary, redOn(await strikeRoll(a))],
         want: ["red", 5], note: "Red Instinct; Blue's Sapphire 2 takes Red's +2 beside Ruby's +3" },
@@ -746,9 +851,13 @@ const INSTINCTS = [
         await by.saves.fortitude.roll({ dc: { value: -30 }, origin: game.actors.get(a.id), skipDialog: true });
         await wait(1200);
         const outcome = game.messages.contents.at(-1).flags.pf2e.context.outcome;
+        // The distance as measured, beside the outcome: a move that did not land would put it within 30 feet.
+        const me = canvas.scene.tokens.get(ctx.tokenId).object;
+        const it = canvas.scene.tokens.get(ctx.bystanderTokenId).object;
+        const feet = Math.round(canvas.grid.measurePath([me.center, it.center]).distance);
         await place(ctx, ctx.bystanderTokenId, 2);
-        return outcome;
-    }), want: "criticalSuccess", note: "control: 35 feet away, the critical stands" },
+        return feet > 30 ? outcome : `moved only to ${feet} feet — ${outcome}`;
+    }), want: "criticalSuccess", note: "control: 40 feet away, the critical stands" },
 
     // Orange.
     { id: "I-3a", lv: 17, b: { carnelian: 3, ruby: 2 }, act: async (a, t, ctx) => inCombat(ctx, async () => {
@@ -1785,7 +1894,7 @@ const SCENARIOS = [
     }, want: [12, "fire"] },
 
     // Senses, skills and the dark.
-    { id: "SN-4b", lv: 17, b: { tin: 4 }, act: async (a) => read.mod(a.skills.survival, "tin"), want: ["2 circumstance"] },
+    { id: "SN-4c", lv: 17, b: { tin: 4 }, act: async (a) => read.mod(a.skills.survival, "tin"), want: ["2 circumstance"] },
     { id: "ON-3a", lv: 17, b: { onyx: 3 }, act: async (a) => {
         await a.update({ "flags.pf2e.rollOptions.all.self:in-dim-light-or-darkness": true });
         const lit = game.actors.get(a.id).armorClass.modifiers.find((m) => m.slug?.includes("onyx"))?.enabled ?? false;

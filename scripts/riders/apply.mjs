@@ -2149,6 +2149,19 @@ async function applySave(rider, context) {
 }
 
 /**
+ * Lapis Lazuli Depth 4 — *"name a creature's strongest save; for 1 minute your Mutations target its weakest
+ * instead"* (#88). *Lay Bare* marks the creature with both, for the Assimilator that named them; a save one of that
+ * Assimilator's Mutations calls for, on that creature, rolls the weakest when it asked for the strongest.
+ */
+function laidBare(slug, context) {
+    const origin = context.originActor;
+    if (!origin || !(context.item?.system?.traits?.otherTags ?? []).includes("assimilator-mutation-action")) return slug;
+    const mark = context.actor?.itemTypes?.effect?.find((e) => e.flags?.[MODULE_ID]?.laidBare?.origin === origin.uuid);
+    const bare = mark?.flags?.[MODULE_ID]?.laidBare;
+    return bare && slug === bare.strongest ? bare.weakest : slug;
+}
+
+/**
  * The save itself, apart from the rider that usually asks for it.
  *
  * *Royal Demon Rose*'s ground tick needs exactly this — roll a save, dispatch nested riders by its outcome —
@@ -2158,7 +2171,8 @@ async function applySave(rider, context) {
  * just to hand back to `applySave`.
  */
 export async function runSave(spec, context) {
-    const { statistic: slug, dc } = spec;
+    const { dc } = spec;
+    const slug = laidBare(spec.statistic, context);
     const statistic = context.actor.getStatistic?.(slug);
     if (!statistic) {
         console.warn(`Isaac's Homebrew | ${context.actor.name} has no ${slug} statistic`);
