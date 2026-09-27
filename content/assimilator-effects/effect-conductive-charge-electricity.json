@@ -26,7 +26,12 @@
                 "dieSize": "d4",
                 "key": "DamageDice",
                 "selector": "strike-damage",
-                "slug": "conductive-charge-electricity"
+                "slug": "conductive-charge-electricity",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    }
+                ]
             }
         ],
         "start": {

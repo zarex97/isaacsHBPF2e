@@ -27,7 +27,12 @@
                 "key": "DamageDice",
                 "label": "Kinetic Surge",
                 "selector": "unarmed-damage",
-                "slug": "kinetic-surge"
+                "slug": "kinetic-surge",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    }
+                ]
             }
         ],
         "start": {

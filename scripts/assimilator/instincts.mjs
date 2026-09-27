@@ -3,7 +3,7 @@ import { encounterOf } from "../lib/encounter-damage.mjs";
 import { shadowTarget } from "../riders/bypass.mjs";
 import { Relay } from "../riders/relay.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
-import { AssimilatorDamage, depthOf } from "./damage.mjs";
+import { AssimilatorDamage, depthOf, suppressed } from "./damage.mjs";
 import { scaled } from "./engine.mjs";
 
 /**
@@ -360,6 +360,11 @@ export const Instincts = {
         const item = message.item;
         if (!item || message.flags?.pf2e?.context) return;
         if (item.slug !== "purify" && item.slug !== "cleansing-tide") return;
+        // White's Purify is the Instinct's and Pearl's Cleansing Tide a Mutation's: neither answers a suppressed symbiont.
+        if (suppressed(item.actor)) {
+            ui.notifications.warn(`${item.name}: the symbiont is suppressed while other armour is worn.`);
+            return;
+        }
         const onlyValueOne = item.slug === "cleansing-tide";
         const target = [...game.user.targets][0]?.actor ?? item.actor;
         await Instincts.pickCondition(item, target, onlyValueOne);

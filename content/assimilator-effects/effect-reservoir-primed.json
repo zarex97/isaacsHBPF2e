@@ -26,14 +26,24 @@
                 "dieSize": "{item|flags.isaacs-hb-pf2e.assimilator.die}",
                 "key": "DamageDice",
                 "selector": "strike-damage",
-                "slug": "reservoir-primed"
+                "slug": "reservoir-primed",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    }
+                ]
             },
             {
                 "damageType": "{item|flags.isaacs-hb-pf2e.assimilator.type}",
                 "key": "FlatModifier",
                 "selector": "strike-damage",
                 "slug": "reservoir-primed-bonus",
-                "value": "@item.flags.isaacs-hb-pf2e.assimilator.bonus"
+                "value": "@item.flags.isaacs-hb-pf2e.assimilator.bonus",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    }
+                ]
             }
         ],
         "start": {

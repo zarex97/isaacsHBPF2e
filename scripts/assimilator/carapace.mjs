@@ -1,5 +1,7 @@
 import { DamageBus, PRIORITY } from "../lib/damage-bus.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
+import { suppressed } from "./damage.mjs";
+import { Engine } from "./engine.mjs";
 
 /**
  * The Carapace: the Assimilator's plate, as an object that blocks, breaks and is repaired.
@@ -81,6 +83,22 @@ export const Carapace = {
         Hooks.on("updateItem", (item, change) => {
             if (item.slug === PLATE && change?.system?.hp && isWriter()) Carapace.syncBroken(item.actor);
         });
+        // Armour going on or coming off moves the plate in or out of its slot, which is an *item* update. pf2e
+        // re-tests a `reevaluateOnUpdate` GrantItem only on an *actor* update, so without a rebuild here a
+        // suppressed Mutation's action stayed on the sheet until something else touched the actor.
+        const armourMoved = (item, change) => {
+            if (item.type !== "armor" || !isWriter() || item.actor?.class?.slug !== "assimilator") return;
+            if (change && !change.system?.equipped) return;
+            Carapace.suppression(item.actor);
+        };
+        Hooks.on("updateItem", armourMoved);
+        Hooks.on("createItem", (item) => armourMoved(item));
+        Hooks.on("deleteItem", (item) => armourMoved(item));
+        // Symbiotic Reflex: the owner's own client asks which of the two it is.
+        Hooks.on("createChatMessage", (message, _options, userId) => {
+            if (userId !== game.user.id || message.item?.slug !== "symbiotic-reflex" || message.flags?.pf2e?.context) return;
+            Carapace.reflex(message.actor).catch((e) => console.error("Isaac's Homebrew | Symbiotic Reflex", e));
+        });
         // The plate's maximum is 10 + 5 per level. A level gained grows the plate by the difference; it does not
         // repair it. `preUpdateActor` is the last moment the old maximum can be read.
         Hooks.on("preUpdateActor", (actor, change) => {
@@ -118,10 +136,13 @@ export const Carapace = {
         const effects = actor.itemTypes?.effect ?? [];
         const plate = livingPlate(actor);
         const fromCreature = !!params.item?.actor && params.item.actor !== actor;
-        const block = physical(params.damage) && plate ? effects.find((e) => e.slug === ARMED) : null;
+        // Suppressed, the plate is out of its slot: no Block, and no Mutation's reduction. Symbiotic Reflex is not
+        // the plate, and with no Depth its resistance is 0 anyway.
+        const dark = suppressed(actor);
+        const block = physical(params.damage) && plate && !dark ? effects.find((e) => e.slug === ARMED) : null;
         const reflex = fromCreature ? effects.find((e) => e.slug === REFLEX) : null;
         // Any other armed reduction a Mutation grants — Mercury's Pass Through is the first — declares itself.
-        const others = effects.filter((e) => {
+        const others = dark ? [] : effects.filter((e) => {
             const r = e.flags?.[MODULE_ID]?.assimilator?.reduction;
             return r && (!r.fromCreature || fromCreature);
         });
@@ -204,7 +225,78 @@ export const Carapace = {
         });
     },
 
-    /** Put the broken effect on or take it off, to match the plate's Hit Points against its Broken Threshold. */
+    /**
+     * Guide §4.2: *"Attempting it suppresses Living Plate, every Mutation, and your Instinct until you take it off.
+     * The symbiont does not share."* Rebuild the engine's picture, and say so when the symbiont goes dark or wakes.
+     */
+    async suppression(actor) {
+        const was = !!actor.flags?.[MODULE_ID]?.assimilator?.derived?.suppressed;
+        await Engine.rebuild(actor);
+        const now = suppressed(actor);
+        if (now === was) return;
+        await ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            flags: { [MODULE_ID]: { assimilatorSuppressed: now } },
+            content: now
+                ? `<p><strong>The symbiont does not share.</strong> With other armour on, ${actor.name}'s Living Plate, `
+                    + "every Mutation and the Instinct are suppressed until it comes off.</p>"
+                : `<p><strong>The symbiont wakes.</strong> ${actor.name}'s Living Plate, Mutations and Instinct return.</p>`,
+        });
+    },
+
+    /**
+     * Symbiotic Reflex (guide §4.7): *"choose one — (a) gain resistance equal to twice your highest Depth against
+     * that damage, or (b) if the triggering creature is within your reach, make a Carapace Strike against it."*
+     *
+     * The triggering creature is the one targeted. Each choice is offered only when it can do something: (a) not
+     * while the symbiont is suppressed, when there is no Depth to give; (b) only when that creature is within the
+     * reach pf2e reports for the Carapace Strike — which *Reach of the Thing* moves. A Strike made off-turn takes no
+     * multiple attack penalty, so it is the first variant, followed through to damage as every scripted Strike is.
+     */
+    async reflex(actor) {
+        if (!actor) return null;
+        const token = actor.getActiveTokens?.(true, false)?.[0] ?? null;
+        const trigger = [...game.user.targets][0] ?? null;
+        const strike = actor.system.actions?.find((s) => s.slug === "carapace-strike" || s.label === "Carapace Strike");
+        const highest = actor.flags?.[MODULE_ID]?.assimilator?.derived?.highestDepth ?? 0;
+        const reach = strike ? actor.getReach({ action: "attack", weapon: strike.item }) : 0;
+        const inReach = !!(token && trigger && trigger.actor !== actor && token.distanceTo(trigger) <= reach);
+        const buttons = [];
+        if (!suppressed(actor) && highest > 0) buttons.push({ action: "resist", label: `Resist ${2 * highest}` });
+        if (strike && inReach) buttons.push({ action: "strike", label: "Carapace Strike" });
+        if (!buttons.length) {
+            ui.notifications.warn(`Symbiotic Reflex: nothing to do — ${suppressed(actor) ? "the symbiont is suppressed" : "no Depth"}`
+                + ` and ${trigger ? `${trigger.name} is beyond your ${reach}-foot reach` : "no triggering creature is targeted"}.`);
+            return null;
+        }
+        const { DialogV2 } = foundry.applications.api;
+        const picked = await DialogV2.wait({
+            window: { title: "Symbiotic Reflex" },
+            content: "<p>The thing wearing you answers the blow. Choose one.</p>",
+            buttons, rejectClose: false,
+        });
+        if (picked === "resist") {
+            const effect = await effectFromPack(REFLEX);
+            if (effect) await actor.createEmbeddedDocuments("Item", [foundry.utils.deepClone(effect.toObject())]);
+        } else if (picked === "strike") {
+            const options = ["symbiotic-reflex"];
+            await strike.variants[0].roll({ target: trigger, options, createMessage: true });
+            const outcome = [...game.messages].reverse()
+                .find((m) => m.flags?.pf2e?.context?.type === "attack-roll")?.flags?.pf2e?.context?.outcome;
+            if (outcome === "criticalSuccess") await strike.critical({ target: trigger, options, createMessage: true });
+            else if (outcome === "success") await strike.damage({ target: trigger, options, createMessage: true });
+        }
+        return picked ?? null;
+    },
+
+    /**
+     * Put the broken effect on or take it off, to match the plate's Hit Points against its Broken Threshold.
+     *
+     * Guide §4.3: *"While broken, you lose Living Plate's rune benefits."* The effect overrides potency and
+     * resilient to 0; pf2e has no alteration for property runes, so those are set aside on the plate itself and put
+     * back when it mends. An armour property rune is nothing but its roll option and its traits, both re-read from
+     * `system.runes.property` at the next preparation, so emptying the list is the whole of switching one off.
+     */
     async syncBroken(actor) {
         const plate = livingPlate(actor);
         if (!actor || !plate) return;
@@ -212,9 +304,26 @@ export const Carapace = {
         if (plate.isBroken && current.length === 0) {
             const effect = await effectFromPack(BROKEN);
             if (effect) await actor.createEmbeddedDocuments("Item", [foundry.utils.deepClone(effect.toObject())]);
+            await Carapace.setRunesAside(plate);
         } else if (!plate.isBroken && current.length > 0) {
             await actor.deleteEmbeddedDocuments("Item", current.map((e) => e.id));
+            await Carapace.restoreRunes(plate);
         }
+    },
+
+    async setRunesAside(plate) {
+        const runes = plate._source.system.runes?.property ?? [];
+        if (!runes.length) return;
+        await plate.update({ "system.runes.property": [], [`flags.${MODULE_ID}.assimilator.brokenRunes`]: runes });
+    },
+
+    /** Back on the plate, with any rune etched while it was broken kept beside them. */
+    async restoreRunes(plate) {
+        const aside = plate.flags?.[MODULE_ID]?.assimilator?.brokenRunes;
+        if (!aside) return;
+        const now = plate._source.system.runes?.property ?? [];
+        await plate.update({ "system.runes.property": [...new Set([...aside, ...now])],
+            [`flags.${MODULE_ID}.assimilator.-=brokenRunes`]: null });
     },
 
     /** Keep the plate's damage where it was when its maximum moves with a level. */
