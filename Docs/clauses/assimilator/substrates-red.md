@@ -86,7 +86,8 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | CU-1a | Copper D1 | When a Mutation of yours deals energy damage, the target takes **1 more of that type** at the start of its next turn. | `rig` | ✅ | Rig, live: 5 fire from a Copper Strike queued **1 fire** on the target for the start of its next turn (the point lands from `pf2e.startTurn`) |
 | CU-2a | Copper D2 | When you take fire or electricity damage, your next Strike before the end of your next turn deals **+1d4** of that type. | `rig` | ✅ | Rig, live: taking 5 fire gave the next Strike **+1d4 fire**, and that damage roll spent it |
 | CU-3a | Copper D3 | Energy damage from your Mutations **conducts**: one creature adjacent to the target takes **2** of that type. | `rig` | ✅ | Rig, live: 5 electricity into the target — the creature beside it took **2** |
-| CU-4a | Copper D4 | The conduction becomes **half** the energy damage, and reaches any creature touching the same metal object, water, or surface as the target. | `rig` | ⚠️ | Rig, live: 10 electricity into the target — the creature beside it took **5**, half. *"Any creature touching the same metal object, water, or surface"* is reduced to the adjacent one |
+| CU-4a | Copper D4 | The conduction becomes **half** the energy damage | `rig` | ✅ | Rig, live: 10 electricity into the target — the creature beside it took **5**, half. Split from the old CU-4a (#85) |
+| CU-4b | Copper D4 | reaches any creature touching the same metal object, water, or surface as the target. |  | — | Nothing to automate: whether two creatures touch the same metal, water or surface is not something the board knows. The conduction reaches the adjacent creature (CU-4a); anything further is the GM's call (#85) |
 
 ---
 
@@ -95,9 +96,9 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | Status | Count |
 | :-- | --: |
 | ☐ | 0 |
-| ✅ | 19 |
-| ⚠️ | 5 |
+| ✅ | 20 |
+| ⚠️ | 4 |
 | ❌ | 0 |
 | 🔧 | 0 |
-| — | 1 |
-| **Total** | **25** |
+| — | 2 |
+| **Total** | **26** |
