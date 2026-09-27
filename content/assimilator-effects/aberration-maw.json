@@ -32,7 +32,7 @@
                 "key": "ItemAlteration",
                 "mode": "add",
                 "predicate": [
-                    "item:category:unarmed"
+                    "item:slug:carapace-strike"
                 ],
                 "property": "traits",
                 "value": "deadly-d8"

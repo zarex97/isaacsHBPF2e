@@ -153,9 +153,9 @@
                     },
                     "carapace:intact"
                 ],
-                "selector": "saving-throw",
-                "text": "You cannot be slowed by magical effects.",
-                "title": "Platinum (Depth 4)"
+                "selector": "all",
+                "title": "Platinum (Depth 4)",
+                "text": "You cannot be slowed by magical effects. pf2e does not record whether a slowed came from magic, so when one lands the GM is asked, with one click to remove it."
             }
         ],
         "start": {

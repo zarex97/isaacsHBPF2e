@@ -140,11 +140,12 @@
                     "carapace:intact"
                 ],
                 "selector": "all",
-                "text": "When you counteract an effect, or a spell fails against you, your next Strike deals +2d6 force.",
+                "text": "When you counteract an effect, or a spell fails against you, your next Strike deals +2d6 force — Quartz Charge, applied for you.",
                 "title": "Quartz (Depth 3)"
             },
             {
-                "key": "Note",
+                "allowDuplicate": false,
+                "key": "GrantItem",
                 "predicate": [
                     {
                         "not": "assimilator:suppressed"
@@ -157,9 +158,8 @@
                     },
                     "carapace:intact"
                 ],
-                "selector": "saving-throw",
-                "text": "Once per day, reflect a spell that targets only you back at its caster (Will save against your class DC negates).",
-                "title": "Quartz (Depth 4)"
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Prism Reflection"
             }
         ],
         "start": {

@@ -1,0 +1,56 @@
+{
+    "img": "icons/magic/light/beam-rays-magenta.webp",
+    "name": "Effect: Quartz Charge",
+    "system": {
+        "description": {
+            "value": "<p><strong>Quartz, Depth 3.</strong> You counteracted an effect, or a spell failed against you: your next Strike deals <strong>+2d6 force</strong>.</p>"
+        },
+        "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "DamageDice",
+                "selector": "strike-damage",
+                "slug": "quartz-charge",
+                "label": "Quartz Charge",
+                "diceNumber": 2,
+                "dieSize": "d6",
+                "damageType": "force",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    }
+                ]
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

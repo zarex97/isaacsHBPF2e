@@ -477,6 +477,11 @@ export const Engine = {
                 if (out[down] <= 0) delete out[down];
             }
         }
+        // Nickel Depth 4 (#89, the #86 ruling): one bound Purple Substrate may count as Depth 4, in place of the third
+        // Aberration. Not on a broken plate, for the same reason as below.
+        const purple = state.choices.nickelPurple;
+        if ((out.nickel ?? 0) >= 4 && purple && purple !== "nickel" && purple in out
+            && !effects.some((e) => e.slug === "effect-carapace-broken")) out[purple] = Math.max(out[purple], 4);
         // A critical hit's "counts as Depth 4 for that Strike" — Gold's Instinct, Topaz Depth 4, Apex Predator (#86: a
         // Depth is indivisible). Not on a broken plate, where §4.3 switches every Mutation at Depth 3 or higher off:
         // raising one to 4 there would take it away.
@@ -608,7 +613,8 @@ export const Engine = {
         const aberrations = actor.itemTypes.effect.filter((e) => e.flags?.[MODULE_ID]?.[KEY]?.aberration);
         // Chimeric Frame: "two of Nickel's Aberrations without binding Nickel" — in addition to any Nickel holds.
         const frame = Engine.hasFeat(actor, "chimeric-frame") ? 2 : 0;
-        const holds = (derived.effective.nickel ? Engine.aberrationCount(derived.effective.nickel, derived.bonds) : 0) + frame;
+        const holds = (derived.effective.nickel ? Engine.aberrationCount(derived.effective.nickel, derived.bonds) : 0) + frame
+            - Engine.purpleInstead(state, derived.effective);
         const held = (state.choices.nickel ?? []).slice(0, holds);
         for (const e of aberrations) if (!held.includes(e.flags[MODULE_ID][KEY].aberration)) deletes.push(e.id);
         const missing = held.filter((k) => !aberrations.some((e) => e.flags[MODULE_ID][KEY].aberration === k));
@@ -691,6 +697,15 @@ export const Engine = {
             const on = derivedFlag.bonds.includes(slug);
             if (on && !toggles[option]) update[`flags.pf2e.rollOptions.all.${option}`] = true;
             if (!on && toggles[option]) update[`flags.pf2e.rollOptions.all.-=${option}`] = null;
+        }
+        // Nickel's Organ and Mode, as the Aberrations' rules read them (#89).
+        for (const [key, all] of [["organ", ["darkvision", "scent", "low-light"]], ["mode", ["climb", "swim"]]]) {
+            const pick = state.choices[`nickel${key[0].toUpperCase()}${key.slice(1)}`];
+            for (const one of all) {
+                const option = `assimilator:${key}:${one}`;
+                if (pick === one && !toggles[option]) update[`flags.pf2e.rollOptions.all.${option}`] = true;
+                if (pick !== one && toggles[option]) update[`flags.pf2e.rollOptions.all.-=${option}`] = null;
+            }
         }
         for (const colour of COLOURS) {
             const option = `assimilator:instinct:${colour}`;
@@ -882,6 +897,11 @@ export const Engine = {
             return Engine._refuse("Choose a Bond you know.");
         }
         if (key === "twoInstincts" && value && !COLOURS.includes(value)) return Engine._refuse(`"${value}" is not an Instinct.`);
+        if (key === "nickelPurple" && value && !(["amethyst", "quartz", "platinum"].includes(value) && value in state.substrates)) {
+            return Engine._refuse("Choose another Purple Substrate you bind: Amethyst, Quartz or Platinum.");
+        }
+        if (key === "nickelOrgan" && !["darkvision", "scent", "low-light"].includes(value)) return Engine._refuse("An organ is darkvision, scent or low-light.");
+        if (key === "nickelMode" && !["climb", "swim"].includes(value)) return Engine._refuse("A mode is climb or swim.");
         if ((key === "goldInstinct" || key === "purpleUp") && !(value in state.substrates)) {
             return Engine._refuse("Choose a Substrate you bind.");
         }
@@ -895,6 +915,12 @@ export const Engine = {
 
     /** Nickel: roll the Aberrations — at daily preparations, or by the Depth 3 re-roll. */
     /** Aberrations held at a Nickel Depth; Chimera (Electrum + Nickel) holds one more. */
+    /** Nickel Depth 4: 1 when a Purple Substrate stands in for the third Aberration, else 0. */
+    purpleInstead(state, effective) {
+        const purple = state.choices.nickelPurple;
+        return (effective.nickel ?? 0) >= 4 && purple && purple !== "nickel" && purple in state.substrates ? 1 : 0;
+    },
+
     aberrationCount(depth, bonds = []) {
         return (ABERRATION_COUNT[Math.min(depth, 4)] ?? 0) + (bonds.includes("chimera") ? 1 : 0);
     },
@@ -912,7 +938,7 @@ export const Engine = {
         }
         const pool = [...ABERRATIONS];
         const picked = [];
-        const count = (depth ? Engine.aberrationCount(depth, derived.bonds) : 0) + frame;
+        const count = (depth ? Engine.aberrationCount(depth, derived.bonds) : 0) + frame - Engine.purpleInstead(state, derived.effective);
         for (let i = 0; i < count; i++) {
             picked.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
         }
