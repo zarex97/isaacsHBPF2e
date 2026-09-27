@@ -1839,6 +1839,10 @@ export const AssimilatorRig = {
 
     async setup() {
         for (const a of game.actors.filter((x) => [NAME, TARGET, BYSTANDER].includes(x.name))) await a.delete();
+        // A run that never reached its teardown — a reload mid-run — leaves its tokens behind, and deleting the
+        // actors does not take them. They stood on the rig's own squares: a push stopped against a stale Bystander.
+        const stale = canvas.scene.tokens.filter((t) => [NAME, TARGET, BYSTANDER].includes(t.name)).map((t) => t.id);
+        if (stale.length) await canvas.scene.deleteEmbeddedDocuments("Token", stale);
         const cls = (await game.packs.get("isaacs-hb-pf2e.assimilator-class").getDocuments())[0];
         const actor = await Actor.create({ name: NAME, type: "character", prototypeToken: { actorLink: true },
             system: { details: { level: { value: 1 }, alliance: "party" } } });
