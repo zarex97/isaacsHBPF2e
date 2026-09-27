@@ -18,7 +18,25 @@ const NAME = "ZZ Rig — Assimilator";
 const TARGET = "ZZ Rig — Target";
 const BYSTANDER = "ZZ Rig — Bystander";
 
-const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+/**
+ * A pause that a hidden tab cannot stretch. Chrome's intensive throttling holds a page's *chained* timers — a
+ * timer set from a timer, five deep — to one wake-up a minute once the tab has been hidden five minutes, so a
+ * polling loop of forty 250 ms waits took forty minutes and read as a hang (#100). Dedicated workers are exempt;
+ * their timers keep time, and the page is woken by the worker's message rather than by a timer of its own.
+ */
+const clock = (() => {
+    try {
+        const source = "onmessage = (e) => setTimeout(() => postMessage(e.data.id), e.data.ms);";
+        const worker = new Worker(URL.createObjectURL(new Blob([source], { type: "text/javascript" })));
+        const pending = new Map();
+        let next = 0;
+        worker.onmessage = (e) => { pending.get(e.data)?.(); pending.delete(e.data); };
+        return (ms) => new Promise((resolve) => { const id = next++; pending.set(id, resolve); worker.postMessage({ id, ms }); });
+    } catch {
+        return null;
+    }
+})();
+const wait = (ms) => (clock ? clock(ms) : new Promise((r) => setTimeout(r, ms)));
 
 /* -------------------------------------------------------------------------------------------- */
 /*  Readings                                                                                     */
