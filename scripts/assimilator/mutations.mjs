@@ -75,6 +75,42 @@ const MANOEUVRES = { shove: "Shove", trip: "Trip", grapple: "Grapple" };
 
 export const Mutations = {
     /**
+     * Onyx Depth 4, *Shadow Step*: "teleport between two areas of darkness within 60 feet" (#91). Darkness is a dark
+     * scene or a point inside one of Foundry's darkness sources — Shadow Mantle's among them, which rides its token.
+     * pf2e reads light scene-wide only, so the point test is Foundry's.
+     */
+    inDarkness(point) {
+        if ((canvas.scene?.environment?.darknessLevel ?? 0) >= 0.5) return true;
+        const test = canvas.effects?.testInsideDarkness;
+        return typeof test === "function" ? !!canvas.effects.testInsideDarkness({ x: point.x, y: point.y, elevation: 0 }) : false;
+    },
+
+    async shadowStep(actor, destination) {
+        const token = actor?.getActiveTokens?.(true, false)?.[0];
+        if (!token || !destination) return false;
+        const refuse = (why) => { ui.notifications.warn(`Shadow Step: ${why}`); return false; };
+        const size = canvas.grid.size;
+        const snapped = { x: Math.floor(destination.x / size) * size, y: Math.floor(destination.y / size) * size };
+        const centre = { x: snapped.x + (token.document.width * size) / 2, y: snapped.y + (token.document.height * size) / 2 };
+        if (canvas.grid.measurePath([token.center, centre]).distance > 60) return refuse("the destination is beyond 60 feet.");
+        if (!Mutations.inDarkness(token.center)) return refuse("you are not standing in darkness.");
+        if (!Mutations.inDarkness(centre)) return refuse("the destination is not in darkness.");
+        await token.document.update({ x: snapped.x, y: snapped.y }, { animate: false, teleport: true });
+        await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<p><strong>Shadow Step</strong>: ${actor.name} steps from one darkness into another.</p>` });
+        return true;
+    },
+
+    /** The use card: the next click on the board is where the step lands. */
+    pickShadowStep(actor) {
+        ui.notifications.info("Shadow Step: click the square in darkness to step to.");
+        canvas.stage.once("pointerdown", (event) => {
+            const point = event.getLocalPosition?.(canvas.stage) ?? canvas.mousePosition;
+            Mutations.shadowStep(actor, point).catch((e) => console.error("Isaac's Homebrew | Shadow Step", e));
+        });
+    },
+
+    /**
      * Lapis Lazuli Depth 2: *"When you succeed at Recall Knowledge about a creature, allies gain +1 circumstance to
      * attacks against it for 1 round"* (#88). pf2e gives no roll option for alliance, so the bonus goes to the allies
      * rather than onto the creature: each creature on the scene of the Assimilator's alliance, not the Assimilator,
@@ -312,6 +348,7 @@ export const Mutations = {
             const slug = message.item?.slug;
             const actor = message.actor;
             if (!actor?.isOwner) return;
+            if (slug === "shadow-step" && !message.flags?.pf2e?.context) Mutations.pickShadowStep(actor);
             if (slug === "lay-bare" && !message.flags?.pf2e?.context) Mutations.layBare(actor).catch((e) => console.error("Isaac's Homebrew | Lay Bare", e));
             if (slug === "frame-rush" && !message.flags?.pf2e?.context) Mutations.frameRush(actor).catch((e) => console.error("Isaac's Homebrew | Frame Rush", e));
             if (slug === "draw-on-the-reservoir") AssimilatorDamage.draw(actor);
