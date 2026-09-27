@@ -1,4 +1,4 @@
-# The Assimilator — Material Lexicon, **Version 3.2**
+# The Assimilator — Material Lexicon, **Version 3.3**
 
 ### *The symbiont class · Substrate · Essence · Mutation*
 
@@ -15,6 +15,9 @@
 > **v3.2** records the guide's ruling that **a Depth is indivisible** (issue #86): Gold's "one Depth higher" raises
 > the whole Depth, Topaz Depth 4 and the Gold Instinct make a Substrate count as Depth 4 for the critical Strike,
 > and Gold Depth 2 — whose rider-only step the ruling made redundant — lets the choice be made again each encounter.
+>
+> **v3.3** applies the same ruling to Nickel Depth 4 (issue #89): the third Aberration may instead be one other
+> **bound** Purple Substrate counting as Depth 4.
 
 **The structural rule this whole document is built on:**
 
@@ -420,7 +423,7 @@ or swim Speed equal to half your land Speed. **(4) A plate** — Hardness +3 and
 | 1 | One Aberration. |
 | 2 | **Two** Aberrations. |
 | 3 | Once per encounter, as a single action, **re-roll all your Aberrations**. |
-| 4 | **Three** Aberrations, and one of them may instead be the **Depth 4 rider of any other Purple Substrate**. |
+| 4 | **Three** Aberrations, and one of them may instead be **one other bound Purple Substrate counting as Depth 4**. |
 
 ---
 

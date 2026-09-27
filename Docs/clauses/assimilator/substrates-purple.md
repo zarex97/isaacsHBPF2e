@@ -41,7 +41,7 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| AT-1a | Amethyst D1 | **Telepathy 30 feet** with willing creatures with whom you share a language. | `rig` | ⚠️ | Rig: the Note *Amethyst (Depth 1)* appears on the Perception card. Text the table applies — nothing enforces it |
+| AT-1a | Amethyst D1 | **Telepathy 30 feet** with willing creatures with whom you share a language. | `rig` | — | Nothing to automate: pf2e gives telepathy no mechanics — it is communication. The Note on the Perception card tells the table (#89, Q1) |
 | AT-2a | Amethyst D2 | Your Strikes may deal **mental**; **+1d4 mental**. |  | ✅ | Live: **versatile-mental** and **`+ 1d4 mental`** |
 | AT-3a | Amethyst D3 | **+1d6 mental.** | `rig` | ✅ | Rig, live: **`+ 1d6 mental`**, no d4 |
 | AT-3b | Amethyst D3 | On a critical hit the target is **stupefied 1** until the end of its next turn. | `rig` | ✅ | Rig, live: a critical at Depth 3 left the target **stupefied 1** |
@@ -54,11 +54,13 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| QZ-1a | Quartz D1 | +1 circumstance bonus to saves against magic, and you know when a spell is cast within 30 feet. |  | ⚠️ | Live: **+1 circumstance** to saves, predicated on a magical or spell source; not rolled against a spell. Knowing a spell is cast nearby is text |
+| QZ-1a | Quartz D1 | +1 circumstance bonus to saves against magic | `rig` | ✅ | Rig, live: **+1 circumstance** on a save whose origin is a spell; none on a save against nothing magical; none without Quartz. Split from QZ-1a (#89, Q2) |
+| QZ-1b | Quartz D1 | and you know when a spell is cast within 30 feet. | `rig` | ✅ | Rig, live: a spell's card posting from a caster 5 feet away whispers the Assimilator's owners; from 40 feet, nothing; without Quartz, nothing (#89, Q2) |
 | QZ-2a | Quartz D2 | Once per day, **counteract** one magical effect (counteract rank = half your level; modifier = your class DC − 10). | `rig` | ✅ | Rig, live: *Prism Counteract* granted at Depth 2, **1/day** |
-| QZ-3a | Quartz D3 | When you counteract an effect, or a spell fails against you, your next Strike deals **+2d6 force**. | `rig` | ⚠️ | Rig: the Note *Quartz (Depth 3)* appears on the Perception card. Text the table applies — nothing enforces it |
+| QZ-3a | Quartz D3 | When you counteract an effect, or a spell fails against you, your next Strike deals **+2d6 force**. | `rig` | ✅ | Rig, live: a save against a spell that succeeds gives *Quartz Charge*; the next Strike's damage carries **2d6 force**, and spends it. Controls: a failed save gives none; Quartz 2 gives none. The same charge answers a module counteract that succeeds (a hook in the rider engine) and a spell attack that misses (#89, Q3) |
 | QZ-4a | Quartz D4 | Twice per day counteract. |  | ✅ | Live: *Prism Counteract* reads **max 2 per day** at Depth 4 |
-| QZ-4b | Quartz D4 | Once per day, **reflect** a spell that targets only you back at its caster (Will save against your class DC negates). | `rig` | ⚠️ | Rig: the Note *Quartz (Depth 4)* appears on the Will save card. Text the table applies — nothing enforces it |
+| QZ-4b | Quartz D4 | Once per day, **reflect** a spell that targets only you back at its caster |  | — | The once-a-day limit is enforced — *Prism Reflection* refuses a second use that day. Carrying the spell to its caster (re-aiming its damage card, applying its conditions) is the table's: the module cannot re-cast an arbitrary pf2e spell. Split from QZ-4b (#89, Q4) |
+| QZ-4c | Quartz D4 | (Will save against your class DC negates). | `rig` | ✅ | Rig, live: *Prism Reflection* (granted at Depth 4) — the targeted caster rolls **Will against the class DC**, and the card says **reflected** or **negated**; a second use that day is **refused** (#89, Q4) |
 
 ## ⚙️ Platinum — *Ascendant Plate* (lexicon §9)
 
@@ -71,7 +73,7 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | PT-2b | Platinum D2 | You no longer need to breathe. |  | — | Nothing to automate: pf2e does not model breathing |
 | PT-3a | Platinum D3 | Once per day, gain a **fly Speed equal to half your land Speed** for 1 minute. | `rig` | ✅ | Rig, live: *Ascendant Flight* granted at Depth 3, **1/day** |
 | PT-4a | Platinum D4 | Permanent **fly Speed equal to your land Speed**. |  | ✅ | Live: fly Speed **20**, equal to the land Speed (25 less the Plate Aberration's 5) |
-| PT-4b | Platinum D4 | You cannot be slowed by magical effects. | `rig` | ⚠️ | Rig: the Note *Platinum (Depth 4)* appears on the Will save card. Text the table applies — nothing enforces it |
+| PT-4b | Platinum D4 | You cannot be slowed by magical effects. | `rig` | ✅ | Rig, live: slowed landing on a Platinum 4 Assimilator whispers the GM *"Was this slowed magical?"*; its button removes it. Control: Platinum 3 gets no card and stays slowed. pf2e's own *Slow* applies a plain slowed from a link on its card, carrying no word of the spell, so whether a slowed is magical is the GM's to say — asked, not guessed (#89, Q5, Q10) |
 
 ## ⚙️ Nickel — *Unstable Growth* (lexicon §9)
 
@@ -80,16 +82,16 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | NI-1a | Aberrations | At daily preparations, gain one **Aberration** |  | ✅ | Live: the chosen Aberrations became effects on the sheet — *A Limb*, *A Plate*, *A Maw* |
-| NI-1b | Aberrations | **(1) A limb** — an additional unarmed Strike, agile, 1d6 of a physical type. |  | ⚠️ | Live: an **Aberrant Limb** Strike, agile, 1d6, versatile P and S. *"A physical type"* is bludgeoning with versatile P/S |
-| NI-1c | Aberrations | **(2) An organ** — one sense: darkvision, scent (imprecise 30 ft), or low-light plus +2 Perception. | `rig` | ⚠️ | Rig, live: *An Organ* gives **darkvision**. Scent and low-light are not offered |
-| NI-1d | Aberrations | **(3) A mode** — a climb or swim Speed equal to half your land Speed. | `rig` | ⚠️ | Rig, live: *A Mode* gives a climb Speed of **12** (half of 25). Swim is not offered |
+| NI-1b | Aberrations | **(1) A limb** — an additional unarmed Strike, agile, 1d6 of a physical type. | `rig` | ✅ | Live: an **Aberrant Limb** Strike, agile, 1d6, **versatile P and S** — *"a physical type"* is any physical type, chosen on each Strike (#89, Q6) |
+| NI-1c | Aberrations | **(2) An organ** — one sense: darkvision, scent (imprecise 30 ft), or low-light plus +2 Perception. | `rig` | ✅ | Rig, live: the Organ is a Gullet choice — **darkvision** (the default), **scent** imprecise 30 feet, or **low-light vision** with **+2 Perception**; each gives its own and not the others (#89, Q7) |
+| NI-1d | Aberrations | **(3) A mode** — a climb or swim Speed equal to half your land Speed. | `rig` | ✅ | Rig, live: the Mode is a Gullet choice — a **climb** Speed of 12 (half of 25), or a **swim** Speed of 12 instead (#89, Q7) |
 | NI-1e | Aberrations | **(4) A plate** — Hardness +3 and a −5-foot Speed penalty. |  | ✅ | Live: Hardness **2 → 5** (the Plate's +3 as a Substrate bonus) and land Speed **25 → 20** |
 | NI-1f | Aberrations | **(5) A gland** — once per encounter, a 15-foot cone dealing 2d6 of your Instinct's type, basic Reflex. | Claude-in-Chrome | ✅ | Live, aimed with the real pointer (click the apex, point, click): the 15-foot cone caught both creatures east of the Assimilator; each critically failed Reflex and took **`2d6 * 2 fire`** — fire from the Red Instinct. **Fixed while driving:** the damage also carried `multiplier: 0.5`, which the basic ladder composes with, so a critical failure dealt the dice once; the validator now refuses it. Its once-per-encounter use is gated with the Flare's |
-| NI-1g | Aberrations | **(6) A maw** — your jaws gain the **deadly d8** trait. |  | ⚠️ | Live: **deadly-d8** — on every unarmed Strike, since the Carapace has no separate jaws |
+| NI-1g | Aberrations | **(6) A maw** — your jaws gain the **deadly d8** trait. | `rig` | ✅ | Rig, live: **deadly-d8** on the **Carapace Strike**, the class's own weapon; the Talons do not gain it (#89, Q8) |
 | NI-1h | Nickel D1 | One Aberration. | `rig` | ✅ | Rig, live: at Depth 1, three chosen, **one** Aberration held |
 | NI-2a | Nickel D2 | **Two** Aberrations. | `rig` | ✅ | Rig, live: at Depth 2, **two** held |
 | NI-3a | Nickel D3 | Once per encounter, as a single action, **re-roll all your Aberrations**. | `rig` | ✅ | Rig, live: the re-roll was **refused at Depth 2** and at Depth 3 rolled **two** fresh Aberrations |
-| NI-4a | Nickel D4 | **Three** Aberrations, and one of them may instead be the **Depth 4 rider of any other Purple Substrate**. |  | ⚠️ | Live: **three** Aberrations held at Depth 4. The Purple Depth 4 rider in place of one is a Note |
+| NI-4a | Nickel D4 | **Three** Aberrations, and one of them may instead be **one other bound Purple Substrate counting as Depth 4**. | `rig` | ✅ | Rig, live: with Quartz 1 bound and chosen in the Gullet, Nickel 4 makes **Quartz count as Depth 4**, and **two** Aberrations are held, not three. Control: nothing chosen, Quartz 1 and three. Only a bound Purple Substrate may be chosen; not on a broken plate. The #86 ruling applied — lexicon v3.3 (#89, Q9) |
 
 ---
 
@@ -98,9 +100,9 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | Status | Count |
 | :-- | --: |
 | ☐ | 0 |
-| ✅ | 17 |
-| ⚠️ | 10 |
+| ✅ | 27 |
+| ⚠️ | 0 |
 | ❌ | 0 |
 | 🔧 | 0 |
-| — | 1 |
-| **Total** | **28** |
+| — | 3 |
+| **Total** | **30** |

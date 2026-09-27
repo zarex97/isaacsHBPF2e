@@ -30,7 +30,20 @@
             {
                 "key": "BaseSpeed",
                 "selector": "climb",
-                "value": "floor(@actor.attributes.speed.total / 2)"
+                "value": "floor(@actor.attributes.speed.total / 2)",
+                "predicate": [
+                    {
+                        "not": "assimilator:mode:swim"
+                    }
+                ]
+            },
+            {
+                "key": "BaseSpeed",
+                "selector": "swim",
+                "value": "floor(@actor.attributes.speed.total / 2)",
+                "predicate": [
+                    "assimilator:mode:swim"
+                ]
             }
         ],
         "start": {

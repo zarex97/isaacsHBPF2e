@@ -115,6 +115,22 @@ export class GulletApp extends HandlebarsApplicationMixin(ApplicationV2) {
             choices.push({ key: "purpleUp", label: `Purple Instinct — one Depth higher${down ? ` (lowered today: ${catalogue[down]?.name ?? down})` : ""}`,
                 options: bound.map((b) => ({ value: b.slug, label: b.name, selected: state.choices.purpleUp === b.slug })) });
         }
+        // Nickel: the Organ's sense, the Mode's movement, and at Depth 4 a Purple Substrate in place of the third (#89).
+        const aberrations = state.choices.nickel ?? [];
+        if (aberrations.includes("organ")) {
+            choices.push({ key: "nickelOrgan", label: "An organ — which sense",
+                options: ["darkvision", "scent", "low-light"].map((v) => ({ value: v, label: v, selected: (state.choices.nickelOrgan ?? "darkvision") === v })) });
+        }
+        if (aberrations.includes("mode")) {
+            choices.push({ key: "nickelMode", label: "A mode — climb or swim",
+                options: ["climb", "swim"].map((v) => ({ value: v, label: v, selected: (state.choices.nickelMode ?? "climb") === v })) });
+        }
+        if ((effective.nickel ?? 0) >= 4) {
+            choices.push({ key: "nickelPurple", label: "Unstable Growth — a Purple Substrate at Depth 4 instead of the third Aberration",
+                options: [{ value: "", label: "— none —", selected: !state.choices.nickelPurple },
+                    ...bound.filter((b) => ["amethyst", "quartz", "platinum"].includes(b.slug))
+                        .map((b) => ({ value: b.slug, label: b.name, selected: state.choices.nickelPurple === b.slug }))] });
+        }
         if (effective.zinc) {
             // Immune System (Jade + Zinc): Shifting Tissue may also name poison.
             const immune = (derived.bonds ?? []).includes("immune-system") ? ["poison"] : [];

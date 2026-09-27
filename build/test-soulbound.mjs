@@ -3368,6 +3368,8 @@ const SYSTEM_SLUGS = new Set([
     "improvised",
     // Cobalt Depth 3's two counteract modifiers, read off rolls by the rig.
     "cobalt-counteract", "cobalt-counteract-module",
+    // Nickel's Organ modifier, read off Perception by the rig.
+    "aberrant-organ",
 ]);
 
 const unresolvedInScripts = [];
