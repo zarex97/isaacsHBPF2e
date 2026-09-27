@@ -180,7 +180,7 @@
                     "carapace:intact"
                 ],
                 "selector": "athletics",
-                "text": "Forced movement you cause increases by 5 feet.",
+                "text": "Forced movement you cause increases by 5 feet — the Push card after a successful Shove counts it.",
                 "title": "Iron (Depth 3)"
             },
             {
@@ -218,7 +218,7 @@
                     "carapace:intact"
                 ],
                 "selector": "athletics",
-                "text": "A creature you Shove into a wall, hazard or another creature takes bludgeoning damage equal to your level.",
+                "text": "A creature you Shove into a wall, hazard or another creature takes bludgeoning damage equal to your level — the Push card deals it when the push stops against one.",
                 "title": "Iron (Depth 4)"
             }
         ],

@@ -41,7 +41,7 @@
                     "assimilator:bond:siege-frame"
                 ],
                 "selector": "athletics",
-                "text": "Forced movement you cause increases by an additional 10 feet.",
+                "text": "Forced movement you cause increases by an additional 10 feet — the Push card after a successful Shove counts it.",
                 "title": "Siege Frame"
             }
         ],

@@ -514,6 +514,96 @@ const INSTINCTS = [
     }, want: ["fire", "cold", "void", "vitality"] },
 
     // Red, now one modifier per Substrate, gated as that Substrate's damage is.
+    // Ruby Depth 4: "On a critical hit … the target's space burns — a creature ending its turn there takes 1d6 fire."
+    ...[[{ ruby: 4 }, true, true, "a critical: the target's space burns, and the target ending its turn there takes 1d6"],
+        [{ ruby: 4 }, false, false, "control: a plain hit leaves no fire on the ground"],
+        [{ ruby: 3 }, true, false, "control: Ruby 3's critical leaves none"]].map(([b, crit, want, note]) => ({
+        id: "RU-4b", lv: 17, b, note, act: async (a, t, ctx) => inCombat(ctx, async (combat) => {
+            const burning = () => canvas.scene.regions.filter((r) => r.name === "Ruby — burning ground");
+            const clear = async () => { const ids = burning().map((r) => r.id); if (ids.length) await canvas.scene.deleteEmbeddedDocuments("Region", ids); };
+            await clear();
+            await applyStrike(a, t, ctx, await strikeRoll(a, { crit }));
+            await wait(800);
+            const tok = canvas.scene.tokens.get(ctx.targetTokenId);
+            const center = { x: tok._source.x + canvas.grid.size / 2, y: tok._source.y + canvas.grid.size / 2, elevation: 0 };
+            const placed = burning().some((r) => r.testPoint(center));
+            // Its own persistent fire would tick at the same turn end; only the ground's 1d6 is measured.
+            for (const c of game.actors.get(t.id).itemTypes.condition.filter((x) => x.slug === "persistent-damage")) await c.delete();
+            await game.actors.get(t.id).update({ "system.attributes.hp.value": 900 });
+            await combat.nextTurn(); await wait(600);
+            await combat.nextTurn(); await wait(2000);
+            const lost = 900 - game.actors.get(t.id).hitPoints.value;
+            await clear();
+            return want ? [placed, lost >= 1 && lost <= 6] : [placed, lost === 0];
+        }), want: want ? [true, true] : [false, true],
+    })),
+    // Garnet Depth 4: "+2 damage per weapon damage die" against creatures "taking persistent bleed **from you**".
+    { id: "GA-4a", lv: 17, b: { garnet: 4 }, act: async (a, t, ctx) => {
+        const target = () => game.actors.get(t.id);
+        const sanguine = async () => ((await strikeRoll(a)).flags.pf2e.modifiers ?? [])
+            .some((m) => m.slug === "substrate-garnet-sanguine" && m.enabled);
+        const clear = async () => { for (const c of target().itemTypes.condition) await c.delete(); await wait(600); };
+        await clear();
+        const none = await sanguine();
+        await hitWith(a, t, ctx, "1d6[persistent,bleed]");
+        const mine = [await sanguine(), target().getRollOptions().some((o) => o.startsWith("self:assimilator:bleeding-from:"))];
+        await clear();
+        const cleared = target().getRollOptions().some((o) => o.startsWith("self:assimilator:bleeding-from:"));
+        // The same bleed from nobody in particular — no Strike behind it, so no stamp.
+        const roll = await new (DamageRoll())("1d6[persistent,bleed]").evaluate();
+        await target().applyDamage({ damage: roll, token: canvas.scene.tokens.get(ctx.targetTokenId) });
+        await wait(1200);
+        const theirs = [target().itemTypes.condition.some((c) => c.slug === "persistent-damage"), await sanguine()];
+        await clear();
+        return [none, ...mine, cleared, ...theirs];
+    }, want: [false, true, true, false, true, false],
+    note: "no bleed: nothing; your bleed: +2 per die and the option; it ends: the option goes; someone else's bleed: nothing" },
+    // The Shove push (#85): a real pf2e Shove, then the Push card's button, as the player would press it.
+    ...[
+        ["IR-3a", { iron: 3 }, [], 8, (r) => [r.feet, r.moved] , (c) => [c ? 15 : 10, c ? 15 : 10], "Iron 3: the push is 5 feet longer, and the creature travels it"],
+        ["IR-3a", { iron: 2 }, [], 8, (r) => [r.feet, r.moved], (c) => [c ? 10 : 5, c ? 10 : 5], "control: Iron 2 pushes the Shove's own distance"],
+        ["B-08", { iron: 2, steel: 2 }, ["siege-frame"], 8, (r) => [r.feet, r.moved], (c) => [c ? 20 : 15, c ? 20 : 15], "Siege Frame: 10 feet more, travelled"],
+        ["IR-4b", { iron: 4 }, [], 3, (r) => [r.moved, r.hit, r.lost], () => [5, "creature", 17], "Iron 4: stopped by a creature after 5 feet, and 17 bludgeoning"],
+        ["IR-4b", { iron: 3 }, [], 3, (r) => [r.moved, r.hit, r.lost], () => [5, "creature", 0], "control: Iron 3 stops the same way and deals nothing"],
+        ["IR-4b", { iron: 4 }, [], "wall", (r) => [r.moved, r.hit, r.lost], () => [5, "wall", 17], "Iron 4: into a wall after 5 feet, and 17 bludgeoning"],
+    ].map(([id, b, bonds, blocker, read2, expect, note]) => ({
+        id, lv: 17, b, bonds, note, act: async (a, t, ctx) => {
+            const me = () => game.actors.get(a.id);
+            const walls = [];
+            await place(ctx, ctx.targetTokenId, 1);
+            if (blocker === "wall") {
+                await place(ctx, ctx.bystanderTokenId, 8);
+                const g = canvas.grid.size; const mine = canvas.scene.tokens.get(ctx.tokenId)._source;
+                const x = mine.x + 3 * g;
+                walls.push(...(await canvas.scene.createEmbeddedDocuments("Wall", [{ c: [x, mine.y - g, x, mine.y + 2 * g] }])).map((w) => w.id));
+            } else await place(ctx, ctx.bystanderTokenId, blocker);
+            try {
+                await game.actors.get(t.id).update({ "system.attributes.hp.value": 900 });
+                canvas.scene.tokens.get(ctx.targetTokenId).object.setTarget(true, { user: game.user, releaseOthers: true });
+                canvas.scene.tokens.get(ctx.tokenId).object.control({ releaseOthers: true });
+                await game.pf2e.actions.get("shove").use({ actors: [me()], skipDialog: true });
+                const card = await until(() => game.messages.contents.findLast((m) => m.flags?.["isaacs-hb-pf2e"]?.assimilatorPush
+                    && !m.flags["isaacs-hb-pf2e"].assimilatorPush.done), 6000);
+                const shove = game.messages.get(card.flags["isaacs-hb-pf2e"].assimilatorPush.shove);
+                const critical = shove.flags.pf2e.context.outcome === "criticalSuccess";
+                const x0 = canvas.scene.tokens.get(ctx.targetTokenId)._source.x;
+                document.querySelector(`li.chat-message[data-message-id="${card.id}"] button[data-action="isaacs-hb-push"]`)?.click();
+                const said = await until(() => game.messages.contents.findLast((m) => m.flags?.["isaacs-hb-pf2e"]?.assimilatorPushed
+                    && m.timestamp >= card.timestamp), 6000);
+                await wait(800);
+                const r = { feet: card.flags["isaacs-hb-pf2e"].assimilatorPush.feet,
+                    moved: (canvas.scene.tokens.get(ctx.targetTokenId)._source.x - x0) / canvas.grid.size * 5,
+                    hit: said?.flags["isaacs-hb-pf2e"].assimilatorPushed.hit ?? null,
+                    lost: 900 - game.actors.get(t.id).hitPoints.value };
+                const got = read2(r);
+                return JSON.stringify(got) === JSON.stringify(expect(critical)) ? true : { critical, got };
+            } finally {
+                if (walls.length) await canvas.scene.deleteEmbeddedDocuments("Wall", walls);
+                await place(ctx, ctx.targetTokenId, 1);
+                await place(ctx, ctx.bystanderTokenId, 2);
+            }
+        }, want: true,
+    })),
     // Guide §4.5: the Instinct clause applies to "every Mutation you have, including Mutations of other colours".
     { id: "A-44", lv: 17, b: { ruby: 3, sapphire: 2 }, act: async (a) => [derived(a).instincts.primary, redOn(await strikeRoll(a))],
         want: ["red", 5], note: "Red Instinct; Blue's Sapphire 2 takes Red's +2 beside Ruby's +3" },

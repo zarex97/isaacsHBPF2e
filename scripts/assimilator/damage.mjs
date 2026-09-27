@@ -303,6 +303,48 @@ export const AssimilatorDamage = {
         }
         // Lapis Lazuli Depth 3: learn one resistance, weakness or immunity of the creature damaged.
         if (depthOf(originActor, "lapis-lazuli") >= 3) await AssimilatorDamage.reveal(originActor, target);
+        // Ruby Depth 4: "On a critical hit … the target's space burns — a creature ending its turn there takes 1d6 fire."
+        const strike = ["weapon", "melee"].includes(params.item?.type);
+        if (params.outcome === "criticalSuccess" && strike && depthOf(originActor, "ruby") >= 4) {
+            await AssimilatorDamage.burnSpace(params?.token?.document ?? params?.token ?? target.getActiveTokens?.(true, true)?.[0],
+                originActor);
+        }
+    },
+
+    /**
+     * The target's space set burning: a lingering area — the module's own, as Mavros Eruption Clast leaves — on the
+     * squares the token stands on, for 1 minute (#85). It burns whoever ends a turn in it, not the creature that
+     * was hit: the ground stays where the blow landed.
+     */
+    async burnSpace(token, origin) {
+        const doc = token?.document ?? token;
+        if (!doc?.parent || !canvas?.scene || doc.parent.id !== canvas.scene.id) return null;
+        // Loaded here, not at the top: the lingering module defines a Foundry class as it loads, and this file is
+        // also imported by the Node tests.
+        const { BEHAVIOR_TYPE: LINGERING_BEHAVIOR, FLAG: LINGERING } = await import("../targeting/lingering.mjs");
+        const size = canvas.grid.size;
+        const [region] = await canvas.scene.createEmbeddedDocuments("Region", [{
+            name: "Ruby — burning ground",
+            color: "#d9480f",
+            visibility: CONST.REGION_VISIBILITY.ALWAYS,
+            shapes: [{ type: "rectangle", x: doc._source.x, y: doc._source.y,
+                width: (doc.width ?? 1) * size, height: (doc.height ?? 1) * size, rotation: 0, hole: false }],
+            behaviors: [{ type: LINGERING_BEHAVIOR, name: "Ruby — burning ground",
+                system: { events: [CONST.REGION_EVENTS.TOKEN_TURN_END] } }],
+            flags: {
+                [MODULE_ID]: {
+                    [LINGERING]: {
+                        expiresAt: game.time.worldTime + 60, name: "Ruby — burning ground",
+                        itemUuid: null, originUuid: origin.uuid,
+                        damage: { formula: "1d6", type: "fire", persistent: false },
+                        save: null, affects: null, lightIds: [], wallIds: [],
+                    },
+                },
+                pf2e: { areaShape: "burst" },
+            },
+        }]);
+        if (region) await say(origin, `<strong>Furnace Veins</strong>: the ground under ${doc.name} catches; anyone ending a turn there takes 1d6 fire.`);
+        return region ?? null;
     },
 
     /** After damage lands on an Assimilator. */
