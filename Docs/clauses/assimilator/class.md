@@ -156,7 +156,8 @@ this file.
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| A-56 | §4.8 | You need neither food, drink nor air, and you are **immune to disease**. |  | ⚠️ | Live: **immune to disease** at 15th, **not at 14th**. Needing no food, drink or air is text |
+| A-56a | §4.8 | You need neither food, drink nor air |  | — | Nothing to automate: pf2e has no hunger, thirst or breathing to switch off. Split from A-56 (#84) |
+| A-56b | §4.8 | you are **immune to disease**. |  | ✅ | Live: **immune to disease** at 15th, **not at 14th** |
 | A-57 | §4.8 | You are **immune to the drained condition** |  | ✅ | Live: **immune to drained** at 15th, not at 14th |
 | A-58 | §4.8 | and to any effect that would alter your physical form against your will (petrification, polymorph, and the like) |  | ⚠️ | Live: **immune to petrified and polymorph** at 15th, not at 14th — but unconditionally, where the guide says *against your will*: a willing polymorph is refused too |
 | A-59 | §4.8 | You can be healed by **Repair** as well as by anything that heals a creature. |  | — | Nothing to automate: pf2e's Repair activity targets objects, not creatures; that an Assimilator can be Repaired is the GM's ruling at the table |
@@ -177,9 +178,9 @@ this file.
 | Status | Count |
 | :-- | --: |
 | ☐ | 0 |
-| ✅ | 67 |
-| ⚠️ | 8 |
+| ✅ | 68 |
+| ⚠️ | 7 |
 | ❌ | 0 |
 | 🔧 | 0 |
-| — | 1 |
-| **Total** | **76** |
+| — | 2 |
+| **Total** | **77** |
