@@ -894,6 +894,11 @@ for (const [file, slug] of [
     const allotted = sight?.apply?.riders?.[1]?.apply?.substitutions?.[0];
     check("…whose signature is baked into the bonus's predicate when it is handed out",
         [allotted?.path, allotted?.value, bonus.predicate?.length], ["system.rules.0.predicate.0", "picked.as-target", 1]);
+    // "the **next** ally": every ally holds a copy, and the first one spent takes the rest back — which
+    // `shared-allowance.mjs` finds by this flag and the modifier's slug.
+    const fortune = load("soulbound-effects", "effect-allotted-fortune.json");
+    check("…and it is one allowance however many allies hold it",
+        [fortune.flags?.["isaacs-hb-pf2e"]?.sharedAllowance, bonus.slug], [true, "allotted-fortune"]);
 }
 
 /* -------------------------------------------------------------------------------------------- */
