@@ -1281,7 +1281,7 @@ const INSTINCTS = [
                 const offered = [...document.querySelectorAll(".application button")].map((x) => x.textContent.trim());
                 const aegis = offered.some((x) => /ZZ Aegis/.test(x));
                 const picked = await answerDialog("Counteract Spell Effect: ZZ Ward (rank 2)");
-                const gone = picked && !!(await until(() => !target().items.get(ward.id), 6000));
+                const gone = picked && !!(await until(() => !target().items.get(ward.id), 10000));
                 return [picked, aegis, gone];
             } finally {
                 closeTide(); untarget();
@@ -1495,6 +1495,15 @@ const BOND_CHECKS = [
     { id: "B-12", lv: 17, b: { electrum: 2, nickel: 2 }, bonds: ["chimera"], c: { nickel: ["limb", "organ", "mode"] },
         act: async (a) => game.actors.get(a.id).itemTypes.effect.filter((e) => e.flags?.["isaacs-hb-pf2e"]?.assimilator?.aberration).length,
         want: 3, note: "Nickel 2 holds two; Chimera a third" },
+    // Chimera's extra Aberration may instead be a Substrate of either Instinct's colour at Depth 4 (#95, lexicon v3.4).
+    ...[[{ nickel: ["limb", "organ", "mode"], chimeraDeep: "ruby" }, ["red", 4, 2], "Ruby (the Red Instinct's colour) counts as Depth 4; two Aberrations held"],
+        [{ nickel: ["limb", "organ", "mode"], chimeraDeep: "electrum" }, ["red", 2, 3], "control: Electrum is Gold, not an Instinct's colour — nothing raised, three held"]]
+        .map(([c, want, note]) => ({ id: "B-12", lv: 17, b: { electrum: 2, nickel: 2, ruby: 3 }, bonds: ["chimera"], c, want, note,
+            act: async (a) => {
+                await wait(800);
+                const held = game.actors.get(a.id).itemTypes.effect.filter((e) => e.flags?.["isaacs-hb-pf2e"]?.assimilator?.aberration).length;
+                return [derived(a).instincts.primary, derived(a).effective[c.chimeraDeep], held];
+            } })),
     { id: "B-14", lv: 17, b: { amber: 2, cobalt: 2 }, bonds: ["storm-battery"], act: async (a, t, ctx) => {
         await AssimilatorDamageRef().setReservoir(game.actors.get(a.id), 0, null);
         await hitWith(a, t, ctx, "6[cold]", { label: "Arcane Channel" });
@@ -1551,6 +1560,30 @@ const BOND_CHECKS = [
             return effects(tt, /mindstorm/).length && s ? [1, s.value] : null;
         }, 10000);
     }, want: [1, 1], note: "failed Amethyst's save: Mindstorm, stupefied 1" },
+    // Mindstorm's next spell rolls its DC 5 flat check, once; stupefied stays (#95).
+    { id: "B-19", lv: 17, b: { amethyst: 4, quartz: 2 }, bonds: ["mindstorm"], act: async (a, t) => {
+        const target = () => game.actors.get(t.id);
+        await AssimilatorDamageRef().mark(target(), "effect-mindstorm");
+        await until(() => target().itemTypes.condition.some((c) => c.slug === "stupefied"), 4000);
+        const [spell] = await target().createEmbeddedDocuments("Item", [{ name: "ZZ Spark", type: "spell",
+            system: { level: { value: 1 }, traits: { value: ["concentrate", "manipulate"] }, time: { value: "2" } } }]);
+        const cast = async () => {
+            const since = game.messages.size;
+            await target().items.get(spell.id).toMessage(null, { create: true });
+            await wait(1500);
+            return game.messages.contents.slice(since).find((m) => m.flags?.["isaacs-hb-pf2e"]?.mindstormCheck) ?? null;
+        };
+        try {
+            const first = await cast();
+            const second = await cast();
+            const storm = target().itemTypes.effect.find((e) => e.slug === "effect-mindstorm");
+            return [!!first, typeof first?.flags["isaacs-hb-pf2e"].mindstormCheck.passed, !!second,
+                target().itemTypes.condition.some((c) => c.slug === "stupefied"), (storm?.system.rules ?? []).some((r) => r.key === "Note")];
+        } finally {
+            await target().items.get(spell.id)?.delete();
+            for (const e of target().itemTypes.effect.filter((x) => x.slug === "effect-mindstorm")) await e.delete();
+        }
+    }, want: [true, "boolean", false, true, false], note: "the first spell rolls the DC 5 flat check; the second does not; stupefied 1 stays; the Note is spent" },
     { id: "B-20", lv: 17, b: { platinum: 4, aluminium: 2 }, bonds: ["ascension"], act: async (a) =>
         (game.actors.get(a.id).system.movement.speeds.fly?.modifiers ?? []).find((m) => m.slug === "ascension" && m.enabled)?.modifier ?? 0,
     want: 20 },
@@ -1577,12 +1610,62 @@ const BOND_CHECKS = [
         await app.close();
         return [offered, read.resist(game.actors.get(a.id), "poison")];
     }, want: [true, 5], note: "poison offered and resisted at Zinc 2" },
+    // Immune System's disease and spell school, as ruled (#95): a save bonus, and a tradition.
+    { id: "B-23", lv: 17, b: { jade: 2, zinc: 2 }, bonds: ["immune-system"], c: { zinc: "disease" }, act: async (a) => {
+        const app = await game.modules.get("isaacs-hb-pf2e").api.assimilator.openGullet(game.actors.get(a.id)); await wait(800);
+        const values = [...app.element.querySelectorAll(".gullet-choice option")].map((o) => o.value);
+        await app.close();
+        const bonus = async (extra) => {
+            await game.actors.get(a.id).saves.fortitude.roll({ dc: { value: 10 }, skipDialog: true, extraRollOptions: extra });
+            await wait(600);
+            return (game.messages.contents.at(-1).flags.pf2e.modifiers ?? []).find((m) => m.slug === "immune-system-disease" && m.enabled)?.modifier ?? 0;
+        };
+        return [["disease", "arcane", "primal"].every((v) => values.includes(v)), await bonus(["item:trait:disease"]), await bonus([]),
+            game.actors.get(a.id).attributes.resistances.map((r) => r.type).sort()];
+    }, want: [true, 2, 0, ["poison"]], note: "disease and the traditions offered; disease: +2 circumstance on a save against disease, none otherwise; no resistance from Zinc (Jade 2's poison only)" },
+    { id: "B-23", lv: 17, b: { jade: 2, zinc: 2 }, bonds: ["immune-system"], c: { zinc: "arcane" }, get: (a) => read.resist(a, "arcane"),
+        want: 5, note: "a tradition named: resistance 5 to arcane" },
     { id: "B-24", lv: 17, b: { onyx: 2, lead: 2 }, bonds: ["null-shroud"], act: async (a, t, ctx) => {
         canvas.scene.tokens.get(ctx.tokenId).object?.control({ releaseOthers: true });
         await AssimilatorRig.useWithArea(game.actors.get(a.id).items.find((i) => i.slug === "shadow-mantle"));
         return [effects(game.actors.get(a.id), /shadow-mantle/).length,
             game.messages.contents.slice(-5).some((m) => /counteract/i.test(m.content ?? ""))];
     }, want: [1, true], note: "the darkness settles, and suppresses the magic inside it" },
+    // Null Shroud: the darkness cannot be counteracted below 6th rank (#95).
+    ...[[{ onyx: 2, lead: 2 }, ["null-shroud"], [6, true, true], "Null Shroud: floor 6; a rank-5 counteract is refused without a roll; a rank-9 one rolls"],
+        [{ onyx: 2, lead: 1 }, [], [0, false, true], "control: no Null Shroud — no floor, the rank-5 counteract rolls"]].map(([b, bonds, want, note]) => ({
+        id: "B-24", lv: 17, b, bonds, want, note, act: async (a, t) => {
+            const { resolveCounteract } = await import("../riders/apply.mjs");
+            const me = () => game.actors.get(a.id);
+            for (const e of me().itemTypes.effect.filter((x) => x.slug === "effect-shadow-mantle")) await e.delete();
+            await AssimilatorDamageRef().mark(me(), "effect-shadow-mantle");
+            const mantle = await until(() => me().itemTypes.effect.find((x) => x.slug === "effect-shadow-mantle"), 4000);
+            await wait(800);
+            const floor = me().items.get(mantle.id)?.flags?.["isaacs-hb-pf2e"]?.counteractFloor ?? 0;
+            const level = () => game.actors.get(t.id).system.details.level.value;
+            const was = level();
+            const rolled = async (lvl) => {
+                await game.actors.get(t.id).update({ "system.details.level.value": lvl });
+                const since = game.messages.size;
+                const effect = me().itemTypes.effect.find((x) => x.slug === "effect-shadow-mantle");
+                if (!effect) return null;
+                // An NPC has no class statistic: it counteracts with Perception, which is all this reading needs.
+                await resolveCounteract({ originUuid: game.actors.get(t.id).uuid, effectUuid: effect.uuid, itemUuid: null, statistic: "perception" });
+                await wait(800);
+                return game.messages.contents.slice(since).some((m) => (m.flags?.pf2e?.context?.options ?? []).includes("isaacs-hb-pf2e:counteract"));
+            };
+            try {
+                const low = await rolled(9);
+                const lowRefused = low === false;
+                if (!me().itemTypes.effect.some((x) => x.slug === "effect-shadow-mantle")) await AssimilatorDamageRef().mark(me(), "effect-shadow-mantle");
+                await wait(600);
+                const high = await rolled(17);
+                return [floor, lowRefused, !!high];
+            } finally {
+                await game.actors.get(t.id).update({ "system.details.level.value": was });
+                for (const e of me().itemTypes.effect.filter((x) => x.slug === "effect-shadow-mantle")) await e.delete();
+            }
+        } })),
     { id: "B-25", lv: 17, b: { jet: 2, manganese: 2 }, bonds: ["rot"], act: async (a, t, ctx) => {
         await hitWith(a, t, ctx, "1d6[persistent,acid]");
         for (const e of game.actors.get(t.id).itemTypes.effect.filter((x) => x.slug === "effect-corroded")) await e.delete();
@@ -2189,7 +2272,8 @@ const SCENARIOS = [
                 { name: "ZZ Riposte", type: "action", system: { actionType: { value: "reaction" } } },
                 { name: "ZZ Innate", type: "spellcastingEntry", system: { prepared: { value: "innate" }, tradition: { value: "arcane" }, ability: { value: "cha" } } },
                 { name: "ZZ Prepared", type: "spellcastingEntry", system: { prepared: { value: "prepared" }, tradition: { value: "arcane" }, ability: { value: "int" } } }]);
-            const spells = await target().createEmbeddedDocuments("Item", made.slice(1).map((e) => ({ name: `ZZ Spark (${e.name})`, type: "spell",
+            const entries = made.filter((x) => x.type === "spellcastingEntry").sort((x, y) => (x.name === "ZZ Innate" ? -1 : 1));
+            const spells = await target().createEmbeddedDocuments("Item", entries.map((e) => ({ name: `ZZ Spark (${e.name})`, type: "spell",
                 system: { level: { value: 1 }, traits: { value: ["concentrate", "manipulate"] }, time: { value: "2" }, location: { value: e.id } } })));
             const posted = async (id) => {
                 const item = target().items.get(id);
@@ -2199,7 +2283,8 @@ const SCENARIOS = [
                 return game.messages.contents.slice(since).some((m) => m.flags?.pf2e?.origin?.uuid === item.uuid);
             };
             try {
-                return [bound, await posted(made[0].id), await posted(spells[0].id), await posted(spells[1].id)];
+                const byName = (name) => target().items.getName(name).id;
+                return [bound, await posted(byName("ZZ Riposte")), await posted(byName("ZZ Spark (ZZ Innate)")), await posted(byName("ZZ Spark (ZZ Prepared)"))];
             } finally {
                 await target().deleteEmbeddedDocuments("Item", [...made, ...spells].map((x) => x.id).filter((id) => target().items.has(id)));
                 for (const e of target().itemTypes.effect.filter((x) => x.slug === "effect-argent-bound")) await e.delete();

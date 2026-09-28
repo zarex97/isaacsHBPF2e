@@ -396,10 +396,19 @@ export const Engine = {
         const counts = colourCounts(effective, catalogue, electrumColour);
         const bonds = activeBonds(state.bonds.slice(0, grants.bondSlots), effective, await Engine.bondPairs(),
             state.choices.electrumBond ?? null, Engine.hasFeat(actor, "bonded-deep") ? state.choices.bondedDeep ?? null : null);
-        const instincts = instinctsOf(state.instinct, effective.electrum ?? 0, electrumColour, bonds.includes("transmutation"),
+        let instincts = instinctsOf(state.instinct, effective.electrum ?? 0, electrumColour, bonds.includes("transmutation"),
             Engine.instinctFeats(actor, state));
+        // Chimera (#95, lexicon v3.4): its extra Aberration may instead be a bound Substrate of either Instinct's colour,
+        // counting as Depth 4. It needs the Bonds, which need the Depths, so it is applied after both.
+        const chimeraDeep = Engine.chimeraDeep(actor, state, effective, bonds, instincts, catalogue);
+        if (chimeraDeep) {
+            effective[chimeraDeep] = Math.max(effective[chimeraDeep], 4);
+            instincts = instinctsOf(state.instinct, effective.electrum ?? 0, electrumColour, bonds.includes("transmutation"),
+                Engine.instinctFeats(actor, state));
+        }
         return {
             bonds,
+            chimeraDeep,
             colourCount: counts,
             instincts,
             iv: instinctValues({ effective, catalogue, counts, scale: instincts.scale }),
@@ -614,7 +623,7 @@ export const Engine = {
         // Chimeric Frame: "two of Nickel's Aberrations without binding Nickel" — in addition to any Nickel holds.
         const frame = Engine.hasFeat(actor, "chimeric-frame") ? 2 : 0;
         const holds = (derived.effective.nickel ? Engine.aberrationCount(derived.effective.nickel, derived.bonds) : 0) + frame
-            - Engine.purpleInstead(state, derived.effective);
+            - Engine.purpleInstead(state, derived.effective) - (derived.chimeraDeep ? 1 : 0);
         const held = (state.choices.nickel ?? []).slice(0, holds);
         for (const e of aberrations) if (!held.includes(e.flags[MODULE_ID][KEY].aberration)) deletes.push(e.id);
         const missing = held.filter((k) => !aberrations.some((e) => e.flags[MODULE_ID][KEY].aberration === k));
@@ -707,6 +716,10 @@ export const Engine = {
                 if (pick !== one && toggles[option]) update[`flags.pf2e.rollOptions.all.-=${option}`] = null;
             }
         }
+        // Immune System (#95): Shifting Tissue naming disease is a bonus to saves, since pf2e has no disease resistance.
+        const disease = state.choices.zinc === "disease";
+        if (disease && !toggles["assimilator:zinc:disease"]) update["flags.pf2e.rollOptions.all.assimilator:zinc:disease"] = true;
+        if (!disease && toggles["assimilator:zinc:disease"]) update["flags.pf2e.rollOptions.all.-=assimilator:zinc:disease"] = null;
         for (const colour of COLOURS) {
             const option = `assimilator:instinct:${colour}`;
             if (colour === live.primary && !toggles[option]) update[`flags.pf2e.rollOptions.all.${option}`] = true;
@@ -900,6 +913,7 @@ export const Engine = {
         if (key === "nickelPurple" && value && !(["amethyst", "quartz", "platinum"].includes(value) && value in state.substrates)) {
             return Engine._refuse("Choose another Purple Substrate you bind: Amethyst, Quartz or Platinum.");
         }
+        if (key === "chimeraDeep" && value && !(value in state.substrates)) return Engine._refuse("Choose a Substrate you bind.");
         if (key === "nickelOrgan" && !["darkvision", "scent", "low-light"].includes(value)) return Engine._refuse("An organ is darkvision, scent or low-light.");
         if (key === "nickelMode" && !["climb", "swim"].includes(value)) return Engine._refuse("A mode is climb or swim.");
         if ((key === "goldInstinct" || key === "purpleUp") && !(value in state.substrates)) {
@@ -915,6 +929,18 @@ export const Engine = {
 
     /** Nickel: roll the Aberrations — at daily preparations, or by the Depth 3 re-roll. */
     /** Aberrations held at a Nickel Depth; Chimera (Electrum + Nickel) holds one more. */
+    /**
+     * Chimera — *"it may be drawn from the Depth-4 rider list of either of your Instincts"* (#95). Ruled as Nickel Depth
+     * 4's "instead": the chosen bound Substrate of the primary or second Instinct's colour counts as Depth 4. Not on a
+     * broken plate, where §4.3 switches Depth 3+ off.
+     */
+    chimeraDeep(actor, state, effective, bonds, instincts, catalogue) {
+        const pick = state.choices.chimeraDeep;
+        if (!pick || !bonds.includes("chimera") || !(pick in effective)) return null;
+        if ((actor.itemTypes?.effect ?? []).some((e) => e.slug === "effect-carapace-broken")) return null;
+        return [instincts.primary, instincts.secondary].filter(Boolean).includes(catalogue[pick]?.colour) ? pick : null;
+    },
+
     /** Nickel Depth 4: 1 when a Purple Substrate stands in for the third Aberration, else 0. */
     purpleInstead(state, effective) {
         const purple = state.choices.nickelPurple;
@@ -938,7 +964,8 @@ export const Engine = {
         }
         const pool = [...ABERRATIONS];
         const picked = [];
-        const count = (depth ? Engine.aberrationCount(depth, derived.bonds) : 0) + frame - Engine.purpleInstead(state, derived.effective);
+        const count = (depth ? Engine.aberrationCount(depth, derived.bonds) : 0) + frame - Engine.purpleInstead(state, derived.effective)
+            - (derived.chimeraDeep ? 1 : 0);
         for (let i = 0; i < count; i++) {
             picked.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
         }
