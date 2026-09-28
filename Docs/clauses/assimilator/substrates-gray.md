@@ -54,7 +54,7 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| MO-1a | Moonstone D1 | Once per encounter, as a reaction after taking damage of a type, gain **resistance 2** to that type for 1 minute. |  | ⚠️ | Live: *Reactive Evolution* granted; its effect's choice is the damage type. Once per encounter is text |
+| MO-1a | Moonstone D1 | Once per encounter, as a reaction after taking damage of a type, gain **resistance 2** to that type for 1 minute. | `rig` | ✅ | Rig, live (#93): 10 fire taken offered a *Reactive Evolution* card to the owners; the click gave **fire 2**. Outside an encounter uses are not counted, so 10 cold offered it again; in an encounter the first use (acid) spent it and 10 sonic offered **nothing**. Control, no Moonstone: no card. The sheet action stays for damage the module never sees |
 | MO-2a | Moonstone D2 | **Resistance 5**, twice per encounter. |  | ✅ | Live: with **fire** chosen, **fire 5** at Depth 2 |
 | MO-3a | Moonstone D3 | **Resistance 8**, it lasts until the encounter ends, and you may hold **two** types at once. | `rig` | ✅ | Rig, live: **fire 8** at Depth 3; it lasts until the encounter ends and two can be held |
 | MO-4a | Moonstone D4 | **Resistance 12**, unlimited uses, **three** types at once. | `rig` | ✅ | Rig, live: **fire 12** at Depth 4 |
@@ -85,7 +85,7 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | AG-3a | Silver D3 | **+1d6** instead. | `rig` | ✅ | Rig, live: **1d6** against a fiend, no d4 |
 | AG-3b | Silver D3 | Your Strikes affect incorporeal creatures as though they had the **ghost touch** rune. |  | ✅ | Live: the Strike carries the **ghostTouch** property rune at Depth 3 |
 | AG-4a | Silver D4 | **+1d6.** | `rig` | ✅ | Rig, live: **1d6** against a spirit |
-| AG-4b | Silver D4 | A supernatural creature you critically hit cannot use **reactions or innate spells** until the end of its next turn. | `rig` | ⚠️ | Rig: the Note *Silver (Depth 4)* appears on the critical Strike card. Text the table applies — nothing enforces it |
+| AG-4b | Silver D4 | A supernatural creature you critically hit cannot use **reactions or innate spells** until the end of its next turn. | `rig` | ✅ | Rig, live (#93): a critical Carapace Strike at Silver 4 on an **undead** gave it *Argent-Bound* (until the end of its next turn); its reaction's card and its innate spell's card were **refused**, and a prepared spell still posted. The module's own reaction offers hold back too. Controls: a **humanoid** critically hit, and Silver 3, bound nothing. Supernatural is Depth 2's list: aberration, fiend, undead, spirit |
 
 ---
 
@@ -94,8 +94,8 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | Status | Count |
 | :-- | --: |
 | ☐ | 0 |
-| ✅ | 22 |
-| ⚠️ | 2 |
+| ✅ | 24 |
+| ⚠️ | 0 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 0 |
