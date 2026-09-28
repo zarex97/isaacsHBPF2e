@@ -91,10 +91,15 @@
                             },
                             "carapace:intact"
                         ]
-                    }
+                    },
+                    "action:recall-knowledge"
                 ],
                 "selector": "skill-check",
-                "text": "When you succeed at Recall Knowledge about a creature, allies gain +1 circumstance to attacks against it for 1 round.",
+                "outcome": [
+                    "success",
+                    "criticalSuccess"
+                ],
+                "text": "Your allies gain Lapis Insight against this creature: +1 circumstance to attacks against it for 1 round. The module gives it to them.",
                 "title": "Lapis Lazuli (Depth 2)"
             },
             {
@@ -116,7 +121,8 @@
                 "title": "Lapis Lazuli (Depth 3)"
             },
             {
-                "key": "Note",
+                "allowDuplicate": false,
+                "key": "GrantItem",
                 "predicate": [
                     {
                         "not": "assimilator:suppressed"
@@ -129,9 +135,8 @@
                     },
                     "carapace:intact"
                 ],
-                "selector": "all",
-                "text": "Once per encounter, name a creature's strongest save; for 1 minute your Mutations target its weakest instead.",
-                "title": "Lapis Lazuli (Depth 4)"
+                "reevaluateOnUpdate": true,
+                "uuid": "Compendium.isaacs-hb-pf2e.assimilator-class-features.Item.Lay Bare"
             }
         ],
         "start": {

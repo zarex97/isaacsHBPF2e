@@ -1,0 +1,56 @@
+{
+    "img": "icons/magic/perception/eye-ringed-glow-angry-small-teal.webp",
+    "name": "Effect: Lapis Insight",
+    "system": {
+        "description": {
+            "value": "<p><strong>Lapis Lazuli, Depth 2.</strong> An allied Assimilator has read this creature: <strong>+1 circumstance to attacks</strong> against it, for 1 round.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "selector": [
+                    "strike-attack-roll",
+                    "spell-attack-roll"
+                ],
+                "slug": "lapis-insight",
+                "type": "circumstance",
+                "value": 1,
+                "label": "Lapis Insight",
+                "predicate": [
+                    "target:signature:{item|flags.isaacs-hb-pf2e.assimilator.lapis}"
+                ]
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}

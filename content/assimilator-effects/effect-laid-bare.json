@@ -1,0 +1,41 @@
+{
+    "img": "icons/magic/perception/eye-slit-orange.webp",
+    "name": "Effect: Laid Bare",
+    "system": {
+        "description": {
+            "value": "<p><strong>Lapis Lazuli, Depth 4.</strong> An Assimilator named this creature's strongest save: for 1 minute, that Assimilator's Mutations target its weakest instead.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}
