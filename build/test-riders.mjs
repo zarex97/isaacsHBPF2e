@@ -886,9 +886,14 @@ for (const [file, slug] of [
     const penalty = load("soulbound-effects", "effect-sight-of-the-balance.json").system.rules[0];
     check("the marked creature's penalty lasts one save",
         [penalty.value, penalty.type, penalty.removeAfterRoll], [-2, "status", true]);
+    // "the next ally who attacks **it**": the bonus is about the chosen creature, so it is spent only by a
+    // roll it applied to. `true` would spend it on whatever the ally attacked first.
     const bonus = load("soulbound-effects", "effect-allotted-fortune.json").system.rules[0];
-    check("and the ally's bonus lasts one attack",
-        [bonus.value, bonus.type, bonus.removeAfterRoll], [1, "status", true]);
+    check("and the ally's bonus lasts one attack against the marked creature",
+        [bonus.value, bonus.type, bonus.removeAfterRoll], [1, "status", "if-enabled"]);
+    const allotted = sight?.apply?.riders?.[1]?.apply?.substitutions?.[0];
+    check("…whose signature is baked into the bonus's predicate when it is handed out",
+        [allotted?.path, allotted?.value, bonus.predicate?.length], ["system.rules.0.predicate.0", "picked.as-target", 1]);
 }
 
 /* -------------------------------------------------------------------------------------------- */

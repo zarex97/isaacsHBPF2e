@@ -26,7 +26,10 @@
                 "selector": "attack",
                 "type": "status",
                 "value": 1,
-                "removeAfterRoll": true
+                "predicate": [
+                    "target:signature:the-picked-creature"
+                ],
+                "removeAfterRoll": "if-enabled"
             }
         ],
         "start": {
