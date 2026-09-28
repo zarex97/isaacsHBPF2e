@@ -10,6 +10,7 @@
 
 import { AssimilatorDamage, depthOf as depth, suppressed } from "./damage.mjs";
 import { Engine } from "./engine.mjs";
+import { tideRefusal } from "./instincts.mjs";
 import { GulletApp } from "./gullet.mjs";
 import { encounterOf } from "../lib/encounter-damage.mjs";
 import { Relay } from "../riders/relay.mjs";
@@ -37,8 +38,9 @@ const PER_ENCOUNTER = {
     "null-field": { key: "null-field" },
     // Lapis Lazuli Depth 4: "Once per encounter".
     "lay-bare": { key: "lay-bare" },
-    // Pearl Depth 4: "Twice per encounter."
-    "cleansing-tide": { key: "cleansing-tide", max: (actor) => (depthOf(actor, "pearl") >= 4 ? 2 : 1) },
+    // Pearl Depth 4: "Twice per encounter." Out of reach is refused before a use is spent (#92).
+    "cleansing-tide": { key: "cleansing-tide", max: (actor) => (depthOf(actor, "pearl") >= 4 ? 2 : 1),
+        refuse: (actor) => tideRefusal(actor, [...game.user.targets][0] ?? null) },
     // The Bonds' own once-per-encounter actions.
     "ignite-the-solar-core": { key: "solar-core" },
     "imperial-strike": { key: "imperial-strike" },
@@ -280,9 +282,15 @@ export const Mutations = {
         const item = fromUuidSync(uuid);
         const rule = PER_ENCOUNTER[item?.slug];
         const actor = item?.actor;
-        const combat = actor && encounterOf(actor);
+        if (!rule || !actor) return undefined;
+        const refusal = rule.refuse?.(actor);
+        if (refusal) {
+            ui.notifications.warn(`${item.name}: ${refusal}`);
+            return false;
+        }
+        const combat = encounterOf(actor);
         // Outside an encounter there is nothing to count against.
-        if (!rule || !combat?.started) return undefined;
+        if (!combat?.started) return undefined;
         const max = rule.max?.(actor) ?? 1;
         const ledger = actor.flags?.[MODULE]?.assimilator?.encounterUses?.[rule.key];
         const used = ledger?.combat === combat.id ? ledger.n : 0;
