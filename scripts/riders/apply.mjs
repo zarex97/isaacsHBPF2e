@@ -1241,7 +1241,8 @@ export async function resolveCounteract(payload) {
     if (!actor || !effect) return;
 
     const slug = payload.statistic ?? classSlugOf(actor) ?? "saint";
-    const statistic = actor.getStatistic?.(slug);
+    // A borrowed class counteracts with its lender's statistic — The Thing That Wears You (#96).
+    const statistic = classStatisticOf(actor, slug);
     if (!statistic) {
         ui.notifications.warn(`${actor.name} has no ${slug} statistic to counteract with.`);
         return;

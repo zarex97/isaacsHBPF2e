@@ -1,5 +1,6 @@
 import { MODULE_ID } from "../sky/signs.mjs";
 import { depthOf } from "./damage.mjs";
+import { classSlugOf, classStatisticOf } from "../lib/class-dc.mjs";
 
 /**
  * Quartz's scripted clauses (#89) — the ones that answer something happening rather than sit on a roll.
@@ -23,7 +24,7 @@ function isWriter() {
 }
 
 function isAssimilator(actor) {
-    return actor?.class?.slug === "assimilator";
+    return classSlugOf(actor) === "assimilator";
 }
 
 function owners(actor) {
@@ -144,7 +145,7 @@ export const Purple = {
             return null;
         }
         await actor.update({ [`flags.${MODULE_ID}.assimilator.used.prismReflection`]: day });
-        const dc = actor.getStatistic?.(actor.class?.slug)?.dc?.value ?? actor.classDC?.dc?.value;
+        const dc = classStatisticOf(actor)?.dc?.value ?? actor.classDC?.dc?.value;
         const roll = await caster.saves.will.roll({ dc: { value: dc }, origin: actor, skipDialog: true });
         const outcome = roll?.degreeOfSuccess >= 2 ? "negated" : "reflected";
         await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }),

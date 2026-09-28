@@ -2,6 +2,7 @@ import { Relay } from "../riders/relay.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 import { bondActive } from "./bonds.mjs";
 import { depthOf } from "./damage.mjs";
+import { classSlugOf } from "../lib/class-dc.mjs";
 
 /**
  * The Shove push: the forced movement an Assimilator causes, moved on the board rather than described.
@@ -33,7 +34,7 @@ function shoveOf(message) {
     if (context?.type !== "skill-check" || !context.options?.includes?.("action:shove")) return null;
     if (!["success", "criticalSuccess"].includes(context.outcome)) return null;
     const actor = message.actor;
-    if (actor?.class?.slug !== "assimilator") return null;
+    if (classSlugOf(actor) !== "assimilator") return null;
     const target = context.target?.token ? fromUuidSync(context.target.token) : null;
     if (!target) return null;
     return { actor, target, critical: context.outcome === "criticalSuccess" };
