@@ -1,0 +1,35 @@
+{
+    "folder": "Mutations",
+    "img": "icons/magic/perception/eye-slit-orange.webp",
+    "name": "Lay Bare",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "offensive",
+        "description": {
+            "value": "<p><strong>Lapis Lazuli, Depth 4.</strong> Once per encounter, name a creature's <strong>strongest save</strong>; for 1 minute your Mutations target its <strong>weakest</strong> instead.</p><p><em>Target the creature and use it: its saves are read off its sheet, and your Mutations' saves that call for the strongest roll the weakest.</em></p>"
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "assimilator-feature",
+                "assimilator-mutation-action"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator",
+                "concentrate"
+            ]
+        }
+    },
+    "type": "action"
+}
