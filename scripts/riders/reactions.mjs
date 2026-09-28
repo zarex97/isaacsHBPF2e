@@ -58,6 +58,8 @@ function onlineOwners(actor) {
 function looksAbleToReact(actor) {
     const conditions = actor?.conditions?.stored ?? [];
     const blocking = ["unconscious", "paralyzed", "petrified", "stunned"];
+    // An effect that forbids reactions says so as a roll option — Silver Depth 4's Argent-Bound (#93).
+    if (actor?.getRollOptions?.().includes("self:cannot-react")) return false;
     return !conditions.some((c) => blocking.includes(c.slug));
 }
 

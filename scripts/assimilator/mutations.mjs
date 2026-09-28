@@ -13,6 +13,7 @@ import { Engine } from "./engine.mjs";
 import { tideRefusal } from "./instincts.mjs";
 import { GulletApp } from "./gullet.mjs";
 import { encounterOf } from "../lib/encounter-damage.mjs";
+import { DamageBus, PRIORITY } from "../lib/damage-bus.mjs";
 import { Relay } from "../riders/relay.mjs";
 import { wrap } from "../lib/wrap.mjs";
 
@@ -74,6 +75,25 @@ async function effectDoc(slug) {
     return ((await game.packs.get(EFFECTS_PACK)?.getDocuments()) ?? []).find((d) => d.slug === slug) ?? null;
 }
 const MANOEUVRES = { shove: "Shove", trip: "Trip", grapple: "Grapple" };
+/** Silver Depth 4's "supernatural creature": the colour's own list, Depth 2's (#93). */
+const SUPERNATURAL = ["aberration", "fiend", "undead", "spirit"];
+const ARGENT = "effect-argent-bound";
+const CARD = "assimilatorCard";
+
+/** Reactive Evolution's working Depth: Moonstone's, or Perfect Adaptation's (Depth 2 without it, one higher with it). */
+function moonDepth(actor) {
+    const adapted = (actor?.itemTypes?.feat ?? []).some((f) => f.slug === "perfect-adaptation");
+    const moon = depth(actor, "moonstone");
+    return Math.min(adapted ? (moon ? moon + 1 : 2) : moon, 4);
+}
+
+/** Uses of Reactive Evolution spent in this creature's encounter; outside one there is nothing to count against (#93). */
+function moonUsed(actor) {
+    const combat = encounterOf(actor);
+    if (!combat?.started) return { combat: null, used: 0 };
+    const uses = actor.flags?.[MODULE]?.assimilator?.moonstoneUses ?? {};
+    return { combat, used: uses.encounter === combat.id ? uses.count : 0 };
+}
 
 export const Mutations = {
     /**
@@ -305,6 +325,14 @@ export const Mutations = {
     registerHooks() {
         // The use card is the use: refusing to post it is refusing the action, before any rider can fire.
         Hooks.on("preCreateChatMessage", (message, data) => Mutations.gateEncounterUse(data));
+        // Silver Depth 4: a bound creature's reaction or innate spell is refused at its card (#93).
+        Hooks.on("preCreateChatMessage", (message, data) => Mutations.gateBound(data));
+        Hooks.on("createChatMessage", (message) => {
+            if (isWriter()) Mutations.argentBind(message).catch((e) => console.error("Isaac's Homebrew | Silver", e));
+        });
+        // Moonstone Depth 1: the damage just taken offers Reactive Evolution its types.
+        DamageBus.after("Reactive Evolution's offer", PRIORITY.riders + 6,
+            (actor, params, before) => Mutations.offerReactive(actor, params, before));
         // Topaz Depth 4: a critical hit asks which other Substrate counts as Depth 4 for the Strike.
         Relay.register?.(TOPAZ, (payload) => Mutations.topazPick(payload));
         Hooks.on("createChatMessage", (message) => {
@@ -424,28 +452,90 @@ export const Mutations = {
     /** Enforce Reactive Evolution's limits on the effect just created. */
     async reactive(item) {
         const actor = item.actor;
-        // Perfect Adaptation: Reactive Evolution at Depth 2 without Moonstone; with it, one Depth higher for this alone.
-        const adapted = (actor?.itemTypes?.feat ?? []).some((f) => f.slug === "perfect-adaptation");
-        const moon = depth(actor, "moonstone");
-        const d = Math.min(adapted ? (moon ? moon + 1 : 2) : moon, 4);
+        const d = moonDepth(actor);
         if (!d) return item.delete();
-        const combat = encounterOf(actor);
-        const key = combat?.id ?? "none";
-        const uses = actor.flags?.[MODULE]?.assimilator?.moonstoneUses ?? {};
-        const used = uses.encounter === key ? uses.count : 0;
-        if (used >= MOONSTONE_USES[d]) {
+        const { combat, used } = moonUsed(actor);
+        if (combat && used >= MOONSTONE_USES[d]) {
             ui.notifications?.warn(`Reactive Evolution is spent for this encounter (${MOONSTONE_USES[d]}).`);
             return item.delete();
         }
-        await actor.update({ [`flags.${MODULE}.assimilator.moonstoneUses`]: { encounter: key, count: used + 1 } });
-        // Depth 3+: it lasts until the encounter ends rather than a minute.
-        if (d >= 3) {
+        if (combat) await actor.update({ [`flags.${MODULE}.assimilator.moonstoneUses`]: { encounter: combat.id, count: used + 1 } });
+        // Depth 3+: it lasts until the encounter ends rather than a minute — outside one, the minute stands.
+        if (d >= 3 && combat) {
             await item.update({ "system.duration": { expiry: null, sustained: false, unit: "unlimited", value: -1 },
                 [`flags.${MODULE}.assimilator.untilEncounterEnds`]: true });
         }
         const held = actor.itemTypes.effect.filter((e) => e.slug === "effect-reactive-evolution");
         const extra = held.length - MOONSTONE_HELD[d];
         if (extra > 0) await actor.deleteEmbeddedDocuments("Item", held.filter((e) => e.id !== item.id).slice(0, extra).map((e) => e.id));
+    },
+
+    /**
+     * Moonstone Depth 1 — *"as a reaction after taking damage of a type"* (#93). The damage just taken offers its
+     * types on a card to the Assimilator's owners; a click spends the reaction and adapts to that type. Nothing is
+     * offered for a type already held, or once this encounter's uses are spent. The sheet action stays, for damage
+     * the module never saw.
+     */
+    async offerReactive(actor, params, before) {
+        const live = params?.token?.actor ?? actor;
+        if (!isWriter() || live?.class?.slug !== "assimilator") return null;
+        if (!((live.hitPoints?.value ?? before) < before)) return null;
+        const d = moonDepth(live);
+        if (!d || !live.items.some((i) => i.slug === "reactive-evolution")) return null;
+        if (moonUsed(live).combat && moonUsed(live).used >= MOONSTONE_USES[d]) return null;
+        const doc = await effectDoc("effect-reactive-evolution");
+        const choosable = (doc?.system.rules.find((r) => r.key === "ChoiceSet")?.choices ?? []).map((c) => c.value);
+        const held = live.itemTypes.effect.filter((e) => e.slug === "effect-reactive-evolution")
+            .map((e) => e.flags?.pf2e?.rulesSelections?.type);
+        const types = [...new Set((params?.damage?.instances ?? []).map((i) => i.type))]
+            .filter((t) => choosable.includes(t) && !held.includes(t));
+        if (!types.length) return null;
+        const whisper = game.users.filter((u) => u.isGM || live.testUserPermission(u, "OWNER")).map((u) => u.id);
+        const buttons = types.map((t) => `<button type="button" data-action="isaacs-hb-assim-card" data-value="${t}">Resist ${t}</button>`).join("");
+        return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: live }), whisper,
+            flags: { [MODULE]: { [CARD]: { kind: "moonstone", origin: live.uuid, options: types } } },
+            content: `<p><strong>Reactive Evolution</strong> (reaction): ${live.name} can adapt to the damage just taken.</p><p>${buttons}</p>` });
+    },
+
+    /** Silver Depth 4: a critical Strike binds a supernatural creature — no reactions, no innate spells (#93). */
+    async argentBind(message) {
+        const context = message.flags?.pf2e?.context;
+        if (context?.type !== "attack-roll" || context.outcome !== "criticalSuccess") return null;
+        const actor = message.actor;
+        if (actor?.class?.slug !== "assimilator" || depth(actor, "silver") < 4) return null;
+        if (!(context.domains ?? []).includes("unarmed-attack-roll")) return null;
+        const target = context.target?.actor ? fromUuidSync(context.target.actor) : null;
+        if (!target || !(target.system?.traits?.value ?? []).some((t) => SUPERNATURAL.includes(t))) return null;
+        const doc = await effectDoc(ARGENT);
+        if (!doc) return null;
+        const old = target.itemTypes.effect.filter((e) => e.slug === ARGENT).map((e) => e.id);
+        if (old.length) await target.deleteEmbeddedDocuments("Item", old);
+        const [made] = await target.createEmbeddedDocuments("Item", [foundry.utils.deepClone(doc.toObject())]);
+        await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<p><strong>Argent Edge</strong>: ${target.name} is bound — no reactions or innate spells until the end of its next turn.</p>` });
+        return made ?? null;
+    },
+
+    /**
+     * A creature under Argent-Bound (or anything else that says so) cannot post a reaction's card, nor cast from an
+     * innate spellcasting entry. Returns false to refuse the card.
+     */
+    gateBound(data) {
+        const uuid = data?.flags?.pf2e?.origin?.uuid;
+        if (!uuid || data?.flags?.pf2e?.context) return undefined;
+        const item = fromUuidSync(uuid);
+        const options = item?.actor?.getRollOptions?.() ?? [];
+        const reaction = item?.system?.actionType?.value === "reaction";
+        const innate = item?.type === "spell" && !!item.spellcasting?.isInnate;
+        if (reaction && options.includes("self:cannot-react")) {
+            ui.notifications.warn(`${item.actor.name} cannot use reactions right now (${item.name}).`);
+            return false;
+        }
+        if (innate && options.includes("self:cannot-cast-innate")) {
+            ui.notifications.warn(`${item.actor.name} cannot cast innate spells right now (${item.name}).`);
+            return false;
+        }
+        return undefined;
     },
 
     /** Add a move to the mover's tally for this turn; mark it once it reaches 10 feet. */
