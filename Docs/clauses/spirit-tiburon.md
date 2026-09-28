@@ -86,7 +86,7 @@ deliberately does not climb, which is a thing pf2e's multiple attack penalty is 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | R-21a | Ola Azul | **60-foot line**, basic Reflex, **slashing** |  | ✅ | Cast live in Severance round 1 at 20th: the card reads **Range 60 feet; Area 60-foot line**, **Defense basic Reflex**, 2 actions, the aimed Region measures 1200px — 60 feet — the damage rolled **`20d6 slashing`**, and *“Ola Azul ends Severance”* followed it |
-| R-21b | Ola Azul | Creatures that fail are pushed **30 feet** directly away from you and knocked **prone** |  | ⚠️ | **The machinery is proved; this exact cell is not.** A **success** moved the target nowhere and applied nothing, and a **critical failure** moved it 60 feet and knocked it prone — so the push, its direction, its arithmetic and the prone rider all work, and the two riders are authored identically apart from the distance and the outcome they name. But a plain **failure** was never rolled: the target's Reflex had to be tuned into a nine-point band under a DC of 37 while standing on a 60-foot line, and four attempts put the line somewhere else. Recorded as not driven rather than inferred from its neighbour |
+| R-21b | Ola Azul | Creatures that fail are pushed **30 feet** directly away from you and knocked **prone** |  | ✅ | **Driven (#77), by fixing the die rather than aiming the line.** The clause is downstream of the aim, so ZZ Victim was targeted by hand (rig §9) in Severance round 1 at 20th, given an untyped **Reflex +20**, and the d20 held by `CONFIG.Dice.randomUniform` for the one save rolled from the card's own target row: **11 + 20 = 31** against DC **37** — a plain **failure**. The Victim went from (25,24) to **(31,25)**: **30 feet**, bearing 9° against the caster-to-Victim bearing of 14° — directly away, to the grid — and is **prone**; *“ZZ Victim is thrown 30 feet away”* on the card. The controls are the neighbours: a **success** moved nobody and a **critical failure** moved it **60** |
 | R-21c | Ola Azul | Creatures that critically fail are pushed 60 feet instead |  | ✅ | Live and measured: a critical failure moved the target from (34,22) to (46,21) — **twelve squares, sixty feet, directly away** from the caster at (21,23) — and left it **prone**. The control is the success above, which moved nobody |
 
 ---
@@ -96,8 +96,8 @@ deliberately does not climb, which is a thing pf2e's multiple attack penalty is 
 | Status | Count |
 | :-- | --: |
 | ☐ | 0 |
-| ✅ | 19 |
-| ⚠️ | 1 |
+| ✅ | 20 |
+| ⚠️ | 0 |
 | ❌ | 1 |
 | 🔧 | 0 |
 | — | 2 |
