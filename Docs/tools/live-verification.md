@@ -330,6 +330,21 @@ and everything downstream of it — the Reiatsu cost, the charge spend, the save
 damage — is proven this way on every shape. It is the right route whenever the clause under test is
 downstream of the aim.
 
+### Landing a save in one outcome band
+
+Tuning a creature's Reflex into a nine-point band under the DC is fragile, and it once took four attempts.
+Fix the die instead, for the one roll, with Foundry's own hook, and read the die back off the result:
+
+```js
+const orig = CONFIG.Dice.randomUniform;
+CONFIG.Dice.randomUniform = () => 0.475;          // came back as an 11 on a d20 in v13 — read it, don't assume
+try { card.querySelector('[data-action="roll-save"]').click(); await wait(3000); }
+finally { CONFIG.Dice.randomUniform = orig; }
+```
+
+Pair it with an **untyped** modifier effect named for what it is, removed afterwards, so the total is the
+die plus a number you chose. The save must still come from the card's target row (see §6).
+
 ## 10. Aiming a line, a cone or a placed burst
 
 When the clause *is* the aim, it can be driven. This section used to say it could not; four things were
