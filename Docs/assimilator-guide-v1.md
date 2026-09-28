@@ -1,13 +1,17 @@
-# The Assimilator — PF2e Class Guide, **Version 1.1**
+# The Assimilator — PF2e Class Guide, **Version 1.2**
 
 ### *The symbiont · Substrate · Essence · Mutation*
 
 *Formerly **The Carapace**. The class is now **the Assimilator**; "the Carapace" names only the living
-plate it wears — hence Carapace Strike, Carapace Block, and your Carapace's Hardness. The companion
-lexicon and the automation programme still use the old class name.*
+plate it wears — hence Carapace Strike, Carapace Block, and your Carapace's Hardness. The automation
+programme still uses the old class name.*
 
 *v1.1 records four rulings (issue #82): Mass follows the §3.1 table, Substrate Hardness takes the
-highest, every Instinct has a damage type, and Electrum's Depth 1 counts it as a second colour.*
+highest, every Instinct has a damage type, and Electrum's Depth 1 counts it as a second colour.
+v1.2 closes the rest of that issue: a Bond slot is priced at 30 wherever it lands (§2.2), and
+White's vitality is said out loud to be narrow (§4.5), §4.1 and §9.2 name v3's Steel where they
+named three v2 materials, and the 16th-level feat that shared the 7th-level feature's name is now
+*Apex Growth* (§8.9). Lexicon v3.1 now carries §5.2's amendments.*
 
 *The complete class: chassis, the 2100-point ledger, advancement table, every core feature, the nine
 Instincts, the Bond rules, and forty-five class feats from 1st to 20th. The thirty-six Substrates and
@@ -148,10 +152,10 @@ Assimilator's defence actually lives; the chassis only buys the right to stand i
 | 1 | **The Carapace** — Carapace Strike + Living Plate + Carapace Block | 30 |
 | 1 | **Assimilation** — Mass, Depth 1, the Feed and Shed activities | 30 |
 | 3 | **Growth** (+1 Gem) | 10 |
-| 4 | **First Bond** | 50 |
+| 4 | **First Bond** | 30 |
 | 5 | **Second Skin** — Depth cap 2, Mass +1/+1 | 110 |
 | 7 | **Symbiotic Reflex** | 50 |
-| 8 | **Second Bond**, Mass +2/+2 | 30 |
+| 8 | **Second Bond**, Mass +2/+2 | 40 |
 | 11 | **Third Skin** — Depth cap 3, Mass +2/+1 | 110 |
 | 12 | **Third Bond** | 30 |
 | 14 | **Growth** (+2/+2) | 10 |
@@ -159,7 +163,7 @@ Assimilator's defence actually lives; the chassis only buys the right to stand i
 | 16 | **Fourth Bond** | 30 |
 | 17 | **Fourth Skin** — Depth cap 4, Mass +2/+1 | 110 |
 | 19 | **Apotheosis** | 110 |
-| 20 | **Fifth Bond**, Mass +2/+2 | 30 |
+| 20 | **Fifth Bond**, Mass +2/+2 | 40 |
 | **Subtotal** | | **840** |
 
 ### **TOTAL 1260 + 840 = 2100** ✅
@@ -177,6 +181,11 @@ the Assimilator has no focus pool, no spell slots, no weapon proficiency and no 
 those four absences are worth roughly what the Skins cost. If playtest says otherwise, the first lever
 is moving the Depth-4 cap from 17th to 19th, which costs the class its whole top-end spike and is
 therefore a real correction rather than a nudge.
+
+**Bonds and Mass are priced separately.** A Bond slot is **30** wherever it lands; **Mass +2/+2** is
+**10**, the price Growth pays at 14th — so the Second and Fifth Bonds, which carry both, are 40.
+Growth at 3rd pays the same 10 for **+1 Gem** alone, and that is deliberate: a point of Mass at 3rd is
+a third of everything you hold, and at 14th it is a ninth.
 
 ---
 
@@ -235,7 +244,8 @@ Your unarmed attack is the class. There is no second option and no upgrade path 
 It is not agile and it is not finesse; it is a heavy thing at the end of a heavier arm. Two 1st-level
 feats change that if you want them to (*Grasping Plates* makes it 1d6 agile finesse; *Reach of the
 Thing* gives it reach on demand), and several Substrates reshape it further — Steel raises its die,
-Black's Voidsteel makes it slashing, Gray's Anvilstar adds a die.
+makes it versatile P and S at Depth 3 and adds a die at Depth 4, and every offensive Substrate lets it
+deal that Substrate's damage type.
 
 **Handwraps of Mighty Blows work normally**, and you should buy them. The class grants no free
 fundamental runes. This is deliberate: a class that hands out its own potency and striking runes has
@@ -309,6 +319,11 @@ Your Instinct also sets **your Instinct's damage type**, which any rule asking f
 **fire**, Gold **force**, Orange **electricity**, Blue **cold**, Purple **mental**, Green **poison**,
 Black **void**, White **vitality**, Gray **bludgeoning**.
 
+White's is meant to be narrow. Vitality harms the undead and nothing living, so under White *Spit*,
+Cobalt's Strike and Nickel's gland are an undead-hunter's tools, and Platinum's resistance answers a
+damage type almost nothing deals. A White Assimilator who wants a ranged attack for every fight
+should take it from somewhere other than the Instinct.
+
 Instinct is recalculated at daily preparations and costs nothing to change — an Assimilator who sheds
 material can be a different creature in the morning. That is intentional. The cost of changing
 Instinct is the **material you destroyed to do it**, and that is a real enough price.
@@ -378,7 +393,7 @@ merely stated.
 ### 5.2 Two amendments to lexicon v3
 
 Blue's and White's clauses did not key off Depth, which broke the rule §1.4 depends on. Both are fixed
-above and the lexicon should be amended to match:
+above, and lexicon **v3.1** carries the same wording in its §2.1:
 
 - **Blue** — *"resistances 5 lower"* becomes **"lower by twice your highest Depth"** (4 → 8 across the
   Depth ladder, so slightly stronger late and weaker early, which is the correct shape).
@@ -570,7 +585,7 @@ re-chosen at each daily preparations.
 **Instinct Fusion** · *Prerequisite: Two Instincts, or Electrum at Depth 3.* Both of your Instinct
 clauses operate at **full value**. You are two organisms sharing a host and they do not always agree.
 
-**Living Weapon** · Your Carapace Strike and Talons each gain **one additional damage die**.
+**Apex Growth** · Your Carapace Strike and Talons each gain **one additional damage die**.
 
 **Second Hunger** · **Free action**, once per encounter: gain **2 Mass** in one track for 1 minute,
 which you must spend immediately to deepen a bound Substrate. When it ends, that Substrate returns to
@@ -634,8 +649,8 @@ Weak to anything with fire immunity and nothing to say to a flying enemy.
 Hardness 2 + 8 (Diamond) + 8 (Steel) + 5 (Chromium) + 5 (Gray's total metal Depth) = **28**, doubled
 to 56 with *Living Fortress* if it doesn't move, and stacking fully thanks to *Adamant Shell*. A
 critical hit becomes a normal hit once per encounter. Moonstone means the second round against any
-damage type is better than the first. Damage output is the worst in the class, and Gray's Edge —
-counting as silver and cold iron, resistances 5 lower — is the only reason it isn't embarrassing.
+damage type is better than the first. Damage output is the worst in the class, and Steel —
+a die step up and versatile P and S at Depth 3 — is the only reason it isn't embarrassing.
 
 ### 9.3 The Thing In The Dark — Black Instinct, Purple second
 

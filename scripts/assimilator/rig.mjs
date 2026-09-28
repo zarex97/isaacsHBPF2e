@@ -458,6 +458,13 @@ const INSTINCTS = [
         const plate = game.actors.get(a.id).itemTypes.armor.find((x) => x.slug === "living-plate");
         return plate.system.hardness - (plate._source.system.hardness ?? 0) - derived(a).substrateHardness;
     }, want: 5, note: "Steel 3 + Iron 2, over the Substrates' own Hardness" },
+    // The class's whole Hardness line at once: Hematite tips the Instinct from White to Gray.
+    { id: "A-27a", lv: 17, b: { diamond: 3, steel: 2, hematite: 2 }, act: async (a) =>
+        [derived(a).instincts.primary, game.actors.get(a.id).itemTypes.armor.find((x) => x.slug === "living-plate").system.hardness],
+    want: ["gray", 12], note: "2 + Diamond's 8 (the highest, not 8 + 5) + Steel's metal Depth 2" },
+    { id: "A-27a", lv: 17, b: { diamond: 3, steel: 2 }, act: async (a) =>
+        [derived(a).instincts.primary, game.actors.get(a.id).itemTypes.armor.find((x) => x.slug === "living-plate").system.hardness],
+    want: ["white", 10], note: "control: without Hematite the Instinct is White and the Gray term is gone" },
     { id: "I-9b", lv: 17, b: { steel: 3, ruby: 2 }, act: async (a, t, ctx) => {
         for (const e of game.actors.get(a.id).itemTypes.effect.filter((x) => x.slug === "effect-integrated-plating")) await e.delete();
         const m = await strikeRoll(a); await wait(600);
@@ -891,10 +898,14 @@ const FEAT_CHECKS = [
     { id: "AF-08b", lv: 17, b: { sapphire: 2 }, feats: ["spit"], act: async (a) =>
         read.strike(game.actors.get(a.id), "Spit")?.totalModifier === read.strike(game.actors.get(a.id))?.totalModifier, want: true,
     note: "the Carapace Strike's attack bonus" },
-    { id: "AF-36", lv: 17, b: { ruby: 1 }, feats: ["grasping-plates", "living-weapon-feat"], act: async (a) => {
+    { id: "AF-36", lv: 17, b: { ruby: 1 }, feats: ["grasping-plates", "apex-growth"], act: async (a) => {
         const f = async (label) => { await read.strike(game.actors.get(a.id), label).damage({ skipDialog: true }); await wait(900); return game.messages.contents.at(-1).rolls[0].formula; };
         return [/2d8/.test(await f("Carapace Strike")), /2d6/.test(await f("Talons"))];
     }, want: [true, true], note: "one more die on each" },
+    { id: "AF-36", lv: 17, b: { ruby: 1 }, feats: ["grasping-plates"], act: async (a) => {
+        const f = async (label) => { await read.strike(game.actors.get(a.id), label).damage({ skipDialog: true }); await wait(900); return game.messages.contents.at(-1).rolls[0].formula; };
+        return [/2d8/.test(await f("Carapace Strike")), /2d6/.test(await f("Talons"))];
+    }, want: [false, false], note: "control: without Apex Growth, one die each" },
 
     // Actions that place an effect.
     { id: "AF-07a", lv: 17, b: { ruby: 1 }, feats: ["plated-guard"], act: async (a) => {
