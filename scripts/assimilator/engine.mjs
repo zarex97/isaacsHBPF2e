@@ -123,10 +123,30 @@ export function substrateHardness(effective, catalogue, { stack = false, extra =
     const bonuses = [...extra];
     for (const [slug, depth] of Object.entries(effective)) {
         const ladder = catalogue[slug]?.hardness;
-        if (ladder) bonuses.push(ladder[Math.min(depth, 4)] ?? 0);
+        // Fifth Depth (#96): Depth 5's numbers are Depth 4's by half again, rounded up.
+        if (ladder) bonuses.push(depth >= 5 ? Math.ceil((ladder[4] ?? 0) * 1.5) : (ladder[Math.min(depth, 4)] ?? 0));
     }
     if (bonuses.length === 0) return 0;
     return stack ? bonuses.reduce((a, b) => a + b, 0) : Math.max(...bonuses);
+}
+
+/**
+ * Fifth Depth — *"its Depth 4 rider applies twice where that is meaningful, and all of its numeric values increase
+ * by half again"* (#96). Every number the Substrate's rules grant goes up by half, rounded up: a bonus, a
+ * resistance, fast healing, a Speed, a number of damage dice. A penalty is not a grant and stays. "Twice where that
+ * is meaningful" is a judgement the clause leaves to the table, so a Note says so.
+ */
+export function fifthDepthRules(rules, name = "This Substrate") {
+    const up = (v) => Math.ceil(v * 1.5);
+    const out = (rules ?? []).map((rule) => {
+        const r = foundry.utils.deepClone(rule);
+        if (["FlatModifier", "Resistance", "FastHealing", "BaseSpeed"].includes(r.key) && typeof r.value === "number" && r.value > 0) r.value = up(r.value);
+        if (r.key === "DamageDice" && typeof r.diceNumber === "number" && r.diceNumber > 0) r.diceNumber = up(r.diceNumber);
+        return r;
+    });
+    out.push({ key: "Note", selector: "all", title: "Fifth Depth",
+        text: `${name.replace(/^Substrate:\s*/, "")} is at Depth 5: its numbers are half again, and its Depth 4 rider applies twice where that is meaningful — the table's judgement.` });
+    return out;
 }
 
 /**
@@ -580,13 +600,27 @@ export const Engine = {
         const owned = actor.itemTypes.effect.filter((e) => e.flags?.[MODULE_ID]?.[KEY]?.substrate);
         for (const [slug, depth] of Object.entries(derived.effective)) {
             const have = owned.find((e) => e.flags[MODULE_ID][KEY].substrate.slug === slug);
+            // Fifth Depth (#96): a Substrate at Depth 5 carries its rules' numbers by half again; back below 5, the
+            // compendium's own.
+            const fifth = depth >= 5;
             if (!have) {
                 const source = foundry.utils.deepClone(catalogue[slug].doc.toObject());
                 source.system.badge = { ...(source.system.badge ?? {}), type: "counter", value: depth };
                 foundry.utils.setProperty(source, `flags.${MODULE_ID}.${KEY}.intact`, intact);
+                if (fifth) {
+                    source.system.rules = fifthDepthRules(source.system.rules, source.name);
+                    foundry.utils.setProperty(source, `flags.${MODULE_ID}.${KEY}.fifth`, true);
+                }
                 creates.push(source);
-            } else if (have.system.badge?.value !== depth || have.flags[MODULE_ID][KEY].intact !== intact) {
-                updates.push({ _id: have.id, "system.badge.value": depth, [`flags.${MODULE_ID}.${KEY}.intact`]: intact });
+            } else if (have.system.badge?.value !== depth || have.flags[MODULE_ID][KEY].intact !== intact
+                || !!have.flags[MODULE_ID][KEY].fifth !== fifth) {
+                const update = { _id: have.id, "system.badge.value": depth, [`flags.${MODULE_ID}.${KEY}.intact`]: intact };
+                if (!!have.flags[MODULE_ID][KEY].fifth !== fifth) {
+                    const pristine = foundry.utils.deepClone(catalogue[slug].doc.toObject().system.rules);
+                    update["system.rules"] = fifth ? fifthDepthRules(pristine, have.name) : pristine;
+                    update[`flags.${MODULE_ID}.${KEY}.fifth`] = fifth;
+                }
+                updates.push(update);
             }
         }
         for (const e of owned) if (!(e.flags[MODULE_ID][KEY].substrate.slug in derived.effective)) deletes.push(e.id);
@@ -715,6 +749,23 @@ export const Engine = {
                 if (pick === one && !toggles[option]) update[`flags.pf2e.rollOptions.all.${option}`] = true;
                 if (pick !== one && toggles[option]) update[`flags.pf2e.rollOptions.all.-=${option}`] = null;
             }
+        }
+        // Reactive Evolution's working Depth (#96), as the option its resistances read: Moonstone's, or Perfect
+        // Adaptation's — Depth 2 without Moonstone, one higher with it, for this Mutation alone.
+        const moon = effective.moonstone ?? 0;
+        const reactive = Math.min(Engine.hasFeat(actor, "perfect-adaptation") ? (moon ? moon + 1 : 2) : moon, 4);
+        for (let d = 1; d <= 4; d++) {
+            const option = `assimilator:reactive-depth:${d}`;
+            if (d === reactive && !toggles[option]) update[`flags.pf2e.rollOptions.all.${option}`] = true;
+            if (d !== reactive && toggles[option]) update[`flags.pf2e.rollOptions.all.-=${option}`] = null;
+        }
+        // Greater Bond (#96): which Bond, as an option the rules read — Storm Battery's wider cone keys off it.
+        const greaterPick = Engine.hasFeat(actor, "greater-bond") ? state.choices.greaterBond : null;
+        for (const slug of Object.keys(await Engine.bondPairs())) {
+            const option = `assimilator:greater-bond:${slug}`;
+            const on = slug === greaterPick && derivedFlag.bonds.includes(slug);
+            if (on && !toggles[option]) update[`flags.pf2e.rollOptions.all.${option}`] = true;
+            if (!on && toggles[option]) update[`flags.pf2e.rollOptions.all.-=${option}`] = null;
         }
         // Immune System (#95): Shifting Tissue naming disease is a bonus to saves, since pf2e has no disease resistance.
         const disease = state.choices.zinc === "disease";

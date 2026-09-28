@@ -1886,6 +1886,28 @@ const FEAT_CHECKS = [
         return [wall?.system.attributes.hardness.value ?? wall?.hardness, wall?.hitPoints?.max, hard - hardAfter, refused,
             !game.actors.some((x) => x.name.startsWith("Wall of Me"))];
     }), want: [17, 85, 2, true, true], note: "Hardness 17, 85 Hit Points; the plate −2; once per encounter; gone when it ends" },
+    // Wall of Me: its owners place it, in the Assimilator's space or adjacent to it (#96).
+    { id: "AF-12a", lv: 17, b: { ruby: 1 }, feats: ["wall-of-me"], act: async (a, t, ctx) => inCombat(ctx, async () => {
+        await use(a, "wall-of-me", 3000);
+        const effect = game.actors.get(a.id).itemTypes.effect.find((x) => x.slug === "effect-wall-of-me");
+        const wall = () => canvas.scene.tokens.get(effect?.flags?.["isaacs-hb-pf2e"]?.assimilator?.wall?.token);
+        const me = canvas.scene.tokens.get(ctx.tokenId);
+        const g = canvas.grid.size;
+        try {
+            // Turned on end, along the Assimilator's west side: adjacent.
+            await wall().update({ x: me.x - g, y: me.y - g, width: 1, height: 2 }, { animate: false });
+            await wait(400);
+            const near = wall().x === me.x - g && wall().height === 2;
+            // Four squares off: refused.
+            await wall().update({ x: me.x + 5 * g, y: me.y }, { animate: false });
+            await wait(400);
+            const far = wall().x === me.x + 5 * g;
+            return [near, far];
+        } finally {
+            for (const e of game.actors.get(a.id).itemTypes.effect.filter((x) => x.slug === "effect-wall-of-me")) await e.delete();
+            await wait(1200);
+        }
+    }), want: [true, false], note: "turned on end beside the Assimilator: allowed; moved four squares away: refused" },
     { id: "AF-16", lv: 17, b: { ruby: 1 }, feats: ["digest"], act: async (a) => {
         const [aff] = await game.actors.get(a.id).createEmbeddedDocuments("Item", [{ name: "ZZ Rig Poison", type: "effect",
             system: { badge: { type: "counter", value: 3 }, traits: { value: ["poison"] } } }]);
@@ -1894,6 +1916,25 @@ const FEAT_CHECKS = [
         await wait(1000);
         return [answered, game.actors.get(a.id).items.get(aff.id)?.system.badge?.value];
     }, want: [true, 1] },
+    // Total Assimilation: a new permanent pick replaces the old one (#96).
+    { id: "AF-39c", lv: 17, b: { ruby: 1 }, feats: ["assimilate", "total-assimilation"], act: async (a, t, ctx) => {
+        const take = async (type) => {
+            await game.actors.get(t.id).update({ "system.attributes.resistances": [{ type, value: 5 }], "system.details.level.value": 10 });
+            canvas.scene.tokens.get(ctx.targetTokenId).object?.setTarget(true, { user: game.user, releaseOthers: true });
+            use(a, "assimilate", 0);
+            await answerDialog(`Resistance ${type} 5`);
+            await answerDialog("Permanent");
+            await wait(1500);
+        };
+        await take("acid");
+        const first = read.resist(game.actors.get(a.id), "acid");
+        await game.actors.get(a.id).update({ "flags.isaacs-hb-pf2e.assimilator.-=used": null });
+        await take("cold");
+        Hooks.callAll("pf2e.restForTheNight", game.actors.get(a.id));
+        await wait(1500);
+        await game.actors.get(t.id).update({ "system.attributes.resistances": [] });
+        return [first, read.resist(game.actors.get(a.id), "acid"), read.resist(game.actors.get(a.id), "cold")];
+    }, want: [5, 0, 5], note: "acid made permanent; then cold made permanent replaces it, and only cold survives the night" },
     { id: "AF-24a", lv: 17, b: { ruby: 2 }, feats: ["consume-the-fallen"], act: async (a) => {
         await game.actors.get(a.id).update({ "system.attributes.hp.temp": 0 });
         use(a, "consume-the-fallen", 0);
@@ -1958,6 +1999,22 @@ const FEAT_CHECKS = [
         await wait(1500);
         return [first, second, !game.actors.get(a.id).items.get(potion.id), derived(a).mass.gem - gem, derived(a).vein];
     }, want: (v) => v[0] && v[1] && v[2] && v[3] === 4, note: "the potion is gone; +4 Gem Mass (and no Vein grant for it)" },
+    // Eat the World keeps one of the item's abilities — a rule it carries — until preparations (#96).
+    { id: "AF-45b", lv: 17, b: { ruby: 1 }, feats: ["eat-the-world"], act: async (a) => {
+        const [charm] = await game.actors.get(a.id).createEmbeddedDocuments("Item", [{ name: "ZZ Charm", type: "equipment",
+            system: { level: { value: 1 }, traits: { value: ["magical"] },
+                rules: [{ key: "FlatModifier", selector: "perception", type: "item", value: 1, label: "ZZ Charm" }] } }]);
+        use(a, "eat-the-world", 0);
+        const first = await answerDialog("ZZ Charm (level 1)");
+        const kept = await answerDialog("ZZ Charm · perception · 1");
+        const second = await answerDialog("Gem");
+        await wait(1500);
+        const bonus = (game.actors.get(a.id).perception.modifiers ?? []).some((m) => m.label === "ZZ Charm" && m.enabled);
+        Hooks.callAll("pf2e.restForTheNight", game.actors.get(a.id));
+        await wait(1500);
+        const after = (game.actors.get(a.id).perception.modifiers ?? []).some((m) => m.label === "ZZ Charm" && m.enabled);
+        return [first, kept, second, !game.actors.get(a.id).items.get(charm.id), bonus, after];
+    }, want: [true, true, true, true, true, false], note: "the charm eaten, its +1 Perception kept; gone at preparations" },
 
     // Reactions and prompts.
     { id: "AF-19a", lv: 17, b: { ruby: 1 }, feats: ["shed-skin"], act: async (a) => {
@@ -1972,6 +2029,13 @@ const FEAT_CHECKS = [
         const granted = await until(() => !!featItem(a, "reactive-evolution"));
         return granted;
     }, want: true, note: "Reactive Evolution without Moonstone" },
+    // Its resistance, as the Depth it works at (#96): Depth 2 without Moonstone; one higher with it.
+    { id: "AF-29a", lv: 17, b: { ruby: 1 }, feats: ["perfect-adaptation"], apply: "effect-reactive-evolution", resolve: "fire",
+        get: (a) => read.resist(a, "fire"), want: 5, note: "without Moonstone, at Depth 2: fire 5" },
+    { id: "AF-29b", lv: 17, b: { moonstone: 1 }, feats: ["perfect-adaptation"], apply: "effect-reactive-evolution", resolve: "fire",
+        get: (a) => read.resist(a, "fire"), want: 5, note: "Moonstone 1 treated as 2 for Reactive Evolution: fire 5" },
+    { id: "AF-29b", lv: 17, b: { moonstone: 1 }, apply: "effect-reactive-evolution", resolve: "fire",
+        get: (a) => read.resist(a, "fire"), want: 2, note: "control: Moonstone 1 without the feat, fire 2" },
     { id: "AF-30a", lv: 17, b: { ruby: 2, sapphire: 2 }, feats: ["apex-predator"], crit: true, act: async (a) =>
         !!(await until(() => derived(a).effective.ruby === 4 && derived(a).effective.sapphire === 4, 6000)),
     want: true, note: "a critical: every Mutation on the Strike counts as Depth 4" },
@@ -1984,6 +2048,25 @@ const FEAT_CHECKS = [
         return game.actors.get(a.id).itemTypes.effect.map((e) => e.flags?.["isaacs-hb-pf2e"]?.assimilator?.why).filter(Boolean);
     }, want: ["apex-predator"], note: "with Gold's Instinct too, one raise: Apex Predator's, the better" },
 
+    // Twin Maw: both bites combined before resistance — resistance 5 comes off once (#96).
+    { id: "AF-15b", lv: 17, b: { ruby: 1 }, feats: ["twin-maw"], act: async (a, t, ctx) => {
+        await setResist(t, [{ type: "slashing", value: 5 }]);
+        const target = () => game.actors.get(t.id);
+        const bite = async (n) => {
+            const roll = await new (DamageRoll())("10[slashing]").evaluate();
+            await target().applyDamage({ damage: roll, token: canvas.scene.tokens.get(ctx.targetTokenId),
+                item: read.strike(game.actors.get(a.id))?.item, rollOptions: new Set(n ? [`twin-maw:strike:${n}`] : []) });
+            await wait(700);
+        };
+        try {
+            await target().update({ "system.attributes.hp.value": 900 });
+            await bite(1); await bite(2);
+            const twin = 900 - target().hitPoints.value;
+            await target().update({ "system.attributes.hp.value": 900 });
+            await bite(0); await bite(0);
+            return [twin, 900 - target().hitPoints.value];
+        } finally { await setResist(t); }
+    }, want: [15, 10], note: "two 10-slashing bites against resistance 5: 15 as Twin Maw (20 − 5); control, two plain hits: 10" },
     { id: "AF-15a", lv: 17, b: { ruby: 1 }, feats: ["twin-maw"], act: async (a, t, ctx) => {
         canvas.scene.tokens.get(ctx.targetTokenId).object?.setTarget(true, { user: game.user, releaseOthers: true });
         canvas.scene.tokens.get(ctx.tokenId).object?.control({ releaseOthers: true });
@@ -2021,6 +2104,35 @@ const FEAT_CHECKS = [
             await hitSelf(game.actors.get(a.id), t, ctx, "5[slashing]");
             return [hard, 900 - game.actors.get(t.id).hitPoints.value];
         }, want: [8, 12], note: "Molten Carapace's +5 Hardness is 8, its 8 fire is 12" },
+    // Greater Bond's other numbers, as ruled (#96): the cone, the DC, the condition value — not the cost.
+    ...[[["greater-bond"], 25, "Storm Battery under Greater Bond: a 25-foot cone"], [[], 15, "control: no Greater Bond, 15 feet"]].map(([feats, want, note]) => ({
+        id: "AF-25b", lv: 17, b: { amber: 2, cobalt: 2 }, bonds: ["storm-battery"], c: { greaterBond: "storm-battery" }, feats, want, note,
+        act: async (a) => {
+            const { configFor } = await import("../targeting/config.mjs");
+            await wait(600);
+            return configFor(game.actors.get(a.id).items.find((i) => i.slug === "storm-channel"))?.area?.value ?? null;
+        } })),
+    { id: "AF-25b", lv: 17, b: { amethyst: 4, quartz: 2 }, bonds: ["mindstorm"], c: { greaterBond: "mindstorm" }, feats: ["greater-bond"],
+        act: async (a, t, ctx) => {
+            await game.actors.get(t.id).update({ "system.saves.will.value": -40 });
+            canvas.scene.tokens.get(ctx.targetTokenId).object?.setTarget(true, { user: game.user, releaseOthers: true });
+            canvas.scene.tokens.get(ctx.tokenId).object?.control({ releaseOthers: true });
+            await read.strike(game.actors.get(a.id)).attack({ skipDialog: true });
+            const storm = await until(() => game.actors.get(t.id).itemTypes.effect.find((e) => e.slug === "effect-mindstorm"), 10000);
+            const dc = storm?.flags?.["isaacs-hb-pf2e"]?.assimilator?.mindstormDc ?? null;
+            for (const e of game.actors.get(t.id).itemTypes.effect.filter((x) => x.slug === "effect-mindstorm")) await e.delete();
+            return dc;
+        }, want: 8, note: "Mindstorm under Greater Bond: the flat check is DC 8" },
+    ...[[["greater-bond"], 2, "Cold Reading under Greater Bond: slowed 2"], [[], 1, "control: no Greater Bond, slowed 1"]].map(([feats, want, note]) => ({
+        id: "AF-25b", lv: 17, b: { sapphire: 2, "lapis-lazuli": 2 }, bonds: ["cold-reading"], c: { greaterBond: "cold-reading" }, feats, want, note,
+        act: async (a, t, ctx) => {
+            await game.actors.get(a.id).update({ "flags.isaacs-hb-pf2e.assimilator.used.-=coldReading": null });
+            await AssimilatorDamageRef().mark(game.actors.get(t.id), "effect-studied");
+            await hitWith(a, t, ctx, "5[slashing]");
+            const slowed = await until(() => game.actors.get(t.id).itemTypes.condition.find((c) => c.slug === "slowed")?.value, 4000);
+            for (const e of game.actors.get(t.id).itemTypes.effect.filter((x) => ["effect-cold-reading", "effect-studied"].includes(x.slug))) await e.delete();
+            return slowed ?? 0;
+        } })),
     { id: "AF-27", lv: 17, b: { steel: 2 }, feats: ["living-fortress"], act: async (a, t, ctx) => inCombat(ctx, async (combat) => {
         const hard = plate(a).hardness;
         await combat.nextTurn(); await wait(1500);
@@ -2040,6 +2152,18 @@ const FEAT_CHECKS = [
         game.actors.get(a.id).itemTypes.effect.filter((e) => e.flags?.["isaacs-hb-pf2e"]?.assimilator?.aberration).length, want: 2 },
     { id: "AF-38a", lv: 17, b: { ruby: 5 }, c: { fifthDepth: "ruby" }, feats: ["fifth-depth"], act: async (a) => [derived(a).effective.ruby, derived(a).spent.gem],
         want: [5, 5], note: "Ruby at Depth 5, 5 Mass" },
+    // Fifth Depth's numbers: half again, rounded up, and a Note for the rider applying twice (#96).
+    ...[[{ ruby: 5 }, { fifthDepth: "ruby" }, ["fifth-depth"], [true, true, true], "Ruby at Depth 5: its rules' numbers half again, and the Note"],
+        [{ ruby: 4 }, {}, [], [false, false, false], "control: Ruby 4 without the feat, the compendium's numbers"]].map(([b, c, feats, want, note]) => ({
+        id: "AF-38b", lv: 17, b, c, feats, want, note, act: async (a) => {
+            await wait(800);
+            const effect = game.actors.get(a.id).itemTypes.effect.find((e) => ["ruby"].includes(e.flags?.["isaacs-hb-pf2e"]?.assimilator?.substrate?.slug));
+            const pristine = (await Engine.catalogue()).ruby.doc.system.rules;
+            // Numbers only: a TokenLight's value is an object, never equal by reference.
+            const scaled = effect.system.rules.some((r, i) => pristine[i] && ((typeof r.value === "number" && r.value !== pristine[i].value)
+                || (typeof r.diceNumber === "number" && r.diceNumber !== pristine[i].diceNumber)));
+            return [!!effect.flags["isaacs-hb-pf2e"].assimilator.fifth, scaled, effect.system.rules.some((r) => r.key === "Note" && r.title === "Fifth Depth")];
+        } })),
     { id: "AF-42", lv: 17, b: { ruby: 1, iron: 2 }, feats: ["perfect-organism"], act: async (a) => [derived(a).effective.ruby, derived(a).effective.iron, derived(a).spent.gem],
         want: [4, 4, 1], note: "everything at the cap; Mass paid is still 1" },
     { id: "AF-43a", lv: 17, b: { ruby: 3 }, c: { twoInstincts: "green" }, feats: ["omnivore"], act: async (a) => {
@@ -2065,6 +2189,33 @@ const FEAT_CHECKS = [
         const gone = await until(() => !game.actors.some((x) => x.name.startsWith("The Thing That Wears")), 10000);
         return [...out, gone];
     }), want: [true, 5, true, 0, true], note: "its Hit Points, initiative −5; you unmutated and unplated; it returns" },
+    // The Thing has your Mutations and your Assimilator DC (#96, Q7).
+    { id: "AF-44b", lv: 17, b: { ruby: 2, magnesium: 2 }, feats: ["the-thing-that-wears-you"], act: async (a, t, ctx) => inCombat(ctx, async () => {
+        await use(a, "the-thing-that-wears-you", 1000);
+        const thing = await until(() => game.actors.find((x) => x.name.startsWith("The Thing That Wears")), 12000);
+        // The Thing gets the Mutations before the Assimilator's suppression lands: wait for both.
+        await until(() => thing?.items.some((i) => i.slug === "flare")
+            && game.actors.get(a.id).getRollOptions().includes("assimilator:suppressed"), 10000);
+        const me = game.actors.get(a.id);
+        const dc = me.getStatistic("assimilator")?.dc?.value;
+        // The Assimilator's own Mutation items stay on its sheet by design, dark behind the suppression.
+        const out = [!!thing?.items.some((i) => i.slug === "flare"), me.getRollOptions().includes("assimilator:suppressed")];
+        try {
+            // Flare, used by the Thing: the save is against the Assimilator DC.
+            canvas.scene.tokens.find((x) => x.actorId === thing.id)?.object?.control({ releaseOthers: true });
+            const since = game.messages.size;
+            await AssimilatorRig.useWithArea(thing.items.find((i) => i.slug === "flare"));
+            const save = await until(() => game.messages.contents.slice(since).find((m) => m.flags?.pf2e?.context?.type === "saving-throw"), 6000);
+            out.push(save?.flags.pf2e.context.dc?.value === dc);
+            // Its Carapace Strike carries Ruby's fire.
+            const strike = thing.system.actions?.find((x) => x.label === "Carapace Strike");
+            out.push(/fire/.test(String(strike ? await strike.damage({ getFormula: true }) : "")));
+        } finally {
+            for (const e of me.itemTypes.effect.filter((x) => x.slug === "effect-worn-no-longer")) await e.delete();
+            await until(() => !game.actors.some((x) => x.name.startsWith("The Thing That Wears")), 10000);
+        }
+        return out;
+    }), want: [true, true, true, true], note: "the Thing has Flare while you are suppressed; its Flare's save is against your Assimilator DC; its Strike carries Ruby's fire" },
 ];
 
 const effects = (actor, re) => actor.itemTypes.effect.filter((e) => re.test(e.slug)).map((e) => e.slug);

@@ -7,7 +7,16 @@
                     "type": "cone",
                     "value": 15
                 },
-                "includesSelf": false
+                "includesSelf": false,
+                "alternateArea": {
+                    "predicate": [
+                        "assimilator:greater-bond:storm-battery"
+                    ],
+                    "area": {
+                        "type": "cone",
+                        "value": 25
+                    }
+                }
             },
             "riders": [
                 {

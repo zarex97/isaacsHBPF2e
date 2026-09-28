@@ -5,6 +5,7 @@ import { Relay } from "../riders/relay.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 import { AssimilatorDamage, depthOf, suppressed } from "./damage.mjs";
 import { Engine, scaled } from "./engine.mjs";
+import { classSlugOf } from "../lib/class-dc.mjs";
 
 /**
  * The Instinct clauses that happen on an event rather than on a sheet (guide §5.1).
@@ -114,7 +115,7 @@ const AFFLICTION_TRAITS = ["poison", "disease", "curse"];
  * A creature's afflictions and their stages: pf2e's affliction items where the system has them, and — as Digest reads
  * them — a poison, disease or curse effect whose counter badge is its stage.
  */
-function afflictionsOf(actor) {
+export function afflictionsOf(actor) {
     const items = (actor.itemTypes.affliction ?? []).map((a) => ({ item: a, stage: a.stage }));
     const effects = actor.itemTypes.effect.filter((e) => e.system.badge?.type === "counter"
         && (e.system.traits?.value ?? []).some((t) => AFFLICTION_TRAITS.includes(t)))
@@ -325,7 +326,7 @@ export const Instincts = {
 
     async onMessage(message) {
         const actor = message.actor;
-        if (!actor || actor.class?.slug !== "assimilator") return;
+        if (!actor || classSlugOf(actor) !== "assimilator") return;
         const instincts = activeInstincts(actor);
         if (!instincts.size) return;
         const context = message.flags?.pf2e?.context;
@@ -363,7 +364,7 @@ export const Instincts = {
 
     /** Orange: the first Stride, Step or reaction each round primes the next Mutation with +1d4. */
     async surge(actor, why) {
-        if (!actor || actor.class?.slug !== "assimilator" || !activeInstincts(actor).has("orange")) return;
+        if (!actor || classSlugOf(actor) !== "assimilator" || !activeInstincts(actor).has("orange")) return;
         const stamp = roundStamp(actor);
         if (!stamp || record(actor).used?.orangeSurge === stamp) return;
         await actor.update({ [`flags.${MODULE_ID}.${KEY}.used.orangeSurge`]: stamp });
