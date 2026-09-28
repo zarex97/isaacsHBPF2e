@@ -114,7 +114,34 @@ function roundKey(actor) {
 export const Bonds = {
     bondActive,
 
+    /** Mindstorm: "its next spell requires a DC 5 flat check" — rolled on the spell's card, and spent either way. */
+    async mindstormCheck(message) {
+        if (!message.item?.isOfType?.("spell") || message.flags?.pf2e?.context) return null;
+        const caster = message.actor;
+        const storm = caster?.itemTypes?.effect.find((e) => e.slug === "effect-mindstorm" && !e.flags?.[MODULE_ID]?.mindstormSpent);
+        if (!storm) return null;
+        await storm.update({ [`flags.${MODULE_ID}.mindstormSpent`]: true,
+            "system.rules": storm._source.system.rules.filter((r) => r.key !== "Note") });
+        const roll = await new Roll("1d20").evaluate();
+        const passed = roll.total >= 5;
+        await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: caster }), rolls: [roll],
+            flags: { [MODULE_ID]: { mindstormCheck: { spell: message.item.uuid, total: roll.total, passed } } },
+            content: `<p><strong>Mindstorm</strong>: ${caster.name} casts ${message.item.name} — DC 5 flat check, `
+                + `<strong>${roll.total}</strong>. ${passed ? "The spell goes off." : "The spell is <strong>disrupted</strong>."}</p>` });
+        return passed;
+    },
+
     registerHooks() {
+        // Mindstorm (#95): the marked creature's next spell rolls its DC 5 flat check.
+        Hooks.on("createChatMessage", (message) => {
+            if (isWriter()) Bonds.mindstormCheck(message).catch((e) => console.error("Isaac's Homebrew | Mindstorm", e));
+        });
+        // Null Shroud (#95): its darkness "cannot itself be counteracted below 6th rank" — a floor the counteract reads.
+        Hooks.on("createItem", (item) => {
+            if (isWriter() && item.slug === "effect-shadow-mantle" && bondActive(item.actor, "null-shroud")) {
+                item.update({ [`flags.${MODULE_ID}.counteractFloor`]: 6 });
+            }
+        });
         Relay.register?.("assimilatorBondEnd", (payload) => Bonds.endCondition(payload));
         DamageBus.before("the Bonds that shape damage", PRIORITY.bypass + 3, (actor, params) => Bonds.shape(actor, params));
         DamageBus.after("the Bonds that answer damage", PRIORITY.riders + 5,

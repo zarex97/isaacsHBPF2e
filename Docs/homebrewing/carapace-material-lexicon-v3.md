@@ -1,4 +1,4 @@
-# The Assimilator — Material Lexicon, **Version 3.3**
+# The Assimilator — Material Lexicon, **Version 3.4**
 
 ### *The symbiont class · Substrate · Essence · Mutation*
 
@@ -18,6 +18,11 @@
 >
 > **v3.3** applies the same ruling to Nickel Depth 4 (issue #89): the third Aberration may instead be one other
 > **bound** Purple Substrate counting as Depth 4.
+>
+> **v3.4** rules on two Bonds (issue #95). **Chimera**'s "Depth-4 rider list of either of your Instincts" is read as
+> Nickel Depth 4's "instead": the extra Aberration may instead be one **bound** Substrate of either Instinct's colour
+> counting as Depth 4. **Immune System**'s *disease* is a **+2 circumstance bonus to saves against disease** (pf2e has
+> no disease resistance), and its *spell school* is one **tradition** — arcane, divine, occult or primal.
 
 **The structural rule this whole document is built on:**
 

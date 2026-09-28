@@ -15,7 +15,7 @@
     "name": "Immune System",
     "system": {
         "description": {
-            "value": "<p><strong>Jade + Zinc.</strong> Shifting Tissue may name <strong>poison, disease or a single spell school</strong> as well as an energy type.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
+            "value": "<p><strong>Jade + Zinc.</strong> Shifting Tissue may name <strong>poison, disease or a single spell school</strong> as well as an energy type.</p><p><em>Ruled (#95):</em> disease is a <strong>+2 circumstance bonus to saves against disease</strong>; a spell school is one <strong>tradition</strong> — arcane, divine, occult or primal.</p><p><em>Suppressed while either Substrate is below Depth 2; it is not lost.</em></p>"
         },
         "duration": {
             "expiry": null,
@@ -31,7 +31,24 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Assimilator"
         },
-        "rules": [],
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "selector": "saving-throw",
+                "slug": "immune-system-disease",
+                "type": "circumstance",
+                "value": 2,
+                "label": "Immune System (disease)",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    },
+                    "assimilator:bond:immune-system",
+                    "assimilator:zinc:disease",
+                    "item:trait:disease"
+                ]
+            }
+        ],
         "slug": "immune-system",
         "start": {
             "initiative": null,

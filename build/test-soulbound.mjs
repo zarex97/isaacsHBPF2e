@@ -3372,6 +3372,8 @@ const SYSTEM_SLUGS = new Set([
     "aberrant-organ",
     // Onyx Depth 1's Stealth modifier, read off the skill by the rig.
     "onyx-stealth-1",
+    // Immune System's disease save bonus, read off a Fortitude roll by the rig (#95).
+    "immune-system-disease",
 ]);
 
 const unresolvedInScripts = [];
