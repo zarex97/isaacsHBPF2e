@@ -83,17 +83,19 @@ async function formula(a, { crit = false, label } = {}) {
 async function overArmour(a, read) {
     const me = () => game.actors.get(a.id);
     const plateOf = () => me().itemTypes.armor.find((x) => x.slug === "living-plate");
-    const settle = async () => { await wait(1500); };
+    // Wait for the engine to say so, not for a fixed beat: under a full run's load 1.5 s was sometimes short.
+    const dark = () => !!me().flags?.["isaacs-hb-pf2e"]?.assimilator?.derived?.suppressed;
+    const settle = async (want) => { await until(() => dark() === want, 8000); await wait(500); };
     const before = await read();
     const pack = game.packs.get("pf2e.equipment-srd");
     const leather = (await pack.getDocuments({ type: "armor" })).find((d) => d.system.slug === "leather-armor");
     const [worn] = await me().createEmbeddedDocuments("Item", [leather.toObject()]);
     await me().changeCarryType(worn, { carryType: "worn", inSlot: true });
-    await settle();
+    await settle(true);
     const during = await read();
     await worn.delete();
     if (!plateOf().system.equipped.inSlot) await me().changeCarryType(plateOf(), { carryType: "worn", inSlot: true });
-    await settle();
+    await settle(false);
     const after = await read();
     return { before, during, after };
 }
@@ -394,8 +396,6 @@ const NOTES = [
     ["SN-2a", { tin: 2 }, "perception", "Tin (Depth 2)"],
     ["AT-1a", { amethyst: 1 }, "perception", "Amethyst (Depth 1)"],
     ["QZ-3a", { quartz: 3 }, "perception", "Quartz (Depth 3)"],
-    ["QZ-4b", { quartz: 4 }, "save:will", "Quartz (Depth 4)"],
-    ["PT-4b", { platinum: 4 }, "save:will", "Platinum (Depth 4)"],
     ["EM-2b", { emerald: 2 }, "perception", "Emerald (Depth 2)"],
     ["CR-2b", { chromium: 2 }, "perception", "Chromium (Depth 2)"],
     ["CR-3b", { chromium: 3 }, "save:reflex", "Chromium (Depth 3)"],
@@ -451,7 +451,7 @@ async function strikeRoll(a, { crit = false } = {}) {
     await (crit ? s.critical({ skipDialog: true }) : s.damage({ skipDialog: true }));
     await wait(900);
     // The damage roll itself, not whatever was posted last: in a long run an Instinct card can land after it.
-    return game.messages.contents.slice(before - game.messages.size).find((m) => m.flags?.pf2e?.context?.type === "damage-roll")
+    return game.messages.contents.slice(before).find((m) => m.flags?.pf2e?.context?.type === "damage-roll")
         ?? game.messages.contents.at(-1);
 }
 
@@ -624,7 +624,7 @@ const INSTINCTS = [
         canvas.scene.tokens.get(ctx.tokenId).object.control({ releaseOthers: true });
         const since = game.messages.size;
         await use(a, "frame-rush", 3500);
-        const fresh = () => game.messages.contents.slice(since - game.messages.size);
+        const fresh = () => game.messages.contents.slice(since);
         const struck = fresh().some((m) => m.flags?.pf2e?.context?.type === "attack-roll" && m.item?.slug === "carapace-strike");
         const card = await until(() => fresh().find((m) => m.flags?.["isaacs-hb-pf2e"]?.assimilatorFrameRush), 6000);
         document.querySelector(`li.chat-message[data-message-id="${card?.id}"] button[data-value="trip"]`)?.click();
@@ -686,7 +686,7 @@ const INSTINCTS = [
             await AssimilatorRig.useWithArea(game.actors.get(a.id).items.find((i) => i.slug === "forked-channel"));
             await wait(1500);
             untarget();
-            return game.messages.contents.slice(since - game.messages.size)
+            return game.messages.contents.slice(since)
                 .filter((m) => m.flags?.pf2e?.context?.type === "attack-roll" && /Arcane Channel/.test(m.flavor ?? "")).length;
         } })),
     // Lapis Depth 2: a successful Recall Knowledge gives allies +1 circumstance to attacks against the creature (#88).
@@ -736,13 +736,119 @@ const INSTINCTS = [
             const since = game.messages.size;
             await AssimilatorRig.useWithArea(game.actors.get(a.id).items.find((i) => i.slug === "flare"));
             await wait(1500);
-            const save = game.messages.contents.slice(since - game.messages.size)
+            const save = game.messages.contents.slice(since)
                 .find((m) => m.flags?.pf2e?.context?.type === "saving-throw" && m.actor?.id === t.id);
             for (const e of creature().itemTypes.effect.filter((x) => x.slug === "effect-laid-bare")) await e.delete();
             await creature().update({ "system.saves.fortitude.value": 10, "system.saves.will.value": 10 });
             untarget();
             return ["fortitude", "reflex", "will"].find((s) => save?.flags?.pf2e?.context?.domains?.includes(s)) ?? null;
         } })),
+    // #89 — Purple.
+    // Quartz 1: +1 circumstance to saves against magic — a save whose origin is a spell.
+    ...[[{ quartz: 1 }, ["origin:item:type:spell"], true, "Quartz 1: +1 on a save against a spell"],
+        [{ quartz: 1 }, [], false, "control: a save against nothing magical"],
+        [{ ruby: 1 }, ["origin:item:type:spell"], false, "control: no Quartz"]].map(([b, extra, want, note]) => ({ id: "QZ-1a", lv: 17, b, want, note,
+        act: async (a) => {
+            await game.actors.get(a.id).saves.will.roll({ dc: { value: 10 }, skipDialog: true, extraRollOptions: extra });
+            await wait(600);
+            return (game.messages.contents.at(-1).flags.pf2e.modifiers ?? []).some((m) => /quartz/.test(m.slug ?? "") && m.enabled);
+        } })),
+    // Quartz 1: "you know when a spell is cast within 30 feet".
+    ...[[{ quartz: 1 }, 1, true, "a spell cast 5 feet away: the owner is told"],
+        [{ quartz: 1 }, 8, false, "control: 40 feet away, nothing"],
+        [{ ruby: 1 }, 1, false, "control: no Quartz"]].map(([b, dx, want, note]) => ({ id: "QZ-1b", lv: 17, b, want, note,
+        act: async (a, t, ctx) => {
+            await place(ctx, ctx.targetTokenId, dx);
+            const caster = game.actors.get(t.id);
+            const [spell] = await caster.createEmbeddedDocuments("Item", [{ name: "ZZ Spark", type: "spell",
+                system: { level: { value: 1 }, traits: { value: ["cantrip", "concentrate", "manipulate"] }, time: { value: "2" } } }]);
+            const since = game.messages.size;
+            await spell.toMessage(null, { create: true });
+            await wait(1500);
+            const told = game.messages.contents.slice(since).some((m) => m.flags?.["isaacs-hb-pf2e"]?.quartzSensed);
+            await spell.delete();
+            await place(ctx, ctx.targetTokenId, 1);
+            return told;
+        } })),
+    // Quartz 3: a spell fails against you — your next Strike deals +2d6 force.
+    ...[[{ quartz: 3 }, 1, [true, true, false], "a save against a spell succeeds: Quartz Charge, +2d6 force on the next Strike, then spent"],
+        [{ quartz: 3 }, 99, [false, false, false], "control: the save fails, no charge"],
+        [{ quartz: 2 }, 1, [false, false, false], "control: Quartz 2"]].map(([b, dc, want, note]) => ({ id: "QZ-3a", lv: 17, b, want, note,
+        act: async (a) => {
+            const me = () => game.actors.get(a.id);
+            for (const e of me().itemTypes.effect.filter((x) => x.slug === "effect-quartz-charge")) await e.delete();
+            await me().saves.reflex.roll({ dc: { value: dc }, skipDialog: true, extraRollOptions: ["origin:item:type:spell"] });
+            const charged = !!(await until(() => me().itemTypes.effect.some((x) => x.slug === "effect-quartz-charge"), dc > 50 ? 1500 : 6000));
+            const force = charged && /2d6 force/.test((await strikeRoll(a)).rolls[0].formula);
+            await wait(800);
+            const left = me().itemTypes.effect.some((x) => x.slug === "effect-quartz-charge");
+            return [charged, force, left];
+        } })),
+    // Quartz 4: Prism Reflection — the caster's Will against the class DC, once a day.
+    { id: "QZ-4b", lv: 17, b: { quartz: 4 }, act: async (a, t, ctx) => {
+        const me = () => game.actors.get(a.id);
+        await me().update({ "flags.isaacs-hb-pf2e.assimilator.used.-=prismReflection": null });
+        untarget(); canvas.scene.tokens.get(ctx.targetTokenId).object.setTarget(true, { user: game.user, releaseOthers: true });
+        const since = game.messages.size;
+        await use(a, "prism-reflection", 3000);
+        const fresh = game.messages.contents.slice(since);
+        const save = fresh.find((m) => m.flags?.pf2e?.context?.type === "saving-throw" && m.actor?.id === t.id);
+        const dc = me().getStatistic(me().class.slug)?.dc?.value;
+        const card = fresh.find((m) => m.flags?.["isaacs-hb-pf2e"]?.prismReflection);
+        const before2 = game.messages.size;
+        await use(a, "prism-reflection", 2500);
+        const again = game.messages.contents.slice(before2).some((m) => m.flags?.pf2e?.context?.type === "saving-throw");
+        untarget();
+        return [!!me().items.find((i) => i.slug === "prism-reflection"), save?.flags?.pf2e?.context?.dc?.value === dc,
+            ["reflected", "negated"].includes(card?.flags["isaacs-hb-pf2e"].prismReflection.outcome), again];
+    }, want: [true, true, true, false], note: "the caster's Will against the class DC; reflected or negated; a second use that day, refused" },
+    // Platinum 4: "You cannot be slowed by magical effects" — the GM is asked, and one click removes it.
+    ...[[{ platinum: 4 }, [true, false], "Platinum 4: the GM's card, and its click removes the slowed"],
+        [{ platinum: 3 }, [false, true], "control: Platinum 3, no card and the slowed stays"]].map(([b, want, note]) => ({ id: "PT-4b", lv: 17, b, want, note,
+        act: async (a) => {
+            const me = () => game.actors.get(a.id);
+            for (const c of me().itemTypes.condition.filter((x) => x.slug === "slowed")) await c.delete();
+            // The badge moves a beat after the rebuild: straight after a Platinum 4 check it still reads 4.
+            await until(() => me().getRollOptions().includes(`self:effect:substrate-platinum:${b.platinum}`), 6000);
+            const since = game.messages.size;
+            await me().createEmbeddedDocuments("Item", [game.pf2e.ConditionManager.getCondition("slowed").toObject()]);
+            const card = await until(() => game.messages.contents.slice(since)
+                .find((m) => m.flags?.["isaacs-hb-pf2e"]?.platinumSlowed), b.platinum >= 4 ? 6000 : 2000);
+            if (card) document.querySelector(`li.chat-message[data-message-id="${card.id}"] button[data-action="isaacs-hb-platinum"]`)?.click();
+            await wait(1500);
+            const slowed = me().itemTypes.condition.some((x) => x.slug === "slowed");
+            for (const c of me().itemTypes.condition.filter((x) => x.slug === "slowed")) await c.delete();
+            return [!!card, slowed];
+        } })),
+    // Nickel's Aberrations: the Limb's type, the Organ's and the Mode's choices, the Maw on the Carapace Strike.
+    { id: "NI-1b", lv: 17, b: { nickel: 1 }, c: { nickel: ["limb"] }, get: (a) => read.traits(a, "Aberrant Limb").filter((x) => /versatile/.test(x)).sort(),
+        want: ["versatile-p", "versatile-s"], note: "any physical type, chosen on each Strike" },
+    ...[["darkvision", [true, false, false, false]], ["scent", [false, "imprecise 30", false, false]],
+        ["low-light", [false, null, true, true]]].map(([organ, want]) => ({ id: "NI-1c", lv: 17, b: { nickel: 1 },
+        c: { nickel: ["organ"], nickelOrgan: organ }, want, note: `the Organ chosen as ${organ}`, act: async (a) => {
+            await wait(800);
+            const me = game.actors.get(a.id);
+            const plus = (me.perception.modifiers ?? []).some((m) => m.slug === "aberrant-organ" && m.enabled);
+            return [read.sense(me, "darkvision") !== null, organ === "scent" ? read.sense(me, "scent") : (organ === "low-light" ? read.sense(me, "scent") : false),
+                read.sense(me, "low-light-vision") !== null, plus];
+        } })),
+    ...[["climb", [12, null]], ["swim", [null, 12]]].map(([mode, want]) => ({ id: "NI-1d", lv: 17, b: { nickel: 1 },
+        c: { nickel: ["mode"], nickelMode: mode }, want, note: `the Mode chosen as ${mode}`,
+        act: async (a) => { await wait(800); const me = game.actors.get(a.id); return [read.speed(me, "climb"), read.speed(me, "swim")]; } })),
+    { id: "NI-1g", lv: 17, b: { nickel: 1 }, c: { nickel: ["maw"] }, feats: ["grasping-plates"], act: async (a) =>
+        [read.traits(a).includes("deadly-d8"), read.traits(a, "Talons").includes("deadly-d8")],
+    want: [true, false], note: "the Carapace Strike gains deadly d8; the Talons do not" },
+    // Nickel 4: a bound Purple Substrate counting as Depth 4, in place of the third Aberration.
+    { id: "NI-4a", lv: 17, b: { nickel: 4, quartz: 1 }, c: { nickel: ["limb", "organ", "maw"], nickelPurple: "quartz" }, act: async (a) => {
+        await wait(800);
+        const held = game.actors.get(a.id).itemTypes.effect.filter((e) => e.flags?.["isaacs-hb-pf2e"]?.assimilator?.aberration).length;
+        return [derived(a).effective.quartz, held];
+    }, want: [4, 2], note: "Quartz 1 counts as 4, and two Aberrations are held, not three" },
+    { id: "NI-4a", lv: 17, b: { nickel: 4, quartz: 1 }, c: { nickel: ["limb", "organ", "maw"] }, act: async (a) => {
+        await wait(800);
+        const held = game.actors.get(a.id).itemTypes.effect.filter((e) => e.flags?.["isaacs-hb-pf2e"]?.assimilator?.aberration).length;
+        return [derived(a).effective.quartz, held];
+    }, want: [1, 3], note: "control: nothing chosen, Quartz 1 and three Aberrations" },
     // Guide §4.5: the Instinct clause applies to "every Mutation you have, including Mutations of other colours".
     { id: "A-44", lv: 17, b: { ruby: 3, sapphire: 2 }, act: async (a) => [derived(a).instincts.primary, redOn(await strikeRoll(a))],
         want: ["red", 5], note: "Red Instinct; Blue's Sapphire 2 takes Red's +2 beside Ruby's +3" },
@@ -835,29 +941,31 @@ const INSTINCTS = [
     { id: "CI-3a", lv: 17, b: { citrine: 3 }, act: async (a, t, ctx) => inCombat(ctx, async () => {
         // An earlier check leaves the target at Fortitude −40; this one needs a critical success.
         await game.actors.get(t.id).update({ "system.saves.fortitude.value": 10 });
+        // Whether Citrine rewrote the card, not the bare outcome: a natural 1 turns a critical into a success by itself.
         const save = async (who) => {
             await who.saves.fortitude.roll({ dc: { value: -30 }, origin: game.actors.get(a.id), skipDialog: true });
             await wait(1200);
-            return game.messages.contents.at(-1).flags.pf2e.context.outcome;
+            return !!game.messages.contents.at(-1).flags?.["isaacs-hb-pf2e"]?.citrine;
         };
         const first = await save(game.actors.get(t.id));
         const second = await save(game.actors.get(t.id));
         return [first, second];
-    }), want: ["success", "criticalSuccess"], note: "adjacent: the first critical is a success; the second that encounter stands" },
+    }), want: [true, false], note: "adjacent: the first critical is turned to a success; the second that encounter stands" },
     { id: "CI-3a", lv: 17, b: { citrine: 3 }, act: async (a, t, ctx) => inCombat(ctx, async () => {
         await place(ctx, ctx.bystanderTokenId, 8);
         const by = game.actors.get(ctx.bystanderId);
         await by.update({ "system.details.alliance": "opposition", "system.saves.fortitude.value": 10 });
         await by.saves.fortitude.roll({ dc: { value: -30 }, origin: game.actors.get(a.id), skipDialog: true });
         await wait(1200);
-        const outcome = game.messages.contents.at(-1).flags.pf2e.context.outcome;
+        const rewritten = !!game.messages.contents.at(-1).flags?.["isaacs-hb-pf2e"]?.citrine;
+        const outcome = rewritten ? "rewritten" : "stands";
         // The distance as measured, beside the outcome: a move that did not land would put it within 30 feet.
         const me = canvas.scene.tokens.get(ctx.tokenId).object;
         const it = canvas.scene.tokens.get(ctx.bystanderTokenId).object;
         const feet = Math.round(canvas.grid.measurePath([me.center, it.center]).distance);
         await place(ctx, ctx.bystanderTokenId, 2);
         return feet > 30 ? outcome : `moved only to ${feet} feet — ${outcome}`;
-    }), want: "criticalSuccess", note: "control: 40 feet away, the critical stands" },
+    }), want: "stands", note: "control: 40 feet away, the critical stands" },
 
     // Orange.
     { id: "I-3a", lv: 17, b: { carnelian: 3, ruby: 2 }, act: async (a, t, ctx) => inCombat(ctx, async () => {
@@ -944,7 +1052,7 @@ const INSTINCTS = [
         const before = game.messages.size;
         await combat.nextRound(); await wait(3000);
         // pf2e posts fast healing as a healing roll at the start of the turn, for the table to apply.
-        const roll = game.messages.contents.slice(before - game.messages.size).find((m) => m.speaker?.actor === a.id
+        const roll = game.messages.contents.slice(before).find((m) => m.speaker?.actor === a.id
             && /fast healing/i.test(m.flavor ?? "") && /Green/.test(m.flavor ?? ""));
         return roll?.rolls[0].total ?? null;
     }), want: 2, note: "two bound Green Substrates: pf2e's fast healing roll at the start of its turn" },
@@ -1303,7 +1411,7 @@ const BOND_CHECKS = [
         const blow = Math.ceil(max / 2) + 10;
         const lost = await hitSelf(game.actors.get(a.id), t, ctx, `${blow}[slashing]`);
         await wait(1500);
-        const said = game.messages.contents.slice(before - game.messages.size).some((m) => m.content?.includes("Runaway Growth"));
+        const said = game.messages.contents.slice(before).some((m) => m.content?.includes("Runaway Growth"));
         // Mercury is not bound, so nothing else turns the blow; what it did not cost came back.
         return [said, blow - lost];
     }, want: [true, 34], note: "below half: re-rolled, and 34 (twice level 17) back" },
@@ -1359,7 +1467,7 @@ const BOND_CHECKS = [
         await by.applyDamage({ damage: roll, token: canvas.scene.tokens.get(ctx.bystanderTokenId) });
         await wait(1200);
         await by.update({ "system.details.alliance": "opposition" });
-        return game.messages.contents.slice(before - game.messages.size).some((m) => m.content?.includes("Living Armour"));
+        return game.messages.contents.slice(before).some((m) => m.content?.includes("Living Armour"));
     }, want: true, note: "an ally 10 feet away took fire: Reactive Evolution is offered" },
     { id: "B-29", lv: 17, b: { silver: 2, jet: 2 }, bonds: ["reapers-edge"], targetTraits: ["undead", "incorporeal"], act: async (a, t, ctx) => {
         await setResist(t, [{ type: "void", value: 10 }], [{ type: "void" }]);
@@ -1649,7 +1757,7 @@ const FEAT_CHECKS = [
         canvas.scene.tokens.get(ctx.tokenId).object?.control({ releaseOthers: true });
         const before = game.messages.size;
         await use(a, "twin-maw", 4000);
-        const rolls = game.messages.contents.slice(before - game.messages.size)
+        const rolls = game.messages.contents.slice(before)
             .filter((m) => m.flags?.pf2e?.context?.type === "attack-roll");
         return [rolls.length, new Set(rolls.map((m) => m.flags.pf2e.context.target?.token)).size];
     }, want: [2, 1], note: "two Carapace Strikes, one creature" },

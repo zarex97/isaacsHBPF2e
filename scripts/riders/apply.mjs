@@ -1265,6 +1265,8 @@ export async function resolveCounteract(payload) {
     const ourRank = Math.max(1, Number(item?.rank) || Math.ceil((actor.level ?? 1) / 2)) + (mastery ? 1 : 0);
     const reach = { criticalSuccess: 3, success: 1, failure: -1, criticalFailure: -Infinity }[outcome] ?? -Infinity;
     const counteracted = targetRank <= ourRank + reach;
+    // Anything that answers a counteract — Quartz Depth 3's charge (#89) — hears it here.
+    Hooks.callAll("isaacsHb.counteracted", actor, { effect, counteracted, outcome });
 
     // Suppression rather than ending, for the things that are a STATE rather than a spell.
     //
