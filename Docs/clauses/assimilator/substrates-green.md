@@ -43,7 +43,7 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | EM-1a | Emerald D1 | **Fast healing 1** while you have at least 1 Hit Point and are below your maximum. | `rig` | ✅ | Rig, live: the active fast-healing rule reads **1** |
 | EM-2a | Emerald D2 | **Fast healing 2.** | `rig` | ✅ | Rig, live: **2** |
-| EM-2b | Emerald D2 | Once per day, regrow a severed part over 1 hour. | `rig` | ⚠️ | Rig: the Note *Emerald (Depth 2)* appears on the Perception card. Text the table applies — nothing enforces it |
+| EM-2b | Emerald D2 | Once per day, regrow a severed part over 1 hour. | `rig` | — | Nothing to automate: pf2e has no severed parts to regrow. The Note tells the table (#90, Q1) |
 | EM-3a | Emerald D3 | **Fast healing 5.** | `rig` | ✅ | Rig, live: **5** |
 | EM-3b | Emerald D3 | You stabilize automatically when dying. | `rig` | ✅ | Rig, live: dying was put on at Emerald 3 and **removed at once** — stabilized |
 | EM-4a | Emerald D4 | **Fast healing 10.** |  | ✅ | Live, turn start in an encounter at Depth 4: pf2e's card reads **fast healing 10 — Emerald**, and only one card — the lower rungs stood down |
@@ -86,11 +86,11 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | CR-1a | Chromium D1 | Carapace **Hardness +2**. |  | ✅ | Live: Hardness **2 → 4** |
 | CR-1b | Chromium D1 | **Resistance 2** to acid. |  | ✅ | Live: **acid 2** |
 | CR-2a | Chromium D2 | **Hardness +5**, **resistance 5** to acid. | `rig` | ✅ | Rig, live: Hardness **7**, acid **5** |
-| CR-2b | Chromium D2 | Your Carapace repairs 1 Hit Point per hour on its own. | `rig` | ⚠️ | Rig: the Note *Chromium (Depth 2)* appears on the Perception card. Text the table applies — nothing enforces it |
+| CR-2b | Chromium D2 | Your Carapace repairs 1 Hit Point per hour on its own. | `rig` | ✅ | Rig, live: the plate mends on the world's clock — driven with clock values, three hours mends **3** Hit Points; 59 minutes, **0**; Chromium 1, **0**. Counted from the plate's last mended hour, so time advanced at once mends all its hours and a part-hour is kept for the next (#90, Q2) |
 | CR-3a | Chromium D3 | **Hardness +8**, **resistance 8** to acid. | `rig` | ✅ | Rig, live: Hardness **10**, acid **8** |
-| CR-3b | Chromium D3 | You are immune to rust, corrosion and effects that damage your items with acid. | `rig` | ⚠️ | Rig: the Note *Chromium (Depth 3)* appears on the Reflex save card. Text the table applies — nothing enforces it |
+| CR-3b | Chromium D3 | You are immune to rust, corrosion and effects that damage your items with acid. | `rig` | — | Nothing to automate: pf2e damages no items on its own — a rust monster's Rust, acid eating gear, are the GM's to apply — and has no immunity for item damage. The Note on the Reflex card tells the table (#90, Q3) |
 | CR-4a | Chromium D4 | **Hardness +12**, **resistance 12** to acid. |  | ✅ | Live: Hardness **14** and **acid 12** |
-| CR-4b | Chromium D4 | Once per encounter, when your Carapace's Hardness would be reduced or bypassed, it isn't. | `rig` | ⚠️ | Rig: the Note *Chromium (Depth 4)* appears on the Perception card. Text the table applies — nothing enforces it |
+| CR-4b | Chromium D4 | Once per encounter, when your Carapace's Hardness would be reduced or bypassed, it isn't. | `rig` | — | Nothing to automate: nothing in pf2e or the module reduces or bypasses the **Carapace's** Hardness — Carapace Block always uses all of it, and the module's Hardness bypasses (Iron 4, Siege Frame) are against objects you Strike. When a GM rules a creature does, the Note reminds them (#90, Q4) |
 
 ---
 
@@ -99,9 +99,9 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | Status | Count |
 | :-- | --: |
 | ☐ | 0 |
-| ✅ | 25 |
-| ⚠️ | 4 |
+| ✅ | 26 |
+| ⚠️ | 0 |
 | ❌ | 0 |
 | 🔧 | 0 |
-| — | 0 |
+| — | 3 |
 | **Total** | **29** |
