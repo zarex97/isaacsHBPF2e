@@ -71,7 +71,7 @@ reaction nor an action.
 | S-74d | At Night | You may do this even while your reaction is spent |  | ✅ | Live: the card is headed **“Effect: The Balance, at Night — free action”**, not “reaction”. A reaction rider may now declare `freeAction`, which is the honest half of this clause; the other half is honest by accident — the module has never tracked a *spent* reaction, so nothing was stopping it. What `looksAbleToReact` actually gates on is being able to act at all (unconscious, paralyzed, petrified, stunned), which is the right gate for a free action too |
 | S-74e | Sight of the Balance | **Sight of the Balance:** at the start of each of your turns, choose one enemy within 60 feet | `test-riders` pins the picker and both effects it hands out | ✅ | **Fixed; this is what the picker was built for.** It fires at the **start of a turn**, so there is no trigger to point at and `trigger: true` — the module's only other way to reach a creature that is not the rider's target — has nothing to reach for. Live: the Quincy's turn began and a whispered card offered every enemy within 60 feet by name (*D1, D2, D3, D4, ZZ Victim, Ghoul Soldier*) |
 | S-74f | Sight of the Balance | Until the start of your next turn, that creature's fortune and misfortune are yours to allot — it takes a **−2 status penalty** to its next saving throw |  | ✅ | Live on the creature chosen from that card: **`Effect: Sight of the Balance`**, reading **The Balance −2 (status)** on D3's Will. `removeAfterRoll` is what makes it *“its **next** saving throw”* rather than a round of them |
-| S-74g | Sight of the Balance | the next ally who attacks it gains a **+1 status bonus** to that attack roll | `test-riders` pins the substitution and `if-enabled` | 🔧 | **Fixed, awaiting re-drive (#77).** The pick now keeps the chosen creature, and `picked.as-target` bakes `target:signature:<its signature>` into `Effect: Allotted Fortune`'s predicate as it is handed out, so the +1 is about **that** creature. `removeAfterRoll` is now `if-enabled`: `true` spent the bonus on whatever the ally attacked first. Before: live, the ally got **+1 (status)** on any Strike, one attack. Still open by design: every ally within 60 feet gets a copy, so *"the next ally"* can be several allies |
+| S-74g | Sight of the Balance | the next ally who attacks it gains a **+1 status bonus** to that attack roll | `test-riders` pins the substitution, `if-enabled` and the shared allowance | ✅ | **Fixed (#77), and it needed two things.** *“Attacks **it**”*: the pick now keeps the creature it chose, and `picked.as-target` bakes `target:signature:<its signature>` into `Effect: Allotted Fortune`'s predicate as it is handed out — live, the predicate read D3's signature `2eb9480e…` and not D4's. *“The **next** ally”*: every ally within 60 feet holds a copy, so the effect is flagged `sharedAllowance` and `riders/shared-allowance.mjs` takes every copy back when any one is spent; `removeAfterRoll` is `if-enabled`, because `true` spent it on whatever the ally attacked first. Live, with D3 picked and 41 copies out: **control** — another ally's Strike at **D4** carried no Allotted Fortune and all 41 copies stood; ZZ Ally's Strike at **D3** carried **Allotted Fortune +1 (status)** and left **0** copies anywhere; the first ally's Strike at D3 afterwards carried none |
 
 ## Severing Art — The Reckoning (guide §9.3)
 
@@ -88,9 +88,9 @@ reaction nor an action.
 | Status | Count |
 | :-- | --: |
 | ☐ | 0 |
-| ✅ | 21 |
+| ✅ | 22 |
 | ⚠️ | 0 |
 | ❌ | 0 |
-| 🔧 | 1 |
+| 🔧 | 0 |
 | — | 0 |
 | **Total** | **22** |

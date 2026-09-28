@@ -23,6 +23,7 @@ import { Recharge } from "./economy/recharge.mjs";
 import { SpellFrequency } from "./economy/spell-frequency.mjs";
 import { TerrainAura } from "./soulbound/terrain-aura.mjs";
 import { Balance } from "./roll-rewrites/balance.mjs";
+import { SharedAllowance } from "./riders/shared-allowance.mjs";
 import { Om } from "./roll-rewrites/om.mjs";
 import { Banish } from "./riders/banish.mjs";
 import { registerHooks as registerLibraHooks } from "./riders/libra.mjs";
@@ -100,6 +101,8 @@ Hooks.once("init", () => {
     start("terrain auras", () => TerrainAura.registerHooks());
     start("Om", () => Om.registerHooks());
     start("The Balance", () => Balance.registerHooks());
+    // A bonus every ally holds a copy of and only the first to use it gets — Sight of the Balance.
+    start("shared allowances", () => SharedAllowance.registerHooks());
     start("the Crystal Wall", () => CrystalWall.registerHooks());
     start("encasements", () => Encasement.registerHooks());
     start("escapes", () => Escape.registerHooks());

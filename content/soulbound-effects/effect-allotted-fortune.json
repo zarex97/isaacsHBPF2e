@@ -1,4 +1,9 @@
 {
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "sharedAllowance": true
+        }
+    },
     "img": "icons/equipment/shield/heater-crystal-blue.webp",
     "name": "Effect: Allotted Fortune",
     "system": {
@@ -23,6 +28,7 @@
             {
                 "key": "FlatModifier",
                 "label": "Allotted Fortune",
+                "slug": "allotted-fortune",
                 "selector": "attack",
                 "type": "status",
                 "value": 1,
