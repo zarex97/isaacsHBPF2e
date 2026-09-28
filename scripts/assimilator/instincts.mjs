@@ -93,6 +93,41 @@ function tokenOf(actor) {
     return actor?.getActiveTokens?.(true, true)?.[0] ?? null;
 }
 
+/** Pearl Depth 2's "yourself or an adjacent ally"; Depth 3's "Range 30 feet" (#92). */
+export function tideReach(actor) {
+    return depthOf(actor, "pearl") >= 3 ? 30 : 5;
+}
+
+/** Why a Cleansing Tide cannot reach the creature on `token` — or null when it can, or when it is its own. */
+export function tideRefusal(actor, token) {
+    const from = tokenOf(actor)?.object;
+    if (!token || !from || token.actor?.id === actor.id) return null;
+    const reach = tideReach(actor);
+    const distance = from.distanceTo(token);
+    if (distance <= reach) return null;
+    return `${token.name} is ${distance} feet away; it reaches ${reach === 5 ? "an adjacent ally" : `${reach} feet`}.`;
+}
+
+const AFFLICTION_TRAITS = ["poison", "disease", "curse"];
+
+/**
+ * A creature's afflictions and their stages: pf2e's affliction items where the system has them, and — as Digest reads
+ * them — a poison, disease or curse effect whose counter badge is its stage.
+ */
+function afflictionsOf(actor) {
+    const items = (actor.itemTypes.affliction ?? []).map((a) => ({ item: a, stage: a.stage }));
+    const effects = actor.itemTypes.effect.filter((e) => e.system.badge?.type === "counter"
+        && (e.system.traits?.value ?? []).some((t) => AFFLICTION_TRAITS.includes(t)))
+        .map((e) => ({ item: e, stage: e.system.badge.value ?? 1 }));
+    return [...items, ...effects];
+}
+
+/** Pearl Depth 4: the spell effects of 4th rank or lower on a creature — not one already suppressed. */
+function spellEffectsOf(actor) {
+    return actor.itemTypes.effect.filter((e) => (e.system.fromSpell || e.slug?.startsWith("spell-effect-"))
+        && (Number(e.system.level?.value) || 1) <= 4 && !e.flags?.[MODULE_ID]?.suppression);
+}
+
 async function say(actor, html, extra = {}) {
     return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<p>${html}</p>`, ...extra });
 }
@@ -369,35 +404,70 @@ export const Instincts = {
         await Instincts.pickCondition(item, target, onlyValueOne);
     },
 
-    /** The conditions a use may end, offered as buttons; the GM ends the one picked. */
+    /**
+     * What a use may end, offered as buttons; the GM carries out the one picked. Cleansing Tide offers more as Pearl
+     * deepens (#92): at Depth 3 an affliction's stage, lowered by 1; at Depth 4 a spell effect of 4th rank or lower,
+     * counteracted.
+     */
     async pickCondition(item, target, onlyValueOne) {
         const conditions = target.itemTypes.condition.filter((c) => c.active !== false
             && (!onlyValueOne || c.value === 1));
-        if (!conditions.length) {
-            ui.notifications.info(`${target.name} has no condition ${item.name} can end.`);
+        const pearl = item.slug === "cleansing-tide" ? depthOf(item.actor, "pearl") : 0;
+        const afflictions = pearl >= 3 ? afflictionsOf(target) : [];
+        const spells = pearl >= 4 ? spellEffectsOf(target) : [];
+        if (!conditions.length && !afflictions.length && !spells.length) {
+            ui.notifications.info(`${target.name} has nothing ${item.name} can end.`);
             return null;
         }
+        const offers = [
+            ...conditions.map((c) => ({ action: `condition:${c.id}`, label: c.name })),
+            ...afflictions.map((a) => ({ action: `affliction:${a.item.id}`, label: `${a.item.name} (stage ${a.stage})` })),
+            ...spells.map((e) => ({ action: `effect:${e.id}`, label: `Counteract ${e.name} (rank ${Number(e.system.level?.value) || 1})` })),
+        ];
+        const asks = [conditions.length ? "End one condition" : null, afflictions.length ? "lower an affliction's stage by 1" : null,
+            spells.length ? "counteract a spell effect" : null].filter(Boolean).join(", or ");
         const { DialogV2 } = foundry.applications.api;
         const picked = await DialogV2.wait({
             window: { title: `${item.name} — ${target.name}` },
-            content: `<p>End one condition on ${target.name}.</p>`,
-            buttons: conditions.map((c) => ({ action: c.id, label: c.name })),
+            content: `<p>${asks} on ${target.name}.</p>`,
+            buttons: offers,
             rejectClose: false,
         });
         if (!picked) return null;
-        await Relay.request({ action: "assimilatorEndCondition", actorUuid: target.uuid, conditionId: picked,
+        const [kind, id] = picked.split(":");
+        await Relay.request({ action: "assimilatorEndCondition", actorUuid: target.uuid, kind, id,
             itemUuid: item.uuid, onlyValueOne });
-        return picked;
+        return id;
     },
 
-    async endCondition({ actorUuid, conditionId, itemUuid, onlyValueOne }) {
+    async endCondition({ actorUuid, kind = "condition", id, itemUuid, onlyValueOne }) {
         const target = await fromUuid(actorUuid);
         const item = await fromUuid(itemUuid);
-        const condition = target?.items?.get(conditionId);
-        if (!condition || condition.type !== "condition" || !item) return;
-        if (onlyValueOne && condition.value !== 1) return;
-        const name = condition.name;
-        await target.decreaseCondition(condition.slug, { forceRemove: true });
+        const picked = target?.items?.get(id);
+        if (!picked || !item) return;
+        const pearl = item.slug === "cleansing-tide" ? depthOf(item.actor, "pearl") : 0;
+        // The GM holds the same line the picker drew: a player's request names a thing, never what may be done to it.
+        if (pearl && tideRefusal(item.actor, tokenOf(target)?.object)) return;
+
+        if (kind === "affliction") {
+            if (pearl < 3 || !afflictionsOf(target).some((a) => a.item.id === id)) return;
+            const stage = picked.type === "affliction" ? picked.stage - 1 : (picked.system.badge?.value ?? 1) - 1;
+            if (picked.type === "affliction") await picked.decrease();
+            else if (stage < 1) await picked.delete();
+            else await picked.update({ "system.badge.value": stage });
+            await say(item.actor, `<strong>${item.name}</strong>: ${target.name}'s ${picked.name} ${stage < 1 ? "is gone" : `eases to stage ${stage}`}.`);
+            return;
+        }
+        if (kind === "effect") {
+            if (pearl < 4 || !spellEffectsOf(target).some((e) => e.id === id)) return;
+            const { resolveCounteract } = await import("../riders/apply.mjs");
+            await resolveCounteract({ originUuid: item.actor.uuid, effectUuid: picked.uuid, itemUuid: item.uuid });
+            return;
+        }
+        if (picked.type !== "condition") return;
+        if (onlyValueOne && picked.value !== 1) return;
+        const name = picked.name;
+        await target.decreaseCondition(picked.slug, { forceRemove: true });
         await say(item.actor, `<strong>${item.name}</strong>: ${target.name} is no longer ${name}.`);
     },
 };

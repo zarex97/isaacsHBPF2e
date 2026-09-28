@@ -58,8 +58,8 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | PE-1a | Pearl D1 | +1 item bonus to saves against poison and disease. | `rig` | ✅ | Rig, live: Fortitude carries **Pearl +1 item**, predicated on poison or disease |
 | PE-1b | Pearl D1 | Once per day, reduce one condition's value by 1. |  | ✅ | Live: *Clear Tide* granted, free, 1/day |
 | PE-2a | Pearl D2 | Once per encounter, as a single action, **end one condition of value 1** on yourself or an adjacent ally. | `rig` | ✅ | Rig, live: *Cleansing Tide* opened the condition picker offering **only value-1 conditions** (frightened 1, not clumsy 2); picking it ended frightened. In an encounter a second use was refused. **Fixed while driving:** "once per encounter" was printed and not enforced |
-| PE-3a | Pearl D3 | Range **30 feet**, and it may instead reduce one **affliction's stage** by 1. | `rig` | ⚠️ | Rig: the Note *Pearl (Depth 3)* appears on the Perception card. Text the table applies — nothing enforces it |
-| PE-4a | Pearl D4 | **Twice** per encounter, and it may instead **counteract** one spell effect of 4th rank or lower. | `rig` | ⚠️ | Rig: the Note *Pearl (Depth 4)* appears on the Perception card. Text the table applies — nothing enforces it |
+| PE-3a | Pearl D3 | Range **30 feet**, and it may instead reduce one **affliction's stage** by 1. | `rig` | ✅ | Rig, live (#92): at Pearl 3 a target **40 feet** off is refused before the use is spent; at **30 feet** the picker offers the target's poison, and picking it eased **stage 3 to 2**. Control, Pearl 2: 30 feet refused; adjacent, **no affliction** offered. Afflictions are pf2e affliction items or, as Digest reads them, a poison, disease or curse effect whose counter is its stage. The GM re-checks reach and Depth before acting |
+| PE-4a | Pearl D4 | **Twice** per encounter, and it may instead **counteract** one spell effect of 4th rank or lower. | `rig` | ✅ | Rig, live (#92): at Pearl 4 the picker offers a **rank-2** spell effect and not a **rank-5** one; picking it rolled the class counteract and the effect was gone. Control, Pearl 3: **no spell effect** offered. Twice per encounter was already enforced (the `PE-4a` use count, **2**) |
 
 ## ⚙️ Aluminium — *Hollow Frame* (lexicon §12)
 
@@ -70,8 +70,8 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | AL-1a | Aluminium D1 | Your Carapace has **no Bulk** and imposes no penalties. | `rig` | ✅ | Rig, live: the plate's Bulk reads **0** |
 | AL-1b | Aluminium D1 | **+5 feet Speed**. |  | ✅ | Live: land Speed **30** |
 | AL-2a | Aluminium D2 | **+10 feet Speed.** |  | ✅ | Live: land Speed **35** at Depth 2+ |
-| AL-2b | Aluminium D2 | You take no damage from falls of less than 30 feet. | `rig` | ⚠️ | Rig: the Note *Aluminium (Depth 2)* appears on the Perception card. Text the table applies — nothing enforces it |
-| AL-3a | Aluminium D3 | You Leap twice as far. | `rig` | ⚠️ | Rig: the Note *Aluminium (Depth 3)* appears on the Athletics card. Text the table applies — nothing enforces it |
+| AL-2b | Aluminium D2 | You take no damage from falls of less than 30 feet. | `rig` | — | Nothing to enforce: pf2e does not model falling damage, so there is no fall to reduce. The Note *Aluminium (Depth 2)* stays on the card for the table (#92, Q3) |
+| AL-3a | Aluminium D3 | You Leap twice as far. | `rig` | — | Nothing to enforce: pf2e's Leap has no distance statistic to double. The Note *Aluminium (Depth 3)* stays on the Athletics card for the table (#92, Q4) |
 | AL-3b | Aluminium D3 | Once per day, **Fly 30 feet** as a single action. | `rig` | ✅ | Rig, live: *Hollow Flight* granted, **1/day** |
 | AL-4a | Aluminium D4 | Permanent **fly Speed 20 feet**. |  | ✅ | Live: **fly 20** at Depth 4 |
 | AL-4b | Aluminium D4 | You may end your turn in midair without falling. |  | — | Nothing to automate: hovering is the table's |
@@ -97,9 +97,9 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | Status | Count |
 | :-- | --: |
 | ☐ | 0 |
-| ✅ | 22 |
-| ⚠️ | 4 |
+| ✅ | 24 |
+| ⚠️ | 0 |
 | ❌ | 0 |
 | 🔧 | 0 |
-| — | 1 |
+| — | 3 |
 | **Total** | **27** |
