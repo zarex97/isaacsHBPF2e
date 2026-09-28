@@ -70,6 +70,9 @@
                             },
                             "carapace:intact"
                         ]
+                    },
+                    {
+                        "not": "assimilator:zinc:disease"
                     }
                 ],
                 "type": "{actor|flags.isaacs-hb-pf2e.assimilator.choices.zinc}",
@@ -103,6 +106,9 @@
                             },
                             "carapace:intact"
                         ]
+                    },
+                    {
+                        "not": "assimilator:zinc:disease"
                     }
                 ],
                 "type": "{actor|flags.isaacs-hb-pf2e.assimilator.choices.zinc}",
@@ -126,7 +132,10 @@
                             4
                         ]
                     },
-                    "carapace:intact"
+                    "carapace:intact",
+                    {
+                        "not": "assimilator:zinc:disease"
+                    }
                 ],
                 "type": "{actor|flags.isaacs-hb-pf2e.assimilator.choices.zinc}",
                 "value": 8
@@ -143,7 +152,10 @@
                             4
                         ]
                     },
-                    "carapace:intact"
+                    "carapace:intact",
+                    {
+                        "not": "assimilator:zinc:disease"
+                    }
                 ],
                 "type": "{actor|flags.isaacs-hb-pf2e.assimilator.choices.zinc}",
                 "value": 12
