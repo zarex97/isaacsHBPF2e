@@ -1,6 +1,6 @@
 import { DamageBus, PRIORITY } from "../lib/damage-bus.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
-import { suppressed } from "./damage.mjs";
+import { depthOf, suppressed } from "./damage.mjs";
 import { Engine } from "./engine.mjs";
 
 /**
@@ -82,6 +82,13 @@ export const Carapace = {
         });
         Hooks.on("updateItem", (item, change) => {
             if (item.slug === PLATE && change?.system?.hp && isWriter()) Carapace.syncBroken(item.actor);
+        });
+        // Chromium Depth 2: "Your Carapace repairs 1 Hit Point per hour on its own" — on the world's clock (#90).
+        Hooks.on("updateWorldTime", (worldTime) => {
+            if (!isWriter()) return;
+            for (const actor of game.actors.filter((a) => a.class?.slug === "assimilator")) {
+                Carapace.selfRepair(actor, worldTime).catch((e) => console.error("Isaac's Homebrew | Chromium", e));
+            }
         });
         // Armour going on or coming off moves the plate in or out of its slot, which is an *item* update. pf2e
         // re-tests a `reevaluateOnUpdate` GrantItem only on an *actor* update, so without a rebuild here a
@@ -324,6 +331,27 @@ export const Carapace = {
         const now = plate._source.system.runes?.property ?? [];
         await plate.update({ "system.runes.property": [...new Set([...aside, ...now])],
             [`flags.${MODULE_ID}.assimilator.-=brokenRunes`]: null });
+    },
+
+    /**
+     * Chromium Depth 2: an hour of the world's time mends a Hit Point of the plate. Counted from the last mended hour
+     * on the plate itself, so a clock advanced by five hours at once mends five, and one that stops at 59 minutes
+     * mends none and loses nothing.
+     */
+    async selfRepair(actor, worldTime = game.time.worldTime) {
+        const plate = livingPlate(actor);
+        if (!plate) return 0;
+        const since = plate.flags?.[MODULE_ID]?.assimilator?.repairedAt;
+        if (depthOf(actor, "chromium") < 2 || typeof since !== "number") {
+            if (since !== worldTime) await plate.update({ [`flags.${MODULE_ID}.assimilator.repairedAt`]: worldTime });
+            return 0;
+        }
+        const hours = Math.floor((worldTime - since) / 3600);
+        if (hours <= 0) return 0;
+        const before = plate.hitPoints.value;
+        const after = Math.min(plate.hitPoints.max, before + hours);
+        await plate.update({ "system.hp.value": after, [`flags.${MODULE_ID}.assimilator.repairedAt`]: since + hours * 3600 });
+        return after - before;
     },
 
     /** Keep the plate's damage where it was when its maximum moves with a level. */
