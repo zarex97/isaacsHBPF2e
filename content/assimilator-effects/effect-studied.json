@@ -24,7 +24,10 @@
                 "affects": "target",
                 "key": "EphemeralEffect",
                 "predicate": [
-                    "target:effect:instinct-blue"
+                    "target:effect:instinct-blue",
+                    {
+                        "not": "target:assimilator:suppressed"
+                    }
                 ],
                 "selectors": [
                     "attack-roll",

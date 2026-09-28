@@ -18,7 +18,25 @@ const NAME = "ZZ Rig — Assimilator";
 const TARGET = "ZZ Rig — Target";
 const BYSTANDER = "ZZ Rig — Bystander";
 
-const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+/**
+ * A pause that a hidden tab cannot stretch. Chrome's intensive throttling holds a page's *chained* timers — a
+ * timer set from a timer, five deep — to one wake-up a minute once the tab has been hidden five minutes, so a
+ * polling loop of forty 250 ms waits took forty minutes and read as a hang (#100). Dedicated workers are exempt;
+ * their timers keep time, and the page is woken by the worker's message rather than by a timer of its own.
+ */
+const clock = (() => {
+    try {
+        const source = "onmessage = (e) => setTimeout(() => postMessage(e.data.id), e.data.ms);";
+        const worker = new Worker(URL.createObjectURL(new Blob([source], { type: "text/javascript" })));
+        const pending = new Map();
+        let next = 0;
+        worker.onmessage = (e) => { pending.get(e.data)?.(); pending.delete(e.data); };
+        return (ms) => new Promise((resolve) => { const id = next++; pending.set(id, resolve); worker.postMessage({ id, ms }); });
+    } catch {
+        return null;
+    }
+})();
+const wait = (ms) => (clock ? clock(ms) : new Promise((r) => setTimeout(r, ms)));
 
 /* -------------------------------------------------------------------------------------------- */
 /*  Readings                                                                                     */
@@ -37,7 +55,9 @@ const read = {
     freq: (a, slug) => a.items.find((i) => i.slug === slug)?.system.frequency?.max ?? null,
     hardness: (a) => a.itemTypes.armor.find((i) => i.slug === "living-plate")?.hardness ?? null,
     strike: (a, label = "Carapace Strike") => a.system.actions.find((s) => s.label === label),
-    fastHealing: (a) => a.rules.filter((r) => r.key === "FastHealing" && !r.ignored && r.test()).map((r) => r.resolveValue(r.value)),
+    // Sorted: the rules come in item order, which is not stable, and B-04 once read [5, 2] for [2, 5] (#101).
+    fastHealing: (a) => a.rules.filter((r) => r.key === "FastHealing" && !r.ignored && r.test()).map((r) => r.resolveValue(r.value))
+        .sort((x, y) => x - y),
     traits: (a, label) => read.strike(a, label)?.item.system.traits.value ?? [],
 };
 
@@ -56,6 +76,28 @@ async function formula(a, { crit = false, label } = {}) {
     return found;
 }
 
+/**
+ * Put leather on over the plate the way the sheet does — `changeCarryType`, which unslots the plate — run `fn`, and
+ * take it off again, re-slotting the plate as a player would. Returns what `fn` read before, while worn and after.
+ */
+async function overArmour(a, read) {
+    const me = () => game.actors.get(a.id);
+    const plateOf = () => me().itemTypes.armor.find((x) => x.slug === "living-plate");
+    const settle = async () => { await wait(1500); };
+    const before = await read();
+    const pack = game.packs.get("pf2e.equipment-srd");
+    const leather = (await pack.getDocuments({ type: "armor" })).find((d) => d.system.slug === "leather-armor");
+    const [worn] = await me().createEmbeddedDocuments("Item", [leather.toObject()]);
+    await me().changeCarryType(worn, { carryType: "worn", inSlot: true });
+    await settle();
+    const during = await read();
+    await worn.delete();
+    if (!plateOf().system.equipped.inSlot) await me().changeCarryType(plateOf(), { carryType: "worn", inSlot: true });
+    await settle();
+    const after = await read();
+    return { before, during, after };
+}
+
 /* -------------------------------------------------------------------------------------------- */
 /*  The checks                                                                                   */
 /* -------------------------------------------------------------------------------------------- */
@@ -66,6 +108,182 @@ const CHECKS = [
     { id: "A-01", lv: 1, b: {}, get: (a) => a.class.system.keyAbility.value, want: ["str", "dex"] },
     { id: "A-07", lv: 1, b: {}, get: (a) => [a.class.system.trainedSkills.value, a.class.system.trainedSkills.additional], want: [["athletics"], 3] },
     { id: "A-07", lv: 1, b: {}, get: (a) => a.skills.athletics.rank, want: 1 },
+
+    // Guide §4.2: other armour suppresses Living Plate, every Mutation and the Instinct until it comes off.
+    { id: "A-26b", lv: 17, b: { ruby: 2, amber: 1 }, act: async (a) => {
+        const me = () => game.actors.get(a.id);
+        const r = await overArmour(a, async () => [me().getRollOptions().includes("assimilator:suppressed"),
+            derived(a).instincts.primary, me().items.some((i) => i.slug === "draw-on-the-reservoir"),
+            /fire/.test(await formula(a)), derived(a).highestDepth]);
+        return [r.before, r.during, r.after];
+    }, want: [[false, "red", true, true, 2], [true, null, false, false, 0], [false, "red", true, true, 2]],
+    note: "Red: the Instinct, Amber's granted action and Ruby's fire all go dark, and all come back" },
+    { id: "A-26b", lv: 17, b: { carnelian: 2 }, act: async (a) => {
+        const me = () => game.actors.get(a.id);
+        const r = await overArmour(a, async () => [derived(a).instincts.primary, read.speed(me())]);
+        return [r.before[0], r.during[0], r.after[0], r.during[1] < r.before[1], r.after[1] === r.before[1]];
+    }, want: ["orange", null, "orange", true, true], note: "Orange: the Instinct's Speed goes with it and returns" },
+    { id: "A-26b", lv: 17, b: { pearl: 2 }, act: async (a) => {
+        const me = () => game.actors.get(a.id);
+        const r = await overArmour(a, async () => [derived(a).instincts.primary, derived(a).iv.whiteUses,
+            me().items.some((i) => i.slug === "cleansing-tide")]);
+        return [r.before, r.during, r.after];
+    }, want: [["white", 2, true], [null, 2, false], ["white", 2, true]],
+    note: "White: the Instinct and Pearl's action go dark; the uses a day do not move, so nothing looks spent" },
+    { id: "A-26b", lv: 17, b: { diamond: 2 }, act: async (a, t, ctx) => {
+        const me = () => game.actors.get(a.id);
+        const plateOf = () => me().itemTypes.armor.find((x) => x.slug === "living-plate");
+        const block = (await game.packs.get("isaacs-hb-pf2e.assimilator-effects").getDocuments())
+            .find((d) => d.slug === "effect-carapace-block").toObject();
+        const cost = async () => {
+            await plateOf().update({ "system.hp.value": plateOf().hitPoints.max });
+            await me().createEmbeddedDocuments("Item", [foundry.utils.deepClone(block)]);
+            const hp = plateOf().hitPoints.value;
+            const lost = await hitSelf(me(), t, ctx, "20[bludgeoning]");
+            for (const e of me().itemTypes.effect.filter((x) => x.slug === "effect-carapace-block")) await e.delete();
+            return [hp - plateOf().hitPoints.value, lost];
+        };
+        const r = await overArmour(a, cost);
+        return [r.before[0] > 0, r.during[0], r.during[1], r.after[0] === r.before[0]];
+    }, want: [true, 0, 20, true], note: "Carapace Block: the plate takes its Hardness; suppressed, it takes nothing and all 20 land; back on, it blocks again" },
+    // Guide §4.7: Symbiotic Reflex asks which, and offers only what can happen.
+    { id: "A-54b", lv: 17, b: { ruby: 2 }, act: async (a, t, ctx) => {
+        const me = () => game.actors.get(a.id);
+        const target = canvas.scene.tokens.get(ctx.targetTokenId).object;
+        const offered = async (pick) => {
+            untarget(); target.setTarget(true, { user: game.user, releaseOthers: true });
+            const since = game.messages.size;
+            game.pf2e.rollItemMacro(me().items.find((i) => i.slug === "symbiotic-reflex").uuid);
+            await until(() => document.querySelector(".application button[data-action='strike'], .application button[data-action='resist']"), 5000);
+            const labels = [...document.querySelectorAll(".application button[data-action='strike'], .application button[data-action='resist']")]
+                .map((b) => b.dataset.action).sort();
+            if (pick) await answerDialog(pick);
+            else [...foundry.applications.instances.values()].filter((x) => x.options?.window?.title === "Symbiotic Reflex").forEach((x) => x.close());
+            await wait(1200);
+            const attack = game.messages.contents.slice(since).find((m) => m.flags?.pf2e?.context?.type === "attack-roll");
+            return [labels, attack ? attack.flags.pf2e.context.target?.token?.endsWith(ctx.targetTokenId) ?? false : null];
+        };
+        await place(ctx, ctx.targetTokenId, 1);
+        const near = await offered("Carapace Strike");
+        await place(ctx, ctx.targetTokenId, 4);
+        const far = await offered(null);
+        await place(ctx, ctx.targetTokenId, 1);
+        const dark = (await overArmour(a, () => offered(null))).during;
+        untarget();
+        return [near, far[0], dark[0]];
+    }, want: [[["resist", "strike"], true], ["resist"], ["strike"]],
+    note: "adjacent: both offered, and (b) Strikes the target; 20 feet off: only (a); suppressed: only (b)" },
+    { id: "A-54a", lv: 17, b: { ruby: 2 }, act: async (a, t, ctx) => {
+        const me = () => game.actors.get(a.id);
+        const target = canvas.scene.tokens.get(ctx.targetTokenId).object;
+        for (const e of me().itemTypes.effect.filter((x) => x.slug === "effect-symbiotic-reflex")) await e.delete();
+        untarget(); target.setTarget(true, { user: game.user, releaseOthers: true });
+        await place(ctx, ctx.targetTokenId, 1);
+        game.pf2e.rollItemMacro(me().items.find((i) => i.slug === "symbiotic-reflex").uuid);
+        await answerDialog("Resist 4");
+        untarget();
+        const armed = me().itemTypes.effect.some((x) => x.slug === "effect-symbiotic-reflex");
+        const lost = await hitSelf(me(), t, ctx, "10[slashing]");
+        return [armed, lost];
+    }, want: [true, 6], note: "(a) at highest Depth 2 arms resistance 4, and the next 10 slashing from the creature takes 6" },
+    // Guide §4.8: "immune … to critical specialization effects of the knife and pick groups." A real pf2e critical from
+    // a character holding a dagger and a light pick, with critical specialization for everything; the control is the
+    // same blow at 14th, before Alien Physiology.
+    ...[["dagger", "knife"], ["light-pick", "pick"]].flatMap(([slug, group]) => [17, 14].map((lv) => ({
+        id: "A-60", lv, b: { ruby: 1 }, act: async (a, t, ctx) => {
+            const me = () => game.actors.get(a.id);
+            const doc = (await game.packs.get("pf2e.equipment-srd").getDocuments({ type: "weapon" }))
+                .find((d) => d.system.slug === slug);
+            const foe = await Actor.create({ name: "ZZ Rig — Critical", type: "character",
+                system: { details: { level: { value: 17 } } } });
+            try {
+                const [weapon] = await foe.createEmbeddedDocuments("Item", [doc.toObject()]);
+                await weapon.update({ "system.equipped.carryType": "held", "system.equipped.handsHeld": 1 });
+                await foe.createEmbeddedDocuments("Item", [{ name: "ZZ Critical Specialization", type: "effect",
+                    system: { rules: [{ key: "CriticalSpecialization" }] } }]);
+                await wait(400);
+                const strike = foe.system.actions.find((s) => s.item.id === weapon.id);
+                await strike.critical({ skipDialog: true });
+                await wait(700);
+                const roll = game.messages.contents.at(-1).rolls[0];
+                const parts = roll.options.damage.damage;
+                const spec = [...(parts.dice ?? []), ...(parts.modifiers ?? [])].some((p) => p.slug === "critical-specialization");
+                for (const c of me().itemTypes.condition.filter((x) => x.slug === "persistent-damage")) await c.delete();
+                await me().update({ "system.attributes.hp.value": me().hitPoints.max, "system.attributes.hp.temp": 0 });
+                const before = me().hitPoints.value;
+                await me().applyDamage({ damage: roll, item: weapon, outcome: "criticalSuccess",
+                    token: canvas.scene.tokens.get(ctx.tokenId) });
+                await wait(1200);
+                const bleed = me().itemTypes.condition.some((c) => c.slug === "persistent-damage"
+                    && c.system.persistent?.damageType === "bleed");
+                const lost = before - me().hitPoints.value;
+                const pickBonus = (parts.modifiers ?? []).find((p) => p.slug === "critical-specialization")?.modifier ?? 0;
+                for (const c of me().itemTypes.condition.filter((x) => x.slug === "persistent-damage")) await c.delete();
+                return group === "knife" ? [spec, bleed] : [spec, pickBonus > 0, lost === roll.total - (lv >= 15 ? pickBonus : 0)];
+            } finally {
+                await foe.delete();
+            }
+        },
+        want: group === "knife" ? [true, lv < 15] : [true, true, true],
+        note: `${group}: ${lv >= 15 ? "Alien Physiology refuses its critical specialization" : "control, 14th: it lands"}`,
+    }))),
+    // Guide §4.8: immune to polymorph "against your will" — a willing one is let in by the toggle.
+    { id: "A-58", lv: 17, b: { ruby: 1 }, act: async (a, t) => {
+        const me = () => game.actors.get(a.id);
+        const feature = me().itemTypes.feat.find((f) => f.slug === "alien-physiology");
+        // pf2e's own "polymorph" immunity type is unimplemented — its predicate is `unhandled:polymorph` — so the
+        // feature carries a custom one, read here by what it matches.
+        const immune = () => [me().attributes.immunities.some((i) => JSON.stringify(i.predicate).includes("trait:polymorph")),
+            me().attributes.immunities.some((i) => i.type === "petrified")];
+        // A real polymorph: Animal Form's effect as the spell's chat card applies it, carrying the spell's own roll
+        // options — which is where "polymorph" is, since pf2e's spell effects have no traits of their own.
+        const form = (await game.packs.get("pf2e.spell-effects").getDocuments()).find((d) => d.system.slug === "spell-effect-animal-form-ape");
+        const lands = async () => {
+            const source = form.toObject();
+            source.system.context = { origin: { actor: t.uuid, token: null, item: null, spellcasting: null,
+                rollOptions: ["origin:item:type:spell", "origin:item:trait:polymorph", "origin:item:trait:concentrate"] },
+                target: null, roll: null };
+            const [made] = await me().createEmbeddedDocuments("Item", [source]);
+            const there = !!made && me().items.has(made.id);
+            if (there) await made.delete();
+            return there;
+        };
+        const unwilling = [...immune(), await lands()];
+        await me().toggleRollOption("all", "assimilator:accept-transformation", feature.id, true);
+        await wait(500);
+        const willing = [...immune(), await lands()];
+        await me().toggleRollOption("all", "assimilator:accept-transformation", feature.id, false);
+        await wait(500);
+        return [unwilling, willing, immune()];
+    }, want: [[true, true, false], [false, true, true], [true, true]],
+    note: "unwilling: immune and refused; the toggle on: petrified still immune, the polymorph lands; off again: immune" },
+    // Guide §4.3: "While broken, you lose Living Plate's rune benefits" — the property runes too.
+    { id: "A-33", lv: 17, b: { ruby: 1 }, act: async (a) => {
+        const me = () => game.actors.get(a.id);
+        const plateOf = () => me().itemTypes.armor.find((x) => x.slug === "living-plate");
+        const slick = () => me().getRollOptions().includes("armor:rune:property:slick");
+        await plateOf().update({ "system.runes": { potency: 2, resilient: 0, property: ["slick"] },
+            "system.hp.value": plateOf().hitPoints.max });
+        await wait(800);
+        const whole = slick();
+        await plateOf().update({ "system.hp.value": plateOf().hitPoints.brokenThreshold - 1 });
+        await until(() => plateOf().isBroken && !slick(), 6000);
+        const broken = [slick(), [...plateOf()._source.system.runes.property]];
+        // A rune etched while it was broken stays, beside the one set aside.
+        await plateOf().update({ "system.runes.property": ["shadow"] });
+        await plateOf().update({ "system.hp.value": plateOf().hitPoints.max });
+        await until(() => !plateOf().isBroken && slick(), 6000);
+        const mended = [slick(), [...plateOf()._source.system.runes.property].sort()];
+        await plateOf().update({ "system.runes": { potency: 0, resilient: 0, property: [] } });
+        return [whole, ...broken, ...mended];
+    }, want: [true, false, [], true, ["shadow", "slick"]],
+    note: "slick's option is on whole, off broken with the list emptied, and back mended beside a rune added meanwhile" },
+    { id: "A-26a", lv: 17, b: { ruby: 1 }, act: async (a) => {
+        const said = () => game.messages.contents.slice(-8).map((m) => m.flags?.["isaacs-hb-pf2e"]?.assimilatorSuppressed)
+            .filter((x) => x !== undefined);
+        const r = await overArmour(a, async () => said().at(-1) ?? null);
+        return [r.during, r.after];
+    }, want: [true, false], note: "wearing it is allowed and says the symbiont does not share; taking it off says it wakes" },
 
     // Red, the numbers not yet read.
     { id: "RU-1b", lv: 17, b: { ruby: 1 }, token: true, get: (a, ctx) => ctx.token.light.dim, want: 10 },
@@ -296,6 +514,11 @@ const INSTINCTS = [
     }, want: ["fire", "cold", "void", "vitality"] },
 
     // Red, now one modifier per Substrate, gated as that Substrate's damage is.
+    // Guide §4.5: the Instinct clause applies to "every Mutation you have, including Mutations of other colours".
+    { id: "A-44", lv: 17, b: { ruby: 3, sapphire: 2 }, act: async (a) => [derived(a).instincts.primary, redOn(await strikeRoll(a))],
+        want: ["red", 5], note: "Red Instinct; Blue's Sapphire 2 takes Red's +2 beside Ruby's +3" },
+    { id: "A-44", lv: 17, b: { ruby: 3 }, act: async (a) => [derived(a).instincts.primary, redOn(await strikeRoll(a))],
+        want: ["red", 3], note: "control: Ruby alone, +3" },
     { id: "I-1a", lv: 17, b: { ruby: 3, iron: 2, garnet: 2 }, act: async (a) => redOn(await strikeRoll(a)),
         want: 5, note: "Ruby 3 + Iron 2; Garnet's die does not fire on a creature that is not dying, so it adds nothing" },
     { id: "I-1a", lv: 17, b: { ruby: 3, silver: 2 }, targetTraits: ["undead", "fiend"], act: async (a) => redOn(await strikeRoll(a)),
@@ -1596,7 +1819,15 @@ export const AssimilatorRig = {
         const ctx = await AssimilatorRig.setup();
         try {
             for (const check of [...CHECKS, ...SCENARIOS, ...NOTES, ...INSTINCTS, ...BOND_CHECKS, ...FEAT_CHECKS].filter((c) => !only || only.test(c.id))) {
-                results.push(await AssimilatorRig.one(check, ctx));
+                // A check that throws outside its own reading — in the reset before it — is that check's failure,
+                // not the run's: recorded against its id, and the run goes on (#101).
+                try {
+                    results.push(await AssimilatorRig.one(check, ctx));
+                } catch (error) {
+                    console.error(`Isaac's Homebrew | rig: ${check.id} threw`, error);
+                    results.push({ id: check.id, note: check.note ?? "", pass: false, actual: `threw: ${error.message}`,
+                        want: typeof check.want === "function" ? check.want.toString().slice(0, 60) : JSON.stringify(check.want) });
+                }
             }
         } finally {
             await AssimilatorRig.teardown(ctx);
