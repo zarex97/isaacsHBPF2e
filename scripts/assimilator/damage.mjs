@@ -122,6 +122,10 @@ export const AssimilatorDamage = {
                 say(item.actor, `<strong>Knitting Flesh</strong>: ${item.actor.name} stabilizes on their own.`);
             }
         });
+        // Manganese Depth 4: "A creature that ends its turn adjacent to you takes 1d6 persistent acid" (#91).
+        Hooks.on("pf2e.endTurn", (combatant) => {
+            if (isWriter()) AssimilatorDamage.rot(combatant).catch((e) => console.error("Isaac's Homebrew | Manganese", e));
+        });
         // Copper Depth 1: the extra point lands at the start of the target's next turn.
         Hooks.on("pf2e.startTurn", (combatant) => {
             if (isWriter()) AssimilatorDamage.conduct(combatant).catch((e) => console.error("Isaac's Homebrew | Copper", e));
@@ -273,6 +277,12 @@ export const AssimilatorDamage = {
         const energy = Object.keys(types).filter((t) => ENERGY.has(t));
         const originActor = game.actors.get(origin.id) ?? origin;
 
+        // Jet Depth 3: "A creature you kill cannot be returned to life by magic below 6th rank" — pf2e has no resurrection to
+        // block, so the corpse carries the mark where the table will see it (#91).
+        if (after === 0 && depthOf(originActor, "jet") >= 3 && !target.itemTypes.effect.some((e) => e.slug === "effect-carrion-marked")) {
+            const doc = await effect("effect-carrion-marked");
+            if (doc) await target.createEmbeddedDocuments("Item", [doc.toObject()]);
+        }
         // Jet Depth 2: "Gain 2 temporary Hit Points when you reduce a creature to 0 Hit Points."
         if (after === 0 && depthOf(originActor, "jet") >= 2 && (originActor.attributes.hp.temp ?? 0) < 2) {
             await originActor.update({ "system.attributes.hp.temp": 2 });
@@ -450,6 +460,24 @@ export const AssimilatorDamage = {
         if (state.charges < 3) return say(actor, "<strong>Discharge</strong> needs 3 charges; the Reservoir has "
             + `${state.charges}.`);
         await AssimilatorDamage.setReservoir(actor, state.charges - 3, state.type);
+    },
+
+    /** Manganese Depth 4: whoever ends a turn beside a Manganese 4 Assimilator — any creature, allies too — rots. */
+    async rot(combatant) {
+        const token = combatant?.token?.object;
+        const actor = combatant?.actor;
+        if (!token || !actor) return 0;
+        const { inflictPersistent } = await import("../riders/apply.mjs");
+        let hit = 0;
+        for (const other of canvas.tokens.placeables) {
+            const source = other.actor;
+            if (!source || source.id === actor.id || source.class?.slug !== "assimilator" || depthOf(source, "manganese") < 4) continue;
+            if (canvas.grid.measurePath([token.center, other.center]).distance > 5) continue;
+            await inflictPersistent(actor, { formula: "1d6", damageType: "acid", dc: 15 });
+            await say(source, `<strong>Rot Touch</strong>: ${actor.name} ends its turn beside ${source.name} — 1d6 persistent acid.`);
+            hit++;
+        }
+        return hit;
     },
 
     /** Copper Depth 3-4: the damage arcs to a creature adjacent to the target. */

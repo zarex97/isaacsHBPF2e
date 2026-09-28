@@ -1192,6 +1192,17 @@ async function applyCounteract(rider, context) {
         return;
     }
 
+    // "Counteract each" (Lead Depth 4's Null Field, #91): every caught effect is rolled against at once rather than
+    // offered one button at a time.
+    if (rider.apply.auto === true) {
+        const statistic = rider.apply.statistic ?? classSlugOf(context.originActor) ?? "saint";
+        for (const uuid of buttons.map((b) => /data-effect="([^"]+)"/.exec(b)?.[1]).filter(Boolean)) {
+            await resolveCounteract({ originUuid: context.originActor?.uuid ?? null, effectUuid: uuid,
+                itemUuid: (context.item ?? context.riderItem)?.uuid ?? null, statistic, suppress: rider.apply.suppress ?? false });
+        }
+        return;
+    }
+
     await ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor: context.originActor }),
         whisper: [...ownersAndGMs(context.originActor)],
@@ -1206,7 +1217,7 @@ async function applyCounteract(rider, context) {
                     // Falls back to the origin's own class, so a Soulbound's Seal the Art counteracts
                     // on the Reiatsu DC without the content having to name it.
                     statistic: rider.apply.statistic ?? classSlugOf(context.originActor) ?? "saint",
-                    suppress: rider.apply.suppress === true,
+                    suppress: rider.apply.suppress ?? false,
                 },
             },
         },
@@ -1277,8 +1288,9 @@ export async function resolveCounteract(payload) {
     //
     // A suppressed effect is disabled rather than removed, so it comes back with its own duration and
     // its own flags intact, and a marker says it may not be re-entered yet.
-    const suppressible = payload.suppress
-        && (effect.system?.traits?.value ?? []).some((t) => SUPPRESSIBLE_TRAITS.has(t));
+    // `suppress: "any"` parks whatever it beats — Lead Depth 4's "suppress magical effects … for 1 round" (#91).
+    const suppressible = payload.suppress === "any" || (payload.suppress
+        && (effect.system?.traits?.value ?? []).some((t) => SUPPRESSIBLE_TRAITS.has(t)));
 
     /**
      * `disabled: true` was a field a pf2e **Effect item does not have**, so this suppressed nothing at

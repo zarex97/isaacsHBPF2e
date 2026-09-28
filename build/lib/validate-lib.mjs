@@ -1374,8 +1374,12 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0, inherit
             if (rider.self !== true) {
                 errors.push(`${at} a counteract rider must be \`self\`: it offers one choice for the whole cast`);
             }
-            if (apply.suppress !== undefined && typeof apply.suppress !== "boolean") {
-                errors.push(`${at} counteract suppress must be true or false — got "${apply.suppress}"`);
+            // `"any"` parks whatever the counteract beats, not only the release states true covers (Lead's Null Field, #91).
+            if (apply.suppress !== undefined && typeof apply.suppress !== "boolean" && apply.suppress !== "any") {
+                errors.push(`${at} counteract suppress must be true, false or "any" — got "${apply.suppress}"`);
+            }
+            if (apply.auto !== undefined && typeof apply.auto !== "boolean") {
+                errors.push(`${at} counteract auto must be true or false — got "${apply.auto}"`);
             }
             break;
         case "prompt":

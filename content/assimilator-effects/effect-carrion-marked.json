@@ -1,0 +1,41 @@
+{
+    "img": "icons/magic/death/skull-horned-worn-fire-blue.webp",
+    "name": "Effect: Carrion-Marked",
+    "system": {
+        "description": {
+            "value": "<p><strong>Jet, Depth 3.</strong> Killed by an Assimilator's Carrion Bloom: this creature <strong>cannot be returned to life by magic below 6th rank</strong>.</p>"
+        },
+        "duration": {
+            "expiry": null,
+            "sustained": false,
+            "unit": "unlimited",
+            "value": -1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Assimilator"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "otherTags": [
+                "assimilator-effect"
+            ],
+            "rarity": "common",
+            "value": [
+                "assimilator"
+            ]
+        }
+    },
+    "type": "effect"
+}
