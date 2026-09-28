@@ -8,9 +8,19 @@
  * at all should mean "whatever class the origin actually has" rather than silently meaning the Saint.
  */
 
-/** The slug of the class this actor has, or null for anyone who is neither. */
+/**
+ * The actor another borrows its class from — The Thing That Wears You, which acts with its Assimilator's DC (#96).
+ * The flag names the lender; a borrowed class is never borrowed on again.
+ */
+function lenderOf(actor) {
+    const uuid = actor?.flags?.["isaacs-hb-pf2e"]?.classFrom;
+    const from = uuid && typeof fromUuidSync === "function" ? fromUuidSync(uuid) : null;
+    return from && from !== actor && !from.flags?.["isaacs-hb-pf2e"]?.classFrom ? from : null;
+}
+
+/** The slug of the class this actor has — or borrows — or null for anyone who is neither. */
 export function classSlugOf(actor) {
-    return actor?.class?.system?.slug ?? null;
+    return actor?.class?.system?.slug ?? lenderOf(actor)?.class?.system?.slug ?? null;
 }
 
 /**
@@ -43,5 +53,8 @@ export function resolveDC(dc, context) {
 export function classStatisticOf(actor, slug = null) {
     const wanted = slug ?? classSlugOf(actor);
     if (!wanted) return null;
-    return actor?.getStatistic?.(wanted) ?? actor?.classDCs?.[wanted] ?? null;
+    const own = actor?.getStatistic?.(wanted) ?? actor?.classDCs?.[wanted] ?? null;
+    if (own) return own;
+    const lender = lenderOf(actor);
+    return lender ? (lender.getStatistic?.(wanted) ?? lender.classDCs?.[wanted] ?? null) : null;
 }

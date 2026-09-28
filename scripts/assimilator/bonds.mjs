@@ -5,6 +5,7 @@ import { Relay } from "../riders/relay.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 import { AssimilatorDamage, byType, depthOf } from "./damage.mjs";
 import { bondOption, Engine } from "./engine.mjs";
+import { classSlugOf } from "../lib/class-dc.mjs";
 
 /**
  * The Bonds that happen on an event (lexicon §14.1).
@@ -122,11 +123,12 @@ export const Bonds = {
         if (!storm) return null;
         await storm.update({ [`flags.${MODULE_ID}.mindstormSpent`]: true,
             "system.rules": storm._source.system.rules.filter((r) => r.key !== "Note") });
+        const dc = storm.flags?.[MODULE_ID]?.[KEY]?.mindstormDc ?? 5;
         const roll = await new Roll("1d20").evaluate();
-        const passed = roll.total >= 5;
+        const passed = roll.total >= dc;
         await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: caster }), rolls: [roll],
             flags: { [MODULE_ID]: { mindstormCheck: { spell: message.item.uuid, total: roll.total, passed } } },
-            content: `<p><strong>Mindstorm</strong>: ${caster.name} casts ${message.item.name} — DC 5 flat check, `
+            content: `<p><strong>Mindstorm</strong>: ${caster.name} casts ${message.item.name} — DC ${dc} flat check, `
                 + `<strong>${roll.total}</strong>. ${passed ? "The spell goes off." : "The spell is <strong>disrupted</strong>."}</p>` });
         return passed;
     },
@@ -251,7 +253,7 @@ export const Bonds = {
         }
 
         // What the Assimilator's damage did to someone else.
-        if (origin && origin.id !== target.id && origin.class?.slug === "assimilator") {
+        if (origin && origin.id !== target.id && classSlugOf(origin) === "assimilator") {
             await Bonds.stampPersistent(target, origin);
             // Blackfire: "When it kills a creature, you regain Hit Points equal to your level."
             if (types.fire && bondActive(origin, "blackfire") && before > 0 && after === 0) {
@@ -273,6 +275,10 @@ export const Bonds = {
                 if (used !== key) {
                     await origin.update({ [`flags.${MODULE_ID}.${KEY}.used.coldReading.${target.id}`]: key });
                     await AssimilatorDamage.mark(target, "effect-cold-reading");
+                    // Greater Bond (#96): slowed 1 by half again, rounded up — slowed 2.
+                    const value = Math.ceil(1 * greater(origin, "cold-reading"));
+                    const slowed = target.itemTypes.condition.find((c) => c.slug === "slowed");
+                    if (value > 1 && slowed && (slowed.value ?? 1) < value) await slowed.update({ "system.value.value": value });
                 }
             }
         }
@@ -363,7 +369,7 @@ export const Bonds = {
     /* ---------------------------------------------------------------------------------------- */
 
     async startTurn(actor) {
-        if (!actor || actor.class?.slug !== "assimilator") return;
+        if (!actor || classSlugOf(actor) !== "assimilator") return;
         // Solar Core: "You take 1d6 fire at the start of each of your turns."
         if (bondActive(actor, "solar-core") && actor.itemTypes.effect.some((e) => e.slug === "effect-solar-core")) {
             const roll = await new (DamageRoll())("1d6[fire]").evaluate();
@@ -393,8 +399,10 @@ export const Bonds = {
         if (actor && context?.type === "saving-throw" && ["failure", "criticalFailure"].includes(context.outcome)) {
             const origin = context.origin?.actor ? fromUuidSync(context.origin.actor) : null;
             if (origin && origin.id !== actor.id && bondActive(origin, "mindstorm")) {
-                await AssimilatorDamage.mark(actor, "effect-mindstorm");
-                await say(origin, `<strong>Mindstorm</strong>: ${actor.name} is stupefied 1, and its next spell needs a DC 5 flat check.`);
+                // Greater Bond (#96): the flat check's DC grows by half again, rounded up — 5 becomes 8.
+                const dc = Math.ceil(5 * greater(origin, "mindstorm"));
+                await AssimilatorDamage.mark(actor, "effect-mindstorm", { mindstormDc: dc });
+                await say(origin, `<strong>Mindstorm</strong>: ${actor.name} is stupefied 1, and its next spell needs a DC ${dc} flat check.`);
             }
         }
         // Cleansing Light: the Flare also ends one condition of value 1 on every ally inside it.
@@ -480,7 +488,7 @@ export const Bonds = {
             .map((c) => ({ bearer: t.actor, from: persistentOrigin(c) }))) ?? [];
         for (const token of canvas.tokens?.placeables ?? []) {
             const a = token.actor;
-            if (!a || a.class?.slug !== "assimilator") continue;
+            if (!a || classSlugOf(a) !== "assimilator") continue;
             const burning = bondActive(a, "living-flame")
                 && fires.some((f) => f.bearer.id === a.id || f.from?.id === a.id);
             const has = !!a.flags?.pf2e?.rollOptions?.all?.[OPTION];
