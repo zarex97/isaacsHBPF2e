@@ -3362,6 +3362,8 @@ const SYSTEM_SLUGS = new Set([
     // pf2e's own: the damage partial Alien Physiology refuses, and the armour and polymorph effect the rig
     // puts on to drive the suppression and the willing transformation.
     "critical-specialization", "leather-armor", "spell-effect-animal-form-ape",
+    // Garnet Depth 4's modifier, read off a damage roll by the rig.
+    "substrate-garnet-sanguine",
 ]);
 
 const unresolvedInScripts = [];

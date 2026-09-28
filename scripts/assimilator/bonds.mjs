@@ -120,6 +120,10 @@ export const Bonds = {
         DamageBus.after("the Bonds that answer damage", PRIORITY.riders + 5,
             (actor, params, before) => Bonds.answer(actor, params, before));
 
+        // A stamped bleed ending takes its `bleeding-from` option with it.
+        Hooks.on("deleteItem", (item) => {
+            if (item.slug === "persistent-damage" && item.flags?.[MODULE_ID]?.[STAMP] && isWriter()) Bonds.syncBleedingFrom(item.actor);
+        });
         Hooks.on("pf2e.startTurn", (combatant) => {
             if (isWriter()) Bonds.startTurn(combatant?.actor).catch((e) => console.error("Isaac's Homebrew | Bonds", e));
         });
@@ -252,11 +256,34 @@ export const Bonds = {
         if (lost > 0) await Bonds.livingArmour(target, types);
     },
 
-    /** Mark the persistent damage an Assimilator just left on a creature as theirs. */
+    /**
+     * Mark the persistent damage an Assimilator just left on a creature as theirs.
+     *
+     * A bleed also puts `self:assimilator:bleeding-from:<id>` on the creature for as long as it lasts — `self:`, so
+     * it reaches a roll *against* it as `target:…` — which is how Garnet Depth 4's "persistent bleed **from you**"
+     * names its attacker: `target:assimilator:bleeding-from:{actor|id}` (#85). pf2e records no one.
+     */
     async stampPersistent(target, origin) {
         const unmarked = target.itemTypes.condition.filter((c) => c.slug === "persistent-damage" && !c.flags?.[MODULE_ID]?.[STAMP]);
         if (!unmarked.length) return;
         await target.updateEmbeddedDocuments("Item", unmarked.map((c) => ({ _id: c.id, [`flags.${MODULE_ID}.${STAMP}`]: origin.uuid })));
+        if (unmarked.some((c) => c.system?.persistent?.damageType === "bleed")) await Bonds.syncBleedingFrom(target);
+    },
+
+    /** The `bleeding-from` options a creature carries, one per Assimilator whose stamped bleed is still on it. */
+    async syncBleedingFrom(actor) {
+        if (!actor?.update) return;
+        const prefix = "self:assimilator:bleeding-from:";
+        const from = new Set(actor.itemTypes.condition
+            .filter((c) => c.slug === "persistent-damage" && c.system?.persistent?.damageType === "bleed")
+            .map((c) => persistentOrigin(c)?.id).filter(Boolean));
+        const toggles = actor.flags?.pf2e?.rollOptions?.all ?? {};
+        const update = {};
+        for (const id of from) if (!toggles[prefix + id]) update[`flags.pf2e.rollOptions.all.${prefix}${id}`] = true;
+        for (const key of Object.keys(toggles)) {
+            if (key.startsWith(prefix) && !from.has(key.slice(prefix.length))) update[`flags.pf2e.rollOptions.all.-=${key}`] = null;
+        }
+        if (Object.keys(update).length) await actor.update(update);
     },
 
     async lash(origin, target, params, type) {
