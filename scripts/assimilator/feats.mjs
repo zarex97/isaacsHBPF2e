@@ -4,6 +4,7 @@ import { Relay } from "../riders/relay.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 import { AssimilatorDamage, byType, depthOf } from "./damage.mjs";
 import { Engine } from "./engine.mjs";
+import { afflictionsOf } from "./instincts.mjs";
 
 /**
  * The Assimilator feats that happen on an event or ask the player something (guide §8).
@@ -17,6 +18,17 @@ const KEY = "assimilator";
 const PHYSICAL = new Set(["bludgeoning", "piercing", "slashing"]);
 const STILL = "assimilator:still";
 const MOVED = "assimilator:moved-this-turn";
+
+/** Twin Maw's first bite, per creature bitten: who bit, what it carried by type, and when. */
+const twinBites = new Map();
+
+/** The resistance a creature brings to one damage type — the highest that applies, as pf2e applies one. */
+function resistanceTo(actor, type) {
+    const physical = PHYSICAL.has(type);
+    const applies = (actor.attributes?.resistances ?? [])
+        .filter((r) => r.type === type || r.type === "all-damage" || (physical && r.type === "physical"));
+    return Math.max(0, ...applies.map((r) => Number(r.value) || 0));
+}
 
 function isWriter() {
     return game.users?.activeGM ? game.users.activeGM.isSelf : game.user.isGM;
@@ -105,6 +117,10 @@ export const Feats = {
         Hooks.on("pf2e.endTurn", (combatant) => {
             if (isWriter()) Feats.endTurn(combatant?.actor).catch((e) => console.error("Isaac's Homebrew | Living Fortress", e));
         });
+        // Twin Maw (#96): "if both hit, combine their damage before applying resistance".
+        DamageBus.before("Twin Maw's combined bite", PRIORITY.carapaceBlock + 3, (actor, params) => Feats.twinMaw(actor, params));
+        // Wall of Me (#96): its owners place it, in the Assimilator's space or adjacent to it.
+        Hooks.on("preUpdateToken", (token, change) => Feats.wallMove(token, change));
         // Wall of Me: when its minute ends, the wall goes.
         Hooks.on("deleteItem", (item) => {
             // Devour's temporary Hit Points last 1 minute.
@@ -305,6 +321,65 @@ export const Feats = {
                 [{ key: "Resistance", type: choice, value }], { expiry: "turn-start", sustained: false, unit: "minutes", value: 10 }) });
     },
 
+    /**
+     * Twin Maw — two Strikes, and *"if both hit, combine their damage before applying resistance"* (#96). The strikes
+     * rider tags them `twin-maw:strike:1` and `:2`; the first bite is remembered, and the second puts back what a
+     * resistance took twice, so it comes off the combined damage once.
+     */
+    twinMaw(actor, params) {
+        const damage = params?.damage;
+        if (!damage || typeof damage === "number" || params.skipIWR) return undefined;
+        const bite = [...(params.rollOptions ?? [])].map((o) => /^twin-maw:strike:(\d)$/.exec(o)?.[1]).find(Boolean);
+        if (!bite) return undefined;
+        const origin = params.item?.actor ?? null;
+        const types = byType(damage);
+        if (bite === "1") {
+            twinBites.set(actor.uuid, { origin: origin?.uuid ?? null, types, at: Date.now() });
+            return undefined;
+        }
+        const first = twinBites.get(actor.uuid);
+        twinBites.delete(actor.uuid);
+        if (!first || first.origin !== (origin?.uuid ?? null) || Date.now() - first.at > 60_000) return undefined;
+        let extra = 0;
+        for (const [type, second] of Object.entries(types)) {
+            const one = first.types[type] ?? 0;
+            const r = resistanceTo(actor, type);
+            if (!one || !r) continue;
+            extra += Math.max(0, one + second - r) - Math.max(0, one - r) - Math.max(0, second - r);
+        }
+        if (extra <= 0) return undefined;
+        const shadowed = Object.prototype.hasOwnProperty.call(actor, "calculateHealthDelta");
+        const original = actor.calculateHealthDelta;
+        actor.calculateHealthDelta = function (args) {
+            return original.call(this, { ...args, delta: args.delta + extra });
+        };
+        return () => {
+            if (shadowed) actor.calculateHealthDelta = original;
+            else delete actor.calculateHealthDelta;
+            if (origin) say(origin, `<strong>Twin Maw</strong>: both bites combined before resistance — ${extra} more to ${actor.name}.`);
+        };
+    },
+
+    /** Wall of Me's owners may move or turn it, but only within the Assimilator's space or adjacent to it. */
+    wallMove(token, change) {
+        if (!["x", "y", "width", "height"].some((k) => k in change)) return undefined;
+        const of = token.actor?.flags?.[MODULE_ID]?.[KEY]?.wallOf;
+        const at = of ? tokenOf(fromUuidSync(of)) : null;
+        if (!at) return undefined;
+        const g = canvas.grid.size;
+        const x = (change.x ?? token.x) / g;
+        const y = (change.y ?? token.y) / g;
+        const w = change.width ?? token.width;
+        const h = change.height ?? token.height;
+        const gapX = Math.max(0, at.x / g - (x + w), x - (at.x / g + at.width));
+        const gapY = Math.max(0, at.y / g - (y + h), y - (at.y / g + at.height));
+        if (gapX > 0.01 || gapY > 0.01) {
+            ui.notifications.warn("Wall of Me rises in your space or adjacent to it.");
+            return false;
+        }
+        return undefined;
+    },
+
     /** Wall of Me: a 10-foot line of Carapace — Hardness your level, 5× level Hit Points, 1 minute; the plate −2 Hardness. */
     async wallOfMe(actor) {
         await Relay.request({ action: "assimilatorFeat", kind: "wall", origin: actor.uuid });
@@ -314,14 +389,18 @@ export const Feats = {
         const at = tokenOf(origin);
         if (!at) return;
         const size = canvas.grid.size;
-        const [wall] = await Actor.create([{ name: `Wall of Me (${origin.name})`, type: "hazard", img: "icons/environment/settlement/city-wall.webp",
+        // Its owners place it (#96): the Assimilator's players own the wall.
+        const ownership = { default: 0 };
+        for (const u of game.users) if (!u.isGM && origin.testUserPermission(u, "OWNER")) ownership[u.id] = 3;
+        const [wall] = await Actor.create([{ name: `Wall of Me (${origin.name})`, type: "hazard", img: "icons/environment/settlement/city-wall.webp", ownership,
             system: { attributes: { hp: { value: 5 * origin.level, max: 5 * origin.level }, hardness: origin.level } },
             flags: { [MODULE_ID]: { [KEY]: { wallOf: origin.uuid } } } }]);
         const doc = (await wall.getTokenDocument({ x: at.x + size, y: at.y, width: 2, height: 1 })).toObject();
         const [token] = await canvas.scene.createEmbeddedDocuments("Token", [doc]);
         await AssimilatorDamage.mark(origin, "effect-wall-of-me", { wall: { actor: wall.id, token: token.id } });
         await origin.update({ "flags.pf2e.rollOptions.all.assimilator:wall-standing": true });
-        await say(origin, `<strong>Wall of Me</strong>: Hardness ${origin.level}, ${5 * origin.level} Hit Points, for 1 minute.`);
+        await say(origin, `<strong>Wall of Me</strong>: Hardness ${origin.level}, ${5 * origin.level} Hit Points, for 1 minute. `
+            + "Drag or turn it where you want it, in your space or adjacent to it.");
     },
 
     async wallDown(effect) {
@@ -334,17 +413,19 @@ export const Feats = {
 
     /** Digest: reduce the stage of one affliction affecting you by 2. */
     async digest(actor) {
-        // Production pf2e has no affliction items: an affliction is an effect (poison, disease, curse) whose counter
-        // badge is its stage.
-        const AFFLICTION = ["poison", "disease", "curse"];
-        const afflictions = actor.itemTypes.effect.filter((e) => e.system.badge?.type === "counter"
-            && (e.system.traits?.value ?? []).some((t) => AFFLICTION.includes(t)));
+        // The same reading as Cleansing Tide's (#96): pf2e's affliction items where the system has them, and a poison,
+        // disease or curse effect whose counter badge is its stage.
+        const afflictions = afflictionsOf(actor);
         const choice = await pick("Digest", "Reduce the stage of one affliction by 2.",
-            afflictions.map((a) => ({ value: a.id, label: `${a.name} (stage ${a.system.badge.value})` })));
+            afflictions.map((a) => ({ value: a.item.id, label: `${a.item.name} (stage ${a.stage})` })));
         if (!choice) return;
-        const affliction = actor.items.get(choice);
-        const stage = (affliction.system.badge.value ?? 1) - 2;
-        if (stage < 1) await affliction.delete();
+        const found = afflictions.find((a) => a.item.id === choice);
+        const affliction = found.item;
+        const stage = found.stage - 2;
+        if (affliction.type === "affliction") {
+            await affliction.decrease();
+            if (actor.items.get(affliction.id)) await affliction.decrease();
+        } else if (stage < 1) await affliction.delete();
         else await affliction.update({ "system.badge.value": stage });
         await say(actor, `<strong>Digest</strong>: ${affliction.name} ${stage < 1 ? "is gone" : `drops to stage ${stage}`}.`);
     },
@@ -457,13 +538,30 @@ export const Feats = {
         const at = tokenOf(origin);
         const strike = origin.system.actions.find((s) => s.label === "Carapace Strike");
         const damage = strike?.item?.system?.damage;
-        const [thing] = await Actor.create([{ name: `The Thing That Wears ${origin.name}`, type: "npc",
+        // Linked, so its Mutations find its token to originate from (#96).
+        const [thing] = await Actor.create([{ name: `The Thing That Wears ${origin.name}`, type: "npc", prototypeToken: { actorLink: true },
             img: "icons/creatures/abilities/mouth-teeth-long-red.webp",
             system: { details: { level: { value: origin.level } }, attributes: {
                 hp: { value: origin.hitPoints.value, max: origin.hitPoints.max }, ac: { value: origin.armorClass.value } },
             saves: { fortitude: { value: origin.saves.fortitude.mod }, reflex: { value: origin.saves.reflex.mod },
                 will: { value: origin.saves.will.mod } }, perception: { mod: origin.perception.mod } },
-            flags: { [MODULE_ID]: { [KEY]: { thingOf: origin.uuid } } } }]);
+            // "…with your Strikes, your Mutations and your Assimilator DC" (#96): it borrows the Assimilator's class
+            // for its DC, and carries the record and the options the Mutations' rules and scripts read.
+            flags: { [MODULE_ID]: { [KEY]: { ...foundry.utils.deepClone(origin.flags?.[MODULE_ID]?.[KEY] ?? {}), thingOf: origin.uuid },
+                classFrom: origin.uuid },
+            pf2e: { rollOptions: { all: { ...foundry.utils.deepClone(origin.flags?.pf2e?.rollOptions?.all ?? {}), "carapace:intact": true } } } } }]);
+        // The Mutations themselves: the engine's own effects, copied, so its sheet grants the same actions at the
+        // same Depths. The grants are its own, not the Assimilator's.
+        const own = origin.itemTypes.effect.filter((e) => {
+            const f = e.flags?.[MODULE_ID]?.[KEY];
+            return f?.substrate || f?.instinct || f?.bond || f?.aberration;
+        }).map((e) => {
+            const source = e.toObject();
+            delete source._id;
+            if (source.flags?.pf2e) { delete source.flags.pf2e.itemGrants; delete source.flags.pf2e.grantedBy; }
+            return source;
+        });
+        if (own.length) await thing.createEmbeddedDocuments("Item", own);
         await thing.createEmbeddedDocuments("Item", [{ name: "Carapace Strike", type: "melee", system: {
             bonus: { value: strike?.totalModifier ?? 0 }, traits: { value: ["unarmed"] },
             damageRolls: { a: { damage: `${damage?.dice ?? 1}${damage?.die ?? "d8"}+${origin.abilities.str.mod}`, damageType: damage?.damageType ?? "bludgeoning" } } } }]);
@@ -476,7 +574,8 @@ export const Feats = {
             await combat.setInitiative(c.id, (mine.initiative ?? 0) - 5);
         }
         await AssimilatorDamage.mark(origin, "effect-worn-no-longer", { thing: { actor: thing.id, token: token.id } });
-        await say(origin, `<strong>The Thing That Wears You</strong>: the Carapace separates. ${origin.name} is a person again.`);
+        await say(origin, `<strong>The Thing That Wears You</strong>: the Carapace separates. ${origin.name} is a person again; `
+            + `the Thing has the Strikes, the Mutations and the Assimilator DC.`);
     },
 
     async thingReturns(effect) {
@@ -490,15 +589,31 @@ export const Feats = {
         const magic = actor.items.filter((i) => i.isOfType?.("physical") && i.isMagical && (i.level ?? 0) <= actor.level);
         const choice = await pick("Eat the World", "Consume which magic item?", magic.map((i) => ({ value: i.id, label: `${i.name} (level ${i.level})` })));
         if (!choice) return;
+        const item = actor.items.get(choice);
+        // "One of its abilities" (#96): an ability its rules express is kept, working, until preparations; an item
+        // whose abilities are text only has that text carried on the effect for the table.
+        const rules = foundry.utils.deepClone(item._source.system.rules ?? []);
+        let ability = null;
+        if (rules.length) {
+            const which = await pick("Eat the World", `Keep which of the ${item.name}'s abilities?`, rules.map((r, i) => ({ value: String(i),
+                label: [r.label ?? r.key, r.selector ? [r.selector].flat().join(", ") : null,
+                    ["string", "number"].includes(typeof r.value) ? String(r.value) : null].filter(Boolean).join(" · ") })));
+            if (which === null || which === undefined) return;
+            ability = rules[Number(which)];
+        }
         const track = await pick("Eat the World", "4 temporary Mass in which track?", [{ value: "gem", label: "Gem" }, { value: "metal", label: "Metal" }]);
         if (!track) return;
-        const item = actor.items.get(choice);
         const name = item.name;
+        const text = item.system.description?.value ?? "";
         await item.delete();
-        await actor.createEmbeddedDocuments("Item", [customEffect(`Eat the World: ${name}`, "icons/magic/unholy/orb-hands-pink.webp", [],
-            null, { grants: { [track]: 4, temporary: true }, eaten: name })]);
+        const effect = customEffect(`Eat the World: ${name}`, "icons/magic/unholy/orb-hands-pink.webp", ability ? [ability] : [],
+            null, { grants: { [track]: 4, temporary: true }, eaten: name, ability: ability ? (ability.label ?? ability.key) : null });
+        effect.system.description.value = ability
+            ? `<p>Eat the World: one of the ${name}'s abilities, kept until the next daily preparations.</p>`
+            : `<p>Eat the World: one of the ${name}'s abilities, until the next daily preparations. Its abilities, for the table:</p>${text}`;
+        await actor.createEmbeddedDocuments("Item", [effect]);
         await say(actor, `<strong>Eat the World</strong>: the ${name} is gone. 4 ${track} Mass until the next daily preparations; `
-            + "one of its abilities is the Assimilator's until then.");
+            + (ability ? `its ${ability.label ?? ability.key} is the Assimilator's until then.` : "one of its abilities is the Assimilator's until then (on the effect)."));
     },
 
     /* ---------------------------------------------------------------------------------------- */

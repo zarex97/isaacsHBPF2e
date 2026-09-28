@@ -16,6 +16,7 @@ import { encounterOf } from "../lib/encounter-damage.mjs";
 import { DamageBus, PRIORITY } from "../lib/damage-bus.mjs";
 import { Relay } from "../riders/relay.mjs";
 import { wrap } from "../lib/wrap.mjs";
+import { classSlugOf } from "../lib/class-dc.mjs";
 
 const MOVED = "self:moved-10-feet-this-turn";
 const DARK = "self:in-dim-light-or-darkness";
@@ -478,7 +479,7 @@ export const Mutations = {
      */
     async offerReactive(actor, params, before) {
         const live = params?.token?.actor ?? actor;
-        if (!isWriter() || live?.class?.slug !== "assimilator") return null;
+        if (!isWriter() || classSlugOf(live) !== "assimilator") return null;
         if (!((live.hitPoints?.value ?? before) < before)) return null;
         const d = moonDepth(live);
         if (!d || !live.items.some((i) => i.slug === "reactive-evolution")) return null;
@@ -502,7 +503,7 @@ export const Mutations = {
         const context = message.flags?.pf2e?.context;
         if (context?.type !== "attack-roll" || context.outcome !== "criticalSuccess") return null;
         const actor = message.actor;
-        if (actor?.class?.slug !== "assimilator" || depth(actor, "silver") < 4) return null;
+        if (classSlugOf(actor) !== "assimilator" || depth(actor, "silver") < 4) return null;
         if (!(context.domains ?? []).includes("unarmed-attack-roll")) return null;
         const target = context.target?.actor ? fromUuidSync(context.target.actor) : null;
         if (!target || !(target.system?.traits?.value ?? []).some((t) => SUPERNATURAL.includes(t))) return null;

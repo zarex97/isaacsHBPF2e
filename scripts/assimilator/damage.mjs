@@ -2,6 +2,7 @@ import { shadowTarget } from "../riders/bypass.mjs";
 import { DamageBus, PRIORITY } from "../lib/damage-bus.mjs";
 import { encounterOf } from "../lib/encounter-damage.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
+import { classSlugOf } from "../lib/class-dc.mjs";
 
 /**
  * The Mutations that answer damage — dealt by an Assimilator, or taken by one.
@@ -360,7 +361,7 @@ export const AssimilatorDamage = {
     /** After damage lands on an Assimilator. */
     async taken(actor, params, before) {
         const live = liveActor(actor, params);
-        if (!isWriter() || !live?.class || live.class.slug !== "assimilator") return;
+        if (!isWriter() || classSlugOf(live) !== "assimilator") return;
         const after = live.hitPoints?.value ?? before;
         const types = byType(params?.damage);
         const energy = Object.keys(types).filter((t) => ENERGY.has(t));
@@ -471,7 +472,7 @@ export const AssimilatorDamage = {
         let hit = 0;
         for (const other of canvas.tokens.placeables) {
             const source = other.actor;
-            if (!source || source.id === actor.id || source.class?.slug !== "assimilator" || depthOf(source, "manganese") < 4) continue;
+            if (!source || source.id === actor.id || classSlugOf(source) !== "assimilator" || depthOf(source, "manganese") < 4) continue;
             if (canvas.grid.measurePath([token.center, other.center]).distance > 5) continue;
             await inflictPersistent(actor, { formula: "1d6", damageType: "acid", dc: 15 });
             await say(source, `<strong>Rot Touch</strong>: ${actor.name} ends its turn beside ${source.name} — 1d6 persistent acid.`);
