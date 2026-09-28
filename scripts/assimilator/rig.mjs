@@ -402,7 +402,6 @@ const NOTES = [
     ["CR-4b", { chromium: 4 }, "perception", "Chromium (Depth 4)"],
     ["JE-3b", { jet: 3 }, "damage", "Jet (Depth 3)"],
     ["PB-1b", { lead: 1 }, "save:will", "Lead (Depth 1)"],
-    ["PB-3a", { lead: 3 }, "perception", "Lead (Depth 3)"],
     ["MN-3b", { manganese: 3 }, "damage", "Manganese (Depth 3)"],
     ["MN-4b", { manganese: 4 }, "damage", "Manganese (Depth 4)"],
     ["AL-2b", { aluminium: 2 }, "perception", "Aluminium (Depth 2)"],
@@ -864,6 +863,86 @@ const INSTINCTS = [
             await plateOf().update({ "system.hp.value": plateOf().hitPoints.max, "flags.isaacs-hb-pf2e.assimilator.repairedAt": now });
             return mended;
         } })),
+    // #91 — Black.
+    // Onyx 1: +1 Stealth in dim light or darkness — the scene darkened, then lit.
+    { id: "ON-1b", lv: 17, b: { onyx: 1 }, act: async (a) => {
+        const scene = canvas.scene; const was = scene.environment.darknessLevel;
+        const stealth = () => (game.actors.get(a.id).skills.stealth.modifiers ?? []).some((m) => m.slug === "onyx-stealth-1" && m.enabled);
+        try {
+            await scene.update({ "environment.darknessLevel": 0.8 });
+            const dark = !!(await until(() => stealth(), 6000));
+            await scene.update({ "environment.darknessLevel": 0 });
+            const lit = !(await until(() => !stealth(), 6000));
+            return [dark, lit];
+        } finally { await scene.update({ "environment.darknessLevel": was }); }
+    }, want: [true, false], note: "darkened scene: +1 item to Stealth; lit: none" },
+    // Onyx 2: Shadow Mantle's darkness rides the token.
+    { id: "ON-2a", lv: 17, b: { onyx: 2 }, act: async (a, t, ctx) => {
+        canvas.scene.tokens.get(ctx.tokenId).object?.control({ releaseOthers: true });
+        await AssimilatorRig.useWithArea(game.actors.get(a.id).items.find((i) => i.slug === "shadow-mantle"));
+        await wait(1500);
+        const tok = canvas.scene.tokens.get(ctx.tokenId);
+        const light = [tok.light.negative, tok.light.dim];
+        for (const e of game.actors.get(a.id).itemTypes.effect.filter((x) => x.slug === "effect-shadow-mantle")) await e.delete();
+        await wait(800);
+        return [...light, canvas.scene.tokens.get(ctx.tokenId).light.negative];
+    }, want: [true, 20, false], note: "Shadow Mantle: the token sheds 20 feet of darkness; gone with the effect" },
+    // Onyx 4: Shadow Step between two darknesses within 60 feet.
+    { id: "ON-4a", lv: 17, b: { onyx: 4 }, apply: "effect-shadow-mantle", act: async (a, t, ctx) => {
+        const M = game.modules.get("isaacs-hb-pf2e").api.assimilator.mutations;
+        const scene = canvas.scene; const was = scene.environment.darknessLevel; const g = canvas.grid.size;
+        const tok = () => canvas.scene.tokens.get(ctx.tokenId);
+        const home = { x: tok()._source.x, y: tok()._source.y };
+        const at = (dx) => ({ x: home.x + dx * g + g / 2, y: home.y - 3 * g + g / 2 });
+        await scene.update({ "environment.darknessLevel": 0 });
+        const [shade] = await scene.createEmbeddedDocuments("AmbientLight", [{ x: at(4).x, y: at(4).y, config: { dim: 10, bright: 0, negative: true } }]);
+        const [far] = await scene.createEmbeddedDocuments("AmbientLight", [{ x: home.x + g / 2, y: home.y - 14 * g, config: { dim: 10, bright: 0, negative: true } }]);
+        await wait(1200);
+        try {
+            const lit = await M.shadowStep(game.actors.get(a.id), at(-4));
+            const tooFar = await M.shadowStep(game.actors.get(a.id), { x: home.x + g / 2, y: home.y - 14 * g });
+            const into = await M.shadowStep(game.actors.get(a.id), at(4));
+            await wait(600);
+            const moved = tok()._source.x !== home.x || tok()._source.y !== home.y;
+            return [lit, tooFar, into, moved];
+        } finally {
+            await scene.deleteEmbeddedDocuments("AmbientLight", [shade.id, far.id]);
+            await scene.update({ "environment.darknessLevel": was });
+            await tok().update({ x: home.x, y: home.y }, { animate: false, teleport: true });
+        }
+    }, want: [false, false, true, true], note: "a lit square: refused; 70 feet: refused; a darkness 20 feet off: stepped into" },
+    // Jet 3: the corpse is marked.
+    ...[[{ jet: 3 }, true, "Jet 3: the creature killed carries Carrion-Marked"], [{ jet: 2 }, false, "control: Jet 2"]].map(([b, want, note]) => ({
+        id: "JE-3b", lv: 17, b, want, note, act: async (a, t, ctx) => {
+            for (const e of game.actors.get(t.id).itemTypes.effect.filter((x) => x.slug === "effect-carrion-marked")) await e.delete();
+            await hitWith(a, t, ctx, "30[slashing]", { hp: 5 });
+            const marked = !!(await until(() => game.actors.get(t.id).itemTypes.effect.some((x) => x.slug === "effect-carrion-marked"), b.jet >= 3 ? 6000 : 1500));
+            for (const e of game.actors.get(t.id).itemTypes.effect.filter((x) => x.slug === "effect-carrion-marked")) await e.delete();
+            return marked;
+        } })),
+    // Lead 3: creatures within 10 feet take −1 status to spell attacks and spell DCs.
+    ...[[{ lead: 3 }, [true, false], "Lead 3: the adjacent creature has the aura; one 40 feet away does not"],
+        [{ lead: 2 }, [false, false], "control: Lead 2, no aura"]].map(([b, want, note]) => ({ id: "PB-3a", lv: 17, b, want, note,
+        act: async (a, t, ctx) => {
+            await place(ctx, ctx.bystanderTokenId, 8);
+            await place(ctx, ctx.targetTokenId, 1);
+            const has = (id) => game.actors.get(id).itemTypes.effect.some((x) => x.slug === "effect-null-weight-aura");
+            const near = !!(await until(() => has(t.id), b.lead >= 3 ? 8000 : 2000));
+            const farOff = has(ctx.bystanderId);
+            await place(ctx, ctx.bystanderTokenId, 2);
+            return [near, farOff];
+        } })),
+    // Manganese 4: a creature that ends its turn adjacent takes 1d6 persistent acid.
+    ...[[{ manganese: 4 }, true, "Manganese 4: the adjacent target ends its turn and takes persistent acid"],
+        [{ manganese: 3 }, false, "control: Manganese 3"]].map(([b, want, note]) => ({ id: "MN-4b", lv: 17, b, want, note,
+        act: async (a, t, ctx) => inCombat(ctx, async (combat) => {
+            for (const c of game.actors.get(t.id).itemTypes.condition) await c.delete();
+            await combat.nextTurn(); await wait(600);
+            await combat.nextTurn(); await wait(1800);
+            const acid = game.actors.get(t.id).itemTypes.condition.some((c) => c.slug === "persistent-damage" && c.system.persistent?.damageType === "acid");
+            for (const c of game.actors.get(t.id).itemTypes.condition) await c.delete();
+            return acid;
+        }) })),
     // Guide §4.5: the Instinct clause applies to "every Mutation you have, including Mutations of other colours".
     { id: "A-44", lv: 17, b: { ruby: 3, sapphire: 2 }, act: async (a) => [derived(a).instincts.primary, redOn(await strikeRoll(a))],
         want: ["red", 5], note: "Red Instinct; Blue's Sapphire 2 takes Red's +2 beside Ruby's +3" },
@@ -2127,11 +2206,26 @@ const SCENARIOS = [
         }
         return "no success rolled";
     }, want: ["criticalSuccess", true] },
+    // Lead 4: Null Field counteracts each magical effect caught — at once — and suppresses what it beats (#91).
     { id: "PB-4a", lv: 17, b: { lead: 4 }, act: async (a, t, ctx) => {
+        const target = () => game.actors.get(t.id);
+        for (const e of target().itemTypes.effect.filter((x) => x.name === "ZZ Ward")) await e.delete();
+        await target().createEmbeddedDocuments("Item", [{ name: "ZZ Ward", type: "effect",
+            system: { level: { value: 1 }, traits: { value: ["arcane", "magical"] }, duration: { value: 10, unit: "minutes" },
+                rules: [{ key: "FlatModifier", selector: "ac", value: 1, type: "status" }] } }]);
+        await game.actors.get(a.id).update({ "flags.isaacs-hb-pf2e.assimilator.-=encounterUses": null });
         canvas.scene.tokens.get(ctx.tokenId).object?.control({ releaseOthers: true });
-        await AssimilatorRig.useWithArea(a.items.find((i) => i.slug === "null-field"));
-        return game.messages.contents.slice(-3).some((m) => /counteract/i.test(m.content ?? ""));
-    }, want: true, note: "the counteract card is offered for the creatures in the emanation" },
+        const since = game.messages.size;
+        await AssimilatorRig.useWithArea(game.actors.get(a.id).items.find((i) => i.slug === "null-field"));
+        await wait(2000);
+        const ward = target().itemTypes.effect.find((x) => x.name === "ZZ Ward");
+        const suppressed = !!ward?.flags?.["isaacs-hb-pf2e"]?.suppression;
+        const card = game.messages.contents.slice(since).some((m) => m.flags?.["isaacs-hb-pf2e"]?.counteract);
+        const rolled = game.messages.contents.slice(since).some((m) => (m.flags?.pf2e?.context?.options ?? []).includes("isaacs-hb-pf2e:counteract"));
+        for (const e of target().itemTypes.effect.filter((x) => x.name === "ZZ Ward")) await e.delete();
+        return [!!ward, rolled, card, suppressed || !ward];
+    }, want: (v) => v[1] === true && v[2] === false && (v[0] === false || v[3] === true),
+    note: "the counteract is rolled at once, no card; a beaten ward is parked, not deleted (or survives a failed roll)" },
     { id: "B-01", lv: 17, b: { ruby: 2, iron: 2 }, bonds: ["molten-carapace"], act: async (a, t, ctx) => {
         await t.update({ "system.attributes.hp.value": 900 });
         await hitSelf(a, t, ctx, "5[slashing]");
@@ -2411,7 +2505,14 @@ export const AssimilatorRig = {
         const local = { token: canvas.scene.tokens.get(ctx.tokenId), targetConditions: [] };
         if (check.crit) {
             canvas.scene.tokens.get(ctx.tokenId).object?.control({ releaseOthers: true });
-            await read.strike(actor())?.attack({ skipDialog: true });
+            // Against AC 1 every attack is a critical — but a natural 1 is not, pf2e dropping it a step. Up to three tries,
+            // so a check that needs a critical does not fail one run in twenty on the die.
+            for (let tries = 0; tries < 3; tries++) {
+                await read.strike(actor())?.attack({ skipDialog: true });
+                await wait(300);
+                const last = game.messages.contents.findLast((m) => m.flags?.pf2e?.context?.type === "attack-roll");
+                if (last?.flags?.pf2e?.context?.outcome === "criticalSuccess") break;
+            }
             // A condition rider goes through the relay; in a full run 1.2 s was sometimes not enough.
             await wait(2500);
             local.targetConditions = target().itemTypes.condition.map((c) => `${c.slug}:${c.value ?? ""}`.replace(/:$/, ""));

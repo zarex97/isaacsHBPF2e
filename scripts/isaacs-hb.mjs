@@ -201,6 +201,7 @@ Hooks.once("init", () => {
             citrine: Citrine,
             purple: Purple,
             carapace: Carapace,
+            mutations: Mutations,
             mend: (actor, itemId) => AssimilatorEngine.mend(actor, itemId),
         },
         open: () => new SkyTrackerApp().render(true),
