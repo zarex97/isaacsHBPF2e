@@ -1248,6 +1248,16 @@ export async function resolveCounteract(payload) {
     }
 
     const targetRank = Math.max(1, Number(effect.system?.level?.value) || 1);
+    // "Cannot be counteracted below Nth rank" — Null Shroud's darkness (#95). The floor rides on the effect, and a
+    // counteract of lower rank fails without a roll.
+    const floor = Number(effect.flags?.[MODULE_ID]?.counteractFloor) || 0;
+    if (floor && counteractRank(actor, item) < floor) {
+        await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), flavor: item?.name ?? "Counteract",
+            flags: { [MODULE_ID]: { counteractFloor: { effect: effect.uuid, floor } } },
+            content: `<p><strong>${effect.name}</strong> cannot be counteracted below rank ${floor} — a counteract rank of `
+                + `${counteractRank(actor, item)} does not touch it.</p>` });
+        return;
+    }
     const roll = await statistic.roll({
         dc: { value: dcByLevel(effect.system?.level?.value ?? actor.level) },
         skipDialog: true,
@@ -1273,7 +1283,7 @@ export async function resolveCounteract(payload) {
      */
     const options = actor.getRollOptions?.() ?? [];
     const mastery = options.includes("soulbound:reishi-mastery");
-    const ourRank = Math.max(1, Number(item?.rank) || Math.ceil((actor.level ?? 1) / 2)) + (mastery ? 1 : 0);
+    const ourRank = counteractRank(actor, item);
     const reach = { criticalSuccess: 3, success: 1, failure: -1, criticalFailure: -Infinity }[outcome] ?? -Infinity;
     const counteracted = targetRank <= ourRank + reach;
     // Anything that answers a counteract — Quartz Depth 3's charge (#89) — hears it here.
@@ -1379,6 +1389,12 @@ export async function resolveCounteract(payload) {
  * disproportionate. These are the traits the ones in play actually carry.
  */
 const SUPPRESSIBLE_TRAITS = new Set(["soulbound", "cosmo", "stance", "polymorph"]);
+
+/** The counteract rank: the item's rank, or half the actor's level; Reishi Mastery raises it by 1. */
+function counteractRank(actor, item) {
+    const mastery = (actor.getRollOptions?.() ?? []).includes("soulbound:reishi-mastery");
+    return Math.max(1, Number(item?.rank) || Math.ceil((actor.level ?? 1) / 2)) + (mastery ? 1 : 0);
+}
 
 /** pf2e's level-based DC table, which a module cannot import and which has not moved in four editions. */
 function dcByLevel(level) {

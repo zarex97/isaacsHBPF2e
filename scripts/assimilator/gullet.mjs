@@ -131,9 +131,17 @@ export class GulletApp extends HandlebarsApplicationMixin(ApplicationV2) {
                     ...bound.filter((b) => ["amethyst", "quartz", "platinum"].includes(b.slug))
                         .map((b) => ({ value: b.slug, label: b.name, selected: state.choices.nickelPurple === b.slug }))] });
         }
+        if ((derived.bonds ?? []).includes("chimera")) {
+            const colours = [derived.instincts?.primary, derived.instincts?.secondary].filter(Boolean);
+            choices.push({ key: "chimeraDeep", label: "Chimera — a Substrate of either Instinct's colour at Depth 4 instead of the extra Aberration",
+                options: [{ value: "", label: "— none —", selected: !state.choices.chimeraDeep },
+                    ...bound.filter((b) => colours.includes(b.colour))
+                        .map((b) => ({ value: b.slug, label: b.name, selected: state.choices.chimeraDeep === b.slug }))] });
+        }
         if (effective.zinc) {
-            // Immune System (Jade + Zinc): Shifting Tissue may also name poison.
-            const immune = (derived.bonds ?? []).includes("immune-system") ? ["poison"] : [];
+            // Immune System (Jade + Zinc): Shifting Tissue may also name poison, disease, or — the remaster having no spell
+            // schools — one magical tradition (#95).
+            const immune = (derived.bonds ?? []).includes("immune-system") ? ["poison", "disease", "arcane", "divine", "occult", "primal"] : [];
             choices.push({ key: "zinc", label: "Shifting Tissue — energy type",
                 options: ["acid", "cold", "electricity", "fire", "sonic", "force", "vitality", "void", ...immune]
                     .map((t) => ({ value: t, label: t, selected: state.choices.zinc === t })) });
