@@ -2,7 +2,8 @@
 
 *Instinct tracker. The nine Instinct clauses, one row per independently-failable sentence. Source:
 `Docs/assimilator-guide-v1.md` §5.1 — **the guide's table, not the lexicon's**: §5.2 amends Blue, White
-and Black so that every clause keys off Depth, and the lexicon's §2.1 still carries the old wording.*
+and Black so that every clause keys off Depth. Lexicon v3.1's §2.1 now says the same, but the guide stays the
+source.*
 
 **Tier:** Instincts · **Tracker issue:** #94
 

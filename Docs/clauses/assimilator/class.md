@@ -85,7 +85,7 @@ this file.
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| A-27a | §4.3 | **2**, plus the **highest** Hardness bonus among your bound Substrates (Diamond, Steel, Chromium), plus Gray's Instinct. | `test-assimilator` pins it | ⚠️ | Live: Hardness **2** bare; **4** with Chromium or Steel at 1; **10** with Diamond 3 beside Steel 1; **14** at a Depth 4 Hardness Substrate; **5** with Nickel's Plate Aberration. The engine takes the highest Substrate bonus and a rule adds it to the plate. Gray's Instinct term waits on Phase 4 |
+| A-27a | §4.3 | **2**, plus the **highest** Hardness bonus among your bound Substrates (Diamond, Steel, Chromium), plus Gray's Instinct. | `test-assimilator` pins it | ✅ | Live: Hardness **2** bare; **4** with Chromium or Steel at 1; **10** with Diamond 3 beside Steel 1; **14** at a Depth 4 Hardness Substrate; **5** with Nickel's Plate Aberration. The engine takes the highest Substrate bonus and a rule adds it to the plate. **The whole line, rig, live:** Diamond 3 + Steel 2 + Hematite 2 is a **Gray** Instinct with Hardness **12** — 2 + Diamond's 8 (the highest, not 8 + 5) + Steel's metal Depth 2. Control: without Hematite the Instinct is **White** and the Hardness **10**, the Gray term gone |
 | A-27b | §4.3 | Substrate bonuses do not add together unless a Bond says so (*Adamant Shell*). |  | ✅ | Live: Diamond 3 (+8) and Steel 1 (+2) together gave Hardness **10**, not 12. *Adamant Shell*, which makes them add, is a Phase 5 Bond |
 | A-28 | §4.3 | **10 + 5 per level** | `test-assimilator` pins it | ✅ | Live: the plate's maximum reads **15 / 30 / 35 / … / 95 / 110** at 1st, 4th, 5th, 17th and 20th. A level keeps the plate's damage rather than repairing it: **12/15 at 1st → 32/35 at 5th** |
 | A-29 | §4.3 | Half its Hit Points |  | ✅ | Live: Broken Threshold **7** on a 15-point plate and **17** on a 35-point one — pf2e derives it as half when the `hp-max` alteration writes the maximum |
@@ -177,8 +177,8 @@ this file.
 | Status | Count |
 | :-- | --: |
 | ☐ | 0 |
-| ✅ | 66 |
-| ⚠️ | 9 |
+| ✅ | 67 |
+| ⚠️ | 8 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 1 |
