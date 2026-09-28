@@ -65,9 +65,9 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| BR-1a | Bronze D1 | You are trained in improvised weapons as martial weapons, and take no penalty for using them. | `rig` | ⚠️ | Rig: the Note *Bronze (Depth 1)* appears on the Strike card. Text the table applies — nothing enforces it |
+| BR-1a | Bronze D1 | You are trained in improvised weapons as martial weapons, and take no penalty for using them. | `rig` | ✅ | Rig, live: an improvised chair leg (pf2e's `improvised` tag) is **trained** at Bronze 1 and its **−2 is gone**; without Bronze it is untrained and −2. A `MartialProficiency` on the tag and pf2e's own `self:ignore-improvised-penalty` (#87, Q1) |
 | BR-2a | Bronze D2 | If you Stride at least 10 feet, your next Strike this turn gains a **+1 circumstance bonus to hit**. |  | ✅ | Live, the same move: the Strike's attack **+23 → +24** once 10 feet were moved |
-| BR-3a | Bronze D3 | Once per round, make a Strike and then a Shove, Trip or Grapple as a **single action**. | `rig` | ⚠️ | Rig: the Note *Bronze (Depth 3)* appears on the Strike card. Text the table applies — nothing enforces it |
+| BR-3a | Bronze D3 | Once per round, make a Strike and then a Shove, Trip or Grapple as a **single action**. | `rig` | ✅ | Rig, live: *Frame Rush* (granted at Depth 3, once per round) rolls the **Carapace Strike** at the target, then a card asks Shove, Trip or Grapple — Trip rolled through pf2e's own action at **−5**, the next multiple attack penalty (pf2e counts no attacks, so the combo is taken as the turn's first). A Shove gets #85's Push card. Control: Bronze 2 has no Frame Rush (#87, Q2) |
 | BR-4a | Bronze D4 | On a critical hit, immediately **Stride up to half your Speed** toward a different enemy as a free action. | `rig` | ✅ | Rig, live: a critical at Bronze 4 posts the *Battle Frame* prompt |
 
 ## ⚙️ Mercury — *Liquid Form* (lexicon §7)
@@ -76,7 +76,7 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| HG-1a | Mercury D1 | You Squeeze at full Speed and are not off-guard while squeezing. | `rig` | ⚠️ | Rig: the Note *Mercury (Depth 1)* appears on the Acrobatics card. Text the table applies — nothing enforces it |
+| HG-1a | Mercury D1 | You Squeeze at full Speed and are not off-guard while squeezing. | `rig` | — | Nothing to automate: pf2e's Squeeze is an exploration check (1 minute per 5 feet) and models no squeezing state — nothing moves a token through a gap or makes it off-guard for squeezing. The Note on the Acrobatics card tells the table, as HG-4a's gap does (#87, Q3) |
 | HG-2a | Mercury D2 | **Resistance 5** to bludgeoning, piercing and slashing. |  | ✅ | Live: **bludgeoning 5, piercing 5, slashing 5** |
 | HG-3a | Mercury D3 | Once per round, as a reaction when you are hit, **reduce the damage by your level** as the blow passes through you. |  | ✅ | Live at 17th: *Pass Through* granted at Depth 3; armed, 40 fire from a creature's Claw took **23** — **17** turned, equal to level — and the reaction was spent |
 | HG-4a | Mercury D4 | You move through gaps as small as an inch. |  | — | Nothing to automate: squeezing through an inch gap is movement the table adjudicates |
@@ -89,9 +89,9 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | Status | Count |
 | :-- | --: |
 | ☐ | 0 |
-| ✅ | 15 |
-| ⚠️ | 3 |
+| ✅ | 17 |
+| ⚠️ | 0 |
 | ❌ | 0 |
 | 🔧 | 0 |
-| — | 1 |
+| — | 2 |
 | **Total** | **19** |
