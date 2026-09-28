@@ -173,6 +173,7 @@ World `pf` is not a clean room. It is a working world with years of fixtures in 
 | Fixtures carry state from the last drive | A "clean" heal that gives back nothing because the target is still wounded; a save that does not fire because the target still has last week's immunity marker. Strip what you are about to measure |
 | A heightening clause needs a caster above 14th | Clone one rather than editing a level in place: re-levelling reopens every `ChoiceSet` the class ever asked |
 | Test actors are misnamed | `ZZ Sev — Ryūjin Jakka` is an Arrogante. Check the spell list, not the name |
+| pf2e's own items are **translated** | The world runs `foundryvtt-es`, so `Effect: Cover` is *Efecto: Cobertura* on the sheet. A filter by English name deletes nothing, stale copies stack, and the reading is three cover levels at once. Match a system item by `sourceId` |
 | The pack LevelDB is locked while a world is open | `npm run build` fails with `EPERM … rm packs`. See §8 |
 
 ### Foundry
