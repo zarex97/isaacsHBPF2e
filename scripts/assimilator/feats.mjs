@@ -234,22 +234,22 @@ export const Feats = {
         // Apex Predator: a critical hit with a Mutation — its Depth 4 rider applies. Gold's Instinct offers the same
         // thing; "take the better" is one card, naming every Mutation that could apply it.
         if (context?.type === "attack-roll" && context.outcome === "criticalSuccess" && has(actor, "apex-predator")) {
-            await Feats.apex(actor);
+            await Feats.apex(actor, message);
         }
     },
 
-    async apex(actor) {
+    /** Apex Predator: "that Substrate counts as Depth 4 for that Strike" — every Mutation the Strike carries (#86). */
+    async apex(actor, message) {
         const catalogue = await Engine.catalogue();
         const effective = record(actor).derived?.effective ?? {};
-        const rows = [];
-        for (const [slug, depth] of Object.entries(effective)) {
-            const entry = catalogue[slug];
-            if (entry?.damageFrom === null || entry?.damageFrom === undefined || depth < entry.damageFrom) continue;
-            const row = /<tr><td>4<\/td><td>(.*?)<\/td><\/tr>/s.exec(entry.doc?.system?.description?.value ?? "")?.[1];
-            if (row) rows.push(`<li><strong>${entry.name.replace(/^Substrate:\s*/, "")}</strong>: ${row}</li>`);
-        }
-        if (rows.length) {
-            await say(actor, `<strong>Apex Predator</strong>: a critical hit with a Mutation — apply its Depth 4 rider:</p><ul>${rows.join("")}</ul><p>`);
+        const mutations = Object.entries(effective).filter(([slug, depth]) => {
+            const from = catalogue[slug]?.damageFrom;
+            return from !== null && from !== undefined && depth >= from;
+        }).map(([slug]) => slug);
+        const raised = await Engine.depthFour(actor, mutations, { madeBy: message?.id ?? null, why: "apex-predator" });
+        if (raised) {
+            await say(actor, `<strong>Apex Predator</strong>: a critical hit with a Mutation — ${raised.join(", ")} `
+                + "count as <strong>Depth 4</strong> for this Strike.");
         }
     },
 

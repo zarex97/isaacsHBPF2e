@@ -60,8 +60,8 @@ the class tracker's (`A-43`–`A-46`). This file is what each one does once it i
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | I-1a | Red | When a Mutation deals damage, it deals **+1 damage per Depth** of its Substrate. | `rig`, `test-assimilator` | ✅ | Rig, live: Ruby 3 + Iron 2 + Garnet 2 against a creature that is not dying — the roll's Red Instinct modifiers sum to **5**; Garnet's die did not fire, so neither did its bonus. Silver at 2 against an undead fiend (both of its rules fire) still counts **once**: 5. **Fixed:** the bonus was one sum of every Mutation that *could* add damage; it is now one modifier per Substrate damage rule, gated by that rule's own predicate, so it fires exactly when the Mutation does |
 | I-1b | Red | Against a creature that has already lost Hit Points this encounter, **double** that bonus. | `rig` | ✅ | Rig, live, in an encounter: **5** before the target had lost Hit Points, **10** after (re-driven after the per-Substrate rewrite) |
-| I-2a | Gold | At daily preparations choose one bound Substrate; it counts as **one Depth higher** for its numeric effects, never above your Depth cap. | `rig`, `test-assimilator` | ✅ | Rig, live: Ruby 1 chosen under Gold manifests at **2**; Ruby 4 chosen at the Depth cap stays **4**. Chosen in the Gullet at daily preparations. **Fixed while driving:** the first rebuild derived the Depths before the Instinct had settled, so the raise waited a rebuild; it re-derives once it settles |
-| I-2b | Gold | When you critically hit, you may apply that Substrate's **Depth 4 rider** even if it isn't at Depth 4. | `rig` | ⚠️ | Rig, live: a critical hit under Gold with Sapphire chosen posts a card quoting **Sapphire's Depth 4 row** (the slow). Applying it is the table's — a Depth 4 rider is written against Depth 4 and is not re-run by the module |
+| I-2a | Gold | At daily preparations choose one bound Substrate; it counts as **one Depth higher**, never above your Depth cap. | `rig`, `test-assimilator` | ✅ | Rig, live: Ruby 1 chosen under Gold manifests at **2**; Ruby 4 chosen at the Depth cap stays **4**. Chosen in the Gullet at daily preparations. **Fixed while driving:** the first rebuild derived the Depths before the Instinct had settled, so the raise waited a rebuild; it re-derives once it settles |
+| I-2b | Gold | When you critically hit, that Substrate counts as **Depth 4 for that Strike** even if it isn't at Depth 4. | `rig` | ✅ | Rig, live: a critical hit under Gold with Sapphire chosen — Sapphire (1, Gold's +1 makes 2) counts as **Depth 4**, its Strike deals 1d6 cold, and the next attack rolled ends it (back to 2). Controls: a miss raises nothing; on a broken plate, no raise — §4.3 would switch it off (#86, Q1, Q5–Q6) |
 | I-3a | Orange | The first time each round you Stride, Step or use a reaction, your next Mutation this round deals **+1d4** of its own damage type. | `rig`, `test-assimilator` | ✅ | Rig, live, in an encounter: the first Stride primed *Kinetic Surge*; a second Stride that round did not; the next Strike carried **1d4 fire** (Ruby's type — the deepest damaging Mutation's) and spent it. A reaction primes it the same way. Resolved: "its own damage type" on a Strike carrying several Mutations is the deepest one's |
 | I-3b | Orange | **+5 feet Speed** per bound Orange Substrate. | `rig`, `test-assimilator` | ✅ | Rig, live: two bound Orange Substrates — the land Speed breakdown reads **Orange Instinct +10** beside Carnelian's own bonus |
 | I-4a | Blue | **Study** a creature (one action). | `rig` | ✅ | Rig, live: *Study* (granted by the Blue Instinct) on the target put **Effect: Studied** on it, until the encounter ends |
@@ -85,8 +85,8 @@ the class tracker's (`A-43`–`A-46`). This file is what each one does once it i
 | Status | Count |
 | :-- | --: |
 | ☐ | 0 |
-| ✅ | 19 |
-| ⚠️ | 1 |
+| ✅ | 20 |
+| ⚠️ | 0 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 0 |

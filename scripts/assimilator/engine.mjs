@@ -24,6 +24,9 @@ import { suppressed } from "./damage.mjs";
  */
 
 const KEY = "assimilator";
+/** The effect a critical hit's "counts as Depth 4 for that Strike" leaves (#86). */
+export const DEPTH_FOUR = "effect-depth-4-for-this-strike";
+
 const PACKS = {
     substrates: `${MODULE_ID}.assimilator-substrates`,
     bonds: `${MODULE_ID}.assimilator-bonds`,
@@ -474,7 +477,36 @@ export const Engine = {
                 if (out[down] <= 0) delete out[down];
             }
         }
+        // A critical hit's "counts as Depth 4 for that Strike" — Gold's Instinct, Topaz Depth 4, Apex Predator (#86: a
+        // Depth is indivisible). Not on a broken plate, where §4.3 switches every Mutation at Depth 3 or higher off:
+        // raising one to 4 there would take it away.
+        if (!effects.some((e) => e.slug === "effect-carapace-broken")) {
+            for (const four of effects.filter((e) => e.slug === DEPTH_FOUR)) {
+                for (const slug of four.flags?.[MODULE_ID]?.[KEY]?.depthFour ?? []) if (slug in out) out[slug] = Math.max(out[slug], 4);
+            }
+        }
         return out;
+    },
+
+    /**
+     * Make `slugs` count as Depth 4 for the Strike that just critically hit. The effect lasts until the next attack
+     * is rolled or the turn ends — not only the damage roll, because some of a Depth 4 rider answers the damage
+     * *landing* (Ruby's burning ground). Returns the Substrates raised, or null.
+     */
+    async depthFour(actor, slugs, { madeBy = null, why = "" } = {}) {
+        if (!actor || actor.itemTypes.effect.some((e) => e.slug === "effect-carapace-broken")) return null;
+        const bound = Engine.state(actor).substrates;
+        const raised = [...new Set(slugs)].filter((s) => (bound[s] ?? 0) > 0);
+        if (!raised.length) return null;
+        const doc = ((await game.packs.get(PACKS.effects)?.getDocuments()) ?? []).find((d) => d.slug === DEPTH_FOUR);
+        if (!doc) return null;
+        const catalogue = await Engine.catalogue();
+        const names = raised.map((s) => catalogue[s]?.name?.replace(/^Substrate:\s*/, "") ?? s);
+        const source = foundry.utils.deepClone(doc.toObject());
+        source.name = `Effect: Depth 4 — ${names.join(", ")}`;
+        foundry.utils.setProperty(source, `flags.${MODULE_ID}.${KEY}`, { depthFour: raised, madeBy, why });
+        await actor.createEmbeddedDocuments("Item", [source]);
+        return raised;
     },
 
     /** The Mutations actually working: all of them, less every one at Depth 3+ while the plate is broken. */
@@ -829,7 +861,16 @@ export const Engine = {
         const first = current === undefined || current === null || (Array.isArray(current) && !current.length);
         // Zinc Depth 2's *Shift Tissue* lets the type change once, whenever; its use sets `zincShift`.
         const shifting = key === "zinc" && actor.flags?.[MODULE_ID]?.[KEY]?.zincShift;
-        if (!state.preparing && !first && !shifting) return Engine._refuse("That choice is made at daily preparations.");
+        // Gold Depth 2: "You may choose the Substrate again at the start of each encounter" (#86) — once an encounter.
+        const encounter = game.combats?.find((c) => c.started && c.combatants.some((x) => x.actor?.id === actor.id));
+        const regild = key === "gold" && encounter && (actor.flags?.[MODULE_ID]?.[KEY]?.derived?.effective?.gold ?? 0) >= 2
+            && state.choices.goldEncounter !== encounter.id;
+        if (!state.preparing && !first && !shifting && !regild) {
+            return Engine._refuse(key === "gold" && encounter
+                ? "Gilded Core's choice is made at daily preparations, and again once each encounter from Gold Depth 2."
+                : "That choice is made at daily preparations.");
+        }
+        if (regild && !state.preparing) state.choices.goldEncounter = encounter.id;
         if (shifting) state.zincShift = false;
         if (key === "nickel") value = [value].flat().filter((k) => ABERRATIONS.includes(k));
         if (key === "electrumBond" && value && !(await Engine.bondCatalogue())[value]) return Engine._refuse(`There is no Bond called "${value}".`);
@@ -929,6 +970,13 @@ export const Engine = {
         Hooks.on("combatStart", (combat) => {
             if (!isWriter()) return;
             for (const c of combat.combatants) if (Engine.state(c.actor).preparing) Engine.endPreparations(c.actor);
+            // Gold Depth 2: the encounter's one chance to choose Gilded Core's Substrate again.
+            for (const c of combat.combatants) {
+                if (!Engine.isAssimilator(c.actor) || (c.actor.flags?.[MODULE_ID]?.[KEY]?.derived?.effective?.gold ?? 0) < 2) continue;
+                ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: c.actor }),
+                    whisper: game.users.filter((u) => c.actor.testUserPermission(u, "OWNER")).map((u) => u.id),
+                    content: `<p><strong>Gilded Core</strong>: ${c.actor.name} may choose Gold's Substrate again for this encounter, in the Gullet.</p>` });
+            }
         });
         // The record changed, a level changed, or a feature that grants Mass came or went.
         Hooks.on("updateActor", (actor, change, options) => {
@@ -938,12 +986,19 @@ export const Engine = {
         const itemChanged = (item) => {
             const flag = item.flags?.[MODULE_ID]?.[KEY];
             const moves = ["effect-apotheosis", "effect-carapace-broken", "effect-gilded-apotheosis", "adamant-shell",
-                "effect-instinctive-surge", "effect-second-hunger"].includes(item.slug);
+                "effect-instinctive-surge", "effect-second-hunger", DEPTH_FOUR].includes(item.slug);
             // An Assimilator feat can move the engine's numbers (Deep Vein, Two Instincts, Perfect Organism, …).
             const feat = item.type === "feat" && item.system?.traits?.value?.includes?.("assimilator");
             if (flag?.grants || moves || feat || item.type === "class") Engine.rebuild(item.actor);
         };
         Hooks.on("createItem", itemChanged);
         Hooks.on("deleteItem", itemChanged);
+        // "For that Strike": the next attack rolled ends it — any attack but the critical that made it.
+        Hooks.on("createChatMessage", (message) => {
+            if (!isWriter() || message.flags?.pf2e?.context?.type !== "attack-roll") return;
+            const spent = message.actor?.itemTypes?.effect?.filter((e) => e.slug === DEPTH_FOUR
+                && e.flags?.[MODULE_ID]?.[KEY]?.madeBy !== message.id).map((e) => e.id) ?? [];
+            if (spent.length) message.actor.deleteEmbeddedDocuments("Item", spent);
+        });
     },
 };

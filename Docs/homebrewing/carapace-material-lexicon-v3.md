@@ -1,4 +1,4 @@
-# The Assimilator — Material Lexicon, **Version 3.1**
+# The Assimilator — Material Lexicon, **Version 3.2**
 
 ### *The symbiont class · Substrate · Essence · Mutation*
 
@@ -11,6 +11,10 @@
 >
 > **v3.1** takes the guide's §5.2 amendments into §2.1 — Blue's and White's clauses key off Depth, and
 > Black gains a Depth step — so the two documents say the same thing (issue #82).
+>
+> **v3.2** records the guide's ruling that **a Depth is indivisible** (issue #86): Gold's "one Depth higher" raises
+> the whole Depth, Topaz Depth 4 and the Gold Instinct make a Substrate count as Depth 4 for the critical Strike,
+> and Gold Depth 2 — whose rider-only step the ruling made redundant — lets the choice be made again each encounter.
 
 **The structural rule this whole document is built on:**
 
@@ -76,7 +80,7 @@ differently" true rather than merely stated.
 | Instinct | Clause — applies to all your Mutations |
 | :-- | :-- |
 | 🔴 **Red** | *Everything you grow is a weapon.* When a Mutation deals damage, it deals **+1 damage per Depth** of its Substrate. Against a creature that has already lost Hit Points this encounter, **double** that bonus. |
-| 🟡 **Gold** | *One thing, made imperial.* At daily preparations choose one bound Substrate; it counts as **one Depth higher** for its numeric effects (never above your level's Depth cap). When you critically hit, you may apply the **Depth 4 rider** of that Substrate even if you haven't reached Depth 4. |
+| 🟡 **Gold** | *One thing, made imperial.* At daily preparations choose one bound Substrate; it counts as **one Depth higher** (never above your level's Depth cap). When you critically hit, that Substrate counts as **Depth 4 for that Strike** even if you haven't reached Depth 4. |
 | 🟠 **Orange** | *Nothing you grow is still.* The first time each round you Stride, Step, or use a reaction, your next Mutation this round deals **+1d4** of its own damage type. You gain **+5 feet Speed** per bound Orange Substrate. |
 | 🔵 **Blue** | *It learns the thing before it kills it.* Study a creature (one action, Perception or a relevant Recall Knowledge). Until the encounter ends, your Mutations treat that creature's resistances as **lower by twice your highest Depth** and you gain **+1 circumstance to AC** against it. One creature at a time. |
 | 🟣 **Purple** | *It does not stay the same shape twice.* Your Mutations count as **magical**. At daily preparations, one Substrate of your choice manifests **one Depth higher** — and one other, randomly determined, manifests **one Depth lower**. You never quite know what you woke up as. |
@@ -226,7 +230,7 @@ does, and a four-step Depth ladder. Depth 1 is always available; the rest unlock
 | 1 | +1 item bonus to Intimidation. Your critical hits deal **+2 damage**. |
 | 2 | Your unarmed Strikes gain the **critical specialization effect** of the brawling group. |
 | 3 | A creature you critically hit is **frightened 1**. |
-| 4 | When you critically hit, apply the **Depth 4 rider of one other bound Substrate** to that Strike, whether or not it is at Depth 4. |
+| 4 | When you critically hit, **one other bound Substrate counts as Depth 4 for that Strike**, whether or not it is at Depth 4. |
 
 ### 💎 Citrine — Essence: **Fortune**
 *A faint gold shimmer that arrives half a second before anything good happens.*
@@ -245,8 +249,8 @@ does, and a four-step Depth ladder. Depth 1 is always available; the rest unlock
 
 | D | |
 | :-: | :-- |
-| 1 | At daily preparations, choose one other bound Substrate. It counts as **one Depth higher** for its numeric effects. This can never exceed your level's Depth cap. |
-| 2 | The chosen Substrate also gains the **rider** of that higher Depth, not only the numbers. |
+| 1 | At daily preparations, choose one other bound Substrate. It counts as **one Depth higher**. This can never exceed your level's Depth cap. |
+| 2 | You may choose the Substrate again at the start of each encounter, instead of only at daily preparations. |
 | 3 | Choose **two** Substrates instead of one. |
 | 4 | Once per day, as a free action, one chosen Substrate manifests at **Depth 4** for 1 minute regardless of its real Depth. *Apotheosis.* |
 
