@@ -8,7 +8,7 @@
  * - **Hematite, Depth 2**: temporary Hit Points equal to your level at the start of each encounter.
  */
 
-import { AssimilatorDamage, depthOf as depth } from "./damage.mjs";
+import { AssimilatorDamage, depthOf as depth, suppressed } from "./damage.mjs";
 import { Engine } from "./engine.mjs";
 import { GulletApp } from "./gullet.mjs";
 import { encounterOf } from "../lib/encounter-damage.mjs";
@@ -53,6 +53,7 @@ function turnKey(combat) {
 }
 
 function depthOf(actor, slug) {
+    if (suppressed(actor)) return 0;
     const m = actor?.getRollOptions?.().map((o) => new RegExp(`^self:effect:substrate-${slug}:(\\d+)$`).exec(o)).find(Boolean);
     return m ? Number(m[1]) : 0;
 }

@@ -1,4 +1,5 @@
 import { MODULE_ID } from "../sky/signs.mjs";
+import { suppressed } from "./damage.mjs";
 
 /**
  * The Assimilator's engine: what the character has eaten, and everything that follows from it.
@@ -591,23 +592,37 @@ export const Engine = {
         if (updates.length) await actor.updateEmbeddedDocuments("Item", updates);
         if (creates.length) await actor.createEmbeddedDocuments("Item", creates);
 
+        // Guide §4.2: other armour worn over the plate suppresses every Mutation and the Instinct. The items stay —
+        // their rules carry the suppression as a predicate, and deleting them would hand back every granted action's
+        // spent uses when the armour came off — but the picture every script reads goes dark: nothing bound, no
+        // Instinct, no Bond. Mass, slots and the record itself are untouched, so taking the armour off restores it.
+        const dark = suppressed(actor);
+        const effective = dark ? {} : derived.effective;
+        const counts = dark ? {} : derived.colourCount;
+        const live = dark ? { primary: null, secondary: null, scale: 1 } : settled;
+        const instinct = dark ? null : state.instinct;
+        const iv = instinctValues({ effective: Engine.surged(actor, effective), catalogue, counts, scale: live.scale });
+        // Except White's uses a day: that number is a frequency's maximum, and a maximum that fell to 0 and came back
+        // must not look like a day's uses spent. Purify refuses a suppressed symbiont on its own.
+        if (dark) iv.whiteUses = instinctValues({ effective: derived.effective, catalogue, counts: derived.colourCount,
+            scale: settled.scale }).whiteUses;
         const derivedFlag = {
             mass: derived.mass, spent: derived.spent, depthCap: derived.depthCap, bondSlots: derived.bondSlots,
-            vein: derived.vein, highestDepth: derived.highestDepth, mutationDepth: derived.mutationDepth,
+            vein: derived.vein, highestDepth: dark ? 0 : derived.highestDepth, mutationDepth: dark ? 0 : derived.mutationDepth,
             // From the Instinct as this rebuild settled it, not as `derive` read it before the first binding set one.
-            instinctType: INSTINCT_TYPES[state.instinct] ?? "bludgeoning", substrateHardness: derived.substrateHardness,
-            colours: derived.colours, effective: derived.effective,
-            colourCount: derived.colourCount, instincts: settled, bonds: derived.bonds,
+            instinctType: INSTINCT_TYPES[instinct] ?? "bludgeoning", substrateHardness: dark ? 0 : derived.substrateHardness,
+            colours: derived.colours, effective,
+            colourCount: counts, instincts: live, bonds: dark ? [] : derived.bonds,
             gb: Engine.greaterBond(actor, state),
             fastHealing: Math.max(
-                EMERALD_FAST_HEALING[Math.min(Engine.workingDepths(actor, derived.effective).emerald ?? 0, 4)] ?? 0,
-                [settled.primary, settled.secondary].includes("green")
-                    ? instinctValues({ effective: derived.effective, catalogue, counts: derived.colourCount, scale: settled.scale }).greenHealing
+                EMERALD_FAST_HEALING[Math.min(Engine.workingDepths(actor, effective).emerald ?? 0, 4)] ?? 0,
+                [live.primary, live.secondary].includes("green")
+                    ? instinctValues({ effective, catalogue, counts, scale: live.scale }).greenHealing
                     : 0),
-            mutationType: mutationTypeOf(Engine.workingDepths(actor, derived.effective), catalogue,
-                INSTINCT_TYPES[state.instinct] ?? "bludgeoning"),
-            iv: instinctValues({ effective: Engine.surged(actor, derived.effective), catalogue, counts: derived.colourCount,
-                scale: settled.scale }),
+            mutationType: mutationTypeOf(Engine.workingDepths(actor, effective), catalogue,
+                INSTINCT_TYPES[instinct] ?? "bludgeoning"),
+            iv,
+            suppressed: dark,
         };
         // Write only what a rebuild owns — the derived picture and the Instinct it settled — never the record it
         // read at the start. A rebuild awaits item work in between, and writing the whole record back clobbered
@@ -630,25 +645,25 @@ export const Engine = {
         }
         if (now.instinct !== state.instinct) update[`flags.${MODULE_ID}.${KEY}.instinct`] = state.instinct;
         const toggles = actor.flags?.pf2e?.rollOptions?.all ?? {};
-        const emerald = EMERALD_FAST_HEALING[Math.min(Engine.workingDepths(actor, derived.effective).emerald ?? 0, 4)] ?? 0;
-        const outheals = [settled.primary, settled.secondary].includes("green") && derivedFlag.iv.greenHealing > emerald;
+        const emerald = EMERALD_FAST_HEALING[Math.min(Engine.workingDepths(actor, effective).emerald ?? 0, 4)] ?? 0;
+        const outheals = [live.primary, live.secondary].includes("green") && derivedFlag.iv.greenHealing > emerald;
         if (outheals && !toggles[GREEN_OUTHEALS]) update[`flags.pf2e.rollOptions.all.${GREEN_OUTHEALS}`] = true;
         if (!outheals && toggles[GREEN_OUTHEALS]) update[`flags.pf2e.rollOptions.all.-=${GREEN_OUTHEALS}`] = null;
         // Burrower: "a metal Substrate at Depth 2 or higher".
-        const metal2 = Object.entries(derived.effective).some(([s, d]) => catalogue[s]?.kind === "metal" && d >= 2);
+        const metal2 = Object.entries(effective).some(([s, d]) => catalogue[s]?.kind === "metal" && d >= 2);
         if (metal2 && !toggles["assimilator:metal-2"]) update["flags.pf2e.rollOptions.all.assimilator:metal-2"] = true;
         if (!metal2 && toggles["assimilator:metal-2"]) update["flags.pf2e.rollOptions.all.-=assimilator:metal-2"] = null;
         // The Bonds in force, one option each: every Bond rule and every line of Bond code keys off it.
         for (const slug of Object.keys(await Engine.bondPairs())) {
             const option = bondOption(slug);
-            const on = derived.bonds.includes(slug);
+            const on = derivedFlag.bonds.includes(slug);
             if (on && !toggles[option]) update[`flags.pf2e.rollOptions.all.${option}`] = true;
             if (!on && toggles[option]) update[`flags.pf2e.rollOptions.all.-=${option}`] = null;
         }
         for (const colour of COLOURS) {
             const option = `assimilator:instinct:${colour}`;
-            if (colour === settled.primary && !toggles[option]) update[`flags.pf2e.rollOptions.all.${option}`] = true;
-            if (colour !== settled.primary && toggles[option]) update[`flags.pf2e.rollOptions.all.-=${option}`] = null;
+            if (colour === live.primary && !toggles[option]) update[`flags.pf2e.rollOptions.all.${option}`] = true;
+            if (colour !== live.primary && toggles[option]) update[`flags.pf2e.rollOptions.all.-=${option}`] = null;
         }
         if (Object.keys(update).length) await actor.update(update, { assimilatorEngine: true });
     },

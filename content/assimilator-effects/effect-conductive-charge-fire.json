@@ -26,7 +26,12 @@
                 "dieSize": "d4",
                 "key": "DamageDice",
                 "selector": "strike-damage",
-                "slug": "conductive-charge-fire"
+                "slug": "conductive-charge-fire",
+                "predicate": [
+                    {
+                        "not": "assimilator:suppressed"
+                    }
+                ]
             }
         ],
         "start": {

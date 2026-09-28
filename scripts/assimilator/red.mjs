@@ -1,3 +1,5 @@
+import { SUPPRESSED } from "./damage.mjs";
+
 /**
  * Red's scripted riders — the parts of a Red Substrate that happen on a clock rather than on a roll.
  *
@@ -30,7 +32,7 @@ export const Red = {
         if (!actor || !token) return 0;
         const options = new Set(actor.getRollOptions());
         const garnet = [...options].map((o) => /^self:effect:substrate-garnet:(\d+)$/.exec(o)).find(Boolean);
-        if (!garnet || Number(garnet[1]) < 3 || !options.has("carapace:intact")) return 0;
+        if (!garnet || Number(garnet[1]) < 3 || !options.has("carapace:intact") || options.has(SUPPRESSED)) return 0;
 
         const near = canvas.tokens.placeables.some((other) => other !== token && bleeding(other.actor)
             && canvas.grid.measurePath([token.center, other.center]).distance <= 30);
