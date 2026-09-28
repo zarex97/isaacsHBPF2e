@@ -71,7 +71,7 @@ reaction nor an action.
 | S-74d | At Night | You may do this even while your reaction is spent |  | ✅ | Live: the card is headed **“Effect: The Balance, at Night — free action”**, not “reaction”. A reaction rider may now declare `freeAction`, which is the honest half of this clause; the other half is honest by accident — the module has never tracked a *spent* reaction, so nothing was stopping it. What `looksAbleToReact` actually gates on is being able to act at all (unconscious, paralyzed, petrified, stunned), which is the right gate for a free action too |
 | S-74e | Sight of the Balance | **Sight of the Balance:** at the start of each of your turns, choose one enemy within 60 feet | `test-riders` pins the picker and both effects it hands out | ✅ | **Fixed; this is what the picker was built for.** It fires at the **start of a turn**, so there is no trigger to point at and `trigger: true` — the module's only other way to reach a creature that is not the rider's target — has nothing to reach for. Live: the Quincy's turn began and a whispered card offered every enemy within 60 feet by name (*D1, D2, D3, D4, ZZ Victim, Ghoul Soldier*) |
 | S-74f | Sight of the Balance | Until the start of your next turn, that creature's fortune and misfortune are yours to allot — it takes a **−2 status penalty** to its next saving throw |  | ✅ | Live on the creature chosen from that card: **`Effect: Sight of the Balance`**, reading **The Balance −2 (status)** on D3's Will. `removeAfterRoll` is what makes it *“its **next** saving throw”* rather than a round of them |
-| S-74g | Sight of the Balance | the next ally who attacks it gains a **+1 status bonus** to that attack roll |  | ⚠️ | **The bonus reaches the allies; it is not tied to the creature.** Live in the same click: **`Effect: Allotted Fortune`** landed on the **ally** — not on the enemy and not on the Quincy — reading **+1 (status)** on their Strike, and `removeAfterRoll` makes it one attack. What it cannot say is *“the next ally who attacks **it**”*: a pf2e effect has no way to be about one specific creature without baking that creature's signature into a predicate at hand-out time, which the module can do (`substitutions`) but does not here. So the ally gets their +1 on whatever they attack next. Fixing this half found the other one: a pick's nested riders now resolve their own targets, which is why the ally's bonus is not on the enemy — before that both halves landed on the creature the clause is aimed *against* |
+| S-74g | Sight of the Balance | the next ally who attacks it gains a **+1 status bonus** to that attack roll | `test-riders` pins the substitution and `if-enabled` | 🔧 | **Fixed, awaiting re-drive (#77).** The pick now keeps the chosen creature, and `picked.as-target` bakes `target:signature:<its signature>` into `Effect: Allotted Fortune`'s predicate as it is handed out, so the +1 is about **that** creature. `removeAfterRoll` is now `if-enabled`: `true` spent the bonus on whatever the ally attacked first. Before: live, the ally got **+1 (status)** on any Strike, one attack. Still open by design: every ally within 60 feet gets a copy, so *"the next ally"* can be several allies |
 
 ## Severing Art — The Reckoning (guide §9.3)
 
@@ -89,8 +89,8 @@ reaction nor an action.
 | :-- | --: |
 | ☐ | 0 |
 | ✅ | 21 |
-| ⚠️ | 1 |
+| ⚠️ | 0 |
 | ❌ | 0 |
-| 🔧 | 0 |
+| 🔧 | 1 |
 | — | 0 |
 | **Total** | **22** |
