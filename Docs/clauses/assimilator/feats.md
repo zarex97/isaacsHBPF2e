@@ -125,8 +125,8 @@ forgotten."* — is not a clause and has no row.
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| AF-30a | §8.8 Apex Predator | When you critically hit with a Mutation, apply that Substrate's **Depth 4 rider**, whether or not it is at Depth 4. | `rig` | ✅ | Rig, live: a critical hit posted the **Depth 4 rows** of Ruby and Sapphire, the Mutations on the Strike. Applying them is on the card |
-| AF-30b | §8.8 Apex Predator | *Does not stack with Gold's Instinct clause — take the better.* | `rig` | ✅ | Rig, live: with Gold's Instinct too, **one** card (Apex Predator's), not both |
+| AF-30a | §8.8 Apex Predator | When you critically hit with a Mutation, that Substrate counts as **Depth 4 for that Strike**, whether or not it is at Depth 4. | `rig` | ✅ | Rig, live: a critical hit with Ruby 2 and Sapphire 2 on the Strike makes **both count as Depth 4**. Control: no critical, both stay 2. Was a card quoting the rows; the #86 ruling makes it the raise (guide §8.8) |
+| AF-30b | §8.8 Apex Predator | *Does not stack with Gold's Instinct clause — take the better.* | `rig` | ✅ | Rig, live: with Gold's Instinct too, **one** raise — Apex Predator's, which covers every Mutation on the Strike; Gold's makes none |
 | AF-31 | §8.8 Regurgitate | **Free action**, once per day: **Shed** one Substrate and immediately **Feed** a Substrate you are carrying, at Depth 1. | `rig` | ✅ | Rig, live: Ruby shed and a carried Copper Ingot fed in at **Depth 1**, at once |
 | AF-32 | §8.8 Unbreakable Shell | Once per day, when your Carapace would be reduced below its **Broken Threshold**, it is instead reduced to exactly that threshold. | `rig` | ✅ | Rig, live: a Block that would break the plate left it at **exactly its Broken Threshold**; once a day |
 | AF-33 | §8.8 Chimeric Frame | You gain **two of Nickel's Aberrations** without binding Nickel, re-rolled or re-chosen at each daily preparations. | `rig` | ✅ | Rig, live: **two** Aberrations with no Nickel bound, chosen or rolled in the Gullet |

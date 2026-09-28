@@ -8,6 +8,7 @@ import { Bonds } from "./assimilator/bonds.mjs";
 import { Feats } from "./assimilator/feats.mjs";
 import { Red } from "./assimilator/red.mjs";
 import { Shove } from "./assimilator/shove.mjs";
+import { Citrine } from "./assimilator/citrine.mjs";
 import { AssimilatorRig } from "./assimilator/rig.mjs";
 import { Astral } from "./astral.mjs";
 import { CastPipeline } from "./cast-pipeline.mjs";
@@ -131,6 +132,7 @@ Hooks.once("init", () => {
     start("the Bonds", () => Bonds.registerHooks());
     start("the Assimilator feats", () => Feats.registerHooks());
     start("the Shove push", () => Shove.registerHooks());
+    start("Citrine's fortune", () => Citrine.registerHooks());
     start("damaged this encounter", () => EncounterDamage.registerHooks());
     start("Regeneración's suppression", () => DamageBus.after("Regeneración's suppression", PRIORITY.regeneracion,
         (actor, params) => Regeneracion.onDamage(actor, params)));
@@ -194,6 +196,7 @@ Hooks.once("init", () => {
             bonds: Bonds,
             feats: Feats,
             shove: Shove,
+            citrine: Citrine,
             mend: (actor, itemId) => AssimilatorEngine.mend(actor, itemId),
         },
         open: () => new SkyTrackerApp().render(true),

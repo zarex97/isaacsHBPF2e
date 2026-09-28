@@ -17,7 +17,7 @@
         },
         "category": "class",
         "description": {
-            "value": "<p>When you critically hit with a Mutation, apply that Substrate's <strong>Depth 4 rider</strong>, whether or not it is at Depth 4. <em>Does not stack with Gold's Instinct clause — take the better.</em></p>"
+            "value": "<p>When you critically hit with a Mutation, that Substrate counts as <strong>Depth 4 for that Strike</strong>, whether or not it is at Depth 4. <em>Does not stack with Gold's Instinct clause — take the better.</em></p>"
         },
         "level": {
             "value": 14

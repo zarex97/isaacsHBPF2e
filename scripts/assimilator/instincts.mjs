@@ -4,7 +4,7 @@ import { shadowTarget } from "../riders/bypass.mjs";
 import { Relay } from "../riders/relay.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 import { AssimilatorDamage, depthOf, suppressed } from "./damage.mjs";
-import { scaled } from "./engine.mjs";
+import { Engine, scaled } from "./engine.mjs";
 
 /**
  * The Instinct clauses that happen on an event rather than on a sheet (guide §5.1).
@@ -300,7 +300,7 @@ export const Instincts = {
         }
         // Gold: on a critical hit, the chosen Substrate's Depth 4 row may apply.
         if (instincts.has("gold") && context?.type === "attack-roll" && context.outcome === "criticalSuccess") {
-            await Instincts.goldenCritical(actor);
+            await Instincts.goldenCritical(actor, message);
         }
     },
 
@@ -325,16 +325,15 @@ export const Instincts = {
         await say(actor, `<strong>Orange Instinct</strong>: ${actor.name} ${why}; the next Mutation this round deals +1d4.`);
     },
 
-    async goldenCritical(actor) {
-        // "Does not stack with Gold's Instinct clause — take the better": Apex Predator's card names every Mutation.
+    /** Gold: "When you critically hit, that Substrate counts as Depth 4 for that Strike" (#86). */
+    async goldenCritical(actor, message) {
+        // "Does not stack with Gold's Instinct clause — take the better": Apex Predator raises every Mutation on the Strike.
         if ((actor.itemTypes?.feat ?? []).some((f) => f.slug === "apex-predator")) return;
         const pick = record(actor).choices?.goldInstinct;
-        const substrate = pick && actor.itemTypes.effect.find((e) => e.flags?.[MODULE_ID]?.[KEY]?.substrate?.slug === pick);
-        if (!substrate) return;
-        const row = /<tr><td>4<\/td><td>(.*?)<\/td><\/tr>/s.exec(substrate.system.description?.value ?? "")?.[1];
-        if (!row) return;
-        await say(actor, `<strong>Gold Instinct</strong>: a critical hit — ${actor.name} may apply `
-            + `<strong>${substrate.name.replace(/^Substrate:\s*/, "")}</strong>'s Depth 4 rider:</p><blockquote>${row}</blockquote><p>`);
+        if (!pick) return;
+        const raised = await Engine.depthFour(actor, [pick], { madeBy: message?.id ?? null, why: "gold" });
+        if (raised) await say(actor, `<strong>Gold Instinct</strong>: a critical hit — ${raised.join(", ")} counts as `
+            + "<strong>Depth 4</strong> for this Strike.");
     },
 
     /* ---------------------------------------------------------------------------------------- */

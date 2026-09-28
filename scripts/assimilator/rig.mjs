@@ -630,10 +630,91 @@ const INSTINCTS = [
         want: 2 },
     { id: "I-2a", lv: 17, b: { citrine: 4, gold: 1, ruby: 4 }, c: { goldInstinct: "ruby" }, act: async (a) => derived(a).effective.ruby,
         want: 4, note: "never above the Depth cap" },
-    { id: "I-2b", lv: 17, b: { citrine: 2, sapphire: 1 }, c: { goldInstinct: "sapphire" }, crit: true, act: async () => {
-        const card = await until(() => game.messages.contents.slice(-8).find((m) => m.content?.includes("Gold Instinct")));
-        return !!card && /Sapphire/.test(card.content) && /slowed/.test(card.content);
-    }, want: true, note: "the card quotes Sapphire's Depth 4 row" },
+    // #86: "that Substrate counts as Depth 4 for that Strike" — until the next attack is rolled.
+    { id: "I-2b", lv: 17, b: { citrine: 2, sapphire: 1 }, c: { goldInstinct: "sapphire" }, crit: true, act: async (a, t) => {
+        const raised = await until(() => derived(a).effective.sapphire === 4, 6000);
+        const cold = /1d6 cold/.test((await strikeRoll(a)).rolls[0].formula);
+        // The next attack a miss, so it spends the raise without making another.
+        await game.actors.get(t.id).update({ "system.attributes.ac.value": 99 });
+        await read.strike(game.actors.get(a.id)).attack({ skipDialog: true });
+        const spent = await until(() => derived(a).effective.sapphire === 2, 6000);
+        return [!!raised, cold, !!spent];
+    }, want: [true, true, true], note: "a critical: Sapphire (1, Gold's +1 makes 2) counts as 4 — its 1d6 cold — for the Strike; the next attack ends it" },
+    { id: "I-2b", lv: 17, b: { citrine: 2, sapphire: 1 }, c: { goldInstinct: "sapphire" }, act: async (a, t) => {
+        await game.actors.get(t.id).update({ "system.attributes.ac.value": 99 });
+        await read.strike(game.actors.get(a.id)).attack({ skipDialog: true });
+        await wait(1500);
+        return derived(a).effective.sapphire;
+    }, want: 2, note: "control: a miss raises nothing — Sapphire stays at Gold's 2" },
+    { id: "I-2b", lv: 17, b: { citrine: 2, sapphire: 1 }, c: { goldInstinct: "sapphire" }, apply: "effect-carapace-broken", crit: true, act: async (a) => {
+        await wait(2000);
+        return derived(a).effective.sapphire;
+    }, want: 2, note: "control: on a broken plate there is no raise — §4.3 would switch it off" },
+    { id: "TO-4a", lv: 17, b: { topaz: 4, ruby: 1 }, crit: true, act: async (a) => {
+        const crit = game.messages.contents.findLast((m) => m.flags?.pf2e?.context?.type === "attack-roll");
+        const card = await until(() => game.messages.contents.findLast((m) => m.flags?.["isaacs-hb-pf2e"]?.assimilatorTopaz
+            && m.timestamp >= crit.timestamp), 6000);
+        const offered = card?.flags["isaacs-hb-pf2e"].assimilatorTopaz.options ?? [];
+        document.querySelector(`li.chat-message[data-message-id="${card?.id}"] button[data-value="ruby"]`)?.click();
+        const raised = await until(() => derived(a).effective.ruby === 4, 6000);
+        return [offered, !!raised];
+    }, want: [["ruby"], true], note: "a critical: the card offers the other Substrate, and the pick counts as 4" },
+    { id: "TO-4a", lv: 17, b: { topaz: 3, ruby: 1 }, crit: true, act: async () => {
+        await wait(2000);
+        const crit = game.messages.contents.findLast((m) => m.flags?.pf2e?.context?.type === "attack-roll");
+        return game.messages.contents.some((m) => m.flags?.["isaacs-hb-pf2e"]?.assimilatorTopaz && m.timestamp >= crit.timestamp);
+    }, want: false, note: "control: Topaz 3 offers nothing" },
+    { id: "AU-1b", lv: 17, b: { gold: 1, ruby: 2 }, c: { gold: ["ruby"] }, act: async (a) => [derived(a).effective.ruby,
+        /1d6 fire/.test((await strikeRoll(a)).rolls[0].formula)], want: [3, true], note: "Ruby 2 chosen manifests at 3 — the whole Depth, its 1d6 fire with it" },
+    { id: "AU-1b", lv: 17, b: { gold: 1, ruby: 2 }, act: async (a) => derived(a).effective.ruby, want: 2, note: "control: nothing chosen, Ruby stays 2" },
+    { id: "AU-2a", lv: 17, b: { gold: 2, ruby: 1, iron: 1 }, c: { gold: ["ruby"] }, act: async (a, t, ctx) => {
+        const me = () => game.actors.get(a.id);
+        const outside = (await Engine.choose(me(), "gold", ["iron"])).ok ?? false;
+        return inCombat(ctx, async () => {
+            const first = (await Engine.choose(me(), "gold", ["iron"])).ok ?? false;
+            await wait(800);
+            const iron = derived(a).effective.iron;
+            const second = (await Engine.choose(me(), "gold", ["ruby"])).ok ?? false;
+            return [outside, first, iron, second];
+        });
+    }, want: [false, true, 2, false], note: "outside an encounter: refused; in one: once, and Iron rises; a second time: refused" },
+    { id: "AU-2a", lv: 17, b: { gold: 1, ruby: 1, iron: 1 }, c: { gold: ["ruby"] }, act: async (a, t, ctx) =>
+        inCombat(ctx, async () => (await Engine.choose(game.actors.get(a.id), "gold", ["iron"])).ok ?? false),
+    want: false, note: "control: Gold 1 may not choose again" },
+    // Citrine 2: Gilded Chance rerolls the last failed check, +2.
+    ...[[2, true], [1, false]].map(([d, plus]) => ({ id: "CI-2b", lv: 17, b: { citrine: d }, act: async (a) => {
+        const me = () => game.actors.get(a.id);
+        await me().skills.athletics.roll({ dc: { value: 99 }, skipDialog: true });
+        await wait(800);
+        await use(a, "gilded-chance", 3000);
+        const reroll = game.messages.contents.slice(-6).findLast((m) => (m.rolls ?? []).some((r) => r.options?.isReroll));
+        const roll = reroll?.rolls?.find((r) => r.options?.isReroll);
+        const gilded = (roll?.terms ?? []).some((x) => x.number === 2 && x.options?.flavor === "Gilded Chance");
+        return [!!roll, gilded];
+    }, want: [true, plus], note: plus ? "Citrine 2: the reroll carries +2" : "control: Citrine 1 rerolls without it" })),
+    // Citrine 3: an enemy's critical save against you, within 30 feet, is a success — once an encounter.
+    { id: "CI-3a", lv: 17, b: { citrine: 3 }, act: async (a, t, ctx) => inCombat(ctx, async () => {
+        // An earlier check leaves the target at Fortitude −40; this one needs a critical success.
+        await game.actors.get(t.id).update({ "system.saves.fortitude.value": 10 });
+        const save = async (who) => {
+            await who.saves.fortitude.roll({ dc: { value: -30 }, origin: game.actors.get(a.id), skipDialog: true });
+            await wait(1200);
+            return game.messages.contents.at(-1).flags.pf2e.context.outcome;
+        };
+        const first = await save(game.actors.get(t.id));
+        const second = await save(game.actors.get(t.id));
+        return [first, second];
+    }), want: ["success", "criticalSuccess"], note: "adjacent: the first critical is a success; the second that encounter stands" },
+    { id: "CI-3a", lv: 17, b: { citrine: 3 }, act: async (a, t, ctx) => inCombat(ctx, async () => {
+        await place(ctx, ctx.bystanderTokenId, 8);
+        const by = game.actors.get(ctx.bystanderId);
+        await by.update({ "system.details.alliance": "opposition", "system.saves.fortitude.value": 10 });
+        await by.saves.fortitude.roll({ dc: { value: -30 }, origin: game.actors.get(a.id), skipDialog: true });
+        await wait(1200);
+        const outcome = game.messages.contents.at(-1).flags.pf2e.context.outcome;
+        await place(ctx, ctx.bystanderTokenId, 2);
+        return outcome;
+    }), want: "criticalSuccess", note: "control: 35 feet away, the critical stands" },
 
     // Orange.
     { id: "I-3a", lv: 17, b: { carnelian: 3, ruby: 2 }, act: async (a, t, ctx) => inCombat(ctx, async () => {
@@ -1408,15 +1489,17 @@ const FEAT_CHECKS = [
         const granted = await until(() => !!featItem(a, "reactive-evolution"));
         return granted;
     }, want: true, note: "Reactive Evolution without Moonstone" },
-    { id: "AF-30a", lv: 17, b: { ruby: 2, sapphire: 2 }, feats: ["apex-predator"], crit: true, act: async () => {
-        const card = await until(() => game.messages.contents.slice(-8).find((m) => m.content?.includes("Apex Predator")));
-        return !!card && /Ruby/.test(card.content) && /Sapphire/.test(card.content);
-    }, want: true, note: "a critical: each Mutation's Depth 4 rider is offered" },
-    { id: "AF-30b", lv: 17, b: { citrine: 3, ruby: 2 }, c: { goldInstinct: "ruby" }, feats: ["apex-predator"], crit: true, act: async () => {
-        await wait(1500);
-        const cards = game.messages.contents.slice(-8);
-        return [cards.some((m) => m.content?.includes("Apex Predator")), cards.some((m) => m.content?.includes("Gold Instinct"))];
-    }, want: [true, false], note: "with Gold's Instinct too, one card: the better" },
+    { id: "AF-30a", lv: 17, b: { ruby: 2, sapphire: 2 }, feats: ["apex-predator"], crit: true, act: async (a) =>
+        !!(await until(() => derived(a).effective.ruby === 4 && derived(a).effective.sapphire === 4, 6000)),
+    want: true, note: "a critical: every Mutation on the Strike counts as Depth 4" },
+    { id: "AF-30a", lv: 17, b: { ruby: 2, sapphire: 2 }, feats: ["apex-predator"], act: async (a) => {
+        await strikeRoll(a); await wait(1000);
+        return [derived(a).effective.ruby, derived(a).effective.sapphire];
+    }, want: [2, 2], note: "control: no critical, no raise" },
+    { id: "AF-30b", lv: 17, b: { citrine: 3, ruby: 2 }, c: { goldInstinct: "ruby" }, feats: ["apex-predator"], crit: true, act: async (a) => {
+        await wait(2000);
+        return game.actors.get(a.id).itemTypes.effect.map((e) => e.flags?.["isaacs-hb-pf2e"]?.assimilator?.why).filter(Boolean);
+    }, want: ["apex-predator"], note: "with Gold's Instinct too, one raise: Apex Predator's, the better" },
 
     { id: "AF-15a", lv: 17, b: { ruby: 1 }, feats: ["twin-maw"], act: async (a, t, ctx) => {
         canvas.scene.tokens.get(ctx.targetTokenId).object?.setTarget(true, { user: game.user, releaseOthers: true });
@@ -2049,8 +2132,8 @@ export const AssimilatorRig = {
         if (target().statuses?.has("dead")) await target().toggleStatusEffect("dead", { active: false });
         for (const e of target().itemTypes.effect.filter((x) => /studied|siphon/.test(x.slug))) await e.delete();
         // Anchored: the Bond effects are slugged `solar-core` too, and an unanchored match deleted the Bond itself.
-        for (const e of actor().itemTypes.effect.filter((x) => /^effect-(siphon|kinetic-surge|integrated-plating|knitting-surge|solar-core|imperial|shadow-mantle|plated-guard|instinctive-surge|taste-for-it|devour|second-hunger|reach-of-the-thing|wall-of-me|worn-no-longer)/.test(x.slug)
-            || /^(Assimilated|Eat the World|ZZ Rig)/.test(x.name))) await e.delete();
+        for (const e of actor().itemTypes.effect.filter((x) => /^effect-(siphon|kinetic-surge|integrated-plating|knitting-surge|solar-core|imperial|shadow-mantle|plated-guard|instinctive-surge|taste-for-it|devour|second-hunger|reach-of-the-thing|wall-of-me|worn-no-longer|depth-4-for-this-strike|carapace-broken)/.test(x.slug)
+            || /^(Assimilated|Eat the World|ZZ Rig)/.test(x.name)).filter((x) => x.slug !== check.apply)) await e.delete();
         for (const e of target().itemTypes.effect.filter((x) => /cold-reading|mindstorm|corroded|hunted-in-darkness/.test(x.slug))) await e.delete();
         for (const x of target().itemTypes.armor) await x.delete();
         await actor().update({ "flags.pf2e.rollOptions.all.-=assimilator:living-flame": null });
