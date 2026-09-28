@@ -29,7 +29,41 @@
         "rules": [
             {
                 "key": "Sense",
-                "selector": "darkvision"
+                "selector": "darkvision",
+                "predicate": [
+                    {
+                        "not": "assimilator:organ:scent"
+                    },
+                    {
+                        "not": "assimilator:organ:low-light"
+                    }
+                ]
+            },
+            {
+                "key": "Sense",
+                "selector": "scent",
+                "acuity": "imprecise",
+                "range": 30,
+                "predicate": [
+                    "assimilator:organ:scent"
+                ]
+            },
+            {
+                "key": "Sense",
+                "selector": "low-light-vision",
+                "predicate": [
+                    "assimilator:organ:low-light"
+                ]
+            },
+            {
+                "key": "FlatModifier",
+                "selector": "perception",
+                "slug": "aberrant-organ",
+                "value": 2,
+                "label": "An Organ",
+                "predicate": [
+                    "assimilator:organ:low-light"
+                ]
             }
         ],
         "start": {
