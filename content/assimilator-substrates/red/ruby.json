@@ -322,7 +322,7 @@
                     "carapace:intact"
                 ],
                 "selector": "unarmed-attack-roll",
-                "text": "The target's space burns: a creature ending its turn there takes 1d6 fire.",
+                "text": "The target's space burns for 1 minute once the damage lands: a creature ending its turn there takes 1d6 fire.",
                 "title": "Ruby (Depth 4)"
             }
         ],
