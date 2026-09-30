@@ -201,6 +201,23 @@ export const Reiatsu = {
                     // can cap it. Driven by an item flag, so it costs nothing on an actor without one.
                     applyAttributeCaps(this);
 
+                    // The Stargazer's pool is set by level too — 1, 2 at Second Star, 3 with Conjunction —
+                    // and a derived count would be wrong both ways: 2 at 5th from two Auguries known, and
+                    // one more every morning the sky hands out an Augury of the Day (guide §4.1, §4.9).
+                    // Same wrapper, because `wrap()` allows one on `prepareDerivedData`.
+                    //
+                    // The value is re-read from the source, not from `focus.value`: pf2e has already clamped
+                    // that to its own derived maximum, which is 0 for a Stargazer who knows no Auguries yet.
+                    // Driven: a stored 1 read back as 0 on a pool of 1 until this read the source.
+                    if (classSlugOf(this) === "stargazer") {
+                        const focus = this.system?.resources?.focus;
+                        if (focus) {
+                            focus.max = focus.cap ?? focus.max;
+                            const stored = this._source?.system?.resources?.focus?.value;
+                            focus.value = Math.max(0, Math.min(stored ?? focus.value ?? 0, focus.max));
+                        }
+                    }
+
                     if (classSlugOf(this) === "soulbound") {
                         const focus = this.system?.resources?.focus;
                         if (focus) {

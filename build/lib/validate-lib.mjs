@@ -107,6 +107,7 @@ const FAMILY_PREFIXES = [
     ["saint-", "saint"],
     ["soulbound-", "soulbound"],
     ["assimilator-", "assimilator"],
+    ["stargazer-", "stargazer"],
 ];
 
 /**
@@ -1924,20 +1925,32 @@ function validateEffect(doc, where, errors) {
     if (!system.tokenIcon) errors.push(`${where}: effect missing tokenIcon`);
 }
 
+/**
+ * Each class's chassis numbers, from its guide. The first three classes share 10 HP and a Strength-or-
+ * Dexterity key; the Stargazer is the first that does not (guide §3: 8 HP, Wisdom).
+ */
+const CLASS_PROFILES = {
+    saint: { hp: 10, keys: ["str", "dex"], dc: "Cosmo DC", guide: "guide §2, §1.5" },
+    soulbound: { hp: 10, keys: ["str", "dex"], dc: "Reiatsu DC", guide: "Soulbound guide §3" },
+    assimilator: { hp: 10, keys: ["str", "dex"], dc: "Assimilator DC", guide: "Assimilator guide §3" },
+    stargazer: { hp: 8, keys: ["wis"], dc: "Stargazer DC", guide: "Stargazer guide §3" },
+};
+
 function validateClass(doc, where, errors, family) {
     const system = doc.system;
     const expected = family ?? "saint";
-    const dcName = { soulbound: "Reiatsu DC", assimilator: "Assimilator DC" }[family] ?? "Cosmo DC";
+    const profile = CLASS_PROFILES[expected] ?? CLASS_PROFILES.saint;
+    const dcName = profile.dc;
     if (system.slug !== expected) {
         errors.push(`${where}: class slug must be "${expected}" (it keys the ${dcName})`);
     }
     if (!(system.traits?.value ?? []).includes(expected)) {
         errors.push(`${where}: class must carry the "${expected}" trait`);
     }
-    if (system.hp !== 10) errors.push(`${where}: HP should be 10 (guide §2)`);
+    if (system.hp !== profile.hp) errors.push(`${where}: HP should be ${profile.hp} (${profile.guide})`);
     const keyAbility = system.keyAbility?.value ?? [];
-    if (keyAbility.length !== 2 || !keyAbility.includes("str") || !keyAbility.includes("dex")) {
-        errors.push(`${where}: key ability should be Strength or Dexterity (guide §1.5)`);
+    if (keyAbility.length !== profile.keys.length || !profile.keys.every((k) => keyAbility.includes(k))) {
+        errors.push(`${where}: key ability should be ${profile.keys.join(" or ")} (${profile.guide})`);
     }
     for (const [key, grant] of Object.entries(system.items ?? {})) {
         if (typeof grant.level !== "number") errors.push(`${where}: items.${key} missing level`);
@@ -2007,6 +2020,22 @@ const SOULBOUND_ADVANCEMENT = {
  * The whole of guide §3 since Phase 2. The Mass each feature grants is checked against §3.1's table by
  * `build/test-assimilator.mjs`, which is the other half of the same promise.
  */
+/**
+ * The Stargazer's chassis, guide §3. Only what phase 1 builds is listed; each later phase adds its own
+ * features here as they land (Night Vigil, Fortune's Thread, the Paths, the rewinds).
+ */
+const STARGAZER_ADVANCEMENT = {
+    1: ["Star Chart"],
+    3: ["Astronomy Lore (3rd)"],
+    7: ["Expert Stargazer", "Vigilant Senses", "Second Star", "Astronomy Lore (7th)"],
+    9: ["Great Fortitude"],
+    11: ["Resolve", "Weapon Expertise"],
+    13: ["Incredible Senses", "Lightning Reflexes", "Armor Expertise"],
+    15: ["Master Stargazer", "Astronomy Lore (15th)"],
+    17: ["Greater Resolve"],
+    19: ["Legendary Stargazer"],
+};
+
 const ASSIMILATOR_ADVANCEMENT = {
     1: ["The Carapace", "Instinct", "Assimilation"],
     3: ["Growth"],
@@ -2070,5 +2099,11 @@ function validateAdvancementTable(packs, errors) {
         slug: "assimilator",
         table: ASSIMILATOR_ADVANCEMENT,
         guideRef: "Assimilator guide §3",
+    });
+    checkAdvancement(packs, errors, {
+        pack: "stargazer-class",
+        slug: "stargazer",
+        table: STARGAZER_ADVANCEMENT,
+        guideRef: "Stargazer guide §3",
     });
 }

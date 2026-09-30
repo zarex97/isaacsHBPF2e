@@ -1,0 +1,47 @@
+{
+    "folder": "Core",
+    "img": "icons/sundries/books/book-embossed-blue.webp",
+    "name": "Astronomy Lore (15th)",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your proficiency rank in Astronomy Lore increases to <strong>legendary</strong>, and you gain an extra skill feat, which must apply to Astronomy Lore or Occultism.</p>"
+        },
+        "level": {
+            "value": 15
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "stargazer-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        }
+    },
+    "type": "feat",
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "loreRank": {
+                "slug": "astronomy-lore",
+                "rank": 4
+            }
+        }
+    }
+}
