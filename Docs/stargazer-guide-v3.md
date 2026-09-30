@@ -1,4 +1,4 @@
-# The Stargazer — PF2e Class Guide, **Version 3**
+# The Stargazer — PF2e Class Guide, **Version 3.1**
 
 ### *The diviner, the luck-handler, and the one who has already seen how this ends*
 
@@ -25,6 +25,37 @@ for every mechanical anchor; and **this module's own shipped Sky implementation*
 
 ---
 
+## 0 — What changed in v3.1
+
+v3.1 is a set of **rulings**, not a redesign. Clausifying v3 (`Docs/clauses/stargazer/`) found places
+where the guide disagreed with itself, with pf2e, or with the Sky this module ships; each was ruled on
+in #103 and is written in below. The item numbers are #103's.
+
+| # | Ruling |
+| :-- | :-- |
+| R1 | *Skein of Fates* (Weaver, 13th) did nothing once v3's *Widen the Sky* allowed two of a kind. It now makes Fortune's Thread affect **one additional creature** — three from 13th, four from 17th — and does not extend *Twin Fates* or *Tapestry*. |
+| R2 | *Doubled Strand* (Weaver, 5th) names two creatures from 5th and **three** from 11th, with a free Thread for each, instead of falling behind the base feature at 11th. |
+| R3 | *Cascade* (12th) grants *Twin Fates* on **one** target at 12th and raises it to **three** from 15th, instead of modifying a feature it predates. |
+| R4 | *Omen of Blades* reduces damage by **2 plus 2 per rank**, which is what its printed 4 / 6 / 8 / 10 always said. |
+| R5 | The rewinds, the Portent's die and Chart the Course's free Thread are **built**, not left to the table (§11.3, §11.7). Only *The Dream* stays a GM technique. |
+| R6 | The Sky effects are shown as a blank `The Sky` whenever a player owns a Stargazer, and `announceSky: false` whispers the Stargazers instead of nobody (§8.4, §11.5). §11.5 is rewritten around what #30 shipped. |
+| R7 | The Sky keeps a **history** of past days (§8.2); reads of the future stop at the end of the seven-day queue; *Two Skies* and *Private Sign* read a second aspect pre-rolled into the queue. |
+| R8 | Night Vigil no longer says Exalted happens only when the GM decides; it is rolled at §8.2's weights. |
+| R9 | The stale **2100** figures in §2.7, §2.8 and §10.4 are corrected. |
+| R10 | The Focus Point counts in *The Hour Is Not Come* and §9.4 are corrected: one until 7th, two from 7th, three with *Conjunction*. |
+| R11 | Four renames: the 6th-level feat *Retrograde* is ***Second Chance at Fate***, the 2nd-level *Almanac* is ***Reckoning of Days***, the 16th-level *Constellation of One* is ***Private Sign*** — built from one of the sixteen Auguries and one existing domain — and the Herald's *Ill Omen* is ***Herald's Omen***. |
+| R12 | Your chart indoors is **not** a Night Vigil; it is *Clouded Sky*, which the GM marks on the Sky tracker. |
+| R13 | Fortune's Thread does **not** stack with Aid; both are circumstance bonuses. |
+| R14 | *Perfect Ledger* lasts until the end of your **next** turn, so it reaches your allies. |
+| R15 | *Fixed Sky* fixes **one** Portent at 20, spoken once per week, and leaves the others daily. *Foretold Escape* works only on an **attack roll** against you. |
+| R16 | *Fixed Point* stands as written. |
+| R17 | Smaller fixes: *Coiling Doubt*'s stupefied lasts its minute; *Fate's Favourite* is a natural 20; *Second Chance at Fate* keeps the new result and is a fortune effect; *Long Now* extends only Duration lines; *Alms of Fate* loses the `fortune` trait; *Reckoning of Days* cites §8.4; *Star-Marked Enemy* lifts Snarl's "that you can see"; §0A's *Death Foretold* now includes the fleeing. |
+
+How the pre-roll features are driven in Foundry — **armed in advance**, not prompted on every roll —
+is ADR-0004 and §11.2.
+
+---
+
 ## 0A — What changed in v3
 
 v3 is a commissioned buff, not a correction. Four things were asked for. All four are in, and the
@@ -42,7 +73,7 @@ budget consequences are in §2.4–2.5 rather than hidden in a reshuffle.
    to unbreakable by mental effects from 17th on, which is the correct end state for a seer.
 3. **Two self-defence options**, because 8 HP and Reflex Trained until 13th was never survivable:
    - ***Death Foretold*** (§5.2) — an Augury available from **1st level**. You show a creature the
-     hour of its own death. Will save; frightened 1/2, and **frightened 3 and stunned 1** on a
+     hour of its own death. Will save; frightened 1/2, and **frightened 3, stunned 1 and fleeing** on a
      critical failure. It heightens to **five creatures**, which is exactly how *fear* heightens.
    - ***The Last Thing You See*** (§4.8) — a **reaction at 5th level**, triggered when something
      damages you, applying the same fear ladder to whatever hit you. This is the class's first
@@ -333,7 +364,7 @@ actually sits, in case something misbehaves in play. Pull from the top.
 | *Guiding Star*'s 10th-rank tier | 0 | +2 to five allies is *Courageous Anthem* and then some. Cap it at +1 and it is merely excellent. |
 | *Coiling Doubt*'s 1-minute critical failure | 0 | Three creatures rolling twice-take-lower for a minute ends boss fights. Cap the crit failure at 3 rounds as well. |
 | *Death Foretold*'s crit-failure line | 0 | Frightened 3 **and** stunned 1 **and** fleeing is three riders on one outcome. Drop fleeing first. |
-| Malefic's sky weight (§8.2) | 0 | Move 10 of it to Quiet if the world feels oppressive. Costs the class nothing. |
+| Retrograde's sky weight (§8.2) | 0 | Move 10 of it to Quiet if the world feels oppressive. Costs the class nothing. |
 | Perception Legendary → Master@7 | 190 | Undoes half of §0A item 1. |
 | Will Legendary → Master@11 | 190 | Undoes §0A item 2. |
 
@@ -370,12 +401,12 @@ number is defensible in shape and high in magnitude. What it does **not** defend
 ### 2.7 The tuning knob
 
 Initial skills were set last, per line 134. Four additional increases plus Occultism and Astronomy
-Lore lands the total on 2100 with nothing left over. If a later change needs 5 points, the fifth
+Lore lands the total on 2860 with nothing left over. If a later change needs 5 points, the fifth
 initial skill increase is where it comes from; if it needs to free 5, the fourth is where it goes.
 
 ### 2.8 The three judgment calls
 
-Flag these if you post the build for review. Each has a stated fallback that keeps the total at 2100.
+Flag these if you post the build for review. Each has a stated fallback that leaves the total unchanged.
 
 1. **Five free cantrips on a class with no spell slots.** Line 140 grants 5 free cantrips to "each
    casting class, even bounded." A class with cantrips and *no slots at all* is not something the
@@ -451,11 +482,11 @@ like. You can change one cantrip during your daily preparations.
 ### 4.2 Night Vigil (1st)
 
 The Sky turns without you (§8). One of thirteen skies is up each day, its aspect is Quiet, Benefic,
-Retrograde, Malefic or — when the GM decides the story wants one — Exalted. Almost nobody can tell
-which.
+Retrograde, Malefic or Exalted, rolled at the weights in §8.2. Almost nobody can tell which.
 
-During your daily preparations, spend 10 minutes observing the sky. (Indoors, underground, or under
-cloud, you read your chart instead — see *Clouded Sky*.) You gain three things:
+During your daily preparations, spend 10 minutes observing the sky. (Indoors, underground or under
+cloud there is no sky to observe, and your chart is not a substitute — see *Clouded Sky*.) You gain
+three things:
 
 1. **Certainty.** You learn today's sign *and* its aspect exactly. No check, no DC, no ambiguity.
 2. **The Forecast.** You learn the sign and aspect of the **next three days**. The sky is fixed
@@ -472,10 +503,10 @@ Retrograde**, **Retrograde → no effect**. Positive aspects are unchanged; you 
 sky, only survive a bad one.
 
 *Forewarned is this class's party function, and after v3's reweighting it is live on **40% of days**
-(§8.2) — 30% Malefic and 10% Retrograde. On those days the party simply does not have a bad day, and
+(§8.2) — 30% Retrograde and 10% Malefic. On those days the party simply does not have a bad day, and
 will not know what that was worth until the session you are not there. Thirty percent of all days are
-Malefic, which is the **−2** tier, so this is not a rounding error: it is the single largest thing the
-class does for four other people.
+Retrograde, which Forewarned erases outright rather than softens, so this is not a rounding error: it
+is the single largest thing the class does for four other people.
 
 **GM override.** The GM may declare the day's sign and aspect instead of rolling, whenever the story
 wants it. That is the feature, not a cheat — it is the omen-telegraphing tool the class exists to
@@ -483,7 +514,8 @@ serve.
 
 **Clouded Sky.** If you cannot complete a Night Vigil you learn nothing, gain no Augury of the Day,
 get no forecast, and cannot use Forewarned. You are as blind as everybody else and the sky does not
-care. The 6th-level feat *Sky Anchor* removes this.
+care. The GM marks a clouded night on the Sky tracker, for the whole world, one night at a time. The
+6th-level feat *Sky Anchor* removes this.
 
 ### 4.3 Fortune's Thread (1st)
 
@@ -497,8 +529,9 @@ care. The 6th-level feat *Sky Anchor* removes this.
 >
 > At 9th level (*Surer Thread*) the bonus and penalty increase to **±2**.
 
-**Why circumstance.** It stacks with *Courageous Anthem*, *Bless*, *Heroism* and Aid, so the Stargazer
-never steps on the party Bard. It is small, it is every round, it is at range, it costs no daily
+**Why circumstance.** It stacks with *Courageous Anthem*, *Bless* and *Heroism*, which are status
+bonuses, so the Stargazer never steps on the party Bard. It does **not** stack with Aid, which is a
+circumstance bonus too; the higher of the two applies. It is small, it is every round, it is at range, it costs no daily
 resource, and it lands on whichever roll matters most — which is what "manipulator of luck" should
 feel like. And ±1/±2 does not distort PF2e's tight math the way a reroll would.
 
@@ -741,7 +774,7 @@ instance. A creature cannot benefit from this Augury again for 10 minutes.
 **Heightened (5th)** The target also regains **2d8** Hit Points. **(+2)** +2d8.
 *The single most valuable thing on this list, and the one to watch in play. It is a reaction, so it
 competes with Fortune's Thread and* The Last Thing You See*, and it costs a Focus Point — the class
-has two of those until 8th level.*
+has one until 7th level, two from 7th, and three only with the 8th-level feat* Conjunction*.*
 
 ***Guiding Star*** ✦✦ (concentrate, prediction)
 **Targets** 2 allies within 60 feet · **Duration** until the start of your next turn
@@ -790,10 +823,12 @@ their next roll.
 
 ***Perfect Ledger*** ✦ (concentrate, prediction)
 **Targets** you and up to 2 allies within 30 feet
-Each target's next **Recall Knowledge** this turn is a **free action**, gains a +2 circumstance bonus,
+Each target's next **Recall Knowledge** before the end of your next turn is a **free action**, gains a
++2 circumstance bonus,
 and on a success reveals one additional piece of information. On a critical success it also reveals the
 creature's **lowest saving throw** and all of its **weaknesses**.
-**Heightened (5th)** Every Recall Knowledge each target makes this turn is a free action.
+**Heightened (5th)** Every Recall Knowledge each target makes until the end of your next turn is a free
+action.
 
 ***Fixed Point*** ✦✦✦ (concentrate, prediction)
 **Area** 30-foot emanation · **Targets** up to 6 creatures you choose
@@ -809,7 +844,7 @@ not always the right answer.*
 **Critical Success** Unaffected. **Success** The next attack roll or skill check the target attempts
 is rolled twice, taking the lower. **Failure** As success, but the first attack roll or skill check
 each round for **3 rounds**. **Critical Failure** As failure for **1 minute**, and the target is
-**stupefied 2**.
+**stupefied 2** for the same minute.
 *Anchor:* *ill omen*, whose critical failure is exactly "every time during the duration, roll twice
 take the worse," on one target. This spreads it across three and adds the stupefied rider.
 
@@ -820,7 +855,7 @@ Seek and to Perception checks to find it, and the **first attack made against it
 +1 circumstance bonus. Your **Snarl** against it is **−3**, or **−4** once you have *Surer Thread*.
 **Heightened (6th)** 2 creatures.
 
-***Alms of Fate*** ✦ (concentrate, fortune, prediction)
+***Alms of Fate*** ✦ (concentrate, prediction)
 **Targets** 2 allies within 30 feet
 On each target's next damaging effect before the end of your next turn, they **reroll all 1s and 2s**
 on the damage dice and must keep the new results.
@@ -881,16 +916,17 @@ interchangeable within the budget.
 - **1st — Knotted Thread (50).** When you **Guide** an ally with Fortune's Thread, they also gain a
   **+1 circumstance bonus to AC** against the next attack made against them before the start of your
   next turn.
-- **5th — Doubled Strand (30).** *Chart the Course* names **two** creatures instead of one. The free
-  Fortune's Thread it grants may be used on either of them, but only once.
-- **13th — Skein of Fates (70).** When you use Fortune's Thread you may apply **Guide to two allies**
-  or **Snarl to two enemies**, instead of the one-and-one that *Widen the Sky* allows.
+- **5th — Doubled Strand (30).** *Chart the Course* names **two** creatures instead of one, and
+  **three** from 11th level. You may use its free Fortune's Thread once for each of them.
+- **13th — Skein of Fates (70).** Fortune's Thread affects **one additional creature** with a single
+  reaction — three from 13th, and four once *Threefold Thread* arrives at 17th. The extra target does
+  not extend *Twin Fates* or *Tapestry*.
 - **17th — Tapestry (70).** Once per 10 minutes, Fortune's Thread affects **every ally within 60 feet**
   (Guide) or **every enemy within 60 feet** (Snarl). One reaction, one choice, everyone.
 
 ### 6.2 The Herald — *I do not curse them. I announce what is coming*
 
-- **1st — Ill Omen (50).** You learn ***Coiling Doubt***, and it does not count against your Auguries
+- **1st — Herald's Omen (50).** You learn ***Coiling Doubt***, and it does not count against your Auguries
   known. In addition, once per round, when a creature critically fails a roll you affected with
   **Snarl**, it takes **persistent mental damage equal to your Wisdom modifier**.
 - **5th — The Announcement (30).** You can **Demoralize** using Astronomy Lore instead of Intimidation,
@@ -958,8 +994,8 @@ at 1, 2, 4, 6, 8, 10, 12, 14, 16, 18 and 20.
 
 ### 2nd level
 
-- **Almanac** — You can attempt an Astronomy Lore check to determine the sky of **yesterday** or of a
-  day more than three days out, at the DCs in §8.5.
+- **Reckoning of Days** — You can attempt an Astronomy Lore check to determine the sky of **yesterday**
+  or of a day more than three days out, as far as the end of the seven-day queue, at the DCs in §8.4.
 - **Twin Portent** — Roll **two** d20s at your Night Vigil and record both as separate Portents. You
   must spend both before your next Vigil or lose them, and *Speak the Portent*'s frequency becomes
   twice per day.
@@ -972,7 +1008,7 @@ at 1, 2, 4, 6, 8, 10, 12, 14, 16, 18 and 20.
 
 - **Read the Room** — Once per encounter, Sense Motive as a **free action**.
 - **Omen of Blades** — When you **Snarl** an attack roll and the attack still hits, you may spend 1
-  Focus Point to reduce the damage by **2 per your Stargazer DC proficiency rank** (so 4 at Trained,
+  Focus Point to reduce the damage by **2 plus 2 per your Stargazer DC proficiency rank** (so 4 at Trained,
   6 at Expert, 8 at Master, 10 at Legendary).
 - **Widened Chart** — *Chart the Course* has a range of 120 feet and no longer requires you to see the
   creature, only to know where it is.
@@ -981,8 +1017,8 @@ at 1, 2, 4, 6, 8, 10, 12, 14, 16, 18 and 20.
 
 ### 6th level
 
-- **Retrograde** — Once per day, when a creature within 30 feet critically fails a check, you may have
-  it reroll. You might want it to succeed.
+- **Second Chance at Fate** — Once per day, when a creature within 30 feet critically fails a check,
+  you may have it reroll and use the new result. This is a fortune effect. You might want it to succeed.
 - **Sky Anchor** — You can perform a Night Vigil with no sky at all. *Clouded Sky* never applies to you.
 - **Prophecy's Weight** — You can **Demoralize** using Astronomy Lore, at 60 feet, with no auditory or
   visual requirement. *(The Herald gets this at 5th; this feat exists for everyone else.)*
@@ -998,7 +1034,7 @@ at 1, 2, 4, 6, 8, 10, 12, 14, 16, 18 and 20.
 
 ### 10th level
 
-- **Fate's Favourite** — Once per day, treat one d20 roll **you** make as a 20. You saw this.
+- **Fate's Favourite** — Once per day, treat one d20 roll **you** make as a **natural 20**. You saw this.
 - **Wide Vigil** — Forewarned has no limit on the number of allies you may brief, and briefing takes 1
   minute.
 - **Unspent Thread** — If you have not used your reaction by the start of your turn, your first *Chart
@@ -1010,8 +1046,10 @@ at 1, 2, 4, 6, 8, 10, 12, 14, 16, 18 and 20.
 
 ### 12th level
 
-- **Cascade** — When you use *Twin Fates*, apply the same effect to a **second** creature.
-- **Long Now** — Your Auguries with a duration of 1 minute last **10 minutes**.
+- **Cascade** — You gain *Twin Fates* (§4.13) now, affecting **one** of its targets. From 15th level,
+  when the class feature arrives, *Twin Fates* affects up to **three** of its targets instead of two.
+- **Long Now** — Your Auguries whose **Duration** line reads 1 minute last **10 minutes**. A duration
+  inside a degree of success, such as *Coiling Doubt*'s critical failure, does not change.
 - **Prophesied Ally** — Choose one ally during your Night Vigil. Fortune's Thread used on that ally
   does not consume your reaction, once per round.
 
@@ -1020,26 +1058,30 @@ at 1, 2, 4, 6, 8, 10, 12, 14, 16, 18 and 20.
 - **Inevitable** — Once per day, ⤾ reaction, when a creature critically succeeds at a check against
   you, it gets a success instead. This is a misfortune effect.
 - **Star-Marked Enemy** — Choose one creature you can see. Until your next daily preparations, *Coiling
-  Doubt* and *Snarl* against it do not require line of sight, only knowledge of its location.
+  Doubt* and *Snarl* against it do not require line of sight, only knowledge of its location. For
+  Snarl, this replaces Fortune's Thread's requirement that you can see the creature.
 - **Echo of the Unmade** — When you use *Unmake the Moment*, you may also grant **one ally** the memory
   of the erased round. They keep it; everyone else does not.
 
 ### 16th level
 
-- **Constellation of One** — Work with your GM to add a **fourteenth sign** to the wheel: your own. It
-  rises only over you, uses the standard aspect scaling, and you roll its aspect separately on days
-  the sky is Starless. Design it together; it should grant an Augury you would not otherwise take.
+- **Private Sign** — Add a **fourteenth sign** to the wheel: your own. Choose **one Augury** from §5.2
+  for it to grant and **one existing sign's domain** for it to govern; it should be an Augury you would
+  not otherwise take. It rises only over you, on days the sky is Starless, and uses the standard aspect
+  scaling. Its aspect is rolled in advance with the day, as part of the seven-day queue.
 - **Written in Advance** — Spend 10 minutes. The next skill check you attempt within the hour is an
   automatic **success** (not a critical success). You already did this.
-- **Foretold Escape** — Once per day, when you would take damage that reduces you to 0 Hit Points, you
-  may *Speak the Portent* on the triggering roll even if it has already been rolled and even if your
-  Portent is spent — using a value of 1.
+- **Foretold Escape** — Once per day, when an **attack roll** against you would deal damage that
+  reduces you to 0 Hit Points, you may *Speak the Portent* on that attack roll even though it has
+  already been rolled, even if your Portent is spent, and even if a fortune or misfortune effect
+  altered it — using a value of 1. It cannot be used on your own saving throw, or on damage no attack
+  roll dealt.
 
 ### 18th level
 
 - **Two Skies** — During your Night Vigil, read the sky **twice**. Both signs are ascendant for you and
-  the allies you brief: you gain both Auguries of the Day, and the second sign's aspect is rolled
-  separately. *(This is the Stargazer's answer to the Saint's 18th-level* The Thirteenth*, and the two
+  the allies you brief: you gain both Auguries of the Day. The second sign and its aspect are rolled
+  in advance with the day, as part of the seven-day queue. *(This is the Stargazer's answer to the Saint's 18th-level* The Thirteenth*, and the two
   interact: on a Starless sky a Saint with that feat is lit, and a Stargazer with this one still reads
   a second sky over it.)*
 - **The Long Vigil** — *Rewrite the Ending*'s cooldown drops to **3 days** if you have not used it at
@@ -1051,7 +1093,9 @@ at 1, 2, 4, 6, 8, 10, 12, 14, 16, 18 and 20.
 
 - **Cartographer of Endings** — Once per day, ask the GM **one yes-or-no question about the next 24
   hours**. The answer is true.
-- **Fixed Sky** — Your Portent is always a **20**. You may only speak it **once per week**.
+- **Fixed Sky** — One of your Portents is always a **20**, and you may speak that one only **once per
+  week**. Any other Portents you record, from *Twin Portent* or *Second Portent*, are still rolled and
+  spoken daily.
 - **The Sky Answers** — Once per day, when you would use *Rewrite the Ending*, you may instead use
   *Unmake the Moment* without spending its frequency, and *Rewrite the Ending* is not expended.
 
@@ -1089,7 +1133,9 @@ A fifth, softer conflict: the module **announces the sky publicly in chat by def
 ### 8.2 The loop, and v3's reweighting
 
 Each dawn the GM advances the day. The next pre-rolled entry becomes today, and a new day is rolled
-onto the end of the queue.
+onto the end of the queue. The day that ends is kept in the Sky's **history**, so a past sky can be
+read as well as a future one. The Sky's day count is also the class's calendar: every "once per week"
+in this guide is seven dawns of it.
 
 **The sign** — thirteen skies, **equally likely**, 1 in 13 each:
 
@@ -1104,25 +1150,26 @@ and `scripts/sky/signs.mjs` has been updated to match:
 |---|---|---|---|
 | **Quiet** (`none`) | 50 | **20** | The sky is unremarkable. Nothing happens. |
 | **Benefic** | 20 | **30** | The sky is kind. **+1** to the sign's domain. |
-| **Retrograde** | 15 | **10** | The sky drags. **−1** to the sign's domain. |
-| **Malefic** | 15 | **30** | The sky is hostile. **−2** to the sign's domain. |
+| **Retrograde** | 15 | **30** | The sky drags. **−1** to the sign's domain. |
+| **Malefic** | 15 | **10** | The sky is hostile. **−2** to the sign's domain. |
 | **Exalted** | 0 | **10** | A Zenith. **+2** to the domain. |
 
 All bonuses and penalties are **circumstance**, so they never stack with themselves and only one sign
 is ever up. The worst a character can be is −2 in one narrow domain, which is inside PF2e's tolerance.
 
 **What the reweighting does.** The sky was quiet half the time and is now quiet one day in five. It is
-**hostile 40% of days** (30 Malefic + 10 Retrograde) and **kind 40%** (30 Benefic + 10 Exalted). Two
+**hostile 40% of days** (30 Retrograde + 10 Malefic) and **kind 40%** (30 Benefic + 10 Exalted). Two
 consequences follow:
 
 - **Forewarned matters far more.** v2's Night Vigil bought a party-wide mitigation that was worth
-  nothing on 70% of days. It is now live on **40%** of them, and the 30% that are *Malefic* are the
-  −2 tier, which is the one worth being warned about. This is the largest indirect buff in v3 and it
-  did not cost a point.
-- **Malefic at 30% is a lot of −2.** A specific sign now comes up hostile about **2.3% of days each**,
-  but *some* sign is hostile 40% of the time, and every creature in the world is inside it. If your
-  table finds the sky oppressive, Malefic is the dial — move 10 points of its weight to Quiet before
-  touching anything else.
+  nothing on 70% of days. It is now live on **40%** of them, and the 30% that are *Retrograde* are
+  the tier Forewarned cancels outright rather than merely softens. This is the largest indirect buff
+  in v3 and it did not cost a point.
+- **Retrograde at 30% is a lot of −1.** A specific sign now comes up hostile about **2.3% of days
+  each**, but *some* sign is hostile 40% of the time, and every creature in the world is inside it.
+  The −2 tier is rarer than in v2 (10% against 15%), so the sky nags more often and punishes less. If
+  your table finds the sky oppressive, Retrograde is the dial — move 10 points of its weight to Quiet
+  before touching anything else.
 
 > ### ⚠ The Exalted change reaches the Saint
 >
@@ -1185,12 +1232,15 @@ needs to know their Cloth is lit.
 
 **With a Stargazer in the party, turn it off.** Set `announceSky: false` and whisper the Stargazer's
 player instead. The class's 50-point Night Vigil is *certainty*, and certainty is worth nothing if it
-is posted in chat for free. Then:
+is posted in chat for free. With the setting off, the module whispers the day's sign and aspect to
+every player who owns a Stargazer rather than to nobody. Then:
 
 - **In person:** apply the modifier out loud and unexplained. *"That's a 17… minus one. 16. Miss."*
   Say nothing else.
 - **In a VTT:** the effect is named `The Sky` with an empty description and a generic icon (§11).
-  Players see that something is on them. They do not see what.
+  Players see that something is on them. They do not see what. The module does this by itself
+  whenever a player owns a Stargazer character anywhere in the world: the four aspect effects are
+  renamed, emptied and given one shared icon as they are applied.
 - **Let them get it wrong for months.** The folklore the players invent is the point.
 
 **For everyone else — reading the sky without the class.** Ten minutes under an open sky and an
@@ -1332,7 +1382,7 @@ This has not changed and it is what keeps the class from being simply better tha
   control, no answer to a problem that is not a d20 roll. This is the big one and it is 740 points of
   Bard the Stargazer will never have.
 - **Healing is two Auguries deep.** *Shell of Hours* and *The Hour Is Not Come* are real now, but they
-  are Focus Points — two per encounter until 8th level, three after — against a Cleric's font. A
+  are Focus Points — one until 7th level, two from 7th, three with *Conjunction* — against a Cleric's font. A
   Stargazer is not a healer; it is a class that can occasionally refuse one death.
 - **No damage** beyond a cantrip, and the worst attack progression in the game.
 - **One reaction.** Fortune's Thread, *The Last Thing You See* and *The Hour Is Not Come* all want it,
@@ -1362,9 +1412,10 @@ Balance conversations about this class keep landing on ±2 and missing the actua
 1st-level character who knows, every morning and for free, what the next three days hold.**
 
 v3 made that worse in a way the ledger does not see: the sky reweighting (§8.2) means 40% of days now
-carry a live negative aspect instead of 30%, and 30% of days are the −2 tier. Night Vigil's Forewarned
-was priced at 50 when it was live on three days in ten. It is now live on four, and the bad days are
-worse. **It was not repriced.** If anything in this class is underpriced, it is this, and it is the
+carry a live negative aspect instead of 30%, and 30% of days are Retrograde, which Forewarned erases
+outright. Night Vigil's Forewarned was priced at 50 when it was live on three days in ten. It is now
+live on four, and on three of those four it cancels the penalty rather than softening it. **It was not
+repriced.** If anything in this class is underpriced, it is this, and it is the
 one number only play can settle.
 
 ### 9.7 Where to look first if it misbehaves
@@ -1461,7 +1512,8 @@ what was actually asked for.
 
 **Running it:**
 
-- Screenshot the VTT board and everyone's sheet at initiative. That is the restore point.
+- The module snapshots the board and every combatant's sheet when initiative is rolled (§11.7). That
+  is the restore point.
 - Do not re-run the enemies' identical dice. Re-run the *encounter*. It will go differently.
 - It is a **plot device with a stat block**. Tell the table it exists before session one.
 
@@ -1475,8 +1527,8 @@ Most PF2e games end around 10 to 12. Two honest options:
    class feature rather than a Broken Thread ability: at 11th level every Stargazer now reaches the
    rewind, instead of only the one player in four who picked that Path.
 2. **Move Tier 3 down and pay for it.** To put *Rewrite the Ending* at 13th you must find 190 points
-   at 13th. Concretely: drop **Twin Fates** (50), **Constellation Mastery** (50), **Second Star** (30),
-   **Widen the Sky** (30), and **three Auguries** (30). The class stays at 2100 and becomes a
+   at 13th. Concretely: drop **Twin Fates** (70), **Constellation Mastery** (50), **Second Star** (30)
+   and **Widen the Sky** (50) — 200 points, ten more than you need. The total does not rise, and the class becomes a
    one-trick time-rewinder with no luck engine worth the name. **Not recommended** — it guts the
    identity the class was asked for.
 
@@ -1525,7 +1577,12 @@ The awkward one, and the reason this class needs more automation work than the S
   `selector: ["attack", "saving-throw", "skill-check", "perception"]` for Guide,
   `["attack", "skill-check", "perception"]` for Snarl — **the selector list is where §4.3's
   restriction is enforced**, so get it right there and nowhere else.
-- `duration: { value: 0, unit: "rounds" }` so it self-clears at the end of the turn it was applied in.
+- **The effect is armed, not applied on the spot** (ADR-0004). *"About to roll"* has no moment in
+  Foundry — a roll resolves the instant it is clicked — so the Stargazer's player arms the Thread on a
+  creature in advance: *"Guide Kesh's next attack."* The next matching roll takes it, and the reaction
+  is spent then. One reaction arms up to as many creatures as the Thread can affect; the rest stay armed
+  after the first fires. An armed Thread expires at the start of your next turn, and you cannot arm one
+  with no reaction left — *Two Warnings* allows a second, and *Chart the Course*'s free Threads cost none.
 - The ±2 upgrade at 9th is a second `flat-modifier` on the *Stargazer*, or simpler, a
   `value: "ternary(gte(@actor.level,9),2,1)"` on the effect. Prefer the latter; one item, no
   suppression logic.
@@ -1535,19 +1592,24 @@ The awkward one, and the reason this class needs more automation work than the S
 
 ### 11.3 Chart the Course and Portent
 
-- **Chart the Course** is a flag plus an effect on the named creature; the "free Fortune's Thread"
-  is bookkeeping the player does, not something worth automating. A chat card naming the creature and
-  expiring at the start of your next turn is enough.
-- **Portent** is a macro and a flag — `actor.setFlag("world", "portent", value)` — applied by hand.
-  Replacing a d20 result programmatically fights pf2e's dice pipeline and is not worth it. The Saint's
-  `scripts/roll-rewrites/` helpers see the die after the fact, which is the wrong side of the roll for this.
-  Roll it at daily preparations, whisper it, and let the player say when.
+- **Chart the Course** is a flag plus an effect on each named creature, expiring at the start of your
+  next turn. Its free Fortune's Thread is **armed on the named creature at no reaction cost**, and
+  spent by that creature's first d20.
+- **Portent** is rolled and whispered at the Night Vigil and kept in a `stargazer` flag. *Speak the
+  Portent* is **armed** the same way as a Thread — on a creature and a roll type — and it never
+  expires until it is spoken or a new Vigil overwrites it. When the armed roll comes, its d20 **is**
+  the Portent: the die is replaced before the roll resolves, which is why this needs the pre-roll seam
+  and not the Saint's `scripts/roll-rewrites/` helpers, which see the die after the fact.
+- **Reactions that come after the event** — *The Hour Is Not Come*, *The Last Thing You See*, *Deja
+  Vu*, *Inevitable*, *Second Chance at Fate* — are not armed. When the trigger happens, the Stargazer's
+  player is offered a button on a chat card, and the effect is applied after the fact: *The Hour Is
+  Not Come* sets the target to 1 Hit Point, removes dying and unconscious, and adds no wounded.
 
 ### 11.4 The Sky — what v3 already changed in code
 
 **Done in this change, not left as a note:**
 
-- `scripts/sky/signs.mjs` — the `ASPECTS` weights are now **20 / 30 / 10 / 30 / 10** (Quiet, Benefic,
+- `scripts/sky/signs.mjs` — the `ASPECTS` weights are now **20 / 30 / 30 / 10 / 10** (Quiet, Benefic,
   Retrograde, Malefic, Exalted), per §8.2. The comment explaining why `exalted` was 0 has been replaced
   with one explaining what changed and **that it reaches the Saint**.
 - `README.md` — the *Schedule Zenith* bullet said `Exalted` had "a roll weight of **zero**." It no
@@ -1556,30 +1618,30 @@ The awkward one, and the reason this class needs more automation work than the S
 Nothing else in `scripts/sky/` needed to change: `rollAspect()` already normalises over the weight
 total, so reweighting is a data edit, and `scheduleZenith` is untouched.
 
-### 11.5 The Sky, the part that still does not exist
+### 11.5 The Sky, and what is still missing from it
 
-`scripts/sky/` currently applies effects **only to Saints**, and only `Sky: Ascendant` / `Sky: Zenith`
-when a Saint's own Cloth is up (`tracker.mjs → applyTo`). §8.3's domain modifiers are **not
-implemented for anyone**. Building them means:
+*Rewritten in v3.1.* The Sky became **terrain** (ADR-0001) and shipped in #30: four effect items —
+`Sky: Benefic`, `Retrograde`, `Malefic`, `Exalted` — each predicating on the day's `sky:sign:*` option,
+applied to every character and every tagged NPC in the active scene, with *Unfailing Cosmo* and
+*Shelter of the Cloth* read in `SkyTracker.aspectFor`. Four items, not the forty-eight v3 described.
+What the Stargazer still needs from it:
 
-1. **Four effect items per sign**, named identically — `The Sky` — with an empty description and one
-   shared generic icon, carrying one `flat-modifier` scoped to that sign's domain selectors. Aries
-   Benefic is `selector: ["initiative"], type: "circumstance", value: 1`. That is **48 items**
-   (12 signs × 4 aspects); Starless has none and Quiet has none.
-2. **A second application path in `tracker.mjs`** that applies the day's sign/aspect effect to *every*
-   character, not just Saints — gated behind a new world setting, because a table running only the
-   Saint should not suddenly acquire 48 new effects.
-3. **Keeping `Unfailing Cosmo` working.** The existing rule — Saints never receive Retrograde or
-   Malefic — has to survive the new path. The check already lives in `applyTo`; the new path must
-   share it rather than reimplement it.
-4. **Respecting `announceSky`.** §8.4 wants it off with a Stargazer at the table. The setting exists;
-   add a whisper-to-the-Stargazer branch rather than a second setting.
-
-Estimated work: the 48 effect items are mechanical and can be generated from a table; the tracker
-change is small. This is the single largest implementation item in the class and it should be its own
-phase, the way the Soulbound's lineages were. **v3's reweighting makes it more urgent, not less:** the
-sky is now live on four days in five instead of one in two, so a subsystem that applies nothing is
-wrong four times as often.
+1. **Presentation.** When a player owns a Stargazer, the four effects are renamed `The Sky`, emptied
+   and given one shared icon as they are applied (§8.4), the way the sign's roll option is already
+   stamped onto them. A table running only the Saint sees them unchanged.
+2. **A whisper branch for `announceSky`.** With the setting off, the day goes to the Stargazers'
+   players instead of to nobody.
+3. **Per-actor softening.** *Forewarned* and *Foreordained* soften the day for the Stargazer and the
+   allies briefed, through the same `aspectFor` path *Shelter of the Cloth* uses.
+4. **A history and a second queue field.** Past days are kept (§8.2); *Two Skies* and *Private Sign*
+   read a second aspect that is pre-rolled into each queue entry, and a scheduled Zenith is marked as
+   scheduled so *Trade the Day* can refuse to move it (§8.6).
+5. **A clouded-night toggle** on the tracker window (§4.2).
+6. **Libra and the partial domains.** Libra's four die rules (§8.3) exist nowhere yet: they apply
+   automatically, once per actor per day — per hour on Exalted and Malefic days — to attack rolls,
+   saving throws, skill checks and Perception checks, never to flat checks. Six domains are only partly
+   automated (Aries' first Strike, Taurus' forced movement, Cancer's recovery checks, Virgo's Recall
+   Knowledge and Search, Aquarius' counteract checks, Pisces' illusions).
 
 ### 11.6 Auguries
 
@@ -1588,12 +1650,27 @@ focus-spell auto-heightening. The Augury of the Day is a compendium lookup keyed
 `SkyTracker.state.sign` — a one-line mapping from §5.3 — granted and revoked on the
 `isaacs-hb-pf2e.skyChanged` hook, which `tracker.mjs` already fires.
 
-### 11.7 What not to automate
+### 11.7 The Vigil and the rewinds
 
-- **Rewrite the Ending.** It is a screenshot and a conversation.
-- **Unmake the Moment.** Same, at a smaller scale. Undoing a round of state in Foundry is not a
-  feature, it is a bug generator. The GM narrates the rewind; players re-set their own sheets.
-- **Night Vigil's forecast.** `api.sky.forecast(3)` already returns it. Whisper the output. Done.
+*Rewritten in v3.1.* v3 said not to automate the rewinds. v3.1 builds them, because both fire on a
+clean initiative boundary — which is exactly what makes a snapshot tractable.
+
+- **Night Vigil** runs by itself at *Rest for the Night* (`pf2e.restForTheNight`, as the
+  Assimilator's preparations do): it reads today and the forecast from `api.sky.forecast()`, grants the
+  Augury of the Day, rolls the Portent and whispers all of it. *Forewarned* is a button on that card,
+  where the player picks the allies briefed.
+- **Unmake the Moment** snapshots every combatant at the start of each of the Stargazer's turns: the
+  full actor — Hit Points, conditions, effects, resources, item uses — plus token positions and the
+  combat tracker's turn. Using it restores the previous snapshot, deletes tokens and actors created
+  since, leaves the chat log alone, and then applies stunned 1 and drained 1. The Stargazer's player
+  presses it; the restore runs on the GM's client without a confirmation, because its trigger can be
+  checked.
+- **Rewrite the Ending** snapshots the same state when initiative is rolled. The Stargazer's player
+  presses it and the **GM confirms**, because *"defeated or captured"* is a judgement. Drained 2 and
+  doomed 1 are locked against reduction, and the lost features are disabled until a Vigil marked as
+  the full eight hours under open sky.
+- **Weeks** are counted in the Sky's dawns (§8.2).
+- **What stays by hand:** *The Dream* (§10.1). It is a GM technique, not a button.
 
 ---
 
@@ -1612,10 +1689,10 @@ In order of how likely each is to bite.
 3. **The GM forgets the sky.** The number one failure mode of the whole framework: it is invisible by
    design, so nothing at the table reminds you. Use the tracker's Advance Day button as part of your
    morning routine. If you skip a day, do not retcon it — the sky was cloudy.
-4. **The sky is now loud.** After v3's reweighting only one day in five is Quiet and 30% are Malefic,
+4. **The sky is now loud.** After v3's reweighting only one day in five is Quiet and 30% are Retrograde,
    so the players will notice unexplained penalties much sooner than v2's spread intended. That is the
    point — but it also means the folklore forms faster, and a table that liked the sky being subtle
-   should move 10 weight from Malefic to Quiet (§8.2) rather than abandoning the subsystem.
+   should move 10 weight from Retrograde to Quiet (§8.2) rather than abandoning the subsystem.
 5. **Portent is a 20 and the player hoards it for four sessions.** Fine, and the best part of the
    class. Just remind them once that a new Vigil overwrites it.
 6. **8 HP plus light armour plus Reflex Trained until 13th means the Stargazer dies to fireballs.**
@@ -1646,11 +1723,10 @@ take the build to review, and revisit them after play.
    to be unpopular with the player and most likely to be correct.
 4. **Whether Night Vigil is worth 50 or 500.** §9.6. Unanswerable on paper, and v3's reweighting
    raised it again without repricing it: Forewarned went from live on 30% of days to 40%, and the
-   hostile half got heavier. If anything in this class is quietly underpriced, it is this.
-5. **The Sky's domain modifiers for every creature in the world** are 48 unbuilt effect items and a
-   tracker change (§11.4). Until they exist, §8.3 is a paper subsystem and Forewarned has nothing to
-   forewarn against. **This is the gap between this document and a playable class**, and it should be
-   the first phase of implementation, not the last.
+   share of those days it cancels outright doubled (Retrograde 15 → 30). If anything in this class is quietly underpriced, it is this.
+5. **The Sky's domain modifiers for every creature in the world** — *settled in v3.1*: they shipped as
+   four terrain effects in #30 (ADR-0001), so Forewarned has something to forewarn against. What the
+   Stargazer still needs from the Sky is listed in §11.5.
 6. **The Exalted reweighting reaches the Saint** (§8.2). A Zenith can now happen by chance, roughly
    once per 130 days of game time, where `signs.mjs` previously guaranteed it never would. This is the
    only change in v3 that alters an already-played class, and it was a side effect of a Stargazer

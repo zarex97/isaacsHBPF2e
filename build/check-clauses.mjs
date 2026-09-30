@@ -2,7 +2,7 @@
  * Hold the clause trackers to the guide.
  *
  * A clause is one independently-failable declaration a class guide makes, tracked as a row in
- * `Docs/clauses/*.md` (the Soulbound) or `Docs/clauses/assimilator/*.md` (the Assimilator). The rows are the spec restated as a checklist, and a checklist restating a
+ * `Docs/clauses/*.md` (the Soulbound), `Docs/clauses/assimilator/*.md` (the Assimilator) or `Docs/clauses/stargazer/*.md` (the Stargazer). The rows are the spec restated as a checklist, and a checklist restating a
  * document is a second copy of it — which drifts. `Docs/soulbound-verification-checklist.md` was
  * written that way, by hand, from the guide, and nothing has ever checked that its 269 rows still say
  * what the guide says.
@@ -74,6 +74,24 @@ const ASSIMILATOR = {
     "substrates-gray.md": { prefixes: ["HE", "MO", "ST", "AG"], source: ASSIMILATOR_LEXICON },
 };
 
+const STARGAZER_DIR = path.join(CLAUSE_DIR, "stargazer");
+const STARGAZER_GUIDE = path.join(ROOT, "Docs", "stargazer-guide-v3.md");
+
+/**
+ * The Stargazer's trackers. Every one quotes the one guide.
+ *
+ * The four Paths share a file, each under its own prefix — Weaver, Herald, Ephemeris, Broken Thread — so
+ * a Path's rows can be found by ID without a file per four abilities. Auguries are `OM` (omen) because
+ * `AU` and `AG` are Gold and Silver.
+ */
+const STARGAZER = {
+    "class.md": { prefixes: ["SG"], source: STARGAZER_GUIDE },
+    "auguries.md": { prefixes: ["OM"], source: STARGAZER_GUIDE },
+    "paths.md": { prefixes: ["WV", "HR", "EP", "BT"], source: STARGAZER_GUIDE },
+    "feats.md": { prefixes: ["SF"], source: STARGAZER_GUIDE },
+    "sky.md": { prefixes: ["SK"], source: STARGAZER_GUIDE },
+};
+
 const failures = [];
 let clauses = 0;
 
@@ -135,6 +153,17 @@ if (fs.existsSync(ASSIMILATOR_DIR)) {
             continue;
         }
         trackers.push({ name: label, file: path.join(ASSIMILATOR_DIR, name), allowed: tier.prefixes, guide: source(tier.source) });
+    }
+}
+if (fs.existsSync(STARGAZER_DIR)) {
+    for (const name of fs.readdirSync(STARGAZER_DIR).filter((n) => n.endsWith(".md")).sort()) {
+        const tier = STARGAZER[name];
+        const label = `stargazer/${name}`;
+        if (!tier) {
+            fail(label, null, `not a known tracker file — expected one of ${Object.keys(STARGAZER).join(", ")}`);
+            continue;
+        }
+        trackers.push({ name: label, file: path.join(STARGAZER_DIR, name), allowed: tier.prefixes, guide: source(tier.source) });
     }
 }
 
