@@ -169,6 +169,47 @@ function check(label, actual, expected) {
 }
 
 /* -------------------------------------------------------------------------------------------- */
+/*  Phase 2 — the luck engine (SG-33, SG-34, SG-35, SG-37, SG-40, SG-43, SG-44, SG-47)            */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    globalThis.foundry ??= { utils: { randomID: () => "x" } };
+    const { Numbers, threadEffect, portentEffect, refusal } = await import("../scripts/stargazer/threads.mjs");
+    const { isPortent } = await import("../scripts/stargazer/armed.mjs");
+    const sg = (level, ...slugs) => ({ level, name: "Vega", uuid: "Actor.vega", id: "vega", itemTypes: { feat: slugs.map((slug) => ({ slug })) } });
+
+    check("SG-33b/SG-37a/SG-44a: one creature at 30 feet; two at 60 from Widen the Sky; three from Threefold Thread",
+        [[Numbers.threadTargets(sg(1)), Numbers.threadRange(sg(1))],
+            [Numbers.threadTargets(sg(5, "widen-the-sky")), Numbers.threadRange(sg(5, "widen-the-sky"))],
+            [Numbers.threadTargets(sg(17, "widen-the-sky", "threefold-thread")), Numbers.threadRange(sg(17, "widen-the-sky", "threefold-thread"))]],
+        [[1, 30], [2, 60], [3, 60]]);
+    check("SG-40: ±1, ±2 from Surer Thread", [Numbers.threadValue(sg(8)), Numbers.threadValue(sg(9, "surer-thread"))], [1, 2]);
+    check("SG-34b: Chart the Course names one creature, two from 11th", [Numbers.chartTargets(sg(10)), Numbers.chartTargets(sg(11))], [1, 2]);
+    check("one reaction; Two Warnings a second", [Numbers.reactions(sg(9)), Numbers.reactions(sg(10, "two-warnings"))], [1, 2]);
+
+    const origin = sg(9, "surer-thread");
+    const guide = threadEffect({ origin, group: "g", kind: "guide", value: 2, kinds: ["attack-roll", "saving-throw", "skill-check", "perception"] }).system.rules[0];
+    const snarl = threadEffect({ origin, group: "g", kind: "snarl", value: 2, kinds: ["attack-roll", "skill-check", "perception"] }).system.rules[0];
+    check("SG-33c Guide: +N circumstance, spent only by a roll it applied to",
+        [guide.key, guide.type, guide.value, guide.removeAfterRoll], ["FlatModifier", "circumstance", 2, "if-enabled"]);
+    check("SG-33d/e Snarl: −N circumstance, and never a saving throw",
+        [snarl.value, snarl.selector.includes("saving-throw")], [-2, false]);
+    const free = threadEffect({ origin, group: "g", kind: "snarl", value: 1, kinds: ["attack-roll", "skill-check", "perception"], free: true }).system.rules[0];
+    check("SG-47d a Chart the Course Thread is spent by the creature's first d20, whatever it is", free.removeAfterRoll, true);
+    const twin = threadEffect({ origin, group: "g", kind: "guide", value: 2, kinds: ["attack-roll"], twice: true }).system.rules[0];
+    const twinSnarl = threadEffect({ origin, group: "g", kind: "snarl", value: 2, kinds: ["skill-check"], twice: true }).system.rules[0];
+    check("SG-43a/b Twin Fates: roll twice, higher for Guide and lower for Snarl, spent only when it rolled twice",
+        [twin.key, twin.keep, twinSnarl.keep, twin.removeAfterRoll], ["RollTwice", "higher", "lower", true]);
+
+    const portent = portentEffect({ origin, value: 20, selector: "skill-check" }).system.rules[0];
+    check("SG-35e/f the Portent replaces the die, required, with a slug the fortune guard knows",
+        [portent.key, portent.value, portent.required, portent.removeAfterRoll, isPortent(portent)], ["SubstituteRoll", 20, true, "if-enabled", true]);
+
+    check("a creature immune to prediction refuses the Thread",
+        refusal(origin, { name: "Oracle", attributes: { immunities: [{ type: "prediction" }] } }, { range: 30 }), "Oracle is immune to prediction");
+}
+
+/* -------------------------------------------------------------------------------------------- */
 
 if (failures.length > 0) {
     console.error(`Stargazer tests failed: ${failures.length} of ${checks}.`);

@@ -50,6 +50,7 @@ import { RisingPressure } from "./soulbound/rising-pressure.mjs";
 import { Scattered } from "./soulbound/scattered.mjs";
 import { Armed } from "./stargazer/armed.mjs";
 import { StarChart } from "./stargazer/star-chart.mjs";
+import { Threads } from "./stargazer/threads.mjs";
 import { Suppression } from "./soulbound/suppression.mjs";
 import { SpiritWeapon } from "./soulbound/weapon.mjs";
 import { Wound } from "./soulbound/wound.mjs";
@@ -99,6 +100,7 @@ Hooks.once("init", () => {
     start("free casts' settings", () => FreeCast.registerSettings());
     start("Cosmo", () => Cosmo.registerHooks());
     start("the Star Chart", () => StarChart.registerHooks());
+    start("the luck engine", () => Threads.registerHooks());
     start("the Gemini duplicate", () => Duplicate.registerHooks());
     start("recharging", () => Recharge.registerHooks());
     start("spell frequency", () => SpellFrequency.registerHooks());

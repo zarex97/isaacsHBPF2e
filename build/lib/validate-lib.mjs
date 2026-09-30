@@ -2025,14 +2025,15 @@ const SOULBOUND_ADVANCEMENT = {
  * features here as they land (Night Vigil, Fortune's Thread, the Paths, the rewinds).
  */
 const STARGAZER_ADVANCEMENT = {
-    1: ["Star Chart"],
+    1: ["Star Chart", "Fortune's Thread", "Chart the Course", "Portent"],
     3: ["Astronomy Lore (3rd)"],
+    5: ["Widen the Sky", "The Last Thing You See"],
     7: ["Expert Stargazer", "Vigilant Senses", "Second Star", "Astronomy Lore (7th)"],
-    9: ["Great Fortitude"],
+    9: ["Great Fortitude", "Surer Thread"],
     11: ["Resolve", "Weapon Expertise"],
     13: ["Incredible Senses", "Lightning Reflexes", "Armor Expertise"],
-    15: ["Master Stargazer", "Astronomy Lore (15th)"],
-    17: ["Greater Resolve"],
+    15: ["Master Stargazer", "Astronomy Lore (15th)", "Twin Fates"],
+    17: ["Greater Resolve", "Threefold Thread"],
     19: ["Legendary Stargazer"],
 };
 

@@ -151,6 +151,54 @@
                 "level": 19,
                 "name": "Legendary Stargazer",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Legendary Stargazer"
+            },
+            "fthrd": {
+                "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+                "level": 1,
+                "name": "Fortune's Thread",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Fortune's Thread"
+            },
+            "prtnt": {
+                "img": "icons/magic/perception/eye-ringed-glow-angry-small-teal.webp",
+                "level": 1,
+                "name": "Portent",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Portent"
+            },
+            "widen": {
+                "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+                "level": 5,
+                "name": "Widen the Sky",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Widen the Sky"
+            },
+            "lasts": {
+                "img": "icons/magic/death/skull-horned-worn-fire-blue.webp",
+                "level": 5,
+                "name": "The Last Thing You See",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.The Last Thing You See"
+            },
+            "surer": {
+                "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+                "level": 9,
+                "name": "Surer Thread",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Surer Thread"
+            },
+            "twinf": {
+                "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+                "level": 15,
+                "name": "Twin Fates",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Twin Fates"
+            },
+            "three": {
+                "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+                "level": 17,
+                "name": "Threefold Thread",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Threefold Thread"
+            },
+            "crse": {
+                "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+                "level": 1,
+                "name": "Chart the Course",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Chart the Course"
             }
         },
         "keyAbility": {
