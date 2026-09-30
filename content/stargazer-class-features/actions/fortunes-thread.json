@@ -1,0 +1,41 @@
+{
+    "folder": "Actions",
+    "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+    "name": "Fortune's Thread",
+    "system": {
+        "actionType": {
+            "value": "reaction"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>Trigger</strong> A creature within 30 feet that you can see is about to roll an attack roll, a saving throw, a skill check, or a Perception check.</p><p><strong>Effect</strong> Choose one:</p><ul><li><strong>Guide</strong> &mdash; the triggering creature gains a <strong>+1 circumstance bonus</strong> to the roll.</li><li><strong>Snarl</strong> &mdash; the triggering creature takes a <strong>&minus;1 circumstance penalty</strong> to the roll. Snarl can only be applied to an attack roll, skill check, or Perception check, never a saving throw.</li></ul><p>At 9th level (<em>Surer Thread</em>) the bonus and penalty increase to <strong>&plusmn;2</strong>.</p><hr /><p><em>Target the creatures, then use this from your sheet: you pick Guide or Snarl for each, and the GM's client arms it on them. It is spent by the first matching roll; your reaction goes then.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "stargazer-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "stargazer",
+                "concentrate",
+                "prediction"
+            ]
+        }
+    },
+    "type": "feat"
+}
