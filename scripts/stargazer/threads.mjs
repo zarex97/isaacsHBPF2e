@@ -352,11 +352,16 @@ async function startTurn(actor) {
 export async function rollPortent(actor) {
     if (!isStargazer(actor) || !has(actor, "portent")) return null;
     const roll = await new Roll("1d20").evaluate();
+    await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor }), flavor: "<strong>Portent</strong> — recorded at the Night Vigil" }, { rollMode: "gmroll" });
+    await setPortent(actor, roll.total);
+    return roll.total;
+}
+
+/** Record a Portent, overwriting any unspent one — including one already armed on a creature. */
+export async function setPortent(actor, value) {
     // The old Portent may be armed on a creature this client cannot write to; the GM takes it back.
     await Relay.request({ action: "stargazerSweepPortent", origin: actor.uuid });
-    await actor.update({ [`flags.${MODULE_ID}.${FLAG}.portent`]: { value: roll.total, spent: false } });
-    await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor }), flavor: "<strong>Portent</strong> — recorded at the Night Vigil" }, { rollMode: "gmroll" });
-    return roll.total;
+    await actor.update({ [`flags.${MODULE_ID}.${FLAG}.portent`]: { value, spent: false } });
 }
 
 /* ------------------------------------------------------------------------------------------------ */
@@ -468,10 +473,6 @@ export const Threads = {
         });
         Hooks.on("pf2e.startTurn", (combatant) => {
             if (isWriter()) startTurn(combatant?.actor).catch((e) => console.error("Isaac's Homebrew | a Stargazer's turn", e));
-        });
-        Hooks.on("pf2e.restForTheNight", (actor) => {
-            // The Night Vigil runs at rest (guide §11.7). Phase 3 grows the rest of the Vigil around this.
-            if (actor?.isOwner && isStargazer(actor)) rollPortent(actor).catch((e) => console.error("Isaac's Homebrew | the Portent", e));
         });
         DamageBus.after("The Last Thing You See", PRIORITY.riders + 8, (actor, params, before) => offerLastThing(actor, params, before));
         Hooks.on("renderChatMessageHTML", (message, html) => bindCard(message, html));

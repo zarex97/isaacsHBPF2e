@@ -1,0 +1,39 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/light/explosion-star-large-blue-yellow.webp",
+    "name": "Constellation Mastery",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>You no longer read the sky. You argue with it.</p><ul><li><strong>Trade the Day.</strong> During your Night Vigil you may swap today&rsquo;s <strong>aspect</strong> with the aspect of any of the next three days in your forecast. The two days exchange aspects; the signs do not move. The day you traded away is still coming. A scheduled Zenith cannot move.</li><li><strong>Forewarned becomes Foreordained.</strong> You and the allies you brief treat a negative aspect as <strong>Benefic</strong> instead of merely reducing it. Exalted and Benefic days are unchanged.</li><li><strong>Starless.</strong> On a Starless sky you may choose any sign&rsquo;s Augury as your Augury of the Day.</li></ul>"
+        },
+        "level": {
+            "value": 13
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "stargazer-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        }
+    },
+    "type": "feat"
+}

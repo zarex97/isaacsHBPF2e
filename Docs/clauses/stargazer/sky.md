@@ -117,8 +117,8 @@ the weights themselves are.
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | SK-32a | §8.6 | **Unfailing Cosmo** makes a Saint immune to Retrograde and Malefic aspects entirely, enforced in `tracker.mjs` rather than remembered. |  | ☐ |  |
 | SK-32b | §8.6 | **Forewarned does nothing for a Saint.** |  | ☐ |  |
-| SK-33a | §8.6 | It cannot move a **scheduled Zenith**, because that is the GM's arc-climax button and not a thing the sky rolled. |  | ☐ |  |
-| SK-33b | §11.5 | a scheduled Zenith is marked as scheduled so *Trade the Day* can refuse to move it |  | ☐ |  |
+| SK-33a | §8.6 | It cannot move a **scheduled Zenith**, because that is the GM's arc-climax button and not a thing the sky rolled. |  | ✅ | Live: Leo pinned Exalted two days out by the GM; *Trade the Day* for that day was refused — *a scheduled Zenith is the GM's, not the sky's* |
+| SK-33b | §11.5 | a scheduled Zenith is marked as scheduled so *Trade the Day* can refuse to move it |  | ✅ | Live: the pinned queue entry carries `scheduled: true`, and a rolled day does not |
 | SK-34 | §8.6 | A Stargazer can tell a Saint **exactly when their Cloth will be lit**, three days out, from 1st level. |  | ☐ |  |
 
 ---
@@ -127,8 +127,8 @@ the weights themselves are.
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 55 |
-| ✅ | 0 |
+| ☐ | 53 |
+| ✅ | 2 |
 | ⚠️ | 0 |
 | ❌ | 0 |
 | 🔧 | 0 |
