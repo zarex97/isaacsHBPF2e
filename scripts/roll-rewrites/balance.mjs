@@ -62,7 +62,7 @@ export const Balance = {
 
         message.updateSource({
             rolls: [JSON.stringify(rollData)],
-            flavor: relabel(message.flavor ?? "", degree, source.name),
+            flavor: relabel(message.flavor ?? "", degree, `${source.name}: natural 1 counted as a 10`),
             [`flags.pf2e.context.outcome`]: degree.key,
             [`flags.pf2e.context.unadjustedOutcome`]: degree.unadjustedKey,
             [`flags.${MODULE_ID}.${FLAG}`]: { spent: true, from: source.uuid },
@@ -105,7 +105,7 @@ export const Balance = {
 };
 
 /** Set the d20's recorded result, so the card shows the die it is now claiming to be. */
-function setDieResult(rollData, value) {
+export function setDieResult(rollData, value) {
     for (const term of rollData.terms ?? []) {
         if (term.faces !== 20 || !Array.isArray(term.results)) continue;
         for (const result of term.results) {
@@ -123,9 +123,9 @@ function setDieResult(rollData, value) {
  * line is appended instead. The numbers in the flags are right either way; this only governs what is read
  * at a glance, and a visibly stale label would be worse than an ugly extra sentence.
  */
-function relabel(flavor, degree, sourceName) {
+export function relabel(flavor, degree, what) {
     const label = _degreeLabel(degree.key);
-    const note = `<div class="isaacs-hb-balance">${sourceName}: natural 1 counted as a 10 — ${label}.</div>`;
+    const note = `<div class="isaacs-hb-balance">${what} — ${label}.</div>`;
 
     try {
         const root = document.createElement("div");

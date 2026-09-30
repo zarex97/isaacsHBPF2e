@@ -3,6 +3,11 @@ import { ASPECTS, ASPECT_IDS, CLOTH_SIGNS, MODULE_ID, SIGN_IDS, aspectOf, signOf
 const SETTING = "sky";
 const EFFECT_FLAG = "skyEffect";
 const QUEUE_LENGTH = 7;
+/** Past days kept for the Almanac and Reckoning of Days — a year and then some. */
+const HISTORY_LENGTH = 400;
+/** The four terrain effects, as opposed to a Saint's own Ascendant and Zenith. */
+const ASPECT_EFFECT = /^Sky: (Benefic|Retrograde|Malefic|Exalted)$/;
+const BLANK_ICON = "icons/magic/light/explosion-star-glow-silhouette.webp";
 
 /** An NPC opts into the Sky by tag, the same idiom `clothOf` uses to find a Cloth. */
 const TERRAIN_TAG = "sky-tracked";
@@ -16,6 +21,9 @@ const MILDER = { malefic: "retrograde", retrograde: "none" };
 
 /** Harshest to kindest, for choosing the mildest of several softenings. */
 const MILDNESS = ["malefic", "retrograde", "none", "benefic"];
+
+/** The application in flight for each creature, so two never overlap. See `SkyTracker.applyTo`. */
+const applying = new Map();
 
 /**
  * The sky's state and the only code that touches actors because of it.
@@ -88,7 +96,7 @@ export const SkyTracker = {
      * four it began with (`scheduled`, `clouded`), and a Saint-era caller that sets only a sign must not
      * erase a Stargazer's clouded night.
      */
-    async set({ sign, aspect, day, queue, scheduled, clouded } = {}, { announce = true } = {}) {
+    async set({ sign, aspect, day, queue, scheduled, clouded, history } = {}, { announce = true } = {}) {
         if (!game.user.isGM) return;
         const current = this.state;
         const next = {
@@ -99,6 +107,7 @@ export const SkyTracker = {
             queue: queue ?? current.queue,
             scheduled: scheduled ?? current.scheduled ?? false,
             clouded: clouded ?? current.clouded ?? false,
+            history: history ?? current.history ?? [],
         };
         await game.settings.set(MODULE_ID, SETTING, next);
         await this.applyToAll();
@@ -114,13 +123,16 @@ export const SkyTracker = {
         const current = this.state;
         const queue = [...(current.queue ?? [])];
         const nextDay = queue.shift() ?? { sign: this.rollSign(), aspect: this.rollAspect() };
+        // The day that ends is kept, so a past sky can be read as well as a future one (§8.2, R7).
+        const history = [...(current.history ?? []), { day: current.day, sign: current.sign, aspect: current.aspect }]
+            .slice(-HISTORY_LENGTH);
         while (queue.length < QUEUE_LENGTH) {
             queue.push({ sign: this.rollSign(), aspect: this.rollAspect() });
         }
         // A new night is not clouded until the GM says so; a scheduled day stays marked as scheduled.
         await this.set({
             day: current.day + 1, sign: nextDay.sign, aspect: nextDay.aspect, queue,
-            scheduled: Boolean(nextDay.scheduled), clouded: false,
+            scheduled: Boolean(nextDay.scheduled), clouded: false, history,
         });
     },
 
@@ -227,6 +239,31 @@ export const SkyTracker = {
             if (signTag) return signTag.slice("cloth-".length);
         }
         return null;
+    },
+
+    /** The pack name of a sky effect this module applied, even when it wears the blank "The Sky". */
+    skyName(effect) {
+        return effect.getFlag(MODULE_ID, "skyName") ?? effect.name;
+    },
+
+    /** Stargazer guide §8.4 (R6): a player owns a Stargazer character anywhere in the world. */
+    hidesTheSky() {
+        return game.actors.some((a) => a.type === "character" && a.hasPlayerOwner && a.class?.system?.slug === "stargazer");
+    },
+
+    /** Players who own a Stargazer — who the day is whispered to when it is not announced (§8.4). */
+    stargazerPlayers() {
+        const owners = new Set();
+        for (const actor of game.actors) {
+            if (actor.type !== "character" || actor.class?.system?.slug !== "stargazer") continue;
+            for (const user of game.users) if (!user.isGM && actor.testUserPermission(user, "OWNER")) owners.add(user.id);
+        }
+        return [...owners];
+    },
+
+    /** The sky of a past day, if the history holds it (Stargazer guide §8.2; ruling R7). */
+    recall(day) {
+        return (this.state.history ?? []).find((entry) => entry.day === day) ?? null;
     },
 
     /** Sky effects this module put on an actor. Effects a GM applied by hand are left alone. */
@@ -353,18 +390,44 @@ export const SkyTracker = {
         return wanted;
     },
 
-    async applyTo(actor) {
+    /**
+     * One application at a time per creature. The start-up `applyToAll` and a GM's first change of the sky can
+     * overlap, and now that a changed sign replaces the effect rather than keeping it, two overlapping passes
+     * both tried to delete the same effect — driven: *Item does not exist* on the first change after a reload.
+     */
+    applyTo(actor) {
+        const previous = applying.get(actor.id) ?? Promise.resolve();
+        const next = previous.then(() => this.applyNow(actor)).catch((error) => {
+            console.error(`Isaac's Homebrew | the sky could not be applied to ${actor.name}`, error);
+        });
+        applying.set(actor.id, next);
+        return next;
+    },
+
+    async applyNow(actor) {
         if (!game.user.isGM) return;
         const wanted = new Set(this.wantedFor(actor));
 
         const existing = this.ownedEffects(actor);
-        const keep = existing.filter((e) => wanted.has(e.name));
-        const remove = existing.filter((e) => !wanted.has(e.name));
+        // Matched by the name the pack gave it, which a blanked effect keeps in a flag — and a blanked effect
+        // on a world with no Stargazer (or the reverse) is replaced, so the presentation follows the table.
+        const blank = this.hidesTheSky();
+        // And by the sign it was stamped with. The four terrain effects are one item each for every sign, and
+        // the day's sign is stamped on as a roll option when the effect is created — so an effect kept because
+        // its *name* still matched ("Sky: Benefic" two days running) carried yesterday's sign, and the terrain
+        // touched yesterday's domain. Driven: Taurus → Gemini → Leo, all Benefic, and the effect still said
+        // `sky:sign:taurus` on the third day.
+        const { sign } = this.state;
+        const fits = (e) => wanted.has(this.skyName(e))
+            && Boolean(e.getFlag(MODULE_ID, "skyBlank")) === (blank && ASPECT_EFFECT.test(this.skyName(e)))
+            && (e.getFlag(MODULE_ID, "skySign") ?? null) === sign;
+        const keep = existing.filter(fits);
+        const remove = existing.filter((e) => !fits(e));
         if (remove.length > 0) {
             await actor.deleteEmbeddedDocuments("Item", remove.map((e) => e.id));
         }
 
-        const held = new Set(keep.map((e) => e.name));
+        const held = new Set(keep.map((e) => this.skyName(e)));
         const missing = [...wanted].filter((name) => !held.has(name));
         if (missing.length === 0) return;
 
@@ -378,7 +441,16 @@ export const SkyTracker = {
                 continue;
             }
             const source = (await pack.getDocument(index._id)).toObject();
-            source.flags = foundry.utils.mergeObject(source.flags ?? {}, { [MODULE_ID]: { [EFFECT_FLAG]: true } });
+            source.flags = foundry.utils.mergeObject(source.flags ?? {}, { [MODULE_ID]: { [EFFECT_FLAG]: true, skyName: name, skySign: this.state.sign } });
+            // Stargazer guide §8.4 (ruling R6): with a Stargazer at the table the day's aspect is what the
+            // Night Vigil sells, so the four terrain effects arrive as one anonymous "The Sky" — same rules,
+            // no name, no description, one shared icon. A Saint's own Ascendant and Zenith keep their names.
+            if (blank && ASPECT_EFFECT.test(name)) {
+                source.name = "The Sky";
+                source.img = BLANK_ICON;
+                source.system.description = { ...(source.system.description ?? {}), value: "" };
+                source.flags[MODULE_ID].skyBlank = true;
+            }
             /**
              * Stamp the day's sign onto the effect on its way to the sheet.
              *
@@ -420,7 +492,10 @@ export const SkyTracker = {
 
     async announce() {
         if (!game.user.isGM) return;
-        if (!game.settings.get(MODULE_ID, "announceSky")) return;
+        // Off, the day goes to the players who own a Stargazer rather than to nobody (§8.4, R6).
+        const announced = game.settings.get(MODULE_ID, "announceSky");
+        const whisper = announced ? [] : this.stargazerPlayers();
+        if (!announced && whisper.length === 0) return;
 
         const sign = this.sign;
         const aspect = this.aspect;
@@ -442,7 +517,7 @@ export const SkyTracker = {
             `</div>`,
         ].join("");
 
-        await ChatMessage.create({ content, whisper: [] });
+        await ChatMessage.create({ content, whisper });
     },
 
     /* ---------------------------------------------------------------------------------------------- */

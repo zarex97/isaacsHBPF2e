@@ -26,6 +26,8 @@ export const PRIORITY = {
     ignoreCover: 10,
     /** Guide §4.5 — a Portent is not spent on a roll that fortune or misfortune already altered. */
     portentGuard: 20,
+    /** `sky/terrain-rolls.mjs` — the day's modifier on a creature's first Strike in an encounter, under Aries. */
+    ariesFirstStrike: 30,
 };
 
 const stages = [];
