@@ -595,6 +595,28 @@ function check(label, actual, expected) {
 }
 
 /* -------------------------------------------------------------------------------------------- */
+/*  #116 sight, #123 frequency at zero                                                          */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    const { sightBlock } = await import("../scripts/stargazer/threads.mjs");
+    const who = (name, conditions = [], senses = []) => ({ id: name, name, itemTypes: { condition: conditions.map((slug) => ({ slug })) }, perception: { senses: senses.map((type) => ({ type })) }, getActiveTokens: () => [] });
+    check("#116 sight: blinded, invisible, hidden, undetected and unnoticed refuse; see invisibility sees the invisible; nothing blocks a plain target",
+        [sightBlock(who("sg", ["blinded"]), who("t")) !== null, sightBlock(who("sg"), who("t", ["invisible"])) !== null,
+            sightBlock(who("sg", [], ["see-invisibility"]), who("t", ["invisible"])), sightBlock(who("sg"), who("t", ["hidden"])) !== null,
+            sightBlock(who("sg"), who("t", ["undetected"])) !== null, sightBlock(who("sg"), who("t", ["unnoticed"])) !== null, sightBlock(who("sg"), who("t"))],
+        [true, true, null, true, true, true, null]);
+
+    const { mayPost } = await import("../scripts/economy/frequency-guard.mjs");
+    const f = (value) => ({ value, max: 1, per: "PT10M" });
+    check("#123 a use card at zero is refused unless pf2e just counted that use; spells, frequency-less items and the rewinds pass",
+        [mayPost({ type: "feat", slug: "sentence-passed", frequency: f(1) }), mayPost({ type: "feat", slug: "sentence-passed", frequency: f(0) }),
+            mayPost({ type: "feat", slug: "sentence-passed", frequency: f(0), justCounted: true }), mayPost({ type: "spell", slug: "x", frequency: f(0) }),
+            mayPost({ type: "action", slug: "x", frequency: null }), mayPost({ type: "feat", slug: "rewrite-the-ending", frequency: f(0) })],
+        [true, false, true, true, true, true]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
 
 if (failures.length > 0) {
     console.error(`Stargazer tests failed: ${failures.length} of ${checks}.`);

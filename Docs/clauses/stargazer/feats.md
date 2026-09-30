@@ -87,7 +87,7 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 | SF-12a | §7 Omen of Blades | When you **Snarl** an attack roll and the attack still hits, you may spend 1 Focus Point to reduce the damage |  | ✅ | Live, Altair (19th): the foe's Snarled Claw hit Deneb and offered *Omen of Blades*; spending it took his Focus 2 → 1. An unSnarled hit offered nothing |
 | SF-12b | §7 Omen of Blades | by **2 plus 2 per your Stargazer DC proficiency rank** (so 4 at Trained, 6 at Expert, 8 at Master, 10 at Legendary). | `test-stargazer` pins it | ✅ | Live, Altair (19th), Legendary: a 15-point hit dealt **5** and the resistance went with it; the next 15 dealt 15 |
 | SF-13a | §7 Widened Chart | *Chart the Course* has a range of 120 feet | `test-stargazer` pins it | ✅ | Live, Altair (19th): Chart the Course armed ZZ Ally at 105 feet; Deneb's, without it, was refused at 90 ("beyond 60") |
-| SF-13b | §7 Widened Chart | and no longer requires you to see the creature, only to know where it is. |  | — | The module never asks whether you can see a Thread's target (#116), so there is no sight requirement to lift |
+| SF-13b | §7 Widened Chart | and no longer requires you to see the creature, only to know where it is. |  | ✅ | Live (#116): Altair, with Widened Chart, armed Chart the Course on a hidden Deneb; Deneb, without it, was refused on a hidden Altair (*you cannot see it*) |
 | SF-14a | §7 Borrowed Eyes | You can perform a Night Vigil through the senses of your familiar or a willing ally under an open sky |  | ✅ | Live, Deneb (13th): under a clouded sky her card offered *Borrowed Eyes*; choosing SG Ally sent the GM a request, and allowing it ran her Vigil (*Read through borrowed eyes*). Mira's clouded card offered nothing |
 | SF-14b | §7 Borrowed Eyes | as long as you are within 1 mile of them. |  | ✅ | Live: the GM's request names the open sky and the mile; the allowance is the GM's click |
 
@@ -141,8 +141,8 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 | SF-29a | §7 Inevitable | Once per day, ⤾ reaction, when a creature critically succeeds at a check against you, it gets a success instead. | `test-stargazer` pins it | ✅ | Live, Altair (19th): the foe's critical success against him offered *Inevitable*; using it made the card a **success** and the frequency 1 → 0; the next critical success that day offered nothing |
 | SF-29b | §7 Inevitable | This is a misfortune effect. | `test-stargazer` pins it | ✅ | The feat carries `misfortune` (pinned) |
 | SF-30a | §7 Star-Marked Enemy | Choose one creature you can see. |  | ✅ | Live, Altair (19th): with two targets it asked for one; with the foe targeted it marked the foe; marking Mira took the foe's mark off |
-| SF-30b | §7 Star-Marked Enemy | Until your next daily preparations, *Coiling Doubt* and *Snarl* against it do not require line of sight, only knowledge of its location. |  | ⚠️ | Live, Altair (19th): the mark lasted until his next Vigil, which removed it. **Gap:** nothing asks for line of sight yet (#116), so the mark has nothing to lift |
-| SF-30c | §7 Star-Marked Enemy | For Snarl, this replaces Fortune's Thread's requirement that you can see the creature. |  | — | As SF-30b: Fortune's Thread's "that you can see" is not checked (#116) |
+| SF-30b | §7 Star-Marked Enemy | Until your next daily preparations, *Coiling Doubt* and *Snarl* against it do not require line of sight, only knowledge of its location. |  | ✅ | Live: the mark lasted until Altair's next Vigil, which removed it. **Fixed (#116):** a Snarl on the Star-Marked foe armed while it was hidden |
+| SF-30c | §7 Star-Marked Enemy | For Snarl, this replaces Fortune's Thread's requirement that you can see the creature. |  | ✅ | Live (#116): the same hidden, marked foe refused a Guide — the mark lifts sight for Snarl only |
 | SF-31a | §7 Echo of the Unmade | When you use *Unmake the Moment*, you may also grant **one ally** the memory of the erased round. |  | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): after Altair's Unmake, *Echo of the Unmade* offered one ally and whispered Mira that she remembers the erased round |
 | SF-31b | §7 Echo of the Unmade | They keep it; everyone else does not. |  | ✅ | Live: the whisper went to that ally's owners and the GM, nobody else |
 
@@ -188,9 +188,9 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 | Status | Count |
 | :-- | --: |
 | ☐ | 0 |
-| ✅ | 71 |
-| ⚠️ | 2 |
+| ✅ | 74 |
+| ⚠️ | 1 |
 | ❌ | 0 |
 | 🔧 | 0 |
-| — | 4 |
+| — | 2 |
 | **Total** | **77** |

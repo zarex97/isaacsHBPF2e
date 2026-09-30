@@ -201,7 +201,7 @@ World `pf` is not a clean room. It is a working world with years of fixtures in 
 | `save-rolled` riders come from `pf2e-toolbelt.rollSave` | Which fires only from a **target row on the chat card**. An ad-hoc `actor.saves.reflex.roll()` fires nothing |
 | `item.toMessage()` bypasses `spellcastingEntry.cast` | A *spell* posted that way skips area targeting; an *action* does not |
 | `item.toMessage()` also **spends no frequency** | pf2e decrements `system.frequency.value` in `createUseActionMessage`, which only the two character sheets call. Driving an action by `toMessage()` leaves a once-per-day allowance untouched, and reads exactly like the class failing to count. Click `[data-action="use-action"]` on the sheet's own row instead |
-| A **counted** frequency is not an **enforced** one | `createUseActionMessage` stops decrementing at zero and posts the card anyway. pf2e never refuses; whatever the card drives must check for itself |
+| A **counted** frequency is not an **enforced** one | `createUseActionMessage` stops decrementing at zero and posts the card anyway. pf2e never refuses. `economy/frequency-guard.mjs` now refuses a feat's or action's use card at 0 unless pf2e just counted that use (#123) |
 | A predicate on a tag matches nothing on an **old** sheet | `otherTags` is copied at grant time like everything else, so a tag added to the pack later is absent — and a predicate that matches nothing does not complain, it simply never fires. `Release.repair` unions them back; run it before believing a rule element did nothing |
 | `showCheckDialogs` / `showDamageDialogs` user flags | Block scripted rolls |
 | `game.user.updateTokenTargets` does not exist | Use `token.object.setTarget(true, { user, releaseOthers })` |
@@ -230,6 +230,7 @@ World `pf` is not a clean room. It is a working world with years of fixtures in 
 | pf2e's **Refocus** does nothing | The action from `actionspf2e` is text: posting it, or its sheet row, restores no Focus Point. Whatever a class says Refocus does has to be done by the module |
 | A cast asks **"Confirm targets"** first | The area-targeting flow opens a `DialogV2` before any of the spell's own prompts. A scripted answer queue must put an OK for it first, or the spell's dialog takes the wrong answer and waits for ever |
 | An emanation **replaces** your targets | A spell with an area and a `maxTargets` catches the first creatures in the area up to the cap, whatever the user targeted. Target counts are checked against that list |
+| A token in the scene's **padding** is out of everyone's sight | The inner bounds are a sight edge: a fixture standing below the map's bottom row (the `pf` foe at y 3800) is refused by every "that you can see" check, as Foundry's own vision would hide it. Stand fixtures on the map |
 | An effect has no `disabled` field | A pf2e Effect item's `system.expired` is derived in `prepareBaseData`, so writing either one is overwritten or ignored. To switch an effect off without deleting it, move its rules aside — see `soulbound/suppression.mjs` |
 
 ## 7. Running long jobs
