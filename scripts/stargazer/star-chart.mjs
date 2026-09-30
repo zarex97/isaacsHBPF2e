@@ -72,6 +72,13 @@ export const StarChart = {
         return item?.type === "spell" && (item.system.traits?.value ?? []).includes("stargazer");
     },
 
+    /** A spell a Stargazer feat granted — Star-Touched Cantrip's — belongs in the Star Chart too. */
+    isGrantedByStargazer(item) {
+        if (item?.type !== "spell") return false;
+        const granter = item.actor?.items.get(item.flags?.pf2e?.grantedBy?.id ?? "");
+        return Boolean(granter && (granter.system.traits?.value ?? []).includes("stargazer"));
+    },
+
     /** File an Augury into the Star Chart if it arrived without an entry — GrantItem never files one. */
     async fileSpell(spell) {
         const actor = spell.actor;
@@ -112,7 +119,7 @@ export const StarChart = {
                 await this.syncLore(item.actor);
                 return;
             }
-            if (this.isAugury(item)) await this.fileSpell(item);
+            if (this.isAugury(item) || this.isGrantedByStargazer(item)) await this.fileSpell(item);
             if (item.type === "lore" || item.flags?.[MODULE_ID]?.loreRank) await this.syncLore(item.actor);
         });
         Hooks.on("deleteItem", async (item) => {

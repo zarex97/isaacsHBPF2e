@@ -1,0 +1,43 @@
+{
+    "folder": "14th",
+    "img": "icons/magic/unholy/orb-glowing-purple.webp",
+    "name": "Inevitable",
+    "system": {
+        "actionType": {
+            "value": "reaction"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Once per day, when a creature critically succeeds at a check against you, it gets a success instead. This is a misfortune effect.</p><hr /><p><em>Offered as a button when it triggers.</em></p>"
+        },
+        "level": {
+            "value": 14
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [],
+            "rarity": "common",
+            "value": [
+                "stargazer",
+                "misfortune"
+            ]
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
+        }
+    },
+    "type": "feat"
+}

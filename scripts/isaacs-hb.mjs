@@ -54,6 +54,7 @@ import { Threads } from "./stargazer/threads.mjs";
 import { Vigil } from "./stargazer/vigil.mjs";
 import { Auguries } from "./stargazer/auguries.mjs";
 import { Paths } from "./stargazer/paths.mjs";
+import { Feats as StargazerFeats } from "./stargazer/feats.mjs";
 import { TerrainRolls } from "./sky/terrain-rolls.mjs";
 import { Suppression } from "./soulbound/suppression.mjs";
 import { SpiritWeapon } from "./soulbound/weapon.mjs";
@@ -108,6 +109,7 @@ Hooks.once("init", () => {
     start("the Night Vigil", () => Vigil.registerHooks());
     start("the Auguries", () => Auguries.registerHooks());
     start("the Stargazer's Paths", () => Paths.registerHooks());
+    start("the Stargazer's feats", () => StargazerFeats.registerHooks());
     start("the Gemini duplicate", () => Duplicate.registerHooks());
     start("recharging", () => Recharge.registerHooks());
     start("spell frequency", () => SpellFrequency.registerHooks());

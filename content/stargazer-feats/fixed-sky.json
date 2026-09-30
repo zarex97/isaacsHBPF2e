@@ -1,0 +1,37 @@
+{
+    "folder": "20th",
+    "img": "icons/sundries/gaming/dice-runed-brown.webp",
+    "name": "Fixed Sky",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>One of your Portents is always a <strong>20</strong>, and you may speak that one only <strong>once per week</strong>. Any other Portents you record, from <em>Twin Portent</em> or <em>Second Portent</em>, are still rolled and spoken daily.</p>"
+        },
+        "level": {
+            "value": 20
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [],
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        }
+    },
+    "type": "feat"
+}

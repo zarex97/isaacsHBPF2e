@@ -51,6 +51,18 @@ export function forewarnMode(actor) {
     return has(actor, "constellation-mastery") ? "benefic" : "milder";
 }
 
+/** Guide §4.2, §7: the Vigil takes 10 minutes, 1 with Sky Reader. */
+export function vigilMinutes(actor) {
+    return has(actor, "sky-reader") ? 1 : 10;
+}
+
+/** Guide §7: briefing the party takes 10 minutes, 1 with Sky Reader or Wide Vigil. */
+export function briefingMinutes(actor) {
+    return has(actor, "sky-reader") || has(actor, "wide-vigil") ? 1 : 10;
+}
+
+const minutes = (n) => `${n} minute${n === 1 ? "" : "s"}`;
+
 /** Guide §4.2 / §6.3: three days of forecast, seven with the Ephemeris's The Almanac. */
 export function forecastDays(actor) {
     return has(actor, "the-almanac") ? 7 : 3;
@@ -81,6 +93,8 @@ export async function runVigil(actor) {
     const sky = SkyTracker.state;
     const clouded = Boolean(sky.clouded) && !has(actor, "sky-anchor");
     await actor.update({ [`flags.${MODULE_ID}.${FLAG}.vigil`]: { day: sky.day, clouded, forewarned: false, traded: false } });
+    // Star-Marked Enemy lasts "until your next daily preparations"; the mark may be on a creature only the GM can write.
+    if (has(actor, "star-marked-enemy")) await Relay.request({ action: "stargazerClearMarks", origin: actor.uuid });
 
     if (clouded) {
         await grantAuguryOfTheDay(actor, null, sky.day);
@@ -90,7 +104,7 @@ export async function runVigil(actor) {
     const forecast = SkyTracker.forecast(forecastDays(actor));
     const starless = sky.sign === "starless";
     const lines = [
-        `<p><strong>Night Vigil</strong> — Day ${sky.day}.</p>`,
+        `<p><strong>Night Vigil</strong> — Day ${sky.day}. (${minutes(vigilMinutes(actor))})</p>`,
         `<p><strong>Certainty.</strong> Today: ${describe(sky.sign, sky.aspect)}.</p>`,
         `<p><strong>The Forecast.</strong></p><ol>${forecast.map((d) => `<li>Day ${d.day}: ${d.sign.glyph} ${d.sign.label}, ${d.aspect.label}</li>`).join("")}</ol>`,
     ];
@@ -116,6 +130,8 @@ export async function runVigil(actor) {
         }
     }
 
+    if (has(actor, "prophesied-ally")) lines.push(`<p><button type="button" data-stargazer="prophesy">Prophesied Ally: choose one</button></p>`);
+    if (has(actor, "star-touched-cantrip")) lines.push(`<p><button type="button" data-stargazer="swap-cantrip">Star-Touched Cantrip: swap it</button></p>`);
     if (has(actor, "the-almanac")) lines.push(`<p><button type="button" data-stargazer="almanac">The Almanac: read a past day</button></p>`);
 
     const limit = forewarnLimit(actor);
@@ -131,16 +147,52 @@ export async function runVigil(actor) {
 /*  The card's buttons                                                                              */
 /* ------------------------------------------------------------------------------------------------ */
 
-async function pickAllies(actor) {
-    const limit = forewarnLimit(actor);
-    const scene = game.scenes?.active;
+/** One ally, from the same candidates Forewarned offers. */
+async function pickOne(actor, title, text) {
+    const candidates = allyCandidates(actor);
+    const data = await foundry.applications.api.DialogV2.prompt({
+        window: { title },
+        content: `<p>${text}</p><div class="form-group"><label>Ally</label><select name="ally">${candidates.map((a) => `<option value="${a.uuid}">${a.name}</option>`).join("")}</select></div>`,
+        rejectClose: false,
+        ok: { label: "Choose", callback: (_e, button) => new foundry.applications.ux.FormDataExtended(button.form).object },
+    });
+    return data?.ally || null;
+}
+
+/**
+ * Star-Touched Cantrip: "may swap it during daily preparations". pf2e asks a ChoiceSet once, when the
+ * feat is created, so the feat is made again in its own slot — its cantrip goes with it and the prompt
+ * comes back.
+ */
+async function swapCantrip(actor) {
+    const feat = actor.itemTypes.feat.find((f) => f.slug === "star-touched-cantrip");
+    if (!feat) return;
+    // From the compendium, not the owned copy: pf2e stores the answer in the ChoiceSet rule's own
+    // `selection` and in the name, so a copy of the owned feat re-granted the same cantrip unasked (driven).
+    const pack = game.packs.get(`${MODULE_ID}.stargazer-feats`);
+    const entry = (await pack?.getIndex())?.find((e) => e.name === "Star-Touched Cantrip");
+    const fresh = entry ? await pack.getDocument(entry._id) : null;
+    if (!fresh) return;
+    const source = fresh.toObject();
+    source.system.location = feat.system.location;
+    source._stats = { ...(source._stats ?? {}), compendiumSource: fresh.uuid };
+    await feat.delete();
+    await actor.createEmbeddedDocuments("Item", [source]);
+}
+
+function allyCandidates(actor) {
     const candidates = new Map();
-    for (const token of scene?.tokens ?? []) {
+    for (const token of game.scenes?.active?.tokens ?? []) {
         const a = token.actor;
         if (a && a.id !== actor.id && a.type === "character") candidates.set(a.id, a);
     }
     for (const a of game.actors) if (a.hasPlayerOwner && a.type === "character" && a.id !== actor.id) candidates.set(a.id, a);
-    const rows = [...candidates.values()].map((a) => `<label style="display:block"><input type="checkbox" name="${a.uuid}"> ${a.name}</label>`).join("");
+    return [...candidates.values()];
+}
+
+async function pickAllies(actor) {
+    const limit = forewarnLimit(actor);
+    const rows = allyCandidates(actor).map((a) => `<label style="display:block"><input type="checkbox" name="${a.uuid}"> ${a.name}</label>`).join("");
     const data = await foundry.applications.api.DialogV2.prompt({
         window: { title: forewarnMode(actor) === "benefic" ? "Foreordained" : "Forewarned" },
         content: `<p>You and each ally who listens ${forewarnMode(actor) === "benefic" ? "treat a negative aspect as Benefic" : "take today's negative aspect one step milder"} for the rest of the day. ${Number.isFinite(limit) ? `Up to ${limit} allies.` : ""}</p>${rows}`,
@@ -175,6 +227,15 @@ function bindCard(message, html) {
             } else if (kind === "forewarn") {
                 const allies = await pickAllies(actor);
                 if (allies) await Relay.request({ action: "stargazerForewarn", origin: actor.uuid, allies, day: card.day });
+            } else if (kind === "prophesy") {
+                const ally = await pickOne(actor, "Prophesied Ally", "Fortune's Thread on this ally alone costs no reaction, once per round, until your next Vigil.");
+                if (!ally) return;
+                await actor.update({ [`flags.${MODULE_ID}.${FLAG}.prophesied`]: { uuid: ally, day: card.day }, [`flags.${MODULE_ID}.${FLAG}.prophesiedRound`]: null });
+                ui.notifications.info(`Prophesied Ally: ${fromUuidSync(ally)?.name}.`);
+                button.disabled = true;
+            } else if (kind === "swap-cantrip") {
+                await swapCantrip(actor);
+                button.disabled = true;
             } else if (kind === "almanac") {
                 await readPastDay(actor);
             } else if (kind === "trade") {
@@ -211,7 +272,7 @@ async function forewarn({ origin, allies = [], day }) {
         await SkyTracker.applyTo(creature);
     }
     await actor.update({ [`flags.${MODULE_ID}.${FLAG}.vigil.forewarned`]: true });
-    await whisper(actor, `<p><strong>${mode === "benefic" ? "Foreordained" : "Forewarned"}</strong>: ${[actor, ...listeners].map((c) => c.name).join(", ")}.</p>`);
+    await whisper(actor, `<p><strong>${mode === "benefic" ? "Foreordained" : "Forewarned"}</strong>: ${[actor, ...listeners].map((c) => c.name).join(", ")}. (The briefing took ${minutes(briefingMinutes(actor))}.)</p>`);
 }
 
 async function trade({ origin, days, day }) {

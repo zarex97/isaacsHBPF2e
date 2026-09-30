@@ -1,0 +1,38 @@
+{
+    "folder": "16th",
+    "img": "icons/sundries/books/book-embossed-blue.webp",
+    "name": "Written in Advance",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Spend 10 minutes. The next skill check you attempt within the hour is an automatic <strong>success</strong> (not a critical success). You already did this.</p><hr /><p><em>Post this to chat after the 10 minutes.</em></p>"
+        },
+        "level": {
+            "value": 16
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [],
+            "rarity": "common",
+            "value": [
+                "stargazer",
+                "exploration"
+            ]
+        }
+    },
+    "type": "feat"
+}
