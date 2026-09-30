@@ -1,6 +1,6 @@
 {
     "folder": "Core",
-    "img": "icons/weapons/staves/staff-ornate-hook.webp",
+    "img": "icons/magic/light/swords-light-glowing-white.webp",
     "name": "Weapon Expertise",
     "system": {
         "actionType": {

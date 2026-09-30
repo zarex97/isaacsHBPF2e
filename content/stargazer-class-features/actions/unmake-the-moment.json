@@ -1,6 +1,6 @@
 {
     "folder": "Actions",
-    "img": "icons/magic/time/clock-stopwatch-white-blue.webp",
+    "img": "icons/magic/light/circle-window-clock-blue.webp",
     "name": "Unmake the Moment",
     "system": {
         "actionType": {
