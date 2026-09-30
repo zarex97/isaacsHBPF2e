@@ -43,8 +43,8 @@ export function signOf(id) {
 export const ASPECTS = [
     { id: "none", label: "Quiet", weight: 20, hint: "The sky is unremarkable." },
     { id: "benefic", label: "Benefic", weight: 30, hint: "The sky is kind." },
-    { id: "retrograde", label: "Retrograde", weight: 10, hint: "The sky drags." },
-    { id: "malefic", label: "Malefic", weight: 30, hint: "The sky is hostile." },
+    { id: "retrograde", label: "Retrograde", weight: 30, hint: "The sky drags." },
+    { id: "malefic", label: "Malefic", weight: 10, hint: "The sky is hostile." },
     { id: "exalted", label: "Exalted", weight: 10, hint: "A Zenith." },
 ];
 
