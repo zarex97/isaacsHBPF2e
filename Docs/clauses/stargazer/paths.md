@@ -70,7 +70,7 @@ numbered `01`–`04` by the Path's 1st-, 5th-, 13th- and 17th-level ability, wit
 | HR-02a | §6.2 The Announcement | You can **Demoralize** using Astronomy Lore instead of Intimidation |  | ✅ | Live, Vega (17th, Herald): The Announcement rolled Demoralize as an **Astronomy Lore** check, `1d20 + 25`; her Intimidation is +0 |
 | HR-02b | §6.2 The Announcement | at a range of 60 feet |  | — | pf2e does not bound Demoralize's 30 feet, so there is nothing to widen; the check is the GM's |
 | HR-02c | §6.2 The Announcement | with no auditory or visual requirement | `test-stargazer` pins it | ✅ | Live, Vega (17th, Herald): no auditory trait on the roll and no **Unintelligible −4**; a plain Demoralize at the same foe kept both (control). **Fixed while driving:** pf2e re-tests modifiers against the roll options, so the stage lifts the option, not the modifier |
-| HR-03a | §6.2 Sentence Passed | ✦✦ (concentrate, misfortune, prediction), once per 10 minutes, 1 creature within 60 feet, Will save against your Stargazer DC. | `test-stargazer` pins it | ⚠️ | Live, Vega (17th, Herald): two actions with `concentrate, misfortune, prediction`, a Will save against DC 34. The sheet's Use took the frequency 1 → 0. **Gap:** pf2e posts a second Use at 0 anyway; the GM refuses it |
+| HR-03a | §6.2 Sentence Passed | ✦✦ (concentrate, misfortune, prediction), once per 10 minutes, 1 creature within 60 feet, Will save against your Stargazer DC. | `test-stargazer` pins it | ✅ | Live, Vega: two actions with `concentrate, misfortune, prediction`, a Will save against her DC. **Fixed (#123):** the sheet's Use posted it and rolled the save (1 → 0); a second Use at 0 posted nothing and rolled nothing (*no uses left*), and neither did posting it to chat; ten minutes later it worked again |
 | HR-03b | §6.2 Sentence Passed | **Failure** For 1 minute the target treats every natural 20 as a natural 10 |  | ✅ | Live, Vega (17th, Herald): a failed save → *Effect: Sentence Passed* for 1 minute; a success → nothing. Sentenced, the foe's natural 20 on Athletics read **10** (DC 5: a success, not a critical success); Deneb's natural 20 stayed 20. **Fixed while driving:** the card now shows the new total |
 | HR-03c | §6.2 Sentence Passed | and cannot benefit from fortune effects. |  | ✅ | Live, Vega (17th, Herald): with a keep-higher fortune effect the sentenced foe rolled `1d20`, Deneb `2d20kh`; a reroll of the foe's check was refused, Deneb's went through. **Fixed while driving:** pf2e 8 spells it `keep-higher` |
 | HR-03d | §6.2 Sentence Passed | **Critical Failure** As failure, and it is **doomed 1**. | `test-stargazer` pins it | ✅ | Live, Vega (17th, Herald): a critical failure → the effect and **doomed 1** |
@@ -87,7 +87,7 @@ numbered `01`–`04` by the Path's 1st-, 5th-, 13th- and 17th-level ability, wit
 | EP-02b | §6.3 The Almanac | you may determine what the sky was on any past day you were alive for. |  | ✅ | Live, Deneb (13th, Ephemeris): the Vigil card's *The Almanac* button read day 226 as *Sagittarius, Malefic* from the tracker's history; day 100, which it does not hold, went to the GM. Altair's card had no button |
 | EP-03a | §6.3 Written Down | When you critically succeed at a Recall Knowledge check, you and all allies who can hear you gain a **+1 circumstance bonus to all d20 rolls against that creature type** for 1 minute. |  | ✅ | Live, Deneb (13th, Ephemeris): a critical success on Recall Knowledge at an undead foe → *Written Down: Undead* on her and every ally within 60 feet (ZZ Ally at 90, Aries at 145: nothing); her Strike at it took **+1**, and nothing once it was no longer undead. A plain success wrote nothing. **Fixed while driving:** "who can hear you" is read as 60 feet — unbounded, it briefed the whole test scene |
 | EP-03b | §6.3 Written Down | You may also use Fortune's Thread on a Recall Knowledge check **after the roll but before the GM answers**. | `test-stargazer` pins it | ✅ | Live, Deneb (13th, Ephemeris): after a Recall Knowledge of 30 against DC 31 she was offered *Guide +2 / Snarl −2*; Guide made it **32, a success**, and spent her reaction. With none left, the next Recall Knowledge offered nothing |
-| EP-04a | §6.3 Every Sky Ever Read | Once per hour, ask the GM one yes-or-no question about the next hour. | `test-stargazer` pins it | ⚠️ | The feature carries pf2e's once-per-hour frequency. **Gap:** as with Sentence Passed, pf2e posts a use at 0 |
+| EP-04a | §6.3 Every Sky Ever Read | Once per hour, ask the GM one yes-or-no question about the next hour. | `test-stargazer` pins it | ✅ | Live (#123), Deneb: the sheet's Use posted it once; a second Use at 0 posted nothing; an hour later it posted again |
 | EP-04b | §6.3 Every Sky Ever Read | The answer is **true**. |  | — | The answer is the GM's |
 | EP-04c | §6.3 Every Sky Ever Read | If the GM genuinely has not decided, the answer is "not yet written," and the use is not spent. |  | — | Whether the GM has decided is the GM's; they hand the use back on the sheet |
 
@@ -112,8 +112,8 @@ numbered `01`–`04` by the Path's 1st-, 5th-, 13th- and 17th-level ability, wit
 | Status | Count |
 | :-- | --: |
 | ☐ | 0 |
-| ✅ | 32 |
-| ⚠️ | 2 |
+| ✅ | 34 |
+| ⚠️ | 0 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 4 |

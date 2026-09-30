@@ -253,10 +253,41 @@ export function portentSlots(actor, today) {
     return slots;
 }
 
+/** The condition slugs a creature carries, active ones only. */
+const conditionsOf = (actor) => new Set((actor?.itemTypes?.condition ?? []).filter((c) => c.active !== false).map((c) => c.slug));
+
+/**
+ * Why the Stargazer cannot see this creature, or null (#116). "That you can see" — Fortune's Thread, Chart the
+ * Course, Speak the Portent, The Last Thing You See — fails when the Stargazer is **blinded**, when the target
+ * is **invisible** (unless the Stargazer sees invisibility), **hidden**, **undetected** or **unnoticed**, or when
+ * a wall that blocks sight stands between their tokens. Lighting is left to the GM: pf2e does not record
+ * what a creature can see in the dark, only how it is concealed.
+ */
+export function sightBlock(origin, target) {
+    if (!origin || !target || origin.id === target.id) return null;
+    if (conditionsOf(origin).has("blinded")) return `${origin.name} is blinded`;
+    const onTarget = conditionsOf(target);
+    const senses = [...(origin.perception?.senses ?? origin.system?.perception?.senses ?? [])].map((s) => s?.type ?? s);
+    if (onTarget.has("invisible") && !senses.includes("see-invisibility")) return `${target.name} is invisible`;
+    for (const slug of ["undetected", "unnoticed", "hidden"]) if (onTarget.has(slug)) return `${target.name} is ${slug}`;
+    const a = tokenOf(origin);
+    const b = tokenOf(target);
+    if (!a || !b || a.parent?.id !== b.parent?.id) return null;
+    const from = a.object?.center ?? a.center;
+    const to = b.object?.center ?? b.center;
+    const backend = CONFIG.Canvas?.polygonBackends?.sight;
+    if (from && to && backend?.testCollision?.(from, to, { type: "sight", mode: "any" })) return `${target.name} is out of sight`;
+    return null;
+}
+
 /** Why a target cannot take this Thread, or null. Shared by the picker and the GM's re-check. */
-export function refusal(origin, target, { range }) {
+export function refusal(origin, target, { range, sight = true }) {
     if (!target) return "no such creature";
     if ((target.attributes?.immunities ?? []).some((i) => i.type === "prediction")) return `${target.name} is immune to prediction`;
+    if (sight) {
+        const blind = sightBlock(origin, target);
+        if (blind) return `you cannot see it: ${blind}`;
+    }
     const feet = distance(origin, target);
     if (feet > range) {
         return Number.isFinite(feet)
@@ -400,7 +431,11 @@ async function arm({ origin: originUuid, entries = [], chart, free, tapestry }) 
         const target = (await fromUuid(entry.target))?.actor ?? (await fromUuid(entry.target));
         // Thread of Warning: "even though positions are not yet set" — a Thread on initiative alone has no range.
         const onInitiative = entry.on === "initiative";
-        const why = refusal(origin, target, { range: onInitiative ? Infinity : range });
+        // Sight, where it is asked (#116): not on initiative (Thread of Warning), not for a Chart the Course with
+        // Widened Chart ("only to know where it is"), and not for a Snarl on this Stargazer's Star-Marked Enemy.
+        const starMarked = entry.kind === "snarl" && (target?.itemTypes?.effect ?? []).some((e) => e.flags?.[MODULE_ID]?.starMarked === origin.uuid);
+        const sight = !onInitiative && !(chart && has(origin, "widened-chart")) && !starMarked;
+        const why = refusal(origin, target, { range: onInitiative ? Infinity : range, sight });
         if (why) {
             await say(origin, `<strong>${name}</strong>: ${why}.`);
             continue;
@@ -590,6 +625,8 @@ async function offerLastThing(actor, params, before) {
     const attacker = params?.item?.actor;
     if (!attacker || attacker.id === actor.id) return;
     if (distance(actor, attacker) > 30) return;
+    // "A creature within 30 feet that you can see" (#116).
+    if (sightBlock(actor, attacker)) return;
     if (reactionsLeft(actor) <= 0) return;
     await ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor }),
