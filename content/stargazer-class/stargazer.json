@@ -1,5 +1,5 @@
 {
-    "img": "icons/magic/light/explosion-star-glow-blue.webp",
+    "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
     "name": "Stargazer",
     "system": {
         "ancestryFeatLevels": {
@@ -57,229 +57,229 @@
         "hp": 8,
         "items": {
             "chart": {
-                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "img": "icons/sundries/gaming/card-astronomy-pink.webp",
                 "level": 1,
                 "name": "Star Chart",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Star Chart"
             },
             "lore3": {
-                "img": "icons/sundries/books/book-embossed-blue.webp",
+                "img": "icons/tools/navigation/spyglass-telescope-brass-blue.webp",
                 "level": 3,
                 "name": "Astronomy Lore (3rd)",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Astronomy Lore (3rd)"
             },
             "lore7": {
-                "img": "icons/sundries/books/book-embossed-blue.webp",
+                "img": "icons/tools/navigation/spyglass-telescope-brass.webp",
                 "level": 7,
                 "name": "Astronomy Lore (7th)",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Astronomy Lore (7th)"
             },
             "lor15": {
-                "img": "icons/sundries/books/book-embossed-blue.webp",
+                "img": "icons/tools/navigation/spyglass-telescope-blue.webp",
                 "level": 15,
                 "name": "Astronomy Lore (15th)",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Astronomy Lore (15th)"
             },
             "expsg": {
-                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "img": "icons/magic/light/explosion-star-orange.webp",
                 "level": 7,
                 "name": "Expert Stargazer",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Expert Stargazer"
             },
             "vigil": {
-                "img": "icons/creatures/eyes/human-single-blue.webp",
+                "img": "icons/magic/perception/eye-ringed-glow-angry-small-red.webp",
                 "level": 7,
                 "name": "Vigilant Senses",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Vigilant Senses"
             },
             "star2": {
-                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "img": "icons/magic/light/explosion-star-small-orange-purple.webp",
                 "level": 7,
                 "name": "Second Star",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Second Star"
             },
             "grfor": {
-                "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+                "img": "icons/magic/life/heart-cross-blue.webp",
                 "level": 9,
                 "name": "Great Fortitude",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Great Fortitude"
             },
             "resol": {
-                "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+                "img": "icons/commodities/biological/organ-brain-pink-purple.webp",
                 "level": 11,
                 "name": "Resolve",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Resolve"
             },
             "wexpe": {
-                "img": "icons/weapons/staves/staff-ornate-hook.webp",
+                "img": "icons/magic/light/swords-light-glowing-white.webp",
                 "level": 11,
                 "name": "Weapon Expertise",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Weapon Expertise"
             },
             "incre": {
-                "img": "icons/creatures/eyes/human-single-blue.webp",
+                "img": "icons/magic/perception/eye-ringed-glow-angry-large-teal.webp",
                 "level": 13,
                 "name": "Incredible Senses",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Incredible Senses"
             },
             "light": {
-                "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+                "img": "icons/magic/fire/explosion-flame-lightning-strike.webp",
                 "level": 13,
                 "name": "Lightning Reflexes",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Lightning Reflexes"
             },
             "aexpe": {
-                "img": "icons/equipment/chest/robe-layered-blue.webp",
+                "img": "icons/equipment/chest/breastplate-banded-blue.webp",
                 "level": 13,
                 "name": "Armor Expertise",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Armor Expertise"
             },
             "mstsg": {
-                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "img": "icons/magic/light/explosion-star-small-blue-yellow.webp",
                 "level": 15,
                 "name": "Master Stargazer",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Master Stargazer"
             },
             "grres": {
-                "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+                "img": "icons/skills/wounds/anatomy-organ-brain-pink-red.webp",
                 "level": 17,
                 "name": "Greater Resolve",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Greater Resolve"
             },
             "legsg": {
-                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "img": "icons/magic/light/explosion-star-pink.webp",
                 "level": 19,
                 "name": "Legendary Stargazer",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Legendary Stargazer"
             },
             "fthrd": {
-                "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+                "img": "icons/tools/hand/needle-thread-spool.webp",
                 "level": 1,
                 "name": "Fortune's Thread",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Fortune's Thread"
             },
             "prtnt": {
-                "img": "icons/magic/perception/eye-ringed-glow-angry-small-teal.webp",
+                "img": "icons/magic/perception/orb-crystal-ball-scrying.webp",
                 "level": 1,
                 "name": "Portent",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Portent"
             },
             "widen": {
-                "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+                "img": "icons/magic/light/explosion-star-small-teal.webp",
                 "level": 5,
                 "name": "Widen the Sky",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Widen the Sky"
             },
             "lasts": {
-                "img": "icons/magic/death/skull-horned-worn-fire-blue.webp",
+                "img": "icons/magic/perception/eye-slit-pink.webp",
                 "level": 5,
                 "name": "The Last Thing You See",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.The Last Thing You See"
             },
             "surer": {
-                "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+                "img": "icons/magic/light/explosion-star-small-orange.webp",
                 "level": 9,
                 "name": "Surer Thread",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Surer Thread"
             },
             "twinf": {
-                "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+                "img": "icons/magic/light/explosion-star-small-teal-purple.webp",
                 "level": 15,
                 "name": "Twin Fates",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Twin Fates"
             },
             "three": {
-                "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+                "img": "icons/magic/light/explosion-star-small-pink.webp",
                 "level": 17,
                 "name": "Threefold Thread",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Threefold Thread"
             },
             "crse": {
-                "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+                "img": "icons/tools/navigation/compass-brass-blue-red.webp",
                 "level": 1,
                 "name": "Chart the Course",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Chart the Course"
             },
             "cmast": {
-                "img": "icons/magic/light/explosion-star-large-blue-yellow.webp",
+                "img": "icons/magic/light/explosion-star-orange-purple.webp",
                 "level": 13,
                 "name": "Constellation Mastery",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Constellation Mastery"
             },
             "nvigl": {
-                "img": "icons/magic/perception/eye-ringed-glow-angry-small-teal.webp",
+                "img": "icons/magic/time/day-night-sun-moon.webp",
                 "level": 1,
                 "name": "Night Vigil",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Night Vigil"
             },
             "aug01": {
-                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "img": "icons/magic/light/explosion-star-large-blue-yellow.webp",
                 "level": 1,
                 "name": "Augury (1st)",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Augury (1st)"
             },
             "aug05": {
-                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "img": "icons/magic/light/explosion-star-large-pink.webp",
                 "level": 5,
                 "name": "Augury (5th)",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Augury (5th)"
             },
             "aug07": {
-                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "img": "icons/magic/light/explosion-star-large-teal-purple.webp",
                 "level": 7,
                 "name": "Augury (7th)",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Augury (7th)"
             },
             "aug09": {
-                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "img": "icons/magic/light/explosion-star-large-teal.webp",
                 "level": 9,
                 "name": "Augury (9th)",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Augury (9th)"
             },
             "aug11": {
-                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "img": "icons/magic/light/explosion-star-blue-large.webp",
                 "level": 11,
                 "name": "Augury (11th)",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Augury (11th)"
             },
             "aug13": {
-                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "img": "icons/magic/light/explosion-star-blue-small.webp",
                 "level": 13,
                 "name": "Augury (13th)",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Augury (13th)"
             },
             "aug15": {
-                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "img": "icons/magic/light/explosion-star-blue-yellow.webp",
                 "level": 15,
                 "name": "Augury (15th)",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Augury (15th)"
             },
             "aug17": {
-                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "img": "icons/magic/light/explosion-star-blue.webp",
                 "level": 17,
                 "name": "Augury (17th)",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Augury (17th)"
             },
             "aug19": {
-                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "img": "icons/magic/light/explosion-star-glow-blue-purple.webp",
                 "level": 19,
                 "name": "Augury (19th)",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Augury (19th)"
             },
             "spath": {
-                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "img": "icons/magic/light/beam-deflect-path-yellow.webp",
                 "level": 1,
                 "name": "Stargazer's Path",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Stargazer's Path"
             },
             "unmak": {
-                "img": "icons/magic/time/clock-stopwatch-white-blue.webp",
+                "img": "icons/magic/light/circle-window-clock-blue.webp",
                 "level": 11,
                 "name": "Unmake the Moment",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Unmake the Moment"
             },
             "rwrte": {
-                "img": "icons/magic/time/hourglass-tilted-glowing-gold.webp",
+                "img": "icons/magic/time/hourglass-brown-orange.webp",
                 "level": 19,
                 "name": "Rewrite the Ending",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Rewrite the Ending"
