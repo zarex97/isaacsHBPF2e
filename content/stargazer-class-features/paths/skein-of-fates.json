@@ -1,0 +1,39 @@
+{
+    "folder": "Paths",
+    "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+    "name": "Skein of Fates",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Fortune's Thread affects <strong>one additional creature</strong> with a single reaction &mdash; three from 13th, and four once <em>Threefold Thread</em> arrives at 17th. The extra target does not extend <em>Twin Fates</em> or <em>Tapestry</em>.</p>"
+        },
+        "level": {
+            "value": 13
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "stargazer-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        }
+    },
+    "type": "feat"
+}

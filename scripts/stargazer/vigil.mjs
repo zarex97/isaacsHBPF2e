@@ -2,6 +2,7 @@ import { Relay } from "../riders/relay.mjs";
 import { MODULE_ID, aspectOf, signOf } from "../sky/signs.mjs";
 import { SkyTracker } from "../sky/tracker.mjs";
 import { SIGN_AUGURY } from "./auguries.mjs";
+import { readPastDay } from "./paths.mjs";
 import { isStargazer, rollPortent, setPortent } from "./threads.mjs";
 
 /**
@@ -115,6 +116,8 @@ export async function runVigil(actor) {
         }
     }
 
+    if (has(actor, "the-almanac")) lines.push(`<p><button type="button" data-stargazer="almanac">The Almanac: read a past day</button></p>`);
+
     const limit = forewarnLimit(actor);
     lines.push(`<hr /><button type="button" data-stargazer="forewarn">${forewarnMode(actor) === "benefic" ? "Foreordained" : "Forewarned"}: brief ${Number.isFinite(limit) ? `up to ${limit}` : "any number of"} allies</button>`);
     if (has(actor, "constellation-mastery")) {
@@ -172,6 +175,8 @@ function bindCard(message, html) {
             } else if (kind === "forewarn") {
                 const allies = await pickAllies(actor);
                 if (allies) await Relay.request({ action: "stargazerForewarn", origin: actor.uuid, allies, day: card.day });
+            } else if (kind === "almanac") {
+                await readPastDay(actor);
             } else if (kind === "trade") {
                 await Relay.request({ action: "stargazerTrade", origin: actor.uuid, days: Number(button.dataset.days), day: card.day });
             }

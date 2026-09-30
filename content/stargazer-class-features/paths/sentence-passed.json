@@ -1,0 +1,86 @@
+{
+    "folder": "Paths",
+    "img": "icons/magic/unholy/orb-glowing-purple.webp",
+    "name": "Sentence Passed",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 2
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Once per 10 minutes, 1 creature within 60 feet, Will save against your Stargazer DC.</p><p><strong>Failure</strong> For 1 minute the target treats every natural 20 as a natural 10 and cannot benefit from fortune effects.<br /><strong>Critical Failure</strong> As failure, and it is <strong>doomed 1</strong>.</p>"
+        },
+        "level": {
+            "value": 13
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "stargazer-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "stargazer",
+                "concentrate",
+                "misfortune",
+                "prediction"
+            ]
+        },
+        "frequency": {
+            "max": 1,
+            "per": "PT10M"
+        }
+    },
+    "type": "feat",
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "riders": [
+                {
+                    "event": "action-used",
+                    "apply": {
+                        "type": "save",
+                        "statistic": "will",
+                        "dc": "class",
+                        "riders": [
+                            {
+                                "apply": {
+                                    "type": "effect",
+                                    "uuid": "Compendium.isaacs-hb-pf2e.stargazer-effects.Item.Effect: Sentence Passed"
+                                },
+                                "outcomes": [
+                                    "failure",
+                                    "criticalFailure"
+                                ],
+                                "duration": {
+                                    "unit": "minutes",
+                                    "value": 1
+                                }
+                            },
+                            {
+                                "apply": {
+                                    "type": "condition",
+                                    "slug": "doomed",
+                                    "value": 1
+                                },
+                                "outcomes": [
+                                    "criticalFailure"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+}

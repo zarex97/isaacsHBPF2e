@@ -1218,6 +1218,8 @@ check("every wrap the module needs is still there", [...claimedBy.keys()].sort()
     "CONFIG.PF2E.Item.documentClasses.spellcastingEntry.prototype.cast",
     // Tin Depth 3's see-invisibility is "within 30 feet"; pf2e hands Foundry an unlimited range for it (#88).
     "CONFIG.Token.documentClass.prototype._prepareDetectionModes",
+    // The Herald's Sentence Passed: "cannot benefit from fortune effects", and a hero-point reroll is one.
+    "game.pf2e.Check.rerollFromMessage",
     // The check pipeline (`lib/check-pipeline.mjs`): the last moment before a d20 falls. Its stages are the
     // Soulbound's Strikes that ignore cover and the Stargazer's Portent guard.
     "game.pf2e.Check.roll",
