@@ -110,7 +110,7 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | SG-33a | §4.3 | **Fortune's Thread** ⤾ **[reaction]** (concentrate, prediction) |  | ✅ | Live: a reaction on the sheet with `concentrate` and `prediction`; posting it opened the picker — Guide or Snarl per targeted creature, the roll kind, and Twin Fates at 15th |
-| SG-33b | §4.3 | **Trigger** A creature within 30 feet that you can see is about to roll an attack roll, a saving throw, a skill check, or a Perception check. | `test-stargazer` pins it | ⚠️ | Live: armed in advance on the creature (ADR-0004) and spent by its next matching roll; a creature 90 feet away was refused against 60, and one immune to `prediction` was refused. **Gap:** *that you can see* is not checked — range is, and so is immunity to `prediction` |
+| SG-33b | §4.3 | **Trigger** A creature within 30 feet that you can see is about to roll an attack roll, a saving throw, a skill check, or a Perception check. | `test-stargazer` pins it | ✅ | Live: armed in advance on the creature (ADR-0004) and spent by its next matching roll; 90 feet refused against 60; immunity to `prediction` refused. **Fixed (#116):** a sight check stands beside range and immunity. Live, Altair: a Guide on Deneb behind a sight-blocking wall was refused (*out of sight*), and with the wall gone armed; refused on Deneb invisible, on Deneb hidden, and with Altair blinded; Mira, in plain view, armed |
 | SG-33c | §4.3 | **Guide** — the triggering creature gains a **+1 circumstance bonus** to the roll. | `test-stargazer` pins it | ✅ | Live at 17th: an ally's skill check took **Guide +2** (circumstance) and the effect was gone after it; the control roll straight after was bare `1d20`. +1 below 9th is pinned statically |
 | SG-33d | §4.3 | **Snarl** — the triggering creature takes a **−1 circumstance penalty** to the roll. | `test-stargazer` pins it | ✅ | Live at 17th: the foe's skill check rolled **`1d20 - 2`** and the Snarl was spent |
 | SG-33e | §4.3 | Snarl can only be applied to an **attack roll, skill check, or Perception check**, never a saving throw. | `test-stargazer` pins it | ✅ | Live: a Snarl armed on the foe was **not** applied to its Will save (`1d20 + 8`, still armed) and fired on its next skill check; arming a Snarl on saving throws is refused outright |
@@ -134,7 +134,7 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 | SG-35a | §4.5 | When you complete a Night Vigil, roll a d20 and record the result. This is your **Portent**, and you know its value. |  | ✅ | Live: *Rest for the Night* recorded a Portent of **6** and posted it as a GM roll to the Stargazer |
 | SG-35b | §4.5 | **Speak the Portent** ✦ **[free action]** (prediction) |  | ✅ | Live: a free action with `prediction` on the sheet; speaking it armed the Portent on the targeted creature |
 | SG-35c | §4.5 | **Frequency** once per day | `test-stargazer` pins it | ✅ | Live: Mira, with one Portent, spoke it once; after it was spent, posting Portent again opened no picker |
-| SG-35d | §4.5 | **Trigger** A creature within 60 feet that you can see is about to roll a d20 for an attack roll, a saving throw, or a skill check. |  | ⚠️ | Live: spoken over the foe's next skill check, 20 feet away — the same range and immunity refusals as a Thread, at 60 feet. **Gap:** *that you can see* is not checked — range is, and so is immunity to `prediction` |
+| SG-35d | §4.5 | **Trigger** A creature within 60 feet that you can see is about to roll a d20 for an attack roll, a saving throw, or a skill check. | `test-stargazer` pins it | ✅ | Live: spoken over a skill check 20 feet away, with the same range and immunity refusals as a Thread. **Fixed (#116):** refused on Deneb invisible (*you cannot see it*), and spoken on her once visible |
 | SG-35e | §4.5 | The creature does not roll. Its d20 result **is** your recorded Portent, and the roll resolves normally from there. The Portent is spent. | `test-stargazer` pins it | ✅ | Live: the foe's skill check was the constant **`14`** — no die — and the Portent was spent; the control roll straight after was `1d20` |
 | SG-35f | §4.5 | A Portent of 20 counts as a natural 20 and a Portent of 1 as a natural 1 | `test-stargazer` pins it | ✅ | Live: a Portent of 20 on a Will save of +14 against DC 34 was a **critical success** (34 is a success; the natural 20 raises it). Phase 0 drove the natural 1 |
 | SG-35g | §4.5 | Speak the Portent cannot be used on a roll already altered by a fortune or misfortune effect, and does not itself have those traits. | `test-stargazer` pins the guard | ⚠️ | Live (phase 0): a Portent beside a fortune roll-twice rolled `2d20kh` and stayed armed. **Gap:** pf2e's `SubstituteRoll` must carry `fortune` or `misfortune`, so the roll does have the trait |
@@ -154,7 +154,7 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | SG-37a | §4.7 | Fortune's Thread's range increases to **60 feet** | `test-stargazer` pins it | ✅ | Live at 17th: creatures at 10 and 20 feet armed; one at **90** refused *"beyond 60 feet"* |
 | SG-37b | §4.7 | when you use it you may affect **two creatures** with the same reaction, in **any combination** — two Guides, two Snarls, or one of each. | `test-stargazer` pins it | ✅ | Live: one reaction armed **Guide on the ally and Snarl on the foe**; the foe's skill check spent the reaction, and the ally's Perception check took its Guide afterwards without spending another |
-| SG-37c | §4.7 | Both must be within range and you must be able to see both. | `test-stargazer` pins it | ⚠️ | Live: both must be within range — the 90-foot creature was refused. **Gap:** *that you can see* is not checked — range is, and so is immunity to `prediction` |
+| SG-37c | §4.7 | Both must be within range and you must be able to see both. | `test-stargazer` pins it | ✅ | Live: both must be within range, and both must be seen. **Fixed (#116):** a sight check stands beside range and immunity. Live, Altair: a Guide on Deneb behind a sight-blocking wall was refused (*out of sight*), and with the wall gone armed; refused on Deneb invisible, on Deneb hidden, and with Altair blinded; Mira, in plain view, armed |
 | SG-37d | §4.7 | It is still a single reaction, and Snarl's restriction to attack rolls, skill checks and Perception still applies. | `test-stargazer` pins it | ✅ | Live: two creatures, one reaction; a new arm with it spent was refused *"no reaction left this round"*; Snarl still never reached the foe's save |
 
 ## The Last Thing You See (guide §4.8)
@@ -162,7 +162,7 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | SG-38a | §4.8 | **The Last Thing You See** ⤾ **[reaction]** (concentrate, emotion, fear, illusion, mental, prediction, visual) |  | ✅ | Live: a reaction with `concentrate, emotion, fear, illusion, mental, prediction, visual`, offered as a whispered button when it triggers (ADR-0004) |
-| SG-38b | §4.8 | **Trigger** A creature within 30 feet that you can see deals damage to you. |  | ⚠️ | Live: the foe hitting Vega from 20 feet posted the button; the same hit from 90 feet did not; with the reaction spent, no button. **Gap:** *that you can see* is not checked — range is, and so is immunity to `prediction` |
+| SG-38b | §4.8 | **Trigger** A creature within 30 feet that you can see deals damage to you. |  | ✅ | Live: a hit from 20 feet posted the button, from 90 did not, and with the reaction spent none. **Fixed (#116):** the same hit from a hidden foe, or from behind a wall, posted nothing; the visible foe's posted the button |
 | SG-38c | §4.8 | It attempts a Will save against your Stargazer DC. |  | ✅ | Live: the foe rolled Will against **DC 34** — Vega's Stargazer DC at 17th |
 | SG-38d | §4.8 | **Critical Success** It is unaffected and is temporarily immune for 10 minutes. |  | ✅ | Live: a critical success (Portent 20, Will +14) gave no condition and an immunity effect; using it again posted *"unaffected"* and rolled no save |
 | SG-38e | §4.8 | **Success** Frightened 1. |  | ✅ | Live: success (`19 + 15` = 34) → **frightened 1** |
@@ -243,7 +243,7 @@ rewinds behave at the table. ADR-0004 is the reasoning behind the arming model.*
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | SG-47a | §11.2 | One reaction arms up to as many creatures as the Thread can affect; the rest stay armed after the first fires. | `test-stargazer` pins it | ✅ | Live: two creatures armed on one reaction; the first roll moved *spent* from 0 to 1, the second fired afterwards and it stayed 1 |
 | SG-47b | §11.2 | An armed Thread expires at the start of your next turn, and you cannot arm one with no reaction left |  | ✅ | Live: with the reaction spent, arming was refused; at Vega's next turn the count was back to 0, and a Guide armed then left unrolled for a round was gone at the turn after, costing nothing |
-| SG-47c | §11.2 | *Two Warnings* allows a second, and *Chart the Course*'s free Threads cost none. |  | ⚠️ | Live: Chart the Course's Threads armed with the reaction spent and cost none. **Gap:** *Two Warnings* is a feat, not built until phase 6 (#108) |
+| SG-47c | §11.2 | *Two Warnings* allows a second, and *Chart the Course*'s free Threads cost none. |  | ✅ | Live (phase 6a, #125): Deneb with *Two Warnings* armed two Threads in one round and a third was refused, and Chart the Course's Threads armed with the reaction spent and cost none |
 | SG-47d | §11.3 | Its free Fortune's Thread is **armed on the named creature at no reaction cost**, and spent by that creature's first d20. | `test-stargazer` pins it | ✅ | Live: the foe's first d20 after Chart was a save; its Snarl could not apply and was spent anyway |
 | SG-47e | §11.3 | it never expires until it is spoken or a new Vigil overwrites it. |  | ✅ | Live: Mira's Portent armed on SG Ally was still there two days of world time later; speaking it again moved it to the foe; armed and unspoken, the next Vigil took it back |
 | SG-47f | §11.3 | the die is replaced before the roll resolves | `test-stargazer` pins it | ✅ | Live: the Portent's roll formula is the constant — `14`, `19 + 15` — not a die |
@@ -265,8 +265,8 @@ rewinds behave at the table. ADR-0004 is the reasoning behind the arming model.*
 | Status | Count |
 | :-- | --: |
 | ☐ | 0 |
-| ✅ | 116 |
-| ⚠️ | 7 |
+| ✅ | 121 |
+| ⚠️ | 2 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 6 |

@@ -22,6 +22,7 @@ import { Duplicate } from "./economy/duplicate.mjs";
 import { FreeCast } from "./economy/free-cast.mjs";
 import { Recharge } from "./economy/recharge.mjs";
 import { SpellFrequency } from "./economy/spell-frequency.mjs";
+import { FrequencyGuard } from "./economy/frequency-guard.mjs";
 import { TerrainAura } from "./soulbound/terrain-aura.mjs";
 import { Balance } from "./roll-rewrites/balance.mjs";
 import { SharedAllowance } from "./riders/shared-allowance.mjs";
@@ -118,6 +119,7 @@ Hooks.once("init", () => {
     start("the Gemini duplicate", () => Duplicate.registerHooks());
     start("recharging", () => Recharge.registerHooks());
     start("spell frequency", () => SpellFrequency.registerHooks());
+    start("feat and action frequency", () => FrequencyGuard.registerHooks());
     start("terrain auras", () => TerrainAura.registerHooks());
     start("Om", () => Om.registerHooks());
     start("The Balance", () => Balance.registerHooks());

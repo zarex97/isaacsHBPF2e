@@ -222,7 +222,11 @@ export const Reiatsu = {
                         const focus = this.system?.resources?.focus;
                         if (focus) {
                             focus.max = focus.cap ?? focus.max;
-                            focus.value = Math.min(focus.value ?? 0, focus.max);
+                            // Re-read from the source, as the Stargazer's pin does: pf2e has already clamped
+                            // `focus.value` to its own maximum — the count of costed kidō — so a Soulbound with
+                            // three points and two costed kidō read 2 and could never spend the third (#114).
+                            const stored = this._source?.system?.resources?.focus?.value;
+                            focus.value = Math.max(0, Math.min(stored ?? focus.value ?? 0, focus.max));
                         }
                         // pf2e has no alteration for an action cost, and two abilities need one. This is
                         // the one place a second wrapper on `prepareDerivedData` would have gone, and
