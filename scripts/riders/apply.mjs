@@ -2446,6 +2446,19 @@ function resolveFromOrigin(expression, context) {
         return originActor?.system?.proficiencies?.attacks?.[proficiency[1]]?.rank ?? null;
     }
 
+    /**
+     * The roll option an attack against the creature chosen off a `pick` card carries.
+     *
+     * *Sight of the Balance* hands its +1 to the allies, but the clause is *"the next ally who attacks
+     * **it**"* — and a pf2e effect cannot be about one creature unless that creature is named in its
+     * predicate. pf2e publishes `self:signature:<signature>` on every actor and renames it `target:` on a
+     * roll against them, so the name is baked in here, at hand-out time, the only moment the pick is known.
+     */
+    if (expression === "picked.as-target") {
+        const signature = context.picked?.actor?.signature;
+        return signature ? `target:signature:${signature}` : null;
+    }
+
     const match = /^origin\.statistic\.([\w-]+)\.rank$/.exec(String(expression));
     if (match) return originActor?.getStatistic?.(match[1])?.rank ?? null;
     if (expression === "origin.level") return originActor?.level ?? null;
@@ -2742,7 +2755,9 @@ export async function applyPick(payload) {
     const originActor = origin?.actor ?? origin;
 
     const work = {
-        ...context, originActor, actor, target: picked, item,
+        // `picked` survives the loop below, which re-points `target` at each nested rider's own
+        // recipients — see `picked.as-target` in `resolveFromOrigin`.
+        ...context, originActor, actor, target: picked, picked, item,
         outcome: payload.outcome ?? null,
         adjustments: [], prompts: [], notes: [], choices: [], picks: [], moves: [],
     };

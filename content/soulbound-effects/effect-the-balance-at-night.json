@@ -61,7 +61,13 @@
                                 },
                                 "apply": {
                                     "type": "effect",
-                                    "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Allotted Fortune"
+                                    "uuid": "Compendium.isaacs-hb-pf2e.soulbound-effects.Item.Effect: Allotted Fortune",
+                                    "substitutions": [
+                                        {
+                                            "path": "system.rules.0.predicate.0",
+                                            "value": "picked.as-target"
+                                        }
+                                    ]
                                 }
                             }
                         ]
