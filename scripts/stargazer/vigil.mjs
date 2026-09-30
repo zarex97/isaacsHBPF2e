@@ -3,7 +3,7 @@ import { MODULE_ID, aspectOf, signOf } from "../sky/signs.mjs";
 import { SkyTracker } from "../sky/tracker.mjs";
 import { SIGN_AUGURY } from "./auguries.mjs";
 import { readPastDay } from "./paths.mjs";
-import { isStargazer, rollPortent, setPortent } from "./threads.mjs";
+import { isStargazer, portentsOf, rollPortents, setPortentValue } from "./threads.mjs";
 
 /**
  * The Night Vigil — Stargazer guide §4.2, §4.12, and the build ruling in §11.7.
@@ -75,59 +75,117 @@ export function forecastDays(actor) {
  * which is the price of a guarantee." Returns the name granted, or null.
  */
 export async function grantAuguryOfTheDay(actor, name, day) {
-    const old = actor.itemTypes.spell.filter((s) => s.flags?.[MODULE_ID]?.auguryOfTheDay);
-    if (old.length > 0) await actor.deleteEmbeddedDocuments("Item", old.map((s) => s.id));
-    if (!name) return null;
-    if (actor.itemTypes.spell.some((s) => s.name === name)) return null;
-    const pack = game.packs.get(`${MODULE_ID}.stargazer-auguries`);
-    const entry = (await pack?.getIndex())?.find((e) => e.name === name);
-    if (!entry) return null;
-    const source = foundry.utils.deepClone((await pack.getDocument(entry._id)).toObject());
-    source.flags = foundry.utils.mergeObject(source.flags ?? {}, { [MODULE_ID]: { auguryOfTheDay: { day } } });
-    await actor.createEmbeddedDocuments("Item", [source]);
-    return name;
+    const [granted] = await grantAuguriesOfTheDay(actor, name ? [name] : [], day);
+    return granted ?? null;
 }
 
-export async function runVigil(actor) {
+/**
+ * Several Auguries of the Day at once — *Two Skies* (§7, 18th) gives both signs' — replacing yesterday's.
+ * Each is skipped when it is already known. Returns the names granted.
+ */
+export async function grantAuguriesOfTheDay(actor, names, day) {
+    const old = actor.itemTypes.spell.filter((s) => s.flags?.[MODULE_ID]?.auguryOfTheDay);
+    if (old.length > 0) await actor.deleteEmbeddedDocuments("Item", old.map((s) => s.id));
+    const pack = game.packs.get(`${MODULE_ID}.stargazer-auguries`);
+    const index = (await pack?.getIndex()) ?? [];
+    const granted = [];
+    for (const name of [...new Set(names.filter(Boolean))]) {
+        if (actor.itemTypes.spell.some((s) => s.name === name)) continue;
+        const entry = index.find((e) => e.name === name);
+        if (!entry) continue;
+        const source = foundry.utils.deepClone((await pack.getDocument(entry._id)).toObject());
+        source.flags = foundry.utils.mergeObject(source.flags ?? {}, { [MODULE_ID]: { auguryOfTheDay: { day } } });
+        await actor.createEmbeddedDocuments("Item", [source]);
+        granted.push(name);
+    }
+    return granted;
+}
+
+/** Private Sign's Augury, by name, from the choice the feat recorded. */
+function privateAugury(actor) {
+    const own = SkyTracker.privateSignOf(actor);
+    return own?.augury ? fromUuidSync(own.augury)?.name ?? null : null;
+}
+
+/**
+ * The day's Auguries for this Stargazer: the sign's, the second sign's with Two Skies, and on a Starless day
+ * a Private Sign's. `tomorrow` is Doubled Reading's: tomorrow's sign read in place of today's.
+ */
+export function dayAuguries(actor, sky, { tomorrow = false } = {}) {
+    const first = tomorrow ? sky.queue?.[0]?.sign : sky.sign;
+    const names = [SIGN_AUGURY[first] ?? null];
+    if (has(actor, "two-skies") && sky.second?.sign) names.push(SIGN_AUGURY[sky.second.sign] ?? null);
+    if (sky.sign === "starless" && has(actor, "private-sign")) names.push(privateAugury(actor));
+    return names.filter(Boolean);
+}
+
+export async function runVigil(actor, { borrowed = false } = {}) {
     if (!isStargazer(actor) || !has(actor, "night-vigil")) return;
     const sky = SkyTracker.state;
-    const clouded = Boolean(sky.clouded) && !has(actor, "sky-anchor");
+    // Borrowed Eyes (§7, 4th): read through a familiar or ally under an open sky — the GM's allowance, below.
+    const clouded = Boolean(sky.clouded) && !has(actor, "sky-anchor") && !borrowed;
     await actor.update({ [`flags.${MODULE_ID}.${FLAG}.vigil`]: { day: sky.day, clouded, forewarned: false, traded: false } });
     // Star-Marked Enemy lasts "until your next daily preparations"; the mark may be on a creature only the GM can write.
     if (has(actor, "star-marked-enemy")) await Relay.request({ action: "stargazerClearMarks", origin: actor.uuid });
 
     if (clouded) {
         await grantAuguryOfTheDay(actor, null, sky.day);
-        return whisper(actor, `<p><strong>Night Vigil — Clouded Sky.</strong> You learn nothing, gain no Augury of the Day, get no forecast, and cannot use Forewarned. You are as blind as everybody else.</p>`);
+        const eyes = has(actor, "borrowed-eyes")
+            ? `<p><button type="button" data-stargazer="borrowed-eyes">Borrowed Eyes: ask to read through your familiar or an ally</button></p>`
+            : "";
+        return whisper(actor, `<p><strong>Night Vigil — Clouded Sky.</strong> You learn nothing, gain no Augury of the Day, get no forecast, and cannot use Forewarned. You are as blind as everybody else.</p>${eyes}`,
+            { vigilCard: { origin: actor.uuid, day: sky.day, clouded: true } });
     }
 
     const forecast = SkyTracker.forecast(forecastDays(actor));
     const starless = sky.sign === "starless";
     const lines = [
-        `<p><strong>Night Vigil</strong> — Day ${sky.day}. (${minutes(vigilMinutes(actor))})</p>`,
+        `<p><strong>Night Vigil</strong> — Day ${sky.day}. (${minutes(vigilMinutes(actor))})${borrowed ? " Read through borrowed eyes." : ""}</p>`,
         `<p><strong>Certainty.</strong> Today: ${describe(sky.sign, sky.aspect)}.</p>`,
-        `<p><strong>The Forecast.</strong></p><ol>${forecast.map((d) => `<li>Day ${d.day}: ${d.sign.glyph} ${d.sign.label}, ${d.aspect.label}</li>`).join("")}</ol>`,
     ];
+    // Two Skies: the second sky, pre-rolled with the day (R7).
+    if (has(actor, "two-skies") && sky.second?.sign) lines.push(`<p><strong>Two Skies.</strong> Also up, for you and whoever you brief: ${describe(sky.second.sign, sky.second.aspect)}.</p>`);
+    // Private Sign: on a Starless day, your own sign rises over you.
+    const own = starless ? SkyTracker.privateSignOf(actor) : null;
+    if (own?.domain && sky.privateAspect) lines.push(`<p><strong>Private Sign.</strong> Nothing is written for anyone else; your own sign rises, governing ${signOf(own.domain).label}'s domain, ${aspectOf(sky.privateAspect).label}.</p>`);
+    const twoSkies = has(actor, "two-skies");
+    lines.push(`<p><strong>The Forecast.</strong></p><ol>${forecast.map((d) => `<li>Day ${d.day}: ${d.sign.glyph} ${d.sign.label}, ${d.aspect.label}${twoSkies && d.second ? `; and ${d.second.sign.glyph} ${d.second.sign.label}, ${d.second.aspect.label}` : ""}</li>`).join("")}</ol>`);
 
-    const granted = await grantAuguryOfTheDay(actor, SIGN_AUGURY[sky.sign] ?? null, sky.day);
-    if (granted) lines.push(`<p><strong>Augury of the Day.</strong> <em>${granted}</em>, until your next daily preparations.</p>`);
-    else if (SIGN_AUGURY[sky.sign]) lines.push(`<p><strong>Augury of the Day.</strong> <em>${SIGN_AUGURY[sky.sign]}</em> — you already know it.</p>`);
+    const auguries = dayAuguries(actor, sky);
+    const granted = await grantAuguriesOfTheDay(actor, auguries, sky.day);
+    for (const name of auguries) {
+        const known = actor.itemTypes.spell.some((s) => s.name === name && !s.flags?.[MODULE_ID]?.auguryOfTheDay);
+        lines.push(granted.includes(name)
+            ? `<p><strong>Augury of the Day.</strong> <em>${name}</em>, until your next daily preparations.</p>`
+            : known
+                ? `<p><strong>Augury of the Day.</strong> <em>${name}</em> — you already know it.</p>`
+                : `<p><strong>Augury of the Day.</strong> <em>${name}</em> is not in the Auguries compendium yet.</p>`);
+    }
     if (starless && has(actor, "constellation-mastery")) {
         lines.push("<p><strong>Starless.</strong> Choose any sign's Augury as your Augury of the Day:</p>",
             ...Object.values(SIGN_AUGURY).map((n) => `<button type="button" data-stargazer="day-augury" data-name="${n}">${n}</button>`));
     }
+    // Doubled Reading (§7, 8th): once per day, take the better of today's Augury and tomorrow's.
+    const doubled = actor.itemTypes.feat.find((f) => f.slug === "doubled-reading");
+    const tomorrow = SIGN_AUGURY[sky.queue?.[0]?.sign] ?? null;
+    if (doubled && (doubled.system.frequency?.value ?? 0) > 0 && tomorrow && tomorrow !== auguries[0]) {
+        lines.push(`<p><button type="button" data-stargazer="doubled-reading">Doubled Reading: take tomorrow's <em>${tomorrow}</em> instead${auguries[0] ? ` of <em>${auguries[0]}</em>` : ""}</button></p>`);
+    }
 
-    let portents = null;
+    let portentChoices = null;
     if (has(actor, "portent")) {
+        // "Nothing is written, so you may roll your Portent twice and keep either result" — each of them.
+        const slots = await rollPortents(actor, { times: starless ? 2 : 1 });
+        const shown = slots.map((s) => (s.fixed ? `<strong>20</strong> (Fixed Sky${s.spent ? ", spoken this week" : ""})` : `<strong>${s.value}</strong>`));
+        lines.push(`<p><strong>Portent${slots.length > 1 ? "s" : ""}.</strong> ${shown.join(", ")}.</p>`);
+        portentChoices = Object.fromEntries(slots.filter((s) => s.options).map((s) => [s.id, s.options]));
         if (starless) {
-            // "Nothing is written, so you may roll your Portent twice and keep either result."
-            const rolls = await Promise.all([new Roll("1d20").evaluate(), new Roll("1d20").evaluate()]);
-            portents = rolls.map((r) => r.total);
-            lines.push(`<p><strong>Starless.</strong> Nothing is written: your Portent rolled <strong>${portents[0]}</strong> and <strong>${portents[1]}</strong>. Keep either.</p>`,
-                ...portents.map((v) => `<button type="button" data-stargazer="keep-portent" data-value="${v}">Keep ${v}</button>`));
-        } else {
-            await rollPortent(actor);
+            for (const slot of slots.filter((s) => (s.options ?? []).length > 1)) {
+                lines.push(`<p>Starless: nothing is written. Keep ${slot.options.map((v) => `<button type="button" data-stargazer="keep-portent" data-slot="${slot.id}" data-value="${v}">${v}</button>`).join(" or ")}</p>`);
+            }
         }
+        const sign = actor.itemTypes.feat.find((f) => f.slug === "astrological-sign");
+        if (sign && (sign.system.frequency?.value ?? 0) > 0) lines.push(`<p><button type="button" data-stargazer="astrological-sign">Astrological Sign: move a Portent up to 3</button></p>`);
     }
 
     if (has(actor, "prophesied-ally")) lines.push(`<p><button type="button" data-stargazer="prophesy">Prophesied Ally: choose one</button></p>`);
@@ -140,7 +198,7 @@ export async function runVigil(actor) {
         lines.push(`<p><strong>Trade the Day.</strong> Swap today's aspect with one of these; the signs do not move.</p>`,
             ...forecast.slice(0, 3).map((d) => `<button type="button" data-stargazer="trade" data-days="${d.in}">Day ${d.day} (${d.aspect.label})</button>`));
     }
-    return whisper(actor, lines.join(""), { vigilCard: { origin: actor.uuid, day: sky.day, portents } });
+    return whisper(actor, lines.join(""), { vigilCard: { origin: actor.uuid, day: sky.day, portents: portentChoices, auguries } });
 }
 
 /* ------------------------------------------------------------------------------------------------ */
@@ -213,10 +271,28 @@ function bindCard(message, html) {
             const kind = button.dataset.stargazer;
             if (kind === "keep-portent") {
                 const value = Number(button.dataset.value);
-                if (!card.portents?.includes(value) || state(actor).vigil?.day !== card.day) return;
-                await setPortent(actor, value);
+                const slot = button.dataset.slot ?? "p1";
+                if (!(card.portents?.[slot] ?? []).includes(value) || state(actor).vigil?.day !== card.day) return;
+                await setPortentValue(actor, slot, value);
                 ui.notifications.info(`Portent: ${value}.`);
-                for (const b of html.querySelectorAll('button[data-stargazer="keep-portent"]')) b.disabled = true;
+                for (const b of html.querySelectorAll(`button[data-stargazer="keep-portent"][data-slot="${slot}"]`)) b.disabled = true;
+            } else if (kind === "astrological-sign") {
+                if (state(actor).vigil?.day !== card.day) return;
+                if (await astrologicalSign(actor, card)) button.disabled = true;
+            } else if (kind === "doubled-reading") {
+                if (state(actor).vigil?.day !== card.day) return;
+                const item = actor.itemTypes.feat.find((f) => f.slug === "doubled-reading");
+                if (!item || (item.system.frequency?.value ?? 0) <= 0) return ui.notifications.warn("Doubled Reading: already used today.");
+                await item.update({ "system.frequency.value": item.system.frequency.value - 1 });
+                const names = dayAuguries(actor, SkyTracker.state, { tomorrow: true });
+                const granted = await grantAuguriesOfTheDay(actor, names, card.day);
+                ui.notifications.info(`Doubled Reading: ${names[0]}${granted.includes(names[0]) ? "" : " (already known)"}.`);
+                button.disabled = true;
+            } else if (kind === "borrowed-eyes") {
+                const through = await pickOne(actor, "Borrowed Eyes", "Whose eyes, under an open sky, within a mile of you?");
+                if (!through) return;
+                await Relay.request({ action: "stargazerBorrowedEyes", origin: actor.uuid, through, day: card.day });
+                button.disabled = true;
             } else if (kind === "day-augury") {
                 const name = button.dataset.name;
                 if (!Object.values(SIGN_AUGURY).includes(name) || state(actor).vigil?.day !== card.day) return;
@@ -255,6 +331,68 @@ function vigilToday(actor, day) {
     return vigil && vigil.day === day && day === SkyTracker.state.day && !vigil.clouded ? vigil : null;
 }
 
+/**
+ * Astrological Sign (§7, 1st): once per day, when the Portents are recorded, one of them may be treated as
+ * any number within 3 of what was rolled. "What was rolled" is the Vigil's die, not a value already moved.
+ */
+async function astrologicalSign(actor, card) {
+    const item = actor.itemTypes.feat.find((f) => f.slug === "astrological-sign");
+    if (!item || (item.system.frequency?.value ?? 0) <= 0) {
+        ui.notifications.warn("Astrological Sign: already used today.");
+        return false;
+    }
+    const open = portentsOf(actor).filter((p) => !p.fixed && !p.spent);
+    if (open.length === 0) return false;
+    const rolled = (p) => card.portents?.[p.id] ?? [p.value];
+    const options = open.flatMap((p) => {
+        const base = rolled(p);
+        const values = new Set(base.flatMap((v) => Array.from({ length: 7 }, (_, i) => v - 3 + i)).filter((v) => v >= 1 && v <= 20));
+        return [...values].sort((a, b) => a - b).map((v) => `<option value="${p.id}:${v}" ${v === p.value ? "selected" : ""}>${open.length > 1 ? `Portent ${p.id.replace("p", "")}: ` : ""}${v}</option>`);
+    }).join("");
+    const data = await foundry.applications.api.DialogV2.prompt({
+        window: { title: "Astrological Sign" },
+        content: `<p>Treat a Portent as any number within 3 of what you rolled (${open.map((p) => rolled(p).join(" or ")).join("; ")}).</p><div class="form-group"><label>Portent</label><select name="choice">${options}</select></div>`,
+        rejectClose: false,
+        ok: { label: "Record it", callback: (_e, button) => new foundry.applications.ux.FormDataExtended(button.form).object },
+    });
+    if (!data?.choice) return false;
+    const [id, raw] = String(data.choice).split(":");
+    const value = Number(raw);
+    const portent = open.find((p) => p.id === id);
+    if (!portent || !rolled(portent).some((v) => Math.abs(v - value) <= 3)) return false;
+    await item.update({ "system.frequency.value": item.system.frequency.value - 1 });
+    await setPortentValue(actor, id, value);
+    await whisper(actor, `<p><strong>Astrological Sign</strong>: a Portent of <strong>${value}</strong>.</p>`);
+    return true;
+}
+
+/** Borrowed Eyes: the GM allows the reading, and the Vigil runs as though the sky were open. */
+async function borrowedEyes({ origin, through, day }) {
+    const actor = await fromUuid(origin);
+    const eyes = fromUuidSync(through);
+    if (!isStargazer(actor) || !has(actor, "borrowed-eyes") || day !== SkyTracker.state.day) return;
+    await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        whisper: game.users.filter((u) => u.isGM).map((u) => u.id),
+        content: `<p><strong>Borrowed Eyes</strong> — ${actor.name} asks to read tonight's sky through ${eyes?.name ?? "an ally"}'s eyes: under an open sky, within a mile.</p><button type="button" data-stargazer-gm="borrowed-eyes">Allow it</button>`,
+        flags: { [MODULE_ID]: { borrowedEyes: { origin, through, day, used: false } } },
+    });
+}
+
+function bindGmCard(message, html) {
+    const flag = message.flags?.[MODULE_ID]?.borrowedEyes;
+    const button = html.querySelector?.('button[data-stargazer-gm="borrowed-eyes"]');
+    if (!flag || !button) return;
+    if (flag.used || !game.user.isGM) button.disabled = true;
+    button.addEventListener("click", async () => {
+        button.disabled = true;
+        if (!game.user.isGM || flag.day !== SkyTracker.state.day) return;
+        await message.update({ [`flags.${MODULE_ID}.borrowedEyes.used`]: true });
+        const actor = await fromUuid(flag.origin);
+        if (actor) await runVigil(actor, { borrowed: true });
+    });
+}
+
 async function forewarn({ origin, allies = [], day }) {
     const actor = await fromUuid(origin);
     const vigil = isStargazer(actor) ? vigilToday(actor, day) : null;
@@ -291,9 +429,13 @@ export const Vigil = {
     registerHooks() {
         Relay.register?.("stargazerForewarn", forewarn);
         Relay.register?.("stargazerTrade", trade);
+        Relay.register?.("stargazerBorrowedEyes", borrowedEyes);
         Hooks.on("pf2e.restForTheNight", (actor) => {
             if (actor?.isOwner && isStargazer(actor)) runVigil(actor).catch((e) => console.error("Isaac's Homebrew | the Night Vigil", e));
         });
-        Hooks.on("renderChatMessageHTML", (message, html) => bindCard(message, html));
+        Hooks.on("renderChatMessageHTML", (message, html) => {
+            bindCard(message, html);
+            bindGmCard(message, html);
+        });
     },
 };

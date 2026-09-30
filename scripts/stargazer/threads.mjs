@@ -2,6 +2,7 @@ import { classSlugOf } from "../lib/class-dc.mjs";
 import { DamageBus, PRIORITY } from "../lib/damage-bus.mjs";
 import { Relay } from "../riders/relay.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
+import { SkyTracker } from "../sky/tracker.mjs";
 
 /**
  * The luck engine — Fortune's Thread, Chart the Course, Speak the Portent, The Last Thing You See.
@@ -184,7 +185,7 @@ export function threadEffect({ origin, group, kind, value, kinds, free, twice })
 }
 
 /** The Portent, armed on a creature for one kind of roll (guide §4.5). */
-export function portentEffect({ origin, value, selector }) {
+export function portentEffect({ origin, value, selector, portentId = "p1" }) {
     return {
         name: `Portent: ${value}`,
         type: "effect",
@@ -197,7 +198,7 @@ export function portentEffect({ origin, value, selector }) {
                 key: "SubstituteRoll",
                 // Load-bearing: `"if-enabled"` only matches an explicit slug, and the fortune guard in
                 // `armed.mjs` finds a Portent by this prefix.
-                slug: `stargazer-portent-${origin.id}`,
+                slug: `stargazer-portent-${origin.id}-${portentId}`,
                 label: "Portent",
                 selector,
                 value,
@@ -208,8 +209,48 @@ export function portentEffect({ origin, value, selector }) {
             tokenIcon: { show: true },
             traits: { value: ["prediction"], rarity: "common", otherTags: [] },
         },
-        flags: { [MODULE_ID]: { [PORTENT]: { origin: origin.uuid } } },
+        flags: { [MODULE_ID]: { [PORTENT]: { origin: origin.uuid, portentId } } },
     };
+}
+
+/* ------------------------------------------------------------------------------------------------ */
+/*  How many Portents, and which                                                                    */
+/* ------------------------------------------------------------------------------------------------ */
+
+/**
+ * How many Portents a Vigil records (guide §4.5, §7): one; two with *Twin Portent* or *Second Portent*;
+ * three with both. Each speaking spends one, so this is also how often the Portent can be spoken — Twin
+ * Portent's "twice per day" and Second Portent's "twice … three times" are the same count.
+ */
+export function portentCount(actor) {
+    if (!has(actor, "portent")) return 0;
+    return 1 + (has(actor, "twin-portent") ? 1 : 0) + (has(actor, "second-portent") ? 1 : 0);
+}
+
+/** Fixed Sky (guide §7, 20th; ruling R15): the fixed Portent can be spoken once per week — seven dawns of the Sky. */
+export function fixedReady(actor, today = SkyTracker.state?.day) {
+    const at = state(actor).fixedSpokenDay;
+    return typeof at !== "number" || today - at >= 7;
+}
+
+/** This Stargazer's Portents. A sheet from before Twin Portent carries one, as `portent`. */
+export function portentsOf(actor) {
+    const s = state(actor);
+    if (Array.isArray(s.portents)) return s.portents;
+    if (typeof s.portent?.value === "number") return [{ id: "p1", value: s.portent.value, spent: Boolean(s.portent.spent) }];
+    return [];
+}
+
+export const unspentPortents = (actor) => portentsOf(actor).filter((p) => !p.spent && typeof p.value === "number");
+
+/** The Portents a Vigil records, before any are rolled: a `fixed` one is 20, the rest are `null` until the die. */
+export function portentSlots(actor, today) {
+    const count = portentCount(actor);
+    if (count === 0) return [];
+    const slots = [];
+    if (has(actor, "fixed-sky")) slots.push({ id: "fixed", value: 20, fixed: true, spent: !fixedReady(actor, today) });
+    while (slots.length < count) slots.push({ id: `p${slots.length + 1}`, value: null, spent: false });
+    return slots;
 }
 
 /** Why a target cannot take this Thread, or null. Shared by the picker and the GM's re-check. */
@@ -285,16 +326,18 @@ async function pickThreads(actor, { free, chart }) {
 }
 
 async function pickPortent(actor) {
-    const s = state(actor);
-    if (typeof s.portent?.value !== "number") return ui.notifications.warn("Speak the Portent: you have no Portent. It is rolled at your Night Vigil.");
+    const open = unspentPortents(actor);
+    if (open.length === 0) return ui.notifications.warn("Speak the Portent: you have no Portent left. They are rolled at your Night Vigil.");
     const [target] = targeted();
     if (!target || targeted().length > 1) return ui.notifications.warn("Speak the Portent: target exactly one creature.");
-    const data = await form("Speak the Portent", `<p>Your Portent is <strong>${s.portent.value}</strong>. The next roll of this kind ${target.name} makes <em>is</em> your Portent.</p>
+    const which = open.map((p) => `<option value="${p.id}">${p.value}${p.fixed ? " (Fixed Sky, once a week)" : ""}</option>`).join("");
+    const data = await form("Speak the Portent", `<p>The next roll of this kind ${target.name} makes <em>is</em> your Portent.</p>
+        <div class="form-group"><label>Portent</label><select name="portent">${which}</select></div>
         <div class="form-group"><label>Roll</label><select name="on">
             <option value="attack-roll">attack roll</option><option value="saving-throw">saving throw</option><option value="skill-check">skill check</option>
         </select></div>`);
     if (!data) return;
-    await Relay.request({ action: "stargazerPortent", origin: actor.uuid, target: target.uuid, on: data.on });
+    await Relay.request({ action: "stargazerPortent", origin: actor.uuid, target: target.uuid, on: data.on, portentId: data.portent });
 }
 
 /** Once per 10 minutes, by the world clock. */
@@ -393,17 +436,19 @@ async function arm({ origin: originUuid, entries = [], chart, free, tapestry }) 
     await say(origin, `<strong>${name}</strong>: ${armed.join("; ")}.${cost}`, { whisper: ownersOf(origin) });
 }
 
-async function speak({ origin: originUuid, target: targetUuid, on }) {
+async function speak({ origin: originUuid, target: targetUuid, on, portentId }) {
     const origin = await fromUuid(originUuid);
     if (!isStargazer(origin) || !["attack-roll", "saving-throw", "skill-check"].includes(on)) return;
-    const value = state(origin).portent?.value;
-    if (typeof value !== "number") return;
+    const open = unspentPortents(origin);
+    const portent = open.find((p) => p.id === (portentId ?? open[0]?.id));
+    if (!portent) return;
+    const value = portent.value;
     const target = (await fromUuid(targetUuid))?.actor ?? (await fromUuid(targetUuid));
     const why = refusal(origin, target, { range: 60 });
     if (why) return say(origin, `<strong>Speak the Portent</strong>: ${why}.`);
-    // One Portent, one place: speaking it again moves it.
-    await sweepPortent(origin);
-    await target.createEmbeddedDocuments("Item", [portentEffect({ origin, value, selector: on })]);
+    // One Portent, one place: speaking it again moves it. Another Portent is another place.
+    await sweepPortent(origin, portent.id);
+    await target.createEmbeddedDocuments("Item", [portentEffect({ origin, value, selector: on, portentId: portent.id })]);
     await say(origin, `<strong>Speak the Portent</strong>: ${target.name}'s next ${KINDS[on].replace(/s$/, "")} will be a ${value}.`, { whisper: ownersOf(origin) });
 }
 
@@ -418,9 +463,12 @@ async function sweep(origin, match = () => true) {
     }
 }
 
-async function sweepPortent(origin) {
+async function sweepPortent(origin, portentId = null) {
     for (const actor of game.actors) {
-        const ours = actor.itemTypes.effect.filter((e) => e.flags?.[MODULE_ID]?.[PORTENT]?.origin === origin.uuid);
+        const ours = actor.itemTypes.effect.filter((e) => {
+            const flag = e.flags?.[MODULE_ID]?.[PORTENT];
+            return flag?.origin === origin.uuid && (!portentId || (flag.portentId ?? "p1") === portentId);
+        });
         if (ours.length > 0) await actor.deleteEmbeddedDocuments("Item", ours.map((e) => e.id), { stargazerQuiet: true });
     }
 }
@@ -434,8 +482,13 @@ async function spent(item, options) {
     const origin = await fromUuid((thread ?? portent).origin);
     if (!origin) return;
     if (portent) {
-        await origin.update({ [`flags.${MODULE_ID}.${FLAG}.portent`]: { value: null, spent: true } });
-        return say(origin, `<strong>Portent</strong> spoken on ${item.actor?.name}.`, { whisper: ownersOf(origin) });
+        const id = portent.portentId ?? "p1";
+        const portents = portentsOf(origin).map((p) => (p.id === id ? { ...p, spent: true } : p));
+        const update = { [`flags.${MODULE_ID}.${FLAG}.portents`]: portents, [`flags.${MODULE_ID}.${FLAG}.portent`]: null };
+        const fixed = portents.find((p) => p.id === id)?.fixed;
+        if (fixed) update[`flags.${MODULE_ID}.${FLAG}.fixedSpokenDay`] = SkyTracker.state.day;
+        await origin.update(update);
+        return say(origin, `<strong>Portent</strong> spoken on ${item.actor?.name}${fixed ? ": the Fixed Sky, once this week" : ""}.`, { whisper: ownersOf(origin) });
     }
     if (thread.kind === "guide" && has(origin, "knotted-thread") && item.actor) await knot(origin, item.actor);
     if (thread.free) return;
@@ -489,20 +542,42 @@ async function startTurn(actor) {
 /*  The Portent, rolled at the Vigil                                                                */
 /* ------------------------------------------------------------------------------------------------ */
 
-/** Guide §4.5: at the Night Vigil, roll a d20 and record it. A new Vigil overwrites an unspent Portent. */
-export async function rollPortent(actor) {
-    if (!isStargazer(actor) || !has(actor, "portent")) return null;
-    const roll = await new Roll("1d20").evaluate();
-    await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor }), flavor: "<strong>Portent</strong> — recorded at the Night Vigil" }, { rollMode: "gmroll" });
-    await setPortent(actor, roll.total);
-    return roll.total;
+/**
+ * Guide §4.5, §7: at the Night Vigil, roll the Portents and record them. A new Vigil overwrites every
+ * unspent one. `times: 2` is a Starless night ("roll your Portent twice and keep either"): each Portent gets
+ * both dice as `options`, and the first is recorded until the player keeps one.
+ */
+export async function rollPortents(actor, { times = 1 } = {}) {
+    if (!isStargazer(actor)) return [];
+    const slots = portentSlots(actor, SkyTracker.state.day);
+    const open = slots.filter((s) => s.value === null);
+    if (slots.length === 0) return [];
+    let dice = [];
+    if (open.length > 0) {
+        const roll = await new Roll(`${open.length * times}d20`).evaluate();
+        dice = roll.dice[0].results.map((r) => r.result);
+        const label = open.length === 1 && times === 1 ? "Portent" : "Portents";
+        await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor }), flavor: `<strong>${label}</strong>, recorded at the Night Vigil` }, { rollMode: "gmroll" });
+    }
+    open.forEach((slot, i) => {
+        slot.options = dice.slice(i * times, (i + 1) * times);
+        slot.value = slot.options[0];
+    });
+    await setPortents(actor, slots.map(({ options, ...slot }) => slot));
+    return slots;
 }
 
-/** Record a Portent, overwriting any unspent one — including one already armed on a creature. */
-export async function setPortent(actor, value) {
-    // The old Portent may be armed on a creature this client cannot write to; the GM takes it back.
+/** Record the Portents, overwriting every unspent one — including any already armed on a creature. */
+export async function setPortents(actor, portents) {
+    // An old Portent may be armed on a creature this client cannot write to; the GM takes it back.
     await Relay.request({ action: "stargazerSweepPortent", origin: actor.uuid });
-    await actor.update({ [`flags.${MODULE_ID}.${FLAG}.portent`]: { value, spent: false } });
+    await actor.update({ [`flags.${MODULE_ID}.${FLAG}.portents`]: portents, [`flags.${MODULE_ID}.${FLAG}.portent`]: null });
+}
+
+/** Change one recorded Portent's value: a Starless night's other die, or Astrological Sign's nudge. */
+export async function setPortentValue(actor, id, value) {
+    const portents = portentsOf(actor).map((p) => (p.id === id && !p.fixed ? { ...p, value } : p));
+    await actor.update({ [`flags.${MODULE_ID}.${FLAG}.portents`]: portents, [`flags.${MODULE_ID}.${FLAG}.portent`]: null });
 }
 
 /* ------------------------------------------------------------------------------------------------ */
@@ -596,7 +671,7 @@ async function onOwnUse(message) {
 }
 
 export const Threads = {
-    rollPortent,
+    rollPortents,
     reactionsLeft,
     registerHooks() {
         Relay.register?.("stargazerArm", arm);
