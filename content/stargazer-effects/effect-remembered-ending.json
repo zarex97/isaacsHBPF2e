@@ -1,0 +1,61 @@
+{
+    "img": "icons/magic/time/hourglass-tilted-glowing-gold.webp",
+    "name": "Effect: Remembered Ending",
+    "system": {
+        "description": {
+            "value": "<p>You were in the erased timeline: +2 circumstance bonus to your first d20 roll of the re-run encounter.</p>"
+        },
+        "duration": {
+            "value": 1,
+            "unit": "hours",
+            "expiry": "turn-start",
+            "sustained": false
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "slug": "remembered-ending",
+                "label": "Rewrite the Ending",
+                "selector": [
+                    "attack-roll",
+                    "saving-throw",
+                    "skill-check",
+                    "perception"
+                ],
+                "type": "circumstance",
+                "value": 2,
+                "removeAfterRoll": "if-enabled",
+                "predicate": [
+                    {
+                        "not": "check:type:initiative"
+                    }
+                ]
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "rememberedEnding": "first"
+        }
+    },
+    "type": "effect"
+}

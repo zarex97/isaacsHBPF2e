@@ -1,0 +1,51 @@
+{
+    "img": "icons/magic/time/hourglass-tilted-glowing-gold.webp",
+    "name": "Effect: Remembered Initiative",
+    "system": {
+        "description": {
+            "value": "<p>You were in the erased timeline: +2 circumstance bonus to your initiative roll.</p>"
+        },
+        "duration": {
+            "value": 1,
+            "unit": "hours",
+            "expiry": "turn-start",
+            "sustained": false
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "slug": "remembered-initiative",
+                "label": "Rewrite the Ending",
+                "selector": "initiative",
+                "type": "circumstance",
+                "value": 2,
+                "removeAfterRoll": true
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "rememberedEnding": "initiative"
+        }
+    },
+    "type": "effect"
+}

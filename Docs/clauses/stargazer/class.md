@@ -180,17 +180,17 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SG-41a | §4.11 | **Unmake the Moment** ✦ **[free action]** (prediction) |  | ☐ |  |
-| SG-41b | §4.11 | **Frequency** once per day (recharges on your next Night Vigil) |  | ☐ |  |
-| SG-41c | §4.11 | **Trigger** Your turn begins. |  | ☐ |  |
-| SG-41d | §4.11 | Time rewinds to the **start of your last turn**. |  | ☐ |  |
-| SG-41e | §4.11 | Everything done since then by every creature is undone: damage dealt, conditions applied, spells cast, movement made, resources spent, reactions used. |  | ☐ |  |
-| SG-41f | §4.11 | Creatures reduced to 0 Hit Points return to the Hit Points they had. |  | ☐ |  |
-| SG-41g | §4.11 | Everyone except you loses all memory of the unwound round. |  | ☐ |  |
-| SG-41h | §4.11 | you may spend 1 action on your turn to shout a warning, granting one ally a **+2 circumstance bonus** to their next roll this round. |  | ☐ |  |
-| SG-41i | §4.11 | You are **stunned 1** and **drained 1** when the loop resolves. |  | ☐ |  |
-| SG-41j | §4.11 | Initiative order does not change. |  | ☐ |  |
-| SG-41k | §4.11 | Enemies act again as the GM chooses — they are not obliged to repeat what they did, and they do not remember it either. |  | ☐ |  |
+| SG-41a | §4.11 | **Unmake the Moment** ✦ **[free action]** (prediction) | `test-stargazer` pins it | ✅ | A free action with `prediction`, granted at 11th |
+| SG-41b | §4.11 | **Frequency** once per day (recharges on your next Night Vigil) | `test-stargazer` pins it | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): after Altair's one use, his next turn offered nothing; Mira's Night Vigil put her count from 2 back to 0 |
+| SG-41c | §4.11 | **Trigger** Your turn begins. |  | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): the card came to Altair's whispers as his round-2 turn began; posting the feature off his turn was refused ("only as your turn begins") |
+| SG-41d | §4.11 | Time rewinds to the **start of your last turn**. | `test-stargazer` pins it | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): from round 2 back to round 1, Altair's turn |
+| SG-41e | §4.11 | Everything done since then by every creature is undone: damage dealt, conditions applied, spells cast, movement made, resources spent, reactions used. |  | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): Mira's 20 damage and frightened 2 were gone, the foe stood where it had and lost the effect it gained, the token summoned in the round was deleted, and the clock went back six seconds |
+| SG-41f | §4.11 | Creatures reduced to 0 Hit Points return to the Hit Points they had. |  | ✅ | Live: Mira, dead at 0 with dying 4, came back at 84 — what she had at the start of the turn rewound to |
+| SG-41g | §4.11 | Everyone except you loses all memory of the unwound round. |  | — | Memory is the table's; the card says who remembers (and *Echo of the Unmade* whispers the one ally who does) |
+| SG-41h | §4.11 | you may spend 1 action on your turn to shout a warning, granting one ally a **+2 circumstance bonus** to their next roll this round. |  | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): *Shout a warning* put +2 circumstance on SG Ally's next roll, which took it and spent it |
+| SG-41i | §4.11 | You are **stunned 1** and **drained 1** when the loop resolves. |  | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): Altair **stunned 1** and **drained 1** after the restore |
+| SG-41j | §4.11 | Initiative order does not change. |  | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): the order stayed Altair, foe, Mira, SG Ally, with the same initiatives |
+| SG-41k | §4.11 | Enemies act again as the GM chooses — they are not obliged to repeat what they did, and they do not remember it either. |  | — | What enemies do in the replay is the GM's |
 
 ## Constellation Mastery (guide §4.12)
 
@@ -223,16 +223,16 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 | SG-45a | §10.1 The Dream | The Stargazer's Night Vigil produces **a vision the player does not get to interpret**. |  | ☐ |  |
 | SG-45b | §10.1 The Dream | **The players keep every piece of information they learned** |  | ☐ |  |
 | SG-45c | §10.1 The Dream | **Frequency:** once per adventure or arc, maximum, and only when the GM initiates. |  | ☐ |  |
-| SG-46a | §10.3 | **Rewrite the Ending** ✦ **[free action]** (prediction) |  | ☐ |  |
-| SG-46b | §10.3 | **Frequency** once per week |  | ☐ |  |
-| SG-46c | §10.3 | **Trigger** You or an ally within 60 feet dies, or the party is defeated or captured. |  | ☐ |  |
-| SG-46d | §10.3 | Time unwinds to the **moment initiative was rolled** for this encounter. |  | ☐ |  |
-| SG-46e | §10.3 | All damage, conditions, deaths, expended spells, expended items and expended resources since that moment are restored, for every creature. |  | ☐ |  |
-| SG-46f | §10.3 | each ally who was in the erased timeline gains a **+2 circumstance bonus to their initiative roll and to their first d20 roll** of the re-run encounter |  | ☐ |  |
-| SG-46g | §10.3 | Your Star Chart goes dark. You are **drained 2** and **doomed 1** |  | ☐ |  |
-| SG-46h | §10.3 | you lose Night Vigil, Fortune's Thread, Chart the Course, Portent, and all Auguries and Focus Points, until you complete a **full 8-hour Night Vigil under open sky**. |  | ☐ |  |
-| SG-46i | §10.3 | Neither condition can be reduced before then by any means. |  | ☐ |  |
-| SG-46j | §10.3 | You cannot use Rewrite the Ending again for 7 days regardless. |  | ☐ |  |
+| SG-46a | §10.3 | **Rewrite the Ending** ✦ **[free action]** (prediction) | `test-stargazer` pins it | ✅ | A free action with `prediction`, granted at 19th |
+| SG-46b | §10.3 | **Frequency** once per week | `test-stargazer` pins it | ✅ | Live: after a use on day 227 it was not ready again until day 234 (seven dawns) |
+| SG-46c | §10.3 | **Trigger** You or an ally within 60 feet dies, or the party is defeated or captured. |  | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): posting it asked the GM, in a GM-only whisper, whether someone died or the party fell |
+| SG-46d | §10.3 | Time unwinds to the **moment initiative was rolled** for this encounter. |  | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): confirmed, the encounter went back to before round 1 and every initiative was cleared to be rolled again |
+| SG-46e | §10.3 | All damage, conditions, deaths, expended spells, expended items and expended resources since that moment are restored, for every creature. |  | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): Mira, dead (0 Hit Points, dying 4), stood at 104 with no dying |
+| SG-46f | §10.3 | each ally who was in the erased timeline gains a **+2 circumstance bonus to their initiative roll and to their first d20 roll** of the re-run encounter | `test-stargazer` pins it | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): Altair, Mira and SG Ally took *Remembered Initiative* and *Remembered Ending*, the foe neither; Mira's initiative took +2, her next check +2, the one after nothing. **Fixed while driving:** initiative is a Perception check and spent the first-d20 bonus too; it is now kept off initiative by `check:type:initiative` |
+| SG-46g | §10.3 | Your Star Chart goes dark. You are **drained 2** and **doomed 1** |  | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): Altair **drained 2**, **doomed 1**, and *Effect: Star Chart Dark* |
+| SG-46h | §10.3 | you lose Night Vigil, Fortune's Thread, Chart the Course, Portent, and all Auguries and Focus Points, until you complete a **full 8-hour Night Vigil under open sky**. | `test-stargazer` pins it | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): his focus fell to 0 of 0; Fortune's Thread, Chart the Course and Portent each refused with no picker; his Night Vigil read nothing and rolled no Portent |
+| SG-46i | §10.3 | Neither condition can be reduced before then by any means. |  | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): reducing drained and removing doomed were both refused while the chart was dark; once relit, drained went 2 → 1 |
+| SG-46j | §10.3 | You cannot use Rewrite the Ending again for 7 days regardless. | `test-stargazer` pins it | ✅ | Live: not ready on day 227 or 230, ready on 234 |
 
 ## Build rulings (guide §11.2, §11.3, §11.7)
 
@@ -250,13 +250,13 @@ rewinds behave at the table. ADR-0004 is the reasoning behind the arming model.*
 | SG-47g | §11.3 | When the trigger happens, the Stargazer's player is offered a button on a chat card, and the effect is applied after the fact |  | ✅ | Live: The Last Thing You See was offered as a button after the damage landed, and its save and conditions were applied after the fact |
 | SG-48a | §11.7 | **Night Vigil** runs by itself at *Rest for the Night* |  | ✅ | Live: the Vigil ran at *Rest for the Night* with no other action |
 | SG-48b | §11.7 | *Forewarned* is a button on that card, where the player picks the allies briefed. |  | ✅ | Live: the button on the Vigil card opened the picker, and the briefing landed |
-| SG-48c | §11.7 | the full actor — Hit Points, conditions, effects, resources, item uses — plus token positions and the combat tracker's turn. |  | ☐ |  |
-| SG-48d | §11.7 | Using it restores the previous snapshot, deletes tokens and actors created since, leaves the chat log alone, and then applies stunned 1 and drained 1. |  | ☐ |  |
-| SG-48e | §11.7 | The Stargazer's player presses it; the restore runs on the GM's client without a confirmation |  | ☐ |  |
-| SG-48f | §11.7 | **Rewrite the Ending** snapshots the same state when initiative is rolled. |  | ☐ |  |
-| SG-48g | §11.7 | The Stargazer's player presses it and the **GM confirms** |  | ☐ |  |
-| SG-48h | §11.7 | Drained 2 and doomed 1 are locked against reduction, and the lost features are disabled until a Vigil marked as the full eight hours under open sky. |  | ☐ |  |
-| SG-48i | §11.7 | **Weeks** are counted in the Sky's dawns (§8.2). |  | ☐ |  |
+| SG-48c | §11.7 | the full actor — Hit Points, conditions, effects, resources, item uses — plus token positions and the combat tracker's turn. |  | ✅ | Live: each Stargazer's turn start (every turn, with The Long Way Round) snapshots every combatant's actor, every token and the turn. Kept in the GM client's memory: a reload forgets them, and the rewinds then say there is nothing to go back to |
+| SG-48d | §11.7 | Using it restores the previous snapshot, deletes tokens and actors created since, leaves the chat log alone, and then applies stunned 1 and drained 1. |  | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): the summoned token was deleted, the chat log kept every message, and stunned 1 and drained 1 came after. **Fixed while driving:** Foundry writes `parent` into the options it is given, and one shared options object sent an actor update to the scene |
+| SG-48e | §11.7 | The Stargazer's player presses it; the restore runs on the GM's client without a confirmation |  | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): Altair's player presses the card's button; the GM's client restores it with no confirmation |
+| SG-48f | §11.7 | **Rewrite the Ending** snapshots the same state when initiative is rolled. |  | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): starting the encounter took the snapshot Rewrite restored |
+| SG-48g | §11.7 | The Stargazer's player presses it and the **GM confirms** |  | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): nothing happened until the GM confirmed |
+| SG-48h | §11.7 | Drained 2 and doomed 1 are locked against reduction, and the lost features are disabled until a Vigil marked as the full eight hours under open sky. |  | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): the locked conditions refused reduction; the dark Vigil card carried the GM's *this was the full eight hours under open sky* button, which relit the chart (focus back to 3) and ran the Vigil |
+| SG-48i | §11.7 | **Weeks** are counted in the Sky's dawns (§8.2). | `test-stargazer` pins it | ✅ | Rewrite's week is counted in the Sky's days |
 
 ---
 
@@ -264,10 +264,10 @@ rewinds behave at the table. ADR-0004 is the reasoning behind the arming model.*
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 38 |
-| ✅ | 83 |
+| ☐ | 10 |
+| ✅ | 109 |
 | ⚠️ | 7 |
 | ❌ | 0 |
 | 🔧 | 0 |
-| — | 1 |
+| — | 3 |
 | **Total** | **129** |

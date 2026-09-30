@@ -533,6 +533,38 @@ function check(label, actual, expected) {
 }
 
 /* -------------------------------------------------------------------------------------------- */
+/*  Phase 7a: the rewinds                                                                       */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    const fs = await import("node:fs");
+    const read = (rel) => JSON.parse(fs.readFileSync(new URL(`../content/${rel}`, import.meta.url), "utf8"));
+    const unmake = read("stargazer-class-features/actions/unmake-the-moment.json").system;
+    const rewrite = read("stargazer-class-features/actions/rewrite-the-ending.json").system;
+    check("SG-41a/b, SG-46a/b: two free actions with prediction, once a day and once a week, at 11th and 19th",
+        [unmake.actionType.value, unmake.traits.value.includes("prediction"), unmake.frequency.per, unmake.level.value,
+            rewrite.actionType.value, rewrite.traits.value.includes("prediction"), rewrite.frequency.per, rewrite.level.value],
+        ["free", true, "day", 11, "free", true, "P1W", 19]);
+    const items = read("stargazer-class/stargazer.json").system.items;
+    check("the class grants both", [items.unmak?.level, items.rwrte?.level], [11, 19]);
+    const dark = read("stargazer-effects/effect-star-chart-dark.json").system.rules[0];
+    check("SG-46h a dark chart holds no Focus Points", [dark.path, dark.value, dark.priority > 30], ["system.resources.focus.cap", 0, true]);
+
+    const { previousShot, rewriteCooldown, unmakeUses } = await import("../scripts/stargazer/rewind.mjs");
+    const shots = [{ round: 3, turn: 2 }, { round: 4, turn: 2 }];
+    check("SG-41d Unmake goes back to the start of your last turn, not the one beginning now",
+        [previousShot(shots, { now: { round: 4, turn: 2 } }), previousShot(shots, { now: { round: 5, turn: 2 } }), previousShot([{ round: 4, turn: 2 }], { now: { round: 4, turn: 2 } })],
+        [{ round: 3, turn: 2 }, { round: 4, turn: 2 }, null]);
+    check("BT-04a The Long Way Round: another creature's last turn, earlier this round",
+        previousShot([{ round: 4, turn: 0 }], { now: { round: 4, turn: 2 } }), { round: 4, turn: 0 });
+    const sg = (...slugs) => ({ itemTypes: { feat: slugs.map((slug) => ({ slug })) } });
+    check("BT-03a Unmade Again: twice per day", [unmakeUses(sg()), unmakeUses(sg("unmade-again"))], [1, 2]);
+    check("SG-46j, SF-36: seven dawns; three with The Long Vigil when the last use was in an earlier adventure",
+        [rewriteCooldown({ longVigil: false, lastAdventure: "a", adventure: "b" }), rewriteCooldown({ longVigil: true, lastAdventure: "a", adventure: "b" }),
+            rewriteCooldown({ longVigil: true, lastAdventure: "b", adventure: "b" })], [7, 3, 7]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
 
 if (failures.length > 0) {
     console.error(`Stargazer tests failed: ${failures.length} of ${checks}.`);
