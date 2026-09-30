@@ -1753,7 +1753,7 @@ async function applyEffect(rider, context) {
     applySubstitutions(source, rider.apply.substitutions, context);
     source._stats = foundry.utils.mergeObject(source._stats ?? {}, { compendiumSource: uuid });
     source.system.start = startData();
-    if (rider.duration) source.system.duration = durationData(rider.duration);
+    if (rider.duration) source.system.duration = durationData(longNow(rider, context));
     source.system.context = contextData(context);
     source.flags = foundry.utils.mergeObject(source.flags ?? {}, riderFlags(rider, context));
 
@@ -2576,6 +2576,22 @@ function outcomeSuffix(context) {
  * A rider that genuinely wants the shorter window says `expiry: "turn-start"` for itself. None of the
  * shipped content did, which is what made this a silent default rather than a decision.
  */
+/**
+ * The Stargazer's *Long Now* (guide §7, 12th): an Augury whose **Duration** line reads 1 minute lasts
+ * 10 minutes. The Duration line is the spell's own `system.duration`; a rider scoped to a degree of success
+ * carries `outcomes` and is left alone — "a duration inside a degree of success … does not change".
+ */
+export function longNow(rider, context) {
+    const duration = rider.duration;
+    const item = context?.item ?? context?.riderItem;
+    const caster = context?.originActor ?? item?.actor;
+    const minute = duration?.unit === "minutes" && Number(duration?.value) === 1;
+    if (!minute || rider.outcomes || item?.type !== "spell") return duration;
+    if (String(item.system?.duration?.value ?? "").trim().toLowerCase() !== "1 minute") return duration;
+    if (!(caster?.itemTypes?.feat ?? []).some((f) => f.slug === "long-now")) return duration;
+    return { ...duration, value: 10 };
+}
+
 function durationData(duration) {
     return {
         expiry: duration?.expiry ?? "turn-end",

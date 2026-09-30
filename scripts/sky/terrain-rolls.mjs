@@ -32,10 +32,17 @@ const LIBRA_TYPES = new Set(["attack-roll", "saving-throw", "skill-check", "perc
  */
 const libraSpent = new Map();
 
-/** The terrain aspect this creature is wearing today, or null. */
-export function wornAspect(actor) {
+/**
+ * The terrain aspect this creature is wearing for `sign` today, or null.
+ *
+ * By the sign stamped on the effect, not the day's: *Two Skies* puts a second sign up over a Stargazer's
+ * party and a *Private Sign* raises one on a Starless day, so "is Libra up for this creature" is a question
+ * about what it wears.
+ */
+export function wornAspect(actor, sign) {
     for (const effect of actor?.itemTypes?.effect ?? []) {
         if (!effect.getFlag?.(MODULE_ID, "skyEffect")) continue;
+        if (sign && effect.getFlag(MODULE_ID, "skySign") !== sign) continue;
         const match = /^Sky: (Benefic|Retrograde|Malefic|Exalted)$/.exec(SkyTracker.skyName(effect));
         if (match) return match[1].toLowerCase();
     }
@@ -53,11 +60,10 @@ export function libraReady(aspect, used, { day, hour }) {
 }
 
 function rewriteLibra(message) {
-    if (SkyTracker.state.sign !== "libra") return;
     const context = message.flags?.pf2e?.context;
     if (!LIBRA_TYPES.has(context?.type)) return;
     const actor = message.actor;
-    const aspect = wornAspect(actor);
+    const aspect = wornAspect(actor, "libra");
     if (!aspect) return;
 
     const roll = message.rolls?.at(0);
@@ -94,11 +100,11 @@ function rewriteLibra(message) {
 
 /** Aries: the day's modifier on a creature's first Strike in an encounter. */
 function ariesFirstStrike(check, context) {
-    if (SkyTracker.state.sign !== "aries" || context?.type !== "attack-roll") return;
+    if (context?.type !== "attack-roll") return;
     const domains = context.domains ?? [];
     if (!domains.includes("strike-attack-roll")) return;
     const actor = context.actor;
-    const aspect = wornAspect(actor);
+    const aspect = wornAspect(actor, "aries");
     if (!aspect) return;
     // The encounter being fought: the viewed one when it holds this creature, else any it is in.
     const holds = (c) => c?.started && c.combatants.some((x) => x.actorId === actor.id);

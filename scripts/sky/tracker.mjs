@@ -22,6 +22,14 @@ const MILDER = { malefic: "retrograde", retrograde: "none" };
 /** Harshest to kindest, for choosing the mildest of several softenings. */
 const MILDNESS = ["malefic", "retrograde", "none", "benefic"];
 
+/** A sky effect's rules for one sign: those gated on it, and those gated on no sign at all. Pure. */
+export function ownSignRules(rules, sign) {
+    return rules.filter((rule) => {
+        const predicate = JSON.stringify(rule?.predicate ?? []);
+        return !predicate.includes("sky:sign:") || predicate.includes(`"sky:sign:${sign}"`);
+    });
+}
+
 /** The application in flight for each creature, so two never overlap. See `SkyTracker.applyTo`. */
 const applying = new Map();
 
@@ -77,7 +85,25 @@ export const SkyTracker = {
      * stored — the future is fixed before anybody looks at it.
      */
     rollQueue(length = QUEUE_LENGTH) {
-        return Array.from({ length }, () => ({ sign: this.rollSign(), aspect: this.rollAspect() }));
+        return Array.from({ length }, () => this.rollDay());
+    },
+
+    /**
+     * One day of sky, with what two Stargazer feats read beside it (guide §7; ruling R7): a **second** sign
+     * and aspect for *Two Skies*, and the aspect a *Private Sign* rises with on a Starless day. Rolled with
+     * the day, so the future stays fixed however often it is read.
+     */
+    rollDay() {
+        return { sign: this.rollSign(), aspect: this.rollAspect(), ...this.rollExtras() };
+    },
+
+    rollExtras() {
+        return { second: { sign: this.rollSign(), aspect: this.rollAspect() }, privateAspect: this.rollAspect() };
+    },
+
+    /** A day rolled before Two Skies existed has no second sky; it gets one the first time the GM's client looks. */
+    withExtras(entry) {
+        return entry?.second && entry?.privateAspect ? entry : { ...entry, ...this.rollExtras() };
     },
 
     /** What the sky will be over the next `days` days, for Read the Constellation and Two Skies. */
@@ -88,6 +114,8 @@ export const SkyTracker = {
             day: this.state.day + i + 1,
             sign: signOf(entry.sign),
             aspect: aspectOf(entry.aspect),
+            second: entry.second ? { sign: signOf(entry.second.sign), aspect: aspectOf(entry.second.aspect) } : null,
+            privateAspect: entry.privateAspect ? aspectOf(entry.privateAspect) : null,
         }));
     },
 
@@ -96,7 +124,7 @@ export const SkyTracker = {
      * four it began with (`scheduled`, `clouded`), and a Saint-era caller that sets only a sign must not
      * erase a Stargazer's clouded night.
      */
-    async set({ sign, aspect, day, queue, scheduled, clouded, history } = {}, { announce = true } = {}) {
+    async set({ sign, aspect, day, queue, scheduled, clouded, history, second, privateAspect } = {}, { announce = true } = {}) {
         if (!game.user.isGM) return;
         const current = this.state;
         const next = {
@@ -108,6 +136,8 @@ export const SkyTracker = {
             scheduled: scheduled ?? current.scheduled ?? false,
             clouded: clouded ?? current.clouded ?? false,
             history: history ?? current.history ?? [],
+            second: second ?? current.second ?? null,
+            privateAspect: privateAspect ?? current.privateAspect ?? null,
         };
         await game.settings.set(MODULE_ID, SETTING, next);
         await this.applyToAll();
@@ -122,17 +152,21 @@ export const SkyTracker = {
         if (!game.user.isGM) return;
         const current = this.state;
         const queue = [...(current.queue ?? [])];
-        const nextDay = queue.shift() ?? { sign: this.rollSign(), aspect: this.rollAspect() };
+        const nextDay = this.withExtras(queue.shift() ?? this.rollDay());
         // The day that ends is kept, so a past sky can be read as well as a future one (§8.2, R7).
-        const history = [...(current.history ?? []), { day: current.day, sign: current.sign, aspect: current.aspect }]
-            .slice(-HISTORY_LENGTH);
+        const history = [...(current.history ?? []), {
+            day: current.day, sign: current.sign, aspect: current.aspect,
+            ...(current.second ? { second: current.second } : {}),
+            ...(current.privateAspect ? { privateAspect: current.privateAspect } : {}),
+        }].slice(-HISTORY_LENGTH);
         while (queue.length < QUEUE_LENGTH) {
-            queue.push({ sign: this.rollSign(), aspect: this.rollAspect() });
+            queue.push(this.rollDay());
         }
         // A new night is not clouded until the GM says so; a scheduled day stays marked as scheduled.
         await this.set({
-            day: current.day + 1, sign: nextDay.sign, aspect: nextDay.aspect, queue,
+            day: current.day + 1, sign: nextDay.sign, aspect: nextDay.aspect, queue: queue.map((d) => this.withExtras(d)),
             scheduled: Boolean(nextDay.scheduled), clouded: false, history,
+            second: nextDay.second, privateAspect: nextDay.privateAspect,
         });
     },
 
@@ -307,8 +341,7 @@ export const SkyTracker = {
      *
      * Only the negative half is softened. Nothing mitigates a kindness.
      */
-    aspectFor(actor) {
-        const { aspect } = this.state;
+    aspectFor(actor, aspect = this.state.aspect) {
         if (!MILDER[aspect]) return aspect;
         const options = actor.getRollOptions?.() ?? [];
         if (options.includes("saint:unfailing-cosmo")) return "none";
@@ -371,7 +404,7 @@ export const SkyTracker = {
         }
     },
 
-    /** Every sky effect this actor should be wearing right now, by name. */
+    /** Every sky effect this actor should be wearing right now: its pack name, and the sign it is stamped with. */
     wantedFor(actor) {
         const { sign } = this.state;
         const wanted = [];
@@ -380,14 +413,43 @@ export const SkyTracker = {
         const cloth = this.clothOf(actor);
         if (cloth && cloth === sign) {
             const tier = this.state.aspect === "exalted" ? "Zenith" : "Ascendant";
-            wanted.push(`Sky: ${tier} (${signOf(sign).label})`);
+            wanted.push({ name: `Sky: ${tier} (${signOf(sign).label})`, sign });
         }
 
         // The terrain everyone stands in. Starless is a real sky with nothing written in it, and a Quiet
         // day has no modifier to carry, so neither produces an effect.
-        const aspect = this.aspectFor(actor);
-        if (sign !== "starless" && aspect !== "none") wanted.push(`Sky: ${aspectOf(aspect).label}`);
+        const terrain = (skySign, skyAspect) => {
+            const aspect = this.aspectFor(actor, skyAspect);
+            if (skySign && skySign !== "starless" && aspect && aspect !== "none") wanted.push({ name: `Sky: ${aspectOf(aspect).label}`, sign: skySign });
+        };
+        terrain(sign, this.state.aspect);
+
+        // Two Skies (Stargazer guide §7, 18th): the second sign is ascendant too, for the Stargazer and the
+        // allies they briefed today.
+        const second = this.state.second;
+        if (second && second.sign !== sign && this.readsTwoSkies(actor)) terrain(second.sign, second.aspect);
+
+        // Private Sign (§7, 16th): on a Starless day the Stargazer's own sign rises over them alone, with the
+        // domain they chose and the aspect pre-rolled for the day.
+        const own = sign === "starless" ? this.privateSignOf(actor) : null;
+        if (own?.domain && this.state.privateAspect) terrain(own.domain, this.state.privateAspect);
         return wanted;
+    },
+
+    /** Two Skies reaches its Stargazer and whoever that Stargazer briefed today. */
+    readsTwoSkies(actor) {
+        const has = (a) => (a?.itemTypes?.feat ?? []).some((f) => f.slug === "two-skies");
+        if (has(actor)) return true;
+        const warned = actor?.flags?.[MODULE_ID]?.forewarned;
+        return Boolean(warned && warned.day === this.state.day && has(fromUuidSync(warned.by ?? "")));
+    },
+
+    /** A Private Sign's two choices — the Augury it grants and the sign whose domain it governs — or null. */
+    privateSignOf(actor) {
+        const feat = (actor?.itemTypes?.feat ?? []).find((f) => f.slug === "private-sign");
+        if (!feat) return null;
+        const chosen = feat.flags?.pf2e?.rulesSelections ?? {};
+        return { augury: chosen.privateAugury ?? null, domain: chosen.privateDomain ?? null };
     },
 
     /**
@@ -406,7 +468,9 @@ export const SkyTracker = {
 
     async applyNow(actor) {
         if (!game.user.isGM) return;
-        const wanted = new Set(this.wantedFor(actor));
+        const wanted = this.wantedFor(actor);
+        const key = (name, skySign) => `${name}|${skySign}`;
+        const wantedKeys = new Set(wanted.map((w) => key(w.name, w.sign)));
 
         const existing = this.ownedEffects(actor);
         // Matched by the name the pack gave it, which a blanked effect keeps in a flag — and a blanked effect
@@ -417,31 +481,32 @@ export const SkyTracker = {
         // its *name* still matched ("Sky: Benefic" two days running) carried yesterday's sign, and the terrain
         // touched yesterday's domain. Driven: Taurus → Gemini → Leo, all Benefic, and the effect still said
         // `sky:sign:taurus` on the third day.
-        const { sign } = this.state;
-        const fits = (e) => wanted.has(this.skyName(e))
-            && Boolean(e.getFlag(MODULE_ID, "skyBlank")) === (blank && ASPECT_EFFECT.test(this.skyName(e)))
-            && (e.getFlag(MODULE_ID, "skySign") ?? null) === sign;
+        //
+        // Two Skies and Private Sign make the sign part of the key: a creature may wear two `Sky: Benefic`
+        // effects at once, one for each sign up over it.
+        const fits = (e) => wantedKeys.has(key(this.skyName(e), e.getFlag(MODULE_ID, "skySign") ?? null))
+            && Boolean(e.getFlag(MODULE_ID, "skyBlank")) === (blank && ASPECT_EFFECT.test(this.skyName(e)));
         const keep = existing.filter(fits);
         const remove = existing.filter((e) => !fits(e));
         if (remove.length > 0) {
             await actor.deleteEmbeddedDocuments("Item", remove.map((e) => e.id));
         }
 
-        const held = new Set(keep.map((e) => this.skyName(e)));
-        const missing = [...wanted].filter((name) => !held.has(name));
+        const held = new Set(keep.map((e) => key(this.skyName(e), e.getFlag(MODULE_ID, "skySign") ?? null)));
+        const missing = wanted.filter((w) => !held.has(key(w.name, w.sign)));
         if (missing.length === 0) return;
 
         const pack = game.packs.get(`${MODULE_ID}.saint-effects`);
         if (!pack) return;
         const sources = [];
-        for (const name of missing) {
+        for (const { name, sign: skySign } of missing) {
             const index = pack.index.find((e) => e.name === name);
             if (!index) {
                 console.warn(`${MODULE_ID} | no sky effect named "${name}" in the effects pack`);
                 continue;
             }
             const source = (await pack.getDocument(index._id)).toObject();
-            source.flags = foundry.utils.mergeObject(source.flags ?? {}, { [MODULE_ID]: { [EFFECT_FLAG]: true, skyName: name, skySign: this.state.sign } });
+            source.flags = foundry.utils.mergeObject(source.flags ?? {}, { [MODULE_ID]: { [EFFECT_FLAG]: true, skyName: name, skySign } });
             // Stargazer guide §8.4 (ruling R6): with a Stargazer at the table the day's aspect is what the
             // Night Vigil sells, so the four terrain effects arrive as one anonymous "The Sky" — same rules,
             // no name, no description, one shared icon. A Saint's own Ascendant and Zenith keep their names.
@@ -463,9 +528,14 @@ export const SkyTracker = {
              * `applyFullReleaseShape`: a rule added after creation misses the preparation the creation
              * itself triggers.
              */
+            //
+            // Only this sign's rules come along. The effect carries every sign's, each gated on
+            // `sky:sign:<id>`, and a roll option is the creature's, not the effect's: under Two Skies a
+            // `Sky: Benefic` for Aquarius and a `Sky: Retrograde` for Leo each lit the other's domain, and Leo
+            // read +1 from the wrong effect (driven).
             source.system.rules = [
-                { key: "RollOption", option: `sky:sign:${this.state.sign}` },
-                ...(source.system.rules ?? []),
+                { key: "RollOption", option: `sky:sign:${skySign}` },
+                ...ownSignRules(source.system.rules ?? [], skySign),
             ];
             sources.push(source);
         }
@@ -569,6 +639,14 @@ export const SkyTracker = {
         const state = this.state;
         if (!state.queue || state.queue.length === 0) {
             await game.settings.set(MODULE_ID, SETTING, { ...state, queue: this.rollQueue() });
+        }
+        // Two Skies and Private Sign read a second sky pre-rolled with each day (R7). A world whose days were
+        // rolled before that gets them now, once, rather than on a player's client that cannot write them.
+        const now = this.state;
+        const queue = (now.queue ?? []).map((d) => this.withExtras(d));
+        const today = now.second && now.privateAspect ? {} : this.rollExtras();
+        if (Object.keys(today).length > 0 || queue.some((d, i) => d !== now.queue[i])) {
+            await game.settings.set(MODULE_ID, SETTING, { ...now, ...today, queue });
         }
         await this.applyToAll();
     },
