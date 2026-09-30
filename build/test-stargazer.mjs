@@ -225,6 +225,32 @@ function check(label, actual, expected) {
 }
 
 /* -------------------------------------------------------------------------------------------- */
+/*  Phase 3b — the Sky (SK-22, SK-12, SK-14, SK-19, SK-20)                                       */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    const { libraReady } = await import("../scripts/sky/terrain-rolls.mjs");
+    const now = { day: 10, hour: 240 };
+    check("SK-22a/c Libra's daily allowance: spent for the sky's day, back the next",
+        [libraReady("benefic", null, now), libraReady("benefic", { day: 10, hour: 239 }, now), libraReady("retrograde", { day: 9, hour: 240 }, now)],
+        [true, false, true]);
+    check("SK-22b/d Libra's hourly allowance on Exalted and Malefic: spent for the hour, back the next",
+        [libraReady("exalted", { day: 10, hour: 240 }, now), libraReady("malefic", { day: 10, hour: 239 }, now)], [false, true]);
+
+    const fs = await import("node:fs");
+    for (const aspect of ["benefic", "exalted", "retrograde", "malefic"]) {
+        const rules = JSON.parse(fs.readFileSync(new URL(`../content/saint-effects/sky-aspect/sky-${aspect}.json`, import.meta.url), "utf8")).system.rules;
+        const value = rules[0].value;
+        const find = (selector, sign) => rules.find((r) => r.selector === selector && r.predicate?.[0] === `sky:sign:${sign}` && r.predicate.length > 1)
+            ?? rules.find((r) => r.selector === selector && r.predicate?.[0] === `sky:sign:${sign}`);
+        check(`SK-12/14/19/20 ${aspect}: Cancer's disease and poison, Virgo's Recall Knowledge and Seek, Aquarius's counteract, Pisces's illusions — all at ${value}`,
+            [find("fortitude", "cancer")?.value, find("skill-check", "virgo")?.predicate?.[1], find("perception", "virgo")?.predicate?.[1],
+                find("counteract-check", "aquarius")?.value, find("perception", "pisces")?.predicate?.[1]],
+            [value, "action:recall-knowledge", "action:seek", value, "item:trait:illusion"]);
+    }
+}
+
+/* -------------------------------------------------------------------------------------------- */
 
 if (failures.length > 0) {
     console.error(`Stargazer tests failed: ${failures.length} of ${checks}.`);
