@@ -1,0 +1,133 @@
+{
+    "_id": "sgzhandbook00001",
+    "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
+    "name": "The Stargazer: Handbook",
+    "pages": [
+        {
+            "_id": "sgzhandbookp0100",
+            "name": "The Stargazer at a glance",
+            "sort": 100,
+            "text": {
+                "content": "<p>You read the sky, and the sky is not kind. Every dawn one of thirteen signs rises with an aspect — Quiet, Benefic, Retrograde, Malefic or Exalted — and it tilts one narrow domain for everyone under it, the ogre in the cave included. Nobody else at the table knows what today is. <strong>You do.</strong></p> <p>Mechanically: 8 Hit Points per level, expert Perception, expert Will, trained Fortitude and Reflex, simple weapons and light armour, and a <strong>Stargazer DC</strong> keyed to Wisdom. Your output is a number on somebody else's sheet: a +1 there, a −1 here, a 20 exactly where it is needed.</p> <ul> <li><strong>@UUID[Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Night Vigil]{Night Vigil}</strong> — every night, the day's sign and aspect, the next three days, your Portent and your Augury of the Day, whispered to you.</li> <li><strong>@UUID[Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Fortune's Thread]{Fortune's Thread}</strong> — a reaction: Guide an ally's d20 (+1) or Snarl an enemy's (−1).</li> <li><strong>@UUID[Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Portent]{Portent}</strong> — a d20 rolled at the Vigil that you spend as somebody else's die.</li> <li><strong>Auguries</strong> — focus spells that bend the next few rolls.</li> <li><strong>A Path</strong> at 1st — the Weaver, the Herald, the Ephemeris or the Broken Thread.</li> <li><strong>@UUID[Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Unmake the Moment]{Unmake the Moment}</strong> at 11th and <strong>@UUID[Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Rewrite the Ending]{Rewrite the Ending}</strong> at 19th — the round, and then the whole encounter, undone.</li> </ul>",
+                "format": 1
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text"
+        },
+        {
+            "_id": "sgzhandbookp0200",
+            "name": "The luck engine: Threads, Chart and Portent",
+            "sort": 200,
+            "text": {
+                "content": "<p>Fortune's Thread acts on a d20 <strong>before it is rolled</strong>, and Foundry has no such moment — a roll resolves the instant it is clicked. So you <strong>arm</strong> it in advance: post Fortune's Thread with the creature targeted, choose Guide or Snarl and which roll it waits for, and the next matching roll takes it. The reaction is spent then, not when you arm it. One reaction arms as many creatures as your Thread can affect.</p> <ul> <li><strong>Snarl</strong> reaches attack rolls, skill checks and Perception, never a saving throw.</li> <li>An armed Thread expires at the start of your next turn. You cannot arm one with no reaction left.</li> <li><strong>Chart the Course</strong> names creatures and arms each with a free Thread, spent by that creature's first d20.</li> <li><strong>Speak the Portent</strong> is armed the same way, on a creature and a roll type; it waits until spoken or until your next Vigil overwrites it. A Portent of 20 is a natural 20.</li> </ul> <h3>At the table</h3> <p><strong>Declare a standing policy</strong> at the start of each fight — <em>\"I Snarl the first attack against Kesh each round\"</em> — and change it out loud. Otherwise every d20 in the game pauses for <em>\"wait — reaction?\"</em>, and the class eats the table's clock.</p> <p><strong>GM: announce a roll before you make it.</strong> The Thread triggers before the die. Rolling fast behind a screen turns the class off; this is the same courtesy Aid and the Champion's reaction already need.</p> <p>Reactions that answer something that already happened — <em>The Last Thing You See</em>, <em>The Hour Is Not Come</em>, <em>Deja Vu</em>, <em>Inevitable</em>, <em>Second Chance at Fate</em>, <em>Omen of Blades</em> — are not armed. When they trigger, a button appears in your whispers.</p>",
+                "format": 1
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text"
+        },
+        {
+            "_id": "sgzhandbookp0300",
+            "name": "The Night Vigil and the Sky",
+            "sort": 300,
+            "text": {
+                "content": "<p>The Vigil runs by itself when you <strong>Rest for the Night</strong>. Its card, whispered to you, carries today's sign and aspect exactly, the forecast, your Portents and the Augury of the Day, and the buttons you act on afterwards: <em>Forewarned</em> (brief up to five allies, who take the day's bad aspect one step milder), and from 13th <em>Trade the Day</em>.</p> <p><strong>A clouded night reads nothing.</strong> Indoors, underground or under cloud, the GM ticks <em>Clouded</em> on the Sky tracker before you rest. A chart read indoors is not a Vigil.</p> <h3>GM: turn <code>announceSky</code> off</h3> <p>The module posts the day's sign to chat by default, which is right for a table running only the Saint. With a Stargazer at the table, <strong>turn it off</strong> in the module settings: the Vigil's certainty is the class, and it is worth nothing if chat gives it away for free. With it off, the day is whispered to every player who owns a Stargazer. The Sky's effects then appear on every sheet as a blank <strong>The Sky</strong> — players see that something is on them, not what. Let them get it wrong for months; the folklore is the point.</p> <h3>Reading the sky without the class</h3> <p>Anyone can try: ten minutes under an open sky and an Astronomy Lore or Occultism Recall Knowledge check against the region's Hard DC, 5 lower on an Exalted or Malefic day. A critical success learns the sign and aspect, a success the sign, a critical failure a wrong sign — confidently. The Stargazer's <em>Reckoning of Days</em> automates exactly this reading for yesterday and for days four to seven out.</p> <h3>Every dawn</h3> <p>Advance the day on the Sky tracker as part of your morning routine. If you skip one, do not retcon it — the sky was cloudy.</p>",
+                "format": 1
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text"
+        },
+        {
+            "_id": "sgzhandbookp0400",
+            "name": "The Auguries",
+            "sort": 400,
+            "text": {
+                "content": "<p>Auguries are occult focus spells with the <code>prediction</code> trait. You learn one at 1st and more at 5th, 7th, 9th and every other level to 19th; each Vigil adds the <strong>Augury of the Day</strong> — the rising sign's — until your next daily preparations, unless you already know it. On a Starless night none is granted (from 13th you choose any).</p> <table><thead><tr><th>Augury</th><th>Actions</th><th>Sign</th></tr></thead><tbody><tr><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-auguries.Item.Borrowed Second]{Borrowed Second}</td><td>2</td><td>—</td></tr><tr><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-auguries.Item.Coiling Doubt]{Coiling Doubt}</td><td>2</td><td>Scorpio</td></tr><tr><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-auguries.Item.Crown of Fire]{Crown of Fire}</td><td>2</td><td>Leo</td></tr><tr><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-auguries.Item.Death Foretold]{Death Foretold}</td><td>2</td><td>—</td></tr><tr><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-auguries.Item.Deep Dream]{Deep Dream}</td><td>2</td><td>Pisces</td></tr><tr><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-auguries.Item.First Blood]{First Blood}</td><td>2</td><td>Aries</td></tr><tr><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-auguries.Item.Fixed Point]{Fixed Point}</td><td>3</td><td>Libra</td></tr><tr><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-auguries.Item.Guiding Star]{Guiding Star}</td><td>2</td><td>—</td></tr><tr><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-auguries.Item.Hunted by the Sky]{Hunted by the Sky}</td><td>2</td><td>Sagittarius</td></tr><tr><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-auguries.Item.Iron Auspice]{Iron Auspice}</td><td>2</td><td>Taurus</td></tr><tr><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-auguries.Item.Perfect Ledger]{Perfect Ledger}</td><td>1</td><td>Virgo</td></tr><tr><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-auguries.Item.Poured Knowing]{Poured Knowing}</td><td>2</td><td>Aquarius</td></tr><tr><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-auguries.Item.Shell of Hours]{Shell of Hours}</td><td>2</td><td>Cancer</td></tr><tr><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-auguries.Item.The Hour Is Not Come]{The Hour Is Not Come}</td><td>reaction</td><td>—</td></tr><tr><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-auguries.Item.Two Roads]{Two Roads}</td><td>1</td><td>Gemini</td></tr></tbody></table> <p>Capricorn's <em>Alms of Fate</em> is not built yet; on a Capricorn night the Vigil card says so.</p>",
+                "format": 1
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text"
+        },
+        {
+            "_id": "sgzhandbookp0500",
+            "name": "The four Paths",
+            "sort": 500,
+            "text": {
+                "content": "<p>Chosen at 1st; each grants an ability at 1st, 5th, 13th and 17th, and they come and go with your level.</p> <table><thead><tr><th>Path</th><th>1st</th><th>5th</th><th>13th</th><th>17th</th></tr></thead><tbody><tr><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.The Weaver]{The Weaver}<br /><em>Fate is a fabric, and I have hands.</em></td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Knotted Thread]{Knotted Thread}</td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Doubled Strand]{Doubled Strand}</td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Skein of Fates]{Skein of Fates}</td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Tapestry]{Tapestry}</td></tr><tr><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.The Herald]{The Herald}<br /><em>I do not curse them. I announce what is coming.</em></td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Herald's Omen]{Herald's Omen}</td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.The Announcement]{The Announcement}</td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Sentence Passed]{Sentence Passed}</td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Foregone Conclusion]{Foregone Conclusion}</td></tr><tr><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.The Ephemeris]{The Ephemeris}<br /><em>I have read every sky. Ask me anything.</em></td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Perfect Recall]{Perfect Recall}</td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.The Almanac]{The Almanac}</td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Written Down]{Written Down}</td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Every Sky Ever Read]{Every Sky Ever Read}</td></tr><tr><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.The Broken Thread]{The Broken Thread}<br /><em>I have already lost you once.</em></td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Deja Vu]{Deja Vu}</td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Second Sight]{Second Sight}</td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Unmade Again]{Unmade Again}</td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.The Long Way Round]{The Long Way Round}</td></tr></tbody></table>",
+                "format": 1
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text"
+        },
+        {
+            "_id": "sgzhandbookp0600",
+            "name": "Class feats",
+            "sort": 600,
+            "text": {
+                "content": "<p>Stargazer feats come at 1st, 2nd, 4th and every even level to 20th. Several are used by <strong>posting them to chat</strong> (Cold Read, Read the Room, Fate's Favourite, Written in Advance, Star-Marked Enemy, Patient Watcher, Reckoning of Days); several offer a <strong>button</strong> when they trigger (Omen of Blades, Second Chance at Fate, Inevitable, Foretold Escape); the Vigil card carries the rest (Astrological Sign, Doubled Reading, Prophesied Ally, Borrowed Eyes, the Star-Touched Cantrip swap).</p> <table><thead><tr><th>Level</th><th>Feats</th></tr></thead><tbody><tr><td>1</td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Astrological Sign]{Astrological Sign}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Cold Read]{Cold Read}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Companion of the Watch]{Companion of the Watch}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Sky Reader]{Sky Reader}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Star-Touched Cantrip]{Star-Touched Cantrip}</td></tr><tr><td>2</td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Augury Adept]{Augury Adept}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Patient Watcher]{Patient Watcher}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Reckoning of Days]{Reckoning of Days}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Thread of Warning]{Thread of Warning}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Twin Portent]{Twin Portent}</td></tr><tr><td>4</td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Borrowed Eyes]{Borrowed Eyes}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Omen of Blades]{Omen of Blades}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Read the Room]{Read the Room}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Widened Chart]{Widened Chart}</td></tr><tr><td>6</td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Long Thread]{Long Thread}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Prophecy's Weight]{Prophecy's Weight}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Second Chance at Fate]{Second Chance at Fate}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Sky Anchor]{Sky Anchor}</td></tr><tr><td>8</td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Conjunction]{Conjunction}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Doubled Reading]{Doubled Reading}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Second Portent]{Second Portent}</td></tr><tr><td>10</td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Fate's Favourite]{Fate's Favourite}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Two Warnings]{Two Warnings}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Unspent Thread]{Unspent Thread}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Wide Vigil]{Wide Vigil}</td></tr><tr><td>12</td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Cascade]{Cascade}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Long Now]{Long Now}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Prophesied Ally]{Prophesied Ally}</td></tr><tr><td>14</td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Echo of the Unmade]{Echo of the Unmade}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Inevitable]{Inevitable}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Star-Marked Enemy]{Star-Marked Enemy}</td></tr><tr><td>16</td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Foretold Escape]{Foretold Escape}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Private Sign]{Private Sign}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Written in Advance]{Written in Advance}</td></tr><tr><td>18</td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.The Long Vigil]{The Long Vigil}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Two Skies]{Two Skies}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Unbroken Chain]{Unbroken Chain}</td></tr><tr><td>20</td><td>@UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Cartographer of Endings]{Cartographer of Endings}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.Fixed Sky]{Fixed Sky}, @UUID[Compendium.isaacs-hb-pf2e.stargazer-feats.Item.The Sky Answers]{The Sky Answers}</td></tr></tbody></table>",
+                "format": 1
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text"
+        },
+        {
+            "_id": "sgzhandbookp0700",
+            "name": "The rewind, in three tiers",
+            "sort": 700,
+            "text": {
+                "content": "<h3>Tier 1 — The Dream (a GM technique)</h3> <p>Not a button. With the Stargazer's player's permission: the Night Vigil produces <strong>a vision the player does not get to interpret</strong> — an image, a name, a colour; write it down. When the party is about to do something catastrophic, run the bad timeline for real, and let it end badly. Then the Stargazer wakes at their Vigil and it is undone. <strong>The players keep every piece of information they learned.</strong> Once per adventure or arc at most, and only when the GM starts it — if a player can invoke it, they will ask <em>\"is this a bad ending?\"</em> at every fork.</p> <h3>Tier 2 — Unmake the Moment (11th)</h3> <p>As your turn begins, a card offers to rewind to the <strong>start of your last turn</strong>. Pressing it puts the board back — Hit Points, conditions, effects, resources, positions, the turn, the clock — and deletes tokens and actors created since; the chat log stays. You are stunned 1 and drained 1, and you may shout a warning worth +2 to one ally's next roll. Once per day; it recharges at your Vigil.</p> <h3>Tier 3 — Rewrite the Ending (19th)</h3> <p>When you or an ally within 60 feet dies, or the party falls, post it; the <strong>GM confirms</strong>. The encounter goes back to the moment initiative was rolled, everyone rolls initiative again, and each ally who was there takes +2 to that roll and to their first d20. Your Star Chart goes dark: drained 2 and doomed 1 that cannot be reduced, no Focus Points, no Threads, Chart, Portent or Vigil — until a Vigil the GM marks as <strong>the full eight hours under open sky</strong>. Once per week of the Sky's dawns.</p> <h3>GM: what to know</h3> <ul> <li><strong>The snapshots live in your client's memory.</strong> The module takes them at each Stargazer's turn and when an encounter starts. <strong>Reloading your browser forgets them</strong>, and the rewinds will say there is nothing to go back to.</li> <li>Do not re-run the enemies' identical dice. Re-run the encounter; it will go differently, and the enemies do not remember.</li> <li><em>The Long Vigil</em> shortens Rewrite's cooldown in a new adventure: set <strong>Stargazer: current adventure</strong> in the module settings when one begins.</li> <li>Tell the table Rewrite exists before session one. It is a plot device with a stat block.</li> </ul>",
+                "format": 1
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text"
+        },
+        {
+            "_id": "sgzhandbookp0800",
+            "name": "What the module does, and what it leaves to you",
+            "sort": 800,
+            "text": {
+                "content": "<p>Nearly everything is automated. What is not:</p> <ul> <li><strong>Memory.</strong> Who remembers an unmade round is the table's; the cards say who does.</li> <li><strong>The GM's answers.</strong> <em>Every Sky Ever Read</em> and <em>Cartographer of Endings</em> ask the GM a question; the module counts the use, the GM answers truly.</li> <li><strong>Sight.</strong> Nothing checks whether you can see a Thread's target yet, so <em>Star-Marked Enemy</em> and <em>Widened Chart</em> lift a requirement nobody enforces.</li> <li><strong>A use at zero.</strong> pf2e counts a once-per-day feat's uses but still posts it at zero. Sentence Passed will ask for the save anyway: refuse it.</li> <li><strong>Companion of the Watch.</strong> pf2e 8's familiars have no trait list, so your familiar is celestial as far as rules can read, not on its sheet.</li> <li><strong>Action costs.</strong> A free Recall Knowledge, a free Chart the Course: pf2e does not count actions, so neither does the module.</li> </ul>",
+                "format": 1
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text"
+        },
+        {
+            "_id": "sgzhandbookp0900",
+            "name": "GM notes: the playtest checklist",
+            "sort": 900,
+            "text": {
+                "content": "<p>In order of how likely each is to bite:</p> <ol> <li><strong>Fortune's Thread eats the clock.</strong> Standing policies, every combat.</li> <li><strong>Announce rolls before you make them.</strong> The class is built on it.</li> <li><strong>You forget the sky.</strong> Advance the day every morning.</li> <li><strong>The sky is loud.</strong> One day in five is Quiet and 30% are Retrograde. If your table finds it oppressive, move 10 weight from Retrograde to Quiet before abandoning it.</li> <li><strong>The player hoards a Portent of 20.</strong> Fine, and the best part of the class — remind them once that a new Vigil overwrites it.</li> <li><strong>8 Hit Points, light armour, trained Reflex until 13th.</strong> The Stargazer dies to fireballs. Intentional; make sure the player knows.</li> <li><strong>Rewrite never comes up</strong>, because 19th level. Run the Dream instead.</li> <li><strong>Nobody notices the class is a support.</strong> Have the Stargazer's player count \"rolls I changed the outcome of\" for three sessions.</li> </ol>",
+                "format": 1
+            },
+            "title": {
+                "level": 1,
+                "show": true
+            },
+            "type": "text"
+        }
+    ]
+}
