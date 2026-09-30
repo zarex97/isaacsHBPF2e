@@ -333,7 +333,7 @@ actually sits, in case something misbehaves in play. Pull from the top.
 | *Guiding Star*'s 10th-rank tier | 0 | +2 to five allies is *Courageous Anthem* and then some. Cap it at +1 and it is merely excellent. |
 | *Coiling Doubt*'s 1-minute critical failure | 0 | Three creatures rolling twice-take-lower for a minute ends boss fights. Cap the crit failure at 3 rounds as well. |
 | *Death Foretold*'s crit-failure line | 0 | Frightened 3 **and** stunned 1 **and** fleeing is three riders on one outcome. Drop fleeing first. |
-| Malefic's sky weight (§8.2) | 0 | Move 10 of it to Quiet if the world feels oppressive. Costs the class nothing. |
+| Retrograde's sky weight (§8.2) | 0 | Move 10 of it to Quiet if the world feels oppressive. Costs the class nothing. |
 | Perception Legendary → Master@7 | 190 | Undoes half of §0A item 1. |
 | Will Legendary → Master@11 | 190 | Undoes §0A item 2. |
 
@@ -472,10 +472,10 @@ Retrograde**, **Retrograde → no effect**. Positive aspects are unchanged; you 
 sky, only survive a bad one.
 
 *Forewarned is this class's party function, and after v3's reweighting it is live on **40% of days**
-(§8.2) — 30% Malefic and 10% Retrograde. On those days the party simply does not have a bad day, and
+(§8.2) — 30% Retrograde and 10% Malefic. On those days the party simply does not have a bad day, and
 will not know what that was worth until the session you are not there. Thirty percent of all days are
-Malefic, which is the **−2** tier, so this is not a rounding error: it is the single largest thing the
-class does for four other people.
+Retrograde, which Forewarned erases outright rather than softens, so this is not a rounding error: it
+is the single largest thing the class does for four other people.
 
 **GM override.** The GM may declare the day's sign and aspect instead of rolling, whenever the story
 wants it. That is the feature, not a cheat — it is the omen-telegraphing tool the class exists to
@@ -1104,25 +1104,26 @@ and `scripts/sky/signs.mjs` has been updated to match:
 |---|---|---|---|
 | **Quiet** (`none`) | 50 | **20** | The sky is unremarkable. Nothing happens. |
 | **Benefic** | 20 | **30** | The sky is kind. **+1** to the sign's domain. |
-| **Retrograde** | 15 | **10** | The sky drags. **−1** to the sign's domain. |
-| **Malefic** | 15 | **30** | The sky is hostile. **−2** to the sign's domain. |
+| **Retrograde** | 15 | **30** | The sky drags. **−1** to the sign's domain. |
+| **Malefic** | 15 | **10** | The sky is hostile. **−2** to the sign's domain. |
 | **Exalted** | 0 | **10** | A Zenith. **+2** to the domain. |
 
 All bonuses and penalties are **circumstance**, so they never stack with themselves and only one sign
 is ever up. The worst a character can be is −2 in one narrow domain, which is inside PF2e's tolerance.
 
 **What the reweighting does.** The sky was quiet half the time and is now quiet one day in five. It is
-**hostile 40% of days** (30 Malefic + 10 Retrograde) and **kind 40%** (30 Benefic + 10 Exalted). Two
+**hostile 40% of days** (30 Retrograde + 10 Malefic) and **kind 40%** (30 Benefic + 10 Exalted). Two
 consequences follow:
 
 - **Forewarned matters far more.** v2's Night Vigil bought a party-wide mitigation that was worth
-  nothing on 70% of days. It is now live on **40%** of them, and the 30% that are *Malefic* are the
-  −2 tier, which is the one worth being warned about. This is the largest indirect buff in v3 and it
-  did not cost a point.
-- **Malefic at 30% is a lot of −2.** A specific sign now comes up hostile about **2.3% of days each**,
-  but *some* sign is hostile 40% of the time, and every creature in the world is inside it. If your
-  table finds the sky oppressive, Malefic is the dial — move 10 points of its weight to Quiet before
-  touching anything else.
+  nothing on 70% of days. It is now live on **40%** of them, and the 30% that are *Retrograde* are
+  the tier Forewarned cancels outright rather than merely softens. This is the largest indirect buff
+  in v3 and it did not cost a point.
+- **Retrograde at 30% is a lot of −1.** A specific sign now comes up hostile about **2.3% of days
+  each**, but *some* sign is hostile 40% of the time, and every creature in the world is inside it.
+  The −2 tier is rarer than in v2 (10% against 15%), so the sky nags more often and punishes less. If
+  your table finds the sky oppressive, Retrograde is the dial — move 10 points of its weight to Quiet
+  before touching anything else.
 
 > ### ⚠ The Exalted change reaches the Saint
 >
@@ -1362,9 +1363,10 @@ Balance conversations about this class keep landing on ±2 and missing the actua
 1st-level character who knows, every morning and for free, what the next three days hold.**
 
 v3 made that worse in a way the ledger does not see: the sky reweighting (§8.2) means 40% of days now
-carry a live negative aspect instead of 30%, and 30% of days are the −2 tier. Night Vigil's Forewarned
-was priced at 50 when it was live on three days in ten. It is now live on four, and the bad days are
-worse. **It was not repriced.** If anything in this class is underpriced, it is this, and it is the
+carry a live negative aspect instead of 30%, and 30% of days are Retrograde, which Forewarned erases
+outright. Night Vigil's Forewarned was priced at 50 when it was live on three days in ten. It is now
+live on four, and on three of those four it cancels the penalty rather than softening it. **It was not
+repriced.** If anything in this class is underpriced, it is this, and it is the
 one number only play can settle.
 
 ### 9.7 Where to look first if it misbehaves
@@ -1547,7 +1549,7 @@ The awkward one, and the reason this class needs more automation work than the S
 
 **Done in this change, not left as a note:**
 
-- `scripts/sky/signs.mjs` — the `ASPECTS` weights are now **20 / 30 / 10 / 30 / 10** (Quiet, Benefic,
+- `scripts/sky/signs.mjs` — the `ASPECTS` weights are now **20 / 30 / 30 / 10 / 10** (Quiet, Benefic,
   Retrograde, Malefic, Exalted), per §8.2. The comment explaining why `exalted` was 0 has been replaced
   with one explaining what changed and **that it reaches the Saint**.
 - `README.md` — the *Schedule Zenith* bullet said `Exalted` had "a roll weight of **zero**." It no
@@ -1612,10 +1614,10 @@ In order of how likely each is to bite.
 3. **The GM forgets the sky.** The number one failure mode of the whole framework: it is invisible by
    design, so nothing at the table reminds you. Use the tracker's Advance Day button as part of your
    morning routine. If you skip a day, do not retcon it — the sky was cloudy.
-4. **The sky is now loud.** After v3's reweighting only one day in five is Quiet and 30% are Malefic,
+4. **The sky is now loud.** After v3's reweighting only one day in five is Quiet and 30% are Retrograde,
    so the players will notice unexplained penalties much sooner than v2's spread intended. That is the
    point — but it also means the folklore forms faster, and a table that liked the sky being subtle
-   should move 10 weight from Malefic to Quiet (§8.2) rather than abandoning the subsystem.
+   should move 10 weight from Retrograde to Quiet (§8.2) rather than abandoning the subsystem.
 5. **Portent is a 20 and the player hoards it for four sessions.** Fine, and the best part of the
    class. Just remind them once that a new Vigil overwrites it.
 6. **8 HP plus light armour plus Reflex Trained until 13th means the Stargazer dies to fireballs.**
@@ -1646,7 +1648,7 @@ take the build to review, and revisit them after play.
    to be unpopular with the player and most likely to be correct.
 4. **Whether Night Vigil is worth 50 or 500.** §9.6. Unanswerable on paper, and v3's reweighting
    raised it again without repricing it: Forewarned went from live on 30% of days to 40%, and the
-   hostile half got heavier. If anything in this class is quietly underpriced, it is this.
+   share of those days it cancels outright doubled (Retrograde 15 → 30). If anything in this class is quietly underpriced, it is this.
 5. **The Sky's domain modifiers for every creature in the world** are 48 unbuilt effect items and a
    tracker change (§11.4). Until they exist, §8.3 is a paper subsystem and Forewarned has nothing to
    forewarn against. **This is the gap between this document and a playable class**, and it should be
