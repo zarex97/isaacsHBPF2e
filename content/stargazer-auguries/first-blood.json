@@ -1,0 +1,105 @@
+{
+    "img": "icons/skills/melee/strike-sword-blood-red.webp",
+    "name": "First Blood",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p>Cast during exploration. The next time each rolls initiative within the hour, it gains a <strong>+2 status bonus</strong> to that roll, is <strong>not off-guard</strong> during the first round, and its <strong>first Strike of the encounter that hits deals an extra 1d6 spirit damage</strong>.</p><hr /><p><strong>Heightened (+2)</strong> +1d6.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": null,
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "up to 5 allies"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "stargazer-augury",
+                "stargazer-sign-aries"
+            ],
+            "rarity": "common",
+            "traditions": [
+                "occult"
+            ],
+            "value": [
+                "concentrate",
+                "focus",
+                "prediction",
+                "stargazer"
+            ]
+        }
+    },
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "allies",
+                "includesSelf": true,
+                "maxTargets": 5,
+                "range": 30
+            },
+            "riders": [
+                {
+                    "event": "action-used",
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.stargazer-effects.Item.Effect: First Blood (Initiative)"
+                    },
+                    "duration": {
+                        "unit": "hours",
+                        "value": 1
+                    }
+                },
+                {
+                    "event": "action-used",
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.stargazer-effects.Item.Effect: First Blood (Strike)",
+                        "substitutions": [
+                            {
+                                "path": "system.rules.0.diceNumber",
+                                "value": {
+                                    "base": 1,
+                                    "at": {
+                                        "5": 2,
+                                        "9": 3,
+                                        "13": 4,
+                                        "17": 5
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "duration": {
+                        "unit": "hours",
+                        "value": 1
+                    }
+                }
+            ]
+        }
+    },
+    "type": "spell"
+}

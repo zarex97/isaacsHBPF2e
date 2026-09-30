@@ -3347,6 +3347,8 @@ const SYSTEM_SLUGS = new Set([
     "effect-cover",
     // A pf2e condition the Assimilator rig reads off a target after a Flare.
     "blinded",
+    // A pf2e condition: The Hour Is Not Come puts back whatever wounded value the creature had before.
+    "wounded",
     // Not a document: the slug of the −1 Will modifier *Effect: Null Weight* puts on a save.
     "null-weight",
     // The Assimilator's Substrate catalogue is keyed by its own slug ("electrum"), not the effect's document slug.

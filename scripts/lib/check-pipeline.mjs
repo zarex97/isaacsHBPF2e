@@ -28,6 +28,8 @@ export const PRIORITY = {
     portentGuard: 20,
     /** `sky/terrain-rolls.mjs` — the day's modifier on a creature's first Strike in an encounter, under Aries. */
     ariesFirstStrike: 30,
+    /** `stargazer/auguries.mjs` — Hunted by the Sky: the first attack each round, and Seek against it. */
+    huntedBySky: 40,
 };
 
 const stages = [];

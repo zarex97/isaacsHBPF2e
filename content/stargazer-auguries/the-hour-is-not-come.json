@@ -1,0 +1,60 @@
+{
+    "img": "icons/magic/life/heart-glowing-red.webp",
+    "name": "The Hour Is Not Come",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p><strong>Trigger</strong> You or an ally within 30 feet is reduced to 0 Hit Points.</p><p><strong>Effect</strong> It was not going to happen today. The target is reduced to <strong>1 Hit Point</strong> instead, gains <strong>temporary Hit Points equal to your level</strong>, and does not gain the wounded condition from this instance. A creature cannot benefit from this Augury again for 10 minutes.</p><hr /><p><strong>Heightened (5th)</strong> The target also regains <strong>2d8</strong> Hit Points. <strong>(+2)</strong> +2d8.</p><hr /><p><em>When it triggers, a button appears in your whispers; it spends the Focus Point and the reaction.</em></p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": null,
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "you or an ally"
+        },
+        "time": {
+            "value": "reaction"
+        },
+        "traits": {
+            "otherTags": [
+                "stargazer-augury"
+            ],
+            "rarity": "common",
+            "traditions": [
+                "occult"
+            ],
+            "value": [
+                "concentrate",
+                "focus",
+                "healing",
+                "prediction",
+                "stargazer"
+            ]
+        }
+    },
+    "flags": {
+        "isaacs-hb-pf2e": {}
+    },
+    "type": "spell"
+}

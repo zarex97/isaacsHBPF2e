@@ -98,6 +98,18 @@ export function reactionsLeft(actor) {
     return Numbers.reactions(actor) - (s.spent ?? 0) - pending;
 }
 
+/** Spend one of this Stargazer's reactions on something other than a Thread — The Last Thing You See, The Hour Is Not Come. */
+export async function spendReaction(actor) {
+    if (!inCombat(actor)) return;
+    await actor.update({ [`flags.${MODULE_ID}.${FLAG}.spent`]: (state(actor).spent ?? 0) + 1 });
+}
+
+/** Hunted by the Sky (guide §5.2): a Snarl against a hunted creature is −3, or −4 with Surer Thread. */
+export function snarlAgainst(origin, target) {
+    const hunted = (target?.itemTypes?.effect ?? []).some((e) => e.flags?.[MODULE_ID]?.huntedBySky);
+    return Numbers.threadValue(origin) + (hunted ? 2 : 0);
+}
+
 /** A Thread's effect, as the GM writes it onto the creature. */
 export function threadEffect({ origin, group, kind, value, kinds, free, twice }) {
     const guide = kind === "guide";
@@ -271,7 +283,8 @@ async function arm({ origin: originUuid, entries = [], chart, free }) {
             await say(origin, `<strong>${name}</strong>: Snarl can only be applied to an attack roll, skill check or Perception check.`);
             continue;
         }
-        const effect = threadEffect({ origin, group, kind: entry.kind, value, kinds, free: isFree, twice: Boolean(entry.twice) });
+        const strength = entry.kind === "snarl" ? snarlAgainst(origin, target) : value;
+        const effect = threadEffect({ origin, group, kind: entry.kind, value: strength, kinds, free: isFree, twice: Boolean(entry.twice) });
         await target.createEmbeddedDocuments("Item", [effect]);
         armed.push(`${entry.kind === "guide" ? "Guide" : "Snarl"} on ${target.name}${entry.twice ? " (Twin Fates)" : ""}`);
     }
@@ -393,7 +406,7 @@ async function lastThing({ messageId }) {
     if (!isStargazer(origin) || !attacker) return;
     if (reactionsLeft(origin) <= 0) return say(origin, "<strong>The Last Thing You See</strong>: no reaction left this round.");
     await message.update({ [`flags.${MODULE_ID}.lastThing.used`]: true });
-    await origin.update({ [`flags.${MODULE_ID}.${FLAG}.spent`]: inCombat(origin) ? (state(origin).spent ?? 0) + 1 : 0 });
+    await spendReaction(origin);
 
     const immune = attacker.itemTypes.effect.some((e) => e.slug === IMMUNE_SLUG && e.flags?.[MODULE_ID]?.lastThingFrom === origin.uuid);
     const traits = ["emotion", "fear", "illusion", "mental", "prediction", "visual"];
