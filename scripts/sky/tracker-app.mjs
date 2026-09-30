@@ -22,6 +22,7 @@ export class SkyTrackerApp extends HandlebarsApplicationMixin(ApplicationV2) {
             advanceDay: SkyTrackerApp.#onAdvanceDay,
             scheduleDay: SkyTrackerApp.#onScheduleDay,
             reapply: SkyTrackerApp.#onReapply,
+            toggleClouded: SkyTrackerApp.#onToggleClouded,
         },
     };
 
@@ -48,6 +49,7 @@ export class SkyTrackerApp extends HandlebarsApplicationMixin(ApplicationV2) {
             sign: SkyTracker.sign,
             aspect: SkyTracker.aspect,
             isZenith: SkyTracker.isZenith,
+            clouded: Boolean(state.clouded),
             signs: SIGNS.map((s) => ({ ...s, selected: s.id === state.sign })),
             aspects: ASPECTS.map((a) => ({ ...a, selected: a.id === state.aspect })),
             saints,
@@ -62,6 +64,11 @@ export class SkyTrackerApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
     static async #onSetAspect(_event, target) {
         await SkyTracker.set({ aspect: target.value });
+    }
+
+    /** Clouded Sky (Stargazer guide §4.2): tonight nobody can read the sky. Cleared when the day advances. */
+    static async #onToggleClouded() {
+        await SkyTracker.setClouded(!SkyTracker.state.clouded);
     }
 
     static async #onAdvanceDay() {

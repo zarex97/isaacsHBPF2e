@@ -31,6 +31,9 @@
             <button type="button" data-action="advanceDay"><i class="fa-solid fa-forward"></i> Advance Day</button>
             <button type="button" data-action="scheduleDay"><i class="fa-solid fa-star"></i> Schedule Day</button>
             <button type="button" data-action="reapply"><i class="fa-solid fa-rotate"></i> Re-apply</button>
+            <button type="button" data-action="toggleClouded" class="{{#if clouded}}active{{/if}}" title="Clouded Sky: no Night Vigil can read the sky tonight. Cleared when the day advances.">
+                <i class="fa-solid fa-cloud"></i> {{#if clouded}}Clouded tonight{{else}}Clear tonight{{/if}}
+            </button>
         </div>
     </section>
     {{/if}}
