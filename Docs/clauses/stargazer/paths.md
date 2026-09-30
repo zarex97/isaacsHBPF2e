@@ -37,11 +37,10 @@ a refusal, not a modifier. The Ephemeris **reads beyond the forecast** — seven
 which the seven-day queue holds only half of. And the Broken Thread **modifies *Unmake the Moment***,
 so its rows are exactly as automatable as the rewind itself is.
 
-Four rulings block rows here (see the rulings issue (#103)). **R1** — *Skein of Fates* (`WV-03`) does nothing
-in v3: §4.7 *Widen the Sky* already allows two Guides or two Snarls. **R2** — *Doubled Strand*'s "only
-once" (`WV-02b`) contradicts §4.4 *Chart the Course*'s "once for each of them" from 11th. **R5** — what
-to automate: `BT-03` and `BT-04` inherit whatever is ruled for the rewinds. **R7** — reads beyond the
-seven-day queue: *The Almanac*'s past days (`EP-02b`).
+*Settled in v3.1* (#103): **R1** *Skein of Fates* adds one Thread target (`WV-03`); **R2** *Doubled
+Strand* names three from 11th, with a free Thread for each (`WV-02`); **R5** the rewinds are built, so
+`BT-03` and `BT-04` are too; **R7** the Sky keeps a history, so *The Almanac*'s past days (`EP-02b`)
+have something to read; **R11** the Herald's 1st is renamed *Herald's Omen*.
 
 **IDs are `WV-`, `HR-`, `EP-` and `BT-<nn><letter>`** — Weaver, Herald, Ephemeris, Broken Thread —
 numbered `01`–`04` by the Path's 1st-, 5th-, 13th- and 17th-level ability, with a letter per clause.
@@ -54,9 +53,10 @@ numbered `01`–`04` by the Path's 1st-, 5th-, 13th- and 17th-level ability, wit
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | WV-01a | §6.1 Knotted Thread | When you **Guide** an ally with Fortune's Thread, they also gain a **+1 circumstance bonus to AC** |  | ☐ |  |
 | WV-01b | §6.1 Knotted Thread | against the next attack made against them before the start of your next turn. |  | ☐ |  |
-| WV-02a | §6.1 Doubled Strand | *Chart the Course* names **two** creatures instead of one. |  | ☐ |  |
-| WV-02b | §6.1 Doubled Strand | The free Fortune's Thread it grants may be used on either of them, but only once. |  | ☐ |  |
-| WV-03 | §6.1 Skein of Fates | When you use Fortune's Thread you may apply **Guide to two allies** or **Snarl to two enemies**, instead of the one-and-one that *Widen the Sky* allows. |  | ☐ |  |
+| WV-02a | §6.1 Doubled Strand | *Chart the Course* names **two** creatures instead of one, and **three** from 11th level. |  | ☐ |  |
+| WV-02b | §6.1 Doubled Strand | You may use its free Fortune's Thread once for each of them. |  | ☐ |  |
+| WV-03a | §6.1 Skein of Fates | Fortune's Thread affects **one additional creature** with a single reaction — three from 13th, and four once *Threefold Thread* arrives at 17th. |  | ☐ |  |
+| WV-03b | §6.1 Skein of Fates | The extra target does not extend *Twin Fates* or *Tapestry*. |  | ☐ |  |
 | WV-04a | §6.1 Tapestry | Once per 10 minutes, Fortune's Thread affects **every ally within 60 feet** (Guide) or **every enemy within 60 feet** (Snarl). |  | ☐ |  |
 | WV-04b | §6.1 Tapestry | One reaction, one choice, everyone. |  | ☐ |  |
 
@@ -64,9 +64,9 @@ numbered `01`–`04` by the Path's 1st-, 5th-, 13th- and 17th-level ability, wit
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| HR-01a | §6.2 Ill Omen | You learn ***Coiling Doubt*** |  | ☐ |  |
-| HR-01b | §6.2 Ill Omen | it does not count against your Auguries known. |  | ☐ |  |
-| HR-01c | §6.2 Ill Omen | once per round, when a creature critically fails a roll you affected with **Snarl**, it takes **persistent mental damage equal to your Wisdom modifier**. |  | ☐ |  |
+| HR-01a | §6.2 Herald's Omen | You learn ***Coiling Doubt*** |  | ☐ |  |
+| HR-01b | §6.2 Herald's Omen | it does not count against your Auguries known. |  | ☐ |  |
+| HR-01c | §6.2 Herald's Omen | once per round, when a creature critically fails a roll you affected with **Snarl**, it takes **persistent mental damage equal to your Wisdom modifier**. |  | ☐ |  |
 | HR-02a | §6.2 The Announcement | You can **Demoralize** using Astronomy Lore instead of Intimidation |  | ☐ |  |
 | HR-02b | §6.2 The Announcement | at a range of 60 feet |  | ☐ |  |
 | HR-02c | §6.2 The Announcement | with no auditory or visual requirement |  | ☐ |  |
@@ -111,10 +111,10 @@ numbered `01`–`04` by the Path's 1st-, 5th-, 13th- and 17th-level ability, wit
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 37 |
+| ☐ | 38 |
 | ✅ | 0 |
 | ⚠️ | 0 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 0 |
-| **Total** | **37** |
+| **Total** | **38** |

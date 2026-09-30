@@ -2,7 +2,7 @@
 
 *Class tracker. Every independently-failable declaration the guide makes about what **every**
 Stargazer has, whichever Path they walk. Source: `Docs/stargazer-guide-v3.md` §1.3 and §2.2 (the
-profile), §3 (advancement), §4 (class features) and §10 (the rewind tiers).*
+profile), §3 (advancement), §4 (class features), §10 (the rewind tiers) and §11 (the build rulings v3.1 added).*
 
 **Tier:** class · **Tracker issue:** #105
 
@@ -38,11 +38,11 @@ engine reads the Sky that already ships: *Night Vigil* reads the queue, and *For
 *Foreordained* soften a day per actor, which `SkyTracker.aspectFor` already does for *Shelter of the
 Cloth*.
 
-*Rows waiting on a ruling.* The rulings issue holds what the guide leaves undecided. Item **R5** (what
-§11.3 and §11.7 say not to automate — the rewinds, the Portent's die, Chart the Course's free Thread)
-decides whether `SG-35`, `SG-41`, `SG-45` and `SG-46` are built or end `—`. **R2** is `SG-34d` against
-the Weaver's *Doubled Strand*. **R8** is the Exalted odds `SG-27` reads. **R12** is `SG-26b`: whether a
-chart indoors is a Vigil or *Clouded Sky*. **R13** is `SG-33f`: Aid is a circumstance bonus too.
+*Settled in v3.1* (#103). **R5** builds the rewinds, the Portent's die and Chart the Course's free
+Thread, so `SG-35`, `SG-41` and `SG-46` are built and only *The Dream* (`SG-45`) is expected to end `—`;
+how they behave is the *Build rulings* section at the foot, and ADR-0004. **R12** makes a chart indoors
+*Clouded Sky*, marked by the GM (`SG-26b`, `SG-32b`). **R13** takes Aid out of the stacking list
+(`SG-33f`, `SG-33g`).
 
 **IDs are `SG-<nn><letter>`**, one number per feature in guide order, a letter per clause. The
 Auguries, the Paths, the feats and the Sky have trackers of their own beside this file.
@@ -92,7 +92,7 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | SG-26a | §4.2 | During your daily preparations, spend 10 minutes observing the sky. |  | ☐ |  |
-| SG-26b | §4.2 | (Indoors, underground, or under cloud, you read your chart instead — see *Clouded Sky*.) |  | ☐ |  |
+| SG-26b | §4.2 | (Indoors, underground or under cloud there is no sky to observe, and your chart is not a substitute — see *Clouded Sky*.) |  | ☐ |  |
 | SG-27 | §4.2 | **Certainty.** You learn today's sign *and* its aspect exactly. No check, no DC, no ambiguity. |  | ☐ |  |
 | SG-28a | §4.2 | **The Forecast.** You learn the sign and aspect of the **next three days**. |  | ☐ |  |
 | SG-28b | §4.2 | this answer does not change if you ask again — and neither does it change for the person you sell it to. |  | ☐ |  |
@@ -102,7 +102,8 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 | SG-30b | §4.2 | You and each ally who listens reduce the day's negative aspect by one step for the rest of the day: **Malefic → Retrograde**, **Retrograde → no effect**. |  | ☐ |  |
 | SG-30c | §4.2 | Positive aspects are unchanged; you cannot improve a good sky, only survive a bad one. |  | ☐ |  |
 | SG-31 | §4.2 | **GM override.** The GM may declare the day's sign and aspect instead of rolling, whenever the story wants it. |  | ☐ |  |
-| SG-32 | §4.2 | **Clouded Sky.** If you cannot complete a Night Vigil you learn nothing, gain no Augury of the Day, get no forecast, and cannot use Forewarned. |  | ☐ |  |
+| SG-32a | §4.2 | **Clouded Sky.** If you cannot complete a Night Vigil you learn nothing, gain no Augury of the Day, get no forecast, and cannot use Forewarned. |  | ☐ |  |
+| SG-32b | §4.2 | The GM marks a clouded night on the Sky tracker, for the whole world, one night at a time. |  | ☐ |  |
 
 ## Fortune's Thread (guide §4.3)
 
@@ -113,7 +114,8 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 | SG-33c | §4.3 | **Guide** — the triggering creature gains a **+1 circumstance bonus** to the roll. |  | ☐ |  |
 | SG-33d | §4.3 | **Snarl** — the triggering creature takes a **−1 circumstance penalty** to the roll. |  | ☐ |  |
 | SG-33e | §4.3 | Snarl can only be applied to an **attack roll, skill check, or Perception check**, never a saving throw. |  | ☐ |  |
-| SG-33f | §4.3 | It stacks with *Courageous Anthem*, *Bless*, *Heroism* and Aid |  | ☐ |  |
+| SG-33f | §4.3 | It stacks with *Courageous Anthem*, *Bless* and *Heroism*, which are status bonuses |  | ☐ |  |
+| SG-33g | §4.3 | It does **not** stack with Aid, which is a circumstance bonus too; the higher of the two applies. |  | ☐ |  |
 
 ## Chart the Course (guide §4.4)
 
@@ -232,16 +234,40 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 | SG-46i | §10.3 | Neither condition can be reduced before then by any means. |  | ☐ |  |
 | SG-46j | §10.3 | You cannot use Rewrite the Ending again for 7 days regardless. |  | ☐ |  |
 
+## Build rulings (guide §11.2, §11.3, §11.7)
+
+*Written in v3.1 from #103's rulings R5 and the grilling that followed: how the pre-roll features and the
+rewinds behave at the table. ADR-0004 is the reasoning behind the arming model.*
+
+| ID | Guide | Clause | Static check | Status | Evidence |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| SG-47a | §11.2 | One reaction arms up to as many creatures as the Thread can affect; the rest stay armed after the first fires. |  | ☐ |  |
+| SG-47b | §11.2 | An armed Thread expires at the start of your next turn, and you cannot arm one with no reaction left |  | ☐ |  |
+| SG-47c | §11.2 | *Two Warnings* allows a second, and *Chart the Course*'s free Threads cost none. |  | ☐ |  |
+| SG-47d | §11.3 | Its free Fortune's Thread is **armed on the named creature at no reaction cost**, and spent by that creature's first d20. |  | ☐ |  |
+| SG-47e | §11.3 | it never expires until it is spoken or a new Vigil overwrites it. |  | ☐ |  |
+| SG-47f | §11.3 | the die is replaced before the roll resolves |  | ☐ |  |
+| SG-47g | §11.3 | When the trigger happens, the Stargazer's player is offered a button on a chat card, and the effect is applied after the fact |  | ☐ |  |
+| SG-48a | §11.7 | **Night Vigil** runs by itself at *Rest for the Night* |  | ☐ |  |
+| SG-48b | §11.7 | *Forewarned* is a button on that card, where the player picks the allies briefed. |  | ☐ |  |
+| SG-48c | §11.7 | the full actor — Hit Points, conditions, effects, resources, item uses — plus token positions and the combat tracker's turn. |  | ☐ |  |
+| SG-48d | §11.7 | Using it restores the previous snapshot, deletes tokens and actors created since, leaves the chat log alone, and then applies stunned 1 and drained 1. |  | ☐ |  |
+| SG-48e | §11.7 | The Stargazer's player presses it; the restore runs on the GM's client without a confirmation |  | ☐ |  |
+| SG-48f | §11.7 | **Rewrite the Ending** snapshots the same state when initiative is rolled. |  | ☐ |  |
+| SG-48g | §11.7 | The Stargazer's player presses it and the **GM confirms** |  | ☐ |  |
+| SG-48h | §11.7 | Drained 2 and doomed 1 are locked against reduction, and the lost features are disabled until a Vigil marked as the full eight hours under open sky. |  | ☐ |  |
+| SG-48i | §11.7 | **Weeks** are counted in the Sky's dawns (§8.2). |  | ☐ |  |
+
 ---
 
 ## Counts
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 111 |
+| ☐ | 129 |
 | ✅ | 0 |
 | ⚠️ | 0 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 0 |
-| **Total** | **111** |
+| **Total** | **129** |

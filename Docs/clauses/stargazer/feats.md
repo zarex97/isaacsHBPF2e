@@ -30,23 +30,18 @@ rows rather than checked after the fact — a clause is done when it is ✅, not
 **modify a class feature and need a hook into it**: *Twin Portent*, *Second Portent* and *Fixed Sky*
 all change how many Portents are recorded and spoken, so they owe the Portent a count it reads rather
 than a number it assumes; and *Two Warnings* is a **second reaction restricted to three abilities**,
-which pf2e has no shape for. The second **read the sky queue beyond today** — *Almanac*, *Doubled
-Reading*, *Two Skies*, *Constellation of One* — and each has to say what the tracker's fixed
-seven-day queue answers when it is asked about a day it does not hold. The third are **the rewind
-feats** — *Echo of the Unmade*, *The Long Vigil*, *Unbroken Chain*, *The Sky Answers* — which can
-only be driven once the rulings issue (#103) decides what *Unmake the Moment* and *Rewrite the Ending* are in
-Foundry. The fourth are **GM rulings** — *Cold Read*, *Cartographer of Endings*, *Constellation of
-One*'s design conversation — and are likely `—`.
+which pf2e has no shape for. The second **read the sky beyond today** — *Reckoning of Days*,
+*Doubled Reading*, *Two Skies*, *Private Sign* — and v3.1 settled what they read: a history of past
+days, the seven-day queue and no further, and a second aspect pre-rolled into each queue entry. The
+third are **the rewind feats** — *Echo of the Unmade*, *The Long Vigil*, *Unbroken Chain*, *The Sky
+Answers* — which hang off rewinds v3.1 builds rather than leaves to the table. The fourth are **GM
+rulings** — *Cold Read*, *Cartographer of Endings* — and are likely `—`.
 
-Five items in the rulings issue (#103) block rows here: **R15** (the Portent-count feats disagree —
-*Fixed Sky*'s once per week against *Twin Portent* and *Second Portent*, and *Foretold Escape* against
-Speak the Portent's own trigger — `SF-07`, `SF-20`, `SF-34`, `SF-39`), **R3** (*Cascade* modifies *Twin Fates*, a 15th-level
-feature, from 12th, and duplicates the second target *Twin Fates* already has — `SF-26`), **R4**
-(*Omen of Blades* says "2 per rank" and then prints 4 / 6 / 8 / 10, which is 2 × (rank + 1) — `SF-12b`),
-**R7** (reads beyond the seven-day queue — `SF-06`, `SF-21`, `SF-32c`, `SF-35c`) and **R11** (name
-collisions: the feat *Retrograde* against the aspect, *Almanac* against the Ephemeris's *The Almanac*,
-and *Constellation of One* against the Saint's 20th-level feat of the same name — pf2e slugs collide
-the way the names do).
+*Settled in v3.1* (#103): **R3** *Cascade* grants *Twin Fates* early (`SF-26`); **R4** *Omen of
+Blades* is 2 plus 2 per rank (`SF-12b`); **R7** the sky reads above; **R11** three renames — *Second
+Chance at Fate*, *Reckoning of Days*, *Private Sign*; **R15** *Fixed Sky* fixes one Portent and
+*Foretold Escape* takes only attack rolls (`SF-34`, `SF-39`); and R17's smaller fixes to *Fate's
+Favourite*, *Long Now* and *Star-Marked Enemy*.
 
 **IDs are `SF-<nn><letter>`**, one number per feat in the guide's order, a letter per clause. A
 sentence of pure fiction or design commentary — *"You might want it to succeed."*, *"You saw this."*
@@ -74,8 +69,8 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SF-06a | §7 Almanac | You can attempt an Astronomy Lore check to determine the sky of **yesterday** |  | ☐ |  |
-| SF-06b | §7 Almanac | or of a day more than three days out, at the DCs in §8.5. |  | ☐ |  |
+| SF-06a | §7 Reckoning of Days | You can attempt an Astronomy Lore check to determine the sky of **yesterday** |  | ☐ |  |
+| SF-06b | §7 Reckoning of Days | or of a day more than three days out, as far as the end of the seven-day queue, at the DCs in §8.4. |  | ☐ |  |
 | SF-07a | §7 Twin Portent | Roll **two** d20s at your Night Vigil and record both as separate Portents. |  | ☐ |  |
 | SF-07b | §7 Twin Portent | You must spend both before your next Vigil or lose them |  | ☐ |  |
 | SF-07c | §7 Twin Portent | and *Speak the Portent*'s frequency becomes twice per day. |  | ☐ |  |
@@ -90,7 +85,7 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | SF-11 | §7 Read the Room | Once per encounter, Sense Motive as a **free action**. |  | ☐ |  |
 | SF-12a | §7 Omen of Blades | When you **Snarl** an attack roll and the attack still hits, you may spend 1 Focus Point to reduce the damage |  | ☐ |  |
-| SF-12b | §7 Omen of Blades | by **2 per your Stargazer DC proficiency rank** (so 4 at Trained, 6 at Expert, 8 at Master, 10 at Legendary). |  | ☐ |  |
+| SF-12b | §7 Omen of Blades | by **2 plus 2 per your Stargazer DC proficiency rank** (so 4 at Trained, 6 at Expert, 8 at Master, 10 at Legendary). |  | ☐ |  |
 | SF-13a | §7 Widened Chart | *Chart the Course* has a range of 120 feet |  | ☐ |  |
 | SF-13b | §7 Widened Chart | and no longer requires you to see the creature, only to know where it is. |  | ☐ |  |
 | SF-14a | §7 Borrowed Eyes | You can perform a Night Vigil through the senses of your familiar or a willing ally under an open sky |  | ☐ |  |
@@ -100,7 +95,8 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SF-15 | §7 Retrograde | Once per day, when a creature within 30 feet critically fails a check, you may have it reroll. |  | ☐ |  |
+| SF-15a | §7 Second Chance at Fate | Once per day, when a creature within 30 feet critically fails a check, you may have it reroll and use the new result. |  | ☐ |  |
+| SF-15b | §7 Second Chance at Fate | This is a fortune effect. You might want it to succeed. |  | ☐ |  |
 | SF-16a | §7 Sky Anchor | You can perform a Night Vigil with no sky at all. |  | ☐ |  |
 | SF-16b | §7 Sky Anchor | *Clouded Sky* never applies to you. |  | ☐ |  |
 | SF-17a | §7 Prophecy's Weight | You can **Demoralize** using Astronomy Lore |  | ☐ |  |
@@ -120,7 +116,7 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SF-22 | §7 Fate's Favourite | Once per day, treat one d20 roll **you** make as a 20. |  | ☐ |  |
+| SF-22 | §7 Fate's Favourite | Once per day, treat one d20 roll **you** make as a **natural 20**. |  | ☐ |  |
 | SF-23a | §7 Wide Vigil | Forewarned has no limit on the number of allies you may brief |  | ☐ |  |
 | SF-23b | §7 Wide Vigil | and briefing takes 1 minute. |  | ☐ |  |
 | SF-24 | §7 Unspent Thread | If you have not used your reaction by the start of your turn, your first *Chart the Course* that turn is a **free action**. |  | ☐ |  |
@@ -131,8 +127,10 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SF-26 | §7 Cascade | When you use *Twin Fates*, apply the same effect to a **second** creature. |  | ☐ |  |
-| SF-27 | §7 Long Now | Your Auguries with a duration of 1 minute last **10 minutes**. |  | ☐ |  |
+| SF-26a | §7 Cascade | You gain *Twin Fates* (§4.13) now, affecting **one** of its targets. |  | ☐ |  |
+| SF-26b | §7 Cascade | From 15th level, when the class feature arrives, *Twin Fates* affects up to **three** of its targets instead of two. |  | ☐ |  |
+| SF-27a | §7 Long Now | Your Auguries whose **Duration** line reads 1 minute last **10 minutes**. |  | ☐ |  |
+| SF-27b | §7 Long Now | A duration inside a degree of success, such as *Coiling Doubt*'s critical failure, does not change. |  | ☐ |  |
 | SF-28a | §7 Prophesied Ally | Choose one ally during your Night Vigil. |  | ☐ |  |
 | SF-28b | §7 Prophesied Ally | Fortune's Thread used on that ally does not consume your reaction, once per round. |  | ☐ |  |
 
@@ -144,6 +142,7 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 | SF-29b | §7 Inevitable | This is a misfortune effect. |  | ☐ |  |
 | SF-30a | §7 Star-Marked Enemy | Choose one creature you can see. |  | ☐ |  |
 | SF-30b | §7 Star-Marked Enemy | Until your next daily preparations, *Coiling Doubt* and *Snarl* against it do not require line of sight, only knowledge of its location. |  | ☐ |  |
+| SF-30c | §7 Star-Marked Enemy | For Snarl, this replaces Fortune's Thread's requirement that you can see the creature. |  | ☐ |  |
 | SF-31a | §7 Echo of the Unmade | When you use *Unmake the Moment*, you may also grant **one ally** the memory of the erased round. |  | ☐ |  |
 | SF-31b | §7 Echo of the Unmade | They keep it; everyone else does not. |  | ☐ |  |
 
@@ -151,13 +150,14 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SF-32a | §7 Constellation of One | Work with your GM to add a **fourteenth sign** to the wheel: your own. |  | ☐ |  |
-| SF-32b | §7 Constellation of One | It rises only over you, uses the standard aspect scaling |  | ☐ |  |
-| SF-32c | §7 Constellation of One | and you roll its aspect separately on days the sky is Starless. |  | ☐ |  |
-| SF-32d | §7 Constellation of One | Design it together; it should grant an Augury you would not otherwise take. |  | ☐ |  |
+| SF-32a | §7 Private Sign | Add a **fourteenth sign** to the wheel: your own. |  | ☐ |  |
+| SF-32b | §7 Private Sign | Choose **one Augury** from §5.2 for it to grant and **one existing sign's domain** for it to govern |  | ☐ |  |
+| SF-32c | §7 Private Sign | It rises only over you, on days the sky is Starless, and uses the standard aspect scaling. |  | ☐ |  |
+| SF-32d | §7 Private Sign | Its aspect is rolled in advance with the day, as part of the seven-day queue. |  | ☐ |  |
 | SF-33 | §7 Written in Advance | Spend 10 minutes. The next skill check you attempt within the hour is an automatic **success** (not a critical success). |  | ☐ |  |
-| SF-34a | §7 Foretold Escape | Once per day, when you would take damage that reduces you to 0 Hit Points, you may *Speak the Portent* on the triggering roll |  | ☐ |  |
-| SF-34b | §7 Foretold Escape | even if it has already been rolled and even if your Portent is spent — using a value of 1. |  | ☐ |  |
+| SF-34a | §7 Foretold Escape | Once per day, when an **attack roll** against you would deal damage that reduces you to 0 Hit Points, you may *Speak the Portent* on that attack roll even though it has already been rolled |  | ☐ |  |
+| SF-34b | §7 Foretold Escape | even if your Portent is spent, and even if a fortune or misfortune effect altered it — using a value of 1. |  | ☐ |  |
+| SF-34c | §7 Foretold Escape | It cannot be used on your own saving throw, or on damage no attack roll dealt. |  | ☐ |  |
 
 ## 18th level (guide §7)
 
@@ -165,7 +165,7 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | SF-35a | §7 Two Skies | During your Night Vigil, read the sky **twice**. |  | ☐ |  |
 | SF-35b | §7 Two Skies | Both signs are ascendant for you and the allies you brief: you gain both Auguries of the Day |  | ☐ |  |
-| SF-35c | §7 Two Skies | and the second sign's aspect is rolled separately. |  | ☐ |  |
+| SF-35c | §7 Two Skies | The second sign and its aspect are rolled in advance with the day, as part of the seven-day queue. |  | ☐ |  |
 | SF-36 | §7 The Long Vigil | *Rewrite the Ending*'s cooldown drops to **3 days** if you have not used it at all during the current adventure. |  | ☐ |  |
 | SF-37a | §7 Unbroken Chain | *Unmake the Moment* recharges on a 10-minute rest rather than on your Night Vigil |  | ☐ |  |
 | SF-37b | §7 Unbroken Chain | but no more than once per hour. |  | ☐ |  |
@@ -176,8 +176,8 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | SF-38a | §7 Cartographer of Endings | Once per day, ask the GM **one yes-or-no question about the next 24 hours**. |  | ☐ |  |
 | SF-38b | §7 Cartographer of Endings | The answer is true. |  | ☐ |  |
-| SF-39a | §7 Fixed Sky | Your Portent is always a **20**. |  | ☐ |  |
-| SF-39b | §7 Fixed Sky | You may only speak it **once per week**. |  | ☐ |  |
+| SF-39a | §7 Fixed Sky | One of your Portents is always a **20**, and you may speak that one only **once per week**. |  | ☐ |  |
+| SF-39b | §7 Fixed Sky | Any other Portents you record, from *Twin Portent* or *Second Portent*, are still rolled and spoken daily. |  | ☐ |  |
 | SF-40a | §7 The Sky Answers | Once per day, when you would use *Rewrite the Ending*, you may instead use *Unmake the Moment* without spending its frequency |  | ☐ |  |
 | SF-40b | §7 The Sky Answers | and *Rewrite the Ending* is not expended. |  | ☐ |  |
 
@@ -187,10 +187,10 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 72 |
+| ☐ | 77 |
 | ✅ | 0 |
 | ⚠️ | 0 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 0 |
-| **Total** | **72** |
+| **Total** | **77** |
