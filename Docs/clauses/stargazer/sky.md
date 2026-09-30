@@ -34,12 +34,11 @@ keeps the seven-day queue, rolls the sign and aspect, and applies the four `Sky:
 `Sky: Retrograde`, `Sky: Malefic` and `Sky: Exalted` effects from `content/saint-effects/sky-aspect/`
 to every character and every NPC tagged `sky-tracked` in the active scene (#30); `aspectFor` already
 enforces *Unfailing Cosmo*. So this tracker is mostly a **drive of existing code** against the
-Stargazer guide's words, not a build — and where the two disagree, the row says so. The exception is
-the presentation: the guide's §8.4 and §11.5 want **one** effect named `The Sky`, with an empty
-description and a generic icon, forty-eight of them; what ships is **four** effects, each named for its
-aspect, described, with its own icon — which hands every player the aspect a Stargazer's Night Vigil
-is supposed to sell. **Ruling R6** blocks the presentation rows (`SK-27`, `SK-29a`, `SK-29b`) until it
-is decided.
+Stargazer guide's words, not a build — and where the two disagree, the row says so. The build half is
+what v3.1 added (#103): **R6** blanks the four shipped effects to `The Sky` whenever a player owns a
+Stargazer and whispers the day when `announceSky` is off (`SK-27`, `SK-29`); **R7** gives the tracker
+a history (`SK-02b`); Libra's die rules, which exist nowhere yet, get their scope (`SK-22e`); and a
+scheduled Zenith is marked so *Trade the Day* can refuse it (`SK-33b`).
 
 **IDs are `SK-<nn><letter>`**, numbered in the guide's order. Commentary on what the reweighting
 *means* — how often the sky is hostile, what that does to Forewarned — is not a clause and has no row;
@@ -52,7 +51,9 @@ the weights themselves are.
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | SK-01 | §8.2 | Each dawn the GM advances the day. |  | ☐ |  |
-| SK-02 | §8.2 | The next pre-rolled entry becomes today, and a new day is rolled onto the end of the queue. |  | ☐ |  |
+| SK-02a | §8.2 | The next pre-rolled entry becomes today, and a new day is rolled onto the end of the queue. |  | ☐ |  |
+| SK-02b | §8.2 | The day that ends is kept in the Sky's **history**, so a past sky can be read as well as a future one. |  | ☐ |  |
+| SK-02c | §8.2 | every "once per week" in this guide is seven dawns of it. |  | ☐ |  |
 | SK-03 | §8.2 | thirteen skies, **equally likely**, 1 in 13 each |  | ☐ |  |
 | SK-04 | §11.4 | the `ASPECTS` weights are now **20 / 30 / 30 / 10 / 10** (Quiet, Benefic, Retrograde, Malefic, Exalted) |  | ☐ |  |
 | SK-05a | §8.2 Quiet | The sky is unremarkable. Nothing happens. |  | ☐ |  |
@@ -86,6 +87,7 @@ the weights themselves are.
 | SK-22b | §8.3 Libra | **Exalted** As Benefic, but once per hour. |  | ☐ |  |
 | SK-22c | §8.3 Libra | **Retrograde** Once per day, the first natural 20 you roll counts as a 10. |  | ☐ |  |
 | SK-22d | §8.3 Libra | **Malefic** As Retrograde, but once per hour. |  | ☐ |  |
+| SK-22e | §11.5 | they apply automatically, once per actor per day — per hour on Exalted and Malefic days — to attack rolls, saving throws, skill checks and Perception checks, never to flat checks. |  | ☐ |  |
 | SK-23 | §8.3 | The flat ±1/±2 on a stated domain is the whole system, and it is enough. |  | ☐ |  |
 
 ## Who knows (guide §8.4)
@@ -95,10 +97,12 @@ the weights themselves are.
 | SK-24 | §8.4 | **It affects everyone.** PCs, NPCs, the ogre in the cave, the duke's tax collector. |  | ☐ |  |
 | SK-25 | §8.4 | In practice, track it for PCs and named NPCs only; −1 on a mook is noise. |  | ☐ |  |
 | SK-26 | §8.4 | The module ships `announceSky: true`, which posts the day's sign and aspect to chat. |  | ☐ |  |
-| SK-27 | §8.4 | Set `announceSky: false` and whisper the Stargazer's player instead. |  | ☐ |  |
+| SK-27a | §8.4 | Set `announceSky: false` and whisper the Stargazer's player instead. |  | ☐ |  |
+| SK-27b | §8.4 | With the setting off, the module whispers the day's sign and aspect to every player who owns a Stargazer rather than to nobody. |  | ☐ |  |
 | SK-28 | §8.4 | **In person:** apply the modifier out loud and unexplained. |  | ☐ |  |
 | SK-29a | §8.4 | **In a VTT:** the effect is named `The Sky` with an empty description and a generic icon |  | ☐ |  |
 | SK-29b | §8.4 | Players see that something is on them. They do not see what. |  | ☐ |  |
+| SK-29c | §8.4 | The module does this by itself whenever a player owns a Stargazer character anywhere in the world: the four aspect effects are renamed, emptied and given one shared icon as they are applied. |  | ☐ |  |
 | SK-30a | §8.4 | Ten minutes under an open sky and an **Astronomy Lore** or **Occultism** check, as a Recall Knowledge action |  | ☐ |  |
 | SK-30b | §8.4 | against the region's level-based **Hard** DC. |  | ☐ |  |
 | SK-30c | §8.4 | On an Exalted or Malefic day, reduce the DC by 5 |  | ☐ |  |
@@ -113,7 +117,8 @@ the weights themselves are.
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | SK-32a | §8.6 | **Unfailing Cosmo** makes a Saint immune to Retrograde and Malefic aspects entirely, enforced in `tracker.mjs` rather than remembered. |  | ☐ |  |
 | SK-32b | §8.6 | **Forewarned does nothing for a Saint.** |  | ☐ |  |
-| SK-33 | §8.6 | It cannot move a **scheduled Zenith**, because that is the GM's arc-climax button and not a thing the sky rolled. |  | ☐ |  |
+| SK-33a | §8.6 | It cannot move a **scheduled Zenith**, because that is the GM's arc-climax button and not a thing the sky rolled. |  | ☐ |  |
+| SK-33b | §11.5 | a scheduled Zenith is marked as scheduled so *Trade the Day* can refuse to move it |  | ☐ |  |
 | SK-34 | §8.6 | A Stargazer can tell a Saint **exactly when their Cloth will be lit**, three days out, from 1st level. |  | ☐ |  |
 
 ---
@@ -122,10 +127,10 @@ the weights themselves are.
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 49 |
+| ☐ | 55 |
 | ✅ | 0 |
 | ⚠️ | 0 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 0 |
-| **Total** | **49** |
+| **Total** | **55** |

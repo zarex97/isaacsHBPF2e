@@ -37,10 +37,9 @@ the printed cancel-out rule applies to them. And the **Augury of the Day** is no
 granted and revoked by the sky, keyed off the day's sign, so §5.3's table is twelve grants that must
 land on the right morning and leave again on the next.
 
-*Rows waiting on a ruling* (#103). **R14** is `OM-09`: *Perfect Ledger*'s "this turn" never reaches an
-ally. **R16** is `OM-10`: *Fixed Point* named on enemies' saves is a debuff with no save. **R17** lists
-the smaller ambiguities — *Coiling Doubt*'s stupefied duration, *Alms of Fate*'s fortune trait on a
-damage reroll.
+*Settled in v3.1* (#103): **R14** *Perfect Ledger* lasts until the end of your next turn, so it reaches
+allies (`OM-09`); **R16** *Fixed Point* stands as written (`OM-10`); **R17** *Coiling Doubt*'s stupefied
+lasts its minute (`OM-11g`) and *Alms of Fate* loses the `fortune` trait (`OM-13a`).
 
 **IDs are `OM-<nn><letter>`**, one number per Augury in the guide's order — `OM-00` is the rules line
 they all share, `OM-17` is §5.3's mapping — and a letter per clause. A sentence of pure fiction — *"You
@@ -154,11 +153,11 @@ and have no row.
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | OM-09a | §5.2 Perfect Ledger | ***Perfect Ledger*** ✦ (concentrate, prediction) |  | ☐ |  |
 | OM-09b | §5.2 Perfect Ledger | **Targets** you and up to 2 allies within 30 feet |  | ☐ |  |
-| OM-09c | §5.2 Perfect Ledger | Each target's next **Recall Knowledge** this turn is a **free action** |  | ☐ |  |
+| OM-09c | §5.2 Perfect Ledger | Each target's next **Recall Knowledge** before the end of your next turn is a **free action** |  | ☐ |  |
 | OM-09d | §5.2 Perfect Ledger | gains a +2 circumstance bonus |  | ☐ |  |
 | OM-09e | §5.2 Perfect Ledger | on a success reveals one additional piece of information. |  | ☐ |  |
 | OM-09f | §5.2 Perfect Ledger | On a critical success it also reveals the creature's **lowest saving throw** and all of its **weaknesses**. |  | ☐ |  |
-| OM-09g | §5.2 Perfect Ledger | **Heightened (5th)** Every Recall Knowledge each target makes this turn is a free action. |  | ☐ |  |
+| OM-09g | §5.2 Perfect Ledger | **Heightened (5th)** Every Recall Knowledge each target makes until the end of your next turn is a free action. |  | ☐ |  |
 
 ## Fixed Point (guide §5.2)
 
@@ -180,7 +179,7 @@ and have no row.
 | OM-11d | §5.2 Coiling Doubt | **Success** The next attack roll or skill check the target attempts is rolled twice, taking the lower. |  | ☐ |  |
 | OM-11e | §5.2 Coiling Doubt | **Failure** As success, but the first attack roll or skill check each round for **3 rounds**. |  | ☐ |  |
 | OM-11f | §5.2 Coiling Doubt | **Critical Failure** As failure for **1 minute** |  | ☐ |  |
-| OM-11g | §5.2 Coiling Doubt | the target is **stupefied 2**. |  | ☐ |  |
+| OM-11g | §5.2 Coiling Doubt | the target is **stupefied 2** for the same minute. |  | ☐ |  |
 
 ## Hunted by the Sky (guide §5.2)
 
@@ -198,7 +197,7 @@ and have no row.
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| OM-13a | §5.2 Alms of Fate | ***Alms of Fate*** ✦ (concentrate, fortune, prediction) |  | ☐ |  |
+| OM-13a | §5.2 Alms of Fate | ***Alms of Fate*** ✦ (concentrate, prediction) |  | ☐ |  |
 | OM-13b | §5.2 Alms of Fate | **Targets** 2 allies within 30 feet |  | ☐ |  |
 | OM-13c | §5.2 Alms of Fate | On each target's next damaging effect before the end of your next turn, they **reroll all 1s and 2s** on the damage dice and must keep the new results. |  | ☐ |  |
 | OM-13d | §5.2 Alms of Fate | **Heightened (5th)** 3 allies. |  | ☐ |  |
