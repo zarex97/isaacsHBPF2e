@@ -1,0 +1,51 @@
+{
+    "img": "icons/magic/fire/flame-burning-hand-orange.webp",
+    "name": "Effect: Crown of Fire",
+    "system": {
+        "description": {
+            "value": "<p>+2 status bonus to Intimidation and Performance. You can <strong>Demoralize at 60 feet</strong> with no auditory or visual requirement and no penalty for a shared-language failure.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Crown of Fire",
+                "selector": "intimidation",
+                "type": "status",
+                "value": 2
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Crown of Fire",
+                "selector": "performance",
+                "type": "status",
+                "value": 2
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

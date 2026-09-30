@@ -1,0 +1,53 @@
+{
+    "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+    "name": "Effect: Two Roads",
+    "system": {
+        "description": {
+            "value": "<p>The first skill check before the end of the Stargazer's next turn is rolled twice, keeping the higher — saving throws too, from the 5th-rank Augury.</p>"
+        },
+        "duration": {
+            "expiry": "turn-end",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [
+            {
+                "key": "RollTwice",
+                "keep": "higher",
+                "removeAfterRoll": true,
+                "selector": [
+                    "skill-check"
+                ]
+            },
+            {
+                "key": "RollTwice",
+                "keep": "higher",
+                "removeAfterRoll": true,
+                "selector": [
+                    "skill-check"
+                ]
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

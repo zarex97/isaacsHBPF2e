@@ -1453,7 +1453,10 @@ function validateRider(rider, at, errors, { doc, top = false, depth = 0, inherit
         case "heal":
             // "Redirect that damage to yourself" gives the ally back exactly what landed on them, so the
             // amount is the blow's rather than a number written in advance.
-            if (!["event.damage.total", "origin.level"].includes(apply.value) && !(Number(apply.value) > 0)) {
+            // Or dice: *Shell of Hours* regains 2d8 (`formula`), grown by `perStep` like a damage rider's.
+            if (typeof apply.formula === "string") {
+                if (!/^\d*d\d+$/.test(apply.formula)) errors.push(`${at} heal formula "${apply.formula}" is not NdM`);
+            } else if (!["event.damage.total", "origin.level"].includes(apply.value) && !(Number(apply.value) > 0)) {
                 errors.push(`${at} heal riders need a positive value — got "${apply.value}"`);
             }
             // The Saint is the one who heals, not the creature that failed its save. Landing this on the
@@ -1824,6 +1827,7 @@ function validateSpell(doc, where, errors, family) {
         errors.push(`${where}: the Assimilator has no spells (guide §1.6) — write this as an action or an effect`);
         return;
     }
+    if (family === "stargazer") return validateStargazerSpell(doc, where, errors, rank);
 
     for (const required of ["focus", "cosmo", "saint"]) {
         if (!traits.includes(required)) errors.push(`${where}: Technique must carry the "${required}" trait`);
@@ -1915,6 +1919,23 @@ function validateSoulboundSpell(doc, where, errors, rank) {
         errors.push(
             `${where}: ${tier} effects have base rank ${SB_TIER_RANK[tier]}, not ${rank} (guide §7/§9)`,
         );
+    }
+}
+
+/**
+ * The Stargazer's Auguries (guide §5.1): *"All Auguries: `prediction`, `focus`, occult; rank = half your level
+ * rounded up; DC = Stargazer DC."* The rank is pf2e's own focus-spell auto-heightening from a base of 1, and the
+ * DC is the Star Chart entry's, so what is left to hold is the traits, the base rank, and the tag the nine
+ * *Augury (Nth)* choices filter on.
+ */
+function validateStargazerSpell(doc, where, errors, rank) {
+    const traits = doc.system.traits?.value ?? [];
+    for (const required of ["focus", "prediction", "stargazer"]) {
+        if (!traits.includes(required)) errors.push(`${where}: an Augury must carry the "${required}" trait (Stargazer guide §5.1)`);
+    }
+    if (rank !== 1) errors.push(`${where}: an Augury is authored at rank 1 and auto-heightens — it has rank ${rank}`);
+    if (!(doc.system.traits?.otherTags ?? []).includes("stargazer-augury")) {
+        errors.push(`${where}: an Augury needs the "stargazer-augury" tag, which the Augury choices filter on`);
     }
 }
 
