@@ -1,0 +1,106 @@
+{
+    "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+    "name": "Two Roads",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p>Before the end of your next turn, the first <strong>skill check</strong> each attempts is rolled <strong>twice</strong>; each takes the higher result.</p><hr /><p><strong>Heightened (5th)</strong> 3 allies, and it applies to <strong>saving throws</strong> as well. <strong>(9th)</strong> 4 allies.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": null,
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "2 allies"
+        },
+        "time": {
+            "value": "1"
+        },
+        "traits": {
+            "otherTags": [
+                "stargazer-augury",
+                "stargazer-sign-gemini"
+            ],
+            "rarity": "common",
+            "traditions": [
+                "occult"
+            ],
+            "value": [
+                "concentrate",
+                "focus",
+                "fortune",
+                "prediction",
+                "stargazer"
+            ]
+        }
+    },
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "allies",
+                "maxTargets": 2,
+                "range": 30,
+                "heightening": {
+                    "at": {
+                        "9": {
+                            "maxTargets": 1
+                        },
+                        "17": {
+                            "maxTargets": 1
+                        }
+                    }
+                }
+            },
+            "riders": [
+                {
+                    "event": "action-used",
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.stargazer-effects.Item.Effect: Two Roads",
+                        "substitutions": [
+                            {
+                                "path": "system.rules.1.selector",
+                                "value": {
+                                    "base": [
+                                        "skill-check"
+                                    ],
+                                    "at": {
+                                        "9": [
+                                            "saving-throw"
+                                        ]
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 1,
+                        "expiry": "turn-end"
+                    }
+                }
+            ]
+        }
+    },
+    "type": "spell"
+}

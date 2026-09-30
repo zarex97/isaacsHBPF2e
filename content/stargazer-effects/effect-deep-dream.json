@@ -1,0 +1,54 @@
+{
+    "img": "icons/magic/perception/eye-ringed-glow-angry-small-teal.webp",
+    "name": "Effect: Deep Dream",
+    "system": {
+        "description": {
+            "value": "<p>+2 status bonus to Will saves and to Perception checks to disbelieve illusions.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Deep Dream",
+                "selector": "will",
+                "type": "status",
+                "value": 2
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Deep Dream",
+                "selector": "perception",
+                "type": "status",
+                "value": 2,
+                "predicate": [
+                    "item:trait:illusion"
+                ]
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

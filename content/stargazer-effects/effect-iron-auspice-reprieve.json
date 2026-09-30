@@ -1,0 +1,49 @@
+{
+    "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+    "name": "Effect: Iron Auspice (Reprieve)",
+    "system": {
+        "description": {
+            "value": "<p>Once during Iron Auspice: a critical failure on a Fortitude save is a failure. Spent when it happens.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [
+            {
+                "key": "AdjustDegreeOfSuccess",
+                "selector": "fortitude",
+                "adjustment": {
+                    "criticalFailure": "one-degree-better"
+                }
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect",
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "stargazerReprieve": "fortitude"
+        }
+    }
+}

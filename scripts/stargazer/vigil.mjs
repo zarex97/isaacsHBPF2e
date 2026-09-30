@@ -1,6 +1,7 @@
 import { Relay } from "../riders/relay.mjs";
 import { MODULE_ID, aspectOf, signOf } from "../sky/signs.mjs";
 import { SkyTracker } from "../sky/tracker.mjs";
+import { SIGN_AUGURY } from "./auguries.mjs";
 import { isStargazer, rollPortent, setPortent } from "./threads.mjs";
 
 /**
@@ -54,6 +55,26 @@ export function forecastDays(actor) {
     return has(actor, "the-almanac") ? 7 : 3;
 }
 
+/**
+ * The Augury of the Day (§4.2, §5.3): the ascendant sign's Augury, added to the repertoire until the next
+ * daily preparations. Yesterday's goes first, whatever tonight brings. Nothing is granted on a Starless or
+ * clouded night, or when the Augury is already known permanently — "a spare Focus Point's worth of nothing,
+ * which is the price of a guarantee." Returns the name granted, or null.
+ */
+export async function grantAuguryOfTheDay(actor, name, day) {
+    const old = actor.itemTypes.spell.filter((s) => s.flags?.[MODULE_ID]?.auguryOfTheDay);
+    if (old.length > 0) await actor.deleteEmbeddedDocuments("Item", old.map((s) => s.id));
+    if (!name) return null;
+    if (actor.itemTypes.spell.some((s) => s.name === name)) return null;
+    const pack = game.packs.get(`${MODULE_ID}.stargazer-auguries`);
+    const entry = (await pack?.getIndex())?.find((e) => e.name === name);
+    if (!entry) return null;
+    const source = foundry.utils.deepClone((await pack.getDocument(entry._id)).toObject());
+    source.flags = foundry.utils.mergeObject(source.flags ?? {}, { [MODULE_ID]: { auguryOfTheDay: { day } } });
+    await actor.createEmbeddedDocuments("Item", [source]);
+    return name;
+}
+
 export async function runVigil(actor) {
     if (!isStargazer(actor) || !has(actor, "night-vigil")) return;
     const sky = SkyTracker.state;
@@ -61,6 +82,7 @@ export async function runVigil(actor) {
     await actor.update({ [`flags.${MODULE_ID}.${FLAG}.vigil`]: { day: sky.day, clouded, forewarned: false, traded: false } });
 
     if (clouded) {
+        await grantAuguryOfTheDay(actor, null, sky.day);
         return whisper(actor, `<p><strong>Night Vigil — Clouded Sky.</strong> You learn nothing, gain no Augury of the Day, get no forecast, and cannot use Forewarned. You are as blind as everybody else.</p>`);
     }
 
@@ -71,6 +93,14 @@ export async function runVigil(actor) {
         `<p><strong>Certainty.</strong> Today: ${describe(sky.sign, sky.aspect)}.</p>`,
         `<p><strong>The Forecast.</strong></p><ol>${forecast.map((d) => `<li>Day ${d.day}: ${d.sign.glyph} ${d.sign.label}, ${d.aspect.label}</li>`).join("")}</ol>`,
     ];
+
+    const granted = await grantAuguryOfTheDay(actor, SIGN_AUGURY[sky.sign] ?? null, sky.day);
+    if (granted) lines.push(`<p><strong>Augury of the Day.</strong> <em>${granted}</em>, until your next daily preparations.</p>`);
+    else if (SIGN_AUGURY[sky.sign]) lines.push(`<p><strong>Augury of the Day.</strong> <em>${SIGN_AUGURY[sky.sign]}</em> — you already know it.</p>`);
+    if (starless && has(actor, "constellation-mastery")) {
+        lines.push("<p><strong>Starless.</strong> Choose any sign's Augury as your Augury of the Day:</p>",
+            ...Object.values(SIGN_AUGURY).map((n) => `<button type="button" data-stargazer="day-augury" data-name="${n}">${n}</button>`));
+    }
 
     let portents = null;
     if (has(actor, "portent")) {
@@ -132,6 +162,13 @@ function bindCard(message, html) {
                 await setPortent(actor, value);
                 ui.notifications.info(`Portent: ${value}.`);
                 for (const b of html.querySelectorAll('button[data-stargazer="keep-portent"]')) b.disabled = true;
+            } else if (kind === "day-augury") {
+                const name = button.dataset.name;
+                if (!Object.values(SIGN_AUGURY).includes(name) || state(actor).vigil?.day !== card.day) return;
+                if (!has(actor, "constellation-mastery") || SkyTracker.state.sign !== "starless") return;
+                await grantAuguryOfTheDay(actor, name, card.day);
+                ui.notifications.info(`Augury of the Day: ${name}.`);
+                for (const b of html.querySelectorAll('button[data-stargazer="day-augury"]')) b.disabled = true;
             } else if (kind === "forewarn") {
                 const allies = await pickAllies(actor);
                 if (allies) await Relay.request({ action: "stargazerForewarn", origin: actor.uuid, allies, day: card.day });
