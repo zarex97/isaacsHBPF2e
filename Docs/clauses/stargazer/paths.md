@@ -99,11 +99,11 @@ numbered `01`–`04` by the Path's 1st-, 5th-, 13th- and 17th-level ability, wit
 | BT-01b | §6.4 Deja Vu | **Trigger** You fail, but do not critically fail, a check. **Effect** Reroll it. |  | ✅ | Live, Mira (13th, Broken Thread): her failed Athletics offered *Deja Vu*; the click rerolled it (the old card went, the new one marked a reroll). A critical failure offered nothing |
 | BT-01c | §6.4 Deja Vu | This is a fortune effect. | `test-stargazer` pins it | ✅ | Live, Mira (13th, Broken Thread): a failure already rolled with a keep-higher fortune effect offered nothing; the sentenced creature's refusal is HR-03c |
 | BT-02 | §6.4 Second Sight | *Deja Vu* can instead trigger on a failed check by an ally within 30 feet that you can see. | `test-stargazer` pins it | ✅ | Live, Mira (13th, Broken Thread): Deneb, 10 feet away, failing offered Mira the button and the GM rerolled Deneb's check; ZZ Ally at 95 feet and the enemy foe at 15 were offered nothing |
-| BT-03a | §6.4 Unmade Again | *Unmake the Moment* can be used **twice per day** |  | ☐ | Granted at its level (SG-22); what it changes is *Unmake the Moment*, which is phase 7's |
-| BT-03b | §6.4 Unmade Again | and you are no longer **drained 1** when it resolves. |  | ☐ | Granted at its level (SG-22); what it changes is *Unmake the Moment*, which is phase 7's |
-| BT-03c | §6.4 Unmade Again | You are still stunned 1. |  | ☐ | Granted at its level (SG-22); what it changes is *Unmake the Moment*, which is phase 7's |
-| BT-04a | §6.4 The Long Way Round | *Unmake the Moment* may rewind to the start of **any creature's** last turn, not only your own — declare which as you use it. |  | ☐ | Granted at its level (SG-22); what it changes is *Unmake the Moment*, which is phase 7's |
-| BT-04b | §6.4 The Long Way Round | once per week, you may use *Unmake the Moment* **while dead**, if you died during the round it would undo. |  | ☐ | Granted at its level (SG-22); what it changes is *Unmake the Moment*, which is phase 7's |
+| BT-03a | §6.4 Unmade Again | *Unmake the Moment* can be used **twice per day** | `test-stargazer` pins it | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): Mira used Unmake twice in a day; a third turn offered nothing |
+| BT-03b | §6.4 Unmade Again | and you are no longer **drained 1** when it resolves. |  | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): neither use left her drained |
+| BT-03c | §6.4 Unmade Again | You are still stunned 1. |  | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): stunned 1 each time |
+| BT-04a | §6.4 The Long Way Round | *Unmake the Moment* may rewind to the start of **any creature's** last turn, not only your own — declare which as you use it. | `test-stargazer` pins it | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): her card offered every combatant's last turn; choosing the foe's went back to the start of its round-2 turn, undoing the 30 damage Altair took in it. **Fixed while driving:** a rewound turn replaced its own snapshot, and pf2e's once-per-round turn start is put back with the combatant's flags |
+| BT-04b | §6.4 The Long Way Round | once per week, you may use *Unmake the Moment* **while dead**, if you died during the round it would undo. |  | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): dead on the foe's turn, posting Unmake offered *The Long Way Round* and brought her back to her last turn at 84; a second death that week was refused. Altair, without it, was refused while dead |
 
 ---
 
@@ -111,8 +111,8 @@ numbered `01`–`04` by the Path's 1st-, 5th-, 13th- and 17th-level ability, wit
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 5 |
-| ✅ | 27 |
+| ☐ | 0 |
+| ✅ | 32 |
 | ⚠️ | 2 |
 | ❌ | 0 |
 | 🔧 | 0 |

@@ -2051,11 +2051,11 @@ const STARGAZER_ADVANCEMENT = {
     5: ["Widen the Sky", "The Last Thing You See"],
     7: ["Expert Stargazer", "Vigilant Senses", "Second Star", "Astronomy Lore (7th)"],
     9: ["Great Fortitude", "Surer Thread"],
-    11: ["Resolve", "Weapon Expertise"],
+    11: ["Resolve", "Weapon Expertise", "Unmake the Moment"],
     13: ["Incredible Senses", "Lightning Reflexes", "Armor Expertise", "Constellation Mastery"],
     15: ["Master Stargazer", "Astronomy Lore (15th)", "Twin Fates"],
     17: ["Greater Resolve", "Threefold Thread"],
-    19: ["Legendary Stargazer"],
+    19: ["Legendary Stargazer", "Rewrite the Ending"],
 };
 
 const ASSIMILATOR_ADVANCEMENT = {

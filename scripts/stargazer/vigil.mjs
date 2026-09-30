@@ -122,6 +122,18 @@ export function dayAuguries(actor, sky, { tomorrow = false } = {}) {
 export async function runVigil(actor, { borrowed = false } = {}) {
     if (!isStargazer(actor) || !has(actor, "night-vigil")) return;
     const sky = SkyTracker.state;
+    // Rewrite the Ending (§10.3): a dark chart reads nothing, until the GM marks a Vigil as the full eight
+    // hours under open sky.
+    if (state(actor).dark) {
+        return ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            whisper: [...new Set([...ownersOf(actor), ...game.users.filter((u) => u.isGM).map((u) => u.id)])],
+            content: `<p><strong>Night Vigil</strong> — your Star Chart is dark. Nothing is read, and nothing comes back, until a full eight-hour Night Vigil under open sky.</p><button type="button" data-stargazer-gm="relight">GM: this was the full eight hours under open sky</button>`,
+            flags: { [MODULE_ID]: { relightCard: { origin: actor.uuid, used: false } } },
+        });
+    }
+    // Unmake the Moment recharges on the Night Vigil (§4.11).
+    if ((state(actor).unmakeUsed ?? 0) > 0) await actor.update({ [`flags.${MODULE_ID}.${FLAG}.unmakeUsed`]: 0 });
     // Borrowed Eyes (§7, 4th): read through a familiar or ally under an open sky — the GM's allowance, below.
     const clouded = Boolean(sky.clouded) && !has(actor, "sky-anchor") && !borrowed;
     await actor.update({ [`flags.${MODULE_ID}.${FLAG}.vigil`]: { day: sky.day, clouded, forewarned: false, traded: false } });
@@ -379,6 +391,21 @@ async function borrowedEyes({ origin, through, day }) {
     });
 }
 
+function bindRelight(message, html) {
+    const flag = message.flags?.[MODULE_ID]?.relightCard;
+    const button = html.querySelector?.('button[data-stargazer-gm="relight"]');
+    if (!flag || !button) return;
+    if (flag.used || !game.user.isGM) button.disabled = true;
+    button.addEventListener("click", async () => {
+        button.disabled = true;
+        if (!game.user.isGM) return;
+        await message.update({ [`flags.${MODULE_ID}.relightCard.used`]: true });
+        await Relay.request({ action: "stargazerRelight", origin: flag.origin });
+        const actor = await fromUuid(flag.origin);
+        if (actor) await runVigil(actor);
+    });
+}
+
 function bindGmCard(message, html) {
     const flag = message.flags?.[MODULE_ID]?.borrowedEyes;
     const button = html.querySelector?.('button[data-stargazer-gm="borrowed-eyes"]');
@@ -436,6 +463,7 @@ export const Vigil = {
         Hooks.on("renderChatMessageHTML", (message, html) => {
             bindCard(message, html);
             bindGmCard(message, html);
+            bindRelight(message, html);
         });
     },
 };

@@ -1,0 +1,45 @@
+{
+    "folder": "Actions",
+    "img": "icons/magic/time/clock-stopwatch-white-blue.webp",
+    "name": "Unmake the Moment",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per day (recharges on your next Night Vigil)<br /><strong>Trigger</strong> Your turn begins.</p><p><strong>Effect</strong> Time rewinds to the <strong>start of your last turn</strong>. Everything done since then by every creature is undone: damage dealt, conditions applied, spells cast, movement made, resources spent, reactions used. Creatures reduced to 0 Hit Points return to the Hit Points they had. Everyone except you loses all memory of the unwound round. You keep it, and you may spend 1 action on your turn to shout a warning, granting one ally a <strong>+2 circumstance bonus</strong> to their next roll this round.</p><p>You are <strong>stunned 1</strong> and <strong>drained 1</strong> when the loop resolves. Initiative order does not change. Enemies act again as the GM chooses &mdash; they are not obliged to repeat what they did, and they do not remember it either.</p><hr /><p><em>When your turn begins, a card in your whispers offers the rewind. The board, every combatant and the turn go back to the start of your last turn; the chat log stays.</em></p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
+        },
+        "level": {
+            "value": 11
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "stargazer-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "stargazer",
+                "prediction"
+            ]
+        }
+    },
+    "type": "feat"
+}

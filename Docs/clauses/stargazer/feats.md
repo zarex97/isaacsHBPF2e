@@ -143,8 +143,8 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 | SF-30a | §7 Star-Marked Enemy | Choose one creature you can see. |  | ✅ | Live, Altair (19th): with two targets it asked for one; with the foe targeted it marked the foe; marking Mira took the foe's mark off |
 | SF-30b | §7 Star-Marked Enemy | Until your next daily preparations, *Coiling Doubt* and *Snarl* against it do not require line of sight, only knowledge of its location. |  | ⚠️ | Live, Altair (19th): the mark lasted until his next Vigil, which removed it. **Gap:** nothing asks for line of sight yet (#116), so the mark has nothing to lift |
 | SF-30c | §7 Star-Marked Enemy | For Snarl, this replaces Fortune's Thread's requirement that you can see the creature. |  | — | As SF-30b: Fortune's Thread's "that you can see" is not checked (#116) |
-| SF-31a | §7 Echo of the Unmade | When you use *Unmake the Moment*, you may also grant **one ally** the memory of the erased round. |  | ☐ |  |
-| SF-31b | §7 Echo of the Unmade | They keep it; everyone else does not. |  | ☐ |  |
+| SF-31a | §7 Echo of the Unmade | When you use *Unmake the Moment*, you may also grant **one ally** the memory of the erased round. |  | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): after Altair's Unmake, *Echo of the Unmade* offered one ally and whispered Mira that she remembers the erased round |
+| SF-31b | §7 Echo of the Unmade | They keep it; everyone else does not. |  | ✅ | Live: the whisper went to that ally's owners and the GM, nobody else |
 
 ## 16th level (guide §7)
 
@@ -166,9 +166,9 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 | SF-35a | §7 Two Skies | During your Night Vigil, read the sky **twice**. |  | ✅ | Live, Deneb (13th): the card read a second sky, *Leo, Benefic*, and its forecast listed each day's second sky |
 | SF-35b | §7 Two Skies | Both signs are ascendant for you and the allies you brief: you gain both Auguries of the Day |  | ✅ | Live, Deneb (13th): she wore *Sky: Benefic* for Capricorn **and** Leo; SG Ally, once briefed, gained the Leo one, and Mira, not briefed, only Capricorn. Her Intimidation took Leo's +1, Mira's nothing. She gained both Auguries of the Day (Crown of Fire; Capricorn's Alms of Fate is not built, #121) |
 | SF-35c | §7 Two Skies | The second sign and its aspect are rolled in advance with the day, as part of the seven-day queue. | `test-stargazer` pins it | ✅ | Live: the second sky is rolled with each day, in the queue (the world's queue gained them on first load) |
-| SF-36 | §7 The Long Vigil | *Rewrite the Ending*'s cooldown drops to **3 days** if you have not used it at all during the current adventure. |  | ☐ |  |
-| SF-37a | §7 Unbroken Chain | *Unmake the Moment* recharges on a 10-minute rest rather than on your Night Vigil |  | ☐ |  |
-| SF-37b | §7 Unbroken Chain | but no more than once per hour. |  | ☐ |  |
+| SF-36 | §7 The Long Vigil | *Rewrite the Ending*'s cooldown drops to **3 days** if you have not used it at all during the current adventure. | `test-stargazer` pins it | ✅ | Live: with the adventure renamed, Rewrite was ready again after three dawns; in the same adventure, not before seven |
+| SF-37a | §7 Unbroken Chain | *Unmake the Moment* recharges on a 10-minute rest rather than on your Night Vigil |  | ✅ | Live: Altair's Refocus recharged Unmake the Moment (1 used → 0); Mira's, without the feat, did not |
+| SF-37b | §7 Unbroken Chain | but no more than once per hour. |  | ✅ | Live: a second Refocus the same hour recharged nothing; an hour later it did |
 
 ## 20th level (guide §7)
 
@@ -178,8 +178,8 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 | SF-38b | §7 Cartographer of Endings | The answer is true. |  | — | The answer is the GM's |
 | SF-39a | §7 Fixed Sky | One of your Portents is always a **20**, and you may speak that one only **once per week**. | `test-stargazer` pins it | ✅ | Live, Altair (19th): one Portent is always 20; spoken on Deneb, it was marked *spoken this week* at the next Vigil and not offered |
 | SF-39b | §7 Fixed Sky | Any other Portents you record, from *Twin Portent* or *Second Portent*, are still rolled and spoken daily. | `test-stargazer` pins it | ✅ | Live, Altair (19th): beside it the others were rolled, and spoken the same day |
-| SF-40a | §7 The Sky Answers | Once per day, when you would use *Rewrite the Ending*, you may instead use *Unmake the Moment* without spending its frequency |  | ☐ |  |
-| SF-40b | §7 The Sky Answers | and *Rewrite the Ending* is not expended. |  | ☐ |  |
+| SF-40a | §7 The Sky Answers | Once per day, when you would use *Rewrite the Ending*, you may instead use *Unmake the Moment* without spending its frequency |  | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): the GM's Rewrite card offered *The Sky Answers*; taking it rewound to Altair's last turn with his day's Unmake not spent |
+| SF-40b | §7 The Sky Answers | and *Rewrite the Ending* is not expended. |  | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): Rewrite the Ending stayed unused (no cooldown written), and The Sky Answers' daily use went 1 → 0 |
 
 ---
 
@@ -187,8 +187,8 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 8 |
-| ✅ | 63 |
+| ☐ | 1 |
+| ✅ | 70 |
 | ⚠️ | 2 |
 | ❌ | 0 |
 | 🔧 | 0 |
