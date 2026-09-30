@@ -109,36 +109,36 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SG-33a | §4.3 | **Fortune's Thread** ⤾ **[reaction]** (concentrate, prediction) |  | ☐ |  |
-| SG-33b | §4.3 | **Trigger** A creature within 30 feet that you can see is about to roll an attack roll, a saving throw, a skill check, or a Perception check. |  | ☐ |  |
-| SG-33c | §4.3 | **Guide** — the triggering creature gains a **+1 circumstance bonus** to the roll. |  | ☐ |  |
-| SG-33d | §4.3 | **Snarl** — the triggering creature takes a **−1 circumstance penalty** to the roll. |  | ☐ |  |
-| SG-33e | §4.3 | Snarl can only be applied to an **attack roll, skill check, or Perception check**, never a saving throw. |  | ☐ |  |
+| SG-33a | §4.3 | **Fortune's Thread** ⤾ **[reaction]** (concentrate, prediction) |  | ✅ | Live: a reaction on the sheet with `concentrate` and `prediction`; posting it opened the picker — Guide or Snarl per targeted creature, the roll kind, and Twin Fates at 15th |
+| SG-33b | §4.3 | **Trigger** A creature within 30 feet that you can see is about to roll an attack roll, a saving throw, a skill check, or a Perception check. | `test-stargazer` pins it | ⚠️ | Live: armed in advance on the creature (ADR-0004) and spent by its next matching roll; a creature 90 feet away was refused against 60, and one immune to `prediction` was refused. **Gap:** *that you can see* is not checked — range is, and so is immunity to `prediction` |
+| SG-33c | §4.3 | **Guide** — the triggering creature gains a **+1 circumstance bonus** to the roll. | `test-stargazer` pins it | ✅ | Live at 17th: an ally's skill check took **Guide +2** (circumstance) and the effect was gone after it; the control roll straight after was bare `1d20`. +1 below 9th is pinned statically |
+| SG-33d | §4.3 | **Snarl** — the triggering creature takes a **−1 circumstance penalty** to the roll. | `test-stargazer` pins it | ✅ | Live at 17th: the foe's skill check rolled **`1d20 - 2`** and the Snarl was spent |
+| SG-33e | §4.3 | Snarl can only be applied to an **attack roll, skill check, or Perception check**, never a saving throw. | `test-stargazer` pins it | ✅ | Live: a Snarl armed on the foe was **not** applied to its Will save (`1d20 + 8`, still armed) and fired on its next skill check; arming a Snarl on saving throws is refused outright |
 | SG-33f | §4.3 | It stacks with *Courageous Anthem*, *Bless* and *Heroism*, which are status bonuses |  | ☐ |  |
-| SG-33g | §4.3 | It does **not** stack with Aid, which is a circumstance bonus too; the higher of the two applies. |  | ☐ |  |
+| SG-33g | §4.3 | It does **not** stack with Aid, which is a circumstance bonus too; the higher of the two applies. |  | ✅ | Live: an ally holding Aid (+1 circumstance) and a Guide (+2) rolled `1d20 + 2` — **Aid off, Guide on**; the higher circumstance bonus applies |
 
 ## Chart the Course (guide §4.4)
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SG-34a | §4.4 | **Chart the Course** ✦ **[one action]** (concentrate, prediction) |  | ☐ |  |
-| SG-34b | §4.4 | Name one creature within 60 feet that you can see — **two creatures from 11th level**. |  | ☐ |  |
-| SG-34c | §4.4 | Until the start of your next turn, the first time a named creature rolls a d20, you may use **Fortune's Thread** on that roll **without spending your reaction**. |  | ☐ |  |
-| SG-34d | §4.4 | If you named two creatures you may do this once for each of them. |  | ☐ |  |
-| SG-34e | §4.4 | You can have only one Chart the Course active at a time. |  | ☐ |  |
+| SG-34a | §4.4 | **Chart the Course** ✦ **[one action]** (concentrate, prediction) |  | ✅ | Live: a one-action item with `concentrate` and `prediction`; Chart's Threads armed with the reaction already spent |
+| SG-34b | §4.4 | Name one creature within 60 feet that you can see — **two creatures from 11th level**. | `test-stargazer` pins it | ✅ | Live at 17th: two creatures named, 20 and 10 feet away. One below 11th and 60 feet are pinned statically |
+| SG-34c | §4.4 | Until the start of your next turn, the first time a named creature rolls a d20, you may use **Fortune's Thread** on that roll **without spending your reaction**. | `test-stargazer` pins it | ✅ | Live: with the reaction already spent, the ally's first d20 took **Guide +2** and the reaction count did not move |
+| SG-34d | §4.4 | If you named two creatures you may do this once for each of them. |  | ✅ | Live: two named creatures, one free Thread each — the foe's was spent on its first d20, the ally's on its own |
+| SG-34e | §4.4 | You can have only one Chart the Course active at a time. |  | ✅ | Live: a second Chart the Course removed the first one's Thread from the ally and armed its own on the foe |
 
 ## Portent (guide §4.5)
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SG-35a | §4.5 | When you complete a Night Vigil, roll a d20 and record the result. This is your **Portent**, and you know its value. |  | ☐ |  |
-| SG-35b | §4.5 | **Speak the Portent** ✦ **[free action]** (prediction) |  | ☐ |  |
+| SG-35a | §4.5 | When you complete a Night Vigil, roll a d20 and record the result. This is your **Portent**, and you know its value. |  | ✅ | Live: *Rest for the Night* recorded a Portent of **6** and posted it as a GM roll to the Stargazer |
+| SG-35b | §4.5 | **Speak the Portent** ✦ **[free action]** (prediction) |  | ✅ | Live: a free action with `prediction` on the sheet; speaking it armed the Portent on the targeted creature |
 | SG-35c | §4.5 | **Frequency** once per day |  | ☐ |  |
-| SG-35d | §4.5 | **Trigger** A creature within 60 feet that you can see is about to roll a d20 for an attack roll, a saving throw, or a skill check. |  | ☐ |  |
-| SG-35e | §4.5 | The creature does not roll. Its d20 result **is** your recorded Portent, and the roll resolves normally from there. The Portent is spent. |  | ☐ |  |
-| SG-35f | §4.5 | A Portent of 20 counts as a natural 20 and a Portent of 1 as a natural 1 |  | ☐ |  |
-| SG-35g | §4.5 | Speak the Portent cannot be used on a roll already altered by a fortune or misfortune effect, and does not itself have those traits. |  | ☐ |  |
-| SG-35h | §4.5 | A new Night Vigil overwrites an unspent Portent. |  | ☐ |  |
+| SG-35d | §4.5 | **Trigger** A creature within 60 feet that you can see is about to roll a d20 for an attack roll, a saving throw, or a skill check. |  | ⚠️ | Live: spoken over the foe's next skill check, 20 feet away — the same range and immunity refusals as a Thread, at 60 feet. **Gap:** *that you can see* is not checked — range is, and so is immunity to `prediction` |
+| SG-35e | §4.5 | The creature does not roll. Its d20 result **is** your recorded Portent, and the roll resolves normally from there. The Portent is spent. | `test-stargazer` pins it | ✅ | Live: the foe's skill check was the constant **`14`** — no die — and the Portent was spent; the control roll straight after was `1d20` |
+| SG-35f | §4.5 | A Portent of 20 counts as a natural 20 and a Portent of 1 as a natural 1 | `test-stargazer` pins it | ✅ | Live: a Portent of 20 on a Will save of +14 against DC 34 was a **critical success** (34 is a success; the natural 20 raises it). Phase 0 drove the natural 1 |
+| SG-35g | §4.5 | Speak the Portent cannot be used on a roll already altered by a fortune or misfortune effect, and does not itself have those traits. | `test-stargazer` pins the guard | ⚠️ | Live (phase 0): a Portent beside a fortune roll-twice rolled `2d20kh` and stayed armed. **Gap:** pf2e's `SubstituteRoll` must carry `fortune` or `misfortune`, so the roll does have the trait |
+| SG-35h | §4.5 | A new Night Vigil overwrites an unspent Portent. |  | ✅ | Live: a second rest replaced the unspent Portent of **6** with **14** |
 
 ## Astronomy Lore (guide §4.6)
 
@@ -152,29 +152,29 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SG-37a | §4.7 | Fortune's Thread's range increases to **60 feet** |  | ☐ |  |
-| SG-37b | §4.7 | when you use it you may affect **two creatures** with the same reaction, in **any combination** — two Guides, two Snarls, or one of each. |  | ☐ |  |
-| SG-37c | §4.7 | Both must be within range and you must be able to see both. |  | ☐ |  |
-| SG-37d | §4.7 | It is still a single reaction, and Snarl's restriction to attack rolls, skill checks and Perception still applies. |  | ☐ |  |
+| SG-37a | §4.7 | Fortune's Thread's range increases to **60 feet** | `test-stargazer` pins it | ✅ | Live at 17th: creatures at 10 and 20 feet armed; one at **90** refused *"beyond 60 feet"* |
+| SG-37b | §4.7 | when you use it you may affect **two creatures** with the same reaction, in **any combination** — two Guides, two Snarls, or one of each. | `test-stargazer` pins it | ✅ | Live: one reaction armed **Guide on the ally and Snarl on the foe**; the foe's skill check spent the reaction, and the ally's Perception check took its Guide afterwards without spending another |
+| SG-37c | §4.7 | Both must be within range and you must be able to see both. | `test-stargazer` pins it | ⚠️ | Live: both must be within range — the 90-foot creature was refused. **Gap:** *that you can see* is not checked — range is, and so is immunity to `prediction` |
+| SG-37d | §4.7 | It is still a single reaction, and Snarl's restriction to attack rolls, skill checks and Perception still applies. | `test-stargazer` pins it | ✅ | Live: two creatures, one reaction; a new arm with it spent was refused *"no reaction left this round"*; Snarl still never reached the foe's save |
 
 ## The Last Thing You See (guide §4.8)
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SG-38a | §4.8 | **The Last Thing You See** ⤾ **[reaction]** (concentrate, emotion, fear, illusion, mental, prediction, visual) |  | ☐ |  |
-| SG-38b | §4.8 | **Trigger** A creature within 30 feet that you can see deals damage to you. |  | ☐ |  |
-| SG-38c | §4.8 | It attempts a Will save against your Stargazer DC. |  | ☐ |  |
-| SG-38d | §4.8 | **Critical Success** It is unaffected and is temporarily immune for 10 minutes. |  | ☐ |  |
-| SG-38e | §4.8 | **Success** Frightened 1. |  | ☐ |  |
-| SG-38f | §4.8 | **Failure** Frightened 2. |  | ☐ |  |
-| SG-38g | §4.8 | **Critical Failure** Frightened 3 and **stunned 1**. |  | ☐ |  |
+| SG-38a | §4.8 | **The Last Thing You See** ⤾ **[reaction]** (concentrate, emotion, fear, illusion, mental, prediction, visual) |  | ✅ | Live: a reaction with `concentrate, emotion, fear, illusion, mental, prediction, visual`, offered as a whispered button when it triggers (ADR-0004) |
+| SG-38b | §4.8 | **Trigger** A creature within 30 feet that you can see deals damage to you. |  | ⚠️ | Live: the foe hitting Vega from 20 feet posted the button; the same hit from 90 feet did not; with the reaction spent, no button. **Gap:** *that you can see* is not checked — range is, and so is immunity to `prediction` |
+| SG-38c | §4.8 | It attempts a Will save against your Stargazer DC. |  | ✅ | Live: the foe rolled Will against **DC 34** — Vega's Stargazer DC at 17th |
+| SG-38d | §4.8 | **Critical Success** It is unaffected and is temporarily immune for 10 minutes. |  | ✅ | Live: a critical success (Portent 20, Will +14) gave no condition and an immunity effect; using it again posted *"unaffected"* and rolled no save |
+| SG-38e | §4.8 | **Success** Frightened 1. |  | ✅ | Live: success (`19 + 15` = 34) → **frightened 1** |
+| SG-38f | §4.8 | **Failure** Frightened 2. |  | ✅ | Live: failure (`10 + 20` = 30) → **frightened 2** |
+| SG-38g | §4.8 | **Critical Failure** Frightened 3 and **stunned 1**. |  | ✅ | Live: a rolled 23 against DC 34, a critical failure → **frightened 3** and **stunned 1** |
 
 ## Second Star and Surer Thread (guide §4.9, §4.10)
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | SG-39 | §4.9 | Your focus pool increases to **2 Focus Points**. | `test-stargazer` pins it | ✅ | Live at the boundary: focus pool **1 at 6th**, **2 at 7th**, and a stored 2 holds at 7th; levelled back to 6th it is **1** again |
-| SG-40 | §4.10 | Fortune's Thread's bonus and penalty increase to **±2**. |  | ☐ |  |
+| SG-40 | §4.10 | Fortune's Thread's bonus and penalty increase to **±2**. | `test-stargazer` pins it | ✅ | Live at 17th: Guide **+2** and Snarl **−2**. The 8th/9th boundary is pinned statically |
 
 ## Unmake the Moment (guide §4.11)
 
@@ -207,11 +207,11 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SG-43a | §4.13 | Once per 10 minutes, when you use Fortune's Thread, you may instead make it a true **fortune** or **misfortune** effect for **up to two of its targets** |  | ☐ |  |
-| SG-43b | §4.13 | each rolls twice and takes the higher result (Guide) or the lower result (Snarl). |  | ☐ |  |
-| SG-43c | §4.13 | This replaces the bonus or penalty for those targets, and Snarl's restriction to attack rolls, skill checks and Perception still applies. |  | ☐ |  |
+| SG-43a | §4.13 | Once per 10 minutes, when you use Fortune's Thread, you may instead make it a true **fortune** or **misfortune** effect for **up to two of its targets** | `test-stargazer` pins it | ✅ | Live: Twin Fates on two of a Thread's targets; used again inside 10 minutes, refused |
+| SG-43b | §4.13 | each rolls twice and takes the higher result (Guide) or the lower result (Snarl). | `test-stargazer` pins it | ✅ | Live: the ally's Reflex save rolled **`2d20kh`**, the foe's skill check **`2d20kl`** |
+| SG-43c | §4.13 | This replaces the bonus or penalty for those targets, and Snarl's restriction to attack rolls, skill checks and Perception still applies. | `test-stargazer` pins it | ✅ | Live: the Twin Fates rolls carried no ±2 — it replaces the bonus — and the foe's save under a Twin Fates Snarl rolled `1d20 + 8`, untouched |
 | SG-43d | §4.13 | If a fortune effect and a misfortune effect would apply to the same roll, the two cancel each other out. |  | ☐ |  |
-| SG-44a | §4.14 | Fortune's Thread affects **three creatures** with a single reaction, in any combination of Guide and Snarl. |  | ☐ |  |
+| SG-44a | §4.14 | Fortune's Thread affects **three creatures** with a single reaction, in any combination of Guide and Snarl. | `test-stargazer` pins it | ✅ | Live at 17th: three creatures — the ally, the foe and the Stargazer — armed on one reaction (one pending); four were refused |
 | SG-44b | §4.14 | *Twin Fates* still affects two. |  | ☐ |  |
 
 ## The rewind, Tiers 1 and 3 (guide §10.1, §10.3)
@@ -241,13 +241,13 @@ rewinds behave at the table. ADR-0004 is the reasoning behind the arming model.*
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SG-47a | §11.2 | One reaction arms up to as many creatures as the Thread can affect; the rest stay armed after the first fires. |  | ☐ |  |
-| SG-47b | §11.2 | An armed Thread expires at the start of your next turn, and you cannot arm one with no reaction left |  | ☐ |  |
-| SG-47c | §11.2 | *Two Warnings* allows a second, and *Chart the Course*'s free Threads cost none. |  | ☐ |  |
-| SG-47d | §11.3 | Its free Fortune's Thread is **armed on the named creature at no reaction cost**, and spent by that creature's first d20. |  | ☐ |  |
+| SG-47a | §11.2 | One reaction arms up to as many creatures as the Thread can affect; the rest stay armed after the first fires. | `test-stargazer` pins it | ✅ | Live: two creatures armed on one reaction; the first roll moved *spent* from 0 to 1, the second fired afterwards and it stayed 1 |
+| SG-47b | §11.2 | An armed Thread expires at the start of your next turn, and you cannot arm one with no reaction left |  | ✅ | Live: with the reaction spent, arming was refused; at Vega's next turn the count was back to 0, and a Guide armed then left unrolled for a round was gone at the turn after, costing nothing |
+| SG-47c | §11.2 | *Two Warnings* allows a second, and *Chart the Course*'s free Threads cost none. |  | ⚠️ | Live: Chart the Course's Threads armed with the reaction spent and cost none. **Gap:** *Two Warnings* is a feat, not built until phase 6 (#108) |
+| SG-47d | §11.3 | Its free Fortune's Thread is **armed on the named creature at no reaction cost**, and spent by that creature's first d20. | `test-stargazer` pins it | ✅ | Live: the foe's first d20 after Chart was a save; its Snarl could not apply and was spent anyway |
 | SG-47e | §11.3 | it never expires until it is spoken or a new Vigil overwrites it. |  | ☐ |  |
-| SG-47f | §11.3 | the die is replaced before the roll resolves |  | ☐ |  |
-| SG-47g | §11.3 | When the trigger happens, the Stargazer's player is offered a button on a chat card, and the effect is applied after the fact |  | ☐ |  |
+| SG-47f | §11.3 | the die is replaced before the roll resolves | `test-stargazer` pins it | ✅ | Live: the Portent's roll formula is the constant — `14`, `19 + 15` — not a die |
+| SG-47g | §11.3 | When the trigger happens, the Stargazer's player is offered a button on a chat card, and the effect is applied after the fact |  | ✅ | Live: The Last Thing You See was offered as a button after the damage landed, and its save and conditions were applied after the fact |
 | SG-48a | §11.7 | **Night Vigil** runs by itself at *Rest for the Night* |  | ☐ |  |
 | SG-48b | §11.7 | *Forewarned* is a button on that card, where the player picks the allies briefed. |  | ☐ |  |
 | SG-48c | §11.7 | the full actor — Hit Points, conditions, effects, resources, item uses — plus token positions and the combat tracker's turn. |  | ☐ |  |
@@ -264,9 +264,9 @@ rewinds behave at the table. ADR-0004 is the reasoning behind the arming model.*
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 101 |
-| ✅ | 25 |
-| ⚠️ | 2 |
+| ☐ | 61 |
+| ✅ | 59 |
+| ⚠️ | 8 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 1 |

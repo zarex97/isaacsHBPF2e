@@ -1,0 +1,39 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+    "name": "Widen the Sky",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Fortune's Thread's range increases to <strong>60 feet</strong>, and when you use it you may affect <strong>two creatures</strong> with the same reaction, in <strong>any combination</strong> &mdash; two Guides, two Snarls, or one of each. Both must be within range and you must be able to see both. It is still a single reaction, and Snarl's restriction to attack rolls, skill checks and Perception still applies.</p>"
+        },
+        "level": {
+            "value": 5
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "stargazer-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        }
+    },
+    "type": "feat"
+}

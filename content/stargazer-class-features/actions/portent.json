@@ -1,0 +1,40 @@
+{
+    "folder": "Actions",
+    "img": "icons/magic/perception/eye-ringed-glow-angry-small-teal.webp",
+    "name": "Portent",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>When you complete a Night Vigil, roll a d20 and record the result. This is your <strong>Portent</strong>, and you know its value.</p><p><strong>Speak the Portent</strong> [free-action] <em>(prediction)</em><br /><strong>Frequency</strong> once per day<br /><strong>Trigger</strong> A creature within 60 feet that you can see is about to roll a d20 for an attack roll, a saving throw, or a skill check.<br /><strong>Effect</strong> The creature does not roll. Its d20 result <strong>is</strong> your recorded Portent, and the roll resolves normally from there. The Portent is spent.</p><p>A Portent of 20 counts as a natural 20 and a Portent of 1 as a natural 1, because it was one &mdash; you rolled it at dawn. Speak the Portent cannot be used on a roll already altered by a fortune or misfortune effect, and does not itself have those traits.</p><p>A new Night Vigil overwrites an unspent Portent.</p><hr /><p><em>Target one creature and use this to speak it over that creature's next attack roll, saving throw or skill check.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "stargazer-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "stargazer",
+                "prediction"
+            ]
+        }
+    },
+    "type": "feat"
+}

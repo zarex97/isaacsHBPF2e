@@ -1,0 +1,39 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+    "name": "Threefold Thread",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Fortune's Thread affects <strong>three creatures</strong> with a single reaction, in any combination of Guide and Snarl. <em>Twin Fates</em> still affects two.</p>"
+        },
+        "level": {
+            "value": 17
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "stargazer-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        }
+    },
+    "type": "feat"
+}

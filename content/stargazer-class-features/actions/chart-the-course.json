@@ -1,0 +1,41 @@
+{
+    "folder": "Actions",
+    "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+    "name": "Chart the Course",
+    "system": {
+        "actionType": {
+            "value": "action"
+        },
+        "actions": {
+            "value": 1
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Name one creature within 60 feet that you can see &mdash; <strong>two creatures from 11th level</strong>. Until the start of your next turn, the first time a named creature rolls a d20, you may use <strong>Fortune's Thread</strong> on that roll <strong>without spending your reaction</strong>. If you named two creatures you may do this once for each of them. You can have only one Chart the Course active at a time.</p><hr /><p><em>Target the creatures and use this: you choose Guide or Snarl for each now, and it lands on that creature's first d20 &mdash; no reaction.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "stargazer-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "stargazer",
+                "concentrate",
+                "prediction"
+            ]
+        }
+    },
+    "type": "feat"
+}
