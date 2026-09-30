@@ -74,7 +74,7 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 | SG-19 | §3 19th | **Legendary Stargazer** (Stargazer DC legendary) | `test-stargazer` pins it | ✅ | Live at the boundary: Stargazer DC rank **3 at 18th** (DC 35), **4 at 19th** (DC 38) |
 | SG-20 | §9.8 | no weapon specialization, ever | `test-stargazer` pins it | ✅ | Live at 20th, simple weapons expert: a club Strike's damage is **`1d6 bludgeoning`** — no specialization bonus, and no specialization feature was ever granted |
 | SG-21 | §7 | Stargazer feats come at 1, 2, 4, 6, 8, 10, 12, 14, 16, 18 and 20. | `test-stargazer` pins it | ✅ | Live at 6th: class feat slots at **1, 2, 4, 6** |
-| SG-22 | §6 | Each grants an ability at **1st (50)**, **5th (30)**, **13th (70)** and **17th (70)** |  | ☐ |  |
+| SG-22 | §6 | Each grants an ability at **1st (50)**, **5th (30)**, **13th (70)** and **17th (70)** | `test-stargazer` pins it | ✅ | Live: the Chassis (6th) chose *The Herald* from the Stargazer's Path prompt and got Herald's Omen and The Announcement; at 13th Sentence Passed arrived, at 17th Foregone Conclusion, and back at 6th both went. Altair, Vega, Deneb and Mira took the other three |
 
 ## Star Chart (guide §4.1, §3)
 
@@ -264,8 +264,8 @@ rewinds behave at the table. ADR-0004 is the reasoning behind the arming model.*
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 39 |
-| ✅ | 82 |
+| ☐ | 38 |
+| ✅ | 83 |
 | ⚠️ | 7 |
 | ❌ | 0 |
 | 🔧 | 0 |

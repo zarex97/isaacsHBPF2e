@@ -30,6 +30,12 @@ export const PRIORITY = {
     ariesFirstStrike: 30,
     /** `stargazer/auguries.mjs` — Hunted by the Sky: the first attack each round, and Seek against it. */
     huntedBySky: 40,
+    /** `stargazer/paths.mjs` — Sentence Passed: the sentenced creature's fortune effects are taken off the roll. */
+    sentencePassed: 50,
+    /** `stargazer/paths.mjs` — tag a roll a Snarl touched, for Herald's Omen and Foregone Conclusion. */
+    snarlTag: 60,
+    /** `stargazer/paths.mjs` — a Demoralize by The Announcement is not lost on a creature that cannot understand you. */
+    announcement: 70,
 };
 
 const stages = [];

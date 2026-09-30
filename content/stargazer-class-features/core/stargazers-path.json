@@ -1,0 +1,67 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/light/explosion-star-glow-blue.webp",
+    "name": "Stargazer's Path",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Four Paths. Each grants an ability at <strong>1st</strong>, <strong>5th</strong>, <strong>13th</strong> and <strong>17th</strong> level.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [
+            {
+                "key": "ChoiceSet",
+                "flag": "stargazerPath",
+                "prompt": "Choose your Path",
+                "choices": [
+                    {
+                        "label": "The Weaver",
+                        "value": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.The Weaver"
+                    },
+                    {
+                        "label": "The Herald",
+                        "value": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.The Herald"
+                    },
+                    {
+                        "label": "The Ephemeris",
+                        "value": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.The Ephemeris"
+                    },
+                    {
+                        "label": "The Broken Thread",
+                        "value": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.The Broken Thread"
+                    }
+                ]
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "{item|flags.system.rulesSelections.stargazerPath}"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "stargazer-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        }
+    },
+    "type": "feat"
+}

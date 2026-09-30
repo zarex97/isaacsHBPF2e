@@ -21,7 +21,7 @@ import { MODULE_ID } from "../sky/signs.mjs";
  */
 
 const FLAG = "stargazer";
-const THREAD = "stargazerThread";
+export const THREAD = "stargazerThread";
 const PORTENT = "stargazerPortent";
 const IMMUNE_SLUG = "stargazer-last-thing-immune";
 
@@ -77,9 +77,11 @@ export const Numbers = {
     threadValue(actor) {
         return has(actor, "surer-thread") ? 2 : 1;
     },
-    /** Guide §4.4 — one creature, two from 11th. */
+    /** Guide §4.4 — one creature, two from 11th; the Weaver's Doubled Strand makes it two, and three (§6.1). */
     chartTargets(actor) {
-        return (actor?.level ?? 1) >= 11 ? 2 : 1;
+        const eleventh = (actor?.level ?? 1) >= 11;
+        if (has(actor, "doubled-strand")) return eleventh ? 3 : 2;
+        return eleventh ? 2 : 1;
     },
     chartRange(actor) {
         return has(actor, "widened-chart") ? 120 : 60;
@@ -203,7 +205,20 @@ function targeted() {
     return [...game.user.targets].map((t) => t.actor).filter(Boolean);
 }
 
+async function pickTapestry() {
+    const data = await form("Tapestry", `<p>One reaction, one choice, everyone within ${TAPESTRY_RANGE} feet.</p>
+        <div class="form-group"><label>Thread</label><select name="kind">
+            <option value="">Not now: use my targets</option>
+            <option value="guide">Guide every ally</option><option value="snarl">Snarl every enemy</option>
+        </select></div>`);
+    return data?.kind || null;
+}
+
 async function pickThreads(actor, { free, chart }) {
+    if (!chart && tapestryReady(actor) && reactionsLeft(actor) > 0) {
+        const kind = await pickTapestry();
+        if (kind) return Relay.request({ action: "stargazerArm", origin: actor.uuid, tapestry: kind, entries: [], chart: false, free: false });
+    }
     const creatures = targeted();
     const max = chart ? Numbers.chartTargets(actor) : Numbers.threadTargets(actor);
     const name = chart ? "Chart the Course" : "Fortune's Thread";
@@ -242,27 +257,54 @@ async function pickPortent(actor) {
     await Relay.request({ action: "stargazerPortent", origin: actor.uuid, target: target.uuid, on: data.on });
 }
 
+/** Once per 10 minutes, by the world clock. */
+const tenMinutes = (at) => typeof at !== "number" || (game.time.worldTime - at) >= 600;
+
 function twinFatesReady(actor) {
-    const at = state(actor).twinFatesAt;
-    return typeof at !== "number" || (game.time.worldTime - at) >= 600;
+    return tenMinutes(state(actor).twinFatesAt);
+}
+
+/** The Weaver's Tapestry (guide §6.1), once per 10 minutes. */
+export function tapestryReady(actor) {
+    return has(actor, "tapestry") && tenMinutes(state(actor).tapestryAt);
+}
+const TAPESTRY_RANGE = 60;
+
+/** Everyone the Tapestry reaches: every ally within 60 feet (Guide) or every enemy (Snarl). */
+function tapestryCreatures(origin, kind) {
+    const scene = tokenOf(origin)?.parent;
+    const found = new Map();
+    for (const token of scene?.tokens ?? []) {
+        const actor = token.actor;
+        if (!actor || actor.id === origin.id || found.has(actor.id)) continue;
+        if (distance(origin, actor) > TAPESTRY_RANGE) continue;
+        if (kind === "guide" ? actor.isAllyOf(origin) : actor.isEnemyOf(origin)) found.set(actor.id, actor);
+    }
+    return [...found.values()];
 }
 
 /* ------------------------------------------------------------------------------------------------ */
 /*  The GM's half                                                                                   */
 /* ------------------------------------------------------------------------------------------------ */
 
-async function arm({ origin: originUuid, entries = [], chart, free }) {
+async function arm({ origin: originUuid, entries = [], chart, free, tapestry }) {
     const origin = await fromUuid(originUuid);
     if (!isStargazer(origin)) return;
-    const name = chart ? "Chart the Course" : "Fortune's Thread";
+    // Tapestry: the GM, not the picker, decides who is within 60 feet and on which side.
+    if (tapestry) {
+        if (chart || free || !["guide", "snarl"].includes(tapestry) || !tapestryReady(origin)) return;
+        entries = tapestryCreatures(origin, tapestry).map((c) => ({ target: c.uuid, kind: tapestry, on: "any" }));
+        if (entries.length === 0) return say(origin, `<strong>Tapestry</strong>: nobody within ${TAPESTRY_RANGE} feet to ${tapestry === "guide" ? "Guide" : "Snarl"}.`);
+    }
+    const name = tapestry ? "Tapestry" : chart ? "Chart the Course" : "Fortune's Thread";
     const max = chart ? Numbers.chartTargets(origin) : Numbers.threadTargets(origin);
-    const range = chart ? Numbers.chartRange(origin) : Numbers.threadRange(origin);
+    const range = tapestry ? TAPESTRY_RANGE : chart ? Numbers.chartRange(origin) : Numbers.threadRange(origin);
     const isFree = Boolean(chart || free);
-    if (entries.length === 0 || entries.length > max) return;
+    if (entries.length === 0 || (!tapestry && entries.length > max)) return;
     if (!isFree && reactionsLeft(origin) <= 0) return say(origin, `<strong>${name}</strong>: no reaction left this round.`);
 
     const twice = entries.filter((e) => e.twice);
-    if (twice.length > 0 && (chart || twice.length > 2 || !has(origin, "twin-fates") || !twinFatesReady(origin))) return;
+    if (twice.length > 0 && (chart || tapestry || twice.length > 2 || !has(origin, "twin-fates") || !twinFatesReady(origin))) return;
 
     // Chart the Course: only one active at a time — the last one's Threads go.
     if (chart) await sweep(origin, (flag) => flag.free);
@@ -293,6 +335,7 @@ async function arm({ origin: originUuid, entries = [], chart, free }) {
     const update = {};
     if (!isFree) update[`flags.${MODULE_ID}.${FLAG}.pending`] = [...(state(origin).pending ?? []), group];
     if (twice.length > 0) update[`flags.${MODULE_ID}.${FLAG}.twinFatesAt`] = game.time.worldTime;
+    if (tapestry) update[`flags.${MODULE_ID}.${FLAG}.tapestryAt`] = game.time.worldTime;
     if (Object.keys(update).length > 0) await origin.update(update);
     await say(origin, `<strong>${name}</strong>: ${armed.join("; ")}.`, { whisper: ownersOf(origin) });
 }
@@ -341,6 +384,7 @@ async function spent(item, options) {
         await origin.update({ [`flags.${MODULE_ID}.${FLAG}.portent`]: { value: null, spent: true } });
         return say(origin, `<strong>Portent</strong> spoken on ${item.actor?.name}.`, { whisper: ownersOf(origin) });
     }
+    if (thread.kind === "guide" && has(origin, "knotted-thread") && item.actor) await knot(origin, item.actor);
     if (thread.free) return;
     const pending = state(origin).pending ?? [];
     if (!pending.includes(thread.group)) return; // this group already cost its reaction
@@ -350,10 +394,35 @@ async function spent(item, options) {
     });
 }
 
+/**
+ * The Weaver's Knotted Thread (guide §6.1): a Guided creature also takes +1 AC against the next attack made
+ * against it before the start of the Stargazer's next turn. Given when the Guide lands — that is when the
+ * Thread is spent — and taken back by the next attack roll at it (`paths.mjs`), or by the Stargazer's turn.
+ */
+async function knot(origin, actor) {
+    const pack = game.packs.get(`${MODULE_ID}.stargazer-effects`);
+    const entry = (await pack?.getIndex())?.find((e) => e.name === "Effect: Knotted Thread");
+    if (!entry) return;
+    const source = foundry.utils.deepClone((await pack.getDocument(entry._id)).toObject());
+    source.flags = foundry.utils.mergeObject(source.flags ?? {}, { [MODULE_ID]: { knottedThread: origin.uuid } });
+    source.system.duration = { value: -1, unit: "unlimited", expiry: null, sustained: false };
+    await unknot(origin, actor);
+    await actor.createEmbeddedDocuments("Item", [source]);
+}
+
+/** Take this Stargazer's Knotted Thread off one creature, or off everyone. */
+async function unknot(origin, only = null) {
+    for (const actor of only ? [only] : game.actors) {
+        const ours = actor.itemTypes.effect.filter((e) => e.flags?.[MODULE_ID]?.knottedThread === origin.uuid);
+        if (ours.length > 0) await actor.deleteEmbeddedDocuments("Item", ours.map((e) => e.id), { stargazerQuiet: true });
+    }
+}
+
 /** The start of the Stargazer's turn: the reaction comes back and every Thread still armed expires. */
 async function startTurn(actor) {
     if (!isStargazer(actor)) return;
     await sweep(actor);
+    await unknot(actor);
     await actor.update({ [`flags.${MODULE_ID}.${FLAG}.pending`]: [], [`flags.${MODULE_ID}.${FLAG}.spent`]: 0 });
 }
 
