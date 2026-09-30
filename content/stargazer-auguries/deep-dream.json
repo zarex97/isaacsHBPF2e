@@ -1,0 +1,106 @@
+{
+    "img": "icons/magic/perception/eye-ringed-glow-angry-small-teal.webp",
+    "name": "Deep Dream",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p>+2 status bonus to Will saves and to Perception checks to disbelieve illusions. <strong>Once</strong> during the duration, a critical failure on a Will save becomes a failure. While the Augury lasts, a target is never off-guard merely for being unaware of a creature at the start of an encounter.</p><hr /><p><strong>Heightened (+2)</strong> +1 ally.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": "1 minute"
+        },
+        "heightening": null,
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "2 allies"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "stargazer-augury",
+                "stargazer-sign-pisces"
+            ],
+            "rarity": "common",
+            "traditions": [
+                "occult"
+            ],
+            "value": [
+                "concentrate",
+                "focus",
+                "prediction",
+                "stargazer"
+            ]
+        }
+    },
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "allies",
+                "maxTargets": 2,
+                "range": 30,
+                "heightening": {
+                    "at": {
+                        "5": {
+                            "maxTargets": 1
+                        },
+                        "9": {
+                            "maxTargets": 1
+                        },
+                        "13": {
+                            "maxTargets": 1
+                        },
+                        "17": {
+                            "maxTargets": 1
+                        }
+                    }
+                }
+            },
+            "riders": [
+                {
+                    "event": "action-used",
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.stargazer-effects.Item.Effect: Deep Dream"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    }
+                },
+                {
+                    "event": "action-used",
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.stargazer-effects.Item.Effect: Deep Dream (Reprieve)"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    }
+                }
+            ]
+        }
+    },
+    "type": "spell"
+}

@@ -1,0 +1,57 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/light/explosion-star-glow-blue.webp",
+    "name": "Augury (7th)",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>You learn one Augury of your choice. You know <strong>nine</strong> permanently by 19th level — at 1st, 5th, 7th, 9th, 11th, 13th, 15th, 17th and 19th.</p>"
+        },
+        "level": {
+            "value": 7
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [
+            {
+                "key": "ChoiceSet",
+                "adjustName": false,
+                "flag": "augury7",
+                "prompt": "Choose an Augury",
+                "choices": {
+                    "itemType": "spell",
+                    "filter": [
+                        "item:tag:stargazer-augury"
+                    ]
+                }
+            },
+            {
+                "key": "GrantItem",
+                "allowDuplicate": false,
+                "uuid": "{item|flags.system.rulesSelections.augury7}"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "stargazer-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        }
+    },
+    "type": "feat"
+}

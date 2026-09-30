@@ -1,0 +1,65 @@
+{
+    "img": "icons/magic/light/explosion-star-glow-yellow.webp",
+    "name": "Effect: Guiding Star",
+    "system": {
+        "description": {
+            "value": "<p>+1 status bonus to attack rolls, damage rolls, Perception checks and skill checks (+2 from the 10th-rank Augury), until the start of the Stargazer's next turn.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Guiding Star",
+                "selector": "attack-roll",
+                "type": "status",
+                "value": 1
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Guiding Star",
+                "selector": "damage",
+                "type": "status",
+                "value": 1
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Guiding Star",
+                "selector": "perception",
+                "type": "status",
+                "value": 1
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Guiding Star",
+                "selector": "skill-check",
+                "type": "status",
+                "value": 1
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

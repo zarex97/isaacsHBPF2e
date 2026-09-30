@@ -1,0 +1,95 @@
+{
+    "img": "icons/magic/fire/flame-burning-hand-orange.webp",
+    "name": "Crown of Fire",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p>+2 status bonus to Intimidation and Performance. Each target can <strong>Demoralize at 60 feet</strong> with no auditory or visual requirement and no penalty for a shared-language failure. Once per round, when a target critically succeeds at any check, one ally within 30 feet of it gains a <strong>+1 status bonus</strong> to their next roll.</p><hr /><p><strong>Heightened (+2)</strong> +1 ally.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": "1 minute"
+        },
+        "heightening": null,
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "2 allies"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "stargazer-augury",
+                "stargazer-sign-leo"
+            ],
+            "rarity": "common",
+            "traditions": [
+                "occult"
+            ],
+            "value": [
+                "concentrate",
+                "focus",
+                "prediction",
+                "stargazer"
+            ]
+        }
+    },
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "allies",
+                "maxTargets": 2,
+                "range": 30,
+                "heightening": {
+                    "at": {
+                        "5": {
+                            "maxTargets": 1
+                        },
+                        "9": {
+                            "maxTargets": 1
+                        },
+                        "13": {
+                            "maxTargets": 1
+                        },
+                        "17": {
+                            "maxTargets": 1
+                        }
+                    }
+                }
+            },
+            "riders": [
+                {
+                    "event": "action-used",
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.stargazer-effects.Item.Effect: Crown of Fire"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    }
+                }
+            ]
+        }
+    },
+    "type": "spell"
+}

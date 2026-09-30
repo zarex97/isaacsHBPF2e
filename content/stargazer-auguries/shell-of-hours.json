@@ -1,0 +1,105 @@
+{
+    "img": "icons/magic/life/heart-cross-strong-flame-green.webp",
+    "name": "Shell of Hours",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p>Each regains <strong>2d8 Hit Points</strong> immediately and gains a +2 status bonus to saves against disease and poison and to recovery checks. <strong>Once</strong> during the duration, the first time a target would be reduced to 0 Hit Points it is reduced to <strong>1 Hit Point</strong> instead and the Augury ends for that target.</p><hr /><p><strong>Heightened (+2)</strong> +2d8 and +1 ally.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": "1 minute"
+        },
+        "heightening": null,
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "2 allies"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "stargazer-augury",
+                "stargazer-sign-cancer"
+            ],
+            "rarity": "common",
+            "traditions": [
+                "occult"
+            ],
+            "value": [
+                "concentrate",
+                "focus",
+                "healing",
+                "prediction",
+                "stargazer"
+            ]
+        }
+    },
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "allies",
+                "maxTargets": 2,
+                "range": 30,
+                "heightening": {
+                    "at": {
+                        "5": {
+                            "maxTargets": 1
+                        },
+                        "9": {
+                            "maxTargets": 1
+                        },
+                        "13": {
+                            "maxTargets": 1
+                        },
+                        "17": {
+                            "maxTargets": 1
+                        }
+                    }
+                }
+            },
+            "riders": [
+                {
+                    "event": "action-used",
+                    "apply": {
+                        "type": "heal",
+                        "formula": "2d8",
+                        "perStep": "2d8",
+                        "perStepInterval": 2
+                    }
+                },
+                {
+                    "event": "action-used",
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.stargazer-effects.Item.Effect: Shell of Hours"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    }
+                }
+            ]
+        }
+    },
+    "type": "spell"
+}

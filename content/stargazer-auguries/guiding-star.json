@@ -1,0 +1,130 @@
+{
+    "img": "icons/magic/light/explosion-star-glow-yellow.webp",
+    "name": "Guiding Star",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p>Each target gains a <strong>+1 status bonus to attack rolls, damage rolls, Perception checks and skill checks</strong>.</p><hr /><p><strong>Heightened (4th)</strong> 3 allies. <strong>(7th)</strong> 4 allies. <strong>(10th)</strong> 5 allies, and the bonus is <strong>+2</strong>.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": "until the start of your next turn"
+        },
+        "heightening": null,
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "2 allies"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "stargazer-augury"
+            ],
+            "rarity": "common",
+            "traditions": [
+                "occult"
+            ],
+            "value": [
+                "concentrate",
+                "focus",
+                "prediction",
+                "stargazer"
+            ]
+        }
+    },
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "allies",
+                "maxTargets": 2,
+                "range": 60,
+                "heightening": {
+                    "at": {
+                        "7": {
+                            "maxTargets": 1
+                        },
+                        "13": {
+                            "maxTargets": 1
+                        },
+                        "19": {
+                            "maxTargets": 1
+                        }
+                    }
+                }
+            },
+            "riders": [
+                {
+                    "event": "action-used",
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.stargazer-effects.Item.Effect: Guiding Star",
+                        "substitutions": [
+                            {
+                                "path": "system.rules.0.value",
+                                "value": {
+                                    "base": 1,
+                                    "at": {
+                                        "19": 2
+                                    }
+                                }
+                            },
+                            {
+                                "path": "system.rules.1.value",
+                                "value": {
+                                    "base": 1,
+                                    "at": {
+                                        "19": 2
+                                    }
+                                }
+                            },
+                            {
+                                "path": "system.rules.2.value",
+                                "value": {
+                                    "base": 1,
+                                    "at": {
+                                        "19": 2
+                                    }
+                                }
+                            },
+                            {
+                                "path": "system.rules.3.value",
+                                "value": {
+                                    "base": 1,
+                                    "at": {
+                                        "19": 2
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 1,
+                        "expiry": "turn-start"
+                    }
+                }
+            ]
+        }
+    },
+    "type": "spell"
+}
