@@ -1,0 +1,81 @@
+{
+    "img": "icons/sundries/books/book-open-turquoise.webp",
+    "name": "Perfect Ledger",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p>Each target's next <strong>Recall Knowledge</strong> before the end of your next turn is a <strong>free action</strong>, gains a +2 circumstance bonus, and on a success reveals one additional piece of information. On a critical success it also reveals the creature's <strong>lowest saving throw</strong> and all of its <strong>weaknesses</strong>.</p><hr /><p><strong>Heightened (5th)</strong> Every Recall Knowledge each target makes until the end of your next turn is a free action.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": null,
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "you and up to 2 allies"
+        },
+        "time": {
+            "value": "1"
+        },
+        "traits": {
+            "otherTags": [
+                "stargazer-augury",
+                "stargazer-sign-virgo"
+            ],
+            "rarity": "common",
+            "traditions": [
+                "occult"
+            ],
+            "value": [
+                "concentrate",
+                "focus",
+                "prediction",
+                "stargazer"
+            ]
+        }
+    },
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "allies",
+                "includesSelf": true,
+                "maxTargets": 3,
+                "range": 30
+            },
+            "riders": [
+                {
+                    "event": "action-used",
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.stargazer-effects.Item.Effect: Perfect Ledger"
+                    },
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 1,
+                        "expiry": "turn-end"
+                    }
+                }
+            ]
+        }
+    },
+    "type": "spell"
+}
