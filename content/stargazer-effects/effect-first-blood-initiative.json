@@ -1,0 +1,45 @@
+{
+    "img": "icons/skills/melee/strike-sword-blood-red.webp",
+    "name": "Effect: First Blood (Initiative)",
+    "system": {
+        "description": {
+            "value": "<p>+2 status bonus to the next initiative roll within the hour.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "hours",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "First Blood",
+                "selector": "initiative",
+                "type": "status",
+                "value": 2,
+                "removeAfterRoll": "if-enabled"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

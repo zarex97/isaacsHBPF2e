@@ -1,0 +1,86 @@
+{
+    "img": "icons/magic/perception/eye-slit-orange.webp",
+    "name": "Hunted by the Sky",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p>The target cannot be concealed or hidden from you. You and your allies gain a +1 circumstance bonus to Seek and to Perception checks to find it, and the <strong>first attack made against it each round</strong> gains a +1 circumstance bonus. Your <strong>Snarl</strong> against it is <strong>−3</strong>, or <strong>−4</strong> once you have <em>Surer Thread</em>.</p><hr /><p><strong>Heightened (6th)</strong> 2 creatures.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": "1 minute"
+        },
+        "heightening": null,
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "range": {
+            "value": "60 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "1 creature"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "stargazer-augury",
+                "stargazer-sign-sagittarius"
+            ],
+            "rarity": "common",
+            "traditions": [
+                "occult"
+            ],
+            "value": [
+                "concentrate",
+                "focus",
+                "prediction",
+                "stargazer"
+            ]
+        }
+    },
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "all",
+                "maxTargets": 1,
+                "range": 60,
+                "heightening": {
+                    "at": {
+                        "11": {
+                            "maxTargets": 1
+                        }
+                    }
+                }
+            },
+            "riders": [
+                {
+                    "event": "action-used",
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.stargazer-effects.Item.Effect: Hunted by the Sky"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    }
+                }
+            ]
+        }
+    },
+    "type": "spell"
+}

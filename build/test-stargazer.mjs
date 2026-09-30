@@ -298,6 +298,44 @@ function check(label, actual, expected) {
 }
 
 /* -------------------------------------------------------------------------------------------- */
+/*  Phase 4b — the Auguries that bite (OM-01, OM-02, OM-04, OM-09–OM-12)                         */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    const fs = await import("node:fs");
+    const read = (rel) => JSON.parse(fs.readFileSync(new URL(`../content/${rel}`, import.meta.url), "utf8"));
+    const riders = (slug) => read(`stargazer-auguries/${slug}.json`).flags["isaacs-hb-pf2e"].riders;
+    const at = (list, rank, outcome) => list.filter((r) => r.apply.type === "damage" && r.outcomes.includes(outcome)
+        && r.predicate.every((p) => (p.gte ? rank >= p.gte[1] : rank <= p.lte[1]))).map((r) => `${r.apply.formula}${r.apply.multiplier ? "x2" : ""}`);
+    const death = riders("death-foretold");
+    check("OM-01d-f Death Foretold: frightened 1 / 2 / 3 + stunned 1 + fleeing 1 round",
+        death.filter((r) => r.apply.type === "condition").map((r) => `${r.outcomes[0]}:${r.apply.slug}${r.apply.value ?? ""}`),
+        ["success:frightened1", "failure:frightened2", "criticalFailure:frightened3", "criticalFailure:stunned1", "criticalFailure:fleeing"]);
+    check("OM-01g/h Death Foretold's damage: none below rank 4; 2d6 at 4, +2d6 each two ranks; doubled on a critical failure",
+        [at(death, 3, "failure"), at(death, 4, "failure"), at(death, 7, "failure"), at(death, 10, "failure"), at(death, 10, "criticalFailure")],
+        [[], ["2d6"], ["4d6"], ["8d6"], ["8d6x2"]]);
+    const { hourDice } = await import("../scripts/stargazer/auguries.mjs");
+    check("OM-02g/h The Hour Is Not Come heals nothing below rank 5, 2d8 at 5, +2d8 each two ranks",
+        [4, 5, 6, 7, 9, 10].map(hourDice), [0, 2, 2, 4, 6, 6]);
+    const blood = riders("first-blood")[1].apply.substitutions[0].value;
+    check("OM-04e/f First Blood: 1d6 spirit, +1d6 every other rank", [blood.base, blood.at["5"], blood.at["17"],
+        read("stargazer-effects/effect-first-blood-strike.json").system.rules[0].damageType], [1, 2, 5, "spirit"]);
+    const doubt = riders("coiling-doubt");
+    check("OM-11 Coiling Doubt: one roll on a success; each round for 3 rounds on a failure; a minute and stupefied 2 on a critical failure",
+        doubt.map((r) => `${r.outcomes.join("/")}:${r.apply.slug ?? r.apply.uuid.split("Item.")[1]}:${r.duration.value}${r.duration.unit[0]}`),
+        ["success/failure/criticalFailure:Effect: Coiling Doubt:1m", "failure:Effect: Coiling Doubt (Lingering):3r",
+            "criticalFailure:Effect: Coiling Doubt (Lingering):1m", "criticalFailure:stupefied:1m"]);
+    check("OM-10b Fixed Point: a 30-foot emanation, up to 6 creatures",
+        [read("stargazer-auguries/fixed-point.json").system.area, read("stargazer-auguries/fixed-point.json").flags["isaacs-hb-pf2e"].areaTargeting.maxTargets],
+        [{ type: "emanation", value: 30 }, 6]);
+    const { snarlAgainst } = await import("../scripts/stargazer/threads.mjs");
+    const huntedTarget = { itemTypes: { effect: [{ flags: { "isaacs-hb-pf2e": { huntedBySky: true } } }] } };
+    const sg = (...slugs) => ({ itemTypes: { feat: slugs.map((slug) => ({ slug })) } });
+    check("OM-12f Snarl against a hunted creature: −3, −4 with Surer Thread; −1 against anyone else",
+        [snarlAgainst(sg(), huntedTarget), snarlAgainst(sg("surer-thread"), huntedTarget), snarlAgainst(sg(), { itemTypes: { effect: [] } })], [3, 4, 1]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
 
 if (failures.length > 0) {
     console.error(`Stargazer tests failed: ${failures.length} of ${checks}.`);

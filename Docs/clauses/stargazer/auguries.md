@@ -60,27 +60,27 @@ and have no row.
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| OM-01a | §5.2 Death Foretold | ***Death Foretold*** ✦✦ (concentrate, emotion, fear, illusion, mental, prediction, visual) |  | ☐ |  |
-| OM-01b | §5.2 Death Foretold | **Targets** up to 5 creatures within 30 feet · **Saving Throw** Will |  | ☐ |  |
-| OM-01c | §5.2 Death Foretold | **Critical Success** Unaffected. |  | ☐ |  |
-| OM-01d | §5.2 Death Foretold | **Success** Frightened 1. |  | ☐ |  |
-| OM-01e | §5.2 Death Foretold | **Failure** Frightened 2. |  | ☐ |  |
-| OM-01f | §5.2 Death Foretold | **Critical Failure** Frightened 3, **stunned 1**, and fleeing for 1 round. |  | ☐ |  |
-| OM-01g | §5.2 Death Foretold | **Heightened (4th)** A creature that fails also takes **2d6 mental damage**, doubled on a critical failure. |  | ☐ |  |
-| OM-01h | §5.2 Death Foretold | **(+2)** +2d6. |  | ☐ |  |
+| OM-01a | §5.2 Death Foretold | ***Death Foretold*** ✦✦ (concentrate, emotion, fear, illusion, mental, prediction, visual) | `test-stargazer` pins it | ✅ | Live: two actions with `emotion, fear, illusion, mental, prediction, visual` |
+| OM-01b | §5.2 Death Foretold | **Targets** up to 5 creatures within 30 feet · **Saving Throw** Will | `test-stargazer` pins it | ✅ | Live, Altair (19th), rank 10, the foe's Will save forced against DC 38: the save's riders landed on the creature that rolled; up to five within 30 feet is the targeting ceiling (pinned) |
+| OM-01c | §5.2 Death Foretold | **Critical Success** Unaffected. | `test-stargazer` pins it | ✅ | Live, Altair (19th), rank 10, the foe's Will save forced against DC 38: a critical success left nothing |
+| OM-01d | §5.2 Death Foretold | **Success** Frightened 1. | `test-stargazer` pins it | ✅ | Live, Altair (19th), rank 10, the foe's Will save forced against DC 38: success → **frightened 1** |
+| OM-01e | §5.2 Death Foretold | **Failure** Frightened 2. | `test-stargazer` pins it | ✅ | Live, Altair (19th), rank 10, the foe's Will save forced against DC 38: failure → **frightened 2** |
+| OM-01f | §5.2 Death Foretold | **Critical Failure** Frightened 3, **stunned 1**, and fleeing for 1 round. | `test-stargazer` pins it | ✅ | Live, Altair (19th), rank 10, the foe's Will save forced against DC 38: critical failure → **frightened 3**, **stunned 1** and **fleeing** for 1 round |
+| OM-01g | §5.2 Death Foretold | **Heightened (4th)** A creature that fails also takes **2d6 mental damage**, doubled on a critical failure. | `test-stargazer` pins it | ✅ | Live, Altair (19th), rank 10, the foe's Will save forced against DC 38: failure dealt **`8d6` mental = 29**; critical failure **`8d6 * 2` = 64**. No damage below rank 4 is pinned |
+| OM-01h | §5.2 Death Foretold | **(+2)** +2d6. | `test-stargazer` pins it | ✅ | Live, Altair (19th), rank 10: 8d6 — 2d6 at rank 4 and +2d6 at 6, 8 and 10 |
 
 ## The Hour Is Not Come (guide §5.2)
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| OM-02a | §5.2 The Hour Is Not Come | ***The Hour Is Not Come*** ✦ **[reaction]** (concentrate, healing, prediction) |  | ☐ |  |
-| OM-02b | §5.2 The Hour Is Not Come | **Trigger** You or an ally within 30 feet is reduced to 0 Hit Points. |  | ☐ |  |
-| OM-02c | §5.2 The Hour Is Not Come | The target is reduced to **1 Hit Point** instead |  | ☐ |  |
-| OM-02d | §5.2 The Hour Is Not Come | gains **temporary Hit Points equal to your level** |  | ☐ |  |
-| OM-02e | §5.2 The Hour Is Not Come | does not gain the wounded condition from this instance. |  | ☐ |  |
-| OM-02f | §5.2 The Hour Is Not Come | A creature cannot benefit from this Augury again for 10 minutes. |  | ☐ |  |
-| OM-02g | §5.2 The Hour Is Not Come | **Heightened (5th)** The target also regains **2d8** Hit Points. |  | ☐ |  |
-| OM-02h | §5.2 The Hour Is Not Come | **(+2)** +2d8. |  | ☐ |  |
+| OM-02a | §5.2 The Hour Is Not Come | ***The Hour Is Not Come*** ✦ **[reaction]** (concentrate, healing, prediction) | `test-stargazer` pins it | ✅ | Live: a reaction with `healing`; offered as a whispered button and spending a Focus Point (2 → 1) |
+| OM-02b | §5.2 The Hour Is Not Come | **Trigger** You or an ally within 30 feet is reduced to 0 Hit Points. |  | ✅ | Live, Altair (19th), rank 10: Deneb, 15 feet away, falling from 30 to 0 posted the button; the second fall, while immune, posted none |
+| OM-02c | §5.2 The Hour Is Not Come | The target is reduced to **1 Hit Point** instead | `test-stargazer` pins it | ✅ | Live, Altair (19th), rank 10: Deneb stood at **25** — 1 Hit Point plus the heightened heal |
+| OM-02d | §5.2 The Hour Is Not Come | gains **temporary Hit Points equal to your level** | `test-stargazer` pins it | ✅ | Live, Altair (19th), rank 10: **19** temporary Hit Points |
+| OM-02e | §5.2 The Hour Is Not Come | does not gain the wounded condition from this instance. |  | ✅ | Live, Altair (19th), rank 10: no dying and no wounded afterwards; any wounded value the creature had is put back |
+| OM-02f | §5.2 The Hour Is Not Come | A creature cannot benefit from this Augury again for 10 minutes. |  | ✅ | Live, Altair (19th), rank 10: *Immune: The Hour Is Not Come* for 10 minutes, and the next fall offered nothing |
+| OM-02g | §5.2 The Hour Is Not Come | **Heightened (5th)** The target also regains **2d8** Hit Points. | `test-stargazer` pins it | ✅ | Live, Altair (19th), rank 10: the heal was 24 — **6d8** |
+| OM-02h | §5.2 The Hour Is Not Come | **(+2)** +2d8. | `test-stargazer` pins it | ✅ | Live, Altair (19th), rank 10: 6d8 — 2d8 at rank 5, +2d8 at 7 and 9 |
 
 ## Guiding Star (guide §5.2)
 
@@ -97,12 +97,12 @@ and have no row.
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| OM-04a | §5.2 First Blood | ***First Blood*** ✦✦ (concentrate, prediction) |  | ☐ |  |
-| OM-04b | §5.2 First Blood | **Targets** up to 5 allies within 30 feet · cast during exploration |  | ☐ |  |
-| OM-04c | §5.2 First Blood | The next time each rolls initiative within the hour, it gains a **+2 status bonus** to that roll |  | ☐ |  |
-| OM-04d | §5.2 First Blood | is **not off-guard** during the first round |  | ☐ |  |
-| OM-04e | §5.2 First Blood | its **first Strike of the encounter that hits deals an extra 1d6 spirit damage**. |  | ☐ |  |
-| OM-04f | §5.2 First Blood | **Heightened (+2)** +1d6. |  | ☐ |  |
+| OM-04a | §5.2 First Blood | ***First Blood*** ✦✦ (concentrate, prediction) | `test-stargazer` pins it | ✅ | Live: two actions, `concentrate` and `prediction` |
+| OM-04b | §5.2 First Blood | **Targets** up to 5 allies within 30 feet · cast during exploration | `test-stargazer` pins it | ✅ | Live, Altair (19th), rank 10: on the targeted ally, for an hour; up to five is the ceiling (pinned) |
+| OM-04c | §5.2 First Blood | The next time each rolls initiative within the hour, it gains a **+2 status bonus** to that roll | `test-stargazer` pins it | ✅ | Live, Altair (19th), rank 10: Deneb's initiative roll carried **+2** First Blood, and the effect was spent |
+| OM-04d | §5.2 First Blood | is **not off-guard** during the first round |  | — | pf2e does not make a creature off-guard in the first round for being unaware, so there is nothing to lift |
+| OM-04e | §5.2 First Blood | its **first Strike of the encounter that hits deals an extra 1d6 spirit damage**. | `test-stargazer` pins it | ✅ | Live, Altair (19th), rank 10: the first Strike damage roll was **`1d6 bludgeoning + 5d6 spirit`** and the effect was spent; the second was `1d6 bludgeoning` |
+| OM-04f | §5.2 First Blood | **Heightened (+2)** +1d6. | `test-stargazer` pins it | ✅ | Live, Altair (19th), rank 10: 5d6 — 1d6 +1d6 each two ranks |
 
 ## Iron Auspice (guide §5.2)
 
@@ -151,46 +151,46 @@ and have no row.
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| OM-09a | §5.2 Perfect Ledger | ***Perfect Ledger*** ✦ (concentrate, prediction) |  | ☐ |  |
-| OM-09b | §5.2 Perfect Ledger | **Targets** you and up to 2 allies within 30 feet |  | ☐ |  |
-| OM-09c | §5.2 Perfect Ledger | Each target's next **Recall Knowledge** before the end of your next turn is a **free action** |  | ☐ |  |
-| OM-09d | §5.2 Perfect Ledger | gains a +2 circumstance bonus |  | ☐ |  |
-| OM-09e | §5.2 Perfect Ledger | on a success reveals one additional piece of information. |  | ☐ |  |
-| OM-09f | §5.2 Perfect Ledger | On a critical success it also reveals the creature's **lowest saving throw** and all of its **weaknesses**. |  | ☐ |  |
-| OM-09g | §5.2 Perfect Ledger | **Heightened (5th)** Every Recall Knowledge each target makes until the end of your next turn is a free action. |  | ☐ |  |
+| OM-09a | §5.2 Perfect Ledger | ***Perfect Ledger*** ✦ (concentrate, prediction) | `test-stargazer` pins it | ✅ | Live: one action, `concentrate` and `prediction` |
+| OM-09b | §5.2 Perfect Ledger | **Targets** you and up to 2 allies within 30 feet | `test-stargazer` pins it | ✅ | Live, Altair (19th), rank 10: on the targeted ally; you and two allies is the ceiling (pinned) |
+| OM-09c | §5.2 Perfect Ledger | Each target's next **Recall Knowledge** before the end of your next turn is a **free action** |  | — | A free action is the player's accounting; pf2e does not enforce action costs on a Recall Knowledge |
+| OM-09d | §5.2 Perfect Ledger | gains a +2 circumstance bonus | `test-stargazer` pins it | ✅ | Live, Altair (19th), rank 10: Deneb's next Recall Knowledge took **+2** circumstance and spent the effect; the one after took nothing |
+| OM-09e | §5.2 Perfect Ledger | on a success reveals one additional piece of information. |  | — | What a success reveals is the GM's to say |
+| OM-09f | §5.2 Perfect Ledger | On a critical success it also reveals the creature's **lowest saving throw** and all of its **weaknesses**. |  | ✅ | Live, Altair (19th), rank 10: a critical success with the foe targeted whispered *lowest save fortitude; weaknesses: cold iron 5*. **Fixed while driving:** pf2e records no target on a skill check, so the reveal now reads the roller's own target |
+| OM-09g | §5.2 Perfect Ledger | **Heightened (5th)** Every Recall Knowledge each target makes until the end of your next turn is a free action. |  | — | Action costs again; nothing to automate |
 
 ## Fixed Point (guide §5.2)
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| OM-10a | §5.2 Fixed Point | ***Fixed Point*** ✦✦✦ (concentrate, prediction) |  | ☐ |  |
-| OM-10b | §5.2 Fixed Point | **Area** 30-foot emanation · **Targets** up to 6 creatures you choose |  | ☐ |  |
+| OM-10a | §5.2 Fixed Point | ***Fixed Point*** ✦✦✦ (concentrate, prediction) | `test-stargazer` pins it | ✅ | Live: three actions, `concentrate` and `prediction` |
+| OM-10b | §5.2 Fixed Point | **Area** 30-foot emanation · **Targets** up to 6 creatures you choose | `test-stargazer` pins it | ✅ | A 30-foot emanation choosing up to six (pinned); the GM armed each named target |
 | OM-10c | §5.2 Fixed Point | Name attack rolls, saving throws, or skill checks. |  | ☐ |  |
-| OM-10d | §5.2 Fixed Point | Until the end of your next turn, the **first roll of that type** made by each chosen creature is treated as a **10** on the die, before modifiers. |  | ☐ |  |
+| OM-10d | §5.2 Fixed Point | Until the end of your next turn, the **first roll of that type** made by each chosen creature is treated as a **10** on the die, before modifiers. | `test-stargazer` pins it | ✅ | Live, Altair (19th), rank 10: skill checks named on the foe — its save first rolled a die, its first skill check was the constant **`10 - 3`**, its second rolled again |
 | OM-10e | §5.2 Fixed Point | **Heightened (6th)** Name two roll types. |  | ☐ |  |
 
 ## Coiling Doubt (guide §5.2)
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| OM-11a | §5.2 Coiling Doubt | ***Coiling Doubt*** ✦✦ (concentrate, misfortune, prediction) |  | ☐ |  |
-| OM-11b | §5.2 Coiling Doubt | **Targets** up to 3 creatures within 30 feet · **Saving Throw** Will |  | ☐ |  |
+| OM-11a | §5.2 Coiling Doubt | ***Coiling Doubt*** ✦✦ (concentrate, misfortune, prediction) | `test-stargazer` pins it | ✅ | Live: two actions with `misfortune` |
+| OM-11b | §5.2 Coiling Doubt | **Targets** up to 3 creatures within 30 feet · **Saving Throw** Will | `test-stargazer` pins it | ✅ | Live, Altair (19th), rank 10: the riders landed on the creature that rolled the Will save; up to three within 30 is the ceiling (pinned) |
 | OM-11c | §5.2 Coiling Doubt | **Critical Success** Unaffected. |  | ☐ |  |
 | OM-11d | §5.2 Coiling Doubt | **Success** The next attack roll or skill check the target attempts is rolled twice, taking the lower. |  | ☐ |  |
-| OM-11e | §5.2 Coiling Doubt | **Failure** As success, but the first attack roll or skill check each round for **3 rounds**. |  | ☐ |  |
-| OM-11f | §5.2 Coiling Doubt | **Critical Failure** As failure for **1 minute** |  | ☐ |  |
-| OM-11g | §5.2 Coiling Doubt | the target is **stupefied 2** for the same minute. |  | ☐ |  |
+| OM-11e | §5.2 Coiling Doubt | **Failure** As success, but the first attack roll or skill check each round for **3 rounds**. | `test-stargazer` pins it | ✅ | Live, Altair (19th), rank 10: a failed save → the foe's first skill check **`2d20kl`**, its second `1d20`; at the start of its next turn the one-roll effect was back, and the next check `2d20kl` |
+| OM-11f | §5.2 Coiling Doubt | **Critical Failure** As failure for **1 minute** | `test-stargazer` pins it | ✅ | Live, Altair (19th), rank 10: a critical failure → both effects for **1 minute** |
+| OM-11g | §5.2 Coiling Doubt | the target is **stupefied 2** for the same minute. | `test-stargazer` pins it | ✅ | Live, Altair (19th), rank 10: **stupefied 2** for 1 minute |
 
 ## Hunted by the Sky (guide §5.2)
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| OM-12a | §5.2 Hunted by the Sky | ***Hunted by the Sky*** ✦✦ (concentrate, prediction) |  | ☐ |  |
-| OM-12b | §5.2 Hunted by the Sky | **Targets** 1 creature within 60 feet · **Duration** 1 minute |  | ☐ |  |
-| OM-12c | §5.2 Hunted by the Sky | The target cannot be concealed or hidden from you. |  | ☐ |  |
-| OM-12d | §5.2 Hunted by the Sky | You and your allies gain a +1 circumstance bonus to Seek and to Perception checks to find it |  | ☐ |  |
-| OM-12e | §5.2 Hunted by the Sky | the **first attack made against it each round** gains a +1 circumstance bonus. |  | ☐ |  |
-| OM-12f | §5.2 Hunted by the Sky | Your **Snarl** against it is **−3**, or **−4** once you have *Surer Thread*. |  | ☐ |  |
+| OM-12a | §5.2 Hunted by the Sky | ***Hunted by the Sky*** ✦✦ (concentrate, prediction) | `test-stargazer` pins it | ✅ | Live: two actions, `concentrate` and `prediction` |
+| OM-12b | §5.2 Hunted by the Sky | **Targets** 1 creature within 60 feet · **Duration** 1 minute | `test-stargazer` pins it | ✅ | Live, Altair (19th), rank 10: on the targeted foe for a minute |
+| OM-12c | §5.2 Hunted by the Sky | The target cannot be concealed or hidden from you. |  | ⚠️ | **Gap:** pf2e's detection is the GM's to set; nothing stops the hunted creature being hidden from the Stargazer |
+| OM-12d | §5.2 Hunted by the Sky | You and your allies gain a +1 circumstance bonus to Seek and to Perception checks to find it |  | ✅ | Live, Altair (19th), rank 10: Deneb's Seek at the hunted foe took **+1** circumstance; plain Perception nothing. **Fixed while driving:** pf2e records no target on a Perception check, so the stage reads the roller's target |
+| OM-12e | §5.2 Hunted by the Sky | the **first attack made against it each round** gains a +1 circumstance bonus. |  | ✅ | Live, Altair (19th), rank 10: the first Strike at the hunted foe that round took **+1** circumstance, the second nothing |
+| OM-12f | §5.2 Hunted by the Sky | Your **Snarl** against it is **−3**, or **−4** once you have *Surer Thread*. | `test-stargazer` pins it | ✅ | Live, Altair (19th), rank 10: Altair's Snarl on the hunted foe armed at **−4** (Surer Thread); against anyone else −2 |
 | OM-12g | §5.2 Hunted by the Sky | **Heightened (6th)** 2 creatures. |  | ☐ |  |
 
 ## Alms of Fate (guide §5.2)
@@ -265,10 +265,10 @@ added at the Night Vigil, gone at the next — is Night Vigil's, in the class tr
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 75 |
-| ✅ | 38 |
-| ⚠️ | 3 |
+| ☐ | 32 |
+| ✅ | 76 |
+| ⚠️ | 4 |
 | ❌ | 0 |
 | 🔧 | 0 |
-| — | 2 |
+| — | 6 |
 | **Total** | **118** |

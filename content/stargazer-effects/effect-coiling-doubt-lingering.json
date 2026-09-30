@@ -1,0 +1,41 @@
+{
+    "img": "icons/magic/unholy/orb-glowing-purple.webp",
+    "name": "Effect: Coiling Doubt (Lingering)",
+    "system": {
+        "description": {
+            "value": "<p>The first attack roll or skill check each round is rolled twice, taking the lower.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "rounds",
+            "value": 3
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect",
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "coilingDoubt": true
+        }
+    }
+}
