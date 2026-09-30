@@ -53,7 +53,7 @@ the weights themselves are.
 | SK-01 | §8.2 | Each dawn the GM advances the day. |  | ✅ | Live: the GM's *advanceDay* moved day 227 to 228 |
 | SK-02a | §8.2 | The next pre-rolled entry becomes today, and a new day is rolled onto the end of the queue. |  | ✅ | Live: day 228 took the first queued entry (Starless, Malefic) and the queue was topped back up to 7 |
 | SK-02b | §8.2 | The day that ends is kept in the Sky's **history**, so a past sky can be read as well as a future one. |  | ✅ | Live: after the advance, `recall(227)` returned day 227's sign and aspect. Kept to 400 days |
-| SK-02c | §8.2 | every "once per week" in this guide is seven dawns of it. |  | ☐ |  |
+| SK-02c | §8.2 | every "once per week" in this guide is seven dawns of it. | `test-stargazer` pins it | ✅ | Live: Rewrite the Ending was not ready again on day 230 and ready on 234; Fixed Sky's Portent, spoken on day 227, was marked spoken for the week — both counted in the Sky's days |
 | SK-03 | §8.2 | thirteen skies, **equally likely**, 1 in 13 each |  | ✅ | Live: 26,000 `rollSign` calls — every sign between **7.3% and 8.0%** (1 in 13 is 7.7%) |
 | SK-04 | §11.4 | the `ASPECTS` weights are now **20 / 30 / 30 / 10 / 10** (Quiet, Benefic, Retrograde, Malefic, Exalted) |  | ✅ | Live: 20,000 `rollAspect` calls — Quiet **19.8**, Benefic **30.5**, Retrograde **29.6**, Malefic **10.1**, Exalted **10.0** per cent |
 | SK-05a | §8.2 Quiet | The sky is unremarkable. Nothing happens. |  | ✅ | Live: a Quiet Taurus day put nothing on the ally's Fortitude |
@@ -103,13 +103,13 @@ the weights themselves are.
 | SK-29a | §8.4 | **In a VTT:** the effect is named `The Sky` with an empty description and a generic icon |  | ✅ | Live: with a player owning a Stargazer, every creature's aspect effect was **The Sky**, description empty, one shared icon; the rule inside still applied (Taurus −1) |
 | SK-29b | §8.4 | Players see that something is on them. They do not see what. |  | ✅ | Live: the blanked effect names no aspect and no sign; only its flag, for the module, remembers which it is |
 | SK-29c | §8.4 | The module does this by itself whenever a player owns a Stargazer character anywhere in the world: the four aspect effects are renamed, emptied and given one shared icon as they are applied. |  | ✅ | Live: the moment the player's ownership was removed and the sky re-applied, the effect was **Sky: Retrograde** again with its own icon — the control |
-| SK-30a | §8.4 | Ten minutes under an open sky and an **Astronomy Lore** or **Occultism** check, as a Recall Knowledge action |  | ☐ |  |
-| SK-30b | §8.4 | against the region's level-based **Hard** DC. |  | ☐ |  |
-| SK-30c | §8.4 | On an Exalted or Malefic day, reduce the DC by 5 |  | ☐ |  |
-| SK-31a | §8.4 Critical Success | You learn the sign **and** the aspect. |  | ☐ |  |
-| SK-31b | §8.4 Success | You learn the sign only. |  | ☐ |  |
-| SK-31c | §8.4 Failure | Nothing. |  | ☐ |  |
-| SK-31d | §8.4 Critical Failure | You learn a **wrong sign**, confidently. |  | ☐ |  |
+| SK-30a | §8.4 | Ten minutes under an open sky and an **Astronomy Lore** or **Occultism** check, as a Recall Knowledge action | `test-stargazer` pins it | ✅ | Live: the *Read the Sky* macro rolled SG Ally's Occultism as a secret Recall Knowledge; Mira was offered Astronomy Lore or Occultism. **Built this pass.** The ten minutes are the table's |
+| SK-30b | §8.4 | against the region's level-based **Hard** DC. | `test-stargazer` pins it | ✅ | Live: DC 17 at region level 1 — the Hard DC (15 + 2) |
+| SK-30c | §8.4 | On an Exalted or Malefic day, reduce the DC by 5 | `test-stargazer` pins it | ✅ | Live: on a Malefic day, DC 12 |
+| SK-31a | §8.4 Critical Success | You learn the sign **and** the aspect. | `test-stargazer` pins it | ✅ | Live: a critical success whispered *Capricorn, Benefic* |
+| SK-31b | §8.4 Success | You learn the sign only. | `test-stargazer` pins it | ✅ | Live: a success whispered *Capricorn rules it; not whether that is good news* |
+| SK-31c | §8.4 Failure | Nothing. | `test-stargazer` pins it | ✅ | Live: a failure whispered *the sky will not say* |
+| SK-31d | §8.4 Critical Failure | You learn a **wrong sign**, confidently. | `test-stargazer` pins it | ✅ | Live: a critical failure whispered *Aries rules it*, in the words of a success. A clouded sky refused to roll at all |
 
 ## Interaction with the Saint (guide §8.6)
 
@@ -127,8 +127,8 @@ the weights themselves are.
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 8 |
-| ✅ | 43 |
+| ☐ | 0 |
+| ✅ | 51 |
 | ⚠️ | 3 |
 | ❌ | 0 |
 | 🔧 | 0 |
