@@ -475,6 +475,64 @@ function check(label, actual, expected) {
 }
 
 /* -------------------------------------------------------------------------------------------- */
+/*  Phase 6b: the Portent family, and the sky beyond today                                      */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    const { portentCount, portentSlots, fixedReady, portentsOf } = await import("../scripts/stargazer/threads.mjs");
+    const sg = (flags, ...slugs) => ({ level: 20, itemTypes: { feat: slugs.map((slug) => ({ slug })) }, flags: { "isaacs-hb-pf2e": { stargazer: flags } } });
+    check("SF-07a, SF-20a/b: one Portent; two with Twin Portent or Second Portent; three with both",
+        [portentCount(sg({}, "portent")), portentCount(sg({}, "portent", "twin-portent")), portentCount(sg({}, "portent", "second-portent")),
+            portentCount(sg({}, "portent", "twin-portent", "second-portent")), portentCount(sg({}))], [1, 2, 2, 3, 0]);
+    check("SF-39a/b Fixed Sky: one Portent is a 20; the others are rolled",
+        portentSlots(sg({}, "portent", "twin-portent", "fixed-sky"), 100).map((s) => [s.id, s.value, Boolean(s.fixed), s.spent]),
+        [["fixed", 20, true, false], ["p2", null, false, false]]);
+    check("SF-39a Fixed Sky: once per week — seven dawns of the Sky",
+        [fixedReady(sg({ fixedSpokenDay: 100 }), 106), fixedReady(sg({ fixedSpokenDay: 100 }), 107), fixedReady(sg({}), 1)], [false, true, true]);
+    check("SF-39a: a fixed Portent spoken this week is recorded spent",
+        portentSlots(sg({ fixedSpokenDay: 100 }, "portent", "fixed-sky"), 103).map((s) => s.spent), [true]);
+    check("a sheet from before Twin Portent still reads its one Portent",
+        portentsOf(sg({ portent: { value: 14, spent: false } })), [{ id: "p1", value: 14, spent: false }]);
+
+    const { readingDC, readingResult } = await import("../scripts/stargazer/feats.mjs");
+    check("SF-06b Reckoning of Days: the level's Hard DC, 5 lower on an Exalted or Malefic day",
+        [readingDC(2, "benefic"), readingDC(2, "malefic"), readingDC(10, "exalted"), readingDC(10, "none")], [18, 13, 24, 29]);
+    const day = { sign: "leo", aspect: "benefic" };
+    check("SF-06a §8.4's ladder: sign and aspect; sign; nothing; a wrong sign told as a success",
+        [0, 1, 2, 3].map((d) => readingResult(d, day, { wrongSign: "virgo" })),
+        [{ sign: "virgo", aspect: null }, null, { sign: "leo", aspect: null }, { sign: "leo", aspect: "benefic" }]);
+
+    const { longNow } = await import("../scripts/riders/apply.mjs");
+    const caster = (...slugs) => ({ itemTypes: { feat: slugs.map((slug) => ({ slug })) } });
+    const spell = (duration) => ({ type: "spell", system: { duration: { value: duration } } });
+    const minute = { unit: "minutes", value: 1 };
+    check("SF-27a Long Now: a 1-minute Duration line lasts 10 minutes",
+        longNow({ duration: minute }, { item: spell("1 minute"), originActor: caster("long-now") }), { unit: "minutes", value: 10 });
+    check("SF-27b Long Now: not inside a degree of success, not without a Duration line, not without the feat",
+        [longNow({ duration: minute, outcomes: ["criticalFailure"] }, { item: spell("1 minute"), originActor: caster("long-now") }).value,
+            longNow({ duration: minute }, { item: spell(""), originActor: caster("long-now") }).value,
+            longNow({ duration: minute }, { item: spell("1 minute"), originActor: caster() }).value], [1, 1, 1]);
+
+    const { SkyTracker } = await import("../scripts/sky/tracker.mjs");
+    const rolled = SkyTracker.rollDay();
+    check("SF-32d, SF-35c: every day is rolled with a second sky and a private aspect",
+        [typeof rolled.second?.sign, typeof rolled.second?.aspect, typeof rolled.privateAspect, SkyTracker.withExtras(rolled) === rolled,
+            Boolean(SkyTracker.withExtras({ sign: "leo", aspect: "none" }).second)], ["string", "string", "string", true, true]);
+
+    const { ownSignRules } = await import("../scripts/sky/tracker.mjs");
+    const benefic = JSON.parse((await import("node:fs")).readFileSync(new URL("../content/saint-effects/sky-aspect/sky-benefic.json", import.meta.url), "utf8")).system.rules;
+    const leo = ownSignRules(benefic, "leo");
+    check("SF-35b, SF-32c: a sky effect keeps only its own sign's rules, so two skies do not light each other's domains",
+        [leo.length > 0, leo.every((r) => JSON.stringify(r.predicate ?? []).includes('"sky:sign:leo"')), ownSignRules(benefic, "starless").length], [true, true, 0]);
+
+    const { wornAspect } = await import("../scripts/sky/terrain-rolls.mjs");
+    const effect = (name, sign) => ({ getFlag: (_m, k) => ({ skyEffect: true, skyName: name, skySign: sign })[k], name });
+    const wearer = { itemTypes: { effect: [effect("Sky: Benefic", "leo"), effect("Sky: Malefic", "libra")] } };
+    check("SF-32, SF-35: Libra and Aries read the sign a creature wears, not only the day's",
+        [wornAspect(wearer, "libra"), wornAspect(wearer, "leo"), wornAspect(wearer, "aries")], ["malefic", "benefic", null]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
 
 if (failures.length > 0) {
     console.error(`Stargazer tests failed: ${failures.length} of ${checks}.`);
