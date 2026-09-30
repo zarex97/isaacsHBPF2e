@@ -1,0 +1,315 @@
+{
+    "img": "icons/magic/death/skull-horned-worn-fire-blue.webp",
+    "name": "Death Foretold",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": {
+            "save": {
+                "basic": false,
+                "statistic": "will"
+            }
+        },
+        "description": {
+            "value": "<p>You show each of them the hour of its own death, in detail, with the date.</p><hr /><p><strong>Critical Success</strong> Unaffected.<br /><strong>Success</strong> Frightened 1.<br /><strong>Failure</strong> Frightened 2.<br /><strong>Critical Failure</strong> Frightened 3, <strong>stunned 1</strong>, and fleeing for 1 round.</p><hr /><p><strong>Heightened (4th)</strong> A creature that fails also takes <strong>2d6 mental damage</strong>, doubled on a critical failure. <strong>(+2)</strong> +2d6.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": null,
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "up to 5 creatures"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "stargazer-augury"
+            ],
+            "rarity": "common",
+            "traditions": [
+                "occult"
+            ],
+            "value": [
+                "concentrate",
+                "emotion",
+                "fear",
+                "focus",
+                "illusion",
+                "mental",
+                "prediction",
+                "stargazer",
+                "visual"
+            ]
+        }
+    },
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "maxTargets": 5,
+                "range": 30
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "type": "condition",
+                        "slug": "frightened",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "success"
+                    ]
+                },
+                {
+                    "apply": {
+                        "type": "condition",
+                        "slug": "frightened",
+                        "value": 2
+                    },
+                    "outcomes": [
+                        "failure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "type": "condition",
+                        "slug": "frightened",
+                        "value": 3
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "type": "condition",
+                        "slug": "stunned",
+                        "value": 1
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ]
+                },
+                {
+                    "apply": {
+                        "type": "condition",
+                        "slug": "fleeing"
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ],
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 1,
+                        "expiry": "turn-end"
+                    }
+                },
+                {
+                    "apply": {
+                        "type": "damage",
+                        "damageType": "mental",
+                        "formula": "2d6"
+                    },
+                    "outcomes": [
+                        "failure"
+                    ],
+                    "predicate": [
+                        {
+                            "gte": [
+                                "item:rank",
+                                4
+                            ]
+                        },
+                        {
+                            "lte": [
+                                "item:rank",
+                                5
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "apply": {
+                        "type": "damage",
+                        "damageType": "mental",
+                        "formula": "4d6"
+                    },
+                    "outcomes": [
+                        "failure"
+                    ],
+                    "predicate": [
+                        {
+                            "gte": [
+                                "item:rank",
+                                6
+                            ]
+                        },
+                        {
+                            "lte": [
+                                "item:rank",
+                                7
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "apply": {
+                        "type": "damage",
+                        "damageType": "mental",
+                        "formula": "6d6"
+                    },
+                    "outcomes": [
+                        "failure"
+                    ],
+                    "predicate": [
+                        {
+                            "gte": [
+                                "item:rank",
+                                8
+                            ]
+                        },
+                        {
+                            "lte": [
+                                "item:rank",
+                                9
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "apply": {
+                        "type": "damage",
+                        "damageType": "mental",
+                        "formula": "8d6"
+                    },
+                    "outcomes": [
+                        "failure"
+                    ],
+                    "predicate": [
+                        {
+                            "gte": [
+                                "item:rank",
+                                10
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "apply": {
+                        "type": "damage",
+                        "damageType": "mental",
+                        "formula": "2d6",
+                        "multiplier": 2
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ],
+                    "predicate": [
+                        {
+                            "gte": [
+                                "item:rank",
+                                4
+                            ]
+                        },
+                        {
+                            "lte": [
+                                "item:rank",
+                                5
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "apply": {
+                        "type": "damage",
+                        "damageType": "mental",
+                        "formula": "4d6",
+                        "multiplier": 2
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ],
+                    "predicate": [
+                        {
+                            "gte": [
+                                "item:rank",
+                                6
+                            ]
+                        },
+                        {
+                            "lte": [
+                                "item:rank",
+                                7
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "apply": {
+                        "type": "damage",
+                        "damageType": "mental",
+                        "formula": "6d6",
+                        "multiplier": 2
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ],
+                    "predicate": [
+                        {
+                            "gte": [
+                                "item:rank",
+                                8
+                            ]
+                        },
+                        {
+                            "lte": [
+                                "item:rank",
+                                9
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "apply": {
+                        "type": "damage",
+                        "damageType": "mental",
+                        "formula": "8d6",
+                        "multiplier": 2
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ],
+                    "predicate": [
+                        {
+                            "gte": [
+                                "item:rank",
+                                10
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "type": "spell"
+}

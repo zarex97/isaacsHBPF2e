@@ -1,0 +1,46 @@
+{
+    "img": "icons/magic/unholy/orb-glowing-purple.webp",
+    "name": "Effect: Coiling Doubt",
+    "system": {
+        "description": {
+            "value": "<p>The next attack roll or skill check is rolled twice, taking the lower.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [
+            {
+                "key": "RollTwice",
+                "keep": "lower",
+                "removeAfterRoll": true,
+                "selector": [
+                    "attack-roll",
+                    "skill-check"
+                ]
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

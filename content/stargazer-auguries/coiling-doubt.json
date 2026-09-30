@@ -1,0 +1,130 @@
+{
+    "img": "icons/magic/unholy/orb-glowing-purple.webp",
+    "name": "Coiling Doubt",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": {
+            "save": {
+                "basic": false,
+                "statistic": "will"
+            }
+        },
+        "description": {
+            "value": "<p><strong>Critical Success</strong> Unaffected.<br /><strong>Success</strong> The next attack roll or skill check the target attempts is rolled twice, taking the lower.<br /><strong>Failure</strong> As success, but the first attack roll or skill check each round for <strong>3 rounds</strong>.<br /><strong>Critical Failure</strong> As failure for <strong>1 minute</strong>, and the target is <strong>stupefied 2</strong> for the same minute.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": null,
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "up to 3 creatures"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "stargazer-augury",
+                "stargazer-sign-scorpio"
+            ],
+            "rarity": "common",
+            "traditions": [
+                "occult"
+            ],
+            "value": [
+                "concentrate",
+                "focus",
+                "misfortune",
+                "prediction",
+                "stargazer"
+            ]
+        }
+    },
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "enemies",
+                "maxTargets": 3,
+                "range": 30
+            },
+            "riders": [
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.stargazer-effects.Item.Effect: Coiling Doubt"
+                    },
+                    "outcomes": [
+                        "success",
+                        "failure",
+                        "criticalFailure"
+                    ],
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    }
+                },
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.stargazer-effects.Item.Effect: Coiling Doubt (Lingering)"
+                    },
+                    "outcomes": [
+                        "failure"
+                    ],
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 3,
+                        "expiry": "turn-start"
+                    }
+                },
+                {
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.stargazer-effects.Item.Effect: Coiling Doubt (Lingering)"
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ],
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    }
+                },
+                {
+                    "apply": {
+                        "type": "condition",
+                        "slug": "stupefied",
+                        "value": 2
+                    },
+                    "outcomes": [
+                        "criticalFailure"
+                    ],
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    }
+                }
+            ]
+        }
+    },
+    "type": "spell"
+}

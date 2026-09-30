@@ -1,0 +1,69 @@
+{
+    "img": "icons/magic/time/hourglass-tilted-gray.webp",
+    "name": "Fixed Point",
+    "system": {
+        "area": {
+            "type": "emanation",
+            "value": 30
+        },
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p>Name attack rolls, saving throws, or skill checks. Until the end of your next turn, the <strong>first roll of that type</strong> made by each chosen creature is treated as a <strong>10</strong> on the die, before modifiers.</p><hr /><p><strong>Heightened (6th)</strong> Name two roll types.</p><hr /><p><em>After you cast it, you are asked which roll types to name.</em></p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": null,
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "range": {
+            "value": ""
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "up to 6 creatures you choose"
+        },
+        "time": {
+            "value": "3"
+        },
+        "traits": {
+            "otherTags": [
+                "stargazer-augury",
+                "stargazer-sign-libra"
+            ],
+            "rarity": "common",
+            "traditions": [
+                "occult"
+            ],
+            "value": [
+                "concentrate",
+                "focus",
+                "prediction",
+                "stargazer"
+            ]
+        }
+    },
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "all",
+                "includesSelf": true,
+                "maxTargets": 6
+            }
+        }
+    },
+    "type": "spell"
+}
