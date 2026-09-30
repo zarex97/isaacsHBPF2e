@@ -1,7 +1,9 @@
 import { DamageBus, PRIORITY as DAMAGE } from "../lib/damage-bus.mjs";
 import { Relay } from "../riders/relay.mjs";
-import { relabel } from "../roll-rewrites/balance.mjs";
-import { MODULE_ID } from "../sky/signs.mjs";
+import { degreeOf } from "../lib/degree.mjs";
+import { relabel, setDieResult } from "../roll-rewrites/balance.mjs";
+import { MODULE_ID, SIGN_IDS, aspectOf, signOf } from "../sky/signs.mjs";
+import { SkyTracker } from "../sky/tracker.mjs";
 import { announce, snarledBy } from "./paths.mjs";
 import { isStargazer, reactionsLeft, spendReaction } from "./threads.mjs";
 
@@ -152,6 +154,124 @@ export async function clearStarMarks(origin) {
         const marks = token.actor.itemTypes.effect.filter((e) => e.flags?.[MODULE_ID]?.starMarked === origin.uuid);
         if (marks.length > 0) await token.actor.deleteEmbeddedDocuments("Item", marks.map((e) => e.id));
     }
+}
+
+/* ------------------------------------------------------------------------------------------------ */
+/*  Reckoning of Days                                                                               */
+/* ------------------------------------------------------------------------------------------------ */
+
+/**
+ * The DC to read a day's sky (guide §8.4): the level-based **Hard** DC, less 5 on an Exalted or Malefic day
+ * — "a great sky is obvious to anyone who looks up". The region's level is the Stargazer's, for want of one.
+ */
+export function readingDC(level, aspect) {
+    const base = LEVEL_DC[Math.min(Math.max(level ?? 1, 0), LEVEL_DC.length - 1)] + 2;
+    return ["exalted", "malefic"].includes(aspect) ? base - 5 : base;
+}
+
+/** What a reading of that degree tells the reader (§8.4). A critical failure is a wrong sign, told as a success. */
+export function readingResult(degree, day, { wrongSign } = {}) {
+    if (degree === 3) return { sign: day.sign, aspect: day.aspect };
+    if (degree === 2) return { sign: day.sign, aspect: null };
+    if (degree === 0) return { sign: wrongSign, aspect: null };
+    return null;
+}
+
+/** Reckoning of Days (§7, 2nd): yesterday, or four to seven days out — the queue's end. */
+async function reckoning(actor) {
+    const sky = SkyTracker.state;
+    const days = [{ label: `Yesterday (day ${sky.day - 1})`, offset: -1 }];
+    for (let n = 4; n <= Math.min(7, sky.queue?.length ?? 0); n++) days.push({ label: `Day ${sky.day + n} (${n} days out)`, offset: n });
+    const data = await foundry.applications.api.DialogV2.prompt({
+        window: { title: "Reckoning of Days" },
+        content: `<p>Which day's sky do you reckon?</p><div class="form-group"><label>Day</label><select name="offset">${days.map((d) => `<option value="${d.offset}">${d.label}</option>`).join("")}</select></div>`,
+        rejectClose: false,
+        ok: { label: "Reckon it", callback: (_e, button) => new foundry.applications.ux.FormDataExtended(button.form).object },
+    });
+    const offset = Number(data?.offset);
+    if (!days.some((d) => d.offset === offset)) return;
+    const day = offset < 0 ? SkyTracker.recall(sky.day - 1) : sky.queue?.[offset - 1];
+    const lore = Object.values(actor.skills ?? {}).find((s) => s.slug === "astronomy-lore");
+    if (!lore) return ui.notifications.warn("Reckoning of Days: you have no Astronomy Lore.");
+    if (!day) {
+        return say(actor, `<strong>Reckoning of Days</strong>: the tracker does not hold that day; the GM tells you what it was.`, { whisper: ownersOf(actor) });
+    }
+    const dc = readingDC(actor.level, day.aspect);
+    const roll = await lore.roll({
+        skipDialog: true, rollMode: "blindroll", traits: ["secret"], dc: { value: dc, label: "Reckoning of Days" },
+        extraRollOptions: ["action:reckoning-of-days", "secret"],
+    });
+    const degree = roll?.degreeOfSuccess ?? roll?.options?.degreeOfSuccess ?? null;
+    const others = SIGN_IDS.filter((s) => s !== day.sign);
+    const result = readingResult(degree, day, { wrongSign: others[Math.floor(Math.random() * others.length)] });
+    const when = offset < 0 ? "Yesterday" : `Day ${sky.day + offset}`;
+    const text = result
+        ? `${when}: ${signOf(result.sign).glyph} <strong>${signOf(result.sign).label}</strong>${result.aspect ? `, ${aspectOf(result.aspect).label}` : " rules it; not whether that is good news"}.`
+        : `${when}: the sky will not say.`;
+    await say(actor, `<strong>Reckoning of Days</strong> — ${text}`, { whisper: ownersOf(actor) });
+}
+
+/* ------------------------------------------------------------------------------------------------ */
+/*  Foretold Escape                                                                                 */
+/* ------------------------------------------------------------------------------------------------ */
+
+/**
+ * The attack roll that just dropped this Stargazer, or null. Foretold Escape reaches only an **attack
+ * roll** against you (ruling R15), so damage no attack roll dealt finds nothing here.
+ */
+function killingAttack(actor, attacker) {
+    // The most recent attack at this creature, and only if it hit. An older hit further up the log is not
+    // what dealt this damage — driven: a fire splash after a miss found the hit before it.
+    for (const message of game.messages.contents.slice(-15).reverse()) {
+        const context = message.flags?.pf2e?.context;
+        if (context?.type !== "attack-roll") continue;
+        const target = context.target?.actor ? fromUuidSync(context.target.actor) : null;
+        if (target?.id !== actor.id) continue;
+        if (attacker && message.actor?.id !== attacker.id) return null;
+        return ["success", "criticalSuccess"].includes(context.outcome) ? message : null;
+    }
+    return null;
+}
+
+async function offerEscape(actor, params, before) {
+    if (!isStargazer(actor) || !(before > 0) || (actor.hitPoints?.value ?? 1) > 0) return;
+    const item = featOf(actor, "foretold-escape");
+    if (!item || (item.system.frequency?.value ?? 0) <= 0) return;
+    const attack = killingAttack(actor, params?.item?.actor ?? null);
+    if (!attack) return;
+    await offerCard(actor, `<strong>Foretold Escape</strong> — ${attack.actor?.name}'s attack would end you. Speak a Portent of 1 over it?`,
+        "escape", { messageId: attack.id, before }, [["use", "Speak it: a 1"]]);
+}
+
+/** The attack re-read with a natural 1, and the Stargazer put back as they stood if it now misses. */
+async function escape(origin, flag) {
+    const item = featOf(origin, "foretold-escape");
+    const attack = game.messages.get(flag.messageId);
+    const context = attack?.flags?.pf2e?.context;
+    const roll = attack?.rolls?.at(0);
+    if (!item || !context || !roll) return;
+    if (!(await spendDaily(item))) return say(origin, "<strong>Foretold Escape</strong>: already used today.", { whisper: ownersOf(origin) });
+    const modifier = Number(roll.total) - Number(roll.dice?.find((d) => d.faces === 20)?.total ?? 0);
+    const rollData = roll.toJSON();
+    setDieResult(rollData, 1);
+    const degree = degreeOf({ dieValue: 1, modifier, dc: context.dc?.value, adjustments: context.dosAdjustments ?? null });
+    rollData.total = degree.total;
+    rollData.options = { ...(rollData.options ?? {}), degreeOfSuccess: degree.value };
+    await attack.update({
+        rolls: [JSON.stringify(rollData)], content: String(degree.total),
+        flavor: relabel(attack.flavor ?? "", degree, `Foretold Escape (${origin.name}): a Portent of 1`),
+        "flags.pf2e.context.outcome": degree.key, "flags.pf2e.context.unadjustedOutcome": degree.unadjustedKey,
+    });
+    if (degree.value >= 2) {
+        return say(origin, `<strong>Foretold Escape</strong>: even on a 1, ${attack.actor?.name}'s attack hits. The damage stands.`);
+    }
+    // It missed: it never happened. Hit Points back to where they stood, and the fall undone.
+    await origin.update({ "system.attributes.hp.value": flag.before });
+    for (const slug of ["dying", "unconscious"]) {
+        const held = origin.itemTypes.condition.find((c) => c.slug === slug);
+        if (held) await origin.decreaseCondition(slug, { forceRemove: true });
+    }
+    await say(origin, `<strong>Foretold Escape</strong>: ${attack.actor?.name}'s attack was always going to miss. ${origin.name} stands at ${flag.before} Hit Points.`);
 }
 
 /* ------------------------------------------------------------------------------------------------ */
@@ -332,6 +452,8 @@ async function useCard({ card: cardId }) {
         return;
     }
 
+    if (flag.key === "escape") return escape(origin, flag);
+
     if (flag.key === "inevitable") {
         const item = featOf(origin, "inevitable");
         const context = source?.flags?.pf2e?.context;
@@ -386,6 +508,7 @@ async function onOwnUse(message) {
         "written-in-advance": () => writtenInAdvance(actor),
         "star-marked-enemy": () => starMark(actor),
         "patient-watcher": () => patientWatcher(actor),
+        "reckoning-of-days": () => reckoning(actor),
     }[item.slug];
     if (run) await run();
 }
@@ -426,6 +549,7 @@ export const Feats = {
         Hooks.on("createItem", (item, _options, userId) => {
             if (userId === game.user.id && item.type === "feat") makeFamiliar(item).catch((e) => console.error("Isaac's Homebrew | Companion of the Watch", e));
         });
+        DamageBus.after("Foretold Escape", DAMAGE.riders + 11, (actor, params, before) => offerEscape(actor, params, before));
         // Omen of Blades lasts one hit: the damage it softened takes it away.
         DamageBus.after("Omen of Blades", DAMAGE.riders + 10, async (actor) => {
             const omens = (actor?.itemTypes?.effect ?? []).filter((e) => e.flags?.[MODULE_ID]?.omenOfBlades);

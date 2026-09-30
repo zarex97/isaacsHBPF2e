@@ -53,7 +53,7 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SF-01 | §7 Astrological Sign | Once per day, when you record your Portent, you may treat its value as any number within **3** of what you rolled. |  | ☐ |  |
+| SF-01 | §7 Astrological Sign | Once per day, when you record your Portent, you may treat its value as any number within **3** of what you rolled. |  | ✅ | Live, Altair (19th): his Vigil card offered *Astrological Sign*; a rolled 11 became **14**, the choices ran 8–14 and 16–20 (never past 20, never the fixed Portent), and a second use that day was refused. Deneb, without it, had no button |
 | SF-02a | §7 Sky Reader | Your Night Vigil takes **1 minute** instead of 10 |  | ✅ | Live, Altair (19th): his Vigil card read *(1 minute)*; Mira's and Deneb's, without the feat, *(10 minutes)* |
 | SF-02b | §7 Sky Reader | and Forewarned takes 1 minute instead of 10. |  | ✅ | Live, Altair (19th): his Forewarned said *The briefing took 1 minute*; Mira's took 10 |
 | SF-03a | §7 Companion of the Watch | You gain a familiar. |  | ✅ | Live, the Chassis (6th): taking the feat made *ZZ Stargazer Chassis's Watcher*, a familiar whose master is the Chassis. Mira, without it, has none |
@@ -69,11 +69,11 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SF-06a | §7 Reckoning of Days | You can attempt an Astronomy Lore check to determine the sky of **yesterday** |  | ☐ |  |
-| SF-06b | §7 Reckoning of Days | or of a day more than three days out, as far as the end of the seven-day queue, at the DCs in §8.4. |  | ☐ |  |
-| SF-07a | §7 Twin Portent | Roll **two** d20s at your Night Vigil and record both as separate Portents. |  | ☐ |  |
-| SF-07b | §7 Twin Portent | You must spend both before your next Vigil or lose them |  | ☐ |  |
-| SF-07c | §7 Twin Portent | and *Speak the Portent*'s frequency becomes twice per day. |  | ☐ |  |
+| SF-06a | §7 Reckoning of Days | You can attempt an Astronomy Lore check to determine the sky of **yesterday** | `test-stargazer` pins it | ✅ | Live, Altair (19th): posting it offered yesterday and days 4–7; yesterday (Sagittarius, Malefic) was read **secretly**, and the reading whispered to him: critical success → sign and aspect; success → sign only; failure → nothing |
+| SF-06b | §7 Reckoning of Days | or of a day more than three days out, as far as the end of the seven-day queue, at the DCs in §8.4. | `test-stargazer` pins it | ✅ | Live, Altair (19th): against DC 36 — his level's Hard 41, less 5 for a Malefic or Exalted day. A critical failure named **Capricorn**, told as a success; day 232 (Capricorn, Exalted) read on a critical success |
+| SF-07a | §7 Twin Portent | Roll **two** d20s at your Night Vigil and record both as separate Portents. | `test-stargazer` pins it | ✅ | Live, Altair (19th): his Vigil recorded the Portents *20 (Fixed Sky), 11, 19* — one roll of the dice for the rolled ones, whispered to the GM. Deneb recorded one |
+| SF-07b | §7 Twin Portent | You must spend both before your next Vigil or lose them |  | ✅ | Live, Altair (19th): a Portent left unspent (19, armed on SG Ally) was gone at the next Vigil — re-rolled, and the armed effect taken back |
+| SF-07c | §7 Twin Portent | and *Speak the Portent*'s frequency becomes twice per day. | `test-stargazer` pins it | ✅ | Live, Altair (19th): each speaking spends one Portent, so he spoke three times in the day — the 20 on Deneb, the 14 on Mira, the 19 on SG Ally — and the picker offered only what was left |
 | SF-08a | §7 Thread of Warning | Fortune's Thread can trigger on an **initiative roll** | `test-stargazer` pins it | ✅ | Live, Altair (19th): the Thread picker offered *its next initiative roll*; ZZ Ally's initiative took **Guide +2** and spent it |
 | SF-08b | §7 Thread of Warning | even though positions are not yet set and you may not be able to see the roller. |  | ✅ | Live, Altair (19th): ZZ Ally was 105 feet away, past his 90 — armed on initiative; the same Thread on a skill check was refused ("beyond 90 feet") |
 | SF-09 | §7 Augury Adept | You learn one additional Augury. | `test-stargazer` pins it | ✅ | Live, the Chassis: the prompt offered the 15 Auguries and granted *Two Roads* into the Star Chart |
@@ -88,8 +88,8 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 | SF-12b | §7 Omen of Blades | by **2 plus 2 per your Stargazer DC proficiency rank** (so 4 at Trained, 6 at Expert, 8 at Master, 10 at Legendary). | `test-stargazer` pins it | ✅ | Live, Altair (19th), Legendary: a 15-point hit dealt **5** and the resistance went with it; the next 15 dealt 15 |
 | SF-13a | §7 Widened Chart | *Chart the Course* has a range of 120 feet | `test-stargazer` pins it | ✅ | Live, Altair (19th): Chart the Course armed ZZ Ally at 105 feet; Deneb's, without it, was refused at 90 ("beyond 60") |
 | SF-13b | §7 Widened Chart | and no longer requires you to see the creature, only to know where it is. |  | — | The module never asks whether you can see a Thread's target (#116), so there is no sight requirement to lift |
-| SF-14a | §7 Borrowed Eyes | You can perform a Night Vigil through the senses of your familiar or a willing ally under an open sky |  | ☐ |  |
-| SF-14b | §7 Borrowed Eyes | as long as you are within 1 mile of them. |  | ☐ |  |
+| SF-14a | §7 Borrowed Eyes | You can perform a Night Vigil through the senses of your familiar or a willing ally under an open sky |  | ✅ | Live, Deneb (13th): under a clouded sky her card offered *Borrowed Eyes*; choosing SG Ally sent the GM a request, and allowing it ran her Vigil (*Read through borrowed eyes*). Mira's clouded card offered nothing |
+| SF-14b | §7 Borrowed Eyes | as long as you are within 1 mile of them. |  | ✅ | Live: the GM's request names the open sky and the mile; the allowance is the GM's click |
 
 ## 6th level (guide §7)
 
@@ -108,9 +108,9 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | SF-19 | §7 Conjunction | Your focus pool increases to **3 Focus Points**, the game's maximum. | `test-stargazer` pins it | ✅ | Live, Altair (19th): focus max **3**; Deneb, without it, 2 |
-| SF-20a | §7 Second Portent | You may *Speak the Portent* twice per day. |  | ☐ |  |
-| SF-20b | §7 Second Portent | If you also have *Twin Portent*, you may speak three times, and you record three Portents. |  | ☐ |  |
-| SF-21 | §7 Doubled Reading | Once per day you may take the **better** of two Auguries of the Day by reading both today's sign and tomorrow's. |  | ☐ |  |
+| SF-20a | §7 Second Portent | You may *Speak the Portent* twice per day. | `test-stargazer` pins it | ✅ | Pinned: Second Portent alone records two Portents, so it speaks twice |
+| SF-20b | §7 Second Portent | If you also have *Twin Portent*, you may speak three times, and you record three Portents. | `test-stargazer` pins it | ✅ | Live, Altair (19th), with both: three Portents recorded, three spoken |
+| SF-21 | §7 Doubled Reading | Once per day you may take the **better** of two Auguries of the Day by reading both today's sign and tomorrow's. |  | ✅ | Live, Deneb (13th): the card offered tomorrow's *Perfect Ledger* in place of today's; taking it granted Perfect Ledger beside Two Skies' Crown of Fire, and the frequency went 1 → 0 |
 
 ## 10th level (guide §7)
 
@@ -129,8 +129,8 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | SF-26a | §7 Cascade | You gain *Twin Fates* (§4.13) now, affecting **one** of its targets. | `test-stargazer` pins it | ✅ | Live, Deneb (13th, in combat), without the class feature: Twin Fates on one of two targets armed; on both it was refused ("up to one") |
 | SF-26b | §7 Cascade | From 15th level, when the class feature arrives, *Twin Fates* affects up to **three** of its targets instead of two. | `test-stargazer` pins it | ✅ | Live, Altair (19th), with the class feature: Twin Fates on three of four armed; on all four it was refused ("up to three") |
-| SF-27a | §7 Long Now | Your Auguries whose **Duration** line reads 1 minute last **10 minutes**. |  | ☐ |  |
-| SF-27b | §7 Long Now | A duration inside a degree of success, such as *Coiling Doubt*'s critical failure, does not change. |  | ☐ |  |
+| SF-27a | §7 Long Now | Your Auguries whose **Duration** line reads 1 minute last **10 minutes**. | `test-stargazer` pins it | ✅ | Live, Altair (19th): Iron Auspice (Duration: 1 minute) cast on Deneb put both its effects on her for **10 minutes**; with the feat removed, 1 minute |
+| SF-27b | §7 Long Now | A duration inside a degree of success, such as *Coiling Doubt*'s critical failure, does not change. | `test-stargazer` pins it | ✅ | A rider scoped to a degree of success is left alone (pinned). Coiling Doubt has no Duration line at all, so none of its minutes move |
 | SF-28a | §7 Prophesied Ally | Choose one ally during your Night Vigil. |  | ✅ | Live, Deneb (13th, in combat): the Vigil card's *Prophesied Ally* chose ZZ SG Ally |
 | SF-28b | §7 Prophesied Ally | Fortune's Thread used on that ally does not consume your reaction, once per round. |  | ✅ | Live, Deneb (13th, in combat): a Thread on that ally alone said *No reaction: the Prophesied Ally* and left nothing pending; the next that round cost a reaction, as did one on Mira |
 
@@ -150,22 +150,22 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SF-32a | §7 Private Sign | Add a **fourteenth sign** to the wheel: your own. |  | ☐ |  |
-| SF-32b | §7 Private Sign | Choose **one Augury** from §5.2 for it to grant and **one existing sign's domain** for it to govern |  | ☐ |  |
-| SF-32c | §7 Private Sign | It rises only over you, on days the sky is Starless, and uses the standard aspect scaling. |  | ☐ |  |
-| SF-32d | §7 Private Sign | Its aspect is rolled in advance with the day, as part of the seven-day queue. |  | ☐ |  |
+| SF-32a | §7 Private Sign | Add a **fourteenth sign** to the wheel: your own. |  | ✅ | Live, Deneb (13th): on a Starless day her card said *your own sign rises*, and only she wore its effect |
+| SF-32b | §7 Private Sign | Choose **one Augury** from §5.2 for it to grant and **one existing sign's domain** for it to govern | `test-stargazer` pins it | ✅ | Live, Deneb (13th): taking the feat asked for an Augury (*Hunted by the Sky*) and a domain (*Leo*); on the Starless day Hunted by the Sky was her Augury of the Day and her Intimidation took Leo's modifier |
+| SF-32c | §7 Private Sign | It rises only over you, on days the sky is Starless, and uses the standard aspect scaling. |  | ✅ | Live, Deneb (13th): Retrograde → *The Sky (Leo) −1* on her Intimidation; SG Ally, on the same day, nothing from Leo, and Mira nothing at all. **Fixed while driving:** each sky effect now keeps only its own sign's rules — two effects on one creature lit each other's domains |
+| SF-32d | §7 Private Sign | Its aspect is rolled in advance with the day, as part of the seven-day queue. | `test-stargazer` pins it | ✅ | Live: every queued day carries its `privateAspect`, rolled with the day; the card read today's |
 | SF-33 | §7 Written in Advance | Spend 10 minutes. The next skill check you attempt within the hour is an automatic **success** (not a critical success). | `test-stargazer` pins it | ✅ | Live, Altair (19th): posting it armed *Effect: Written in Advance*; his next Athletics — a natural 1 against DC 40 — read **success**, and the one after failed as it should. A natural 20 against DC 10 read success, not critical success |
-| SF-34a | §7 Foretold Escape | Once per day, when an **attack roll** against you would deal damage that reduces you to 0 Hit Points, you may *Speak the Portent* on that attack roll even though it has already been rolled |  | ☐ |  |
-| SF-34b | §7 Foretold Escape | even if your Portent is spent, and even if a fortune or misfortune effect altered it — using a value of 1. |  | ☐ |  |
-| SF-34c | §7 Foretold Escape | It cannot be used on your own saving throw, or on damage no attack roll dealt. |  | ☐ |  |
+| SF-34a | §7 Foretold Escape | Once per day, when an **attack roll** against you would deal damage that reduces you to 0 Hit Points, you may *Speak the Portent* on that attack roll even though it has already been rolled |  | ✅ | Live, Altair (19th): dropped to 0 by the foe's critical hit, he was offered *Foretold Escape*; speaking it re-read the attack as a **1** (a miss) and he stood at 5 Hit Points again; the frequency went 1 → 0 and the next fall offered nothing |
+| SF-34b | §7 Foretold Escape | even if your Portent is spent, and even if a fortune or misfortune effect altered it — using a value of 1. |  | ☐ | Built — the escape reads neither his Portents nor the roll's fortune — but not yet driven on a fortune-altered attack |
+| SF-34c | §7 Foretold Escape | It cannot be used on your own saving throw, or on damage no attack roll dealt. |  | ✅ | Live, Altair (19th): fire damage after an attack that missed him offered nothing; Deneb, without the feat, felled by a hit, nothing. **Fixed while driving:** only the latest attack at the creature counts — an older hit further up had been found |
 
 ## 18th level (guide §7)
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SF-35a | §7 Two Skies | During your Night Vigil, read the sky **twice**. |  | ☐ |  |
-| SF-35b | §7 Two Skies | Both signs are ascendant for you and the allies you brief: you gain both Auguries of the Day |  | ☐ |  |
-| SF-35c | §7 Two Skies | The second sign and its aspect are rolled in advance with the day, as part of the seven-day queue. |  | ☐ |  |
+| SF-35a | §7 Two Skies | During your Night Vigil, read the sky **twice**. |  | ✅ | Live, Deneb (13th): the card read a second sky, *Leo, Benefic*, and its forecast listed each day's second sky |
+| SF-35b | §7 Two Skies | Both signs are ascendant for you and the allies you brief: you gain both Auguries of the Day |  | ✅ | Live, Deneb (13th): she wore *Sky: Benefic* for Capricorn **and** Leo; SG Ally, once briefed, gained the Leo one, and Mira, not briefed, only Capricorn. Her Intimidation took Leo's +1, Mira's nothing. She gained both Auguries of the Day (Crown of Fire; Capricorn's Alms of Fate is not built, #121) |
+| SF-35c | §7 Two Skies | The second sign and its aspect are rolled in advance with the day, as part of the seven-day queue. | `test-stargazer` pins it | ✅ | Live: the second sky is rolled with each day, in the queue (the world's queue gained them on first load) |
 | SF-36 | §7 The Long Vigil | *Rewrite the Ending*'s cooldown drops to **3 days** if you have not used it at all during the current adventure. |  | ☐ |  |
 | SF-37a | §7 Unbroken Chain | *Unmake the Moment* recharges on a 10-minute rest rather than on your Night Vigil |  | ☐ |  |
 | SF-37b | §7 Unbroken Chain | but no more than once per hour. |  | ☐ |  |
@@ -176,8 +176,8 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | SF-38a | §7 Cartographer of Endings | Once per day, ask the GM **one yes-or-no question about the next 24 hours**. |  | — | The question and its answer are the table's; the feat carries its once-per-day frequency |
 | SF-38b | §7 Cartographer of Endings | The answer is true. |  | — | The answer is the GM's |
-| SF-39a | §7 Fixed Sky | One of your Portents is always a **20**, and you may speak that one only **once per week**. |  | ☐ |  |
-| SF-39b | §7 Fixed Sky | Any other Portents you record, from *Twin Portent* or *Second Portent*, are still rolled and spoken daily. |  | ☐ |  |
+| SF-39a | §7 Fixed Sky | One of your Portents is always a **20**, and you may speak that one only **once per week**. | `test-stargazer` pins it | ✅ | Live, Altair (19th): one Portent is always 20; spoken on Deneb, it was marked *spoken this week* at the next Vigil and not offered |
+| SF-39b | §7 Fixed Sky | Any other Portents you record, from *Twin Portent* or *Second Portent*, are still rolled and spoken daily. | `test-stargazer` pins it | ✅ | Live, Altair (19th): beside it the others were rolled, and spoken the same day |
 | SF-40a | §7 The Sky Answers | Once per day, when you would use *Rewrite the Ending*, you may instead use *Unmake the Moment* without spending its frequency |  | ☐ |  |
 | SF-40b | §7 The Sky Answers | and *Rewrite the Ending* is not expended. |  | ☐ |  |
 
@@ -187,8 +187,8 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 32 |
-| ✅ | 39 |
+| ☐ | 8 |
+| ✅ | 63 |
 | ⚠️ | 2 |
 | ❌ | 0 |
 | 🔧 | 0 |

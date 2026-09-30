@@ -220,6 +220,8 @@ World `pf` is not a clean room. It is a working world with years of fixtures in 
 | A ChoiceSet's answer lives in the **rule** | pf2e stores it as the rule's own `selection` and derives `flags.pf2e.rulesSelections` from it on every prepare. Updating the flag reverts; a copy of the owned item re-grants the old answer without asking. Change the rule, or start from the compendium |
 | A familiar has **no traits** | pf2e 8's familiar schema stores none, and an `ActorTraits` rule on it is ignored. `flags.pf2e.rollOptions.all["self:trait:x"]` is what predicates can see |
 | A secret check needs the **`secret` trait** | A `rollMode: "blindroll"` alone was posted in the open; with `traits: ["secret"]` pf2e whispers it to the GM |
+| A roll option an effect sets is the **creature's** | A `RollOption` on one effect lights predicates on every other effect on the sheet. Two sky effects each carrying all twelve signs' rules, gated on `sky:sign:<id>`, lit each other's domains — a Retrograde Leo read +1 from the Benefic Aquarius beside it. Strip what does not belong before the item is created |
+| A bare `20` is still a natural 20 | With a +0 modifier a substituted roll's formula is just `20`, but pf2e still steps the degree: 20 against DC 30 is a critical failure by 10, raised to a failure. Do the arithmetic before calling it a bug |
 | An effect has no `disabled` field | A pf2e Effect item's `system.expired` is derived in `prepareBaseData`, so writing either one is overwritten or ignored. To switch an effect off without deleting it, move its rules aside — see `soulbound/suppression.mjs` |
 
 ## 7. Running long jobs

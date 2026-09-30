@@ -11,7 +11,7 @@
         },
         "category": "class",
         "description": {
-            "value": "<p>Add a <strong>fourteenth sign</strong> to the wheel: your own. Choose <strong>one Augury</strong> from §5.2 for it to grant and <strong>one existing sign's domain</strong> for it to govern; it should be an Augury you would not otherwise take. It rises only over you, on days the sky is Starless, and uses the standard aspect scaling. Its aspect is rolled in advance with the day, as part of the seven-day queue.</p>"
+            "value": "<p>Add a <strong>fourteenth sign</strong> to the wheel: your own. Choose <strong>one Augury</strong> from §5.2 for it to grant and <strong>one existing sign's domain</strong> for it to govern; it should be an Augury you would not otherwise take. It rises only over you, on days the sky is Starless, and uses the standard aspect scaling. Its aspect is rolled in advance with the day, as part of the seven-day queue.</p><hr /><p><em>Your two choices are asked when you take the feat. On a Starless day your Augury of the Day is its Augury, and the Sky applies its domain to you at its aspect.</em></p>"
         },
         "level": {
             "value": 16
@@ -24,7 +24,76 @@
             "remaster": true,
             "title": "Isaac's Homebrew: The Stargazer"
         },
-        "rules": [],
+        "rules": [
+            {
+                "key": "ChoiceSet",
+                "adjustName": false,
+                "flag": "privateAugury",
+                "prompt": "Your sign grants which Augury?",
+                "choices": {
+                    "itemType": "spell",
+                    "filter": [
+                        "item:tag:stargazer-augury"
+                    ]
+                }
+            },
+            {
+                "key": "ChoiceSet",
+                "adjustName": false,
+                "flag": "privateDomain",
+                "prompt": "Your sign governs which domain?",
+                "choices": [
+                    {
+                        "value": "aries",
+                        "label": "Aries: initiative, and the first Strike"
+                    },
+                    {
+                        "value": "taurus",
+                        "label": "Taurus: Fortitude, and holding your ground"
+                    },
+                    {
+                        "value": "gemini",
+                        "label": "Gemini: Deception and Diplomacy"
+                    },
+                    {
+                        "value": "cancer",
+                        "label": "Cancer: Medicine and recovery"
+                    },
+                    {
+                        "value": "leo",
+                        "label": "Leo: Intimidation and Performance"
+                    },
+                    {
+                        "value": "virgo",
+                        "label": "Virgo: Crafting and Recall Knowledge"
+                    },
+                    {
+                        "value": "libra",
+                        "label": "Libra: the die"
+                    },
+                    {
+                        "value": "scorpio",
+                        "label": "Scorpio: Stealth and Thievery"
+                    },
+                    {
+                        "value": "sagittarius",
+                        "label": "Sagittarius: ranged attacks and Survival"
+                    },
+                    {
+                        "value": "capricorn",
+                        "label": "Capricorn: Climb, Jump and Swim"
+                    },
+                    {
+                        "value": "aquarius",
+                        "label": "Aquarius: the lores of magic, and counteracting"
+                    },
+                    {
+                        "value": "pisces",
+                        "label": "Pisces: Will, and seeing through illusion"
+                    }
+                ]
+            }
+        ],
         "traits": {
             "otherTags": [],
             "rarity": "common",
