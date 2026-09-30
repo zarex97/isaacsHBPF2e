@@ -194,6 +194,10 @@ export const RefuseDeath = {
                 // Fire and forget, like the two writes below it: this hook runs inside `preUpdateActor`
                 // and cannot be async — the whole trick is rewriting `changes` before it is committed.
                 if (declared.grants) grantStep(actor, declared.grants);
+                // A refusal that is also the end of the thing that granted it — *Shell of Hours*: "the first
+                // time a target would be reduced to 0 Hit Points it is reduced to 1 Hit Point instead and the
+                // Augury ends for that target" (Stargazer guide §5.2). Fire and forget, for the same reason.
+                if (declared.consume) item.delete();
 
                 const price = pool.kind === "focus"
                     ? `${cost} focus point${cost === 1 ? "" : "s"}`

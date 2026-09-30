@@ -1,0 +1,72 @@
+{
+    "img": "icons/sundries/books/book-embossed-blue.webp",
+    "name": "Effect: Poured Knowing",
+    "system": {
+        "description": {
+            "value": "<p>+2 status bonus to Arcana, Nature, Occultism, Religion and Society.</p>"
+        },
+        "duration": {
+            "expiry": "turn-start",
+            "sustained": false,
+            "unit": "minutes",
+            "value": 1
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "label": "Poured Knowing",
+                "selector": "arcana",
+                "type": "status",
+                "value": 2
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Poured Knowing",
+                "selector": "nature",
+                "type": "status",
+                "value": 2
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Poured Knowing",
+                "selector": "occultism",
+                "type": "status",
+                "value": 2
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Poured Knowing",
+                "selector": "religion",
+                "type": "status",
+                "value": 2
+            },
+            {
+                "key": "FlatModifier",
+                "label": "Poured Knowing",
+                "selector": "society",
+                "type": "status",
+                "value": 2
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "type": "effect"
+}

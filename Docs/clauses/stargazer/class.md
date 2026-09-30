@@ -81,11 +81,11 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | SG-23a | §4.1 | You gain a focus pool of **1 Focus Point** and the **Auguries** you learn from §5. | `test-stargazer` pins it | ✅ | Live: focus pool **1** at 1st (cap 1); a stored 1 holds and a stored 0 holds. **Fixed while driving:** pf2e clamps the value to its own derived maximum — 0 with no Auguries — before the pool is pinned to its cap, so a stored 1 read back 0; the pin now re-reads the source. The Soulbound has the same bug: #114 |
-| SG-23b | §4.1 | their rank is always half your level rounded up, and they use your **Stargazer DC** and your Wisdom modifier for spell attack rolls and DCs. | `test-stargazer` pins it | ⚠️ | Live: the Star Chart entry's DC is the Stargazer DC at every level from 1st to 20th and its attribute is **Wis**. **Gap:** no Augury exists yet to read its rank — phase 4 (#106) |
+| SG-23b | §4.1 | their rank is always half your level rounded up, and they use your **Stargazer DC** and your Wisdom modifier for spell attack rolls and DCs. | `test-stargazer` pins it | ✅ | Live: the Star Chart's DC is the Stargazer DC at every level and its attribute Wis; the nine known Auguries read **rank 10** at 19th |
 | SG-23c | §4.1 | You **Refocus** by reading the sky, or your chart, for 10 minutes. |  | ☐ |  |
 | SG-24a | §4.1 | You also know **5 occult cantrips**, chosen when you take the class, cast at will at a rank of half your level rounded up. |  | ✅ | Live at 6th: pf2e's *Daze* added to the Star Chart is filed there as a cantrip at rank **3** (half of 6, rounded up), and casting it left the focus pool at **0 → 0** — at will |
 | SG-24b | §4.1 | You can change one cantrip during your daily preparations. |  | ☐ |  |
-| SG-25 | §3 | Nine Auguries known, at 1, 5, 7, 9, 11, 13, 15, 17 and 19. |  | ☐ |  |
+| SG-25 | §3 | Nine Auguries known, at 1, 5, 7, 9, 11, 13, 15, 17 and 19. | `test-stargazer` pins it | ✅ | Live: nine prompts — one at 1st, eight on the way to 19th — each offering the Auguries; each choice was filed into the Star Chart. The pool stayed **2**, not nine |
 
 ## Night Vigil (guide §4.2)
 
@@ -96,7 +96,7 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 | SG-27 | §4.2 | **Certainty.** You learn today's sign *and* its aspect exactly. No check, no DC, no ambiguity. |  | ✅ | Live: the GM set Taurus, Malefic; the card read **Today: ♉ Taurus, Malefic** |
 | SG-28a | §4.2 | **The Forecast.** You learn the sign and aspect of the **next three days**. | `test-stargazer` pins it | ✅ | Live: the card listed days 228–230 — **Starless, Malefic · Capricorn, Malefic · Virgo, Quiet** — exactly the tracker's queue |
 | SG-28b | §4.2 | this answer does not change if you ask again — and neither does it change for the person you sell it to. |  | ✅ | Live: a second rest produced the identical forecast, because it reads the pre-rolled queue |
-| SG-29a | §4.2 | **Augury of the Day.** You add the ascendant sign's Augury (§5.3) to your repertoire until your next daily preparations, **in addition** to the Auguries you know permanently. |  | ☐ |  |
+| SG-29a | §4.2 | **Augury of the Day.** You add the ascendant sign's Augury (§5.3) to your repertoire until your next daily preparations, **in addition** to the Auguries you know permanently. |  | ✅ | Live: a Taurus Vigil added *Iron Auspice* to Lyra's Star Chart, flagged as the day's; the next Vigil took it away; a clouded one granted nothing |
 | SG-29b | §4.2 | On a **Starless** sky you gain no Augury of the Day — but nothing is written, so you may roll your Portent twice and keep either result. |  | ✅ | Live: on a Starless day the card offered two Portents, **18** and **3**, and clicking *Keep 3* recorded 3. No Augury of the Day is granted on Starless (none exist yet either — phase 4) |
 | SG-30a | §4.2 | **Forewarned.** You may spend a further 10 minutes briefing up to five allies. | `test-stargazer` pins it | ✅ | Live: the card's *Forewarned* button opened the ally picker; checking the ally and confirming briefed Lyra and the ally. Five is the limit (pinned); a second briefing the same day is refused |
 | SG-30b | §4.2 | You and each ally who listens reduce the day's negative aspect by one step for the rest of the day: **Malefic → Retrograde**, **Retrograde → no effect**. |  | ✅ | Live, clear of any Saint's Shelter: on a Malefic day Lyra and the briefed ally wore **Sky: Retrograde** while unbriefed Far wore **Sky: Malefic**; on a Retrograde day the two wore nothing and Far wore Retrograde; the next day it had lapsed |
@@ -201,7 +201,7 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 | SG-42c | §4.12 | the day you traded away is still coming. |  | ✅ | Live: the Retrograde traded away sat on tomorrow's queue entry, still coming |
 | SG-42d | §4.12 | You and the allies you brief treat a negative aspect as **Benefic** instead of merely reducing it: **Retrograde → Benefic**, **Malefic → Benefic**. | `test-stargazer` pins it | ✅ | Live at 13th, a Retrograde day: Deneb and the briefed ally wore **Sky: Benefic**, unbriefed Far **Sky: Retrograde** |
 | SG-42e | §4.12 | Exalted and Benefic days are unchanged |  | ✅ | Live: Exalted and Benefic days are not softened — `aspectFor` returns them untouched, and the briefed creatures wore the same effect as the control |
-| SG-42f | §4.12 | **Starless.** On a Starless sky you may choose any sign's Augury as your Augury of the Day. |  | ☐ |  |
+| SG-42f | §4.12 | **Starless.** On a Starless sky you may choose any sign's Augury as your Augury of the Day. |  | ✅ | Live at 13th: a Starless Vigil's card offered all twelve sign Auguries; clicking *Deep Dream* granted it as the Augury of the Day |
 
 ## Twin Fates and Threefold Thread (guide §4.13, §4.14)
 
@@ -264,9 +264,9 @@ rewinds behave at the table. ADR-0004 is the reasoning behind the arming model.*
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 42 |
-| ✅ | 78 |
-| ⚠️ | 8 |
+| ☐ | 39 |
+| ✅ | 82 |
+| ⚠️ | 7 |
 | ❌ | 0 |
 | 🔧 | 0 |
 | — | 1 |

@@ -251,6 +251,53 @@ function check(label, actual, expected) {
 }
 
 /* -------------------------------------------------------------------------------------------- */
+/*  Phase 4a — the Auguries that buff (OM-00, OM-03, OM-05–OM-08, OM-14–OM-17, SG-25)            */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    const fs = await import("node:fs");
+    const read = (rel) => JSON.parse(fs.readFileSync(new URL(`../content/${rel}`, import.meta.url), "utf8"));
+    const spell = (slug) => read(`stargazer-auguries/${slug}.json`);
+    const targeting = (slug) => spell(slug).flags["isaacs-hb-pf2e"].areaTargeting;
+    const maxAt = (slug, level) => {
+        const t = targeting(slug);
+        return t.maxTargets + Object.entries(t.heightening?.at ?? {}).filter(([l]) => Number(l) <= level).reduce((n, [, v]) => n + (v.maxTargets ?? 0), 0);
+    };
+    const all = ["guiding-star", "iron-auspice", "two-roads", "shell-of-hours", "crown-of-fire", "poured-knowing", "deep-dream", "borrowed-second"];
+    check("OM-00a/b every Augury: prediction, focus, the class trait, occult, rank 1 auto-heightening",
+        all.every((s) => ["focus", "prediction", "stargazer"].every((t) => spell(s).system.traits.value.includes(t))
+            && spell(s).system.traits.traditions.includes("occult") && spell(s).system.level.value === 1), true);
+    check("OM-03 Guiding Star: 2 allies at 60 feet, 3 at rank 4, 4 at rank 7, 5 at rank 10",
+        [targeting("guiding-star").range, maxAt("guiding-star", 1), maxAt("guiding-star", 7), maxAt("guiding-star", 13), maxAt("guiding-star", 19)], [60, 2, 3, 4, 5]);
+    check("OM-03f Guiding Star's bonus is +2 from rank 10",
+        spell("guiding-star").flags["isaacs-hb-pf2e"].riders[0].apply.substitutions.map((s) => s.value.at["19"]), [2, 2, 2, 2]);
+    check("OM-05f/07f/08f/14f/15f +1 ally every other rank", ["iron-auspice", "shell-of-hours", "crown-of-fire", "poured-knowing", "deep-dream"]
+        .map((s) => [maxAt(s, 4), maxAt(s, 5), maxAt(s, 9), maxAt(s, 17)]), Array(5).fill([2, 3, 4, 6]));
+    check("OM-05d Iron Auspice's temporary Hit Points are three times the Stargazer's level",
+        [3, 10, 20].map((l) => { const v = spell("iron-auspice").flags["isaacs-hb-pf2e"].riders[0].apply.substitutions[0].value; return l === 1 ? v.base : v.at[String(l)]; }), [9, 30, 60]);
+    check("OM-06 Two Roads: 2 allies, 3 and saves from rank 5 (level 9), 4 from rank 9",
+        [maxAt("two-roads", 8), maxAt("two-roads", 9), maxAt("two-roads", 17),
+            spell("two-roads").flags["isaacs-hb-pf2e"].riders[0].apply.substitutions[0].value.at["9"][0]], [2, 3, 4, "saving-throw"]);
+    check("OM-07c Shell of Hours heals 2d8, +2d8 every other rank",
+        (({ formula, perStep, perStepInterval }) => [formula, perStep, perStepInterval])(spell("shell-of-hours").flags["isaacs-hb-pf2e"].riders[0].apply), ["2d8", "2d8", 2]);
+    check("OM-07e Shell of Hours refuses one drop to 0 and ends", read("stargazer-effects/effect-shell-of-hours.json").flags["isaacs-hb-pf2e"].refuseDeath.consume, true);
+    check("OM-16 Borrowed Second: you and/or one ally, 3 from rank 5, 5 from rank 9",
+        [targeting("borrowed-second").includesSelf, maxAt("borrowed-second", 1), maxAt("borrowed-second", 9), maxAt("borrowed-second", 17)], [true, 2, 3, 5]);
+
+    const { spentReprieve, SIGN_AUGURY } = await import("../scripts/stargazer/auguries.mjs");
+    const fort = { flags: { "isaacs-hb-pf2e": { stargazerReprieve: "fortitude" } } };
+    check("OM-05e/15d a reprieve is spent by a critical failure on its own save, and only that",
+        [spentReprieve([fort], { type: "saving-throw", domains: ["fortitude", "saving-throw"], unadjustedOutcome: "criticalFailure" }) === fort,
+            spentReprieve([fort], { type: "saving-throw", domains: ["fortitude"], unadjustedOutcome: "failure" }),
+            spentReprieve([fort], { type: "saving-throw", domains: ["will"], unadjustedOutcome: "criticalFailure" })], [true, null, null]);
+    check("OM-17 twelve signs, twelve Auguries; four belong to none",
+        [Object.keys(SIGN_AUGURY).length, ["Guiding Star", "Borrowed Second", "Death Foretold", "The Hour Is Not Come"].some((n) => Object.values(SIGN_AUGURY).includes(n))], [12, false]);
+    const cls = read("stargazer-class/stargazer.json").system.items;
+    check("SG-25 nine Auguries known, at 1, 5, 7, 9, 11, 13, 15, 17 and 19",
+        Object.values(cls).filter((i) => /^Augury \(/.test(i.name)).map((i) => i.level).sort((a, b) => a - b), [1, 5, 7, 9, 11, 13, 15, 17, 19]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
 
 if (failures.length > 0) {
     console.error(`Stargazer tests failed: ${failures.length} of ${checks}.`);

@@ -211,6 +211,60 @@
                 "level": 1,
                 "name": "Night Vigil",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Night Vigil"
+            },
+            "aug01": {
+                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "level": 1,
+                "name": "Augury (1st)",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Augury (1st)"
+            },
+            "aug05": {
+                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "level": 5,
+                "name": "Augury (5th)",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Augury (5th)"
+            },
+            "aug07": {
+                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "level": 7,
+                "name": "Augury (7th)",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Augury (7th)"
+            },
+            "aug09": {
+                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "level": 9,
+                "name": "Augury (9th)",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Augury (9th)"
+            },
+            "aug11": {
+                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "level": 11,
+                "name": "Augury (11th)",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Augury (11th)"
+            },
+            "aug13": {
+                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "level": 13,
+                "name": "Augury (13th)",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Augury (13th)"
+            },
+            "aug15": {
+                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "level": 15,
+                "name": "Augury (15th)",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Augury (15th)"
+            },
+            "aug17": {
+                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "level": 17,
+                "name": "Augury (17th)",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Augury (17th)"
+            },
+            "aug19": {
+                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "level": 19,
+                "name": "Augury (19th)",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Augury (19th)"
             }
         },
         "keyAbility": {

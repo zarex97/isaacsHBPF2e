@@ -976,6 +976,20 @@ async function applyHeal(rider, context) {
     const hp = actor?.hitPoints;
     if (!hp) return;
 
+    // Dice rather than a number: *Shell of Hours* "regains 2d8 Hit Points", +2d8 every other rank (Stargazer
+    // guide §5.2). Its own branch and its own words, so the Soulbound's capped, flame-worded heals are untouched.
+    if (typeof rider.apply.formula === "string") {
+        const dice = growByStep(rider.apply.formula, rider.apply.perStep ?? rider.apply.formula, riderSteps(rider, context));
+        const roll = await new Roll(String(dice)).evaluate();
+        const healed = Math.max(0, Math.min(roll.total, hp.max - hp.value));
+        if (healed > 0) await actor.update({ "system.attributes.hp.value": hp.value + healed });
+        await roll.toMessage({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            flavor: `${context.item?.name ?? "Rider"}: <strong>${actor.name}</strong> regains ${healed} Hit Points`,
+        });
+        return;
+    }
+
     const source = context.item;
     const steps = stepsFor({
         baseRank: source?.baseRank ?? source?.system?.level?.value,

@@ -1,0 +1,90 @@
+{
+    "img": "icons/magic/time/clock-stopwatch-white-blue.webp",
+    "name": "Borrowed Second",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p>Each target immediately <strong>Steps</strong> or <strong>Strides up to its Speed</strong> as a free action and gains a +1 circumstance bonus to AC until the start of your next turn.</p><hr /><p><strong>Heightened (5th)</strong> 3 targets. <strong>(9th)</strong> 5 targets.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": ""
+        },
+        "heightening": null,
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "you and/or 1 willing ally"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "stargazer-augury"
+            ],
+            "rarity": "common",
+            "traditions": [
+                "occult"
+            ],
+            "value": [
+                "concentrate",
+                "focus",
+                "prediction",
+                "stargazer"
+            ]
+        }
+    },
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "allies",
+                "includesSelf": true,
+                "maxTargets": 2,
+                "range": 30,
+                "heightening": {
+                    "at": {
+                        "9": {
+                            "maxTargets": 1
+                        },
+                        "17": {
+                            "maxTargets": 2
+                        }
+                    }
+                }
+            },
+            "riders": [
+                {
+                    "event": "action-used",
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.stargazer-effects.Item.Effect: Borrowed Second"
+                    },
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 1,
+                        "expiry": "turn-start"
+                    }
+                }
+            ]
+        }
+    },
+    "type": "spell"
+}

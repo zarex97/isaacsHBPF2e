@@ -1,0 +1,135 @@
+{
+    "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+    "name": "Iron Auspice",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p>+2 status bonus to Fortitude saves, to Athletics checks to Shove, Trip and Grapple, and to checks to resist forced movement. Each target gains <strong>temporary Hit Points equal to three times your level</strong>, and <strong>once</strong> during the duration treats a critical failure on a Fortitude save as a failure.</p><hr /><p><strong>Heightened (+2)</strong> +1 ally.</p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": "1 minute"
+        },
+        "heightening": null,
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "2 allies"
+        },
+        "time": {
+            "value": "2"
+        },
+        "traits": {
+            "otherTags": [
+                "stargazer-augury",
+                "stargazer-sign-taurus"
+            ],
+            "rarity": "common",
+            "traditions": [
+                "occult"
+            ],
+            "value": [
+                "concentrate",
+                "focus",
+                "prediction",
+                "stargazer"
+            ]
+        }
+    },
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "allies",
+                "maxTargets": 2,
+                "range": 30,
+                "heightening": {
+                    "at": {
+                        "5": {
+                            "maxTargets": 1
+                        },
+                        "9": {
+                            "maxTargets": 1
+                        },
+                        "13": {
+                            "maxTargets": 1
+                        },
+                        "17": {
+                            "maxTargets": 1
+                        }
+                    }
+                }
+            },
+            "riders": [
+                {
+                    "event": "action-used",
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.stargazer-effects.Item.Effect: Iron Auspice",
+                        "substitutions": [
+                            {
+                                "path": "system.rules.2.value",
+                                "value": {
+                                    "base": 3,
+                                    "at": {
+                                        "2": 6,
+                                        "3": 9,
+                                        "4": 12,
+                                        "5": 15,
+                                        "6": 18,
+                                        "7": 21,
+                                        "8": 24,
+                                        "9": 27,
+                                        "10": 30,
+                                        "11": 33,
+                                        "12": 36,
+                                        "13": 39,
+                                        "14": 42,
+                                        "15": 45,
+                                        "16": 48,
+                                        "17": 51,
+                                        "18": 54,
+                                        "19": 57,
+                                        "20": 60
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    }
+                },
+                {
+                    "event": "action-used",
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.stargazer-effects.Item.Effect: Iron Auspice (Reprieve)"
+                    },
+                    "duration": {
+                        "unit": "minutes",
+                        "value": 1
+                    }
+                }
+            ]
+        }
+    },
+    "type": "spell"
+}
