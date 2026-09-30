@@ -1218,8 +1218,8 @@ check("every wrap the module needs is still there", [...claimedBy.keys()].sort()
     "CONFIG.PF2E.Item.documentClasses.spellcastingEntry.prototype.cast",
     // Tin Depth 3's see-invisibility is "within 30 feet"; pf2e hands Foundry an unlimited range for it (#88).
     "CONFIG.Token.documentClass.prototype._prepareDetectionModes",
-    // Cover belongs to the defender, and two Senbonzakura clauses say a Strike goes around it. The check
-    // is the one place that holds the attacker, the target and the DC built from that target's AC.
+    // The check pipeline (`lib/check-pipeline.mjs`): the last moment before a d20 falls. Its stages are the
+    // Soulbound's Strikes that ignore cover and the Stargazer's Portent guard.
     "game.pf2e.Check.roll",
 ]);
 

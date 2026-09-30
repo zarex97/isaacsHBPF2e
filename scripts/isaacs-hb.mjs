@@ -15,6 +15,7 @@ import { Astral } from "./astral.mjs";
 import { CastPipeline } from "./cast-pipeline.mjs";
 import { Cosmo } from "./cosmo.mjs";
 import { Deaths } from "./deaths.mjs";
+import { CheckPipeline } from "./lib/check-pipeline.mjs";
 import { DamageBus, PRIORITY } from "./lib/damage-bus.mjs";
 import { EncounterDamage } from "./lib/encounter-damage.mjs";
 import { Duplicate } from "./economy/duplicate.mjs";
@@ -47,6 +48,7 @@ import { Severance } from "./soulbound/severance.mjs";
 import { SoulboundRig } from "./soulbound/rig.mjs";
 import { RisingPressure } from "./soulbound/rising-pressure.mjs";
 import { Scattered } from "./soulbound/scattered.mjs";
+import { Armed } from "./stargazer/armed.mjs";
 import { Suppression } from "./soulbound/suppression.mjs";
 import { SpiritWeapon } from "./soulbound/weapon.mjs";
 import { Wound } from "./soulbound/wound.mjs";
@@ -189,6 +191,7 @@ Hooks.once("init", () => {
         hypnosis: Hypnosis,
         rig: SoulboundRig,
         damageBus: DamageBus,
+        checkPipeline: CheckPipeline,
         carapace: Carapace,
         assimilator: {
             engine: AssimilatorEngine,
@@ -213,13 +216,16 @@ Hooks.once("init", () => {
 });
 
 // After `init`, so the system's document classes exist to be wrapped: the cast pipeline wraps the
-// spellcasting entry's `cast` and an activity's `toMessage`, and the damage bus wraps `applyDamage`.
+// spellcasting entry's `cast` and an activity's `toMessage`, the damage bus wraps `applyDamage`, and the
+// check pipeline wraps `Check.roll`.
 Hooks.once("setup", () => {
     start("the damage bus", () => DamageBus.install());
+    start("the check pipeline", () => CheckPipeline.install());
     start("the cast pipeline", () => CastPipeline.install());
     start("the reiatsu pool", () => Reiatsu.install());
     start("the rider engine", () => Riders.registerHooks());
     start("Strikes that ignore cover", () => Scattered.register());
+    start("the Stargazer's armed Portent", () => Armed.register());
 });
 
 Hooks.once("ready", async () => {
