@@ -82,9 +82,9 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | SG-23a | §4.1 | You gain a focus pool of **1 Focus Point** and the **Auguries** you learn from §5. | `test-stargazer` pins it | ✅ | Live: focus pool **1** at 1st (cap 1); a stored 1 holds and a stored 0 holds. **Fixed while driving:** pf2e clamps the value to its own derived maximum — 0 with no Auguries — before the pool is pinned to its cap, so a stored 1 read back 0; the pin now re-reads the source. The Soulbound has the same bug: #114 |
 | SG-23b | §4.1 | their rank is always half your level rounded up, and they use your **Stargazer DC** and your Wisdom modifier for spell attack rolls and DCs. | `test-stargazer` pins it | ✅ | Live: the Star Chart's DC is the Stargazer DC at every level and its attribute Wis; the nine known Auguries read **rank 10** at 19th |
-| SG-23c | §4.1 | You **Refocus** by reading the sky, or your chart, for 10 minutes. |  | ☐ |  |
+| SG-23c | §4.1 | You **Refocus** by reading the sky, or your chart, for 10 minutes. |  | ✅ | Live: Mira at 0 of 2 posted Refocus three times — 1, then 2, then still 2. **Built this pass:** pf2e's Refocus is text only and restored nothing |
 | SG-24a | §4.1 | You also know **5 occult cantrips**, chosen when you take the class, cast at will at a rank of half your level rounded up. |  | ✅ | Live at 6th: pf2e's *Daze* added to the Star Chart is filed there as a cantrip at rank **3** (half of 6, rounded up), and casting it left the focus pool at **0 → 0** — at will |
-| SG-24b | §4.1 | You can change one cantrip during your daily preparations. |  | ☐ |  |
+| SG-24b | §4.1 | You can change one cantrip during your daily preparations. |  | ✅ | Live: the Vigil card's *Change one cantrip* offered Mira's own Daze (not the Star-Touched Message) and learned Light in its place, in the Star Chart; a second change at the same Vigil was refused. **Built this pass** |
 | SG-25 | §3 | Nine Auguries known, at 1, 5, 7, 9, 11, 13, 15, 17 and 19. | `test-stargazer` pins it | ✅ | Live: nine prompts — one at 1st, eight on the way to 19th — each offering the Auguries; each choice was filed into the Star Chart. The pool stayed **2**, not nine |
 
 ## Night Vigil (guide §4.2)
@@ -114,7 +114,7 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 | SG-33c | §4.3 | **Guide** — the triggering creature gains a **+1 circumstance bonus** to the roll. | `test-stargazer` pins it | ✅ | Live at 17th: an ally's skill check took **Guide +2** (circumstance) and the effect was gone after it; the control roll straight after was bare `1d20`. +1 below 9th is pinned statically |
 | SG-33d | §4.3 | **Snarl** — the triggering creature takes a **−1 circumstance penalty** to the roll. | `test-stargazer` pins it | ✅ | Live at 17th: the foe's skill check rolled **`1d20 - 2`** and the Snarl was spent |
 | SG-33e | §4.3 | Snarl can only be applied to an **attack roll, skill check, or Perception check**, never a saving throw. | `test-stargazer` pins it | ✅ | Live: a Snarl armed on the foe was **not** applied to its Will save (`1d20 + 8`, still armed) and fired on its next skill check; arming a Snarl on saving throws is refused outright |
-| SG-33f | §4.3 | It stacks with *Courageous Anthem*, *Bless* and *Heroism*, which are status bonuses |  | ☐ |  |
+| SG-33f | §4.3 | It stacks with *Courageous Anthem*, *Bless* and *Heroism*, which are status bonuses |  | ✅ | Live: Deneb's Strike under Bless and a Guide took both — *Bless +1 status* and *Guide +2 circumstance* |
 | SG-33g | §4.3 | It does **not** stack with Aid, which is a circumstance bonus too; the higher of the two applies. |  | ✅ | Live: an ally holding Aid (+1 circumstance) and a Guide (+2) rolled `1d20 + 2` — **Aid off, Guide on**; the higher circumstance bonus applies |
 
 ## Chart the Course (guide §4.4)
@@ -133,7 +133,7 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | SG-35a | §4.5 | When you complete a Night Vigil, roll a d20 and record the result. This is your **Portent**, and you know its value. |  | ✅ | Live: *Rest for the Night* recorded a Portent of **6** and posted it as a GM roll to the Stargazer |
 | SG-35b | §4.5 | **Speak the Portent** ✦ **[free action]** (prediction) |  | ✅ | Live: a free action with `prediction` on the sheet; speaking it armed the Portent on the targeted creature |
-| SG-35c | §4.5 | **Frequency** once per day |  | ☐ |  |
+| SG-35c | §4.5 | **Frequency** once per day | `test-stargazer` pins it | ✅ | Live: Mira, with one Portent, spoke it once; after it was spent, posting Portent again opened no picker |
 | SG-35d | §4.5 | **Trigger** A creature within 60 feet that you can see is about to roll a d20 for an attack roll, a saving throw, or a skill check. |  | ⚠️ | Live: spoken over the foe's next skill check, 20 feet away — the same range and immunity refusals as a Thread, at 60 feet. **Gap:** *that you can see* is not checked — range is, and so is immunity to `prediction` |
 | SG-35e | §4.5 | The creature does not roll. Its d20 result **is** your recorded Portent, and the roll resolves normally from there. The Portent is spent. | `test-stargazer` pins it | ✅ | Live: the foe's skill check was the constant **`14`** — no die — and the Portent was spent; the control roll straight after was `1d20` |
 | SG-35f | §4.5 | A Portent of 20 counts as a natural 20 and a Portent of 1 as a natural 1 | `test-stargazer` pins it | ✅ | Live: a Portent of 20 on a Will save of +14 against DC 34 was a **critical success** (34 is a success; the natural 20 raises it). Phase 0 drove the natural 1 |
@@ -210,9 +210,9 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 | SG-43a | §4.13 | Once per 10 minutes, when you use Fortune's Thread, you may instead make it a true **fortune** or **misfortune** effect for **up to two of its targets** | `test-stargazer` pins it | ✅ | Live: Twin Fates on two of a Thread's targets; used again inside 10 minutes, refused |
 | SG-43b | §4.13 | each rolls twice and takes the higher result (Guide) or the lower result (Snarl). | `test-stargazer` pins it | ✅ | Live: the ally's Reflex save rolled **`2d20kh`**, the foe's skill check **`2d20kl`** |
 | SG-43c | §4.13 | This replaces the bonus or penalty for those targets, and Snarl's restriction to attack rolls, skill checks and Perception still applies. | `test-stargazer` pins it | ✅ | Live: the Twin Fates rolls carried no ±2 — it replaces the bonus — and the foe's save under a Twin Fates Snarl rolled `1d20 + 8`, untouched |
-| SG-43d | §4.13 | If a fortune effect and a misfortune effect would apply to the same roll, the two cancel each other out. |  | ☐ |  |
+| SG-43d | §4.13 | If a fortune effect and a misfortune effect would apply to the same roll, the two cancel each other out. |  | ✅ | Live: a Twin Fates Guide (keep higher) on the foe while under Coiling Doubt (keep lower) rolled `1d20`; the Twin Fates Guide alone, `2d20kh` |
 | SG-44a | §4.14 | Fortune's Thread affects **three creatures** with a single reaction, in any combination of Guide and Snarl. | `test-stargazer` pins it | ✅ | Live at 17th: three creatures — the ally, the foe and the Stargazer — armed on one reaction (one pending); four were refused |
-| SG-44b | §4.14 | *Twin Fates* still affects two. |  | ☐ |  |
+| SG-44b | §4.14 | *Twin Fates* still affects two. |  | ✅ | Live: Vega at 17th (Threefold Thread and Twin Fates, no Cascade) was refused Twin Fates on three of her Thread's targets and allowed it on two; the third took a plain Guide |
 
 ## The rewind, Tiers 1 and 3 (guide §10.1, §10.3)
 
@@ -220,9 +220,9 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SG-45a | §10.1 The Dream | The Stargazer's Night Vigil produces **a vision the player does not get to interpret**. |  | ☐ |  |
-| SG-45b | §10.1 The Dream | **The players keep every piece of information they learned** |  | ☐ |  |
-| SG-45c | §10.1 The Dream | **Frequency:** once per adventure or arc, maximum, and only when the GM initiates. |  | ☐ |  |
+| SG-45a | §10.1 The Dream | The Stargazer's Night Vigil produces **a vision the player does not get to interpret**. |  | — | The Dream is a GM technique by ruling R5; the handbook's *The rewind, in three tiers* tells the GM how to run it |
+| SG-45b | §10.1 The Dream | **The players keep every piece of information they learned** |  | — | As SG-45a: what the players keep is the table's |
+| SG-45c | §10.1 The Dream | **Frequency:** once per adventure or arc, maximum, and only when the GM initiates. |  | — | As SG-45a: only the GM starts it |
 | SG-46a | §10.3 | **Rewrite the Ending** ✦ **[free action]** (prediction) | `test-stargazer` pins it | ✅ | A free action with `prediction`, granted at 19th |
 | SG-46b | §10.3 | **Frequency** once per week | `test-stargazer` pins it | ✅ | Live: after a use on day 227 it was not ready again until day 234 (seven dawns) |
 | SG-46c | §10.3 | **Trigger** You or an ally within 60 feet dies, or the party is defeated or captured. |  | ✅ | Live, a fresh encounter (Altair 30, the foe 20, Mira 10, SG Ally 5): posting it asked the GM, in a GM-only whisper, whether someone died or the party fell |
@@ -245,7 +245,7 @@ rewinds behave at the table. ADR-0004 is the reasoning behind the arming model.*
 | SG-47b | §11.2 | An armed Thread expires at the start of your next turn, and you cannot arm one with no reaction left |  | ✅ | Live: with the reaction spent, arming was refused; at Vega's next turn the count was back to 0, and a Guide armed then left unrolled for a round was gone at the turn after, costing nothing |
 | SG-47c | §11.2 | *Two Warnings* allows a second, and *Chart the Course*'s free Threads cost none. |  | ⚠️ | Live: Chart the Course's Threads armed with the reaction spent and cost none. **Gap:** *Two Warnings* is a feat, not built until phase 6 (#108) |
 | SG-47d | §11.3 | Its free Fortune's Thread is **armed on the named creature at no reaction cost**, and spent by that creature's first d20. | `test-stargazer` pins it | ✅ | Live: the foe's first d20 after Chart was a save; its Snarl could not apply and was spent anyway |
-| SG-47e | §11.3 | it never expires until it is spoken or a new Vigil overwrites it. |  | ☐ |  |
+| SG-47e | §11.3 | it never expires until it is spoken or a new Vigil overwrites it. |  | ✅ | Live: Mira's Portent armed on SG Ally was still there two days of world time later; speaking it again moved it to the foe; armed and unspoken, the next Vigil took it back |
 | SG-47f | §11.3 | the die is replaced before the roll resolves | `test-stargazer` pins it | ✅ | Live: the Portent's roll formula is the constant — `14`, `19 + 15` — not a die |
 | SG-47g | §11.3 | When the trigger happens, the Stargazer's player is offered a button on a chat card, and the effect is applied after the fact |  | ✅ | Live: The Last Thing You See was offered as a button after the damage landed, and its save and conditions were applied after the fact |
 | SG-48a | §11.7 | **Night Vigil** runs by itself at *Rest for the Night* |  | ✅ | Live: the Vigil ran at *Rest for the Night* with no other action |
@@ -264,10 +264,10 @@ rewinds behave at the table. ADR-0004 is the reasoning behind the arming model.*
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 10 |
-| ✅ | 109 |
+| ☐ | 0 |
+| ✅ | 116 |
 | ⚠️ | 7 |
 | ❌ | 0 |
 | 🔧 | 0 |
-| — | 3 |
+| — | 6 |
 | **Total** | **129** |

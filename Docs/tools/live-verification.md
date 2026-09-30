@@ -226,6 +226,10 @@ World `pf` is not a clean room. It is a working world with years of fixtures in 
 | A turn starts **once per round** | pf2e records `roundOfLastTurn` on the combatant and will not start that turn again in the same round. Rewinding the combat into a round already played needs the combatant's flags put back too, or no start-of-turn hook fires |
 | `actor.isDead` wants the **death overlay** | A character at 0 Hit Points and dying 4 reads `isDead: false` until the token shows the dead status. Read dying against `attributes.dying.max` instead |
 | An initiative roll is a **Perception** check | Its domains include `perception` and `check`, so a modifier selected on either is spent by initiative. Its roll options carry `check:type:initiative` — predicate on that, with `removeAfterRoll: "if-enabled"` |
+| A damage roll caches its total **twice** | Changing a die on a pf2e `DamageRoll` needs each `DamageInstance`'s `_total` re-evaluated **and** the `InstancePool`'s own `results[i]` updated, then the roll's `_total` — and the message `content`, which prints the total too. Miss one and the card shows the new dice over the old number |
+| pf2e's **Refocus** does nothing | The action from `actionspf2e` is text: posting it, or its sheet row, restores no Focus Point. Whatever a class says Refocus does has to be done by the module |
+| A cast asks **"Confirm targets"** first | The area-targeting flow opens a `DialogV2` before any of the spell's own prompts. A scripted answer queue must put an OK for it first, or the spell's dialog takes the wrong answer and waits for ever |
+| An emanation **replaces** your targets | A spell with an area and a `maxTargets` catches the first creatures in the area up to the cap, whatever the user targeted. Target counts are checked against that list |
 | An effect has no `disabled` field | A pf2e Effect item's `system.expired` is derived in `prepareBaseData`, so writing either one is overwritten or ignored. To switch an effect off without deleting it, move its rules aside — see `soulbound/suppression.mjs` |
 
 ## 7. Running long jobs

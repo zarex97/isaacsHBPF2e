@@ -565,6 +565,36 @@ function check(label, actual, expected) {
 }
 
 /* -------------------------------------------------------------------------------------------- */
+/*  The remaining rows: Alms of Fate, Crown of Fire, Poured Knowing, Read the Sky               */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    const fs = await import("node:fs");
+    const read = (rel) => JSON.parse(fs.readFileSync(new URL(`../content/${rel}`, import.meta.url), "utf8"));
+    const alms = read("stargazer-auguries/alms-of-fate.json");
+    check("OM-13a/b Alms of Fate: one action, concentrate and prediction, 2 allies within 30 feet, 3 from 9th",
+        [alms.system.time.value, ["concentrate", "prediction"].every((t) => alms.system.traits.value.includes(t)), alms.flags["isaacs-hb-pf2e"].areaTargeting],
+        ["1", true, { affects: "allies", maxTargets: 2, range: 30, heightening: { at: { 9: { maxTargets: 1 } } } }]);
+    const { almsDice, liftCounteractNote, SIGN_AUGURY } = await import("../scripts/stargazer/auguries.mjs");
+    const dice = () => [{ faces: 6, results: [{ result: 1, active: true }, { result: 2, active: true }, { result: 5, active: true }] }, { faces: 8, results: [{ result: 3, active: true }] }];
+    const d1 = dice();
+    almsDice(d1, { random: () => 0.5 });
+    check("OM-13c Alms of Fate: every 1 and 2 rerolled and kept, nothing else touched", d1.map((d) => d.results.map((r) => r.result)), [[4, 4, 5], [3]]);
+    const d2 = dice();
+    almsDice(d2, { maximise: true, random: () => 0 });
+    check("OM-13e at 9th: the die with most to gain is maximised", d2.map((d) => d.results.map((r) => r.result)), [[6, 1, 5], [3]]);
+    check("OM-17j Capricorn's Augury of the Day is Alms of Fate", SIGN_AUGURY.capricorn, "Alms of Fate");
+    check("OM-14e Poured Knowing: each counteract rank one higher, a critical failure unchanged",
+        [liftCounteractNote("if its counteract rank is 3 or less.", "success"), liftCounteractNote("You fail to counteract the target.", "criticalFailure"),
+            liftCounteractNote("if its counteract rank is less than 2.", "failure")],
+        ["if its counteract rank is 4 or less.", "You fail to counteract the target.", "if its counteract rank is less than 3."]);
+    const crown = read("stargazer-effects/effect-crowns-blessing.json").system.rules[0];
+    check("OM-08e Crown of Fire: +1 status to the next roll", [crown.type, crown.value, crown.removeAfterRoll], ["status", 1, true]);
+    const macro = read("stargazer-macros/read-the-sky.json");
+    check("SK-30a Read the Sky: a macro anyone can run", [macro.type, macro.command.includes("readTheSky")], ["script", true]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
 
 if (failures.length > 0) {
     console.error(`Stargazer tests failed: ${failures.length} of ${checks}.`);

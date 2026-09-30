@@ -211,6 +211,43 @@ async function reckoning(actor) {
     await say(actor, `<strong>Reckoning of Days</strong> — ${text}`, { whisper: ownersOf(actor) });
 }
 
+/**
+ * Reading the sky without the class (guide §8.4): ten minutes under an open sky and an Astronomy Lore or
+ * Occultism check, as Recall Knowledge, against the region's Hard DC — 5 lower on an Exalted or Malefic day.
+ * Anyone can; the macro in the Stargazer's macro pack calls this. The roll is secret, and what it tells the
+ * reader is whispered to them: sign and aspect, the sign, nothing, or a wrong sign told as a success.
+ */
+export async function readTheSky(actor) {
+    if (!actor) return ui.notifications.warn("Read the Sky: select your token first.");
+    const sky = SkyTracker.state;
+    if (sky.clouded) return ui.notifications.warn("Read the Sky: the sky is clouded tonight; there is nothing to read.");
+    const lore = Object.values(actor.skills ?? {}).find((s) => s.slug === "astronomy-lore");
+    const skills = [lore, actor.skills?.occultism].filter(Boolean);
+    const data = await foundry.applications.api.DialogV2.prompt({
+        window: { title: "Read the Sky" },
+        content: `<p>Ten minutes under an open sky. The region's level sets the DC.</p>
+            <div class="form-group"><label>Skill</label><select name="skill">${skills.map((s) => `<option value="${s.slug}">${s.label} (${s.mod >= 0 ? "+" : ""}${s.mod})</option>`).join("")}</select></div>
+            <div class="form-group"><label>Region level</label><input type="number" name="level" min="0" max="25" value="${actor.level ?? 1}" /></div>`,
+        rejectClose: false,
+        ok: { label: "Read it", callback: (_e, button) => new foundry.applications.ux.FormDataExtended(button.form).object },
+    });
+    if (!data) return;
+    const statistic = skills.find((s) => s.slug === data.skill);
+    if (!statistic) return;
+    const dc = readingDC(Number(data.level), sky.aspect);
+    const roll = await statistic.roll({
+        skipDialog: true, rollMode: "blindroll", traits: ["secret"], dc: { value: dc, label: "Read the Sky" },
+        extraRollOptions: ["action:recall-knowledge", "action:read-the-sky", "secret"],
+    });
+    const degree = roll?.degreeOfSuccess ?? roll?.options?.degreeOfSuccess ?? null;
+    const others = SIGN_IDS.filter((s) => s !== sky.sign);
+    const result = readingResult(degree, { sign: sky.sign, aspect: sky.aspect }, { wrongSign: others[Math.floor(Math.random() * others.length)] });
+    const text = result
+        ? `Today: ${signOf(result.sign).glyph} <strong>${signOf(result.sign).label}</strong>${result.aspect ? `, ${aspectOf(result.aspect).label}` : " rules it; not whether that is good news"}.`
+        : "The sky will not say.";
+    await say(actor, `<strong>Read the Sky</strong> — ${text}`, { whisper: [...new Set([...ownersOf(actor), ...gmIds()])] });
+}
+
 /* ------------------------------------------------------------------------------------------------ */
 /*  Foretold Escape                                                                                 */
 /* ------------------------------------------------------------------------------------------------ */
@@ -407,6 +444,13 @@ async function afterCheck(message) {
 async function afterRefocus(message) {
     const actor = message.actor;
     if (message.item?.slug !== "refocus" || !isStargazer(actor)) return;
+    // Refocus (guide §4.1): "you Refocus by reading the sky, or your chart, for 10 minutes". pf2e's Refocus
+    // is text only and restores nothing (driven), so the Focus Point is given here, up to the pool.
+    const focus = actor.system?.resources?.focus;
+    if (focus && (focus.value ?? 0) < (focus.max ?? 0)) {
+        await actor.update({ "system.resources.focus.value": Math.min(focus.max, (focus.value ?? 0) + 1) });
+        await say(actor, `<strong>Refocus</strong>: ten minutes with the sky, or the chart. ${actor.name} has ${actor.system.resources.focus.value} of ${focus.max} Focus Points.`, { whisper: ownersOf(actor) });
+    }
     // Unbroken Chain (§7, 18th): Unmake the Moment recharges on a 10-minute rest, no more than once per hour.
     const s = state(actor);
     if (has(actor, "unbroken-chain") && (s.unmakeUsed ?? 0) > 0 && (typeof s.chainAt !== "number" || game.time.worldTime - s.chainAt >= 3600)) {

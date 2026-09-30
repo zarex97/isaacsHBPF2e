@@ -84,6 +84,9 @@ async function afterRoll(message) {
     const reprieve = spentReprieve(effects, context);
     if (reprieve) await reprieve.delete();
 
+    // Crown of Fire: once per round, a critical success hands an ally within 30 feet +1 to their next roll.
+    if (context.outcome === "criticalSuccess") await crownOfFire(actor, effects);
+
     // First Blood: "its first Strike of the encounter that hits". A damage roll is only made on a hit.
     if (context.type === "damage-roll" && (context.domains ?? []).includes("strike-damage")) {
         const blood = effects.find((e) => flagOf(e, "firstBloodStrike"));
@@ -117,6 +120,153 @@ async function revealLedger(actor, target) {
         whisper: [...new Set([...ownersOf(actor), ...game.users.filter((u) => u.isGM).map((u) => u.id)])],
         content: `<p><strong>Perfect Ledger</strong> — ${target.name}: lowest save <strong>${lowest[0]}</strong> (${lowest[1] >= 0 ? "+" : ""}${lowest[1]}); weaknesses: ${weaknesses.length ? weaknesses.join(", ") : "none"}.</p>`,
     });
+}
+
+/* ------------------------------------------------------------------------------------------------ */
+/*  Crown of Fire: a critical success shared                                                        */
+/* ------------------------------------------------------------------------------------------------ */
+
+/** The creature that cast the Augury an effect came from, if the rider recorded it. */
+function casterOf(effect) {
+    const uuid = effect?.system?.context?.origin?.actor;
+    return uuid ? fromUuidSync(uuid) : null;
+}
+
+/** The round a creature is fighting in, or a six-second slice of the clock outside combat. */
+function roundOf(actor) {
+    const combat = game.combats?.find((c) => c.started && c.combatants.some((x) => x.actorId === actor?.id));
+    return combat ? `${combat.id}:${combat.round}` : `t${Math.floor(game.time.worldTime / 6)}`;
+}
+
+async function crownOfFire(actor, effects) {
+    const crownEffect = effects.find((e) => e.name === "Effect: Crown of Fire");
+    if (!crownEffect) return;
+    const round = roundOf(actor);
+    if (flagOf(crownEffect, "crownRound") === round) return;
+    const seen = new Set();
+    const allies = [];
+    for (const token of canvas?.scene?.tokens ?? []) {
+        const a = token.actor;
+        if (!a || a.id === actor.id || seen.has(a.id)) continue;
+        seen.add(a.id);
+        if (a.isAllyOf?.(actor) && feet(actor, a) <= 30) allies.push(a);
+    }
+    if (allies.length === 0) return;
+    await crownEffect.update({ [`flags.${MODULE_ID}.crownRound`]: round });
+    const chooser = casterOf(crownEffect) ?? actor;
+    await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: chooser }),
+        whisper: [...new Set([...ownersOf(chooser), ...ownersOf(actor)])],
+        content: `<p><strong>Crown of Fire</strong> — ${actor.name} critically succeeded. One ally within 30 feet of them takes +1 to their next roll:</p>
+            <select name="ally">${allies.map((a) => `<option value="${a.uuid}">${a.name}</option>`).join("")}</select>
+            <button type="button" data-stargazer="crown">Crown them</button>`,
+        flags: { [MODULE_ID]: { crownCard: { from: actor.uuid, used: false } } },
+    });
+}
+
+async function crown({ card: cardId, ally: allyUuid }) {
+    const card = game.messages.get(cardId);
+    const flag = card?.flags?.[MODULE_ID]?.crownCard;
+    if (!flag || flag.used) return;
+    const ally = (await fromUuid(allyUuid))?.actor ?? (await fromUuid(allyUuid));
+    if (!ally) return;
+    await card.update({ [`flags.${MODULE_ID}.crownCard.used`]: true });
+    const source = await effectFromPack("Effect: Crown's Blessing");
+    if (source) await ally.createEmbeddedDocuments("Item", [source]);
+}
+
+function bindCrown(message, html) {
+    const flag = message.flags?.[MODULE_ID]?.crownCard;
+    const button = html.querySelector?.('button[data-stargazer="crown"]');
+    if (!flag || !button) return;
+    if (flag.used) button.disabled = true;
+    button.addEventListener("click", () => {
+        button.disabled = true;
+        Relay.request({ action: "stargazerCrown", card: message.id, ally: html.querySelector('select[name="ally"]')?.value });
+    });
+}
+
+/* ------------------------------------------------------------------------------------------------ */
+/*  Alms of Fate: 1s and 2s rerolled                                                                */
+/* ------------------------------------------------------------------------------------------------ */
+
+/**
+ * Alms of Fate on a damage roll, rewritten as it lands (The Balance's shape): every die showing 1 or 2 is
+ * rolled again and the new result kept; from 9th rank one die — the one with the most to gain — is set to
+ * its maximum. Returns the dice changed, for the flavour. `random` is injectable for the tests.
+ */
+export function almsDice(dice, { maximise = false, random = Math.random } = {}) {
+    const changed = [];
+    for (const die of dice) {
+        for (const result of die.results ?? []) {
+            if (result.active === false || result.result > 2) continue;
+            const was = result.result;
+            result.result = Math.floor(random() * die.faces) + 1;
+            changed.push(`d${die.faces} ${was} to ${result.result}`);
+        }
+    }
+    if (maximise) {
+        let best = null;
+        for (const die of dice) {
+            for (const result of die.results ?? []) {
+                if (result.active === false) continue;
+                const gain = die.faces - result.result;
+                if (!best || gain > best.gain) best = { die, result, gain };
+            }
+        }
+        if (best && best.gain > 0) {
+            changed.push(`d${best.die.faces} ${best.result.result} to ${best.die.faces}, maximised`);
+            best.result.result = best.die.faces;
+        }
+    }
+    return changed;
+}
+
+/**
+ * Re-total a pf2e damage roll whose dice were changed in place. Each `DamageInstance` caches its total, and
+ * the `InstancePool` above them keeps a result per instance of its own — both have to be told, or the card
+ * shows the new dice over the old total (driven: a d4 rewritten 1 → 4 still totalled 1).
+ */
+function retotal(roll) {
+    for (const pool of roll.terms ?? []) {
+        if (!Array.isArray(pool.rolls)) continue;
+        pool.rolls.forEach((instance, i) => {
+            instance._total = instance._evaluateTotal();
+            if (pool.results?.[i]) pool.results[i].result = instance._total;
+        });
+    }
+    roll._total = roll._evaluateTotal();
+}
+
+function almsRewrite(message) {
+    try {
+        const context = message.flags?.pf2e?.context;
+        if (context?.type !== "damage-roll") return true;
+        const actor = message.actor;
+        const alms = actor?.itemTypes?.effect?.find((e) => flagOf(e, "almsOfFate"));
+        if (!alms) return true;
+        const roll = message.rolls?.at(0);
+        if (!roll?.dice?.length) return true;
+        const caster = casterOf(alms);
+        const changed = almsDice(roll.dice, { maximise: (caster?.level ?? 0) >= 17 });
+        retotal(roll);
+        message.updateSource({
+            rolls: [JSON.stringify(roll.toJSON())], content: String(roll.total),
+            flavor: `${message.flavor ?? ""}<div class="isaacs-hb-balance">Alms of Fate: ${changed.length ? changed.join("; ") : "no 1s or 2s"}.</div>`,
+            [`flags.${MODULE_ID}.almsSpent`]: alms.uuid,
+        });
+    } catch (error) {
+        console.error("Isaac's Homebrew | Alms of Fate could not rewrite a damage roll", error);
+    }
+    return true;
+}
+
+/** The effect goes with the damaging effect it touched. */
+async function almsSpent(message) {
+    const uuid = message.flags?.[MODULE_ID]?.almsSpent;
+    if (!uuid) return;
+    const effect = await fromUuid(uuid);
+    if (effect) await effect.delete();
 }
 
 /* ------------------------------------------------------------------------------------------------ */
@@ -285,13 +435,47 @@ function hunted(check, context) {
 }
 
 /* ------------------------------------------------------------------------------------------------ */
+/*  Poured Knowing: counteract checks                                                               */
+/* ------------------------------------------------------------------------------------------------ */
+
+/** A counteract note's rank, one higher — every outcome but a critical failure, which counteracts nothing. Pure. */
+export function liftCounteractNote(text, outcome) {
+    if (!outcome || outcome === "criticalFailure") return text;
+    return String(text).replace(/(\d+)(?!.*\d)/, (n) => String(Number(n) + 1));
+}
+
+/**
+ * Poured Knowing (guide §5.2): "each target's counteract checks … use your Stargazer DC and proficiency rank
+ * if higher than their own, and count their counteract rank as 1 higher". pf2e rolls a counteract check with
+ * the `counteract-check` domain and prints the rank each degree reaches as notes; the check is raised to the
+ * Stargazer DC's modifier when that is higher, and each note's rank is lifted by one.
+ */
+function pouredKnowing(check, context) {
+    if (!(context?.domains ?? []).includes("counteract-check")) return;
+    const effect = (context.actor?.itemTypes?.effect ?? []).find((e) => flagOf(e, "pouredKnowing"));
+    if (!effect) return;
+    const caster = casterOf(effect);
+    const dc = caster?.classDCs?.stargazer?.dc?.value ?? caster?.getStatistic?.("stargazer")?.dc?.value;
+    if (Number.isFinite(dc) && dc - 10 > check.totalModifier) {
+        check.push(new game.pf2e.Modifier({ slug: "poured-knowing", label: `Poured Knowing (${caster.name}'s Stargazer DC)`, modifier: dc - 10 - check.totalModifier, type: "untyped" }));
+    }
+    for (const note of context.notes ?? []) {
+        const outcome = [note.outcome ?? []].flat()[0];
+        if (outcome && typeof note.text === "string") note.text = liftCounteractNote(note.text, outcome);
+    }
+}
+
+/* ------------------------------------------------------------------------------------------------ */
 
 export const Auguries = {
     registerHooks() {
         Relay.register?.("stargazerFixedPoint", fixPoint);
         Relay.register?.("stargazerHour", hour);
+        Relay.register?.("stargazerCrown", crown);
+        Hooks.on("preCreateChatMessage", (message) => almsRewrite(message));
         Hooks.on("createChatMessage", (message, _options, userId) => {
             if (isWriter()) afterRoll(message).catch((e) => console.error("Isaac's Homebrew | the Auguries", e));
+            if (isWriter()) almsSpent(message).catch((e) => console.error("Isaac's Homebrew | Alms of Fate", e));
             if (userId === game.user.id) ownRoll(message).catch((e) => console.error("Isaac's Homebrew | Perfect Ledger", e));
             if (userId === game.user.id && message.item?.type === "spell") {
                 nameFixedPoint(message).catch((e) => console.error("Isaac's Homebrew | Fixed Point", e));
@@ -302,6 +486,10 @@ export const Auguries = {
         });
         DamageBus.after("The Hour Is Not Come", DAMAGE.riders + 9, (actor, params, before) => offerHour(actor, params, before));
         CheckPipeline.before("Hunted by the Sky (Stargazer guide §5.2)", PRIORITY.huntedBySky, hunted);
-        Hooks.on("renderChatMessageHTML", (message, html) => bindHour(message, html));
+        CheckPipeline.before("Poured Knowing's counteract checks (Stargazer guide §5.2)", PRIORITY.pouredKnowing, pouredKnowing);
+        Hooks.on("renderChatMessageHTML", (message, html) => {
+            bindHour(message, html);
+            bindCrown(message, html);
+        });
     },
 };

@@ -156,7 +156,7 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 | SF-32d | §7 Private Sign | Its aspect is rolled in advance with the day, as part of the seven-day queue. | `test-stargazer` pins it | ✅ | Live: every queued day carries its `privateAspect`, rolled with the day; the card read today's |
 | SF-33 | §7 Written in Advance | Spend 10 minutes. The next skill check you attempt within the hour is an automatic **success** (not a critical success). | `test-stargazer` pins it | ✅ | Live, Altair (19th): posting it armed *Effect: Written in Advance*; his next Athletics — a natural 1 against DC 40 — read **success**, and the one after failed as it should. A natural 20 against DC 10 read success, not critical success |
 | SF-34a | §7 Foretold Escape | Once per day, when an **attack roll** against you would deal damage that reduces you to 0 Hit Points, you may *Speak the Portent* on that attack roll even though it has already been rolled |  | ✅ | Live, Altair (19th): dropped to 0 by the foe's critical hit, he was offered *Foretold Escape*; speaking it re-read the attack as a **1** (a miss) and he stood at 5 Hit Points again; the frequency went 1 → 0 and the next fall offered nothing |
-| SF-34b | §7 Foretold Escape | even if your Portent is spent, and even if a fortune or misfortune effect altered it — using a value of 1. |  | ☐ | Built — the escape reads neither his Portents nor the roll's fortune — but not yet driven on a fortune-altered attack |
+| SF-34b | §7 Foretold Escape | even if your Portent is spent, and even if a fortune or misfortune effect altered it — using a value of 1. |  | ✅ | Live: every one of Altair's Portents spent, the foe's attack rolled with a fortune effect (`2d20kh`) and dropped him to 0; Foretold Escape was offered anyway and re-read the kept die as a **1**, a miss, and he stood at 5 again |
 | SF-34c | §7 Foretold Escape | It cannot be used on your own saving throw, or on damage no attack roll dealt. |  | ✅ | Live, Altair (19th): fire damage after an attack that missed him offered nothing; Deneb, without the feat, felled by a hit, nothing. **Fixed while driving:** only the latest attack at the creature counts — an older hit further up had been found |
 
 ## 18th level (guide §7)
@@ -187,8 +187,8 @@ sentence of pure fiction or design commentary — *"You might want it to succeed
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 1 |
-| ✅ | 70 |
+| ☐ | 0 |
+| ✅ | 71 |
 | ⚠️ | 2 |
 | ❌ | 0 |
 | 🔧 | 0 |
