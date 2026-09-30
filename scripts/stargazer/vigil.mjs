@@ -201,6 +201,7 @@ export async function runVigil(actor, { borrowed = false } = {}) {
     }
 
     if (has(actor, "prophesied-ally")) lines.push(`<p><button type="button" data-stargazer="prophesy">Prophesied Ally: choose one</button></p>`);
+    lines.push(`<p><button type="button" data-stargazer="change-cantrip">Change one cantrip</button></p>`);
     if (has(actor, "star-touched-cantrip")) lines.push(`<p><button type="button" data-stargazer="swap-cantrip">Star-Touched Cantrip: swap it</button></p>`);
     if (has(actor, "the-almanac")) lines.push(`<p><button type="button" data-stargazer="almanac">The Almanac: read a past day</button></p>`);
 
@@ -227,6 +228,47 @@ async function pickOne(actor, title, text) {
         ok: { label: "Choose", callback: (_e, button) => new foundry.applications.ux.FormDataExtended(button.form).object },
     });
     return data?.ally || null;
+}
+
+/**
+ * The Star Chart's cantrips (guide §4.1): "you can change one cantrip during your daily preparations".
+ * Offered on the Vigil card, once per Vigil; a cantrip a feat granted (Star-Touched Cantrip) changes on its
+ * own button instead. The new one is filed where the old one was.
+ */
+async function changeCantrip(actor) {
+    if (state(actor).vigil?.cantripChanged) {
+        ui.notifications.warn("You have already changed a cantrip at this Vigil.");
+        return false;
+    }
+    const own = actor.itemTypes.spell.filter((s) => s.isCantrip && !s.flags?.pf2e?.grantedBy && s.system.location?.value);
+    if (own.length === 0) {
+        ui.notifications.warn("You have no cantrip of your own to change.");
+        return false;
+    }
+    const pack = game.packs.get("pf2e.spells-srd");
+    const index = await pack.getIndex({ fields: ["system.traits.value", "system.traits.traditions", "system.traits.rarity"] });
+    const known = new Set(actor.itemTypes.spell.map((s) => s.name));
+    const options = index.filter((e) => (e.system?.traits?.value ?? []).includes("cantrip") && !(e.system?.traits?.value ?? []).includes("focus")
+        && (e.system?.traits?.traditions ?? []).includes("occult") && (e.system?.traits?.rarity ?? "common") === "common" && !known.has(e.name))
+        .sort((a, b) => a.name.localeCompare(b.name));
+    const data = await foundry.applications.api.DialogV2.prompt({
+        window: { title: "Change one cantrip" },
+        content: `<div class="form-group"><label>Forget</label><select name="old">${own.map((s) => `<option value="${s.id}">${s.name}</option>`).join("")}</select></div>
+            <div class="form-group"><label>Learn</label><select name="learn">${options.map((e) => `<option value="${e._id}">${e.name}</option>`).join("")}</select></div>`,
+        rejectClose: false,
+        ok: { label: "Change it", callback: (_e, button) => new foundry.applications.ux.FormDataExtended(button.form).object },
+    });
+    const old = actor.items.get(data?.old ?? "");
+    const fresh = data?.learn ? await pack.getDocument(data.learn) : null;
+    if (!old || !fresh) return false;
+    const source = fresh.toObject();
+    source.system.location = { ...(source.system.location ?? {}), value: old.system.location.value };
+    source._stats = { ...(source._stats ?? {}), compendiumSource: fresh.uuid };
+    await old.delete();
+    await actor.createEmbeddedDocuments("Item", [source]);
+    await actor.update({ [`flags.${MODULE_ID}.${FLAG}.vigil.cantripChanged`]: true });
+    await whisper(actor, `<p><strong>Night Vigil</strong>: ${old.name} is forgotten; ${fresh.name} is learned.</p>`);
+    return true;
 }
 
 /**
@@ -321,6 +363,9 @@ function bindCard(message, html) {
                 await actor.update({ [`flags.${MODULE_ID}.${FLAG}.prophesied`]: { uuid: ally, day: card.day }, [`flags.${MODULE_ID}.${FLAG}.prophesiedRound`]: null });
                 ui.notifications.info(`Prophesied Ally: ${fromUuidSync(ally)?.name}.`);
                 button.disabled = true;
+            } else if (kind === "change-cantrip") {
+                if (state(actor).vigil?.day !== card.day) return;
+                if (await changeCantrip(actor)) button.disabled = true;
             } else if (kind === "swap-cantrip") {
                 await swapCantrip(actor);
                 button.disabled = true;

@@ -68,5 +68,10 @@
             "value": []
         }
     },
-    "type": "effect"
+    "type": "effect",
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "pouredKnowing": true
+        }
+    }
 }

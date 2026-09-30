@@ -1,0 +1,8 @@
+{
+    "author": null,
+    "command": "// Read the Sky — anyone can try (Stargazer guide §8.4).\n//\n// Ten minutes under an open sky and an Astronomy Lore or Occultism check against the region's Hard DC,\n// 5 lower on an Exalted or Malefic day. The roll is secret; what it tells you is whispered to you.\n\nconst api = game.modules.get(\"isaacs-hb-pf2e\")?.api;\nconst actor = canvas.tokens?.controlled?.[0]?.actor ?? game.user.character;\nif (!api?.stargazer) ui.notifications.error(\"Isaac's Homebrew (PF2e) is not active.\");\nelse await api.stargazer.readTheSky(actor);\n",
+    "img": "icons/tools/navigation/sextant-steel-blue.webp",
+    "name": "Read the Sky",
+    "scope": "global",
+    "type": "script"
+}

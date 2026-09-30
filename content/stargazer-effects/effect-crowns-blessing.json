@@ -1,0 +1,57 @@
+{
+    "img": "icons/magic/control/control-influence-crown-gold.webp",
+    "name": "Effect: Crown's Blessing",
+    "system": {
+        "description": {
+            "value": "<p>Crown of Fire: +1 status bonus to your next roll.</p>"
+        },
+        "duration": {
+            "value": 1,
+            "unit": "minutes",
+            "expiry": "turn-start",
+            "sustained": false
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "slug": "crowns-blessing",
+                "label": "Crown of Fire",
+                "selector": [
+                    "attack-roll",
+                    "saving-throw",
+                    "skill-check",
+                    "perception",
+                    "initiative"
+                ],
+                "type": "status",
+                "value": 1,
+                "removeAfterRoll": true
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "crownsBlessing": true
+        }
+    },
+    "type": "effect"
+}
