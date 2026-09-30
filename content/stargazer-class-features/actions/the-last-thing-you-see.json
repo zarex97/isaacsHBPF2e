@@ -1,0 +1,46 @@
+{
+    "folder": "Actions",
+    "img": "icons/magic/death/skull-horned-worn-fire-blue.webp",
+    "name": "The Last Thing You See",
+    "system": {
+        "actionType": {
+            "value": "reaction"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>Trigger</strong> A creature within 30 feet that you can see deals damage to you.</p><p><strong>Effect</strong> You show it the hour of its own death &mdash; not a threat, a <strong>date</strong>. It attempts a Will save against your Stargazer DC.</p><p><strong>Critical Success</strong> It is unaffected and is temporarily immune for 10 minutes.<br /><strong>Success</strong> Frightened 1.<br /><strong>Failure</strong> Frightened 2.<br /><strong>Critical Failure</strong> Frightened 3 and <strong>stunned 1</strong>.</p><hr /><p><em>When something within 30 feet hurts you, a button appears in your whispers.</em></p>"
+        },
+        "level": {
+            "value": 5
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "stargazer-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "stargazer",
+                "concentrate",
+                "emotion",
+                "fear",
+                "illusion",
+                "mental",
+                "prediction",
+                "visual"
+            ]
+        }
+    },
+    "type": "feat"
+}
