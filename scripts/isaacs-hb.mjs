@@ -53,6 +53,7 @@ import { StarChart } from "./stargazer/star-chart.mjs";
 import { Threads } from "./stargazer/threads.mjs";
 import { Vigil } from "./stargazer/vigil.mjs";
 import { Auguries } from "./stargazer/auguries.mjs";
+import { Paths } from "./stargazer/paths.mjs";
 import { TerrainRolls } from "./sky/terrain-rolls.mjs";
 import { Suppression } from "./soulbound/suppression.mjs";
 import { SpiritWeapon } from "./soulbound/weapon.mjs";
@@ -106,6 +107,7 @@ Hooks.once("init", () => {
     start("the luck engine", () => Threads.registerHooks());
     start("the Night Vigil", () => Vigil.registerHooks());
     start("the Auguries", () => Auguries.registerHooks());
+    start("the Stargazer's Paths", () => Paths.registerHooks());
     start("the Gemini duplicate", () => Duplicate.registerHooks());
     start("recharging", () => Recharge.registerHooks());
     start("spell frequency", () => SpellFrequency.registerHooks());
@@ -236,6 +238,7 @@ Hooks.once("setup", () => {
     start("Strikes that ignore cover", () => Scattered.register());
     start("the Stargazer's armed Portent", () => Armed.register());
     start("Libra and Aries", () => TerrainRolls.registerHooks());
+    start("Sentence Passed", () => Paths.install());
 });
 
 Hooks.once("ready", async () => {

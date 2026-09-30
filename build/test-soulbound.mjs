@@ -3349,6 +3349,8 @@ const SYSTEM_SLUGS = new Set([
     "blinded",
     // A pf2e condition: The Hour Is Not Come puts back whatever wounded value the creature had before.
     "wounded",
+    // pf2e's Demoralize modifier for a target that does not understand you; The Announcement lifts it.
+    "unintelligible",
     // Not a document: the slug of the −1 Will modifier *Effect: Null Weight* puts on a save.
     "null-weight",
     // The Assimilator's Substrate catalogue is keyed by its own slug ("electrum"), not the effect's document slug.

@@ -336,6 +336,90 @@ function check(label, actual, expected) {
 }
 
 /* -------------------------------------------------------------------------------------------- */
+/*  Phase 5: the four Paths                                                                     */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    const fs = await import("node:fs");
+    const read = (rel) => JSON.parse(fs.readFileSync(new URL(`../content/${rel}`, import.meta.url), "utf8"));
+    const feature = (name) => `Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.${name}`;
+    const PATHS = {
+        "the-weaver": ["Knotted Thread", "Doubled Strand", "Skein of Fates", "Tapestry"],
+        "the-herald": ["Herald's Omen", "The Announcement", "Sentence Passed", "Foregone Conclusion"],
+        "the-ephemeris": ["Perfect Recall", "The Almanac", "Written Down", "Every Sky Ever Read"],
+        "the-broken-thread": ["Deja Vu", "Second Sight", "Unmade Again", "The Long Way Round"],
+    };
+    const choice = read("stargazer-class-features/core/stargazers-path.json").system.rules[0];
+    check("SG-22 Stargazer's Path: a 1st-level choice of four",
+        [read("stargazer-class/stargazer.json").system.items.spath.level, choice.key, choice.choices.map((c) => c.label)],
+        [1, "ChoiceSet", ["The Weaver", "The Herald", "The Ephemeris", "The Broken Thread"]]);
+    for (const [slug, abilities] of Object.entries(PATHS)) {
+        const grants = read(`stargazer-class-features/paths/${slug}.json`).system.rules
+            .map((r) => [r.uuid, r.predicate?.[0]?.gte?.[1] ?? 1]);
+        check(`SG-22 ${slug}: an ability at 1st, 5th, 13th and 17th`, grants, abilities.map((a, i) => [feature(a), [1, 5, 13, 17][i]]));
+    }
+
+    const { Numbers } = await import("../scripts/stargazer/threads.mjs");
+    const sg = (level, ...slugs) => ({ level, itemTypes: { feat: slugs.map((slug) => ({ slug })) } });
+    check("WV-02a Doubled Strand: Chart the Course names two, three from 11th (one and two without it)",
+        [sg(5, "doubled-strand"), sg(11, "doubled-strand"), sg(5), sg(11)].map((a) => Numbers.chartTargets(a)), [2, 3, 1, 2]);
+    check("WV-03a Skein of Fates: three from 13th, four with Threefold Thread",
+        [Numbers.threadTargets(sg(13, "widen-the-sky", "skein-of-fates")), Numbers.threadTargets(sg(17, "widen-the-sky", "threefold-thread", "skein-of-fates"))], [3, 4]);
+    const knot = read("stargazer-effects/effect-knotted-thread.json").system.rules[0];
+    check("WV-01a Knotted Thread: +1 circumstance to AC", [knot.selector, knot.type, knot.value], ["ac", "circumstance", 1]);
+
+    check("HR-01a Herald's Omen grants Coiling Doubt",
+        read("stargazer-class-features/paths/heralds-omen.json").system.rules[0].uuid, "Compendium.isaacs-hb-pf2e.stargazer-auguries.Item.Coiling Doubt");
+    const sentence = read("stargazer-class-features/paths/sentence-passed.json");
+    const save = sentence.flags["isaacs-hb-pf2e"].riders[0].apply;
+    check("HR-03a Sentence Passed: two actions, once per 10 minutes, a Will save against the class DC",
+        [sentence.system.actions.value, sentence.system.traits.value.slice(1), sentence.system.frequency, save.statistic, save.dc],
+        [2, ["concentrate", "misfortune", "prediction"], { max: 1, per: "PT10M" }, "will", "class"]);
+    check("HR-03b/d Sentence Passed: the sentence on a failure for a minute; doomed 1 on a critical failure",
+        save.riders.map((r) => `${r.outcomes.join("/")}:${r.apply.slug ?? r.apply.uuid.split("Item.")[1]}${r.duration ? `:${r.duration.value}${r.duration.unit[0]}` : ""}`),
+        ["failure/criticalFailure:Effect: Sentence Passed:1m", "criticalFailure:doomed"]);
+    check("HR-02c The Announcement carries neither auditory nor visual",
+        read("stargazer-class-features/paths/the-announcement.json").system.traits.value.filter((t) => ["auditory", "visual"].includes(t)), []);
+
+    const { snarledBy, dejaVuRefusal, shiftedCheck, creatureTypesOf } = await import("../scripts/stargazer/paths.mjs");
+    check("HR-01c/HR-04 a Snarled roll names each Stargazer once",
+        snarledBy(["action:strike", "stargazer:snarled-by:abc", "stargazer:snarled-by:abc", "stargazer:snarled-by:def"]), ["abc", "def"]);
+
+    const recall = read("stargazer-class-features/paths/perfect-recall.json").system.rules;
+    check("EP-01a/b Perfect Recall: −2 circumstance on Astronomy Lore in place of another skill, below 7th only",
+        [recall[1].selector, recall[1].value, recall[1].predicate], ["astronomy-lore", -2, ["perfect-recall:substitute", { lt: ["self:level", 7] }]]);
+    check("EP-04a Every Sky Ever Read: once per hour",
+        read("stargazer-class-features/paths/every-sky-ever-read.json").system.frequency, { max: 1, per: "PT1H" });
+    check("EP-03a Written Down reads the creature's first creature type",
+        creatureTypesOf(["evil", "undead", "zombie", "mindless"], { undead: "PF2E.TraitUndead", humanoid: "x" }), ["undead"]);
+    check("EP-03b a Guide after the roll moves the total and the degree: 19 vs DC 20 → 20, a success",
+        [shiftedCheck({ total: 19, dieValue: 9, dc: 20 }, 1).total, shiftedCheck({ total: 19, dieValue: 9, dc: 20 }, 1).degree.key,
+            shiftedCheck({ total: 20, dieValue: 10, dc: 20 }, -2).degree.key], [20, "success", "failure"]);
+
+    const me = { id: "me", ...sg(5, "deja-vu", "second-sight") };
+    const ally = { id: "ally", name: "Deneb", isAllyOf: () => true };
+    const foe = { id: "foe", name: "Foe", isAllyOf: () => false };
+    const ok = { at: null, alreadyFortune: false, sentence: false, distanceFeet: 10 };
+    globalThis.game = { ...(globalThis.game ?? {}), time: { worldTime: 1000 } };
+    check("BT-01a/b/c, BT-02 Deja Vu: own failure yes; a critical failure, a spent 10 minutes, fortune already there, the sentence, no",
+        [
+            dejaVuRefusal(me, me, { outcome: "failure" }, ok),
+            dejaVuRefusal(me, me, { outcome: "criticalFailure" }, ok) !== null,
+            dejaVuRefusal(me, me, { outcome: "failure" }, { ...ok, at: 700 }) !== null,
+            dejaVuRefusal(me, me, { outcome: "failure" }, { ...ok, at: 400 }),
+            dejaVuRefusal(me, me, { outcome: "failure" }, { ...ok, alreadyFortune: true }) !== null,
+            dejaVuRefusal(me, me, { outcome: "failure" }, { ...ok, sentence: true }) !== null,
+        ], [null, true, true, null, true, true]);
+    check("BT-02 Second Sight: an ally within 30 feet, not beyond, not a foe, not without the feature",
+        [
+            dejaVuRefusal(me, ally, { outcome: "failure" }, ok),
+            dejaVuRefusal(me, ally, { outcome: "failure" }, { ...ok, distanceFeet: 35 }) !== null,
+            dejaVuRefusal(me, foe, { outcome: "failure" }, ok) !== null,
+            dejaVuRefusal({ id: "me", ...sg(5, "deja-vu") }, ally, { outcome: "failure" }, ok) !== null,
+        ], [null, true, true, true]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
 
 if (failures.length > 0) {
     console.error(`Stargazer tests failed: ${failures.length} of ${checks}.`);

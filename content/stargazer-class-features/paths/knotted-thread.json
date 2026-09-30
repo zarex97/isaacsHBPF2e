@@ -1,0 +1,39 @@
+{
+    "folder": "Paths",
+    "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+    "name": "Knotted Thread",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>When you <strong>Guide</strong> an ally with Fortune's Thread, they also gain a <strong>+1 circumstance bonus to AC</strong> against the next attack made against them before the start of your next turn.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "stargazer-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        }
+    },
+    "type": "feat"
+}
