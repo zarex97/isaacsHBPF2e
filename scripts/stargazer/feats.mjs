@@ -406,7 +406,14 @@ async function afterCheck(message) {
 /** Patient Watcher: offered after a Refocus. */
 async function afterRefocus(message) {
     const actor = message.actor;
-    if (message.item?.slug !== "refocus" || !isStargazer(actor) || !has(actor, "patient-watcher")) return;
+    if (message.item?.slug !== "refocus" || !isStargazer(actor)) return;
+    // Unbroken Chain (§7, 18th): Unmake the Moment recharges on a 10-minute rest, no more than once per hour.
+    const s = state(actor);
+    if (has(actor, "unbroken-chain") && (s.unmakeUsed ?? 0) > 0 && (typeof s.chainAt !== "number" || game.time.worldTime - s.chainAt >= 3600)) {
+        await actor.update({ [`flags.${MODULE_ID}.${FLAG}.unmakeUsed`]: 0, [`flags.${MODULE_ID}.${FLAG}.chainAt`]: game.time.worldTime });
+        await say(actor, "<strong>Unbroken Chain</strong>: ten minutes' rest, and Unmake the Moment is ready again.", { whisper: ownersOf(actor) });
+    }
+    if (!has(actor, "patient-watcher")) return;
     await offerCard(actor, "<strong>Patient Watcher</strong> — you Refocused. Change one of your known Auguries?", "watcher", {}, [["use", "Change an Augury"]]);
 }
 

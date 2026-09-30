@@ -1,0 +1,45 @@
+{
+    "folder": "Actions",
+    "img": "icons/magic/time/hourglass-tilted-glowing-gold.webp",
+    "name": "Rewrite the Ending",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><strong>Frequency</strong> once per week<br /><strong>Trigger</strong> You or an ally within 60 feet dies, or the party is defeated or captured.</p><p><strong>Effect</strong> Time unwinds to the <strong>moment initiative was rolled</strong> for this encounter. All damage, conditions, deaths, expended spells, expended items and expended resources since that moment are restored, for every creature. The encounter has not happened.</p><p><strong>You alone remember it.</strong> As part of this free action you may share what you saw: each ally who was in the erased timeline gains a <strong>+2 circumstance bonus to their initiative roll and to their first d20 roll</strong> of the re-run encounter, and the party has full knowledge of everything it learned &mdash; tactics, resistances, the ambush, the trap in the floor.</p><p><strong>The cost.</strong> Your Star Chart goes dark. You are <strong>drained 2</strong> and <strong>doomed 1</strong>, and you lose Night Vigil, Fortune's Thread, Chart the Course, Portent, and all Auguries and Focus Points, until you complete a <strong>full 8-hour Night Vigil under open sky</strong>. Neither condition can be reduced before then by any means. You cannot use Rewrite the Ending again for 7 days regardless.</p><hr /><p><em>Post this to chat to invoke it; the GM confirms. The board goes back to when initiative was rolled, and initiative is rolled again.</em></p>"
+        },
+        "frequency": {
+            "max": 1,
+            "per": "P1W",
+            "value": 1
+        },
+        "level": {
+            "value": 19
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "stargazer-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "stargazer",
+                "prediction"
+            ]
+        }
+    },
+    "type": "feat"
+}

@@ -1,0 +1,49 @@
+{
+    "img": "icons/magic/time/hourglass-tilted-glowing-gold.webp",
+    "name": "Effect: Star Chart Dark",
+    "system": {
+        "description": {
+            "value": "<p>Your Star Chart is dark: no Night Vigil, Fortune's Thread, Chart the Course, Portent, Auguries or Focus Points until a full 8-hour Night Vigil under open sky. Your drained and doomed cannot be reduced before then.</p>"
+        },
+        "duration": {
+            "value": -1,
+            "unit": "unlimited",
+            "expiry": null,
+            "sustained": false
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [
+            {
+                "key": "ActiveEffectLike",
+                "mode": "override",
+                "path": "system.resources.focus.cap",
+                "priority": 99,
+                "value": 0
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "chartDark": true
+        }
+    },
+    "type": "effect"
+}
