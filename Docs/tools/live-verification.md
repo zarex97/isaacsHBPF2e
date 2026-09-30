@@ -215,6 +215,11 @@ World `pf` is not a clean room. It is a working world with years of fixtures in 
 | `context.rollTwice` is `"keep-higher"` / `"keep-lower"` in pf2e 8 | Not `"higher"` / `"lower"`, which is what the `RollTwice` rule element's own `keep` field says. A check-pipeline stage comparing against the rule's spelling matched nothing, and Sentence Passed let a fortune roll through |
 | To lift a predicated modifier, lift the **roll option** | `Check.roll` re-tests predicates against `context.options`, so a modifier switched off in a stage comes back. The Announcement's `Unintelligible −4` only went once `action:demoralize:unintelligible` was deleted from the options |
 | `getActiveTokens(true, true)` returns **TokenDocuments** | Their scene is `.parent`, not `.document.parent`, and they have no `setTarget` (that is `getActiveTokens(true, false)`). Tapestry read every token's scene as `undefined` and found nobody |
+| `SubstituteRoll` takes **one** selector string | An array is stringified to `"check,saving-throw,…"`, which matches no domain, and the roll goes by untouched. `all` reaches every check |
+| A spell has **no tradition** roll option | `item:trait:occult` and `item:tradition:occult` both match nothing, so a ChoiceSet filter cannot ask for "an occult cantrip". Write the list out |
+| A ChoiceSet's answer lives in the **rule** | pf2e stores it as the rule's own `selection` and derives `flags.pf2e.rulesSelections` from it on every prepare. Updating the flag reverts; a copy of the owned item re-grants the old answer without asking. Change the rule, or start from the compendium |
+| A familiar has **no traits** | pf2e 8's familiar schema stores none, and an `ActorTraits` rule on it is ignored. `flags.pf2e.rollOptions.all["self:trait:x"]` is what predicates can see |
+| A secret check needs the **`secret` trait** | A `rollMode: "blindroll"` alone was posted in the open; with `traits: ["secret"]` pf2e whispers it to the GM |
 | An effect has no `disabled` field | A pf2e Effect item's `system.expired` is derived in `prepareBaseData`, so writing either one is overwritten or ignored. To switch an effect off without deleting it, move its rules aside — see `soulbound/suppression.mjs` |
 
 ## 7. Running long jobs

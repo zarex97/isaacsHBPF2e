@@ -1,0 +1,51 @@
+{
+    "img": "icons/sundries/books/book-embossed-blue.webp",
+    "name": "Effect: Written in Advance",
+    "system": {
+        "description": {
+            "value": "<p>Your next skill check within the hour is an automatic success, not a critical success.</p>"
+        },
+        "duration": {
+            "value": 1,
+            "unit": "hours",
+            "expiry": "turn-start",
+            "sustained": false
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [
+            {
+                "key": "AdjustDegreeOfSuccess",
+                "selector": "skill-check",
+                "adjustment": {
+                    "criticalFailure": "to-success",
+                    "failure": "to-success",
+                    "criticalSuccess": "to-success"
+                }
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "writtenInAdvance": true
+        }
+    },
+    "type": "effect"
+}

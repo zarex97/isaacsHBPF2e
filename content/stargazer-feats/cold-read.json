@@ -1,0 +1,39 @@
+{
+    "folder": "1st",
+    "img": "icons/magic/perception/eye-ringed-glow-angry-small-teal.webp",
+    "name": "Cold Read",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>You can attempt a Deception check to invent a prophecy convincingly. The GM rolls a secret Astronomy Lore check for you at the same time; on a critical success, you were <strong>accidentally right</strong>, and the GM should treat what you said as true.</p><hr /><p><em>Post this to chat: it rolls your Deception, and a secret Astronomy Lore check for the GM.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [],
+            "rarity": "common",
+            "value": [
+                "stargazer",
+                "concentrate",
+                "linguistic"
+            ]
+        }
+    },
+    "type": "feat"
+}

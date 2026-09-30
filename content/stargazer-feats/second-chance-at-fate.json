@@ -1,0 +1,43 @@
+{
+    "folder": "6th",
+    "img": "icons/sundries/gaming/dice-runed-brown.webp",
+    "name": "Second Chance at Fate",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Once per day, when a creature within 30 feet critically fails a check, you may have it reroll and use the new result. This is a fortune effect. You might want it to succeed.</p><hr /><p><em>Offered as a button when it triggers.</em></p>"
+        },
+        "level": {
+            "value": 6
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [],
+            "rarity": "common",
+            "value": [
+                "stargazer",
+                "fortune"
+            ]
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
+        }
+    },
+    "type": "feat"
+}

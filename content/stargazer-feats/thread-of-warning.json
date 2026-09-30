@@ -1,0 +1,37 @@
+{
+    "folder": "2nd",
+    "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+    "name": "Thread of Warning",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Fortune's Thread can trigger on an <strong>initiative roll</strong>, even though positions are not yet set and you may not be able to see the roller.</p><hr /><p><em>Fortune's Thread offers <em>its next initiative roll</em>, at any range.</em></p>"
+        },
+        "level": {
+            "value": 2
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [],
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        }
+    },
+    "type": "feat"
+}

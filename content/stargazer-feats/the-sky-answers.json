@@ -1,0 +1,42 @@
+{
+    "folder": "20th",
+    "img": "icons/magic/time/clock-stopwatch-white-blue.webp",
+    "name": "The Sky Answers",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Once per day, when you would use <em>Rewrite the Ending</em>, you may instead use <em>Unmake the Moment</em> without spending its frequency, and <em>Rewrite the Ending</em> is not expended.</p>"
+        },
+        "level": {
+            "value": 20
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [],
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
+        }
+    },
+    "type": "feat"
+}
