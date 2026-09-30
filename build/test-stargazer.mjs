@@ -210,6 +210,21 @@ function check(label, actual, expected) {
 }
 
 /* -------------------------------------------------------------------------------------------- */
+/*  Phase 3a — the Night Vigil (SG-28, SG-30, SG-42)                                             */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    const { forewarnLimit, forewarnMode, forecastDays } = await import("../scripts/stargazer/vigil.mjs");
+    const sg = (...slugs) => ({ itemTypes: { feat: slugs.map((slug) => ({ slug })) } });
+    check("SG-30a Forewarned briefs up to five allies; Wide Vigil lifts the limit",
+        [forewarnLimit(sg()), forewarnLimit(sg("wide-vigil"))], [5, Infinity]);
+    check("SG-30b/SG-42d Forewarned takes a step off; Constellation Mastery makes it Foreordained",
+        [forewarnMode(sg()), forewarnMode(sg("constellation-mastery"))], ["milder", "benefic"]);
+    check("SG-28a three days of forecast; seven with the Ephemeris's The Almanac",
+        [forecastDays(sg()), forecastDays(sg("the-almanac"))], [3, 7]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
 
 if (failures.length > 0) {
     console.error(`Stargazer tests failed: ${failures.length} of ${checks}.`);

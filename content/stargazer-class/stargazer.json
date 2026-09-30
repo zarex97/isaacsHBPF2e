@@ -199,6 +199,18 @@
                 "level": 1,
                 "name": "Chart the Course",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Chart the Course"
+            },
+            "cmast": {
+                "img": "icons/magic/light/explosion-star-large-blue-yellow.webp",
+                "level": 13,
+                "name": "Constellation Mastery",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Constellation Mastery"
+            },
+            "nvigl": {
+                "img": "icons/magic/perception/eye-ringed-glow-angry-small-teal.webp",
+                "level": 1,
+                "name": "Night Vigil",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Night Vigil"
             }
         },
         "keyAbility": {

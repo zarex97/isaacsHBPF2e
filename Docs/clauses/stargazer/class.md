@@ -91,19 +91,19 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SG-26a | §4.2 | During your daily preparations, spend 10 minutes observing the sky. |  | ☐ |  |
-| SG-26b | §4.2 | (Indoors, underground or under cloud there is no sky to observe, and your chart is not a substitute — see *Clouded Sky*.) |  | ☐ |  |
-| SG-27 | §4.2 | **Certainty.** You learn today's sign *and* its aspect exactly. No check, no DC, no ambiguity. |  | ☐ |  |
-| SG-28a | §4.2 | **The Forecast.** You learn the sign and aspect of the **next three days**. |  | ☐ |  |
-| SG-28b | §4.2 | this answer does not change if you ask again — and neither does it change for the person you sell it to. |  | ☐ |  |
+| SG-26a | §4.2 | During your daily preparations, spend 10 minutes observing the sky. |  | ✅ | Live: *Rest for the Night* ran the Vigil by itself and whispered the card to the Stargazer's owner (one recipient) |
+| SG-26b | §4.2 | (Indoors, underground or under cloud there is no sky to observe, and your chart is not a substitute — see *Clouded Sky*.) |  | ✅ | Live: with the GM's *clouded tonight* set, the Vigil said *Clouded Sky* — the chart is not a substitute. Ruling R12 |
+| SG-27 | §4.2 | **Certainty.** You learn today's sign *and* its aspect exactly. No check, no DC, no ambiguity. |  | ✅ | Live: the GM set Taurus, Malefic; the card read **Today: ♉ Taurus, Malefic** |
+| SG-28a | §4.2 | **The Forecast.** You learn the sign and aspect of the **next three days**. | `test-stargazer` pins it | ✅ | Live: the card listed days 228–230 — **Starless, Malefic · Capricorn, Malefic · Virgo, Quiet** — exactly the tracker's queue |
+| SG-28b | §4.2 | this answer does not change if you ask again — and neither does it change for the person you sell it to. |  | ✅ | Live: a second rest produced the identical forecast, because it reads the pre-rolled queue |
 | SG-29a | §4.2 | **Augury of the Day.** You add the ascendant sign's Augury (§5.3) to your repertoire until your next daily preparations, **in addition** to the Auguries you know permanently. |  | ☐ |  |
-| SG-29b | §4.2 | On a **Starless** sky you gain no Augury of the Day — but nothing is written, so you may roll your Portent twice and keep either result. |  | ☐ |  |
-| SG-30a | §4.2 | **Forewarned.** You may spend a further 10 minutes briefing up to five allies. |  | ☐ |  |
-| SG-30b | §4.2 | You and each ally who listens reduce the day's negative aspect by one step for the rest of the day: **Malefic → Retrograde**, **Retrograde → no effect**. |  | ☐ |  |
-| SG-30c | §4.2 | Positive aspects are unchanged; you cannot improve a good sky, only survive a bad one. |  | ☐ |  |
-| SG-31 | §4.2 | **GM override.** The GM may declare the day's sign and aspect instead of rolling, whenever the story wants it. |  | ☐ |  |
-| SG-32a | §4.2 | **Clouded Sky.** If you cannot complete a Night Vigil you learn nothing, gain no Augury of the Day, get no forecast, and cannot use Forewarned. |  | ☐ |  |
-| SG-32b | §4.2 | The GM marks a clouded night on the Sky tracker, for the whole world, one night at a time. |  | ☐ |  |
+| SG-29b | §4.2 | On a **Starless** sky you gain no Augury of the Day — but nothing is written, so you may roll your Portent twice and keep either result. |  | ✅ | Live: on a Starless day the card offered two Portents, **18** and **3**, and clicking *Keep 3* recorded 3. No Augury of the Day is granted on Starless (none exist yet either — phase 4) |
+| SG-30a | §4.2 | **Forewarned.** You may spend a further 10 minutes briefing up to five allies. | `test-stargazer` pins it | ✅ | Live: the card's *Forewarned* button opened the ally picker; checking the ally and confirming briefed Lyra and the ally. Five is the limit (pinned); a second briefing the same day is refused |
+| SG-30b | §4.2 | You and each ally who listens reduce the day's negative aspect by one step for the rest of the day: **Malefic → Retrograde**, **Retrograde → no effect**. |  | ✅ | Live, clear of any Saint's Shelter: on a Malefic day Lyra and the briefed ally wore **Sky: Retrograde** while unbriefed Far wore **Sky: Malefic**; on a Retrograde day the two wore nothing and Far wore Retrograde; the next day it had lapsed |
+| SG-30c | §4.2 | Positive aspects are unchanged; you cannot improve a good sky, only survive a bad one. |  | ✅ | Live: on Exalted and Benefic days the briefed and the control wore the same effect |
+| SG-31 | §4.2 | **GM override.** The GM may declare the day's sign and aspect instead of rolling, whenever the story wants it. |  | ✅ | Live: the GM set the day's sign and aspect from the tracker, and every creature's Sky effect followed |
+| SG-32a | §4.2 | **Clouded Sky.** If you cannot complete a Night Vigil you learn nothing, gain no Augury of the Day, get no forecast, and cannot use Forewarned. |  | ✅ | Live: the clouded Vigil's card said so, carried no forecast and no buttons, and the Portent stayed **7** — none was rolled |
+| SG-32b | §4.2 | The GM marks a clouded night on the Sky tracker, for the whole world, one night at a time. |  | ✅ | Live: the tracker window's button set *Clouded tonight*; advancing the day cleared it |
 
 ## Fortune's Thread (guide §4.3)
 
@@ -196,11 +196,11 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SG-42a | §4.12 | During your Night Vigil you may swap today's **aspect** with the aspect of any of the next three days in your forecast. |  | ☐ |  |
-| SG-42b | §4.12 | The two days exchange aspects; the signs do not move. |  | ☐ |  |
-| SG-42c | §4.12 | the day you traded away is still coming. |  | ☐ |  |
-| SG-42d | §4.12 | You and the allies you brief treat a negative aspect as **Benefic** instead of merely reducing it: **Retrograde → Benefic**, **Malefic → Benefic**. |  | ☐ |  |
-| SG-42e | §4.12 | Exalted and Benefic days are unchanged |  | ☐ |  |
+| SG-42a | §4.12 | During your Night Vigil you may swap today's **aspect** with the aspect of any of the next three days in your forecast. |  | ✅ | Live at 13th: the card offered the next three days; trading with tomorrow made today **Malefic** and tomorrow **Retrograde**. A second trade the same Vigil did nothing |
+| SG-42b | §4.12 | The two days exchange aspects; the signs do not move. |  | ✅ | Live: Taurus stayed today's sign and Starless tomorrow's — only the aspects moved |
+| SG-42c | §4.12 | the day you traded away is still coming. |  | ✅ | Live: the Retrograde traded away sat on tomorrow's queue entry, still coming |
+| SG-42d | §4.12 | You and the allies you brief treat a negative aspect as **Benefic** instead of merely reducing it: **Retrograde → Benefic**, **Malefic → Benefic**. | `test-stargazer` pins it | ✅ | Live at 13th, a Retrograde day: Deneb and the briefed ally wore **Sky: Benefic**, unbriefed Far **Sky: Retrograde** |
+| SG-42e | §4.12 | Exalted and Benefic days are unchanged |  | ✅ | Live: Exalted and Benefic days are not softened — `aspectFor` returns them untouched, and the briefed creatures wore the same effect as the control |
 | SG-42f | §4.12 | **Starless.** On a Starless sky you may choose any sign's Augury as your Augury of the Day. |  | ☐ |  |
 
 ## Twin Fates and Threefold Thread (guide §4.13, §4.14)
@@ -248,8 +248,8 @@ rewinds behave at the table. ADR-0004 is the reasoning behind the arming model.*
 | SG-47e | §11.3 | it never expires until it is spoken or a new Vigil overwrites it. |  | ☐ |  |
 | SG-47f | §11.3 | the die is replaced before the roll resolves | `test-stargazer` pins it | ✅ | Live: the Portent's roll formula is the constant — `14`, `19 + 15` — not a die |
 | SG-47g | §11.3 | When the trigger happens, the Stargazer's player is offered a button on a chat card, and the effect is applied after the fact |  | ✅ | Live: The Last Thing You See was offered as a button after the damage landed, and its save and conditions were applied after the fact |
-| SG-48a | §11.7 | **Night Vigil** runs by itself at *Rest for the Night* |  | ☐ |  |
-| SG-48b | §11.7 | *Forewarned* is a button on that card, where the player picks the allies briefed. |  | ☐ |  |
+| SG-48a | §11.7 | **Night Vigil** runs by itself at *Rest for the Night* |  | ✅ | Live: the Vigil ran at *Rest for the Night* with no other action |
+| SG-48b | §11.7 | *Forewarned* is a button on that card, where the player picks the allies briefed. |  | ✅ | Live: the button on the Vigil card opened the picker, and the briefing landed |
 | SG-48c | §11.7 | the full actor — Hit Points, conditions, effects, resources, item uses — plus token positions and the combat tracker's turn. |  | ☐ |  |
 | SG-48d | §11.7 | Using it restores the previous snapshot, deletes tokens and actors created since, leaves the chat log alone, and then applies stunned 1 and drained 1. |  | ☐ |  |
 | SG-48e | §11.7 | The Stargazer's player presses it; the restore runs on the GM's client without a confirmation |  | ☐ |  |
@@ -264,8 +264,8 @@ rewinds behave at the table. ADR-0004 is the reasoning behind the arming model.*
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 61 |
-| ✅ | 59 |
+| ☐ | 42 |
+| ✅ | 78 |
 | ⚠️ | 8 |
 | ❌ | 0 |
 | 🔧 | 0 |
