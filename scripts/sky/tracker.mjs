@@ -14,6 +14,9 @@ const SHELTER_FEET = 30;
 /** One step milder, and the only two aspects that have a milder step. */
 const MILDER = { malefic: "retrograde", retrograde: "none" };
 
+/** Harshest to kindest, for choosing the mildest of several softenings. */
+const MILDNESS = ["malefic", "retrograde", "none", "benefic"];
+
 /**
  * The sky's state and the only code that touches actors because of it.
  *
@@ -80,14 +83,22 @@ export const SkyTracker = {
         }));
     },
 
-    async set({ sign, aspect, day, queue } = {}, { announce = true } = {}) {
+    /**
+     * Write the sky. Keys this call does not name are kept, not dropped — the state carries more than the
+     * four it began with (`scheduled`, `clouded`), and a Saint-era caller that sets only a sign must not
+     * erase a Stargazer's clouded night.
+     */
+    async set({ sign, aspect, day, queue, scheduled, clouded } = {}, { announce = true } = {}) {
         if (!game.user.isGM) return;
         const current = this.state;
         const next = {
+            ...current,
             day: day ?? current.day,
             sign: sign ?? current.sign,
             aspect: aspect ?? current.aspect,
             queue: queue ?? current.queue,
+            scheduled: scheduled ?? current.scheduled ?? false,
+            clouded: clouded ?? current.clouded ?? false,
         };
         await game.settings.set(MODULE_ID, SETTING, next);
         await this.applyToAll();
@@ -106,7 +117,35 @@ export const SkyTracker = {
         while (queue.length < QUEUE_LENGTH) {
             queue.push({ sign: this.rollSign(), aspect: this.rollAspect() });
         }
-        await this.set({ day: current.day + 1, sign: nextDay.sign, aspect: nextDay.aspect, queue });
+        // A new night is not clouded until the GM says so; a scheduled day stays marked as scheduled.
+        await this.set({
+            day: current.day + 1, sign: nextDay.sign, aspect: nextDay.aspect, queue,
+            scheduled: Boolean(nextDay.scheduled), clouded: false,
+        });
+    },
+
+    /**
+     * Swap today's aspect with the aspect `days` from now — *Trade the Day* (Stargazer guide §4.12). The
+     * signs do not move, and the day traded away is still coming. A **scheduled Zenith** on either side is
+     * refused (§8.6): it is the GM's arc-climax button, not a thing the sky rolled.
+     */
+    async swapAspects(days) {
+        if (!game.user.isGM) return false;
+        const current = this.state;
+        const queue = [...(current.queue ?? [])];
+        const other = queue[days - 1];
+        if (!other || days < 1) return false;
+        const zenith = (aspect, scheduled) => aspect === "exalted" && scheduled;
+        if (zenith(current.aspect, current.scheduled) || zenith(other.aspect, other.scheduled)) return false;
+        queue[days - 1] = { ...other, aspect: current.aspect };
+        await this.set({ aspect: other.aspect, queue }, { announce: false });
+        return true;
+    },
+
+    /** The GM's word that tonight's sky is hidden — *Clouded Sky* (Stargazer guide §4.2). One night at a time. */
+    async setClouded(clouded) {
+        if (!game.user.isGM) return;
+        await this.set({ clouded: Boolean(clouded) }, { announce: false });
     },
 
     /**
@@ -129,7 +168,7 @@ export const SkyTracker = {
         if (aspect !== null && !ASPECT_IDS.includes(aspect)) return;
 
         if (days <= 0) {
-            const today = {};
+            const today = { scheduled: true };
             if (sign !== null) today.sign = sign;
             if (aspect !== null) today.aspect = aspect;
             return this.set(today);
@@ -138,7 +177,8 @@ export const SkyTracker = {
         const queue = [...(this.state.queue ?? this.rollQueue())];
         while (queue.length < days) queue.push({ sign: this.rollSign(), aspect: this.rollAspect() });
         const queued = queue[days - 1];
-        const pinned = { sign: sign ?? queued.sign, aspect: aspect ?? queued.aspect };
+        // Marked as scheduled, so *Trade the Day* can tell the GM's Zenith from one the sky rolled.
+        const pinned = { sign: sign ?? queued.sign, aspect: aspect ?? queued.aspect, scheduled: true };
         queue[days - 1] = pinned;
         await this.set({ queue }, { announce: false });
 
@@ -235,7 +275,23 @@ export const SkyTracker = {
         if (!MILDER[aspect]) return aspect;
         const options = actor.getRollOptions?.() ?? [];
         if (options.includes("saint:unfailing-cosmo")) return "none";
-        return this.isSheltered(actor) ? MILDER[aspect] : aspect;
+        // Softenings do not stack: a Saint's Shelter and a Stargazer's Forewarned each take the day one
+        // step milder, and a creature under both gets the milder of the two, not two steps.
+        const candidates = [aspect];
+        if (this.isSheltered(actor)) candidates.push(MILDER[aspect]);
+        const warned = this.forewarnedFor(actor);
+        if (warned) candidates.push(warned === "benefic" ? "benefic" : MILDER[aspect]);
+        return candidates.sort((a, b) => MILDNESS.indexOf(b) - MILDNESS.indexOf(a))[0];
+    },
+
+    /**
+     * Stargazer guide §4.2 and §4.12: a creature the Stargazer briefed at today's Night Vigil. `"milder"` is
+     * Forewarned (Malefic → Retrograde, Retrograde → nothing); `"benefic"` is Foreordained, from 13th.
+     * Keyed by day, so it lapses on its own when the GM advances the sky.
+     */
+    forewarnedFor(actor) {
+        const warned = actor?.flags?.[MODULE_ID]?.forewarned;
+        return warned && warned.day === this.state.day ? warned.mode : null;
     },
 
     /** Within 30 feet of a Saint whose Cloth spills far enough to shade them. */
