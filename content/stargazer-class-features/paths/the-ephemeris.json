@@ -1,0 +1,84 @@
+{
+    "folder": "Paths",
+    "img": "icons/sundries/books/book-embossed-blue.webp",
+    "name": "The Ephemeris",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><em>I have read every sky. Ask me anything.</em></p><p>Your Path grants an ability at 1st, 5th, 13th and 17th level.</p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Perfect Recall"
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.The Almanac",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            5
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Written Down",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            13
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Every Sky Ever Read",
+                "predicate": [
+                    {
+                        "gte": [
+                            "self:level",
+                            17
+                        ]
+                    }
+                ],
+                "reevaluateOnUpdate": true
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "stargazer-feature",
+                "stargazer-path"
+            ],
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        }
+    },
+    "type": "feat"
+}

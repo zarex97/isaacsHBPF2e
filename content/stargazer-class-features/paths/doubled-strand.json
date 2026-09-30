@@ -1,0 +1,39 @@
+{
+    "folder": "Paths",
+    "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+    "name": "Doubled Strand",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p><em>Chart the Course</em> names <strong>two</strong> creatures instead of one, and <strong>three</strong> from 11th level. You may use its free Fortune's Thread once for each of them.</p>"
+        },
+        "level": {
+            "value": 5
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [
+                "stargazer-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        }
+    },
+    "type": "feat"
+}

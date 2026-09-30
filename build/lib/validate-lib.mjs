@@ -2046,7 +2046,7 @@ const SOULBOUND_ADVANCEMENT = {
  * features here as they land (Night Vigil, Fortune's Thread, the Paths, the rewinds).
  */
 const STARGAZER_ADVANCEMENT = {
-    1: ["Star Chart", "Night Vigil", "Fortune's Thread", "Chart the Course", "Portent"],
+    1: ["Star Chart", "Night Vigil", "Fortune's Thread", "Chart the Course", "Portent", "Stargazer's Path"],
     3: ["Astronomy Lore (3rd)"],
     5: ["Widen the Sky", "The Last Thing You See"],
     7: ["Expert Stargazer", "Vigilant Senses", "Second Star", "Astronomy Lore (7th)"],

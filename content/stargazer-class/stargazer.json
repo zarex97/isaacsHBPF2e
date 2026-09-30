@@ -265,6 +265,12 @@
                 "level": 19,
                 "name": "Augury (19th)",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Augury (19th)"
+            },
+            "spath": {
+                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "level": 1,
+                "name": "Stargazer's Path",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Stargazer's Path"
             }
         },
         "keyAbility": {
