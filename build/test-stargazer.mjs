@@ -420,6 +420,61 @@ function check(label, actual, expected) {
 }
 
 /* -------------------------------------------------------------------------------------------- */
+/*  Phase 6a: the class feats                                                                   */
+/* -------------------------------------------------------------------------------------------- */
+
+{
+    const fs = await import("node:fs");
+    const dir = new URL("../content/stargazer-feats/", import.meta.url);
+    const read = (rel) => JSON.parse(fs.readFileSync(new URL(rel, dir), "utf8"));
+    const all = fs.readdirSync(dir).filter((f) => f.endsWith(".json") && !f.startsWith("_")).map((f) => read(f));
+    const byLevel = {};
+    for (const f of all) byLevel[f.system.level.value] = (byLevel[f.system.level.value] ?? 0) + 1;
+    check("SF: forty class feats at 1, 2, 4 … 20, each carrying the class trait",
+        [all.length, byLevel, all.every((f) => f.system.category === "class" && f.system.traits.value.includes("stargazer"))],
+        [40, { 1: 5, 2: 5, 4: 4, 6: 4, 8: 3, 10: 4, 12: 3, 14: 3, 16: 3, 18: 3, 20: 3 }, true]);
+
+    const { Numbers, threadKinds } = await import("../scripts/stargazer/threads.mjs");
+    const sg = (level, ...slugs) => ({ level, itemTypes: { feat: slugs.map((slug) => ({ slug })) } });
+    check("SF-08a Thread of Warning adds initiative to Guide and Snarl",
+        [threadKinds(sg(2, "thread-of-warning"), "guide").includes("initiative"), threadKinds(sg(2, "thread-of-warning"), "snarl").includes("initiative"), threadKinds(sg(2), "guide").includes("initiative")],
+        [true, true, false]);
+    check("SF-18 Long Thread: +30 feet (30 → 60; 60 → 90 with Widen the Sky)",
+        [Numbers.threadRange(sg(6, "long-thread")), Numbers.threadRange(sg(6, "widen-the-sky", "long-thread"))], [60, 90]);
+    check("SF-13a Widened Chart: Chart the Course at 120 feet", [Numbers.chartRange(sg(4, "widened-chart")), Numbers.chartRange(sg(4))], [120, 60]);
+    check("SF-25a Two Warnings: a second reaction", [Numbers.reactions(sg(10, "two-warnings")), Numbers.reactions(sg(10))], [2, 1]);
+    check("SF-26a/b Cascade: Twin Fates on one at 12th, three with the class feature; two without Cascade",
+        [Numbers.twinFates(sg(12, "cascade")), Numbers.twinFates(sg(15, "cascade", "twin-fates")), Numbers.twinFates(sg(15, "twin-fates")), Numbers.twinFates(sg(12))], [1, 3, 2, 0]);
+
+    const conj = read("conjunction.json").system.rules[0];
+    check("SF-19 Conjunction: the focus cap is 3, above Second Star's 2",
+        [conj.path, conj.mode, conj.value, conj.priority > 20], ["system.resources.focus.cap", "override", 3, true]);
+    const adept = read("augury-adept.json").system.rules;
+    check("SF-09 Augury Adept: a choice among the Auguries, granted",
+        [adept[0].key, adept[0].choices.filter, adept[1].key], ["ChoiceSet", ["item:tag:stargazer-augury"], "GrantItem"]);
+    check("SF-03c Companion of the Watch: one extra familiar ability",
+        read("companion-of-the-watch.json").system.rules[0], { key: "ActiveEffectLike", mode: "add", path: "system.attributes.familiarAbilities.value", value: 1 });
+    check("SF-22, SF-29a, SF-15a: once per day", ["fates-favourite.json", "inevitable.json", "second-chance-at-fate.json"].map((f) => read(f).system.frequency),
+        Array(3).fill({ max: 1, per: "day", value: 1 }));
+    check("SF-29a/b Inevitable: a reaction, with misfortune", [read("inevitable.json").system.actionType.value, read("inevitable.json").system.traits.value.includes("misfortune")], ["reaction", true]);
+    check("SF-15b Second Chance at Fate: fortune", read("second-chance-at-fate.json").system.traits.value.includes("fortune"), true);
+
+    const eff = (name) => JSON.parse(fs.readFileSync(new URL(`../content/stargazer-effects/${name}.json`, import.meta.url), "utf8")).system.rules[0];
+    const fav = eff("effect-fates-favourite");
+    check("SF-22 Fate's Favourite: the next d20 is a 20, spent by it", [fav.key, fav.value, fav.removeAfterRoll, fav.selector], ["SubstituteRoll", 20, "if-enabled", "all"]);
+    const wia = eff("effect-written-in-advance");
+    check("SF-33 Written in Advance: a skill check becomes a success — a critical success too",
+        [wia.key, wia.selector, Object.values(wia.adjustment)], ["AdjustDegreeOfSuccess", "skill-check", ["to-success", "to-success", "to-success"]]);
+
+    const { omenReduction, secondChanceRefusal } = await import("../scripts/stargazer/feats.mjs");
+    check("SF-12b Omen of Blades: 4 / 6 / 8 / 10 by rank", [1, 2, 3, 4].map(omenReduction), [4, 6, 8, 10]);
+    const ok = { usesLeft: 1, outcome: "criticalFailure", distanceFeet: 20, alreadyFortune: false };
+    check("SF-15a Second Chance at Fate: a critical failure within 30 feet, once a day, not on a fortune roll",
+        [secondChanceRefusal(ok), secondChanceRefusal({ ...ok, outcome: "failure" }) !== null, secondChanceRefusal({ ...ok, usesLeft: 0 }) !== null,
+            secondChanceRefusal({ ...ok, distanceFeet: 35 }) !== null, secondChanceRefusal({ ...ok, alreadyFortune: true }) !== null], [null, true, true, true, true]);
+}
+
+/* -------------------------------------------------------------------------------------------- */
 
 if (failures.length > 0) {
     console.error(`Stargazer tests failed: ${failures.length} of ${checks}.`);

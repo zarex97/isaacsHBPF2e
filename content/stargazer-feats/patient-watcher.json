@@ -1,0 +1,37 @@
+{
+    "folder": "2nd",
+    "img": "icons/magic/time/clock-stopwatch-white-blue.webp",
+    "name": "Patient Watcher",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>When you Refocus, you may also change one of your known Auguries.</p><hr /><p><em>Post this to chat, or Refocus, to swap an Augury.</em></p>"
+        },
+        "level": {
+            "value": 2
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [],
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        }
+    },
+    "type": "feat"
+}

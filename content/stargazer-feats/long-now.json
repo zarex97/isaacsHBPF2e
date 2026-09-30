@@ -1,0 +1,37 @@
+{
+    "folder": "12th",
+    "img": "icons/magic/time/clock-stopwatch-white-blue.webp",
+    "name": "Long Now",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Your Auguries whose <strong>Duration</strong> line reads 1 minute last <strong>10 minutes</strong>. A duration inside a degree of success, such as <em>Coiling Doubt</em>'s critical failure, does not change.</p>"
+        },
+        "level": {
+            "value": 12
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [],
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        }
+    },
+    "type": "feat"
+}

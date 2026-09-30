@@ -31,9 +31,16 @@ const KINDS = {
     "saving-throw": "saving throws",
     "skill-check": "skill checks",
     perception: "Perception checks",
+    initiative: "initiative rolls",
 };
 const GUIDE_KINDS = ["attack-roll", "saving-throw", "skill-check", "perception"];
 const SNARL_KINDS = ["attack-roll", "skill-check", "perception"];
+
+/** The kinds a Thread may be armed on. Thread of Warning (guide §7, 2nd) adds initiative, to either. */
+export function threadKinds(actor, kind) {
+    const base = kind === "snarl" ? SNARL_KINDS : GUIDE_KINDS;
+    return has(actor, "thread-of-warning") ? [...base, "initiative"] : base;
+}
 
 const isWriter = () => (game.users?.activeGM ? game.users.activeGM.isSelf : game.user.isGM);
 const has = (actor, slug) => (actor?.itemTypes?.feat ?? []).some((f) => f.slug === slug);
@@ -45,6 +52,27 @@ const tokenOf = (actor) => actor?.getActiveTokens?.(true, true)?.[0] ?? null;
  * nothing (driven).
  */
 const inCombat = (actor) => Boolean(actor && game.combats?.some((c) => c.started && c.combatants.some((x) => x.actorId === actor.id)));
+
+/** The round this Stargazer is fighting in, or null out of combat. */
+function roundKey(actor) {
+    const combat = game.combats?.find((c) => c.started && c.combatants.some((x) => x.actorId === actor?.id));
+    return combat ? `${combat.id}:${combat.round}` : null;
+}
+
+/**
+ * Prophesied Ally (guide §7, 12th): a Thread on the ally named at the Vigil costs no reaction, once per
+ * round. Read as a Thread on that ally alone — one aimed at others too still costs the reaction they need.
+ */
+export function prophesiedFree(actor, targetUuids) {
+    if (!has(actor, "prophesied-ally") || targetUuids.length !== 1) return false;
+    const ally = state(actor).prophesied;
+    if (!ally?.uuid) return false;
+    const target = fromUuidSync(targetUuids[0]);
+    const targetActor = target?.actor ?? target;
+    if (!targetActor || targetActor.uuid !== ally.uuid) return false;
+    const round = roundKey(actor);
+    return !round || state(actor).prophesiedRound !== round;
+}
 
 export function isStargazer(actor) {
     return actor?.type === "character" && classSlugOf(actor) === "stargazer";
@@ -85,6 +113,15 @@ export const Numbers = {
     },
     chartRange(actor) {
         return has(actor, "widened-chart") ? 120 : 60;
+    },
+    /**
+     * How many of a Thread's targets Twin Fates may double: two from the class feature at 15th. Cascade
+     * (12th) grants it early on one, and makes it three once the class feature arrives (ruling R3).
+     */
+    twinFates(actor) {
+        const feature = has(actor, "twin-fates");
+        if (has(actor, "cascade")) return feature ? 3 : 1;
+        return feature ? 2 : 0;
     },
     /** One reaction; Two Warnings grants a second, for these abilities only. */
     reactions(actor) {
@@ -224,14 +261,16 @@ async function pickThreads(actor, { free, chart }) {
     const name = chart ? "Chart the Course" : "Fortune's Thread";
     if (creatures.length === 0) return ui.notifications.warn(`${name}: target the creatures first.`);
     if (creatures.length > max) return ui.notifications.warn(`${name}: at most ${max} creature${max > 1 ? "s" : ""}.`);
-    if (!free && reactionsLeft(actor) <= 0) return ui.notifications.warn(`${name}: no reaction left this round.`);
+    const prophesied = !chart && prophesiedFree(actor, creatures.map((c) => c.uuid));
+    if (!free && !prophesied && reactionsLeft(actor) <= 0) return ui.notifications.warn(`${name}: no reaction left this round.`);
 
-    const twinFates = !chart && has(actor, "twin-fates") && twinFatesReady(actor);
+    const twinFates = !chart && Numbers.twinFates(actor) > 0 && twinFatesReady(actor);
     const rows = creatures.map((c, i) => `
         <div class="form-group"><label>${c.name}</label>
             <select name="kind${i}"><option value="guide">Guide</option><option value="snarl">Snarl</option></select>
             ${chart ? "" : `<select name="on${i}"><option value="any">its next eligible roll</option>${
-                Object.entries(KINDS).map(([k, v]) => `<option value="${k}">its next ${v.replace(/s$/, "")}</option>`).join("")}</select>`}
+                Object.entries(KINDS).filter(([k]) => threadKinds(actor, "guide").includes(k) || k === "saving-throw")
+                    .map(([k, v]) => `<option value="${k}">its next ${v.replace(/s$/, "")}</option>`).join("")}</select>`}
             ${twinFates ? `<label><input type="checkbox" name="twice${i}"> Twin Fates</label>` : ""}
         </div>`).join("");
     const data = await form(name, `<p>${chart
@@ -240,7 +279,8 @@ async function pickThreads(actor, { free, chart }) {
     if (!data) return;
 
     const entries = creatures.map((c, i) => ({ target: c.uuid, kind: data[`kind${i}`], on: data[`on${i}`] ?? "any", twice: Boolean(data[`twice${i}`]) }));
-    if (entries.filter((e) => e.twice).length > 2) return ui.notifications.warn("Twin Fates: up to two of the Thread's targets.");
+    const twinMax = Numbers.twinFates(actor);
+    if (entries.filter((e) => e.twice).length > twinMax) return ui.notifications.warn(`Twin Fates: up to ${twinMax === 1 ? "one" : twinMax === 3 ? "three" : "two"} of the Thread's targets.`);
     await Relay.request({ action: "stargazerArm", origin: actor.uuid, entries, chart: Boolean(chart), free: Boolean(free) });
 }
 
@@ -299,12 +339,13 @@ async function arm({ origin: originUuid, entries = [], chart, free, tapestry }) 
     const name = tapestry ? "Tapestry" : chart ? "Chart the Course" : "Fortune's Thread";
     const max = chart ? Numbers.chartTargets(origin) : Numbers.threadTargets(origin);
     const range = tapestry ? TAPESTRY_RANGE : chart ? Numbers.chartRange(origin) : Numbers.threadRange(origin);
-    const isFree = Boolean(chart || free);
+    const prophesied = !chart && !free && !tapestry && prophesiedFree(origin, entries.map((e) => e.target));
+    const isFree = Boolean(chart || free || prophesied);
     if (entries.length === 0 || (!tapestry && entries.length > max)) return;
     if (!isFree && reactionsLeft(origin) <= 0) return say(origin, `<strong>${name}</strong>: no reaction left this round.`);
 
     const twice = entries.filter((e) => e.twice);
-    if (twice.length > 0 && (chart || tapestry || twice.length > 2 || !has(origin, "twin-fates") || !twinFatesReady(origin))) return;
+    if (twice.length > 0 && (chart || tapestry || twice.length > Numbers.twinFates(origin) || !twinFatesReady(origin))) return;
 
     // Chart the Course: only one active at a time — the last one's Threads go.
     if (chart) await sweep(origin, (flag) => flag.free);
@@ -314,12 +355,14 @@ async function arm({ origin: originUuid, entries = [], chart, free, tapestry }) 
     const armed = [];
     for (const entry of entries) {
         const target = (await fromUuid(entry.target))?.actor ?? (await fromUuid(entry.target));
-        const why = refusal(origin, target, { range });
+        // Thread of Warning: "even though positions are not yet set" — a Thread on initiative alone has no range.
+        const onInitiative = entry.on === "initiative";
+        const why = refusal(origin, target, { range: onInitiative ? Infinity : range });
         if (why) {
             await say(origin, `<strong>${name}</strong>: ${why}.`);
             continue;
         }
-        const allowed = entry.kind === "snarl" ? SNARL_KINDS : GUIDE_KINDS;
+        const allowed = threadKinds(origin, entry.kind);
         const kinds = entry.on && entry.on !== "any" ? [entry.on] : allowed;
         if (!kinds.every((k) => allowed.includes(k))) {
             await say(origin, `<strong>${name}</strong>: Snarl can only be applied to an attack roll, skill check or Perception check.`);
@@ -336,8 +379,18 @@ async function arm({ origin: originUuid, entries = [], chart, free, tapestry }) 
     if (!isFree) update[`flags.${MODULE_ID}.${FLAG}.pending`] = [...(state(origin).pending ?? []), group];
     if (twice.length > 0) update[`flags.${MODULE_ID}.${FLAG}.twinFatesAt`] = game.time.worldTime;
     if (tapestry) update[`flags.${MODULE_ID}.${FLAG}.tapestryAt`] = game.time.worldTime;
+    let cost = "";
+    if (prophesied) {
+        update[`flags.${MODULE_ID}.${FLAG}.prophesiedRound`] = roundKey(origin);
+        cost = " No reaction: the Prophesied Ally.";
+    }
+    // Unspent Thread (guide §7, 10th): the first Chart the Course of a turn that began with the reaction unused.
+    if (chart && has(origin, "unspent-thread") && state(origin).unspentThread && state(origin).unspentThread === roundKey(origin)) {
+        update[`flags.${MODULE_ID}.${FLAG}.unspentThread`] = null;
+        cost = " A free action: Unspent Thread.";
+    }
     if (Object.keys(update).length > 0) await origin.update(update);
-    await say(origin, `<strong>${name}</strong>: ${armed.join("; ")}.`, { whisper: ownersOf(origin) });
+    await say(origin, `<strong>${name}</strong>: ${armed.join("; ")}.${cost}`, { whisper: ownersOf(origin) });
 }
 
 async function speak({ origin: originUuid, target: targetUuid, on }) {
@@ -421,8 +474,14 @@ async function unknot(origin, only = null) {
 /** The start of the Stargazer's turn: the reaction comes back and every Thread still armed expires. */
 async function startTurn(actor) {
     if (!isStargazer(actor)) return;
+    const before = state(actor);
+    const unspent = has(actor, "unspent-thread") && (before.spent ?? 0) === 0 && (before.pending ?? []).length === 0;
     await sweep(actor);
     await unknot(actor);
+    if (unspent) {
+        await actor.update({ [`flags.${MODULE_ID}.${FLAG}.unspentThread`]: roundKey(actor) });
+        await say(actor, "<strong>Unspent Thread</strong>: your reaction went unused. Your first <em>Chart the Course</em> this turn is a free action.", { whisper: ownersOf(actor) });
+    }
     await actor.update({ [`flags.${MODULE_ID}.${FLAG}.pending`]: [], [`flags.${MODULE_ID}.${FLAG}.spent`]: 0 });
 }
 

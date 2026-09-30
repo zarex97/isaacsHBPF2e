@@ -1,0 +1,37 @@
+{
+    "folder": "10th",
+    "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+    "name": "Unspent Thread",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>If you have not used your reaction by the start of your turn, your first <em>Chart the Course</em> that turn is a <strong>free action</strong>.</p>"
+        },
+        "level": {
+            "value": 10
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [],
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        }
+    },
+    "type": "feat"
+}

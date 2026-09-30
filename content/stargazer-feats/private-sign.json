@@ -1,0 +1,37 @@
+{
+    "folder": "16th",
+    "img": "icons/magic/light/explosion-star-glow-blue.webp",
+    "name": "Private Sign",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Add a <strong>fourteenth sign</strong> to the wheel: your own. Choose <strong>one Augury</strong> from §5.2 for it to grant and <strong>one existing sign's domain</strong> for it to govern; it should be an Augury you would not otherwise take. It rises only over you, on days the sky is Starless, and uses the standard aspect scaling. Its aspect is rolled in advance with the day, as part of the seven-day queue.</p>"
+        },
+        "level": {
+            "value": 16
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [],
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        }
+    },
+    "type": "feat"
+}

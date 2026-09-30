@@ -1,0 +1,191 @@
+{
+    "folder": "1st",
+    "img": "icons/magic/light/explosion-star-glow-blue.webp",
+    "name": "Star-Touched Cantrip",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>You learn one additional occult cantrip, and may swap it during daily preparations.</p><hr /><p><em>Your Night Vigil card offers the swap.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [
+            {
+                "key": "ChoiceSet",
+                "adjustName": true,
+                "flag": "starTouchedCantrip",
+                "prompt": "Choose an occult cantrip",
+                "choices": [
+                    {
+                        "label": "Approximate",
+                        "value": "Compendium.pf2e.spells-srd.Item.EqdSKqr8Qj5TUhMR"
+                    },
+                    {
+                        "label": "Artistic Recollection",
+                        "value": "Compendium.pf2e.spells-srd.Item.tKF4TwqOFQxlwMvq"
+                    },
+                    {
+                        "label": "Bullhorn",
+                        "value": "Compendium.pf2e.spells-srd.Item.W02bHXylIpoXbO4e"
+                    },
+                    {
+                        "label": "Daze",
+                        "value": "Compendium.pf2e.spells-srd.Item.4gBIw4IDrSfFHik4"
+                    },
+                    {
+                        "label": "Detect Magic",
+                        "value": "Compendium.pf2e.spells-srd.Item.gpzpAAAJ1Lza2JVl"
+                    },
+                    {
+                        "label": "Detect Metal",
+                        "value": "Compendium.pf2e.spells-srd.Item.vJZ83ehQiM906lea"
+                    },
+                    {
+                        "label": "Eat Fire",
+                        "value": "Compendium.pf2e.spells-srd.Item.FWuLUKIbkJZjBiuA"
+                    },
+                    {
+                        "label": "Figment",
+                        "value": "Compendium.pf2e.spells-srd.Item.0zU8CPejjQFnhZFI"
+                    },
+                    {
+                        "label": "Forbidding Ward",
+                        "value": "Compendium.pf2e.spells-srd.Item.RA7VKcen3p56rVyZ"
+                    },
+                    {
+                        "label": "Glamorize",
+                        "value": "Compendium.pf2e.spells-srd.Item.UK349cSOljQVYpcu"
+                    },
+                    {
+                        "label": "Guidance",
+                        "value": "Compendium.pf2e.spells-srd.Item.izcxFQFwf3woCnFs"
+                    },
+                    {
+                        "label": "Haunting Hymn",
+                        "value": "Compendium.pf2e.spells-srd.Item.b5BQbwmuBhgPXTyi"
+                    },
+                    {
+                        "label": "Illuminate",
+                        "value": "Compendium.pf2e.spells-srd.Item.qCkxBOLMCCXEjBWo"
+                    },
+                    {
+                        "label": "Infectious Enthusiasm",
+                        "value": "Compendium.pf2e.spells-srd.Item.VACvA5VRbddjt5s9"
+                    },
+                    {
+                        "label": "Know the Way",
+                        "value": "Compendium.pf2e.spells-srd.Item.tXa5vOu5giBNCjdR"
+                    },
+                    {
+                        "label": "Light",
+                        "value": "Compendium.pf2e.spells-srd.Item.WBmvzNDfpwka3qT4"
+                    },
+                    {
+                        "label": "Message",
+                        "value": "Compendium.pf2e.spells-srd.Item.vLzFcIaSXs7YTIqJ"
+                    },
+                    {
+                        "label": "Musical Accompaniment",
+                        "value": "Compendium.pf2e.spells-srd.Item.mnhuvqTIELcpJOFX"
+                    },
+                    {
+                        "label": "Needle Darts",
+                        "value": "Compendium.pf2e.spells-srd.Item.iYRDFxeVpJ5KIjmr"
+                    },
+                    {
+                        "label": "Phase Bolt",
+                        "value": "Compendium.pf2e.spells-srd.Item.5gophZ4AOKW4VW27"
+                    },
+                    {
+                        "label": "Prestidigitation",
+                        "value": "Compendium.pf2e.spells-srd.Item.Qw3fnUlaUbnn7ipC"
+                    },
+                    {
+                        "label": "Protect Companion",
+                        "value": "Compendium.pf2e.spells-srd.Item.AfOpnnwdZwHi2Tnc"
+                    },
+                    {
+                        "label": "Read Aura",
+                        "value": "Compendium.pf2e.spells-srd.Item.OhD2Z6rIGGD5ocZA"
+                    },
+                    {
+                        "label": "Read the Air",
+                        "value": "Compendium.pf2e.spells-srd.Item.lg73SvJZno1ypPAj"
+                    },
+                    {
+                        "label": "Shield",
+                        "value": "Compendium.pf2e.spells-srd.Item.TVKNbcgTee19PXZR"
+                    },
+                    {
+                        "label": "Sigil",
+                        "value": "Compendium.pf2e.spells-srd.Item.AUctDF2fqPZN2w4W"
+                    },
+                    {
+                        "label": "Summon Instrument",
+                        "value": "Compendium.pf2e.spells-srd.Item.yvs1zN5Pai5U4CJX"
+                    },
+                    {
+                        "label": "Tame",
+                        "value": "Compendium.pf2e.spells-srd.Item.s7ILzY2xh1tc9U1v"
+                    },
+                    {
+                        "label": "Telekinetic Hand",
+                        "value": "Compendium.pf2e.spells-srd.Item.pwzdSlJgYqN7bs2w"
+                    },
+                    {
+                        "label": "Telekinetic Projectile",
+                        "value": "Compendium.pf2e.spells-srd.Item.60sgbuMWN0268dB7"
+                    },
+                    {
+                        "label": "Time Sense",
+                        "value": "Compendium.pf2e.spells-srd.Item.BvNbDwFYaidKJG9j"
+                    },
+                    {
+                        "label": "Tremor Signs",
+                        "value": "Compendium.pf2e.spells-srd.Item.uMADQaASgYNsSDDM"
+                    },
+                    {
+                        "label": "Void Warp",
+                        "value": "Compendium.pf2e.spells-srd.Item.mAMEt4FFbdqoRnkN"
+                    },
+                    {
+                        "label": "Warp Step",
+                        "value": "Compendium.pf2e.spells-srd.Item.sX2g6WFSQPNW9jzx"
+                    },
+                    {
+                        "label": "Wash Your Luck",
+                        "value": "Compendium.pf2e.spells-srd.Item.lmHmKGs1N3yNAvln"
+                    }
+                ]
+            },
+            {
+                "key": "GrantItem",
+                "allowDuplicate": false,
+                "uuid": "{item|flags.system.rulesSelections.starTouchedCantrip}"
+            }
+        ],
+        "traits": {
+            "otherTags": [],
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        }
+    },
+    "type": "feat"
+}

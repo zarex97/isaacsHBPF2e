@@ -1,0 +1,42 @@
+{
+    "folder": "1st",
+    "img": "icons/sundries/gaming/dice-runed-brown.webp",
+    "name": "Astrological Sign",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Once per day, when you record your Portent, you may treat its value as any number within <strong>3</strong> of what you rolled.</p><hr /><p><em>Your Night Vigil card offers the values when you have this feat.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [],
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
+        }
+    },
+    "type": "feat"
+}

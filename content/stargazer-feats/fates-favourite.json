@@ -1,0 +1,42 @@
+{
+    "folder": "10th",
+    "img": "icons/sundries/gaming/dice-runed-brown.webp",
+    "name": "Fate's Favourite",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Once per day, treat one d20 roll <strong>you</strong> make as a <strong>natural 20</strong>. You saw this.</p><hr /><p><em>Post this to chat before the roll: your next d20 is a natural 20.</em></p>"
+        },
+        "level": {
+            "value": 10
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [],
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
+        }
+    },
+    "type": "feat"
+}
