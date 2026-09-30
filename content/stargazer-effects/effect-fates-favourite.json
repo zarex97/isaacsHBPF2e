@@ -1,0 +1,52 @@
+{
+    "img": "icons/sundries/gaming/dice-runed-brown.webp",
+    "name": "Effect: Fate's Favourite",
+    "system": {
+        "description": {
+            "value": "<p>Your next d20 roll is a natural 20.</p>"
+        },
+        "duration": {
+            "value": 1,
+            "unit": "days",
+            "expiry": "turn-start",
+            "sustained": false
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [
+            {
+                "key": "SubstituteRoll",
+                "slug": "fates-favourite",
+                "label": "Fate's Favourite",
+                "selector": "all",
+                "value": 20,
+                "required": true,
+                "effectType": "fortune",
+                "removeAfterRoll": "if-enabled"
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "fatesFavourite": true
+        }
+    },
+    "type": "effect"
+}

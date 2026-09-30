@@ -1,0 +1,37 @@
+{
+    "folder": "2nd",
+    "img": "icons/sundries/gaming/dice-runed-brown.webp",
+    "name": "Twin Portent",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Roll <strong>two</strong> d20s at your Night Vigil and record both as separate Portents. You must spend both before your next Vigil or lose them, and <em>Speak the Portent</em>'s frequency becomes twice per day.</p>"
+        },
+        "level": {
+            "value": 2
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [],
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        }
+    },
+    "type": "feat"
+}

@@ -1,0 +1,39 @@
+{
+    "folder": "4th",
+    "img": "icons/magic/perception/eye-ringed-glow-angry-small-teal.webp",
+    "name": "Read the Room",
+    "system": {
+        "actionType": {
+            "value": "free"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Once per encounter, Sense Motive as a <strong>free action</strong>.</p><hr /><p><em>Post this to chat to Sense Motive; once per encounter.</em></p>"
+        },
+        "level": {
+            "value": 4
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [],
+            "rarity": "common",
+            "value": [
+                "stargazer",
+                "concentrate",
+                "secret"
+            ]
+        }
+    },
+    "type": "feat"
+}

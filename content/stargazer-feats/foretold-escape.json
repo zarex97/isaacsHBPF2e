@@ -1,0 +1,42 @@
+{
+    "folder": "16th",
+    "img": "icons/sundries/gaming/dice-runed-brown.webp",
+    "name": "Foretold Escape",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>Once per day, when an <strong>attack roll</strong> against you would deal damage that reduces you to 0 Hit Points, you may <em>Speak the Portent</em> on that attack roll even though it has already been rolled, even if your Portent is spent, and even if a fortune or misfortune effect altered it &mdash; using a value of 1. It cannot be used on your own saving throw, or on damage no attack roll dealt.</p>"
+        },
+        "level": {
+            "value": 16
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "traits": {
+            "otherTags": [],
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        },
+        "frequency": {
+            "max": 1,
+            "per": "day",
+            "value": 1
+        }
+    },
+    "type": "feat"
+}

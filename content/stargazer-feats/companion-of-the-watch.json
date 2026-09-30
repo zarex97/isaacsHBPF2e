@@ -1,0 +1,44 @@
+{
+    "folder": "1st",
+    "img": "icons/magic/light/explosion-star-glow-blue.webp",
+    "name": "Companion of the Watch",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "class",
+        "description": {
+            "value": "<p>You gain a familiar. It has the <code>celestial</code> trait and you gain one extra familiar ability, which must be an ability that gathers or carries information.</p><hr /><p><em>Your familiar is made for you when you take this feat, with the celestial trait. The extra ability is counted on your sheet; pick one that gathers or carries information.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [
+            {
+                "key": "ActiveEffectLike",
+                "mode": "add",
+                "path": "system.attributes.familiarAbilities.value",
+                "value": 1
+            }
+        ],
+        "traits": {
+            "otherTags": [],
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        }
+    },
+    "type": "feat"
+}

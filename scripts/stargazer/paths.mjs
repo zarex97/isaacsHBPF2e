@@ -396,7 +396,7 @@ export async function readPastDay(actor) {
 }
 
 /** The Announcement (§6.2): Demoralize with Astronomy Lore. */
-async function announce(actor) {
+export async function announce(actor) {
     const lore = Object.values(actor.skills ?? {}).find((s) => s.slug === "astronomy-lore" || s.label === "Astronomy Lore");
     if (!lore) return ui.notifications.warn("The Announcement: you have no Astronomy Lore.");
     const action = game.pf2e.actions.get("demoralize");
