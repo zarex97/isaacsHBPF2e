@@ -1,6 +1,6 @@
 {
     "folder": "Core",
-    "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+    "img": "icons/magic/fire/explosion-flame-lightning-strike.webp",
     "name": "Lightning Reflexes",
     "system": {
         "actionType": {
