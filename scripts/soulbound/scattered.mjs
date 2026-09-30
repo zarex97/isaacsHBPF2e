@@ -1,4 +1,4 @@
-import { wrap } from "../lib/wrap.mjs";
+import { CheckPipeline, PRIORITY } from "../lib/check-pipeline.mjs";
 
 /**
  * Strikes that go around cover.
@@ -123,56 +123,51 @@ export function coverBonusOnCheck(check) {
 }
 
 export const Scattered = {
+    /**
+     * A stage on the check pipeline rather than a wrap of its own: `Check.roll` can only be wrapped once,
+     * and the Stargazer's armed Portent needs the same moment.
+     */
     register() {
-        wrap(
-            "game.pf2e.Check.roll",
-            async function (wrapped, check, context = {}, ...rest) {
-                try {
-                    if (context?.type === "attack-roll") {
-                        const allowance = ignoringCover(context.actor, context.item);
-                        const label = allowance?.label;
-                        const target = context.target?.actor;
-                        if (allowance && target) {
-                            const found = coverBonusOn(target);
-                            // "Lesser cover" and nothing more: a bonus above the allowance is standard or
-                            // greater cover, and is left exactly where it is.
-                            const bonus = found <= allowance.max ? found : 0;
-                            const corrected = withoutCover(context.dc, bonus);
-                            if (corrected !== context.dc) {
-                                context = { ...context, dc: corrected };
-                                context.options = new Set([
-                                    ...(context.options ?? []),
-                                    `soulbound:ignored-cover:${bonus}`,
-                                ]);
-                                console.debug(
-                                    `Isaac's Homebrew | ${label} ignored ${bonus} cover on ${target.name}`,
-                                );
-                            }
-                        }
-                    } else if (context?.type === "saving-throw") {
-                        const origin = context.origin?.actor ?? context.origin ?? context.item?.actor;
-                        const allowance = ignoringCover(origin, context.item);
-                        const label = allowance?.label;
-                        const found = allowance ? coverBonusOnCheck(check) : 0;
-                        const bonus = found <= (allowance?.max ?? 0) ? found : 0;
-                        if (bonus > 0 && typeof context.dc?.value === "number") {
-                            context = {
-                                ...context,
-                                dc: { ...context.dc, value: context.dc.value + bonus },
-                                options: new Set([
-                                    ...(context.options ?? []), `soulbound:ignored-cover:${bonus}`,
-                                ]),
-                            };
-                            console.debug(`Isaac's Homebrew | ${label} cancelled ${bonus} cover on a save`);
-                        }
+        CheckPipeline.before("Strikes that ignore cover (S-01d, S-06c)", PRIORITY.ignoreCover, (check, context) => {
+            if (context?.type === "attack-roll") {
+                const allowance = ignoringCover(context.actor, context.item);
+                const label = allowance?.label;
+                const target = context.target?.actor;
+                if (allowance && target) {
+                    const found = coverBonusOn(target);
+                    // "Lesser cover" and nothing more: a bonus above the allowance is standard or
+                    // greater cover, and is left exactly where it is.
+                    const bonus = found <= allowance.max ? found : 0;
+                    const corrected = withoutCover(context.dc, bonus);
+                    if (corrected !== context.dc) {
+                        context = { ...context, dc: corrected };
+                        context.options = new Set([
+                            ...(context.options ?? []),
+                            `soulbound:ignored-cover:${bonus}`,
+                        ]);
+                        console.debug(
+                            `Isaac's Homebrew | ${label} ignored ${bonus} cover on ${target.name}`,
+                        );
                     }
-                } catch (error) {
-                    // A failure here must never cost the roll: the attack matters more than the clause.
-                    console.error("Isaac's Homebrew | could not ignore cover", error);
                 }
-                return wrapped(check, context, ...rest);
-            },
-            { feature: "Strikes that ignore cover (S-01d, S-06c)" },
-        );
+            } else if (context?.type === "saving-throw") {
+                const origin = context.origin?.actor ?? context.origin ?? context.item?.actor;
+                const allowance = ignoringCover(origin, context.item);
+                const label = allowance?.label;
+                const found = allowance ? coverBonusOnCheck(check) : 0;
+                const bonus = found <= (allowance?.max ?? 0) ? found : 0;
+                if (bonus > 0 && typeof context.dc?.value === "number") {
+                    context = {
+                        ...context,
+                        dc: { ...context.dc, value: context.dc.value + bonus },
+                        options: new Set([
+                            ...(context.options ?? []), `soulbound:ignored-cover:${bonus}`,
+                        ]),
+                    };
+                    console.debug(`Isaac's Homebrew | ${label} cancelled ${bonus} cover on a save`);
+                }
+            }
+            return context;
+        });
     },
 };

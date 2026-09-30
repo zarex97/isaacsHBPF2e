@@ -1,7 +1,7 @@
 {
     "id": "isaacs-hb-pf2e",
-    "title": "Isaac's Homebrew (PF2e): The Saint, The Soulbound and The Assimilator",
-    "description": "<p>Homebrew content for the Pathfinder Second Edition system. <strong>The Saint</strong>, a martial focus-user whose power answers to the sky: twelve Gold Cloths with four Techniques each, and a sky tracker that decides whose day it is. <strong>The Soulbound</strong>, a martial focus-user whose pool refills by fighting: three Lineages, fifteen Spirits with four-rung release ladders, the Kidō list, and a capstone that takes your powers when it is done. <strong>The Assimilator</strong>, an unarmed martial worn by a symbiont that grows by eating: thirty-six Substrates fed to four Depths, nine Instincts, and thirty Bonds.</p>",
+    "title": "Isaac's Homebrew (PF2e): The Saint, The Soulbound, The Assimilator and The Stargazer",
+    "description": "<p>Homebrew content for the Pathfinder Second Edition system. <strong>The Saint</strong>, a martial focus-user whose power answers to the sky: twelve Gold Cloths with four Techniques each, and a sky tracker that decides whose day it is. <strong>The Soulbound</strong>, a martial focus-user whose pool refills by fighting: three Lineages, fifteen Spirits with four-rung release ladders, the Kidō list, and a capstone that takes your powers when it is done. <strong>The Assimilator</strong>, an unarmed martial worn by a symbiont that grows by eating: thirty-six Substrates fed to four Depths, nine Instincts, and thirty Bonds. <strong>The Stargazer</strong>, an occult diviner who reads the sky every morning and bends other creatures' luck: sixteen Auguries, four Paths, and a rewind at three scales.</p>",
     "version": "99.0.0",
     "license": "./LICENSE",
     "authors": [
@@ -372,6 +372,97 @@
                 "ASSISTANT": "OWNER"
             },
             "flags": {}
+        },
+        {
+            "name": "stargazer-class",
+            "label": "The Stargazer: Class",
+            "path": "packs/stargazer-class",
+            "type": "Item",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/purple.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "stargazer-class-features",
+            "label": "The Stargazer: Class Features",
+            "path": "packs/stargazer-class-features",
+            "type": "Item",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/purple.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "stargazer-auguries",
+            "label": "The Stargazer: Auguries",
+            "path": "packs/stargazer-auguries",
+            "type": "Item",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/blue.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "stargazer-feats",
+            "label": "The Stargazer: Feats",
+            "path": "packs/stargazer-feats",
+            "type": "Item",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/purple.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "stargazer-effects",
+            "label": "The Stargazer: Effects",
+            "path": "packs/stargazer-effects",
+            "type": "Item",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/blue.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "stargazer-journals",
+            "label": "The Stargazer: Handbook",
+            "path": "packs/stargazer-journals",
+            "type": "JournalEntry",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/blue.webp",
+            "ownership": {
+                "PLAYER": "OBSERVER",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
+        },
+        {
+            "name": "stargazer-macros",
+            "label": "The Stargazer: Macros",
+            "path": "packs/stargazer-macros",
+            "type": "Macro",
+            "system": "pf2e",
+            "banner": "systems/pf2e/assets/compendium-banner/blue.webp",
+            "ownership": {
+                "PLAYER": "NONE",
+                "ASSISTANT": "OWNER"
+            },
+            "flags": {}
         }
     ],
     "packFolders": [
@@ -419,6 +510,20 @@
                 "assimilator-journals",
                 "assimilator-macros"
             ]
+        },
+        {
+            "name": "Isaac's Homebrew: The Stargazer",
+            "sorting": "m",
+            "color": "#1d3557",
+            "packs": [
+                "stargazer-class",
+                "stargazer-class-features",
+                "stargazer-auguries",
+                "stargazer-feats",
+                "stargazer-effects",
+                "stargazer-journals",
+                "stargazer-macros"
+            ]
         }
     ],
     "flags": {
@@ -436,6 +541,10 @@
                     "assimilator": {
                         "label": "Assimilator",
                         "description": "A creature, item, or ability of the Assimilator class."
+                    },
+                    "stargazer": {
+                        "label": "Stargazer",
+                        "description": "A creature, item, or ability of the Stargazer class."
                     }
                 },
                 "spellTraits": {
