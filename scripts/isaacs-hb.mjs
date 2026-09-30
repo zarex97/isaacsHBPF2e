@@ -54,7 +54,7 @@ import { Threads } from "./stargazer/threads.mjs";
 import { Vigil } from "./stargazer/vigil.mjs";
 import { Auguries } from "./stargazer/auguries.mjs";
 import { Paths } from "./stargazer/paths.mjs";
-import { Feats as StargazerFeats } from "./stargazer/feats.mjs";
+import { Feats as StargazerFeats, readTheSky } from "./stargazer/feats.mjs";
 import { Rewind } from "./stargazer/rewind.mjs";
 import { TerrainRolls } from "./sky/terrain-rolls.mjs";
 import { Suppression } from "./soulbound/suppression.mjs";
@@ -180,6 +180,7 @@ Hooks.once("init", () => {
     const module = game.modules.get(MODULE_ID);
     module.api = {
         sky: SkyTracker,
+        stargazer: { readTheSky },
         cosmo: Cosmo,
         targeting: AreaTargeting,
         castPipeline: CastPipeline,

@@ -1,0 +1,87 @@
+{
+    "img": "icons/commodities/currency/coins-assorted-mix-copper-silver-gold.webp",
+    "name": "Alms of Fate",
+    "system": {
+        "area": null,
+        "cost": {
+            "value": ""
+        },
+        "counteraction": false,
+        "damage": {},
+        "defense": null,
+        "description": {
+            "value": "<p>On each target's next damaging effect before the end of your next turn, they <strong>reroll all 1s and 2s</strong> on the damage dice and must keep the new results.</p><hr /><p><strong>Heightened (5th)</strong> 3 allies. <strong>(9th)</strong> Each target also <strong>maximises one damage die</strong> of their choice.</p><p><em>The next damage roll each target makes is rewritten as it lands; at 9th the die with the most to gain is maximised.</em></p>"
+        },
+        "duration": {
+            "sustained": false,
+            "value": "until the end of your next turn"
+        },
+        "heightening": null,
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "range": {
+            "value": "30 feet"
+        },
+        "requirements": "",
+        "rules": [],
+        "target": {
+            "value": "2 allies"
+        },
+        "time": {
+            "value": "1"
+        },
+        "traits": {
+            "otherTags": [
+                "stargazer-augury",
+                "stargazer-sign-leo"
+            ],
+            "rarity": "common",
+            "traditions": [
+                "occult"
+            ],
+            "value": [
+                "concentrate",
+                "focus",
+                "prediction",
+                "stargazer"
+            ]
+        }
+    },
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "areaTargeting": {
+                "affects": "allies",
+                "maxTargets": 2,
+                "range": 30,
+                "heightening": {
+                    "at": {
+                        "9": {
+                            "maxTargets": 1
+                        }
+                    }
+                }
+            },
+            "riders": [
+                {
+                    "event": "action-used",
+                    "apply": {
+                        "type": "effect",
+                        "uuid": "Compendium.isaacs-hb-pf2e.stargazer-effects.Item.Effect: Alms of Fate"
+                    },
+                    "duration": {
+                        "unit": "rounds",
+                        "value": 1,
+                        "expiry": "turn-end"
+                    }
+                }
+            ]
+        }
+    },
+    "type": "spell"
+}
