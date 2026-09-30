@@ -52,6 +52,7 @@ import { Armed } from "./stargazer/armed.mjs";
 import { StarChart } from "./stargazer/star-chart.mjs";
 import { Threads } from "./stargazer/threads.mjs";
 import { Vigil } from "./stargazer/vigil.mjs";
+import { TerrainRolls } from "./sky/terrain-rolls.mjs";
 import { Suppression } from "./soulbound/suppression.mjs";
 import { SpiritWeapon } from "./soulbound/weapon.mjs";
 import { Wound } from "./soulbound/wound.mjs";
@@ -232,6 +233,7 @@ Hooks.once("setup", () => {
     start("the rider engine", () => Riders.registerHooks());
     start("Strikes that ignore cover", () => Scattered.register());
     start("the Stargazer's armed Portent", () => Armed.register());
+    start("Libra and Aries", () => TerrainRolls.registerHooks());
 });
 
 Hooks.once("ready", async () => {
