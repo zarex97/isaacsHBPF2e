@@ -53,37 +53,37 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SG-01 | §3 | **Key ability** Wisdom |  | ☐ |  |
-| SG-02 | §3 | **HP** 8 + Con modifier per level |  | ☐ |  |
-| SG-03 | §3 | **Initial proficiencies (1st):** Perception **Expert** |  | ☐ |  |
-| SG-04 | §3 | Fortitude Trained · Reflex Trained · Will **Expert** |  | ☐ |  |
-| SG-05 | §3 | Occultism and Astronomy Lore plus 4 others Trained |  | ☐ |  |
-| SG-06 | §3 | unarmed and simple weapons Trained |  | ☐ |  |
-| SG-07 | §3 | unarmoured defence and light armour Trained |  | ☐ |  |
-| SG-08 | §3 | **Stargazer DC Trained** (Wisdom) |  | ☐ |  |
-| SG-09 | §3 7th | **Expert Stargazer** (Stargazer DC expert) |  | ☐ |  |
-| SG-10 | §3 7th | **Vigilant Senses** (Perception master) |  | ☐ |  |
-| SG-11 | §1.3 | Fortitude Expert at 9 |  | ☐ |  |
-| SG-12 | §3 11th | **Resolve** (Will master) |  | ☐ |  |
-| SG-13 | §2.2 | Unarmed T@1, Simple T@1, Expert @11 |  | ☐ |  |
-| SG-14 | §3 13th | **Incredible Senses** (Perception legendary) |  | ☐ |  |
-| SG-15 | §1.3 | Reflex Expert at 13 |  | ☐ |  |
-| SG-16 | §2.2 | Unarmored T@1, Light T@1, Expert @13 |  | ☐ |  |
-| SG-17 | §3 15th | **Master Stargazer** (Stargazer DC master) |  | ☐ |  |
-| SG-18 | §3 17th | **Greater Resolve** (Will legendary) |  | ☐ |  |
-| SG-19 | §3 19th | **Legendary Stargazer** (Stargazer DC legendary) |  | ☐ |  |
-| SG-20 | §9.8 | no weapon specialization, ever |  | ☐ |  |
-| SG-21 | §7 | Stargazer feats come at 1, 2, 4, 6, 8, 10, 12, 14, 16, 18 and 20. |  | ☐ |  |
+| SG-01 | §3 | **Key ability** Wisdom | `test-stargazer` pins it | ✅ | Live: the class item's key attribute reads **`wis`**, and the Stargazer DC at 1st is **14** — 10 + trained 3 + Wis +1 |
+| SG-02 | §3 | **HP** 8 + Con modifier per level | `test-stargazer` pins it | ✅ | Live: **8 / 16 / 24 … 160** Hit Points at levels 1, 2, 3 … 20 on a character with no ancestry and Con +0 — eight per level, flat |
+| SG-03 | §3 | **Initial proficiencies (1st):** Perception **Expert** | `test-stargazer` pins it | ✅ | Live: Perception rank **2** at 1st |
+| SG-04 | §3 | Fortitude Trained · Reflex Trained · Will **Expert** | `test-stargazer` pins it | ✅ | Live: Fortitude **1**, Reflex **1**, Will **2** at 1st |
+| SG-05 | §3 | Occultism and Astronomy Lore plus 4 others Trained | `test-stargazer` pins it | ✅ | Live at 1st: Occultism rank **1** and Astronomy Lore rank **1**. **Fixed while driving:** the Lore sat in the class's grant list and never arrived — a class grants feats and nothing else — so it rides on Star Chart's `GrantItem`, as the Soulbound's Spirit Lore does. The four further skills are the class item's `trainedSkills.additional: 4`, which pf2e offers at creation |
+| SG-06 | §3 | unarmed and simple weapons Trained | `test-stargazer` pins it | ✅ | Live at 1st: simple **1**, unarmed **1**, martial **0** |
+| SG-07 | §3 | unarmoured defence and light armour Trained | `test-stargazer` pins it | ✅ | Live at 1st: unarmored **1**, light **1**, medium **0** |
+| SG-08 | §3 | **Stargazer DC Trained** (Wisdom) | `test-stargazer` pins it | ✅ | Live at 1st: a **Stargazer** class DC exists, rank **1**, DC **14**, and the **Star Chart** entry — occult, focus, `proficiency.slug: stargazer` — reads the same **14**. One entry, never two |
+| SG-09 | §3 7th | **Expert Stargazer** (Stargazer DC expert) | `test-stargazer` pins it | ✅ | Live at the boundary: Stargazer DC rank **1 at 6th** (DC 19), **2 at 7th** (DC 22); spellcasting rank rises with it; the Star Chart DC matches at every level |
+| SG-10 | §3 7th | **Vigilant Senses** (Perception master) | `test-stargazer` pins it | ✅ | Live at the boundary: Perception **2 at 6th**, **3 at 7th** |
+| SG-11 | §1.3 | Fortitude Expert at 9 | `test-stargazer` pins it | ✅ | Live at the boundary: Fortitude **1 at 8th**, **2 at 9th** |
+| SG-12 | §3 11th | **Resolve** (Will master) | `test-stargazer` pins it | ✅ | Live at the boundary: Will **2 at 10th**, **3 at 11th** |
+| SG-13 | §2.2 | Unarmed T@1, Simple T@1, Expert @11 | `test-stargazer` pins it | ✅ | Live at the boundary: simple and unarmed **1 at 10th**, **2 at 11th**; martial **0** at 20th |
+| SG-14 | §3 13th | **Incredible Senses** (Perception legendary) | `test-stargazer` pins it | ✅ | Live at the boundary: Perception **3 at 12th**, **4 at 13th** |
+| SG-15 | §1.3 | Reflex Expert at 13 | `test-stargazer` pins it | ✅ | Live at the boundary: Reflex **1 at 12th**, **2 at 13th** |
+| SG-16 | §2.2 | Unarmored T@1, Light T@1, Expert @13 | `test-stargazer` pins it | ✅ | Live at the boundary: light and unarmored **1 at 12th**, **2 at 13th**; medium **0** at 20th. pf2e's own *Armor Expertise* would raise medium and heavy too, so the class's is its own |
+| SG-17 | §3 15th | **Master Stargazer** (Stargazer DC master) | `test-stargazer` pins it | ✅ | Live at the boundary: Stargazer DC rank **2 at 14th** (DC 29), **3 at 15th** (DC 32) |
+| SG-18 | §3 17th | **Greater Resolve** (Will legendary) | `test-stargazer` pins it | ✅ | Live at the boundary: Will **3 at 16th**, **4 at 17th**. pf2e's own *Greater Resolve* also improves a critical failure; the class's raises the rank only, as the guide says |
+| SG-19 | §3 19th | **Legendary Stargazer** (Stargazer DC legendary) | `test-stargazer` pins it | ✅ | Live at the boundary: Stargazer DC rank **3 at 18th** (DC 35), **4 at 19th** (DC 38) |
+| SG-20 | §9.8 | no weapon specialization, ever | `test-stargazer` pins it | ✅ | Live at 20th, simple weapons expert: a club Strike's damage is **`1d6 bludgeoning`** — no specialization bonus, and no specialization feature was ever granted |
+| SG-21 | §7 | Stargazer feats come at 1, 2, 4, 6, 8, 10, 12, 14, 16, 18 and 20. | `test-stargazer` pins it | ✅ | Live at 6th: class feat slots at **1, 2, 4, 6** |
 | SG-22 | §6 | Each grants an ability at **1st (50)**, **5th (30)**, **13th (70)** and **17th (70)** |  | ☐ |  |
 
 ## Star Chart (guide §4.1, §3)
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SG-23a | §4.1 | You gain a focus pool of **1 Focus Point** and the **Auguries** you learn from §5. |  | ☐ |  |
-| SG-23b | §4.1 | their rank is always half your level rounded up, and they use your **Stargazer DC** and your Wisdom modifier for spell attack rolls and DCs. |  | ☐ |  |
+| SG-23a | §4.1 | You gain a focus pool of **1 Focus Point** and the **Auguries** you learn from §5. | `test-stargazer` pins it | ✅ | Live: focus pool **1** at 1st (cap 1); a stored 1 holds and a stored 0 holds. **Fixed while driving:** pf2e clamps the value to its own derived maximum — 0 with no Auguries — before the pool is pinned to its cap, so a stored 1 read back 0; the pin now re-reads the source. The Soulbound has the same bug: #114 |
+| SG-23b | §4.1 | their rank is always half your level rounded up, and they use your **Stargazer DC** and your Wisdom modifier for spell attack rolls and DCs. | `test-stargazer` pins it | ⚠️ | Live: the Star Chart entry's DC is the Stargazer DC at every level from 1st to 20th and its attribute is **Wis**. **Gap:** no Augury exists yet to read its rank — phase 4 (#106) |
 | SG-23c | §4.1 | You **Refocus** by reading the sky, or your chart, for 10 minutes. |  | ☐ |  |
-| SG-24a | §4.1 | You also know **5 occult cantrips**, chosen when you take the class, cast at will at a rank of half your level rounded up. |  | ☐ |  |
+| SG-24a | §4.1 | You also know **5 occult cantrips**, chosen when you take the class, cast at will at a rank of half your level rounded up. |  | ✅ | Live at 6th: pf2e's *Daze* added to the Star Chart is filed there as a cantrip at rank **3** (half of 6, rounded up), and casting it left the focus pool at **0 → 0** — at will |
 | SG-24b | §4.1 | You can change one cantrip during your daily preparations. |  | ☐ |  |
 | SG-25 | §3 | Nine Auguries known, at 1, 5, 7, 9, 11, 13, 15, 17 and 19. |  | ☐ |  |
 
@@ -144,9 +144,9 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SG-36a | §4.6 | Your proficiency increases to **Expert at 3rd**, **Master at 7th** and **Legendary at 15th** |  | ☐ |  |
-| SG-36b | §4.6 | you gain an extra skill feat at each of those levels, which must apply to Astronomy Lore or Occultism. |  | ☐ |  |
-| SG-36c | §4.6 | Astronomy Lore covers celestial events, calendars, navigation by star, prophecy, and — at the GM's discretion — Recall Knowledge about *anything that has been foretold*. |  | ☐ |  |
+| SG-36a | §4.6 | Your proficiency increases to **Expert at 3rd**, **Master at 7th** and **Legendary at 15th** | `test-stargazer` pins it | ✅ | Live: Astronomy Lore **1 at 2nd**, **2 at 3rd**, **3 at 7th**, **4 at 15th**; levelled back down to 6th it reads **2**. pf2e reads a Lore's rank off the lore item, which no rule element reaches, so the core-skill features carry the rank as a flag and `stargazer/star-chart.mjs` keeps the item at the highest one present |
+| SG-36b | §4.6 | you gain an extra skill feat at each of those levels, which must apply to Astronomy Lore or Occultism. | `test-stargazer` pins it | ⚠️ | Live at 6th: skill feat slots at **2, 3, 4, 6** — the extra at 3rd is there (and at 7th and 15th by the same list). **Gap:** nothing limits it to Astronomy Lore or Occultism |
+| SG-36c | §4.6 | Astronomy Lore covers celestial events, calendars, navigation by star, prophecy, and — at the GM's discretion — Recall Knowledge about *anything that has been foretold*. |  | — | The GM's discretion, by the guide's own words; nothing to automate |
 
 ## Widen the Sky (guide §4.7)
 
@@ -173,7 +173,7 @@ Auguries, the Paths, the feats and the Sky have trackers of their own beside thi
 
 | ID | Guide | Clause | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| SG-39 | §4.9 | Your focus pool increases to **2 Focus Points**. |  | ☐ |  |
+| SG-39 | §4.9 | Your focus pool increases to **2 Focus Points**. | `test-stargazer` pins it | ✅ | Live at the boundary: focus pool **1 at 6th**, **2 at 7th**, and a stored 2 holds at 7th; levelled back to 6th it is **1** again |
 | SG-40 | §4.10 | Fortune's Thread's bonus and penalty increase to **±2**. |  | ☐ |  |
 
 ## Unmake the Moment (guide §4.11)
@@ -264,10 +264,10 @@ rewinds behave at the table. ADR-0004 is the reasoning behind the arming model.*
 
 | Status | Count |
 | :-- | --: |
-| ☐ | 129 |
-| ✅ | 0 |
-| ⚠️ | 0 |
+| ☐ | 101 |
+| ✅ | 25 |
+| ⚠️ | 2 |
 | ❌ | 0 |
 | 🔧 | 0 |
-| — | 0 |
+| — | 1 |
 | **Total** | **129** |

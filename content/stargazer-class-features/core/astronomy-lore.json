@@ -1,0 +1,23 @@
+{
+    "folder": "Core",
+    "img": "icons/sundries/books/book-embossed-blue.webp",
+    "name": "Astronomy Lore",
+    "system": {
+        "description": {
+            "value": "<p>Celestial events, calendars, navigation by star, prophecy, and &mdash; at the GM's discretion &mdash; Recall Knowledge about <em>anything that has been foretold</em>.</p>"
+        },
+        "mod": {
+            "value": 0
+        },
+        "proficient": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": []
+    },
+    "type": "lore"
+}

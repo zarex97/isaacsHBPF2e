@@ -1,0 +1,50 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/light/explosion-star-glow-blue.webp",
+    "name": "Legendary Stargazer",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>Your proficiency rank for your Stargazer DC increases to legendary.</p>"
+        },
+        "level": {
+            "value": 19
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [],
+        "subfeatures": {
+            "proficiencies": {
+                "stargazer": {
+                    "attribute": null,
+                    "rank": 4
+                },
+                "spellcasting": {
+                    "rank": 4
+                }
+            }
+        },
+        "traits": {
+            "otherTags": [
+                "stargazer-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        }
+    },
+    "type": "feat"
+}
