@@ -1,0 +1,218 @@
+{
+    "img": "icons/magic/light/explosion-star-glow-blue.webp",
+    "name": "Stargazer",
+    "system": {
+        "ancestryFeatLevels": {
+            "value": [
+                1,
+                5,
+                9,
+                13,
+                17
+            ]
+        },
+        "attacks": {
+            "advanced": 0,
+            "martial": 0,
+            "other": {
+                "name": "",
+                "rank": 0
+            },
+            "simple": 1,
+            "unarmed": 1
+        },
+        "classFeatLevels": {
+            "value": [
+                1,
+                2,
+                4,
+                6,
+                8,
+                10,
+                12,
+                14,
+                16,
+                18,
+                20
+            ]
+        },
+        "defenses": {
+            "heavy": 0,
+            "light": 1,
+            "medium": 0,
+            "unarmored": 1
+        },
+        "description": {
+            "value": "<p>You have already seen how this ends. Every morning you read the sky &mdash; which of thirteen signs is up, and whether it is kind &mdash; and every round you bend somebody else's luck by a little: a Guide for an ally's roll, a Snarl for an enemy's. You cannot fight, and you do not need to.</p><p><strong>Key attribute</strong> Wisdom &middot; <strong>Hit Points</strong> 8 + Constitution modifier per level &middot; <strong>Stargazer DC</strong> your focus spells and class features, Wisdom-keyed</p>"
+        },
+        "generalFeatLevels": {
+            "value": [
+                3,
+                7,
+                11,
+                15,
+                19
+            ]
+        },
+        "hp": 8,
+        "items": {
+            "chart": {
+                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "level": 1,
+                "name": "Star Chart",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Star Chart"
+            },
+            "lore3": {
+                "img": "icons/sundries/books/book-embossed-blue.webp",
+                "level": 3,
+                "name": "Astronomy Lore (3rd)",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Astronomy Lore (3rd)"
+            },
+            "lore7": {
+                "img": "icons/sundries/books/book-embossed-blue.webp",
+                "level": 7,
+                "name": "Astronomy Lore (7th)",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Astronomy Lore (7th)"
+            },
+            "lor15": {
+                "img": "icons/sundries/books/book-embossed-blue.webp",
+                "level": 15,
+                "name": "Astronomy Lore (15th)",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Astronomy Lore (15th)"
+            },
+            "expsg": {
+                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "level": 7,
+                "name": "Expert Stargazer",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Expert Stargazer"
+            },
+            "vigil": {
+                "img": "icons/creatures/eyes/human-single-blue.webp",
+                "level": 7,
+                "name": "Vigilant Senses",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Vigilant Senses"
+            },
+            "star2": {
+                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "level": 7,
+                "name": "Second Star",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Second Star"
+            },
+            "grfor": {
+                "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+                "level": 9,
+                "name": "Great Fortitude",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Great Fortitude"
+            },
+            "resol": {
+                "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+                "level": 11,
+                "name": "Resolve",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Resolve"
+            },
+            "wexpe": {
+                "img": "icons/weapons/staves/staff-ornate-hook.webp",
+                "level": 11,
+                "name": "Weapon Expertise",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Weapon Expertise"
+            },
+            "incre": {
+                "img": "icons/creatures/eyes/human-single-blue.webp",
+                "level": 13,
+                "name": "Incredible Senses",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Incredible Senses"
+            },
+            "light": {
+                "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+                "level": 13,
+                "name": "Lightning Reflexes",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Lightning Reflexes"
+            },
+            "aexpe": {
+                "img": "icons/equipment/chest/robe-layered-blue.webp",
+                "level": 13,
+                "name": "Armor Expertise",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Armor Expertise"
+            },
+            "mstsg": {
+                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "level": 15,
+                "name": "Master Stargazer",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Master Stargazer"
+            },
+            "grres": {
+                "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+                "level": 17,
+                "name": "Greater Resolve",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Greater Resolve"
+            },
+            "legsg": {
+                "img": "icons/magic/light/explosion-star-glow-blue.webp",
+                "level": 19,
+                "name": "Legendary Stargazer",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Legendary Stargazer"
+            }
+        },
+        "keyAbility": {
+            "value": [
+                "wis"
+            ]
+        },
+        "perception": 2,
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "savingThrows": {
+            "fortitude": 1,
+            "reflex": 1,
+            "will": 2
+        },
+        "skillFeatLevels": {
+            "value": [
+                2,
+                3,
+                4,
+                6,
+                7,
+                8,
+                10,
+                12,
+                14,
+                15,
+                16,
+                18,
+                20
+            ]
+        },
+        "skillIncreaseLevels": {
+            "value": [
+                3,
+                5,
+                7,
+                9,
+                11,
+                13,
+                15,
+                17,
+                19
+            ]
+        },
+        "slug": "stargazer",
+        "spellcasting": 1,
+        "trainedSkills": {
+            "additional": 4,
+            "value": [
+                "occultism"
+            ]
+        },
+        "traits": {
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        }
+    },
+    "type": "class"
+}

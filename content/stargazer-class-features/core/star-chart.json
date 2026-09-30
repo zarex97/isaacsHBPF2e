@@ -1,0 +1,51 @@
+{
+    "folder": "Core",
+    "img": "icons/magic/light/explosion-star-glow-blue.webp",
+    "name": "Star Chart",
+    "system": {
+        "actionType": {
+            "value": "passive"
+        },
+        "actions": {
+            "value": null
+        },
+        "category": "classfeature",
+        "description": {
+            "value": "<p>You carry an astrolabe, a star-map, a tattoo, or a memorised sky. You gain a focus pool of <strong>1 Focus Point</strong> and the <strong>Auguries</strong> you learn. Auguries are focus spells with the <code>prediction</code> trait; their rank is always half your level rounded up, and they use your <strong>Stargazer DC</strong> and your Wisdom modifier for spell attack rolls and DCs. You <strong>Refocus</strong> by reading the sky, or your chart, for 10 minutes.</p><p>You also know <strong>5 occult cantrips</strong>, chosen when you take the class, cast at will at a rank of half your level rounded up. You can change one cantrip during your daily preparations.</p><p><em>Your Auguries and cantrips live in the <strong>Star Chart</strong> spellcasting entry, which appears when you take the class. Add your five cantrips to it from the occult list.</em></p>"
+        },
+        "level": {
+            "value": 1
+        },
+        "prerequisites": {
+            "value": []
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [
+            {
+                "key": "ActiveEffectLike",
+                "mode": "override",
+                "path": "system.resources.focus.cap",
+                "priority": 10,
+                "value": 1
+            },
+            {
+                "key": "GrantItem",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Astronomy Lore"
+            }
+        ],
+        "traits": {
+            "otherTags": [
+                "stargazer-feature"
+            ],
+            "rarity": "common",
+            "value": [
+                "stargazer"
+            ]
+        }
+    },
+    "type": "feat"
+}
