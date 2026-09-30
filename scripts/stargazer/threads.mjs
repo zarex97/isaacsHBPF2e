@@ -662,6 +662,10 @@ async function onOwnUse(message) {
     const item = message.item;
     const actor = item?.actor;
     if (!isStargazer(actor) || message.flags?.pf2e?.context) return;
+    // Rewrite the Ending (§10.3): with the Star Chart dark, the luck engine is gone until the long Vigil.
+    if (state(actor).dark && ["fortunes-thread", "chart-the-course", "portent"].includes(item.slug)) {
+        return ui.notifications.warn(`${item.name}: your Star Chart is dark until a full eight-hour Night Vigil under open sky.`);
+    }
     const run = {
         "fortunes-thread": () => pickThreads(actor, { free: false, chart: false }),
         "chart-the-course": () => pickThreads(actor, { free: true, chart: true }),

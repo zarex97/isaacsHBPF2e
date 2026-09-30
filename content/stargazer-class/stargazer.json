@@ -271,6 +271,18 @@
                 "level": 1,
                 "name": "Stargazer's Path",
                 "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Stargazer's Path"
+            },
+            "unmak": {
+                "img": "icons/magic/time/clock-stopwatch-white-blue.webp",
+                "level": 11,
+                "name": "Unmake the Moment",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Unmake the Moment"
+            },
+            "rwrte": {
+                "img": "icons/magic/time/hourglass-tilted-glowing-gold.webp",
+                "level": 19,
+                "name": "Rewrite the Ending",
+                "uuid": "Compendium.isaacs-hb-pf2e.stargazer-class-features.Item.Rewrite the Ending"
             }
         },
         "keyAbility": {

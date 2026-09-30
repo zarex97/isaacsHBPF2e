@@ -1,0 +1,57 @@
+{
+    "img": "icons/magic/time/clock-stopwatch-white-blue.webp",
+    "name": "Effect: Shouted Warning",
+    "system": {
+        "description": {
+            "value": "<p>A Stargazer who has seen this round already shouted a warning: +2 circumstance bonus to your next roll this round.</p>"
+        },
+        "duration": {
+            "value": 1,
+            "unit": "rounds",
+            "expiry": "turn-start",
+            "sustained": false
+        },
+        "level": {
+            "value": 1
+        },
+        "publication": {
+            "license": "ORC",
+            "remaster": true,
+            "title": "Isaac's Homebrew: The Stargazer"
+        },
+        "rules": [
+            {
+                "key": "FlatModifier",
+                "slug": "shouted-warning",
+                "label": "Shouted Warning",
+                "selector": [
+                    "attack-roll",
+                    "saving-throw",
+                    "skill-check",
+                    "perception",
+                    "initiative"
+                ],
+                "type": "circumstance",
+                "value": 2,
+                "removeAfterRoll": true
+            }
+        ],
+        "start": {
+            "initiative": null,
+            "value": 0
+        },
+        "tokenIcon": {
+            "show": true
+        },
+        "traits": {
+            "rarity": "common",
+            "value": []
+        }
+    },
+    "flags": {
+        "isaacs-hb-pf2e": {
+            "shoutedWarning": true
+        }
+    },
+    "type": "effect"
+}
