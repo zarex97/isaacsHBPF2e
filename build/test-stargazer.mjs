@@ -7,6 +7,11 @@
  * is a pure edit of `context.substitutions`.
  */
 
+import { lib, useAutomation } from "./lib/automation.mjs";
+
+// The classes run against Isaac's PF2e Automation's own sources — the sibling checkout, or AUTOMATION_PATH.
+await useAutomation();
+
 const failures = [];
 let checks = 0;
 
@@ -34,7 +39,7 @@ function check(label, actual, expected) {
         },
     };
 
-    const { CheckPipeline } = await import("../scripts/automation/lib/check-pipeline.mjs");
+    const { CheckPipeline } = await import(lib("lib/check-pipeline.mjs"));
     const { CHECK: PRIORITY } = await import("../scripts/stage-priorities.mjs");
     const order = [];
     CheckPipeline.before("late", 30, (_check, context) => {
@@ -608,12 +613,14 @@ function check(label, actual, expected) {
             sightBlock(who("sg"), who("t", ["undetected"])) !== null, sightBlock(who("sg"), who("t", ["unnoticed"])) !== null, sightBlock(who("sg"), who("t"))],
         [true, true, null, true, true, true, null]);
 
-    const { mayPost } = await import("../scripts/automation/economy/frequency-guard.mjs");
+    const { mayPost } = await import(lib("economy/frequency-guard.mjs"));
     const f = (value) => ({ value, max: 1, per: "PT10M" });
+    // The rewinds are exempt only once this module registers them (`registerAreaExtensions`), which the soulbound
+    // suite checks; here the guard is passed the same exemption the registration gives it.
     check("#123 a use card at zero is refused unless pf2e just counted that use; spells, frequency-less items and the rewinds pass",
         [mayPost({ type: "feat", slug: "sentence-passed", frequency: f(1) }), mayPost({ type: "feat", slug: "sentence-passed", frequency: f(0) }),
             mayPost({ type: "feat", slug: "sentence-passed", frequency: f(0), justCounted: true }), mayPost({ type: "spell", slug: "x", frequency: f(0) }),
-            mayPost({ type: "action", slug: "x", frequency: null }), mayPost({ type: "feat", slug: "rewrite-the-ending", frequency: f(0) })],
+            mayPost({ type: "action", slug: "x", frequency: null }), mayPost({ type: "feat", slug: "rewrite-the-ending", frequency: f(0), exempt: new Set(["rewrite-the-ending"]) })],
         [true, false, true, true, true, true]);
 }
 

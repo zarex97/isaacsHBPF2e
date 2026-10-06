@@ -134,8 +134,9 @@ _Avoid_: trigger (docs-only synonym; the code says event).
 
 **Technique**:
 A focus spell belonging to either class — a Saint Technique carries the `cosmo` trait, a
-Soulbound one carries `reiatsu`. One concept, two traits; they share the cast pipeline,
-area targeting and the rider engine.
+Soulbound one carries `reiatsu`. One concept, two traits; they share the rider engine, and the
+cast pipeline and area targeting of Isaac's PF2e Automation, where a Technique is an *ability* this module
+puts in scope with its `techniques` scope predicate.
 
 **Outcome**:
 A degree of success — critical success, success, failure or critical failure. The filter a

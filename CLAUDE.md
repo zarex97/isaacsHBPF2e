@@ -30,9 +30,31 @@ to say what a change reaches, and to say plainly whether anything that worked ha
 ### Verifying a clause
 
 Driven live, in world `pf`, through the **Claude-in-Chrome extension** on the profile signed in as
-`zarexlibertad@gmail.com` — not a browser a script started, which has no extension in it. The rig, the
-traps and what a ✅ owes are in `Docs/tools/live-verification.md`; the reasoning behind the driver is
-`Docs/adr/0003-live-verification-runs-through-the-browser-extension.md`.
+`zarexlibertad@gmail.com` — not a browser a script started, which has no extension in it. The reasoning
+behind the driver is `Docs/adr/0003-live-verification-runs-through-the-browser-extension.md`. The rig, the
+traps and what a ✅ owes moved to the automation repo, which both modules share:
+
+@../isaacs-pf2e-automation/Docs/tools/live-verification.md
+
+@../isaacs-pf2e-automation/Docs/tools/foundry-traps.md
+
+## Sibling repo: Isaac's PF2e Automation
+
+`../isaacs-pf2e-automation` (`zarex97/isaacs-pf2e-automation`) — area targeting, the cast, damage, check,
+reroll, preparation and detection pipelines, and the frequency fixes, as a module of their own. This module
+requires it (`module.json`, `compatibility.minimum`) and builds every class on it
+(`Docs/adr/0005-generic-automation-lives-in-isaacs-pf2e-automation.md`).
+
+- **One door.** Nothing here imports from the automation or reads its API; everything goes through
+  `scripts/automation.mjs`, whose names are lazy facades over the published API. `build/test-riders.mjs`
+  fails on a second door, and on any `wrap()` in this repo: the automation owns every wrap, and the classes
+  register stages.
+- **This module starts on the automation's `init` hook**, not on `init`, so the API is always there.
+- **A new API starts in the automation.** Its contract is `Docs/api.md` there; release it, then raise
+  `compatibility.minimum` here and use it. CI tests these classes against that tag; locally the tests use
+  the sibling checkout (or `AUTOMATION_PATH`).
+
+@../isaacs-pf2e-automation/Docs/api.md
 
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
