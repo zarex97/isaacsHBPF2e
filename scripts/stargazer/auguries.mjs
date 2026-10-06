@@ -1,5 +1,7 @@
-import { CheckPipeline, PRIORITY } from "../lib/check-pipeline.mjs";
-import { DamageBus, PRIORITY as DAMAGE } from "../lib/damage-bus.mjs";
+import { CheckPipeline } from "../lib/check-pipeline.mjs";
+import { CHECK as PRIORITY } from "../stage-priorities.mjs";
+import { DamageBus } from "../lib/damage-bus.mjs";
+import { DAMAGE } from "../stage-priorities.mjs";
 import { Relay } from "../riders/relay.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 import { isStargazer, reactionsLeft, spendReaction } from "./threads.mjs";

@@ -11,42 +11,50 @@
  * is easy to get subtly wrong, and it is invisible in the JSON.
  */
 
-/**
- * What a lit sky is worth, in heightening steps.
- *
- * Every Ascendant Boon says "your Techniques heighten as though you were 4 levels higher", and every
- * Zenith says 8. A Technique heightens once per 2 character levels, so those are 2 and 4 steps — the same
- * numbers the `DamageDice` rules on each Technique are already labelled with. A Zenith emits
- * `sky:ascendant` as well as `sky:zenith`, so the richer sky has to be tested first or it reads as 2.
- */
-export const SKY_STEPS = { ascendant: 2, zenith: 4 };
+const stepProviders = [];
 
-export function skyStepsFromOptions(options) {
+/**
+ * Register a source of heightening the cast rank cannot express.
+ *
+ * "Your Techniques heighten as though you were 4 levels higher" has nowhere to go in a rank that is
+ * already pinned at 10, so it is added as steps on this side instead. A provider reads the caster's roll
+ * options and answers how many steps they are worth; the answers add up.
+ *
+ * @param {string} name
+ * @param {(options: Set<string>) => number} fn
+ */
+export function registerStepProvider(name, fn) {
+    if (typeof fn !== "function") throw new Error(`Isaac's Homebrew | step provider "${name}" is not a function.`);
+    if (stepProviders.some((entry) => entry.name === name)) {
+        throw new Error(`Isaac's Homebrew | heightening already has a step provider called "${name}".`);
+    }
+    stepProviders.push({ name, fn });
+}
+
+/** The bonus steps every registered provider grants for these roll options. */
+export function bonusStepsFrom(options) {
     const set = options instanceof Set ? options : new Set(options ?? []);
-    if (set.has("sky:zenith")) return SKY_STEPS.zenith;
-    if (set.has("sky:ascendant")) return SKY_STEPS.ascendant;
-    return 0;
+    let steps = 0;
+    for (const { fn } of stepProviders) steps += Math.max(0, Number(fn(set)) || 0);
+    return steps;
 }
 
 /**
  * The level a Technique's *named* thresholds are read at.
  *
  * "At 12th and 16th level, you may target one additional creature" is growth keyed to a character level
- * rather than to a step, and the Boons say "your Techniques heighten as though you were 4 levels higher"
- * without excluding it. So a lit sky moves the threshold too: a step is worth two levels, which makes an
- * Ascendant day four and a Zenith eight — the same arithmetic `skyStepsFromOptions` already encodes.
+ * rather than to a step, and "heighten as though you were 4 levels higher" does not exclude it. So bonus
+ * steps move the threshold too: a step is worth two levels.
  */
 export function effectiveLevel(actor) {
     const level = Number(actor?.level) || 0;
-    return level + skyStepsFromOptions(actor?.getRollOptions?.() ?? []) * 2;
+    return level + bonusStepsFrom(actor?.getRollOptions?.() ?? []) * 2;
 }
 
 /**
  * How many heightening steps a cast has taken. Never negative — a Technique cast at its base rank is 0.
  *
- * `bonusSteps` is growth the cast rank cannot express. The sky is the only source today: a Saint at 20th
- * is already casting at rank 10, the ceiling, so "as though you were 4 levels higher" has nowhere to go in
- * the rank and has to be added on this side instead.
+ * `bonusSteps` is growth the cast rank cannot express — see `registerStepProvider`.
  */
 export function stepsFor({ baseRank, castRank, interval = 1, bonusSteps = 0 }) {
     const step = Number(interval) || 1;

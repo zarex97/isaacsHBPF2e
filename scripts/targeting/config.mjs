@@ -1,7 +1,8 @@
-import { Astral } from "../astral.mjs";
+import { flagOf } from "../lib/flags.mjs";
 import { testPredicate } from "../lib/roll-options.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
-import { applyHeightening, applyThresholds, effectiveLevel, skyStepsFromOptions } from "./heightening.mjs";
+import { Extensions } from "./extensions.mjs";
+import { applyHeightening, applyThresholds, bonusStepsFrom, effectiveLevel } from "./heightening.mjs";
 
 /** The effect-area shapes pf2e knows how to build a Region from (`EFFECT_AREA_SHAPES`). */
 export const AREA_SHAPES = ["burst", "cone", "cube", "cylinder", "emanation", "line", "ring", "square"];
@@ -38,7 +39,7 @@ export function configFor(item, override = {}) {
     if (!item?.actor || !canvas?.ready) return null;
     if (!game.settings.get(MODULE_ID, "areaTargeting")) return null;
 
-    const flag = item.flags?.[MODULE_ID]?.[FLAG] ?? null;
+    const flag = flagOf(item, FLAG) ?? null;
     if (flag?.enabled === false) return null;
 
     // A synthetic area is opt-in by definition; a real one is opt-out.
@@ -63,22 +64,18 @@ export function configFor(item, override = {}) {
     // than clicking it.
     if (!hasArea && !flag?.maxTargets && !flag?.range) return null;
 
-    // The module ships homebrew content; it should not quietly take over every wizard's fireball unless the
-    // GM asks it to. An item carrying the flag is ours by definition and always aims — the setting governs
-    // the items that were never written with this in mind.
+    // It should not quietly take over every wizard's fireball unless the GM asks it to. An item carrying the
+    // flag was written for this and always aims; the setting governs the items that were never written
+    // with this in mind, and the narrower choice admits only what a registered scope predicate claims.
     const authored = !!flag;
-    if (!authored && game.settings.get(MODULE_ID, "areaTargetingScope") === "techniques" && !isTechnique(item)) {
+    if (!authored && game.settings.get(MODULE_ID, "areaTargetingScope") === "techniques" && !Extensions.inScope(item)) {
         return null;
     }
 
-    // A lit sky heightens the whole Technique, not just its dice.
-    //
-    // The Boons say "your Techniques heighten as though you were 4 levels higher" (8 on a Zenith), and that
-    // was implemented only as `DamageDice` rules on each Technique — so on an Ascendant day the damage grew
-    // and the wall, the burst and the range did not. pf2e cannot help here: it has already finished
-    // heightening by the time this runs, and at 20th the cast rank is pinned at 10 anyway, so there is no
-    // rank left to raise. The steps are therefore added on this side, to every number that grows.
-    const bonusSteps = skyStepsFromOptions(item.actor?.getRollOptions?.() ?? []);
+    // Heightening the cast rank cannot express — see `bonusStepsFrom`. pf2e has already finished
+    // heightening by the time this runs, and at 20th the cast rank is pinned at 10 anyway, so the steps are
+    // added on this side, to every number that grows.
+    const bonusSteps = bonusStepsFrom(item.actor?.getRollOptions?.() ?? []);
 
     // Growth per heightening step. The item arriving here is already the heightened variant — `variantFor`
     // loads it so the burst is the right size — so the cast rank is simply its rank.
@@ -157,28 +154,15 @@ export function feetOf(range) {
 }
 
 /**
- * A focus effect belonging to one of this module's classes.
- *
- * `cosmo` is the Saint's Technique trait and `reiatsu` the Soulbound's. Area targeting keys off this to
- * decide whether the "Techniques only" world setting covers a given cast, so a Soulbound
- * Technique with an area would otherwise fall back to manual targeting with no symptom but the silence.
- */
-export function isTechnique(item) {
-    if (item?.type !== "spell") return false;
-    const traits = item.system?.traits?.value ?? [];
-    return traits.includes("cosmo") || traits.includes("reiatsu");
-}
-
-/**
  * The caster's token, which a self-anchored area is built on and which every line of effect is drawn from.
  * Prefers the controlled token so a GM moving two copies of the same actor gets the one they are holding.
  *
- * A Saint who is projecting casts their *mental* Techniques from the astral body instead — "using its
- * position as the origin" is a range and a line of effect measured from somewhere else, and this is the one
+ * A registered origin resolver may answer first: a cast measured from somewhere other than the caster —
+ * a projected astral body, say — is a range and a line of effect measured from there, and this is the one
  * function that decides where both are measured from.
  */
 export function originTokenFor(actor, item = null) {
-    const projected = item ? Astral.originFor(actor, item) : null;
+    const projected = item ? Extensions.originFor(actor, item) : null;
     if (projected) return projected;
     const tokens = actor?.getActiveTokens?.(true, false) ?? [];
     return tokens.find((token) => token.controlled) ?? tokens[0] ?? null;

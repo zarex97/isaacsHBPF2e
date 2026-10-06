@@ -18,7 +18,7 @@ import {
     applyHeightening,
     applyThresholds,
     effectiveLevel,
-    skyStepsFromOptions,
+    bonusStepsFrom,
     stepsFor,
     thresholdsCrossed,
     valueAtLevel,
@@ -881,7 +881,7 @@ function strikeCount(rider, context, available) {
     const flag = item?.flags?.[MODULE_ID]?.areaTargeting;
     if (!flag?.maxTargets) return available;
 
-    const bonusSteps = skyStepsFromOptions(context.originActor?.getRollOptions?.() ?? []);
+    const bonusSteps = bonusStepsFrom(context.originActor?.getRollOptions?.() ?? []);
     const grown = applyHeightening(
         { maxTargets: flag.maxTargets },
         flag.heightening,
@@ -994,7 +994,7 @@ async function applyHeal(rider, context) {
     const steps = stepsFor({
         baseRank: source?.baseRank ?? source?.system?.level?.value,
         castRank: source?.rank,
-        bonusSteps: skyStepsFromOptions(context.originActor?.getRollOptions?.() ?? []),
+        bonusSteps: bonusStepsFrom(context.originActor?.getRollOptions?.() ?? []),
     });
     // A heal measured by what just happened rather than by a flat number — "redirect that damage to
     // yourself" gives the ally back exactly what landed on them, so the amount is the blow's.
@@ -1827,7 +1827,7 @@ export function riderSteps(rider, context) {
     const steps = stepsFor({
         baseRank: source?.baseRank ?? source?.system?.level?.value,
         castRank: source?.rank,
-        bonusSteps: skyStepsFromOptions(context.originActor?.getRollOptions?.() ?? []),
+        bonusSteps: bonusStepsFrom(context.originActor?.getRollOptions?.() ?? []),
     });
     const interval = Math.max(1, Number(rider.apply?.perStepInterval) || 1);
     return Math.floor(steps / interval);
@@ -2509,7 +2509,7 @@ function resolveFromOrigin(expression, context) {
         return stepsFor({
             baseRank: item.baseRank ?? item.system?.level?.value,
             castRank: item.rank,
-            bonusSteps: skyStepsFromOptions(originActor?.getRollOptions?.() ?? []),
+            bonusSteps: bonusStepsFrom(originActor?.getRollOptions?.() ?? []),
         });
     }
     // Another Technique's own current damage — what it would roll for itself right now, rank and sky
@@ -2527,7 +2527,7 @@ function resolveFromOrigin(expression, context) {
         const steps = stepsFor({
             baseRank: named.baseRank ?? named.system?.level?.value,
             castRank: named.rank,
-            bonusSteps: skyStepsFromOptions(originActor?.getRollOptions?.() ?? []),
+            bonusSteps: bonusStepsFrom(originActor?.getRollOptions?.() ?? []),
         });
         const scaled = scaleFormula(base.formula, 1 + steps);
         return bonus ? `${scaled} + ${bonus}` : scaled;

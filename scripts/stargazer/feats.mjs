@@ -1,4 +1,5 @@
-import { DamageBus, PRIORITY as DAMAGE } from "../lib/damage-bus.mjs";
+import { DamageBus } from "../lib/damage-bus.mjs";
+import { DAMAGE } from "../stage-priorities.mjs";
 import { Relay } from "../riders/relay.mjs";
 import { degreeOf } from "../lib/degree.mjs";
 import { relabel, setDieResult } from "../roll-rewrites/balance.mjs";

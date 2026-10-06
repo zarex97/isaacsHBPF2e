@@ -1,6 +1,14 @@
 const MODULE_ID = "isaacs-hb-pf2e";
 
 /**
+ * Where the charge count agreed at aiming time is left for `Charges.beforeCast`.
+ *
+ * The count is asked while the area is aimed — it is also how many areas go on the cursor — and spent in
+ * the cast pipeline a moment later. The options object is the thing both of them see, so it travels there.
+ */
+export const SPENDING = Symbol.for("isaacs-hb-pf2e.chargeSpending");
+
+/**
  * A charge pool: N of something, spent and regained on a schedule.
  *
  * Three Spirits want this and want it identically — Hyōrinmaru's three petal-flowers, Los Lobos' eight
@@ -94,6 +102,18 @@ export const Charges = {
             rejectClose: false,
         });
         return picked === null || picked === undefined ? 0 : Number(picked);
+    },
+
+    /**
+     * Area targeting's question, answered from the pool: "expend any number of wolves. **Each** wolf you
+     * expend … detonates in a 10-foot burst." One answer with two uses in it — how much the pool pays, and
+     * how many areas go on the cursor. A declared pool with nothing agreed refuses the cast.
+     */
+    async areaCount(cast, options) {
+        const spending = await this.countFor(cast);
+        if (this.declarationOn(cast) && spending <= 0) return false;
+        if (spending > 0 && options) options[SPENDING] = spending;
+        return spending;
     },
 
     /**

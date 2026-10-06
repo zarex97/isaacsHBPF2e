@@ -106,7 +106,7 @@ check("an explicit slug wins over the actor's class", classStatisticOf(saintActo
 check("with no slug given, the actor's own class answers", classStatisticOf(soulboundActor)?.dc?.value, 28);
 check("a class the actor does not have resolves to nothing", classStatisticOf(saintActor, "soulbound"), null);
 
-const { isTechnique } = await import("../scripts/targeting/config.mjs");
+const { isTechnique } = await import("../scripts/techniques.mjs");
 
 function spellItem(traits) {
     return { type: "spell", system: { traits: { value: traits } } };
@@ -121,6 +121,69 @@ check(
     ],
     [true, true, false, false],
 );
+
+/**
+ * The cast pipeline's stages and area targeting's registrations, in the order they run.
+ *
+ * Both used to be fixed sequences of calls by name, and the order is load-bearing: a sealed voice is
+ * refused before the area is aimed, the Soulbound's refusals come after aiming but before the spell's
+ * Frequency is spent, and a free cast pays last. Registered stages are sorted by priority, so a wrong
+ * number would reorder them silently — this pins the order to the sequence it replaced.
+ */
+{
+    const { CastPipeline } = await import("../scripts/cast-pipeline.mjs");
+    const { registerCastStages } = await import("../scripts/cast-stages.mjs");
+    CastPipeline.registerDefaults();
+    registerCastStages();
+    const order = CastPipeline.stages();
+    check(
+        "the cast stages run in the order the fixed sequence did",
+        order.before.map((stage) => stage.name),
+        [
+            "a sealed voice",
+            "area targeting",
+            "the release ladder",
+            "Severance",
+            "charge pools",
+            "spell frequency",
+            "free casts",
+        ],
+    );
+    check(
+        "and after the cast: Severance ends, the Strike is armed, the kidō opening is left",
+        order.after.map((stage) => stage.name),
+        ["Severance ends", "arming a Strike Technique", "a destruction kidō's opening"],
+    );
+
+    // The registrations import the classes' targeting code, and Lingering declares a Region behavior at
+    // load. Stubbed for this block only: everything after it runs without Foundry, as it always has.
+    const hadFoundry = "foundry" in globalThis;
+    const hadHooks = "Hooks" in globalThis;
+    globalThis.foundry ??= { data: { regionBehaviors: { RegionBehaviorType: class {} } } };
+    globalThis.Hooks ??= { on: () => {} };
+    const { registerAreaExtensions } = await import("../scripts/area-extensions.mjs");
+    const { AreaTargeting } = await import("../scripts/targeting/index.mjs");
+    registerAreaExtensions();
+    const registered = AreaTargeting.registered();
+    check(
+        "the duplicate and the astral body are refused before anything is asked",
+        registered.preAim.map((entry) => entry.name),
+        ["the Gemini duplicate", "the astral body"],
+    );
+    check(
+        "what a confirmed placement leaves behind, in the order it always ran",
+        registered.afterAim.map((entry) => entry.name),
+        ["the Crystal Wall", "lingering areas", "overlapping areas", "the death register"],
+    );
+    check(
+        "astral projection takes over an aimed placement and answers for its origin",
+        [registered.aimed.map((entry) => entry.name), registered.origins.map((entry) => entry.name)],
+        [["astral projection"], ["astral projection"]],
+    );
+    check("the Techniques scope and the charge count are registered", [registered.scopes, registered.areaCount], [["techniques"], true]);
+    if (!hadFoundry) delete globalThis.foundry;
+    if (!hadHooks) delete globalThis.Hooks;
+}
 
 /* ---------------------------------------------------------------------------------------------- */
 /*  The class item                                                                                  */
