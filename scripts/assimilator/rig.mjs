@@ -661,7 +661,7 @@ const INSTINCTS = [
                 await wait(600);
                 return (game.messages.contents.at(-1).flags.pf2e.modifiers ?? []).some((m) => m.slug === "cobalt-counteract-module" && m.enabled);
             };
-            const moduleRoll = await has(["isaacs-hb-pf2e:counteract"]);
+            const moduleRoll = await has(["isaacs-pf2e-automation:counteract"]);
             // pf2e's spell counteract rolls in the `counteract-check` domain: the modifier is there, and its predicate holds.
             const options = me.getRollOptions();
             const spellDomain = (me.synthetics.modifiers["counteract-check"] ?? []).map((f) => f({}))
@@ -1652,7 +1652,7 @@ const BOND_CHECKS = [
                 // An NPC has no class statistic: it counteracts with Perception, which is all this reading needs.
                 await resolveCounteract({ originUuid: game.actors.get(t.id).uuid, effectUuid: effect.uuid, itemUuid: null, statistic: "perception" });
                 await wait(800);
-                return game.messages.contents.slice(since).some((m) => (m.flags?.pf2e?.context?.options ?? []).includes("isaacs-hb-pf2e:counteract"));
+                return game.messages.contents.slice(since).some((m) => (m.flags?.pf2e?.context?.options ?? []).includes("isaacs-pf2e-automation:counteract"));
             };
             try {
                 const low = await rolled(9);
@@ -2578,7 +2578,7 @@ const SCENARIOS = [
         const ward = target().itemTypes.effect.find((x) => x.name === "ZZ Ward");
         const suppressed = !!ward?.flags?.["isaacs-hb-pf2e"]?.suppression;
         const card = game.messages.contents.slice(since).some((m) => m.flags?.["isaacs-hb-pf2e"]?.counteract);
-        const rolled = game.messages.contents.slice(since).some((m) => (m.flags?.pf2e?.context?.options ?? []).includes("isaacs-hb-pf2e:counteract"));
+        const rolled = game.messages.contents.slice(since).some((m) => (m.flags?.pf2e?.context?.options ?? []).includes("isaacs-pf2e-automation:counteract"));
         for (const e of target().itemTypes.effect.filter((x) => x.name === "ZZ Ward")) await e.delete();
         return [!!ward, rolled, card, suppressed || !ward];
     }, want: (v) => v[1] === true && v[2] === false && (v[0] === false || v[3] === true),

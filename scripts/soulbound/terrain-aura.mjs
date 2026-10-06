@@ -22,11 +22,11 @@
  *     "flags": { "isaacs-hb-pf2e": { "terrainAura": {
  *         "affects": "enemies", "cost": 2, "value": 20 } } }
  */
-import { shapeFromArea } from "../automation.mjs";
+import { AUTOMATION_ID, shapeFromArea } from "../automation.mjs";
 
 const MODULE_ID = "isaacs-hb-pf2e";
 const FLAG = "terrainAura";
-const TERRAIN_TYPE = `${MODULE_ID}.enemyMovementCost`;
+const TERRAIN_TYPE = `${AUTOMATION_ID}.enemyMovementCost`;
 
 export const TerrainAura = {
     registerHooks() {

@@ -8,8 +8,6 @@
  * this file loads, which is before any module's `init` — so call sites read as they did when the code lived
  * beside them.
  */
-import { buildRidersApi } from "./automation/riders-api.mjs";
-
 export const AUTOMATION_ID = "isaacs-pf2e-automation";
 
 let api = null;
@@ -88,20 +86,10 @@ export const registerFlagScope = (...args) => automation().flags.registerFlagSco
 /* ---- The rider engine ----------------------------------------------------------------------------- */
 
 /**
- * The rider engine, lingering areas, overlap and enemies-only terrain are on their way into the automation
- * too (phase 2). Until they move they are staged in `scripts/automation/`, and `ridersApi()` builds their
- * part of the contract from there; once they move it is read off the automation like everything above.
+ * The rider engine, lingering areas, overlap and enemies-only terrain moved into the automation in its
+ * 1.1.0. Their names stay grouped here, read off the same API as everything above.
  */
-let riders = null;
-
-export function ridersApi() {
-    return (riders ??= buildRidersApi());
-}
-
-/** For the offline tests. */
-export function setRidersApi(value) {
-    riders = value;
-}
+export const ridersApi = automation;
 
 export const Riders = facade((r) => r.riders, ridersApi);
 export const RiderExtensions = facade((r) => r.riderExtensions, ridersApi);

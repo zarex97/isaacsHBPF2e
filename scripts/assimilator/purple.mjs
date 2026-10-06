@@ -1,3 +1,4 @@
+import { AUTOMATION_ID } from "../automation.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 import { depthOf } from "./damage.mjs";
 import { classSlugOf, classStatisticOf } from "../lib/class-dc.mjs";
@@ -42,7 +43,7 @@ export const Purple = {
             Purple.sensed(message).catch((e) => console.error("Isaac's Homebrew | Quartz", e));
             Purple.failedAgainst(message).catch((e) => console.error("Isaac's Homebrew | Quartz", e));
         });
-        Hooks.on("isaacsHb.counteracted", (actor, { counteracted }) => {
+        Hooks.on(`${AUTOMATION_ID}.counteracted`, (actor, { counteracted }) => {
             if (isWriter() && counteracted) Purple.charge(actor).catch((e) => console.error("Isaac's Homebrew | Quartz", e));
         });
         // Platinum Depth 4: a slowed landing asks the GM whether it was magical.
