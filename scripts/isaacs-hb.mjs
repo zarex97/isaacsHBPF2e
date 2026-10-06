@@ -12,7 +12,7 @@ import { Citrine } from "./assimilator/citrine.mjs";
 import { Purple } from "./assimilator/purple.mjs";
 import { AssimilatorRig } from "./assimilator/rig.mjs";
 import { registerAreaExtensions } from "./area-extensions.mjs";
-import { AUTOMATION_ID, AreaTargeting, Banish, CastPipeline, CheckPipeline, DamageBus, Encasement, Escape, Lingering, Overlap, Recharge, Riders, SharedAllowance, StrikeTechnique, registerEnemyTerrain, registerRollBypass } from "./automation.mjs";
+import { AUTOMATION_ID, AreaTargeting, Banish, CastPipeline, CheckPipeline, DamageBus, Encasement, Lingering, Recharge, Riders } from "./automation.mjs";
 import { Migration } from "./migration.mjs";
 import { Astral } from "./astral.mjs";
 import { registerCastStages } from "./cast-stages.mjs";
@@ -92,25 +92,13 @@ Hooks.once(`${AUTOMATION_ID}.init`, () => {
     // pipeline — registrations, so the generic code never calls them by name.
     start("the classes' cast stages", () => registerCastStages());
     start("the classes' area targeting", () => registerAreaExtensions());
+    // The rider engine itself — its settings, relay, banishments, lingering areas, enemies-only terrain,
+    // armed Strikes, shared allowances, encasements and escapes — is the automation's and starts there.
     start("the classes' word in the rider engine", () => registerRiderExtensions());
-    start("overlapping areas' relay", () => Overlap.registerRelay());
-    start("the rider engine's settings", () => Riders.registerSettings());
-    start("the banishment register", () => {
-        Banish.registerSettings();
-        Banish.registerHooks();
-    });
     start("the death register", () => {
         Deaths.registerSettings();
         Deaths.registerHooks();
     });
-    start("enemies-only difficult terrain", () => registerEnemyTerrain());
-    start("lingering areas", () => {
-        Lingering.register();
-        Lingering.registerHooks();
-    });
-    // The marker a "make one Strike" Technique leaves for the Strike that follows it. Only the sweeps
-    // are hooks: arming is the cast pipeline's, spending is the rider engine's.
-    start("Strike Techniques", () => StrikeTechnique.registerHooks());
     start("astral projection", () => Astral.registerHooks());
     start("free casts' settings", () => FreeCast.registerSettings());
     start("Cosmo", () => Cosmo.registerHooks());
@@ -128,11 +116,7 @@ Hooks.once(`${AUTOMATION_ID}.init`, () => {
     start("terrain auras", () => TerrainAura.registerHooks());
     start("Om", () => Om.registerHooks());
     start("The Balance", () => Balance.registerHooks());
-    // A bonus every ally holds a copy of and only the first to use it gets — Sight of the Balance.
-    start("shared allowances", () => SharedAllowance.registerHooks());
     start("the Crystal Wall", () => CrystalWall.registerHooks());
-    start("encasements", () => Encasement.registerHooks());
-    start("escapes", () => Escape.registerHooks());
     start("the Libra Arms", () => registerLibraHooks());
     start("the spirit weapon", () => SpiritWeapon.registerHooks());
     // Seal the Art parks a release state rather than deleting it; these put it back.
@@ -142,7 +126,6 @@ Hooks.once(`${AUTOMATION_ID}.init`, () => {
     start("Rising Pressure", () => RisingPressure.registerHooks());
     start("the release ladder", () => Release.registerHooks());
     start("Severance", () => Severance.registerHooks());
-    start("a Severing Art's bypass on its own damage roll", () => registerRollBypass());
     start("Blut", () => Blut.registerHooks());
     start("charge pools", () => Charges.registerHooks());
     start("Refuse Death", () => RefuseDeath.registerHooks());
@@ -245,7 +228,6 @@ Hooks.once(`${AUTOMATION_ID}.init`, () => {
 Hooks.once("setup", () => {
     if (!game.modules.get(AUTOMATION_ID)?.active) return;
     start("the reiatsu pool", () => Reiatsu.install());
-    start("the rider engine", () => Riders.registerHooks());
     start("Strikes that ignore cover", () => Scattered.register());
     start("the Stargazer's armed Portent", () => Armed.register());
     start("Libra and Aries", () => TerrainRolls.registerHooks());
