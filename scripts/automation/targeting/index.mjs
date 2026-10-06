@@ -1,6 +1,6 @@
 import { flagOf } from "../lib/flags.mjs";
 import { targetingOptions, testPredicate } from "../lib/roll-options.mjs";
-import { MODULE_ID } from "../sky/signs.mjs";
+import { LIB_ID } from "../id.mjs";
 import { catchTokens } from "./catch.mjs";
 import { canRotate, configFor, describe, originTokenFor } from "./config.mjs";
 import { Extensions } from "./extensions.mjs";
@@ -15,7 +15,7 @@ import { REAIM, reviewTargets } from "./review.mjs";
  * boolean and is called from two places. The options object is already the thing the pipeline mutates
  * for `consume`, so the variant travels there too rather than widening the return type.
  */
-export const VARIANT = Symbol.for("isaacs-hb-pf2e.castVariant");
+export const VARIANT = Symbol.for(`${LIB_ID}.castVariant`);
 
 /**
  * Area targeting: the step that used to be "click eight tokens and hope you got them all".
@@ -41,7 +41,7 @@ export const AreaTargeting = {
     registered: Extensions.registered,
 
     registerSettings() {
-        game.settings.register(MODULE_ID, "areaTargeting", {
+        game.settings.register(LIB_ID, "areaTargeting", {
             name: "Place areas as Regions when casting",
             hint: "A Technique with an area puts that area on the board to be aimed, then targets whoever is "
                 + "inside it, instead of asking you to select targets by hand first.",
@@ -51,7 +51,7 @@ export const AreaTargeting = {
             default: true,
         });
 
-        game.settings.register(MODULE_ID, "areaTargetingScope", {
+        game.settings.register(LIB_ID, "areaTargetingScope", {
             name: "Area targeting applies to",
             hint: "Whether area targeting is used only for Techniques — the Saint's and the Soulbound's alike — "
                 + "or for every spell with "
@@ -66,7 +66,7 @@ export const AreaTargeting = {
             default: "techniques",
         });
 
-        game.settings.register(MODULE_ID, "enforceRange", {
+        game.settings.register(LIB_ID, "enforceRange", {
             name: "Enforce Technique range",
             hint: "Refuse a placement further from you than the Technique reaches. The module never checked "
                 + "this before, so it can be turned off — and a GM can always confirm past a rejection.",
@@ -76,7 +76,7 @@ export const AreaTargeting = {
             default: true,
         });
 
-        game.settings.register(MODULE_ID, "areaTargetingReview", {
+        game.settings.register(LIB_ID, "areaTargetingReview", {
             name: "Review targets before casting",
             hint: "Show the list of caught tokens for confirmation after you place the area. Turn this off to "
                 + "target everything the area caught and cast immediately.",
@@ -308,7 +308,7 @@ async function checkExistingTargets(config, originToken) {
             + `meet this Technique's requirement`,
         );
     }
-    if (config.range > 0 && game.settings.get(MODULE_ID, "enforceRange") && originToken) {
+    if (config.range > 0 && game.settings.get(LIB_ID, "enforceRange") && originToken) {
         const far = targets.filter((t) => (originToken.distanceTo?.(t) ?? 0) > config.range);
         if (far.length > 0) {
             problems.push(
@@ -337,7 +337,7 @@ async function checkExistingTargets(config, originToken) {
  */
 async function withinRange(regions, config, originToken) {
     if (!config.range || !originToken) return true;
-    if (!game.settings.get(MODULE_ID, "enforceRange")) return true;
+    if (!game.settings.get(LIB_ID, "enforceRange")) return true;
 
     let furthest = 0;
     for (const region of regions) {

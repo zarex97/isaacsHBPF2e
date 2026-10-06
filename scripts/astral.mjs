@@ -1,6 +1,6 @@
 import { conditionUuidOf } from "./riders/apply.mjs";
 import { MODULE_ID } from "./sky/signs.mjs";
-import { originOf } from "./targeting/place.mjs";
+import { originOf } from "./automation.mjs";
 
 export const FLAG = "astral";
 

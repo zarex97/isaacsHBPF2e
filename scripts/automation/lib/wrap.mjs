@@ -1,4 +1,4 @@
-import { MODULE_ID } from "../sky/signs.mjs";
+import { LIB_ID } from "../id.mjs";
 
 /**
  * One place in the module that knows how to wrap a system method.
@@ -53,7 +53,7 @@ export function wrap(path, wrapper, { feature = path, type = "MIXED", strategy =
     }
 
     if (strategy === "auto" && globalThis.libWrapper?.register) {
-        libWrapper.register(MODULE_ID, path, wrapper, type);
+        libWrapper.register(LIB_ID, path, wrapper, type);
     } else {
         const { owner, name } = resolved;
         const original = owner[name];

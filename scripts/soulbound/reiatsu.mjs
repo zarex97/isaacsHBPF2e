@@ -3,7 +3,7 @@ import { applyActionCosts } from "./action-cost.mjs";
 import { applyExtraDieSteps, applyTechniqueDieSteps } from "./die-steps.mjs";
 import { applyAttributeCaps } from "./attribute-caps.mjs";
 import { Severance, applyWaning } from "./severance.mjs";
-import { wrap } from "../lib/wrap.mjs";
+import { ActorPreparation } from "../automation.mjs";
 
 const MODULE_ID = "isaacs-hb-pf2e";
 const ENTRY_NAME = "Reiatsu";
@@ -182,79 +182,73 @@ export const Reiatsu = {
     },
 
     install() {
-        wrap(
-            "CONFIG.PF2E.Actor.documentClasses.character.prototype.prepareDerivedData",
-            function (wrapped, ...args) {
-                const result = wrapped(...args);
-                try {
-                    // Published for EVERY character, not only a Soulbound, and that is deliberate.
-                    // The first two kidō are chosen while the class item is still being created, so at
-                    // the moment their ChoiceSets run the actor has no class yet — gate on the class and
-                    // the option is absent, the `lte` compares against NaN, and the prompt opens with
-                    // **no choices at all**, which blocks character creation outright. The option says
-                    // something about the actor's level, not about their class, so computing it for
-                    // everyone costs a key and is correct at the only time it is hard to be correct.
-                    this.rollOptions.all[`soulbound:kido-rank:${Reiatsu.kidoRank(this.level)}`] = true;
+        // Once the character is prepared — see `ActorPreparation`: the one place a number pf2e derives can
+        // still be corrected without anything later overwriting it.
+        ActorPreparation.after("the reiatsu pool", 10, (actor) => {
+            try {
+                // Published for EVERY character, not only a Soulbound, and that is deliberate.
+                // The first two kidō are chosen while the class item is still being created, so at
+                // the moment their ChoiceSets run the actor has no class yet — gate on the class and
+                // the option is absent, the `lte` compares against NaN, and the prompt opens with
+                // **no choices at all**, which blocks character creation outright. The option says
+                // something about the actor's level, not about their class, so computing it for
+                // everyone costs a key and is correct at the only time it is hard to be correct.
+                actor.rollOptions.all[`soulbound:kido-rank:${Reiatsu.kidoRank(actor.level)}`] = true;
 
-                    // Later than `prepareSynthetics`, which is the whole point: pf2e assigns
-                    // `doomed.max = dying.max` after every rule element has run, so no ActiveEffectLike
-                    // can cap it. Driven by an item flag, so it costs nothing on an actor without one.
-                    applyAttributeCaps(this);
+                // Later than `prepareSynthetics`, which is the whole point: pf2e assigns
+                // `doomed.max = dying.max` after every rule element has run, so no ActiveEffectLike
+                // can cap it. Driven by an item flag, so it costs nothing on an actor without one.
+                applyAttributeCaps(actor);
 
-                    // The Stargazer's pool is set by level too — 1, 2 at Second Star, 3 with Conjunction —
-                    // and a derived count would be wrong both ways: 2 at 5th from two Auguries known, and
-                    // one more every morning the sky hands out an Augury of the Day (guide §4.1, §4.9).
-                    // Same wrapper, because `wrap()` allows one on `prepareDerivedData`.
-                    //
-                    // The value is re-read from the source, not from `focus.value`: pf2e has already clamped
-                    // that to its own derived maximum, which is 0 for a Stargazer who knows no Auguries yet.
-                    // Driven: a stored 1 read back as 0 on a pool of 1 until this read the source.
-                    if (classSlugOf(this) === "stargazer") {
-                        const focus = this.system?.resources?.focus;
-                        if (focus) {
-                            focus.max = focus.cap ?? focus.max;
-                            const stored = this._source?.system?.resources?.focus?.value;
-                            focus.value = Math.max(0, Math.min(stored ?? focus.value ?? 0, focus.max));
-                        }
+                // The Stargazer's pool is set by level too — 1, 2 at Second Star, 3 with Conjunction —
+                // and a derived count would be wrong both ways: 2 at 5th from two Auguries known, and
+                // one more every morning the sky hands out an Augury of the Day (guide §4.1, §4.9).
+                // Same stage, so the order of the corrections stays written down in one place.
+                //
+                // The value is re-read from the source, not from `focus.value`: pf2e has already clamped
+                // that to its own derived maximum, which is 0 for a Stargazer who knows no Auguries yet.
+                // Driven: a stored 1 read back as 0 on a pool of 1 until this read the source.
+                if (classSlugOf(actor) === "stargazer") {
+                    const focus = actor.system?.resources?.focus;
+                    if (focus) {
+                        focus.max = focus.cap ?? focus.max;
+                        const stored = actor._source?.system?.resources?.focus?.value;
+                        focus.value = Math.max(0, Math.min(stored ?? focus.value ?? 0, focus.max));
                     }
-
-                    if (classSlugOf(this) === "soulbound") {
-                        const focus = this.system?.resources?.focus;
-                        if (focus) {
-                            focus.max = focus.cap ?? focus.max;
-                            // Re-read from the source, as the Stargazer's pin does: pf2e has already clamped
-                            // `focus.value` to its own maximum — the count of costed kidō — so a Soulbound with
-                            // three points and two costed kidō read 2 and could never spend the third (#114).
-                            const stored = this._source?.system?.resources?.focus?.value;
-                            focus.value = Math.max(0, Math.min(stored ?? focus.value ?? 0, focus.max));
-                        }
-                        // pf2e has no alteration for an action cost, and two abilities need one. This is
-                        // the one place a second wrapper on `prepareDerivedData` would have gone, and
-                        // `wrap()` refuses two on the same target by design — so it lives here.
-                        applyActionCosts(this);
-                        // pf2e's `damage-dice-faces` upgrade latches after one step, on purpose, so
-                        // "two steps instead of one" cannot be written as a rule element at all.
-                        applyExtraDieSteps(this);
-                        // And the same step on a Technique, which pf2e's alteration cannot reach at all:
-                        // `damage-dice-faces` accepts `itemType: "weapon"` and nothing else.
-                        applyTechniqueDieSteps(this);
-                        // The Severing Art's dice decay by round, and the card should say so before a
-                        // player decides whether to spend their one shot — see `applyWaning`.
-                        const round = Severance.round(this);
-                        if (round > 0) applyWaning(this, round);
-                    }
-                } catch (error) {
-                    console.error("Isaac's Homebrew | the reiatsu pool could not be sized", error);
                 }
-                return result;
-            },
-            { feature: "the reiatsu pool" },
-        );
+
+                if (classSlugOf(actor) === "soulbound") {
+                    const focus = actor.system?.resources?.focus;
+                    if (focus) {
+                        focus.max = focus.cap ?? focus.max;
+                        // Re-read from the source, as the Stargazer's pin does: pf2e has already clamped
+                        // `focus.value` to its own maximum — the count of costed kidō — so a Soulbound with
+                        // three points and two costed kidō read 2 and could never spend the third (#114).
+                        const stored = actor._source?.system?.resources?.focus?.value;
+                        focus.value = Math.max(0, Math.min(stored ?? focus.value ?? 0, focus.max));
+                    }
+                    // pf2e has no alteration for an action cost, and two abilities need one.
+                    applyActionCosts(actor);
+                    // pf2e's `damage-dice-faces` upgrade latches after one step, on purpose, so
+                    // "two steps instead of one" cannot be written as a rule element at all.
+                    applyExtraDieSteps(actor);
+                    // And the same step on a Technique, which pf2e's alteration cannot reach at all:
+                    // `damage-dice-faces` accepts `itemType: "weapon"` and nothing else.
+                    applyTechniqueDieSteps(actor);
+                    // The Severing Art's dice decay by round, and the card should say so before a
+                    // player decides whether to spend their one shot — see `applyWaning`.
+                    const round = Severance.round(actor);
+                    if (round > 0) applyWaning(actor, round);
+                }
+            } catch (error) {
+                console.error("Isaac's Homebrew | the reiatsu pool could not be sized", error);
+            }
+        });
 
         this.untraditionEntry();
 
-        // Actors are prepared during `setupGame`, which runs BEFORE the `setup` hook this wrap installs
-        // from — so every Soulbound in the world loads with the pool pf2e derived and only picks up the
+        // Actors are prepared during `setupGame`, which runs BEFORE the `setup` hook the preparation wrap
+        // installs from — so every Soulbound in the world loads with the pool pf2e derived and only picks up the
         // correction the next time something re-prepares it. One sweep at `ready` closes that window;
         // without it the pool reads correctly all session except immediately after a reload, which is the
         // most confusing possible version of the bug.

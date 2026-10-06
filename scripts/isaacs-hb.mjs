@@ -12,20 +12,15 @@ import { Citrine } from "./assimilator/citrine.mjs";
 import { Purple } from "./assimilator/purple.mjs";
 import { AssimilatorRig } from "./assimilator/rig.mjs";
 import { registerAreaExtensions } from "./area-extensions.mjs";
+import { AreaTargeting, CastPipeline, CheckPipeline, DamageBus, Recharge } from "./automation.mjs";
+import { INIT as AUTOMATION_INIT, SETUP as AUTOMATION_SETUP } from "./automation/main.mjs";
 import { Astral } from "./astral.mjs";
-import { CastPipeline } from "./cast-pipeline.mjs";
 import { registerCastStages } from "./cast-stages.mjs";
 import { Cosmo } from "./cosmo.mjs";
 import { Deaths } from "./deaths.mjs";
-import { CheckPipeline } from "./lib/check-pipeline.mjs";
-import { DamageBus } from "./lib/damage-bus.mjs";
 import { DAMAGE as PRIORITY } from "./stage-priorities.mjs";
-import { EncounterDamage } from "./lib/encounter-damage.mjs";
 import { Duplicate } from "./economy/duplicate.mjs";
 import { FreeCast } from "./economy/free-cast.mjs";
-import { Recharge } from "./economy/recharge.mjs";
-import { SpellFrequency } from "./economy/spell-frequency.mjs";
-import { FrequencyGuard } from "./economy/frequency-guard.mjs";
 import { TerrainAura } from "./soulbound/terrain-aura.mjs";
 import { Balance } from "./roll-rewrites/balance.mjs";
 import { SharedAllowance } from "./riders/shared-allowance.mjs";
@@ -64,7 +59,6 @@ import { TerrainRolls } from "./sky/terrain-rolls.mjs";
 import { Suppression } from "./soulbound/suppression.mjs";
 import { SpiritWeapon } from "./soulbound/weapon.mjs";
 import { Wound } from "./soulbound/wound.mjs";
-import { AreaTargeting } from "./targeting/index.mjs";
 import { registerRollBypass } from "./riders/bypass.mjs";
 import { registerEnemyTerrain } from "./targeting/enemy-terrain.mjs";
 import { Lingering } from "./targeting/lingering.mjs";
@@ -88,10 +82,11 @@ function start(feature, fn) {
 
 Hooks.once("init", () => {
     start("the sky tracker's settings", () => SkyTracker.registerSettings());
-    start("area targeting's settings", () => AreaTargeting.registerSettings());
+    // The automation's own work — settings, its default cast stages, the economy's hooks. Run from here
+    // only until the automation has an entry point of its own.
+    for (const [feature, fn] of AUTOMATION_INIT) start(feature, fn);
     // The classes' word in area targeting, heightening and recharging, and their stages in the cast
     // pipeline — registrations, so the generic code never calls them by name.
-    start("the cast pipeline's own stages", () => CastPipeline.registerDefaults());
     start("the classes' cast stages", () => registerCastStages());
     start("the classes' area targeting", () => registerAreaExtensions());
     start("the rider engine's settings", () => Riders.registerSettings());
@@ -125,9 +120,6 @@ Hooks.once("init", () => {
         Rewind.registerHooks();
     });
     start("the Gemini duplicate", () => Duplicate.registerHooks());
-    start("recharging", () => Recharge.registerHooks());
-    start("spell frequency", () => SpellFrequency.registerHooks());
-    start("feat and action frequency", () => FrequencyGuard.registerHooks());
     start("terrain auras", () => TerrainAura.registerHooks());
     start("Om", () => Om.registerHooks());
     start("The Balance", () => Balance.registerHooks());
@@ -168,7 +160,6 @@ Hooks.once("init", () => {
     start("the Shove push", () => Shove.registerHooks());
     start("Citrine's fortune", () => Citrine.registerHooks());
     start("Purple's scripted Mutations", () => Purple.registerHooks());
-    start("damaged this encounter", () => EncounterDamage.registerHooks());
     start("Regeneración's suppression", () => DamageBus.after("Regeneración's suppression", PRIORITY.regeneracion,
         (actor, params) => Regeneracion.onDamage(actor, params)));
     start("the sky tracker window", () => SkyTrackerApp.registerHooks());
@@ -244,13 +235,11 @@ Hooks.once("init", () => {
     };
 });
 
-// After `init`, so the system's document classes exist to be wrapped: the cast pipeline wraps the
-// spellcasting entry's `cast` and an activity's `toMessage`, the damage bus wraps `applyDamage`, and the
-// check pipeline wraps `Check.roll`.
+// After `init`, so the system's document classes exist to be wrapped. The automation installs every wrap —
+// cast, toMessage, applyDamage, Check.roll, character preparation, detection modes, rerolls — and the
+// classes below only register stages on them.
 Hooks.once("setup", () => {
-    start("the damage bus", () => DamageBus.install());
-    start("the check pipeline", () => CheckPipeline.install());
-    start("the cast pipeline", () => CastPipeline.install());
+    for (const [feature, fn] of AUTOMATION_SETUP) start(feature, fn);
     start("the reiatsu pool", () => Reiatsu.install());
     start("the rider engine", () => Riders.registerHooks());
     start("Strikes that ignore cover", () => Scattered.register());

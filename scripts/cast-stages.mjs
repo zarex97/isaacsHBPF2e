@@ -1,4 +1,4 @@
-import { CastPipeline } from "./cast-pipeline.mjs";
+import { CastPipeline } from "./automation.mjs";
 import { FreeCast } from "./economy/free-cast.mjs";
 import { StrikeTechnique } from "./riders/strike-technique.mjs";
 import { MODULE_ID } from "./sky/signs.mjs";

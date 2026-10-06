@@ -1,6 +1,6 @@
 import { Relay } from "../riders/relay.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
-import { catchTokens } from "./catch.mjs";
+import { catchTokens } from "../automation.mjs";
 
 export const FLAG = "overlap";
 

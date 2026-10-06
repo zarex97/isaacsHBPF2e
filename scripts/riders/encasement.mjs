@@ -1,4 +1,4 @@
-import { bonusStepsFrom, stepsFor } from "../targeting/heightening.mjs";
+import { bonusStepsFrom, stepsFor } from "../automation.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 import { escapeDcFor } from "./escape.mjs";
 

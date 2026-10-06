@@ -1,4 +1,4 @@
-import { shapeFromArea } from "../targeting/place.mjs";
+import { shapeFromArea } from "../automation.mjs";
 import { Reiatsu } from "./reiatsu.mjs";
 
 const MODULE_ID = "isaacs-hb-pf2e";

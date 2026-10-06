@@ -131,7 +131,7 @@ check(
  * number would reorder them silently — this pins the order to the sequence it replaced.
  */
 {
-    const { CastPipeline } = await import("../scripts/cast-pipeline.mjs");
+    const { CastPipeline } = await import("../scripts/automation/cast-pipeline.mjs");
     const { registerCastStages } = await import("../scripts/cast-stages.mjs");
     CastPipeline.registerDefaults();
     registerCastStages();
@@ -162,7 +162,7 @@ check(
     globalThis.foundry ??= { data: { regionBehaviors: { RegionBehaviorType: class {} } } };
     globalThis.Hooks ??= { on: () => {} };
     const { registerAreaExtensions } = await import("../scripts/area-extensions.mjs");
-    const { AreaTargeting } = await import("../scripts/targeting/index.mjs");
+    const { AreaTargeting } = await import("../scripts/automation/targeting/index.mjs");
     registerAreaExtensions();
     const registered = AreaTargeting.registered();
     check(

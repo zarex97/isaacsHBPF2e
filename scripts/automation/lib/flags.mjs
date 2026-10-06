@@ -1,4 +1,4 @@
-import { MODULE_ID } from "../sky/signs.mjs";
+import { LIB_ID } from "../id.mjs";
 
 /**
  * Which modules' flags carry authored config.
@@ -8,7 +8,7 @@ import { MODULE_ID } from "../sky/signs.mjs";
  * content keeps authoring where it always has — including the copies already sitting on characters, which
  * no rewrite of the compendium would reach.
  */
-const scopes = [MODULE_ID];
+const scopes = [LIB_ID];
 
 export function registerFlagScope(moduleId) {
     if (typeof moduleId !== "string" || !moduleId) throw new Error("Isaac's Homebrew | a flag scope needs a module id.");
