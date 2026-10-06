@@ -1,5 +1,5 @@
 import { classSlugOf, classStatisticOf, resolveDC } from "../lib/class-dc.mjs";
-import { describeActor, describeDamage, riderOptions, testPredicate } from "../lib/roll-options.mjs";
+import { applyHeightening, applyThresholds, bonusStepsFrom, catchTokens, describeActor, describeDamage, effectiveLevel, riderOptions, shapeFromArea, stepsFor, testPredicate, thresholdsCrossed, valueAtLevel } from "../automation.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 
 /**
@@ -12,17 +12,6 @@ import { MODULE_ID } from "../sky/signs.mjs";
 function soulboundSeveranceDice(actor) {
     return game.modules.get(MODULE_ID)?.api?.severance?.dice?.(actor) ?? 0;
 }
-import { catchTokens } from "../targeting/catch.mjs";
-import { shapeFromArea } from "../targeting/place.mjs";
-import {
-    applyHeightening,
-    applyThresholds,
-    effectiveLevel,
-    bonusStepsFrom,
-    stepsFor,
-    thresholdsCrossed,
-    valueAtLevel,
-} from "../targeting/heightening.mjs";
 import { Banish, durationSeconds } from "./banish.mjs";
 import { OUTCOME_LABELS, collectRiders, itemFor, riderAt } from "./data.mjs";
 import { Encasement } from "./encasement.mjs";

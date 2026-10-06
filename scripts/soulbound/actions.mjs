@@ -258,7 +258,7 @@ async function switchMode(actor, item) {
  * every other aimed area and can be cancelled without costing the Sustain.
  */
 async function placeAnchor(actor, declared) {
-    const { placeArea, discardArea } = await import("../targeting/place.mjs");
+    const { placeArea, discardArea } = await import("../automation.mjs");
     const originToken = actor.getActiveTokens(true, true).at(0);
     if (!originToken?.object) {
         ui.notifications.warn(`${actor.name} needs a token on the scene to send the blades from.`);

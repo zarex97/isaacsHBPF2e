@@ -51,7 +51,7 @@ function evaluate(statement, options) {
 
 globalThis.game = { pf2e: { Predicate: StubPredicate } };
 
-const { riderOptions } = await import("../scripts/lib/roll-options.mjs");
+const { riderOptions } = await import("../scripts/automation/lib/roll-options.mjs");
 const { selectRiders } = await import("../scripts/riders/select.mjs");
 const { collectRiders, isAbilityUse, riderAt } = await import("../scripts/riders/data.mjs");
 const { basicLadder } = await import("../scripts/riders/apply.mjs");
@@ -60,14 +60,14 @@ const { auraCatches, effectForAura } = await import("../scripts/riders/sources.m
 const { mergeBypass, resistanceReduction, ignoresHardness, ignoredImmunities, selectEntries } = await import(
     "../scripts/riders/bypass.mjs"
 );
-const { degreeOf } = await import("../scripts/lib/degree.mjs");
+const { degreeOf } = await import("../scripts/automation/lib/degree.mjs");
 const { applyHeightening, applyThresholds, stepsFor, thresholdsCrossed, valueAtLevel } = await import(
-    "../scripts/targeting/heightening.mjs"
+    "../scripts/automation/targeting/heightening.mjs"
 );
-const { intervalSeconds } = await import("../scripts/economy/recharge.mjs");
-const { aimAngle } = await import("../scripts/targeting/place.mjs");
-const { canRotate } = await import("../scripts/targeting/config.mjs");
-const { REAIM } = await import("../scripts/targeting/review.mjs");
+const { intervalSeconds } = await import("../scripts/automation/economy/recharge.mjs");
+const { aimAngle } = await import("../scripts/automation/targeting/place.mjs");
+const { canRotate } = await import("../scripts/automation/targeting/config.mjs");
+const { REAIM } = await import("../scripts/automation/targeting/review.mjs");
 
 /* -------------------------------------------------------------------------------------------- */
 /*  A world small enough to reason about                                                         */
@@ -1208,6 +1208,42 @@ for (const call of wrapCalls) {
 }
 
 check("no method is wrapped twice", duplicates, []);
+check(
+    "every wrap belongs to the automation, the classes only register stages on it",
+    wrapCalls.filter((call) => !call.file.split(path.sep).join("/").startsWith("scripts/automation/")).map((call) => call.file),
+    [],
+);
+
+/**
+ * The automation's boundary.
+ *
+ * `scripts/automation/` is on its way to being a module of its own, which only works if it already behaves
+ * like one: it imports nothing from the classes, and the classes reach it through `scripts/automation.mjs`
+ * alone. The entry point is the one other importer, and only of the automation's own start-up steps
+ * (`main.mjs`), which it runs until the automation has an entry point of its own.
+ */
+{
+    const importsOf = (file) => [...fs.readFileSync(file, "utf8").matchAll(/(?:from|import\()\s*["']([^"']+\.mjs)["']/g)]
+        .map((match) => path.resolve(path.dirname(file), match[1]));
+    const automationDir = path.join(ROOT, "scripts", "automation") + path.sep;
+    const escapes = [];
+    const trespassers = [];
+    for (const file of mjsUnder(path.join(ROOT, "scripts"))) {
+        const rel = path.relative(ROOT, file).split(path.sep).join("/");
+        const inside = file.startsWith(automationDir);
+        for (const target of importsOf(file)) {
+            const intoAutomation = target.startsWith(automationDir);
+            if (inside && !intoAutomation) escapes.push(`${rel} → ${path.relative(ROOT, target)}`);
+            if (!inside && intoAutomation) {
+                const door = rel === "scripts/automation.mjs";
+                const entry = rel === "scripts/isaacs-hb.mjs" && target === path.join(automationDir, "main.mjs");
+                if (!door && !entry) trespassers.push(`${rel} → ${path.relative(ROOT, target)}`);
+            }
+        }
+    }
+    check("the automation imports nothing from the classes", escapes, []);
+    check("the classes reach the automation only through scripts/automation.mjs", trespassers, []);
+}
 check("every wrap the module needs is still there", [...claimedBy.keys()].sort(), [
     "CONFIG.PF2E.Actor.documentClasses.character.prototype.applyDamage",
     // The Soulbound's pool is its ceiling, not the count of focus effects it knows. pf2e derives the
@@ -1252,7 +1288,7 @@ class WrapSub extends WrapBase {
 class WrapSibling extends WrapBase {}
 
 globalThis.__wrapProbe = { classes: { sub: WrapSub, sibling: WrapSibling } };
-const { wrap: wrapMethod } = await import("../scripts/lib/wrap.mjs");
+const { wrap: wrapMethod } = await import("../scripts/automation/lib/wrap.mjs");
 wrapMethod("__wrapProbe.classes.sub.prototype.hit", function (wrapped, ...args) {
     return `wrapped:${wrapped(...args)}`;
 }, { feature: "the prototype-walk test", strategy: "prototype" });
@@ -1546,7 +1582,7 @@ check("a condition with no address at all resolves to null", conditionUuidOf({ n
  * `item:cast:actions:N`, confirmed against a running pf2e 8.3.0. A predicate naming an option nobody emits
  * fails silently — the boon simply never pays — so the shape is pinned here against the shipped content.
  */
-const { testPredicate } = await import("../scripts/lib/roll-options.mjs");
+const { testPredicate } = await import("../scripts/automation/lib/roll-options.mjs");
 
 /** Every Technique, as the option set pf2e would build for it. */
 function techniqueCosts() {
@@ -1603,7 +1639,7 @@ globalThis.canvas = { ready: true };
 globalThis.game.settings = {
     get: (_module, key) => (key === "areaTargetingScope" ? "techniques" : true),
 };
-const { configFor: realConfigFor } = await import("../scripts/targeting/config.mjs");
+const { configFor: realConfigFor } = await import("../scripts/automation/targeting/config.mjs");
 
 const aimed = [];
 (function walkContent(at) {
@@ -1639,7 +1675,7 @@ check("and there are enough of them for that to mean something", aimed.length > 
 // Range came only from the flag, and no area Technique in the module sets it there — so "a 60-foot burst
 // within 120 feet" placed the burst and never checked the 120 feet, on any Cloth. It now falls back to the
 // spell's own `system.range`, which every one of them does state.
-const { feetOf } = await import("../scripts/targeting/config.mjs");
+const { feetOf } = await import("../scripts/automation/targeting/config.mjs");
 check("a stated range parses to a number", [feetOf("120 feet"), feetOf("60 feet")], [120, 60]);
 
 // `steps` is a fact about the cast, not about the flag. It used to be reported as zero whenever a

@@ -1,5 +1,5 @@
 import { flagOf } from "../lib/flags.mjs";
-import { MODULE_ID } from "../sky/signs.mjs";
+import { LIB_ID } from "../id.mjs";
 
 export const FLAG = "recharge";
 
@@ -36,9 +36,9 @@ export const Recharge = {
         if (!intervalSeconds(item.system?.frequency?.per)) return;
 
         if (value >= (item.system.frequency.max ?? 0)) {
-            await item.unsetFlag(MODULE_ID, `${FLAG}.spentAt`);
+            await item.unsetFlag(LIB_ID, `${FLAG}.spentAt`);
         } else {
-            await item.setFlag(MODULE_ID, `${FLAG}.spentAt`, game.time.worldTime);
+            await item.setFlag(LIB_ID, `${FLAG}.spentAt`, game.time.worldTime);
         }
     },
 
@@ -55,9 +55,9 @@ export const Recharge = {
 
                 // No stamp means the allowance was spent before this module was watching. Start the clock
                 // now rather than refilling immediately, so a fresh world does not hand back every use.
-                const spentAt = item.flags?.[MODULE_ID]?.[FLAG]?.spentAt;
+                const spentAt = item.flags?.[LIB_ID]?.[FLAG]?.spentAt;
                 if (typeof spentAt !== "number") {
-                    await item.setFlag(MODULE_ID, `${FLAG}.spentAt`, now);
+                    await item.setFlag(LIB_ID, `${FLAG}.spentAt`, now);
                     continue;
                 }
                 if (now - spentAt < seconds) continue;
@@ -65,7 +65,7 @@ export const Recharge = {
                 updates.push({
                     _id: item.id,
                     "system.frequency.value": frequency.max,
-                    [`flags.${MODULE_ID}.${FLAG}.-=spentAt`]: null,
+                    [`flags.${LIB_ID}.${FLAG}.-=spentAt`]: null,
                 });
             }
             if (updates.length > 0) await actor.updateEmbeddedDocuments("Item", updates);

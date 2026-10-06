@@ -34,7 +34,7 @@ function check(label, actual, expected) {
         },
     };
 
-    const { CheckPipeline } = await import("../scripts/lib/check-pipeline.mjs");
+    const { CheckPipeline } = await import("../scripts/automation/lib/check-pipeline.mjs");
     const { CHECK: PRIORITY } = await import("../scripts/stage-priorities.mjs");
     const order = [];
     CheckPipeline.before("late", 30, (_check, context) => {
@@ -608,7 +608,7 @@ function check(label, actual, expected) {
             sightBlock(who("sg"), who("t", ["undetected"])) !== null, sightBlock(who("sg"), who("t", ["unnoticed"])) !== null, sightBlock(who("sg"), who("t"))],
         [true, true, null, true, true, true, null]);
 
-    const { mayPost } = await import("../scripts/economy/frequency-guard.mjs");
+    const { mayPost } = await import("../scripts/automation/economy/frequency-guard.mjs");
     const f = (value) => ({ value, max: 1, per: "PT10M" });
     check("#123 a use card at zero is refused unless pf2e just counted that use; spells, frequency-less items and the rewinds pass",
         [mayPost({ type: "feat", slug: "sentence-passed", frequency: f(1) }), mayPost({ type: "feat", slug: "sentence-passed", frequency: f(0) }),

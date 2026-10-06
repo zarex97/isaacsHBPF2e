@@ -1,4 +1,4 @@
-import { MODULE_ID } from "../sky/signs.mjs";
+import { LIB_ID } from "../id.mjs";
 import { FLAG } from "./config.mjs";
 
 const TOOLBELT_ID = "pf2e-toolbelt";
@@ -85,7 +85,7 @@ function regionData(config, shape) {
             // if this ever does get saved, `targetHelper.skip` is its documented third-party opt-out and
             // stops it asking the same question a second time.
             [TOOLBELT_ID]: { targetHelper: { skip: true } },
-            [MODULE_ID]: { [FLAG]: { transient: true } },
+            [LIB_ID]: { [FLAG]: { transient: true } },
             pf2e: {
                 areaShape: config.area.type,
                 origin: {
@@ -177,7 +177,7 @@ export function aimAngle(from, to) {
 export async function discardArea(regions) {
     for (const region of [regions].flat().filter((r) => r)) {
         if (!region.id || !region.parent?.regions?.has(region.id)) continue;
-        if (region.flags?.[MODULE_ID]?.[FLAG]?.transient !== true) continue;
+        if (region.flags?.[LIB_ID]?.[FLAG]?.transient !== true) continue;
         await region.delete();
     }
 }

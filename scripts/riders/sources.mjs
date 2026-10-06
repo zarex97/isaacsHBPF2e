@@ -1,5 +1,4 @@
-import { describeActor, describeDamage } from "../lib/roll-options.mjs";
-import { DamageBus } from "../lib/damage-bus.mjs";
+import { DamageBus, describeActor, describeDamage } from "../automation.mjs";
 import { DAMAGE as PRIORITY } from "../stage-priorities.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 import {

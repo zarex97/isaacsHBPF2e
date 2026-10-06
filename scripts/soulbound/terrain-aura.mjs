@@ -22,7 +22,7 @@
  *     "flags": { "isaacs-hb-pf2e": { "terrainAura": {
  *         "affects": "enemies", "cost": 2, "value": 20 } } }
  */
-import { shapeFromArea } from "../targeting/place.mjs";
+import { shapeFromArea } from "../automation.mjs";
 
 const MODULE_ID = "isaacs-hb-pf2e";
 const FLAG = "terrainAura";

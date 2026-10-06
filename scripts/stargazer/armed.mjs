@@ -1,4 +1,4 @@
-import { CheckPipeline } from "../lib/check-pipeline.mjs";
+import { CheckPipeline } from "../automation.mjs";
 import { CHECK as PRIORITY } from "../stage-priorities.mjs";
 
 /**

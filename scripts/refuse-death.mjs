@@ -1,4 +1,4 @@
-import { testPredicate } from "./lib/roll-options.mjs";
+import { testPredicate } from "./automation.mjs";
 import { Release } from "./soulbound/release.mjs";
 
 const MODULE_ID = "isaacs-hb-pf2e";
