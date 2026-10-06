@@ -1,3 +1,5 @@
+import { DamageBus } from "../automation.mjs";
+import { DAMAGE } from "../stage-priorities.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 
 /**
@@ -193,6 +195,12 @@ export async function restoreShields(actor) {
 }
 
 export function registerHooks() {
+    // Libra's crossed blades halve what any healing gives back, and there is no modifier selector that
+    // multiplies — so the correction is made from the two readings the damage bus takes.
+    DamageBus.after("the Crossing's halved healing", DAMAGE.crossing, async (actor, _params, before) => {
+        if (game.user.isGM) await halveHealing(actor, before);
+    });
+
     Hooks.on("updateActor", async (actor, changed) => {
         if (!game.user.isGM) return;
         if (changed?.system?.details?.level?.value === undefined) return;
