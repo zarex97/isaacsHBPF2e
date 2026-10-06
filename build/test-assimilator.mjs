@@ -208,7 +208,8 @@ check("the same Substrate twice is refused", errorsFor({ substrates: [ruby(), ru
     globalThis.CONFIG = { PF2E: { Actor: { documentClasses: { character: Actor } } } };
     globalThis.game = { user: { isGM: true } };
 
-    const { DamageBus, PRIORITY } = await import("../scripts/lib/damage-bus.mjs");
+    const { DamageBus } = await import("../scripts/lib/damage-bus.mjs");
+    const { DAMAGE: PRIORITY } = await import("../scripts/stage-priorities.mjs");
 
     DamageBus.after("late", 40, (_a, _p, before) => log.push(`late before=${before}`));
     DamageBus.after("broken", 20, () => {

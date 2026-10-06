@@ -1,3 +1,4 @@
+import { flagOf } from "../lib/flags.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 
 export const FLAG = "recharge";
@@ -19,8 +20,6 @@ export const Recharge = {
     registerHooks() {
         Hooks.on("updateWorldTime", () => Recharge.onWorldTime());
         Hooks.on("updateItem", (item, changed) => Recharge.onItemUpdate(item, changed));
-        // A Zenith day is our own unit of time; only the sky tracker knows when one turns over.
-        Hooks.on(`${MODULE_ID}.skyChanged`, (state, previous) => Recharge.onSkyChanged(state, previous));
     },
 
     /**
@@ -74,22 +73,23 @@ export const Recharge = {
     },
 
     /**
-     * "Once per Zenith day."
+     * Refill every allowance that recharges on a named period of its own.
      *
-     * pf2e's `per: "day"` is close but resets on a rest, and a Zenith is a property of the sky rather than
-     * of sleep — the whole point of the day being scheduled is that it is one particular day. So the
-     * interval lives in our flag: `system.frequency.per` would have to be one of pf2e's own choices, and
-     * this is not one of them.
+     * Some periods are not time at all. "Once per Zenith day" is close to pf2e's `per: "day"` but must not
+     * reset on a rest — a Zenith is a property of the sky rather than of sleep — so the item names its
+     * period in the `recharge` flag (`{ per: "zenith-day" }`) and whatever knows when that period turns
+     * over calls this. `system.frequency.per` would have to be one of pf2e's own choices, and these are not.
+     *
+     * @param {string} per  The period that just turned over.
      */
-    async onSkyChanged(state, previous) {
+    async refillPeriod(per) {
         if (!isTimekeeper()) return;
-        if (state?.day === previous?.day) return;
 
         for (const actor of game.actors) {
             const updates = actor.items
                 .filter(
                     (item) =>
-                        item.flags?.[MODULE_ID]?.[FLAG]?.per === "zenith-day" &&
+                        flagOf(item, FLAG)?.per === per &&
                         (item.system?.frequency?.value ?? 0) < (item.system?.frequency?.max ?? 0),
                 )
                 .map((item) => ({ _id: item.id, "system.frequency.value": item.system.frequency.max }));

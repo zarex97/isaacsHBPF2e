@@ -1,4 +1,7 @@
-import { DamageBus, PRIORITY } from "./damage-bus.mjs";
+import { DamageBus } from "./damage-bus.mjs";
+
+/** After the damage-applied riders (30), so a rider reading the option sees the creature as it was. */
+const PRIORITY = 35;
 
 /**
  * "A creature that has already lost Hit Points this encounter" — as a roll option on the creature.
@@ -34,7 +37,7 @@ function liveActor(actor, params) {
 
 export const EncounterDamage = {
     registerHooks() {
-        DamageBus.after("damaged this encounter", PRIORITY.encounterDamage, async (actor, params, before) => {
+        DamageBus.after("damaged this encounter", PRIORITY, async (actor, params, before) => {
             const live = liveActor(actor, params);
             if (!live?.isOwner) return;
             // *This* encounter: one the creature is in and that has started. `game.combat` is whichever encounter

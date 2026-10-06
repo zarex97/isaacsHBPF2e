@@ -1365,7 +1365,7 @@ check("the authored badge still caps the ceiling", Om.ceilingFor(sky([]), { syst
  * That growth used to reach only the `DamageDice` rules, so a wall stayed its ordinary length on the one
  * day of the year it should have been longest. A Zenith emits `sky:ascendant` too, so the order matters.
  */
-const { skyStepsFromOptions } = await import("../scripts/targeting/heightening.mjs");
+const { skyStepsFromOptions } = await import("../scripts/sky/steps.mjs");
 
 check("an unlit sky is worth no steps", skyStepsFromOptions([]), 0);
 check("an Ascendant day is worth two steps", skyStepsFromOptions(["sky:ascendant", "sky:sign:aries"]), 2);

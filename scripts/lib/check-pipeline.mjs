@@ -20,32 +20,12 @@ import { wrap } from "./wrap.mjs";
  * is still rolled. Whatever a feature wanted from a check, the roll matters more.
  */
 
-/** Where each stage falls. Leave gaps; a new stage slots between. */
-export const PRIORITY = {
-    /** `soulbound/scattered.mjs` — Strikes and saves that ignore lesser cover correct the DC. */
-    ignoreCover: 10,
-    /** Guide §4.5 — a Portent is not spent on a roll that fortune or misfortune already altered. */
-    portentGuard: 20,
-    /** `sky/terrain-rolls.mjs` — the day's modifier on a creature's first Strike in an encounter, under Aries. */
-    ariesFirstStrike: 30,
-    /** `stargazer/auguries.mjs` — Hunted by the Sky: the first attack each round, and Seek against it. */
-    huntedBySky: 40,
-    /** `stargazer/auguries.mjs` — Poured Knowing: a counteract check at the Stargazer's DC, one rank higher. */
-    pouredKnowing: 45,
-    /** `stargazer/paths.mjs` — Sentence Passed: the sentenced creature's fortune effects are taken off the roll. */
-    sentencePassed: 50,
-    /** `stargazer/paths.mjs` — tag a roll a Snarl touched, for Herald's Omen and Foregone Conclusion. */
-    snarlTag: 60,
-    /** `stargazer/paths.mjs` — a Demoralize by The Announcement is not lost on a creature that cannot understand you. */
-    announcement: 70,
-};
-
 const stages = [];
 
 export const CheckPipeline = {
     /**
      * @param {string} name       What breaks if it throws, for the log line.
-     * @param {number} priority   Ascending; see `PRIORITY`.
+     * @param {number} priority   Ascending.
      * @param {(check: object, context: object) => object | void} fn
      */
     before(name, priority, fn) {

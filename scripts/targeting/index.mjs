@@ -1,16 +1,11 @@
-import { Astral } from "../astral.mjs";
+import { flagOf } from "../lib/flags.mjs";
 import { targetingOptions, testPredicate } from "../lib/roll-options.mjs";
-import { Deaths } from "../deaths.mjs";
-import { Duplicate } from "../economy/duplicate.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 import { catchTokens } from "./catch.mjs";
 import { canRotate, configFor, describe, originTokenFor } from "./config.mjs";
-import { Lingering } from "./lingering.mjs";
-import { Overlap } from "./overlap.mjs";
+import { Extensions } from "./extensions.mjs";
 import { discardArea, originOf, placeArea } from "./place.mjs";
 import { REAIM, reviewTargets } from "./review.mjs";
-import { Charges } from "../soulbound/charges.mjs";
-import { CrystalWall } from "./wall.mjs";
 
 /**
  * Where a shape choice leaves the spell it decided on.
@@ -21,9 +16,6 @@ import { CrystalWall } from "./wall.mjs";
  * for `consume`, so the variant travels there too rather than widening the return type.
  */
 export const VARIANT = Symbol.for("isaacs-hb-pf2e.castVariant");
-
-/** Where the agreed charge count is left for `Charges.beforeCast`, for the same reason as `VARIANT`. */
-export const SPENDING = Symbol.for("isaacs-hb-pf2e.chargeSpending");
 
 /**
  * Area targeting: the step that used to be "click eight tokens and hope you got them all".
@@ -39,6 +31,15 @@ export const SPENDING = Symbol.for("isaacs-hb-pf2e.chargeSpending");
  * `scripts/cast-pipeline.mjs`, which owns that wrapper and the one on an activity's `toMessage`.
  */
 export const AreaTargeting = {
+    // Where other code plugs in — see `extensions.mjs`.
+    registerPreAim: Extensions.registerPreAim,
+    registerAimed: Extensions.registerAimed,
+    registerAfterAim: Extensions.registerAfterAim,
+    registerOriginResolver: Extensions.registerOriginResolver,
+    registerScopePredicate: Extensions.registerScopePredicate,
+    registerAreaCount: Extensions.registerAreaCount,
+    registered: Extensions.registered,
+
     registerSettings() {
         game.settings.register(MODULE_ID, "areaTargeting", {
             name: "Place areas as Regions when casting",
@@ -94,18 +95,9 @@ export const AreaTargeting = {
      * placement or the review returns false.
      */
     async run(spell, options = {}) {
-        // Gemini's duplicate has the Saint's statistics but none of their Techniques. This is the choke
-        // point every cast passes through, so it is the honest place to say no.
-        if (Duplicate.isDuplicate(spell?.actor)) {
-            ui.notifications.warn(`${spell.actor.name} is a duplicate: no Techniques, no Focus Points.`);
-            return false;
-        }
-        // An astral body "cannot attack"; it is a projected consciousness, not a second Saint. Same choke
-        // point, same argument as the duplicate above.
-        if (Astral.isAstralBody(spell?.actor?.token)) {
-            ui.notifications.warn(`${spell.actor.name} is an astral body: it can only carry mental Techniques.`);
-            return false;
-        }
+        // This is the choke point every cast passes through, so it is where a caster who may not cast at
+        // all is told so — before anything is asked or aimed.
+        if (!(await Extensions.preAim(spell, options))) return false;
 
         let cast = variantFor(spell, options);
         // A Technique that offers two shapes asks before anything else happens, because the answer decides
@@ -123,16 +115,14 @@ export const AreaTargeting = {
                 if (options) options[VARIANT] = variant;
             }
         }
-        // "Expend any number of wolves. **Each** wolf you expend … detonates in a 10-foot burst." The
-        // count is one question with two answers in it: how much the pool pays, and how many areas go on
-        // the cursor. Asked here so that backing out of the placement still costs nothing.
-        const spending = await Charges.countFor(cast);
-        if (Charges.declarationOn(cast) && spending <= 0) return false;
-        if (spending > 0 && options) options[SPENDING] = spending;
+        // How many areas go on the cursor, when that is decided at cast time rather than authored. Asked
+        // here so that backing out of the placement still costs nothing.
+        const count = await Extensions.areaCount(cast, options);
+        if (count === false) return false;
 
         const config = configFor(cast, {
             ...(shape ? { area: shape } : {}),
-            ...(spending > 1 ? { areas: spending } : {}),
+            ...(count > 1 ? { areas: count } : {}),
         });
         if (!config) return true;
         if (bypassHeld()) return true;
@@ -170,17 +160,14 @@ export const AreaTargeting = {
                     return false;
                 }
 
+                // A placement that is about a place rather than about people ends here: reviewing a target
+                // list it will never have is a dialog that can only say "nothing caught".
+                const handled = await Extensions.aimed(config, regions, originToken);
+                if (handled !== undefined) return handled;
+
                 // An emanation is never placed — it is centred on the caster's own space, so re-aiming it
                 // would put the identical area back in the identical spot. Offering a button that visibly
                 // does nothing is worse than not offering one.
-                // *Astral Projection* aims at a place, not at people. Reviewing a target list it will
-                // never have is a dialog that can only say "nothing caught", so it is skipped and the
-                // placement goes straight to the body being made.
-                if (config.item.flags?.[MODULE_ID]?.astral) {
-                    canvas.tokens.setTargets([]);
-                    return !!(await Astral.project(config, regions[0], originToken));
-                }
-
                 const ids = await reviewTargets(collect(regions, config, originToken), config, {
                     canReaim: config.anchor !== "self",
                 });
@@ -188,17 +175,10 @@ export const AreaTargeting = {
                 if (ids === REAIM) continue;
 
                 canvas.tokens.setTargets(ids);
-                // A Technique that raises a barrier builds it from the line just aimed — the last one
-                // aimed, so a re-aimed wall stands where the caster finally pointed it.
-                await CrystalWall.build(config, regions[0]);
-                // Two Techniques leave the area behind them — Gemini folds space into difficult terrain,
-                // and Mavros sets the ground alight — and one asks the ground a question about the past.
-                // All three need the placement that was just confirmed, which is why they live here rather
-                // than in a rider: by the time a rider runs, the area has been discarded.
-                await Lingering.create(config, regions, originToken);
-                // Three pillars catching the same creature is one save at a penalty, not three saves.
-                await Overlap.apply(config, regions, originToken);
-                await Deaths.tally(config, regions[0]);
+                // What the confirmed placement leaves behind — a wall, burning ground, a tally of the dead.
+                // Here rather than in a rider because these need the area itself, and by the time a rider
+                // runs the area has been discarded.
+                await Extensions.afterAim(config, regions, originToken);
                 return true;
             }
         } catch (error) {
@@ -240,7 +220,7 @@ function collect(regions, config, originToken) {
  * rather than the chat card.
  */
 async function chooseShape(item) {
-    const declared = item.flags?.[MODULE_ID]?.areaTargetingShapes;
+    const declared = flagOf(item, "areaTargetingShapes");
     if (!Array.isArray(declared) || declared.length === 0) return null;
 
     /**
