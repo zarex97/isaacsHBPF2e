@@ -1,7 +1,7 @@
-import { MODULE_ID } from "../sky/signs.mjs";
+import { LIB_ID } from "../id.mjs";
 import { applyRiders, applyChoice, applyPick, resolveCounteract, resolveReaction } from "./apply.mjs";
 
-const CHANNEL = `module.${MODULE_ID}`;
+const CHANNEL = `module.${LIB_ID}`;
 
 const HANDLERS = {
     applyRiders,

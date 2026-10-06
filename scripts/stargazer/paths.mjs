@@ -1,7 +1,5 @@
-import { CheckPipeline, RerollPipeline, degreeOf } from "../automation.mjs";
+import { CheckPipeline, Relay, RerollPipeline, degreeOf, inflictPersistent } from "../automation.mjs";
 import { CHECK as PRIORITY } from "../stage-priorities.mjs";
-import { inflictPersistent } from "../riders/apply.mjs";
-import { Relay } from "../riders/relay.mjs";
 import { relabel, setDieResult } from "../roll-rewrites/balance.mjs";
 import { MODULE_ID, aspectOf, signOf } from "../sky/signs.mjs";
 import { SkyTracker } from "../sky/tracker.mjs";

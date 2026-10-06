@@ -1,4 +1,4 @@
-import { Relay } from "../riders/relay.mjs";
+import { Relay } from "../automation.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 import { depthOf } from "./damage.mjs";
 

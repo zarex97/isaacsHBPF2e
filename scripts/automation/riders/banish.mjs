@@ -1,4 +1,4 @@
-import { MODULE_ID } from "../sky/signs.mjs";
+import { LIB_ID } from "../id.mjs";
 
 const SETTING = "banishments";
 
@@ -35,7 +35,7 @@ export function durationSeconds(duration) {
  */
 export const Banish = {
     registerSettings() {
-        game.settings.register(MODULE_ID, SETTING, {
+        game.settings.register(LIB_ID, SETTING, {
             scope: "world",
             config: false,
             type: Object,
@@ -51,7 +51,7 @@ export const Banish = {
     },
 
     records() {
-        return game.settings.get(MODULE_ID, SETTING) ?? {};
+        return game.settings.get(LIB_ID, SETTING) ?? {};
     },
 
     /** Is this token currently folded away? Used to keep a second banishment from stacking. */
@@ -90,7 +90,7 @@ export const Banish = {
 
         // Written before the token is deleted: if the delete throws, a stale record is a chat message the
         // GM can act on, while a deleted token with no record is a creature gone from the game.
-        await game.settings.set(MODULE_ID, SETTING, { ...Banish.records(), [record.id]: record });
+        await game.settings.set(LIB_ID, SETTING, { ...Banish.records(), [record.id]: record });
         await scene.deleteEmbeddedDocuments("Token", [token.id]);
 
         await ChatMessage.create({
@@ -121,7 +121,7 @@ export const Banish = {
         // retrying the same failure on every tick of the clock.
         const remaining = { ...Banish.records() };
         delete remaining[id];
-        await game.settings.set(MODULE_ID, SETTING, remaining);
+        await game.settings.set(LIB_ID, SETTING, remaining);
 
         const scene = game.scenes.get(record.sceneId);
         if (!scene) {

@@ -56,13 +56,13 @@ function evaluate(statement, options) {
 globalThis.game = { pf2e: { Predicate: StubPredicate } };
 
 const { riderOptions } = await import(lib("lib/roll-options.mjs"));
-const { selectRiders } = await import("../scripts/riders/select.mjs");
-const { collectRiders, isAbilityUse, riderAt } = await import("../scripts/riders/data.mjs");
-const { basicLadder } = await import("../scripts/riders/apply.mjs");
-const { alreadySpent, gateByRound, riderKey } = await import("../scripts/riders/round-gate.mjs");
-const { auraCatches, effectForAura } = await import("../scripts/riders/sources.mjs");
+const { selectRiders } = await import("../scripts/automation/riders/select.mjs");
+const { collectRiders, isAbilityUse, riderAt } = await import("../scripts/automation/riders/data.mjs");
+const { basicLadder } = await import("../scripts/automation/riders/apply.mjs");
+const { alreadySpent, gateByRound, riderKey } = await import("../scripts/automation/riders/round-gate.mjs");
+const { auraCatches, effectForAura } = await import("../scripts/automation/riders/sources.mjs");
 const { mergeBypass, resistanceReduction, ignoresHardness, ignoredImmunities, selectEntries } = await import(
-    "../scripts/riders/bypass.mjs"
+    "../scripts/automation/riders/bypass.mjs"
 );
 const { degreeOf } = await import(lib("lib/degree.mjs"));
 const { applyHeightening, applyThresholds, stepsFor, thresholdsCrossed, valueAtLevel } = await import(lib("targeting/heightening.mjs"));
@@ -569,7 +569,7 @@ check(
 // no guard at all. Nothing offline can drive Foundry's chat pipeline, so the wiring is checked statically,
 // the same way duplicate wrap targets are below.
 const onActionUsed = fs
-    .readFileSync(path.join(ROOT, "scripts", "riders", "sources.mjs"), "utf8")
+    .readFileSync(path.join(ROOT, "scripts", "automation", "riders", "sources.mjs"), "utf8")
     .split("async onActionUsed(")[1] ?? "";
 check("the guard is the first thing onActionUsed does", /^[^}]{0,200}isAbilityUse\(/.test(onActionUsed), true);
 
@@ -1205,6 +1205,22 @@ check("re-aim survives the dialog's nullish coalescing", (REAIM ?? null) === REA
     }
     check("this module wraps nothing: the automation owns every wrap, the classes register stages", wrapCalls, []);
     check("the classes reach the automation only through scripts/automation.mjs", trespassers, []);
+
+    /**
+     * The rider engine, staged in `scripts/automation/` until it moves into the automation (phase 2), already
+     * behaves like a module of its own: it imports its own files, and the automation through the door — and
+     * nothing from the classes.
+     */
+    const staged = path.join(ROOT, "scripts", "automation") + path.sep;
+    const door = path.join(ROOT, "scripts", "automation.mjs");
+    const escapes = [];
+    for (const file of mjsUnder(staged)) {
+        for (const match of fs.readFileSync(file, "utf8").matchAll(/(?:from|import\()\s*["']([^"']+\.mjs)["']/g)) {
+            const target = path.resolve(path.dirname(file), match[1]);
+            if (!target.startsWith(staged) && target !== door) escapes.push(`${path.relative(ROOT, file)} → ${match[1]}`);
+        }
+    }
+    check("the staged rider engine imports nothing from the classes", escapes, []);
 }
 
 /* -------------------------------------------------------------------------------------------- */
@@ -1226,8 +1242,8 @@ check("re-aim survives the dialog's nullish coalescing", (REAIM ?? null) === REA
  * save this module rolled itself is ignored — `runSave` has already dispatched those riders, and doing it
  * again is how an ability that forces a save forces it forever.
  */
-const { Sources } = await import("../scripts/riders/sources.mjs");
-const { Relay } = await import("../scripts/riders/relay.mjs");
+const { Sources } = await import("../scripts/automation/riders/sources.mjs");
+const { Relay } = await import("../scripts/automation/riders/relay.mjs");
 
 const heatToken = { documentName: "Token", uuid: "Scene.s.Token.heat", actor: { uuid: "Actor.heat" } };
 const dummyToken = { documentName: "Token", uuid: "Scene.s.Token.dummy", actor: { uuid: "Actor.dummy" } };
@@ -1461,7 +1477,7 @@ check(
  * running pf2e 8.3.0, where `getCondition("immobilized")` gives
  * `sourceId: "Compendium.pf2e.conditionitems.Item.eIcWbB5o3pP6OIMe"` and `uuid: null`.
  */
-const { conditionUuidOf, receiptKeyFor, growByStep } = await import("../scripts/riders/apply.mjs");
+const { conditionUuidOf, receiptKeyFor, growByStep } = await import("../scripts/automation/riders/apply.mjs");
 const CONDITION_UUID = "Compendium.pf2e.conditionitems.Item.eIcWbB5o3pP6OIMe";
 
 check(
@@ -2492,7 +2508,7 @@ for (const [dir, at] of [["sky-ascendant", 8], ["sky-zenith", 5]]) {
  * `immobilized` nor `restrained` has a native Escape, and `grabbed`'s has no DC, so pf2e could not supply
  * it either.
  */
-const { ESCAPE_DC_TYPES, escapeActionSource, escapeStatisticFor } = await import("../scripts/riders/escape.mjs");
+const { ESCAPE_DC_TYPES, escapeActionSource, escapeStatisticFor } = await import("../scripts/automation/riders/escape.mjs");
 
 {
     // The guard that keeps it honest: an `escapeDc` written on any other rider type is a promise with no
@@ -2755,8 +2771,8 @@ function documentedIn(readme, heading, nextHeading) {
 
 {
     const readme = fs.readFileSync(path.join(ROOT, "README.md"), "utf8");
-    const applySource = fs.readFileSync(path.join(ROOT, "scripts/riders/apply.mjs"), "utf8");
-    const dataSource = fs.readFileSync(path.join(ROOT, "scripts/riders/data.mjs"), "utf8");
+    const applySource = fs.readFileSync(path.join(ROOT, "scripts/automation/riders/apply.mjs"), "utf8");
+    const dataSource = fs.readFileSync(path.join(ROOT, "scripts/automation/riders/data.mjs"), "utf8");
 
     // Anchored to `applyOne`'s switch rather than the whole file: `apply.mjs` is 2000 lines and any other
     // switch with a lowercase-hyphen case (`case "from-origin":`, teleport's own `measure` value) would

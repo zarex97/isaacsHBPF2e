@@ -1,5 +1,5 @@
-import { bonusStepsFrom, stepsFor } from "../automation.mjs";
-import { MODULE_ID } from "../sky/signs.mjs";
+import { bonusStepsFrom, stepsFor } from "../../automation.mjs";
+import { LIB_ID } from "../id.mjs";
 import { escapeDcFor } from "./escape.mjs";
 
 export const FLAG = "encasement";
@@ -70,7 +70,7 @@ export const Encasement = {
 
     /** Break the shell — by damage reaching 0, by the escape check, or by a GM's own hand. */
     async destroy(hazard, { freed = true } = {}) {
-        const spec = hazard?.flags?.[MODULE_ID]?.[FLAG];
+        const spec = hazard?.flags?.[LIB_ID]?.[FLAG];
         if (!spec) return;
 
         for (const token of hazard.getActiveTokens(true, true) ?? []) {
@@ -85,7 +85,7 @@ export const Encasement = {
         for (const slug of [spec.conditions].flat().filter(Boolean)) {
             if (target.hasCondition(slug)) await target.decreaseCondition(slug, { forceRemove: true });
         }
-        const escape = target.items.find((i) => i.flags?.[MODULE_ID]?.[FLAG]?.hazardUuid === hazard.uuid);
+        const escape = target.items.find((i) => i.flags?.[LIB_ID]?.[FLAG]?.hazardUuid === hazard.uuid);
         if (escape) await escape.delete();
 
         await ChatMessage.create({
@@ -97,7 +97,7 @@ export const Encasement = {
     registerHooks() {
         Hooks.on("updateActor", async (actor) => {
             if (game.users.activeGM?.id !== game.user.id) return;
-            if (!actor.flags?.[MODULE_ID]?.[FLAG]) return;
+            if (!actor.flags?.[LIB_ID]?.[FLAG]) return;
             if ((actor.hitPoints?.value ?? 1) > 0) return;
             await Encasement.destroy(actor);
         });
@@ -121,7 +121,7 @@ async function createHazard(spec, target, token) {
                     traits: { value: ["cold"], rarity: "common" },
                 },
                 flags: {
-                    [MODULE_ID]: {
+                    [LIB_ID]: {
                         [FLAG]: {
                             name: spec.name ?? null,
                             targetUuid: target.uuid,
@@ -175,7 +175,7 @@ function escapeAction(spec, hazard, context) {
             category: "defensive",
         },
         flags: {
-            [MODULE_ID]: {
+            [LIB_ID]: {
                 [FLAG]: { hazardUuid: hazard.uuid },
                 riders: [
                     {

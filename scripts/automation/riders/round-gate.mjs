@@ -1,4 +1,4 @@
-import { MODULE_ID } from "../sky/signs.mjs";
+import { LIB_ID } from "../id.mjs";
 
 /**
  * Riders that may fire once a round, and no more.
@@ -65,9 +65,9 @@ export async function claimRound(actor, item, index) {
     const stamp = roundKey();
     if (!stamp) return true;
     const key = riderKey(item, index);
-    const ledger = actor?.getFlag?.(MODULE_ID, FLAG) ?? {};
+    const ledger = actor?.getFlag?.(LIB_ID, FLAG) ?? {};
     if (alreadySpent(ledger, key, stamp)) return false;
-    await actor?.setFlag?.(MODULE_ID, FLAG, { ...ledger, [key]: stamp });
+    await actor?.setFlag?.(LIB_ID, FLAG, { ...ledger, [key]: stamp });
     return true;
 }
 
