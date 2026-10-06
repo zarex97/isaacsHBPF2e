@@ -1,6 +1,6 @@
 import { flagOf } from "../lib/flags.mjs";
 import { testPredicate } from "../lib/roll-options.mjs";
-import { MODULE_ID } from "../sky/signs.mjs";
+import { LIB_ID } from "../id.mjs";
 import { Extensions } from "./extensions.mjs";
 import { applyHeightening, applyThresholds, bonusStepsFrom, effectiveLevel } from "./heightening.mjs";
 
@@ -37,7 +37,7 @@ export const FLAG = "areaTargeting";
  */
 export function configFor(item, override = {}) {
     if (!item?.actor || !canvas?.ready) return null;
-    if (!game.settings.get(MODULE_ID, "areaTargeting")) return null;
+    if (!game.settings.get(LIB_ID, "areaTargeting")) return null;
 
     const flag = flagOf(item, FLAG) ?? null;
     if (flag?.enabled === false) return null;
@@ -68,7 +68,7 @@ export function configFor(item, override = {}) {
     // flag was written for this and always aims; the setting governs the items that were never written
     // with this in mind, and the narrower choice admits only what a registered scope predicate claims.
     const authored = !!flag;
-    if (!authored && game.settings.get(MODULE_ID, "areaTargetingScope") === "techniques" && !Extensions.inScope(item)) {
+    if (!authored && game.settings.get(LIB_ID, "areaTargetingScope") === "techniques" && !Extensions.inScope(item)) {
         return null;
     }
 

@@ -1,4 +1,4 @@
-import { testPredicate } from "../lib/roll-options.mjs";
+import { testPredicate } from "../automation.mjs";
 
 /**
  * Which riders an event earns, given a snapshot of the world.

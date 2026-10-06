@@ -1,7 +1,5 @@
-import { CheckPipeline } from "../lib/check-pipeline.mjs";
+import { CheckPipeline, RerollPipeline, degreeOf } from "../automation.mjs";
 import { CHECK as PRIORITY } from "../stage-priorities.mjs";
-import { degreeOf } from "../lib/degree.mjs";
-import { wrap } from "../lib/wrap.mjs";
 import { inflictPersistent } from "../riders/apply.mjs";
 import { Relay } from "../riders/relay.mjs";
 import { relabel, setDieResult } from "../roll-rewrites/balance.mjs";
@@ -470,12 +468,10 @@ export const Paths = {
     /** At setup, when `game.pf2e` is there to wrap. */
     install() {
         // Sentence Passed: no fortune. pf2e's hero-point reroll is one, and Deja Vu is another.
-        wrap("game.pf2e.Check.rerollFromMessage", function (wrapped, message, ...rest) {
-            if (sentenced(message?.actor)) {
-                ui.notifications.warn(`${message.actor.name} cannot benefit from fortune effects (Sentence Passed).`);
-                return undefined;
-            }
-            return wrapped(message, ...rest);
-        }, { feature: "Sentence Passed" });
+        RerollPipeline.before("Sentence Passed", 10, (message) => {
+            if (!sentenced(message?.actor)) return true;
+            ui.notifications.warn(`${message.actor.name} cannot benefit from fortune effects (Sentence Passed).`);
+            return false;
+        });
     },
 };

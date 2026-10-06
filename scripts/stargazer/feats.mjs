@@ -1,7 +1,6 @@
-import { DamageBus } from "../lib/damage-bus.mjs";
+import { DamageBus, degreeOf } from "../automation.mjs";
 import { DAMAGE } from "../stage-priorities.mjs";
 import { Relay } from "../riders/relay.mjs";
-import { degreeOf } from "../lib/degree.mjs";
 import { relabel, setDieResult } from "../roll-rewrites/balance.mjs";
 import { MODULE_ID, SIGN_IDS, aspectOf, signOf } from "../sky/signs.mjs";
 import { SkyTracker } from "../sky/tracker.mjs";

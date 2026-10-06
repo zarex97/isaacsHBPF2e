@@ -1,4 +1,4 @@
-import { testPredicate } from "../lib/roll-options.mjs";
+import { testPredicate } from "../automation.mjs";
 import { allianceOf, catches } from "./enemy-terrain.mjs";
 import { growByStep, inflictPersistent, runSave } from "../riders/apply.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";

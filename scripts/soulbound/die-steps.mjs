@@ -1,4 +1,4 @@
-import { testPredicate } from "../lib/roll-options.mjs";
+import { testPredicate } from "../automation.mjs";
 
 const MODULE_ID = "isaacs-hb-pf2e";
 export const FLAG = "extraDieSteps";

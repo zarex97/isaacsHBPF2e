@@ -1,5 +1,4 @@
-import { DEGREES, degreeOf } from "../lib/degree.mjs";
-import { testPredicate } from "../lib/roll-options.mjs";
+import { DEGREES, degreeOf, testPredicate } from "../automation.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 
 export const FLAG = "balance";

@@ -2108,7 +2108,7 @@ const FEAT_CHECKS = [
     ...[[["greater-bond"], 25, "Storm Battery under Greater Bond: a 25-foot cone"], [[], 15, "control: no Greater Bond, 15 feet"]].map(([feats, want, note]) => ({
         id: "AF-25b", lv: 17, b: { amber: 2, cobalt: 2 }, bonds: ["storm-battery"], c: { greaterBond: "storm-battery" }, feats, want, note,
         act: async (a) => {
-            const { configFor } = await import("../targeting/config.mjs");
+            const { configFor } = await import("../automation.mjs");
             await wait(600);
             return configFor(game.actors.get(a.id).items.find((i) => i.slug === "storm-channel"))?.area?.value ?? null;
         } })),
