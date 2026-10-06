@@ -1,22 +1,29 @@
-import { buildApi } from "./automation/api.mjs";
-
 /**
- * The one door from this module into the automation.
+ * The one door from this module into Isaac's PF2e Automation.
  *
- * Area targeting, the single-wrap pipelines and the economy fixes are on their way to being a module of
- * their own (`scripts/automation/`, see `Docs/adr`). Nothing else in this module imports from there: it
- * goes through `automation()`, which today builds the API from the staged code and will, once the
- * automation is separate, read it off that module. The names exported below are lazy — each one looks the
- * API up when it is used rather than when this file loads — so call sites read exactly as they did when
- * the code lived beside them, and keep working whichever way `automation()` is answered.
+ * Area targeting, the single-wrap pipelines and the allowance fixes live in their own module,
+ * `isaacs-pf2e-automation` (`../isaacs-pf2e-automation`, contract in its `Docs/api.md`). Nothing else in
+ * this module reaches it: everything goes through `automation()`, which reads the API that module publishes
+ * at its `init`. The names exported below are lazy — each looks the API up when it is used rather than when
+ * this file loads, which is before any module's `init` — so call sites read as they did when the code lived
+ * beside them.
  */
+export const AUTOMATION_ID = "isaacs-pf2e-automation";
+
 let api = null;
 
 export function automation() {
-    return (api ??= buildApi());
+    if (api) return api;
+    const published = globalThis.game?.modules?.get(AUTOMATION_ID)?.api;
+    if (!published) {
+        throw new Error(
+            `Isaac's Homebrew | ${AUTOMATION_ID} is not active, or has not finished its init — this module requires it.`,
+        );
+    }
+    return (api = published);
 }
 
-/** For the offline tests: hand the facades an API of their own. */
+/** For the offline tests: hand the facades the automation's API, built from its own sources. */
 export function setAutomation(value) {
     api = value;
 }

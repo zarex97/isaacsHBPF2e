@@ -23,3 +23,6 @@ AGENTS.md
 # rather than all of .claude/ on purpose: settings.json, commands/ and agents/
 # live there too, and those are worth sharing if we ever add them.
 .claude/skills/
+
+# Isaac's PF2e Automation, checked out by CI at the version module.json requires.
+.automation/

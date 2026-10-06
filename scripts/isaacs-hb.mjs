@@ -12,8 +12,8 @@ import { Citrine } from "./assimilator/citrine.mjs";
 import { Purple } from "./assimilator/purple.mjs";
 import { AssimilatorRig } from "./assimilator/rig.mjs";
 import { registerAreaExtensions } from "./area-extensions.mjs";
-import { AreaTargeting, CastPipeline, CheckPipeline, DamageBus, Recharge } from "./automation.mjs";
-import { INIT as AUTOMATION_INIT, SETUP as AUTOMATION_SETUP } from "./automation/main.mjs";
+import { AUTOMATION_ID, AreaTargeting, CastPipeline, CheckPipeline, DamageBus, Recharge } from "./automation.mjs";
+import { Migration } from "./migration.mjs";
 import { Astral } from "./astral.mjs";
 import { registerCastStages } from "./cast-stages.mjs";
 import { Cosmo } from "./cosmo.mjs";
@@ -80,11 +80,22 @@ function start(feature, fn) {
     }
 }
 
+/**
+ * This module starts when Isaac's PF2e Automation has started, not merely at `init`.
+ *
+ * Everything below registers on the automation's API, and Foundry does not promise which module's `init`
+ * runs first. The automation announces its API from inside its own `init`, so starting on that announcement
+ * is still `init` — settings registered here behave as any other — and the API is always there.
+ */
 Hooks.once("init", () => {
+    if (!game.modules.get(AUTOMATION_ID)?.active) {
+        console.error(`Isaac's Homebrew | requires ${AUTOMATION_ID}, which is not active; nothing in this module will start.`);
+    }
+});
+
+Hooks.once(`${AUTOMATION_ID}.init`, () => {
     start("the sky tracker's settings", () => SkyTracker.registerSettings());
-    // The automation's own work — settings, its default cast stages, the economy's hooks. Run from here
-    // only until the automation has an entry point of its own.
-    for (const [feature, fn] of AUTOMATION_INIT) start(feature, fn);
+    start("the settings carried over from before the automation was its own module", () => Migration.registerSettings());
     // The classes' word in area targeting, heightening and recharging, and their stages in the cast
     // pipeline — registrations, so the generic code never calls them by name.
     start("the classes' cast stages", () => registerCastStages());
@@ -235,11 +246,10 @@ Hooks.once("init", () => {
     };
 });
 
-// After `init`, so the system's document classes exist to be wrapped. The automation installs every wrap —
-// cast, toMessage, applyDamage, Check.roll, character preparation, detection modes, rerolls — and the
-// classes below only register stages on them.
+// The automation installs every wrap — cast, toMessage, applyDamage, Check.roll, character preparation,
+// detection modes, rerolls — in its own `setup`; the classes below only register stages on them.
 Hooks.once("setup", () => {
-    for (const [feature, fn] of AUTOMATION_SETUP) start(feature, fn);
+    if (!game.modules.get(AUTOMATION_ID)?.active) return;
     start("the reiatsu pool", () => Reiatsu.install());
     start("the rider engine", () => Riders.registerHooks());
     start("Strikes that ignore cover", () => Scattered.register());
@@ -249,6 +259,13 @@ Hooks.once("setup", () => {
 });
 
 Hooks.once("ready", async () => {
+    if (!game.modules.get(AUTOMATION_ID)?.active) {
+        if (game.user.isGM) ui.notifications.error(`Isaac's Homebrew needs ${AUTOMATION_ID}. Activate it and reload.`);
+        return;
+    }
+    // Once per world, and once per client for the client setting: the area targeting settings people had
+    // set here, copied to where they live now.
+    await Migration.run();
     await SkyTracker.initialise();
     // Characters built before an ability declared its refusal carry an owned copy with no declaration.
     // Narrow and idempotent — it only copies a flag the pack already carries onto an item of the same
