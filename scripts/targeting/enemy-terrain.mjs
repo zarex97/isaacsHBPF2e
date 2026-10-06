@@ -1,5 +1,10 @@
 import { MODULE_ID } from "../sky/signs.mjs";
-import { FLAG } from "./lingering.mjs";
+
+/** Where a lingering area keeps its origin. Spelled here rather than imported, so the two files do not import each other. */
+const LINGERING_FLAG = "lingering";
+
+/** Other flag keys on a Region that name whose terrain it is — see `registerOriginFlag`. */
+const originFlags = [];
 
 /**
  * Difficult terrain that only slows the people it was meant for.
@@ -46,9 +51,15 @@ export function allianceOf(actor) {
  */
 function originOf(region) {
     const flags = region?.flags?.[MODULE_ID] ?? {};
-    const uuid = flags[FLAG]?.originUuid ?? flags.terrainAura?.originUuid ?? null;
+    const key = [LINGERING_FLAG, ...originFlags].find((name) => flags[name]?.originUuid);
+    const uuid = key ? flags[key].originUuid : null;
     const document = uuid ? fromUuidSync(uuid) : null;
     return document?.actor ?? document;
+}
+
+/** Another module's Region flag that records an `originUuid` — a terrain aura that moves with its form. */
+export function registerOriginFlag(key) {
+    if (!originFlags.includes(key)) originFlags.push(key);
 }
 
 export function catches(originAlliance, tokenAlliance) {
