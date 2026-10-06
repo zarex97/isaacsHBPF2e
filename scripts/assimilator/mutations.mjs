@@ -12,11 +12,9 @@ import { AssimilatorDamage, depthOf as depth, suppressed } from "./damage.mjs";
 import { Engine } from "./engine.mjs";
 import { tideRefusal } from "./instincts.mjs";
 import { GulletApp } from "./gullet.mjs";
-import { encounterOf } from "../lib/encounter-damage.mjs";
-import { DamageBus } from "../lib/damage-bus.mjs";
+import { DamageBus, DetectionModes, encounterOf } from "../automation.mjs";
 import { DAMAGE as PRIORITY } from "../stage-priorities.mjs";
 import { Relay } from "../riders/relay.mjs";
-import { wrap } from "../lib/wrap.mjs";
 import { classSlugOf } from "../lib/class-dc.mjs";
 
 const MOVED = "self:moved-10-feet-this-turn";
@@ -348,15 +346,13 @@ export const Mutations = {
         Relay.register?.(LAPIS, (payload) => Mutations.grantInsight(payload));
         // Tin Depth 3: "Invisible creatures within 30 feet are concealed to you" — pf2e's see-invisibility, which pf2e
         // hands Foundry at an unlimited range. When Tin is where the sense came from, its range is Tin's 30 feet.
-        wrap("CONFIG.Token.documentClass.prototype._prepareDetectionModes", function (wrapped, ...args) {
-            const result = wrapped(...args);
-            const sense = this.actor?.perception?.senses?.get?.("see-invisibility");
-            if (sense?.source === "Substrate: Tin" && this.detectionModes?.seeInvisibility) {
+        DetectionModes.after("Tin's 30-foot see-invisibility", 10, (token) => {
+            const sense = token.actor?.perception?.senses?.get?.("see-invisibility");
+            if (sense?.source === "Substrate: Tin" && token.detectionModes?.seeInvisibility) {
                 // Detection ranges are in the scene's distance units — feet, as pf2e's own senses are given.
-                this.detectionModes.seeInvisibility.range = 30;
+                token.detectionModes.seeInvisibility.range = 30;
             }
-            return result;
-        }, { feature: "Tin's 30-foot see-invisibility", type: "WRAPPER" });
+        });
         Relay.register?.(BARE, (payload) => Mutations.markBare(payload));
         Hooks.on("renderChatMessageHTML", (message, html) => Mutations.bindTopaz(message, html));
         Hooks.on("renderChatMessageHTML", (message, html) => Mutations.bindRush(message, html));

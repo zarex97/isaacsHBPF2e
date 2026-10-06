@@ -1,4 +1,4 @@
-import { MODULE_ID } from "../sky/signs.mjs";
+import { LIB_ID } from "../id.mjs";
 import { describe } from "./config.mjs";
 
 // Looked up at call time rather than destructured at import, so this module can be loaded — and the
@@ -42,12 +42,12 @@ export async function reviewTargets({ caught, rejected }, config, { canReaim = f
         return [];
     }
 
-    if (!game.settings.get(MODULE_ID, "areaTargetingReview")) {
+    if (!game.settings.get(LIB_ID, "areaTargetingReview")) {
         return caught.filter((entry) => entry.checked).map((entry) => entry.token.id);
     }
 
     const content = await foundry.applications.handlebars.renderTemplate(
-        `modules/${MODULE_ID}/templates/area-targets.hbs`,
+        `modules/${LIB_ID}/templates/area-targets.hbs`,
         {
             name: config.item.name,
             img: config.item.img,
@@ -94,7 +94,7 @@ export async function reviewTargets({ caught, rejected }, config, { canReaim = f
 
     return DialogV2().wait({
         window: { title: "Confirm targets", icon: "fa-solid fa-crosshairs" },
-        classes: ["isaacs-hb-pf2e", "area-targets"],
+        classes: [LIB_ID, "area-targets"],
         position: { width: 420 },
         content,
         buttons,

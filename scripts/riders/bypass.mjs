@@ -1,4 +1,4 @@
-import { testPredicate } from "../lib/roll-options.mjs";
+import { testPredicate } from "../automation.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 
 export const FLAG = "bypass";

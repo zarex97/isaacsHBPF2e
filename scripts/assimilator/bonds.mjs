@@ -1,6 +1,5 @@
-import { DamageBus } from "../lib/damage-bus.mjs";
+import { DamageBus, encounterOf } from "../automation.mjs";
 import { DAMAGE as PRIORITY } from "../stage-priorities.mjs";
-import { encounterOf } from "../lib/encounter-damage.mjs";
 import { shadowTarget } from "../riders/bypass.mjs";
 import { Relay } from "../riders/relay.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";

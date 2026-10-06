@@ -1,6 +1,5 @@
-import { CheckPipeline } from "../lib/check-pipeline.mjs";
+import { CheckPipeline, degreeOf } from "../automation.mjs";
 import { CHECK as PRIORITY } from "../stage-priorities.mjs";
-import { degreeOf } from "../lib/degree.mjs";
 import { relabel, setDieResult } from "../roll-rewrites/balance.mjs";
 import { MODULE_ID } from "./signs.mjs";
 import { SkyTracker } from "./tracker.mjs";
