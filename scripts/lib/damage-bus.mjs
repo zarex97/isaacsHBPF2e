@@ -19,27 +19,9 @@ import { wrap } from "./wrap.mjs";
  *    "reduced to 0" and "regained N" are readings rather than inferences.
  *
  * Stages run in ascending `priority`. Each one is isolated: a stage that throws is logged by name and the
- * others still run, so one broken feature costs that feature and not the damage. The priorities in use
- * are listed on `PRIORITY` so a new stage can see where it falls without reading every caller.
+ * others still run, so one broken feature costs that feature and not the damage. Leave gaps between
+ * priorities, so a new stage can slot between two existing ones.
  */
-
-/** Where each existing stage falls. Leave gaps; a new stage slots between. */
-export const PRIORITY = {
-    /** `riders/sources.mjs` — origin bypasses, and the shadowing bypass cannot reach. */
-    bypass: 0,
-    /** `assimilator/carapace.mjs` — Carapace Block takes the plate's Hardness off the damage, and the plate pays. */
-    carapaceBlock: 5,
-    /** `riders/libra.mjs` — the Crossing halves whatever a heal gave. */
-    crossing: 10,
-    /** `soulbound/wound.mjs` — absolute, so after the Crossing: it undoes whatever half was left. */
-    wound: 20,
-    /** `riders/sources.mjs` — the `damage-applied` rider event. */
-    riders: 30,
-    /** `lib/encounter-damage.mjs` — marks a creature that has lost Hit Points in this encounter. */
-    encounterDamage: 35,
-    /** `soulbound/regeneracion.mjs` — reads the damage type, which exists only here. */
-    regeneracion: 40,
-};
 
 const stages = { before: [], after: [] };
 
@@ -54,7 +36,7 @@ function add(list, name, priority, fn) {
 export const DamageBus = {
     /**
      * @param {string} name       What breaks if it throws, for the log line.
-     * @param {number} priority   Ascending; see `PRIORITY`.
+     * @param {number} priority   Ascending.
      * @param {(actor: object, params: object) => (void | (() => void))} fn
      */
     before(name, priority, fn) {

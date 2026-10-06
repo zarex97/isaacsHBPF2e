@@ -1,4 +1,4 @@
-import { skyStepsFromOptions, stepsFor } from "../targeting/heightening.mjs";
+import { bonusStepsFrom, stepsFor } from "../targeting/heightening.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 import { escapeDcFor } from "./escape.mjs";
 
@@ -38,7 +38,7 @@ export const Encasement = {
             ? stepsFor({
                   baseRank: context.item?.baseRank ?? context.item?.system?.level?.value,
                   castRank: context.item?.rank,
-                  bonusSteps: skyStepsFromOptions(context.originActor?.getRollOptions?.() ?? []),
+                  bonusSteps: bonusStepsFrom(context.originActor?.getRollOptions?.() ?? []),
               })
             : 0;
         const grown = {

@@ -1,4 +1,5 @@
-import { CheckPipeline, PRIORITY } from "../lib/check-pipeline.mjs";
+import { CheckPipeline } from "../lib/check-pipeline.mjs";
+import { CHECK as PRIORITY } from "../stage-priorities.mjs";
 
 /**
  * Strikes that go around cover.
