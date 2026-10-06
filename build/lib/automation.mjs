@@ -34,5 +34,7 @@ export async function useAutomation() {
     const { setAutomation } = await import("../../scripts/automation.mjs");
     const api = buildApi();
     setAutomation(api);
+    // As the module does at start-up: its content authors under its own id, which the automation reads.
+    api.flags.registerFlagScope("isaacs-hb-pf2e");
     return api;
 }

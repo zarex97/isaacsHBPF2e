@@ -15,7 +15,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { ROOT } from "./lib/pack.mjs";
-import { lib, useAutomation } from "./lib/automation.mjs";
+import { AUTOMATION_ROOT, lib, useAutomation } from "./lib/automation.mjs";
 
 // The classes run against Isaac's PF2e Automation's own sources — the sibling checkout, or AUTOMATION_PATH.
 await useAutomation();
@@ -56,14 +56,12 @@ function evaluate(statement, options) {
 globalThis.game = { pf2e: { Predicate: StubPredicate } };
 
 const { riderOptions } = await import(lib("lib/roll-options.mjs"));
-const { selectRiders } = await import("../scripts/automation/riders/select.mjs");
-const { collectRiders, isAbilityUse, riderAt } = await import("../scripts/automation/riders/data.mjs");
-const { basicLadder } = await import("../scripts/automation/riders/apply.mjs");
-const { alreadySpent, gateByRound, riderKey } = await import("../scripts/automation/riders/round-gate.mjs");
-const { auraCatches, effectForAura } = await import("../scripts/automation/riders/sources.mjs");
-const { mergeBypass, resistanceReduction, ignoresHardness, ignoredImmunities, selectEntries } = await import(
-    "../scripts/automation/riders/bypass.mjs"
-);
+const { selectRiders } = await import(lib("riders/select.mjs"));
+const { collectRiders, isAbilityUse, riderAt } = await import(lib("riders/data.mjs"));
+const { basicLadder } = await import(lib("riders/apply.mjs"));
+const { alreadySpent, gateByRound, riderKey } = await import(lib("riders/round-gate.mjs"));
+const { auraCatches, effectForAura } = await import(lib("riders/sources.mjs"));
+const { mergeBypass, resistanceReduction, ignoresHardness, ignoredImmunities, selectEntries } = await import(lib("riders/bypass.mjs"));
 const { degreeOf } = await import(lib("lib/degree.mjs"));
 const { applyHeightening, applyThresholds, stepsFor, thresholdsCrossed, valueAtLevel } = await import(lib("targeting/heightening.mjs"));
 const { intervalSeconds } = await import(lib("economy/recharge.mjs"));
@@ -569,7 +567,7 @@ check(
 // no guard at all. Nothing offline can drive Foundry's chat pipeline, so the wiring is checked statically,
 // the same way duplicate wrap targets are below.
 const onActionUsed = fs
-    .readFileSync(path.join(ROOT, "scripts", "automation", "riders", "sources.mjs"), "utf8")
+    .readFileSync(path.join(AUTOMATION_ROOT, "scripts", "riders", "sources.mjs"), "utf8")
     .split("async onActionUsed(")[1] ?? "";
 check("the guard is the first thing onActionUsed does", /^[^}]{0,200}isAbilityUse\(/.test(onActionUsed), true);
 
@@ -637,7 +635,8 @@ const shikaiEffect = withRiders(
 );
 const strikeWeapon = withRiders("Spirit Weapon (Blade)", []);
 const sheet = [ryusenkaSpell, shikaiEffect];
-const armed = (id) => ({ items: sheet, getFlag: (_m, key) => (key === "strikeTechnique" ? { itemId: id } : null) });
+// The marker is the automation's, written under its id and read by `flagOf`.
+const armed = (id) => ({ items: sheet, flags: { "isaacs-pf2e-automation": { strikeTechnique: id ? { itemId: id } : null } } });
 
 check(
     "a Strike Technique's riders do not fire on a Strike it did not pay for",
@@ -1206,21 +1205,8 @@ check("re-aim survives the dialog's nullish coalescing", (REAIM ?? null) === REA
     check("this module wraps nothing: the automation owns every wrap, the classes register stages", wrapCalls, []);
     check("the classes reach the automation only through scripts/automation.mjs", trespassers, []);
 
-    /**
-     * The rider engine, staged in `scripts/automation/` until it moves into the automation (phase 2), already
-     * behaves like a module of its own: it imports its own files, and the automation through the door — and
-     * nothing from the classes.
-     */
-    const staged = path.join(ROOT, "scripts", "automation") + path.sep;
-    const door = path.join(ROOT, "scripts", "automation.mjs");
-    const escapes = [];
-    for (const file of mjsUnder(staged)) {
-        for (const match of fs.readFileSync(file, "utf8").matchAll(/(?:from|import\()\s*["']([^"']+\.mjs)["']/g)) {
-            const target = path.resolve(path.dirname(file), match[1]);
-            if (!target.startsWith(staged) && target !== door) escapes.push(`${path.relative(ROOT, file)} → ${match[1]}`);
-        }
-    }
-    check("the staged rider engine imports nothing from the classes", escapes, []);
+    // The rider engine moved into the automation in its 1.1.0; no copy of it stays behind here.
+    check("no staged copy of the automation's code is left in this module", fs.existsSync(path.join(ROOT, "scripts", "automation")), false);
 }
 
 /* -------------------------------------------------------------------------------------------- */
@@ -1242,8 +1228,8 @@ check("re-aim survives the dialog's nullish coalescing", (REAIM ?? null) === REA
  * save this module rolled itself is ignored — `runSave` has already dispatched those riders, and doing it
  * again is how an ability that forces a save forces it forever.
  */
-const { Sources } = await import("../scripts/automation/riders/sources.mjs");
-const { Relay } = await import("../scripts/automation/riders/relay.mjs");
+const { Sources } = await import(lib("riders/sources.mjs"));
+const { Relay } = await import(lib("riders/relay.mjs"));
 
 const heatToken = { documentName: "Token", uuid: "Scene.s.Token.heat", actor: { uuid: "Actor.heat" } };
 const dummyToken = { documentName: "Token", uuid: "Scene.s.Token.dummy", actor: { uuid: "Actor.dummy" } };
@@ -1271,7 +1257,7 @@ check("no itemUuid travels with it, so the GM side rebuilds the variant", "itemU
 check("the event is the one every save rider listens for", sent[0]?.event, "save-rolled");
 
 sent.length = 0;
-const ownSave = saveMessage({ options: ["isaacs-hb-pf2e:rider-save"] });
+const ownSave = saveMessage({ options: ["isaacs-pf2e-automation:rider-save"] });
 await Sources.onSaveMessage(ownSave, ownSave.flags.pf2e.context);
 check("a save this module rolled itself is not dispatched again", sent.length, 0);
 
@@ -1477,7 +1463,7 @@ check(
  * running pf2e 8.3.0, where `getCondition("immobilized")` gives
  * `sourceId: "Compendium.pf2e.conditionitems.Item.eIcWbB5o3pP6OIMe"` and `uuid: null`.
  */
-const { conditionUuidOf, receiptKeyFor, growByStep } = await import("../scripts/automation/riders/apply.mjs");
+const { conditionUuidOf, receiptKeyFor, growByStep } = await import(lib("riders/apply.mjs"));
 const CONDITION_UUID = "Compendium.pf2e.conditionitems.Item.eIcWbB5o3pP6OIMe";
 
 check(
@@ -2508,7 +2494,7 @@ for (const [dir, at] of [["sky-ascendant", 8], ["sky-zenith", 5]]) {
  * `immobilized` nor `restrained` has a native Escape, and `grabbed`'s has no DC, so pf2e could not supply
  * it either.
  */
-const { ESCAPE_DC_TYPES, escapeActionSource, escapeStatisticFor } = await import("../scripts/automation/riders/escape.mjs");
+const { ESCAPE_DC_TYPES, escapeActionSource, escapeStatisticFor } = await import(lib("riders/escape.mjs"));
 
 {
     // The guard that keeps it honest: an `escapeDc` written on any other rider type is a promise with no
@@ -2546,12 +2532,14 @@ const { ESCAPE_DC_TYPES, escapeActionSource, escapeStatisticFor } = await import
     check(
         "the Escape is a one-action item named for what holds you",
         [source.type, source.name, source.system.actions.value],
-        ["action", "Escape Sai — Restrain", 1],
+        ["action", 'ISAACS_AUTOMATION.Escape.Name {"name":"Sai — Restrain"}', 1],
     );
-    check("its card names the DC, because nothing else will", source.system.description.value.includes("DC 27"), true);
-    check("and offers the two skills a check can be rolled for", source.system.description.value.includes("Acrobatics or Athletics"), true);
+    // The card's words are the automation's (lang/en.json); offline its `t()` answers with the key and data.
+    check("its card names the DC, because nothing else will", source.system.description.value.includes('"dc":27'), true);
+    check("and offers the two skills a check can be rolled for", source.system.description.value.includes("Escape.EitherSkill"), true);
 
-    const rider = source.flags["isaacs-hb-pf2e"].riders[0];
+    // Written by the automation's engine, under the automation's own id.
+    const rider = source.flags["isaacs-pf2e-automation"].riders[0];
     check(
         "using it rolls the escape on the captive's own sheet",
         [rider.event, rider.self, rider.apply.type, rider.apply.dc],
@@ -2565,12 +2553,12 @@ const { ESCAPE_DC_TYPES, escapeActionSource, escapeStatisticFor } = await import
     );
     check(
         "the same release is on the item, so an expiring effect can take it back down",
-        source.flags["isaacs-hb-pf2e"].escape.effectId,
+        source.flags["isaacs-pf2e-automation"].escape.effectId,
         "effect01",
     );
 
     const named = escapeActionSource({ item, dc: 20, statistic: "athletics", release: { conditions: ["grabbed"] } });
-    check("content may name one skill instead", named.system.description.value.includes("an Athletics check"), true);
+    check("content may name one skill instead", named.system.description.value.includes('"skill":"Athletics"'), true);
 
     const stub = (acrobatics, athletics) => ({
         getStatistic: (slug) => ({ acrobatics: { slug: "acrobatics", mod: acrobatics }, athletics: { slug: "athletics", mod: athletics } })[slug],
@@ -2771,8 +2759,8 @@ function documentedIn(readme, heading, nextHeading) {
 
 {
     const readme = fs.readFileSync(path.join(ROOT, "README.md"), "utf8");
-    const applySource = fs.readFileSync(path.join(ROOT, "scripts/automation/riders/apply.mjs"), "utf8");
-    const dataSource = fs.readFileSync(path.join(ROOT, "scripts/automation/riders/data.mjs"), "utf8");
+    const applySource = fs.readFileSync(path.join(AUTOMATION_ROOT, "scripts", "riders/apply.mjs"), "utf8");
+    const dataSource = fs.readFileSync(path.join(AUTOMATION_ROOT, "scripts", "riders/data.mjs"), "utf8");
 
     // Anchored to `applyOne`'s switch rather than the whole file: `apply.mjs` is 2000 lines and any other
     // switch with a lowercase-hyphen case (`case "from-origin":`, teleport's own `measure` value) would

@@ -7,7 +7,7 @@
  */
 import { check, report } from "./lib/check.mjs";
 import { familyOf, validate } from "./lib/validate-lib.mjs";
-import { lib, useAutomation } from "./lib/automation.mjs";
+import { AUTOMATION_ROOT, lib, useAutomation } from "./lib/automation.mjs";
 
 // The classes run against Isaac's PF2e Automation's own sources — the sibling checkout, or AUTOMATION_PATH.
 await useAutomation();
@@ -200,7 +200,7 @@ check(
      * Saint who can no longer summon an Arm, with nothing but a console warning to say so.
      */
     const { registerRiderExtensions } = await import("../scripts/riders-extensions.mjs");
-    const { RiderExtensions } = await import("../scripts/automation/riders/extensions.mjs");
+    const { RiderExtensions } = await import(lib("riders/extensions.mjs"));
     registerRiderExtensions();
     const riders = RiderExtensions.registered();
     const names = (list) => list.map((entry) => entry.name);
@@ -869,7 +869,7 @@ for (const [file, expected] of [["soul-reaper", 4], ["hollow", 5]]) {
 /*  Reactions, Blut, and Seal the Art                                                               */
 /* ---------------------------------------------------------------------------------------------- */
 
-const { canOffer } = await import("../scripts/automation/riders/reactions.mjs");
+const { canOffer } = await import(lib("riders/reactions.mjs"));
 
 const offerBase = { hasReaction: true, alreadyOffered: false, ownerOnline: true, frequencyLeft: 1 };
 check("an owner with a reaction available is offered it", canOffer(offerBase), true);
@@ -2594,7 +2594,7 @@ check("…and Flash Step is itself once per round",
  * hand, and **not one doubled on a critical failure**. Written out three times per ability, the missing
  * fourth line is invisible; `basic: true` writes it once.
  */
-const { basicLadder } = await import("../scripts/automation/riders/apply.mjs");
+const { basicLadder } = await import(lib("riders/apply.mjs"));
 
 const damageOnly = { basic: true, riders: [{ apply: { type: "damage", formula: "5d6", damageType: "slashing" } }] };
 check("a basic save halves on a success, doubles on a critical failure, and pays nothing on a critical success",
@@ -3164,7 +3164,7 @@ check("the Full Release aura's frightened is not one of them",
     conditionRiders.filter((r) => r.slug === "frightened").every((r) => !r.max), true);
 
 check("and the engine sets rather than adds when no max is declared",
-    fs.readFileSync(path.join(ROOT, "scripts/automation/riders/apply.mjs"), "utf8")
+    fs.readFileSync(path.join(AUTOMATION_ROOT, "scripts", "riders/apply.mjs"), "utf8")
         .includes("set to at least the value, never above what is already there"),
     true);
 
