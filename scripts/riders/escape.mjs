@@ -1,4 +1,4 @@
-import { resolveDC } from "../lib/class-dc.mjs";
+import { RiderExtensions } from "./extensions.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 
 export const FLAG = "escape";
@@ -180,7 +180,7 @@ export function escapeStatisticFor(actor, named = null) {
  * action's own card, so `null` would print "DC null" onto a player's sheet and stay there.
  */
 export function escapeDcFor(dc, context) {
-    const value = resolveDC(dc, context);
+    const value = RiderExtensions.resolveDC(dc, context);
     if (value !== null) return value;
     console.warn(
         `Isaac's Homebrew | escape: could not resolve escape DC ${JSON.stringify(dc)}`

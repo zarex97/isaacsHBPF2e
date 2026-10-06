@@ -2764,6 +2764,9 @@ function documentedIn(readme, heading, nextHeading) {
     const applyOneStart = applySource.indexOf("async function applyOne(");
     const applyOneBody = applySource.slice(applyOneStart, applySource.indexOf("\n}\n", applyOneStart));
     const dispatched = new Set([...applyOneBody.matchAll(/^\s*case "([a-z-]+)":/gm)].map((m) => m[1]));
+    // The classes' own apply types are registered with the engine rather than switched on in it.
+    const extensionsSource = fs.readFileSync(path.join(ROOT, "scripts/riders-extensions.mjs"), "utf8");
+    for (const m of extensionsSource.matchAll(/registerApplyType\("([a-z-]+)"/g)) dispatched.add(m[1]);
     const eventsBlock = dataSource.slice(dataSource.indexOf("export const EVENTS"));
     const events = new Set(
         [...eventsBlock.slice(0, eventsBlock.indexOf("]")).matchAll(/"([a-z-]+)"/g)].map((m) => m[1]),

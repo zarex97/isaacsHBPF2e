@@ -1,23 +1,10 @@
-import { classSlugOf, classStatisticOf, resolveDC } from "../lib/class-dc.mjs";
 import { applyHeightening, applyThresholds, bonusStepsFrom, catchTokens, describeActor, describeDamage, effectiveLevel, riderOptions, shapeFromArea, stepsFor, testPredicate, thresholdsCrossed, valueAtLevel } from "../automation.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
-
-/**
- * The Soulbound's Severance Waning dice for an actor, read lazily so this module does not import the ladder.
- *
- * Named for its class on purpose: this file also dispatches the Saint's `severed-limb` / `severed-sense`
- * riders from Capricorn's Excalibur, and a bare `SeveranceDice` in shared code reads as though one class
- * owns the root word. `CONTEXT.md` keeps **Severed** and **Severance** apart.
- */
-function soulboundSeveranceDice(actor) {
-    return game.modules.get(MODULE_ID)?.api?.severance?.dice?.(actor) ?? 0;
-}
 import { Banish, durationSeconds } from "./banish.mjs";
 import { OUTCOME_LABELS, collectRiders, itemFor, riderAt } from "./data.mjs";
 import { Encasement } from "./encasement.mjs";
 import { Escape, escapeStatisticFor } from "./escape.mjs";
-import { WEAPON_TAG, crossingBleed, equipArm, libraDice, libraPotency } from "./libra.mjs";
-import { PROFILE_TAG as SPIRIT_PROFILE_TAG, SPIRIT_WEAPON_TAG } from "../soulbound/weapon.mjs";
+import { RiderExtensions } from "./extensions.mjs";
 import { offerReaction } from "./reactions.mjs";
 import { gateByRound } from "./round-gate.mjs";
 import { selectRiders } from "./select.mjs";
@@ -385,8 +372,6 @@ async function applyOne(rider, context) {
             return;
         case "save":
             return applySave(rider, context);
-        case "charge":
-            return applyCharge(rider, context);
         case "pool":
             return applyPool(rider, context);
         case "damage":
@@ -421,12 +406,14 @@ async function applyOne(rider, context) {
             return Encasement.apply(rider, context);
         case "escape":
             return applyEscape(rider, context);
-        case "equip":
-            return applyEquip(rider, context);
         case "expire":
             return applyExpire(rider, context);
-        default:
+        default: {
+            // A type another module registered — Libra's Arms, a Soulbound's charge pool.
+            const registered = RiderExtensions.applyType(apply.type);
+            if (registered) return registered(rider, context);
             console.warn(`Isaac's Homebrew | ${context.item?.name}: unknown rider type "${apply.type}"`);
+        }
     }
 }
 
@@ -494,7 +481,7 @@ async function targetsFor(rider, context) {
      * with two shapes they go into a single Region, and `catchTokens` returns each token once.
      */
     const areas = [rider.area].flat().filter(Boolean);
-    const anchors = context.originActor?.getFlag?.(MODULE_ID, "areaAnchors") ?? {};
+    const anchors = RiderExtensions.anchorsFor(context.originActor);
     const shapes = [];
     for (const area of areas) {
         // `anchor: "target"` centres the shape on the creature that was struck, not on the caster.
@@ -587,18 +574,9 @@ async function applyTeleport(rider, context) {
     const feet = Number(rider.apply.distance) || 0;
     if (feet <= 0) return;
 
-    // Some creatures do not move. Taurus' Bulwark refuses anything its own size or smaller, and a Saint in
-    // Titan's Stance cannot be shifted at all — both are written as a promise the guide makes, so a forced
-    // movement has to honour them rather than shove the token anyway and leave the table to argue.
-    const targetOptions = token.actor?.getRollOptions?.() ?? [];
-    const refusal = (() => {
-        if (targetOptions.includes("saint:immovable")) return "does not move";
-        if (!targetOptions.includes("saint:bulwark")) return null;
-        const order = { tiny: 0, sm: 1, med: 2, lg: 3, huge: 4, grg: 5 };
-        const mover = order[context.originActor?.size ?? "med"] ?? 2;
-        const held = order[token.actor?.size ?? "med"] ?? 2;
-        return mover <= held ? "is not moved by anything its own size or smaller" : null;
-    })();
+    // Some creatures do not move, and a forced movement has to honour that rather than shove the token
+    // anyway and leave the table to argue. Who refuses, and why, is registered (`registerTeleportRefusal`).
+    const refusal = RiderExtensions.teleportRefusal(token, context);
     if (refusal) {
         context.notes.push(`${token.name} ${refusal} — the movement is refused.`);
         return;
@@ -811,38 +789,11 @@ async function applyStrikes(rider, context) {
  * fist if none is, because a Saint holding both Tridents cannot punch with either hand anyway.
  */
 function findStrike(actor, wanted, { exact = false } = {}) {
+    // A named selector — "Libra weapon", "spirit weapon" — answers for itself (`registerStrikeSelector`).
+    const selector = RiderExtensions.strikeSelector(wanted);
+    if (selector) return selector(actor, { exact });
+
     const actions = actor.system.actions ?? [];
-    if (wanted === "libra") {
-        const held = actions.find(
-            (action) =>
-                action.ready && (action.item?.system?.traits?.otherTags ?? []).includes(WEAPON_TAG),
-        );
-        if (held) return held;
-        return actions.find((action) => action.item?.system?.category === "unarmed") ?? actions[0];
-    }
-    /**
-     * "With your **spirit weapon**" — whichever one that is right now.
-     *
-     * Tiburón's *Trident* is "three ranged Strikes with your spirit weapon", and naming the weapon meant
-     * naming *Tiburón — Hollow-Edged Blade*, which is one Spirit's released profile and is not even the
-     * string `findStrike` compares: slugs drop the accent, so it is `tibur-n-hollow-edged-blade`. Driven
-     * live, the rider fell back to `unarmed` and a released Tiburón punched the target three times.
-     *
-     * The class already has a word for the weapon: the tag every profile and every released form carries.
-     * A released form's weapon wins over the sealed profile, because while one is in hand the other is
-     * stowed — the same order `SpiritWeapon.reconcile` keeps.
-     */
-    if (wanted === "spirit-weapon") {
-        const spirit = actions.filter(
-            (action) => (action.item?.system?.traits?.otherTags ?? []).includes(SPIRIT_WEAPON_TAG),
-        );
-        const released = spirit.find(
-            (action) => !(action.item?.system?.traits?.otherTags ?? []).includes(SPIRIT_PROFILE_TAG),
-        );
-        const held = released ?? spirit[0] ?? null;
-        if (held) return held;
-        return exact ? null : (actions.find((a) => a.item?.system?.category === "unarmed") ?? actions[0]);
-    }
 
     const found = actions.find(
         (action) => action.slug === wanted || action.item?.system?.category === wanted,
@@ -1040,31 +991,6 @@ async function applyHeal(rider, context) {
  * here needs to know which item the toggle lives on — which matters, because it lives on the Cloth and the
  * action is granted by it.
  */
-/**
- * Summon an Arm — Libra's twelve weapons, six matched pairs, one pair in the hands at a time.
- *
- * This is a rider rather than an inventory click because the pair is the unit and the sky decides how many
- * pairs the Saint may hold: one normally, two half-pairs under *The Balance*, and all six under a Zenith,
- * where "the Cloth holds what your hands cannot". Equipping by hand can express none of that.
- */
-async function applyEquip(rider, context) {
-    const actor = context.originActor ?? context.actor;
-    if (!actor) return;
-
-    const options = actor.getRollOptions?.() ?? [];
-    const sky = options.includes("sky:zenith") ? "zenith" : options.includes("sky:ascendant") ? "ascendant" : "none";
-    const { equipped, stowed } = await equipArm(actor, rider.apply.arm ?? null, { sky });
-
-    const lines = [];
-    if (equipped.length > 0) lines.push(`<strong>Summoned</strong> ${equipped.join(" and ")}.`);
-    if (stowed.length > 0) lines.push(`<strong>Dismissed</strong> ${stowed.join(", ")}.`);
-    if (lines.length === 0) lines.push("Nothing changed — that Arm is already in your hands.");
-    await ChatMessage.create({
-        speaker: ChatMessage.getSpeaker({ actor }),
-        flavor: context.item?.name ?? "Summon an Arm",
-        content: `<p>${lines.join(" ")}</p>`,
-    });
-}
 
 async function applyToggle(rider, context) {
     const actor = context.actor;
@@ -1198,7 +1124,7 @@ async function applyCounteract(rider, context) {
     // "Counteract each" (Lead Depth 4's Null Field, #91): every caught effect is rolled against at once rather than
     // offered one button at a time.
     if (rider.apply.auto === true) {
-        const statistic = rider.apply.statistic ?? classSlugOf(context.originActor) ?? "saint";
+        const statistic = rider.apply.statistic ?? RiderExtensions.defaultStatistic(context.originActor);
         for (const uuid of buttons.map((b) => /data-effect="([^"]+)"/.exec(b)?.[1]).filter(Boolean)) {
             await resolveCounteract({ originUuid: context.originActor?.uuid ?? null, effectUuid: uuid,
                 itemUuid: (context.item ?? context.riderItem)?.uuid ?? null, statistic, suppress: rider.apply.suppress ?? false });
@@ -1219,7 +1145,7 @@ async function applyCounteract(rider, context) {
                     itemUuid: (context.item ?? context.riderItem)?.uuid ?? null,
                     // Falls back to the origin's own class, so a Soulbound's Seal the Art counteracts
                     // on the Reiatsu DC without the content having to name it.
-                    statistic: rider.apply.statistic ?? classSlugOf(context.originActor) ?? "saint",
+                    statistic: rider.apply.statistic ?? RiderExtensions.defaultStatistic(context.originActor),
                     suppress: rider.apply.suppress ?? false,
                 },
             },
@@ -1243,9 +1169,9 @@ export async function resolveCounteract(payload) {
     const actor = origin?.actor ?? origin;
     if (!actor || !effect) return;
 
-    const slug = payload.statistic ?? classSlugOf(actor) ?? "saint";
-    // A borrowed class counteracts with its lender's statistic — The Thing That Wears You (#96).
-    const statistic = classStatisticOf(actor, slug);
+    const slug = payload.statistic ?? RiderExtensions.defaultStatistic(actor);
+    // Registered resolvers first — a borrowed class counteracts with its lender's statistic.
+    const statistic = RiderExtensions.statistic(actor, slug);
     if (!statistic) {
         ui.notifications.warn(`${actor.name} has no ${slug} statistic to counteract with.`);
         return;
@@ -1270,114 +1196,42 @@ export async function resolveCounteract(payload) {
     });
     const outcome = DEGREES[roll?.degreeOfSuccess ?? -1];
 
-    /**
-     * The Quincy's counteract cluster — guide §5.3, §8.3 and §5.3's 15th-level Mastery.
-     *
-     * Three clauses that all turn on the same roll, and all three were roll options nothing read:
-     *
-     *  - **Seal the Art** costs 1 Reiatsu Point. Nothing spent it: the action is an `action` item, and
-     *    pf2e only deducts focus for a *spell*. So it is charged here, where the outcome is known.
-     *  - **Reishi Mastery** (feat 10) raises the counteract rank by 1 **and makes it free on a critical
-     *    success** — which is why the charge has to wait for the roll rather than happen on the cast.
-     *  - **Sklaverei** (15th) refunds a point on a successful counteract, ignoring Rising Pressure's
-     *    per-encounter cap, and leaves the target **off-guard** until the end of its next turn.
-     *
-     * Read from roll options rather than by slug so a Borrowed Nature dip that grants `Seal the Art`
-     * behaves the same way.
-     */
-    const options = actor.getRollOptions?.() ?? [];
-    const mastery = options.includes("soulbound:reishi-mastery");
     const ourRank = counteractRank(actor, item);
     const reach = { criticalSuccess: 3, success: 1, failure: -1, criticalFailure: -Infinity }[outcome] ?? -Infinity;
     const counteracted = targetRank <= ourRank + reach;
     // Anything that answers a counteract — Quartz Depth 3's charge (#89) — hears it here.
     Hooks.callAll("isaacsHb.counteracted", actor, { effect, counteracted, outcome });
 
-    // Suppression rather than ending, for the things that are a STATE rather than a spell.
-    //
-    // The Soulbound's Seal the Art (guide §5.3) says a release state — Shikai, Bankai, Resurrección,
-    // Vollständig, a Barbarian's Rage, a Magus's Arcane Cascade — is "not ended outright but suppressed
-    // until the end of the target's next turn", and cannot be re-entered meanwhile. Deleting a 13th-level
-    // Bankai with a 5th-level action is exactly what that clause exists to prevent.
-    //
-    // A suppressed effect is disabled rather than removed, so it comes back with its own duration and
-    // its own flags intact, and a marker says it may not be re-entered yet.
-    // `suppress: "any"` parks whatever it beats — Lead Depth 4's "suppress magical effects … for 1 round" (#91).
-    const suppressible = payload.suppress === "any" || (payload.suppress
-        && (effect.system?.traits?.value ?? []).some((t) => SUPPRESSIBLE_TRAITS.has(t)));
+    // Suppression rather than ending, for the things that are a STATE rather than a spell: a stance, a
+    // polymorph, or whatever traits another module registered as one. Deleting a high-rank state with a
+    // low-rank action is what a suppression clause exists to prevent. `suppress: "any"` parks whatever it
+    // beats. How a state is parked, and for how long, is the registered suppressor's; without one, a
+    // counteracted state is ended like anything else.
+    const suppressible = payload.suppress === "any" || (payload.suppress && RiderExtensions.isSuppressible(effect));
 
-    /**
-     * `disabled: true` was a field a pf2e **Effect item does not have**, so this suppressed nothing at
-     * all: driven live, a 17th-level Shikai announced as switched off still had all three of its rule
-     * elements live on the actor. `Suppression` parks the rules and the module's own riders instead, and
-     * puts them back when the window closes — see `soulbound/suppression.mjs`.
-     *
-     * Sklaverei (15th): "On a critical success against a release state, the suppression lasts 1 minute
-     * instead." A minute is not a number of turns, so it is counted on the world clock.
-     */
-    let suppressed = false;
+    let suppression = null;
     if (counteracted && suppressible) {
-        const { Suppression } = await import("../soulbound/suppression.mjs");
-        const minutes = outcome === "criticalSuccess" && options.includes("soulbound:sklaverei") ? 1 : 0;
-        suppressed = await Suppression.suppress(effect, { minutes });
-        // An effect whose rules carry grant-time state cannot be parked and must not be deleted either:
-        // ending a release state outright is the one thing this clause exists to prevent.
-        if (!suppressed) {
-            context.notes?.push?.(`${effect.name} could not be suppressed without stranding a grant.`);
+        suppression = await RiderExtensions.suppress(effect, { actor, outcome, item });
+        if (!suppression) await effect.delete();
+        else if (!suppression.suppressed) {
+            // A state whose rules carry grant-time state cannot be parked and must not be deleted either.
+            ui.notifications.warn(`${effect.name} could not be suppressed without stranding a grant.`);
         }
     } else if (counteracted) {
         await effect.delete();
     }
+    const suppressed = !!suppression?.suppressed;
 
-    if (classSlugOf(actor) === "soulbound") {
-        const pool = actor.system?.resources?.focus;
-        const free = mastery && outcome === "criticalSuccess";
-        let value = pool?.value ?? 0;
-
-        if (!free) value = Math.max(0, value - 1);
-        // Sklaverei's refund ignores the per-encounter ceiling, so it is written straight to the pool
-        // rather than routed through Rising Pressure's ledger.
-        if (counteracted && options.includes("soulbound:sklaverei")) {
-            value = Math.min(pool?.max ?? value, value + 1);
-        }
-        if (value !== (pool?.value ?? 0)) {
-            await actor.update({ "system.resources.focus.value": value });
-        }
-        /**
-         * "…and the target is **off-guard** until the end of its next turn."
-         *
-         * `increaseCondition` applies a condition with **no duration**, so this one never came off: a
-         * Quincy with Sklaverei left every target they ever sealed permanently off-guard. The condition
-         * is carried by a timed effect instead, which is how every other durational condition in the
-         * module is applied.
-         */
-        if (counteracted && options.includes("soulbound:sklaverei") && effect.actor) {
-            await effect.actor.createEmbeddedDocuments("Item", [{
-                name: `${item?.name ?? "Seal the Art"}: Off-Guard`,
-                type: "effect",
-                img: item?.img ?? "icons/svg/downgrade.svg",
-                system: {
-                    duration: { unit: "rounds", value: 1, expiry: "turn-end", sustained: false },
-                    rules: [{
-                        key: "GrantItem",
-                        uuid: "Compendium.pf2e.conditionitems.Item.AJh5ex99aV6VTggg",
-                        allowDuplicate: false,
-                    }],
-                },
-            }]);
-        }
-    }
+    // Whatever a counteract costs or earns beyond its effect — a pool spent or refunded, a target left
+    // off-guard — is registered (`registerAfterCounteract`).
+    await RiderExtensions.afterCounteract({ actor, effect, item, outcome, counteracted, suppressible, suppressed });
 
     await ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor }),
         flavor: item?.name ?? "Counteract",
-        content: counteracted && suppressible
-            // Sklaverei's critical success buys a minute rather than a turn, and the card has to say
-            // which: a player reading "until the end of your next turn" will act on it.
+        content: counteracted && suppression
             ? `<p><strong>${effect.name}</strong> is <strong>suppressed</strong> `
-                + (suppressed && outcome === "criticalSuccess" && options.includes("soulbound:sklaverei")
-                    ? "for <strong>1 minute</strong>"
-                    : `until the end of ${effect.actor?.name ?? "the target"}'s next turn`)
+                + (suppression.until ?? `until the end of ${effect.actor?.name ?? "the target"}'s next turn`)
                 + ", and cannot be re-entered until then.</p>"
             : counteracted
                 ? `<p><strong>${effect.name}</strong> is counteracted and gone.</p>`
@@ -1386,18 +1240,9 @@ export async function resolveCounteract(payload) {
     });
 }
 
-/**
- * What "a release state" means for suppression.
- *
- * A release state is an ongoing self-buff a creature chose to enter, which is what makes deleting it
- * disproportionate. These are the traits the ones in play actually carry.
- */
-const SUPPRESSIBLE_TRAITS = new Set(["soulbound", "cosmo", "stance", "polymorph"]);
-
-/** The counteract rank: the item's rank, or half the actor's level; Reishi Mastery raises it by 1. */
+/** The counteract rank: the item's rank, or half the actor's level, plus whatever is registered. */
 function counteractRank(actor, item) {
-    const mastery = (actor.getRollOptions?.() ?? []).includes("soulbound:reishi-mastery");
-    return Math.max(1, Number(item?.rank) || Math.ceil((actor.level ?? 1) / 2)) + (mastery ? 1 : 0);
+    return Math.max(1, Number(item?.rank) || Math.ceil((actor.level ?? 1) / 2)) + RiderExtensions.counteractRankBonus(actor, item);
 }
 
 /** pf2e's level-based DC table, which a module cannot import and which has not moved in four editions. */
@@ -1742,7 +1587,7 @@ async function applyEffect(rider, context) {
     applySubstitutions(source, rider.apply.substitutions, context);
     source._stats = foundry.utils.mergeObject(source._stats ?? {}, { compendiumSource: uuid });
     source.system.start = startData();
-    if (rider.duration) source.system.duration = durationData(longNow(rider, context));
+    if (rider.duration) source.system.duration = durationData(RiderExtensions.duration(rider, context));
     source.system.context = contextData(context);
     source.flags = foundry.utils.mergeObject(source.flags ?? {}, riderFlags(rider, context));
 
@@ -1758,11 +1603,8 @@ async function applyEffect(rider, context) {
 
     const [created] = await context.actor.createEmbeddedDocuments("Item", [source]);
 
-    // An effect that hands somebody weapons should put them in their hands. *The Twelve Arms* grants the
-    // matched pair through the effect's own `GrantItem` rules, which is what makes them vanish again when
-    // the effect goes — but a granted weapon arrives carried rather than held, and an ally holding an Arm
-    // they have not equipped is the whole Technique not working.
-    if (rider.apply.arm) await equipArm(context.actor, rider.apply.arm);
+    // Whatever has to follow an effect's arrival — an Arm put into the hands that were just granted it.
+    await RiderExtensions.afterEffect(rider, context, created);
 
     if (rider.apply.stack) {
         await crossThresholds(source, 0, Number(source.system?.badge?.value) || 0, context);
@@ -2086,27 +1928,6 @@ export function basicLadder(spec) {
     });
 }
 
-/**
- * Spend from a charge pool.
- *
- * The other half of `Charges.beforeCast`. A Technique that is *cast* is refused before it resolves if
- * the pool is empty; a Technique that is a **reaction** never passes through `cast` at all —
- * Zanhyō Ningyō is triggered by damage landing on you — so its spend rides on the prompt being
- * accepted, as a rider beside the one that summons the doll.
- *
- * Always spends from the ORIGIN's pool, not the target's: the petal-flowers are the Bankai's, and a
- * rider resolving against an enemy must not look for a pool on them.
- */
-async function applyCharge(rider, context) {
-    const { Charges } = await import("../soulbound/charges.mjs");
-    const actor = context.originActor;
-    const { effect, spend = 1, perRound = 1 } = rider.apply;
-    if (!actor || !effect) return;
-    await Charges.spend(actor, effect, {
-        spending: Number(spend),
-        perRound: perRound === null ? Infinity : Number(perRound),
-    });
-}
 
 /**
  * A price paid out of the Reiatsu pool by something that is not a cast.
@@ -2182,18 +2003,6 @@ async function applySave(rider, context) {
     return runSave(rider.apply, context);
 }
 
-/**
- * Lapis Lazuli Depth 4 — *"name a creature's strongest save; for 1 minute your Mutations target its weakest
- * instead"* (#88). *Lay Bare* marks the creature with both, for the Assimilator that named them; a save one of that
- * Assimilator's Mutations calls for, on that creature, rolls the weakest when it asked for the strongest.
- */
-function laidBare(slug, context) {
-    const origin = context.originActor;
-    if (!origin || !(context.item?.system?.traits?.otherTags ?? []).includes("assimilator-mutation-action")) return slug;
-    const mark = context.actor?.itemTypes?.effect?.find((e) => e.flags?.[MODULE_ID]?.laidBare?.origin === origin.uuid);
-    const bare = mark?.flags?.[MODULE_ID]?.laidBare;
-    return bare && slug === bare.strongest ? bare.weakest : slug;
-}
 
 /**
  * The save itself, apart from the rider that usually asks for it.
@@ -2206,35 +2015,23 @@ function laidBare(slug, context) {
  */
 export async function runSave(spec, context) {
     const { dc } = spec;
-    const slug = laidBare(spec.statistic, context);
+    // A save another module changes — a different save asked for, a penalty the caster chose to impose.
+    const { statistic: slug, modifiers } = RiderExtensions.modifySave(spec.statistic, context);
     const statistic = context.actor.getStatistic?.(slug);
     if (!statistic) {
         console.warn(`Isaac's Homebrew | ${context.actor.name} has no ${slug} statistic`);
         return;
     }
 
-    const value = resolveDC(dc, context);
+    const value = RiderExtensions.resolveDC(dc, context);
     if (!value) return;
 
-    /**
-     * `Kidō Focus` (feat 2): "spend 1 additional action to give the target a −1 circumstance penalty to
-     * its save."
-     *
-     * The extra action is a choice, so the feat is a **toggle** on the caster's sheet, and this is the
-     * only place the penalty can land — the save is rolled by the module, not by pf2e, so no rule
-     * element on either side would ever see it. Restricted to kidō, which is what the feat says.
-     */
-    const originOptions = context.originActor?.getRollOptions?.() ?? [];
-    const kidoFocus = originOptions.includes("soulbound:kido-focus")
-        && (context.item?.system?.traits?.otherTags ?? []).includes("sb-tier-kido");
     const roll = await statistic.roll({
         dc: { value },
         skipDialog: true,
         item: context.item ?? null,
         origin: context.originActor ?? null,
-        modifiers: kidoFocus
-            ? [new game.pf2e.Modifier({ slug: "kido-focus", label: "Kidō Focus", modifier: -1, type: "circumstance" })]
-            : [],
+        modifiers,
         extraRollOptions: [`${MODULE_ID}:rider-save`],
     });
     const outcome = DEGREES[roll?.degreeOfSuccess ?? -1];
@@ -2431,15 +2228,9 @@ function resolveFromOrigin(expression, context) {
         const ceiling = Number(expression.max);
         return Number.isFinite(ceiling) && Number.isFinite(Number(grown)) ? Math.min(Number(grown), ceiling) : grown;
     }
-    // The Arms Advance, asked about from a rider. A Libra Art's numbers are stated in the weapon's own
-    // damage dice — "persistent bleed equal to your weapons' number of damage dice in d6s" — which is a
-    // ladder the item already knows and neither the Technique's rank nor the caster's level can be read
-    // off directly, because a lit sky raises it by a whole tier.
-    if (expression === "origin.libra.dice") return libraDice(originActor);
-    if (expression === "origin.libra.bleed") return crossingBleed(originActor);
-    if (expression === "origin.libra.potency") return libraPotency(originActor);
-    const libraDie = /^origin\.libra\.dice\.(d\d+)$/.exec(String(expression));
-    if (libraDie) return `${libraDice(originActor)}${libraDie[1]}`;
+    // A value another module answers — a class's own ladder (`registerOriginValue`).
+    const registered = RiderExtensions.originValue(expression, context);
+    if (registered !== undefined) return registered;
 
     // An attack proficiency rather than a statistic. *The Twelve Arms* says an ally "uses **your** weapon
     // proficiency with it", and that is the Saint's *unarmed* rank — Master at 13th — not their Cosmo DC,
@@ -2482,14 +2273,6 @@ function resolveFromOrigin(expression, context) {
         return Number.isFinite(total) ? total : null;
     }
 
-    // The Waning dice as they stand *now*. Apotheosis "detonates again at the start of your next turn
-    // for half the Waning dice" (R-26), and by then the round has turned — so the second blast is worth
-    // what the table says in the round it actually lands, not what the first one rolled. Reading it
-    // here is the only way to ask that question at the moment it is asked.
-    if (expression === "origin.severance.dice") {
-        const dice = soulboundSeveranceDice(originActor);
-        return dice > 0 ? `${dice}d6` : null;
-    }
     // How far the Technique itself has heightened, sky included — the growth a Strike inherits when the
     // Technique says "each Strike's damage increases by 1d6".
     if (expression === "origin.item.steps") {
@@ -2565,21 +2348,6 @@ function outcomeSuffix(context) {
  * A rider that genuinely wants the shorter window says `expiry: "turn-start"` for itself. None of the
  * shipped content did, which is what made this a silent default rather than a decision.
  */
-/**
- * The Stargazer's *Long Now* (guide §7, 12th): an Augury whose **Duration** line reads 1 minute lasts
- * 10 minutes. The Duration line is the spell's own `system.duration`; a rider scoped to a degree of success
- * carries `outcomes` and is left alone — "a duration inside a degree of success … does not change".
- */
-export function longNow(rider, context) {
-    const duration = rider.duration;
-    const item = context?.item ?? context?.riderItem;
-    const caster = context?.originActor ?? item?.actor;
-    const minute = duration?.unit === "minutes" && Number(duration?.value) === 1;
-    if (!minute || rider.outcomes || item?.type !== "spell") return duration;
-    if (String(item.system?.duration?.value ?? "").trim().toLowerCase() !== "1 minute") return duration;
-    if (!(caster?.itemTypes?.feat ?? []).some((f) => f.slug === "long-now")) return duration;
-    return { ...duration, value: 10 };
-}
 
 function durationData(duration) {
     return {

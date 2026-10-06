@@ -16,6 +16,8 @@ import { AUTOMATION_ID, AreaTargeting, CastPipeline, CheckPipeline, DamageBus, R
 import { Migration } from "./migration.mjs";
 import { Astral } from "./astral.mjs";
 import { registerCastStages } from "./cast-stages.mjs";
+import { registerRiderExtensions } from "./riders-extensions.mjs";
+import { Overlap } from "./targeting/overlap.mjs";
 import { Cosmo } from "./cosmo.mjs";
 import { Deaths } from "./deaths.mjs";
 import { DAMAGE as PRIORITY } from "./stage-priorities.mjs";
@@ -100,6 +102,8 @@ Hooks.once(`${AUTOMATION_ID}.init`, () => {
     // pipeline — registrations, so the generic code never calls them by name.
     start("the classes' cast stages", () => registerCastStages());
     start("the classes' area targeting", () => registerAreaExtensions());
+    start("the classes' word in the rider engine", () => registerRiderExtensions());
+    start("overlapping areas' relay", () => Overlap.registerRelay());
     start("the rider engine's settings", () => Riders.registerSettings());
     start("the banishment register", () => {
         Banish.registerSettings();
