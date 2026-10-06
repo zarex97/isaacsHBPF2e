@@ -1635,7 +1635,7 @@ const BOND_CHECKS = [
     ...[[{ onyx: 2, lead: 2 }, ["null-shroud"], [6, true, true], "Null Shroud: floor 6; a rank-5 counteract is refused without a roll; a rank-9 one rolls"],
         [{ onyx: 2, lead: 1 }, [], [0, false, true], "control: no Null Shroud — no floor, the rank-5 counteract rolls"]].map(([b, bonds, want, note]) => ({
         id: "B-24", lv: 17, b, bonds, want, note, act: async (a, t) => {
-            const { resolveCounteract } = await import("../riders/apply.mjs");
+            const { resolveCounteract } = await import("../automation.mjs");
             const me = () => game.actors.get(a.id);
             for (const e of me().itemTypes.effect.filter((x) => x.slug === "effect-shadow-mantle")) await e.delete();
             await AssimilatorDamageRef().mark(me(), "effect-shadow-mantle");

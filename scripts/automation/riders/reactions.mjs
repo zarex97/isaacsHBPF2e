@@ -15,7 +15,7 @@
  * specific: it is the same machinery any reaction in any class would want, and the Saint's own reaction
  * Techniques could move onto it without a line of new code.
  */
-import { MODULE_ID } from "../sky/signs.mjs";
+import { LIB_ID } from "../id.mjs";
 
 /**
  * May this actor be offered this reaction right now?
@@ -125,7 +125,7 @@ export async function offerReaction(rider, context) {
             + `</div>`
             + `<p class="isaacs-hb-hint"><em>Ignoring this card declines the reaction; nothing is spent.</em></p>`,
         flags: {
-            [MODULE_ID]: {
+            [LIB_ID]: {
                 reaction: {
                     riderItemUuid: item.uuid,
                     riderIndex: context.riderIndex,
@@ -152,7 +152,7 @@ export async function offerReaction(rider, context) {
 
 /** Bind the button on a rendered reaction card. Mirrors `bindChoiceButtons` beside it. */
 export function bindReactionButtons(message, html, request) {
-    const reaction = message?.flags?.[MODULE_ID]?.reaction;
+    const reaction = message?.flags?.[LIB_ID]?.reaction;
     if (!reaction || !html?.querySelectorAll) return;
 
     for (const button of html.querySelectorAll(`[data-action="isaacs-hb-reaction"]`)) {

@@ -1,6 +1,6 @@
-import { DamageBus } from "../automation.mjs";
-import { DAMAGE } from "../stage-priorities.mjs";
-import { MODULE_ID } from "../sky/signs.mjs";
+import { DamageBus } from "./automation.mjs";
+import { DAMAGE } from "./stage-priorities.mjs";
+import { MODULE_ID } from "./sky/signs.mjs";
 
 /**
  * Everything the Libra Cloth needs that is not expressible as a rule element.

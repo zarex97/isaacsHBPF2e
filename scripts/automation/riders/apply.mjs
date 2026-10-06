@@ -1,5 +1,5 @@
-import { applyHeightening, applyThresholds, bonusStepsFrom, catchTokens, describeActor, describeDamage, effectiveLevel, riderOptions, shapeFromArea, stepsFor, testPredicate, thresholdsCrossed, valueAtLevel } from "../automation.mjs";
-import { MODULE_ID } from "../sky/signs.mjs";
+import { applyHeightening, applyThresholds, bonusStepsFrom, catchTokens, describeActor, describeDamage, effectiveLevel, riderOptions, shapeFromArea, stepsFor, testPredicate, thresholdsCrossed, valueAtLevel } from "../../automation.mjs";
+import { LIB_ID } from "../id.mjs";
 import { Banish, durationSeconds } from "./banish.mjs";
 import { OUTCOME_LABELS, collectRiders, itemFor, riderAt } from "./data.mjs";
 import { Encasement } from "./encasement.mjs";
@@ -80,7 +80,7 @@ async function applyToTarget(target, candidates, context, payload) {
     // re-apply. The Saint got the counteract card and never their own aura. `selfOnly` is therefore folded
     // in: it is undefined for every event that never splits this way, so nothing else moves.
     const receiptKey = receiptKeyFor(payload, target.id);
-    const previous = context.message?.flags?.[MODULE_ID]?.ridersApplied?.[receiptKey] ?? null;
+    const previous = context.message?.flags?.[LIB_ID]?.ridersApplied?.[receiptKey] ?? null;
     if (previous?.outcome === (payload.outcome ?? null)) return;
     if (previous) await undo(actor, previous);
 
@@ -178,7 +178,7 @@ async function applyToTarget(target, candidates, context, payload) {
             adjustments: work.adjustments,
             moves: work.moves,
         };
-        await context.message.update({ [`flags.${MODULE_ID}.ridersApplied.${receiptKey}`]: receipt });
+        await context.message.update({ [`flags.${LIB_ID}.ridersApplied.${receiptKey}`]: receipt });
     }
 
     if (work.notes.length > 0) await postNotes(work);
@@ -818,7 +818,7 @@ function strikeCount(rider, context, available) {
     if (asked !== "maxTargets") return available;
 
     const item = context.item ?? context.riderItem;
-    const flag = item?.flags?.[MODULE_ID]?.areaTargeting;
+    const flag = item?.flags?.[LIB_ID]?.areaTargeting;
     if (!flag?.maxTargets) return available;
 
     const bonusSteps = bonusStepsFrom(context.originActor?.getRollOptions?.() ?? []);
@@ -949,7 +949,7 @@ async function applyHeal(rider, context) {
         : (Number(rider.apply.maxPerCast) || Infinity);
 
     const message = context.message;
-    const pool = Number(message?.flags?.[MODULE_ID]?.healPool) || 0;
+    const pool = Number(message?.flags?.[LIB_ID]?.healPool) || 0;
     const allowed = Math.max(0, Math.min(each, cap - pool));
     if (allowed <= 0) {
         // Said out loud rather than whispered. It is the Technique reporting its own ceiling, not a job for
@@ -965,7 +965,7 @@ async function applyHeal(rider, context) {
 
     const healed = Math.min(allowed, hp.max - hp.value);
     if (healed > 0) await actor.update({ "system.attributes.hp.value": hp.value + healed });
-    if (message) await message.update({ [`flags.${MODULE_ID}.healPool`]: pool + allowed });
+    if (message) await message.update({ [`flags.${LIB_ID}.healPool`]: pool + allowed });
 
     await ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor }),
@@ -1139,7 +1139,7 @@ async function applyCounteract(rider, context) {
         content: `<p>${foundry.utils.escapeHTML(rider.apply.prompt ?? "Counteract one, if you wish.")}</p>`
             + `<div class="isaacs-hb-choice">${buttons.join(" ")}</div>`,
         flags: {
-            [MODULE_ID]: {
+            [LIB_ID]: {
                 counteract: {
                     originUuid: context.originActor?.uuid ?? null,
                     itemUuid: (context.item ?? context.riderItem)?.uuid ?? null,
@@ -1180,10 +1180,10 @@ export async function resolveCounteract(payload) {
     const targetRank = Math.max(1, Number(effect.system?.level?.value) || 1);
     // "Cannot be counteracted below Nth rank" — Null Shroud's darkness (#95). The floor rides on the effect, and a
     // counteract of lower rank fails without a roll.
-    const floor = Number(effect.flags?.[MODULE_ID]?.counteractFloor) || 0;
+    const floor = Number(effect.flags?.[LIB_ID]?.counteractFloor) || 0;
     if (floor && counteractRank(actor, item) < floor) {
         await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), flavor: item?.name ?? "Counteract",
-            flags: { [MODULE_ID]: { counteractFloor: { effect: effect.uuid, floor } } },
+            flags: { [LIB_ID]: { counteractFloor: { effect: effect.uuid, floor } } },
             content: `<p><strong>${effect.name}</strong> cannot be counteracted below rank ${floor} — a counteract rank of `
                 + `${counteractRank(actor, item)} does not touch it.</p>` });
         return;
@@ -1192,7 +1192,7 @@ export async function resolveCounteract(payload) {
         dc: { value: dcByLevel(effect.system?.level?.value ?? actor.level) },
         skipDialog: true,
         label: `Counteract — ${effect.name}`,
-        extraRollOptions: [`${MODULE_ID}:counteract`],
+        extraRollOptions: [`${LIB_ID}:counteract`],
     });
     const outcome = DEGREES[roll?.degreeOfSuccess ?? -1];
 
@@ -1313,7 +1313,7 @@ async function applyReadout(rider, context) {
  * moment you cast until the end of the encounter" is one fact told twice, not two different mechanics.
  */
 async function reportTrackedHp(item, context) {
-    const uuid = item?.flags?.[MODULE_ID]?.trackedTarget;
+    const uuid = item?.flags?.[LIB_ID]?.trackedTarget;
     const token = uuid ? await fromUuid(uuid) : null;
     const actor = token?.actor;
 
@@ -1473,7 +1473,7 @@ async function applyCondition(rider, context) {
     const standing = source
         ? context.actor.itemTypes.effect.find(
               (e) => e.name === `${context.item?.name ?? context.riderItem?.name ?? ""}: ${label}`
-                  && e.flags?.[MODULE_ID]?.rider?.source === source,
+                  && e.flags?.[LIB_ID]?.rider?.source === source,
           )
         : null;
     // Only a grant still holding its condition is refreshed. One whose condition was taken off by hand — or
@@ -1597,7 +1597,7 @@ async function applyEffect(rider, context) {
     // this point `context.target` is the caster's own token — see the note where it is set.
     if (rider.apply.trackedTarget) {
         source.flags = foundry.utils.mergeObject(source.flags, {
-            [MODULE_ID]: { trackedTarget: context.eventTarget?.uuid ?? null },
+            [LIB_ID]: { trackedTarget: context.eventTarget?.uuid ?? null },
         });
     }
 
@@ -1627,7 +1627,7 @@ async function applyEffect(rider, context) {
  * counter starts above it.
  */
 async function crossThresholds(source, was, now, context) {
-    const thresholds = source?.flags?.[MODULE_ID]?.counterThresholds;
+    const thresholds = source?.flags?.[LIB_ID]?.counterThresholds;
     for (const threshold of thresholdsCrossed(thresholds, was, now)) {
         try {
             await applyOne(threshold, context);
@@ -1715,7 +1715,7 @@ export async function inflictPersistent(actor, { formula, damageType = "bleed", 
         (c) =>
             c.slug === "persistent-damage" &&
             c.system.persistent?.damageType === damageType &&
-            c.flags?.[MODULE_ID]?.rider,
+            c.flags?.[LIB_ID]?.rider,
     );
     if (ours.length > 0) {
         await actor.deleteEmbeddedDocuments("Item", ours.map((c) => c.id));
@@ -1834,7 +1834,7 @@ async function applyDeath(rider, context) {
         if (!now?.max || now.value > now.max * fraction) return;
     }
 
-    const mode = game.settings.get(MODULE_ID, "automateDeath");
+    const mode = game.settings.get(LIB_ID, "automateDeath");
     const playerOwned = context.actor.hasPlayerOwner;
 
     if (mode === "off" || (mode === "npcs" && playerOwned)) {
@@ -1981,9 +1981,9 @@ async function applyPool(rider, context) {
         const stamp = game.combat?.started ? game.combat.id : null;
         if (!stamp) return;
         const key = `${(context.riderItem ?? context.item)?.id ?? "unknown"}-pool`;
-        const ledger = actor.getFlag(MODULE_ID, "poolSpent") ?? {};
+        const ledger = actor.getFlag(LIB_ID, "poolSpent") ?? {};
         if (ledger[key] === stamp) return;
-        await actor.setFlag(MODULE_ID, "poolSpent", { ...ledger, [key]: stamp });
+        await actor.setFlag(LIB_ID, "poolSpent", { ...ledger, [key]: stamp });
     }
 
     // Clamped rather than refused. The clause prices the first use and does not make it conditional, and
@@ -2032,7 +2032,7 @@ export async function runSave(spec, context) {
         item: context.item ?? null,
         origin: context.originActor ?? null,
         modifiers,
-        extraRollOptions: [`${MODULE_ID}:rider-save`],
+        extraRollOptions: [`${LIB_ID}:rider-save`],
     });
     const outcome = DEGREES[roll?.degreeOfSuccess ?? -1];
     if (!outcome) return;
@@ -2380,7 +2380,7 @@ function contextData({ originActor, originToken, item, actor, target }) {
 
 function riderFlags(rider, { message, item, outcome }) {
     return {
-        [MODULE_ID]: {
+        [LIB_ID]: {
             rider: {
                 messageId: message?.id ?? null,
                 outcome: outcome ?? null,
@@ -2505,7 +2505,7 @@ async function postPick({ rider, index, item }, context, payload) {
             `<p>${foundry.utils.escapeHTML(spec.prompt ?? "Choose a creature.")}</p>`
             + `<div class="isaacs-hb-choice">${buttons}</div>`,
         flags: {
-            [MODULE_ID]: {
+            [LIB_ID]: {
                 pick: {
                     riderItemUuid: item.uuid,
                     riderIndex: index,
@@ -2617,7 +2617,7 @@ async function postChoice({ rider, index, item, target, actor }, context, payloa
             `<p>${foundry.utils.escapeHTML(rider.apply.prompt ?? "Choose one.")}</p>`
             + `<div class="isaacs-hb-choice">${buttons}</div>`,
         flags: {
-            [MODULE_ID]: {
+            [LIB_ID]: {
                 choice: {
                     riderItemUuid: item.uuid,
                     riderIndex: index,

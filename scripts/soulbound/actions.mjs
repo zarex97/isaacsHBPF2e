@@ -1,4 +1,4 @@
-import { isAbilityUse } from "../riders/data.mjs";
+import { isAbilityUse } from "../automation.mjs";
 import { Blut } from "./blut.mjs";
 import { Modes } from "./modes.mjs";
 import { Reiatsu } from "./reiatsu.mjs";

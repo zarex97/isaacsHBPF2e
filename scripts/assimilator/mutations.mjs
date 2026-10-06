@@ -12,9 +12,8 @@ import { AssimilatorDamage, depthOf as depth, suppressed } from "./damage.mjs";
 import { Engine } from "./engine.mjs";
 import { tideRefusal } from "./instincts.mjs";
 import { GulletApp } from "./gullet.mjs";
-import { DamageBus, DetectionModes, encounterOf } from "../automation.mjs";
+import { DamageBus, DetectionModes, Relay, encounterOf } from "../automation.mjs";
 import { DAMAGE as PRIORITY } from "../stage-priorities.mjs";
-import { Relay } from "../riders/relay.mjs";
 import { classSlugOf } from "../lib/class-dc.mjs";
 
 const MOVED = "self:moved-10-feet-this-turn";

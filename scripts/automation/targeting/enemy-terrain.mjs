@@ -1,4 +1,4 @@
-import { MODULE_ID } from "../sky/signs.mjs";
+import { LIB_ID } from "../id.mjs";
 
 /** Where a lingering area keeps its origin. Spelled here rather than imported, so the two files do not import each other. */
 const LINGERING_FLAG = "lingering";
@@ -24,7 +24,7 @@ const originFlags = [];
  * does not recognise on an expired Region rather than a behavior that silently reverts to slowing allies.
  */
 
-export const TYPE = `${MODULE_ID}.enemyMovementCost`;
+export const TYPE = `${LIB_ID}.enemyMovementCost`;
 
 /**
  * Whose side is this token on?
@@ -50,7 +50,7 @@ export function allianceOf(actor) {
  * filter was there, and it had nothing to compare against, so `catches` waved everybody through.
  */
 function originOf(region) {
-    const flags = region?.flags?.[MODULE_ID] ?? {};
+    const flags = region?.flags?.[LIB_ID] ?? {};
     const key = [LINGERING_FLAG, ...originFlags].find((name) => flags[name]?.originUuid);
     const uuid = key ? flags[key].originUuid : null;
     const document = uuid ? fromUuidSync(uuid) : null;

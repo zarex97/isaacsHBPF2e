@@ -1,7 +1,6 @@
 import { classSlugOf } from "../lib/class-dc.mjs";
-import { DamageBus } from "../automation.mjs";
+import { DamageBus, Relay } from "../automation.mjs";
 import { DAMAGE as PRIORITY } from "../stage-priorities.mjs";
-import { Relay } from "../riders/relay.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 import { SkyTracker } from "../sky/tracker.mjs";
 

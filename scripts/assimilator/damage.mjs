@@ -1,5 +1,4 @@
-import { shadowTarget } from "../riders/bypass.mjs";
-import { DamageBus, encounterOf } from "../automation.mjs";
+import { DamageBus, encounterOf, shadowTarget } from "../automation.mjs";
 import { DAMAGE as PRIORITY } from "../stage-priorities.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 import { classSlugOf } from "../lib/class-dc.mjs";
@@ -332,7 +331,7 @@ export const AssimilatorDamage = {
         if (!doc?.parent || !canvas?.scene || doc.parent.id !== canvas.scene.id) return null;
         // Loaded here, not at the top: the lingering module defines a Foundry class as it loads, and this file is
         // also imported by the Node tests.
-        const { BEHAVIOR_TYPE: LINGERING_BEHAVIOR, FLAG: LINGERING } = await import("../targeting/lingering.mjs");
+        const { BEHAVIOR_TYPE: LINGERING_BEHAVIOR, FLAG: LINGERING } = (await import("../automation.mjs")).LingeringData;
         const size = canvas.grid.size;
         const [region] = await canvas.scene.createEmbeddedDocuments("Region", [{
             name: "Ruby — burning ground",
@@ -468,7 +467,7 @@ export const AssimilatorDamage = {
         const token = combatant?.token?.object;
         const actor = combatant?.actor;
         if (!token || !actor) return 0;
-        const { inflictPersistent } = await import("../riders/apply.mjs");
+        const { inflictPersistent } = await import("../automation.mjs");
         let hit = 0;
         for (const other of canvas.tokens.placeables) {
             const source = other.actor;
