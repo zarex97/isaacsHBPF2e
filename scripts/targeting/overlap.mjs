@@ -22,6 +22,11 @@ export const FLAG = "overlap";
  * so it goes through the same relay.
  */
 export const Overlap = {
+    /** The GM applies an overlap's penalty; a player's client asks it to through the relay. */
+    registerRelay() {
+        Relay.register("applyOverlap", applyOverlap);
+    },
+
     async apply(config, regions, originToken) {
         const spec = config.item?.flags?.[MODULE_ID]?.[FLAG];
         const placed = [regions].flat().filter((region) => region);

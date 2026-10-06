@@ -508,7 +508,7 @@ function check(label, actual, expected) {
         [0, 1, 2, 3].map((d) => readingResult(d, day, { wrongSign: "virgo" })),
         [{ sign: "virgo", aspect: null }, null, { sign: "leo", aspect: null }, { sign: "leo", aspect: "benefic" }]);
 
-    const { longNow } = await import("../scripts/riders/apply.mjs");
+    const { longNow } = await import("../scripts/stargazer/long-now.mjs");
     const caster = (...slugs) => ({ itemTypes: { feat: slugs.map((slug) => ({ slug })) } });
     const spell = (duration) => ({ type: "spell", system: { duration: { value: duration } } });
     const minute = { unit: "minutes", value: 1 };

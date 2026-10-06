@@ -1,5 +1,4 @@
 import { DamageBus, describeActor, describeDamage } from "../automation.mjs";
-import { DAMAGE as PRIORITY } from "../stage-priorities.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 import {
     bypassEntriesOn,
@@ -11,8 +10,14 @@ import {
     shadowTarget,
 } from "./bypass.mjs";
 import { OUTCOMES, isAbilityUse, ridersOn } from "./data.mjs";
-import { halveHealing } from "./libra.mjs";
 import { Relay } from "./relay.mjs";
+
+/**
+ * Where the engine's own damage-bus stages fall. Published, so another module's stage can say where it
+ * sits relative to them: the bypass shadows a target before anything else reads it, and the riders read
+ * the damage after whatever corrections land in between.
+ */
+export const RIDER_PRIORITY = { bypass: 0, riders: 30 };
 
 /**
  * Where events come from.
@@ -374,13 +379,8 @@ export const Sources = {
      * a fact rather than an inference.
      */
     registerDamageStages() {
-        DamageBus.before("the IWR bypass", PRIORITY.bypass, (actor, params) => Sources.applyBypass(actor, params));
-        // Libra's crossed blades halve what any healing gives back, and there is no modifier selector that
-        // multiplies — so the correction is made from the two readings the bus takes.
-        DamageBus.after("the Crossing's halved healing", PRIORITY.crossing, async (actor, _params, before) => {
-            if (game.user.isGM) await halveHealing(actor, before);
-        });
-        DamageBus.after("damage riders", PRIORITY.riders, (actor, params, before) => Sources.onDamage(actor, params, before));
+        DamageBus.before("the IWR bypass", RIDER_PRIORITY.bypass, (actor, params) => Sources.applyBypass(actor, params));
+        DamageBus.after("damage riders", RIDER_PRIORITY.riders, (actor, params, before) => Sources.onDamage(actor, params, before));
     },
 
     /**

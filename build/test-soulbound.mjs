@@ -193,6 +193,60 @@ check(
         ["unmake-the-moment", "rewrite-the-ending"].map((slug) => api.economy.mayPost({ type: "feat", slug, frequency: { value: 0, max: 1, per: "PT10M" } })),
         [true, true],
     );
+
+    /**
+     * The classes' word in the rider engine: every branch that used to sit inside `riders/apply.mjs`, now a
+     * registration. Pinned by name so one cannot quietly go missing — an unregistered `equip` type is a Libra
+     * Saint who can no longer summon an Arm, with nothing but a console warning to say so.
+     */
+    const { registerRiderExtensions } = await import("../scripts/riders-extensions.mjs");
+    const { RiderExtensions } = await import("../scripts/riders/extensions.mjs");
+    registerRiderExtensions();
+    const riders = RiderExtensions.registered();
+    const names = (list) => list.map((entry) => entry.name);
+    check("the classes' apply types and named Strikes are registered",
+        [riders.applyTypes, riders.strikeSelectors], [["equip", "charge"], ["libra", "spirit-weapon"]]);
+    check("Libra's and Severance's origin values are registered", names(riders.originValues),
+        ["Libra's dice", "Libra's Crossing bleed", "Libra's potency", "Libra's dice as a die", "the Severance Waning dice"]);
+    check("the Quincy's counteract cluster is registered",
+        [names(riders.counteractRankBonuses), names(riders.afterCounteract), riders.suppressor,
+            ["soulbound", "cosmo"].every((trait) => riders.suppressibleTraits.includes(trait))],
+        [["Reishi Mastery"], ["the Quincy's Reiatsu and Sklaverei"], true, true]);
+    check("Lay Bare and Kidō Focus change the saves the engine rolls, in that order", names(riders.saveModifiers), ["Lay Bare", "Kidō Focus"]);
+    check("Long Now, the Saint's stances, the Arms and Senbonzakura's anchor are registered",
+        [names(riders.durationModifiers), names(riders.teleportRefusals), names(riders.effectFollowUps), names(riders.areaAnchors)],
+        [["Long Now"], ["the Saint's stances"], ["an Arm into the hands"], ["Senbonzakura's emanation"]]);
+
+    // And they answer as the branches did.
+    const statisticOf = (dc) => ({ getStatistic: (slug) => (slug === "saint" ? { dc: { value: dc } } : null) });
+    check("`cosmo` resolves through the Saint's statistic; a number is itself; an unknown word is nothing",
+        [RiderExtensions.resolveDC("cosmo", { originActor: statisticOf(31) }), RiderExtensions.resolveDC(17, {}), RiderExtensions.resolveDC("nonsense", {})],
+        [31, 17, null]);
+    check("a counteract that names no statistic falls back to the Saint's when the origin has no class",
+        RiderExtensions.defaultStatistic({ class: null, flags: {} }), "saint");
+    const taker = (options, size = "med") => ({ actor: { size, getRollOptions: () => options } });
+    check("Titan's Stance refuses all movement, the Bulwark only what is its own size or smaller",
+        [RiderExtensions.teleportRefusal(taker(["saint:immovable"]), { originActor: { size: "huge" } }),
+            RiderExtensions.teleportRefusal(taker(["saint:bulwark"]), { originActor: { size: "med" } }) !== null,
+            RiderExtensions.teleportRefusal(taker(["saint:bulwark"]), { originActor: { size: "huge" } }),
+            RiderExtensions.teleportRefusal(taker([]), { originActor: { size: "med" } })],
+        ["does not move", true, null, null]);
+    const laidBareContext = {
+        originActor: { uuid: "Actor.lapis" },
+        item: { system: { traits: { otherTags: ["assimilator-mutation-action"] } } },
+        actor: { itemTypes: { effect: [{ flags: { "isaacs-hb-pf2e": { laidBare: { origin: "Actor.lapis", strongest: "fortitude", weakest: "will" } } } }] } },
+    };
+    check("Lay Bare turns the strongest save into the weakest, and leaves the others alone",
+        [RiderExtensions.modifySave("fortitude", laidBareContext).statistic, RiderExtensions.modifySave("reflex", laidBareContext).statistic],
+        ["will", "reflex"]);
+    const minute = { unit: "minutes", value: 1 };
+    const longNowContext = { item: { type: "spell", system: { duration: { value: "1 minute" } } }, originActor: { itemTypes: { feat: [{ slug: "long-now" }] } } };
+    check("Long Now stretches a one-minute Augury to ten through the engine's duration modifiers",
+        RiderExtensions.duration({ duration: minute }, longNowContext), { unit: "minutes", value: 10 });
+    check("Reishi Mastery adds one counteract rank",
+        [RiderExtensions.counteractRankBonus({ getRollOptions: () => ["soulbound:reishi-mastery"] }), RiderExtensions.counteractRankBonus({ getRollOptions: () => [] })],
+        [1, 0]);
+
     if (!hadFoundry) delete globalThis.foundry;
     if (!hadHooks) delete globalThis.Hooks;
 }
@@ -3147,8 +3201,8 @@ check("and the feat declares that option",
     contentDoc("soulbound-feats/vollstandig-endurance.json").system.rules[0].option,
     "soulbound:no-full-release-fatigue");
 
-// The Quincy counteract cluster: three clauses that all turn on one roll.
-const applySource = fs.readFileSync(path.join(ROOT, "scripts/riders/apply.mjs"), "utf8");
+// The Quincy counteract cluster: three clauses that all turn on one roll — registered with the rider engine.
+const applySource = fs.readFileSync(path.join(ROOT, "scripts/riders-extensions.mjs"), "utf8");
 check("Seal the Art's Reiatsu Point is charged where the outcome is known",
     applySource.includes("soulbound:reishi-mastery") && applySource.includes("soulbound:sklaverei"),
     true);
