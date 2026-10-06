@@ -11,12 +11,15 @@ import { Shove } from "./assimilator/shove.mjs";
 import { Citrine } from "./assimilator/citrine.mjs";
 import { Purple } from "./assimilator/purple.mjs";
 import { AssimilatorRig } from "./assimilator/rig.mjs";
+import { registerAreaExtensions } from "./area-extensions.mjs";
 import { Astral } from "./astral.mjs";
 import { CastPipeline } from "./cast-pipeline.mjs";
+import { registerCastStages } from "./cast-stages.mjs";
 import { Cosmo } from "./cosmo.mjs";
 import { Deaths } from "./deaths.mjs";
 import { CheckPipeline } from "./lib/check-pipeline.mjs";
-import { DamageBus, PRIORITY } from "./lib/damage-bus.mjs";
+import { DamageBus } from "./lib/damage-bus.mjs";
+import { DAMAGE as PRIORITY } from "./stage-priorities.mjs";
 import { EncounterDamage } from "./lib/encounter-damage.mjs";
 import { Duplicate } from "./economy/duplicate.mjs";
 import { FreeCast } from "./economy/free-cast.mjs";
@@ -86,6 +89,11 @@ function start(feature, fn) {
 Hooks.once("init", () => {
     start("the sky tracker's settings", () => SkyTracker.registerSettings());
     start("area targeting's settings", () => AreaTargeting.registerSettings());
+    // The classes' word in area targeting, heightening and recharging, and their stages in the cast
+    // pipeline — registrations, so the generic code never calls them by name.
+    start("the cast pipeline's own stages", () => CastPipeline.registerDefaults());
+    start("the classes' cast stages", () => registerCastStages());
+    start("the classes' area targeting", () => registerAreaExtensions());
     start("the rider engine's settings", () => Riders.registerSettings());
     start("the banishment register", () => {
         Banish.registerSettings();

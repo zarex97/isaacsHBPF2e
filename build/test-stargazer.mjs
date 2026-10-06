@@ -34,7 +34,8 @@ function check(label, actual, expected) {
         },
     };
 
-    const { CheckPipeline, PRIORITY } = await import("../scripts/lib/check-pipeline.mjs");
+    const { CheckPipeline } = await import("../scripts/lib/check-pipeline.mjs");
+    const { CHECK: PRIORITY } = await import("../scripts/stage-priorities.mjs");
     const order = [];
     CheckPipeline.before("late", 30, (_check, context) => {
         order.push("late");
