@@ -26,6 +26,32 @@ jobs:
       - name: Validate content
         run: npm run validate
 
+      # The classes run on Isaac's PF2e Automation, and are tested against the version module.json says they
+      # need — its `compatibility.minimum` — not against whatever is newest. A homebrew that starts using a
+      # new API fails here until that API is released and the minimum raised.
+      - name: Read the automation version this module requires
+        id: automation
+        run: |
+          VERSION=$(node -p "require('./module.json').relationships.requires.find((r) => r.id === 'isaacs-pf2e-automation').compatibility.minimum")
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Testing against isaacs-pf2e-automation v${VERSION}"
+
+      - uses: actions/checkout@v4
+        with:
+          repository: zarex97/isaacs-pf2e-automation
+          ref: v${{ steps.automation.outputs.version }}
+          path: .automation
+
+      - name: Test the classes against the automation
+        env:
+          AUTOMATION_PATH: .automation
+        run: |
+          npm run check:clauses
+          npm run test:riders
+          npm run test:soulbound
+          npm run test:assimilator
+          npm run test:stargazer
+
       - name: Build compendium packs
         run: npm run build
 

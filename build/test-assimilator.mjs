@@ -10,6 +10,10 @@
  */
 
 import { validateAssimilator } from "./lib/validate-assimilator.mjs";
+import { lib, useAutomation } from "./lib/automation.mjs";
+
+// The classes run against Isaac's PF2e Automation's own sources — the sibling checkout, or AUTOMATION_PATH.
+await useAutomation();
 
 const failures = [];
 let checks = 0;
@@ -208,7 +212,7 @@ check("the same Substrate twice is refused", errorsFor({ substrates: [ruby(), ru
     globalThis.CONFIG = { PF2E: { Actor: { documentClasses: { character: Actor } } } };
     globalThis.game = { user: { isGM: true } };
 
-    const { DamageBus } = await import("../scripts/automation/lib/damage-bus.mjs");
+    const { DamageBus } = await import(lib("lib/damage-bus.mjs"));
     const { DAMAGE: PRIORITY } = await import("../scripts/stage-priorities.mjs");
 
     DamageBus.after("late", 40, (_a, _p, before) => log.push(`late before=${before}`));

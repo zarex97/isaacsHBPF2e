@@ -1,7 +1,7 @@
 import { Astral } from "./astral.mjs";
 import { Deaths } from "./deaths.mjs";
 import { Duplicate } from "./economy/duplicate.mjs";
-import { AreaTargeting, Recharge, registerStepProvider } from "./automation.mjs";
+import { AreaTargeting, FrequencyGuard, Recharge, registerFlagScope, registerStepProvider } from "./automation.mjs";
 import { MODULE_ID } from "./sky/signs.mjs";
 import { skyStepsFromOptions } from "./sky/steps.mjs";
 import { Charges } from "./soulbound/charges.mjs";
@@ -31,6 +31,15 @@ export const AREA_STEP = {
 };
 
 export function registerAreaExtensions() {
+    // This module's content authors its area config, its recharge periods and its shape choices under its
+    // own flags. The automation reads its own namespace first and then every registered one.
+    registerFlagScope(MODULE_ID);
+
+    // The Stargazer's rewinds count their own uses on their own clock; their pf2e frequency is a label, and
+    // the automation's guard would otherwise refuse a rewind the class still allows.
+    FrequencyGuard.exempt("unmake-the-moment");
+    FrequencyGuard.exempt("rewrite-the-ending");
+
     // Gemini's duplicate has the Saint's statistics but none of their Techniques. Every cast passes through
     // the targeting choke point, so it is the honest place to say no.
     AreaTargeting.registerPreAim("the Gemini duplicate", AREA_STEP.duplicate, (spell) => {
