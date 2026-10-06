@@ -1,4 +1,4 @@
-import { Relay } from "../riders/relay.mjs";
+import { Relay } from "../automation.mjs";
 import { MODULE_ID, aspectOf, signOf } from "../sky/signs.mjs";
 import { SkyTracker } from "../sky/tracker.mjs";
 import { SIGN_AUGURY } from "./auguries.mjs";

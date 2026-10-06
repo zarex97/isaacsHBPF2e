@@ -1,5 +1,5 @@
-import { FLAG as BYPASS_FLAG, MEMORY } from "../riders/bypass.mjs";
 import { Reiatsu } from "./reiatsu.mjs";
+import { Bypass } from "../automation.mjs";
 
 const MODULE_ID = "isaacs-hb-pf2e";
 const EFFECTS_PACK = `${MODULE_ID}.soulbound-effects`;
@@ -225,7 +225,7 @@ export const Severance = {
                                   Number.isInteger(round) && round > 0 ? round : 1);
         // A new Severance is a clean slate: last encounter's Art has no business bypassing anything now,
         // and the detached copy of it must go before the grant puts a fresh one beside it.
-        await actor.unsetFlag(MODULE_ID, MEMORY);
+        await actor.unsetFlag(MODULE_ID, Bypass.MEMORY);
         const spent = actor.itemTypes.spell.filter((i) => i.flags?.[MODULE_ID]?.severingArtSpent);
         if (spent.length > 0) {
             await actor.deleteEmbeddedDocuments("Item", spent.map((i) => i.id));
@@ -337,11 +337,11 @@ export const Severance = {
 
 /** Copy the Art's own bypass onto its user, pinned to that Art, so the damage can still find it. */
 async function rememberBypass(actor, spell) {
-    const entries = spell?.flags?.[MODULE_ID]?.[BYPASS_FLAG];
+    const entries = spell?.flags?.[MODULE_ID]?.[Bypass.FLAG];
     if (!Array.isArray(entries) || entries.length === 0) return;
     const slug = spell.slug ?? game.pf2e.system.sluggify(spell.name ?? "");
     if (!slug) return;
-    await actor.setFlag(MODULE_ID, MEMORY, { slug, name: spell.name, entries });
+    await actor.setFlag(MODULE_ID, Bypass.MEMORY, { slug, name: spell.name, entries });
 }
 
 /**

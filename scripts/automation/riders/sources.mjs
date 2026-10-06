@@ -1,5 +1,5 @@
-import { DamageBus, describeActor, describeDamage } from "../automation.mjs";
-import { MODULE_ID } from "../sky/signs.mjs";
+import { DamageBus, describeActor, describeDamage } from "../../automation.mjs";
+import { LIB_ID } from "../id.mjs";
 import {
     bypassEntriesOn,
     ignoresHardness,
@@ -223,7 +223,7 @@ export const Sources = {
         // The loop guard. A save this module rolled itself (`runSave`) produces a message like any other,
         // and its riders have already been dispatched by the rider that asked for the save — dispatching
         // them again from here is how *Aurora Execution* forces a save that forces a save forever.
-        if (context.options?.includes(`${MODULE_ID}:rider-save`)) return;
+        if (context.options?.includes(`${LIB_ID}:rider-save`)) return;
 
         // The origin is on the roll's own context, put there by pf2e when the save knows what it is against.
         // A save rolled off a character sheet has none, and is not an event this module has anything to say
@@ -636,7 +636,7 @@ export const Sources = {
 };
 
 function enabled() {
-    return game.settings.get(MODULE_ID, "riders");
+    return game.settings.get(LIB_ID, "riders");
 }
 
 /** Damage types present in a roll, for `rider:damage:type:cold` and friends. */

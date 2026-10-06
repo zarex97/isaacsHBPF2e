@@ -8,6 +8,8 @@
  * this file loads, which is before any module's `init` — so call sites read as they did when the code lived
  * beside them.
  */
+import { buildRidersApi } from "./automation/riders-api.mjs";
+
 export const AUTOMATION_ID = "isaacs-pf2e-automation";
 
 let api = null;
@@ -29,12 +31,12 @@ export function setAutomation(value) {
 }
 
 /** An object whose every property is read off the API when it is used, methods bound to their owner. */
-function facade(read) {
+function facade(read, source = automation) {
     return new Proxy(
         {},
         {
             get(_target, prop) {
-                const owner = read(automation());
+                const owner = read(source());
                 const value = owner?.[prop];
                 return typeof value === "function" ? value.bind(owner) : value;
             },
@@ -82,3 +84,44 @@ export const thresholdsCrossed = (...args) => automation().heightening.threshold
 export const valueAtLevel = (...args) => automation().heightening.valueAtLevel(...args);
 
 export const registerFlagScope = (...args) => automation().flags.registerFlagScope(...args);
+
+/* ---- The rider engine ----------------------------------------------------------------------------- */
+
+/**
+ * The rider engine, lingering areas, overlap and enemies-only terrain are on their way into the automation
+ * too (phase 2). Until they move they are staged in `scripts/automation/`, and `ridersApi()` builds their
+ * part of the contract from there; once they move it is read off the automation like everything above.
+ */
+let riders = null;
+
+export function ridersApi() {
+    return (riders ??= buildRidersApi());
+}
+
+/** For the offline tests. */
+export function setRidersApi(value) {
+    riders = value;
+}
+
+export const Riders = facade((r) => r.riders, ridersApi);
+export const RiderExtensions = facade((r) => r.riderExtensions, ridersApi);
+export const Relay = facade((r) => r.relay, ridersApi);
+export const RiderPriority = facade((r) => r.riderPriority, ridersApi);
+export const Banish = facade((r) => r.banish, ridersApi);
+export const Encasement = facade((r) => r.encasement, ridersApi);
+export const Escape = facade((r) => r.escape, ridersApi);
+export const StrikeTechnique = facade((r) => r.strikeTechnique, ridersApi);
+export const SharedAllowance = facade((r) => r.sharedAllowance, ridersApi);
+export const Lingering = facade((r) => r.lingering, ridersApi);
+export const LingeringData = facade((r) => r.lingeringData, ridersApi);
+export const Overlap = facade((r) => r.overlap, ridersApi);
+export const Bypass = facade((r) => r.bypass, ridersApi);
+
+export const shadowTarget = (...args) => ridersApi().bypass.shadowTarget(...args);
+export const registerRollBypass = (...args) => ridersApi().bypass.registerRollBypass(...args);
+export const inflictPersistent = (...args) => ridersApi().riderApply.inflictPersistent(...args);
+export const resolveCounteract = (...args) => ridersApi().riderApply.resolveCounteract(...args);
+export const conditionUuidOf = (...args) => ridersApi().riderApply.conditionUuidOf(...args);
+export const isAbilityUse = (...args) => ridersApi().riderData.isAbilityUse(...args);
+export const registerEnemyTerrain = (...args) => ridersApi().enemyTerrain.register(...args);
+export const registerOriginFlag = (...args) => ridersApi().enemyTerrain.registerOriginFlag(...args);

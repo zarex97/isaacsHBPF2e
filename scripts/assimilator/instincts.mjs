@@ -1,7 +1,5 @@
-import { DamageBus, encounterOf } from "../automation.mjs";
+import { DamageBus, Relay, encounterOf, shadowTarget } from "../automation.mjs";
 import { DAMAGE as PRIORITY } from "../stage-priorities.mjs";
-import { shadowTarget } from "../riders/bypass.mjs";
-import { Relay } from "../riders/relay.mjs";
 import { MODULE_ID } from "../sky/signs.mjs";
 import { AssimilatorDamage, depthOf, suppressed } from "./damage.mjs";
 import { Engine, scaled } from "./engine.mjs";
@@ -472,7 +470,7 @@ export const Instincts = {
         }
         if (kind === "effect") {
             if (pearl < 4 || !spellEffectsOf(target).some((e) => e.id === id)) return;
-            const { resolveCounteract } = await import("../riders/apply.mjs");
+            const { resolveCounteract } = await import("../automation.mjs");
             await resolveCounteract({ originUuid: item.actor.uuid, effectUuid: picked.uuid, itemUuid: item.uuid });
             return;
         }

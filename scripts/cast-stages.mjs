@@ -1,6 +1,5 @@
-import { CastPipeline } from "./automation.mjs";
+import { CastPipeline, StrikeTechnique } from "./automation.mjs";
 import { FreeCast } from "./economy/free-cast.mjs";
-import { StrikeTechnique } from "./riders/strike-technique.mjs";
 import { MODULE_ID } from "./sky/signs.mjs";
 import { Charges, SPENDING } from "./soulbound/charges.mjs";
 import { Release } from "./soulbound/release.mjs";

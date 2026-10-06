@@ -1,5 +1,5 @@
-import { testPredicate } from "../automation.mjs";
-import { MODULE_ID } from "../sky/signs.mjs";
+import { testPredicate } from "../../automation.mjs";
+import { LIB_ID } from "../id.mjs";
 
 export const FLAG = "bypass";
 
@@ -52,7 +52,7 @@ export const MEMORY = "severingBypass";
  * encounter picks it up. It is cleared the next time Severance begins.
  */
 export function rememberedEntries(actor) {
-    const kept = actor?.getFlag?.(MODULE_ID, MEMORY);
+    const kept = actor?.getFlag?.(LIB_ID, MEMORY);
     if (!kept?.slug || !Array.isArray(kept.entries)) return [];
     const item = { id: `remembered-${kept.slug}`, name: kept.name ?? kept.slug };
     return kept.entries.map((entry) => ({
@@ -103,7 +103,7 @@ export function bypassEntriesOn(actor, dealtBy = null) {
     const consider = (item) => {
         if (!item || seen.has(item.id)) return;
         seen.add(item.id);
-        const flagged = item.flags?.[MODULE_ID]?.[FLAG];
+        const flagged = item.flags?.[LIB_ID]?.[FLAG];
         if (!Array.isArray(flagged)) return;
         entries.push(...flagged.map((entry) => ({ entry: pinToSource(entry, item), item })));
     };

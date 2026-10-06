@@ -1,15 +1,15 @@
-import { testPredicate } from "../automation.mjs";
+import { testPredicate } from "../../automation.mjs";
 import { allianceOf, catches } from "./enemy-terrain.mjs";
 import { growByStep, inflictPersistent, runSave } from "../riders/apply.mjs";
-import { MODULE_ID } from "../sky/signs.mjs";
+import { LIB_ID } from "../id.mjs";
 
 export const FLAG = "lingering";
 
 /** The module's enemies-only movement-cost behavior. Spelled here so this file imports nothing new. */
-const TERRAIN_TYPE = `${MODULE_ID}.enemyMovementCost`;
+const TERRAIN_TYPE = `${LIB_ID}.enemyMovementCost`;
 
 /** The behavior type this module contributes, namespaced the way Foundry requires of a module. */
-export const BEHAVIOR_TYPE = `${MODULE_ID}.lingering`;
+export const BEHAVIOR_TYPE = `${LIB_ID}.lingering`;
 
 const UNIT_SECONDS = { seconds: 1, rounds: 6, minutes: 60, hours: 3600, days: 86400 };
 
@@ -82,7 +82,7 @@ export const Lingering = {
      * which is the shape of nearly every defect this campaign has turned up.
      */
     specsFor(item) {
-        const declared = item?.flags?.[MODULE_ID]?.[FLAG];
+        const declared = item?.flags?.[LIB_ID]?.[FLAG];
         if (!declared) return [];
         const options = new Set([
             ...(item.actor?.getRollOptions?.() ?? []),
@@ -144,7 +144,7 @@ export const Lingering = {
                 visibility: CONST.REGION_VISIBILITY.ALWAYS,
                 behaviors,
                 flags: {
-                    [MODULE_ID]: {
+                    [LIB_ID]: {
                         [FLAG]: {
                             expiresAt: game.time.worldTime + seconds,
                             name: spec.name ?? config.item.name,
@@ -198,7 +198,7 @@ export const Lingering = {
                         color: spec.light.color ?? null,
                         animation: { type: spec.light.animation ?? "pulse", speed: 5, intensity: 5 },
                     },
-                    flags: { [MODULE_ID]: { [FLAG]: true } },
+                    flags: { [LIB_ID]: { [FLAG]: true } },
                 },
             ]);
             if (light) lightIds.push(light.id);
@@ -219,7 +219,7 @@ export const Lingering = {
                     sight: CONST.WALL_SENSE_TYPES.NORMAL,
                     light: CONST.WALL_SENSE_TYPES.NORMAL,
                     sound: CONST.WALL_SENSE_TYPES.NONE,
-                    flags: { [MODULE_ID]: { [FLAG]: true } },
+                    flags: { [LIB_ID]: { [FLAG]: true } },
                 })),
             );
             wallIds.push(...walls.map((wall) => wall.id));
@@ -234,15 +234,15 @@ export const Lingering = {
         const now = game.time.worldTime;
         for (const scene of game.scenes) {
             const stale = scene.regions.filter((region) => {
-                const expiry = region.flags?.[MODULE_ID]?.[FLAG]?.expiresAt;
+                const expiry = region.flags?.[LIB_ID]?.[FLAG]?.expiresAt;
                 return typeof expiry === "number" && expiry <= now;
             });
             if (stale.length === 0) continue;
 
             // Scenery first: a Region deleted while its walls are still standing leaves nothing behind to
             // say the walls were ever ours.
-            const lightIds = stale.flatMap((region) => region.flags[MODULE_ID][FLAG].lightIds ?? []);
-            const wallIds = stale.flatMap((region) => region.flags[MODULE_ID][FLAG].wallIds ?? []);
+            const lightIds = stale.flatMap((region) => region.flags[LIB_ID][FLAG].lightIds ?? []);
+            const wallIds = stale.flatMap((region) => region.flags[LIB_ID][FLAG].wallIds ?? []);
             const live = (type, ids) => ids.filter((id) => scene[type].has(id));
             if (lightIds.length > 0) {
                 await scene.deleteEmbeddedDocuments("AmbientLight", live("lights", lightIds));
@@ -320,7 +320,11 @@ function scaledSave(save, steps) {
  * a data model would have to declare every field, and the formula is not knowable until the Technique's
  * heightening has been counted.
  */
-class LingeringRegionBehaviorType extends foundry.data.regionBehaviors.RegionBehaviorType {
+// Foundry's base is there whenever a module loads in a world; offline (the tests) there is no `foundry`, and
+// the module must still load, so a plain class stands in. Nothing offline ever instantiates the behavior.
+const RegionBehaviorBase = globalThis.foundry?.data?.regionBehaviors?.RegionBehaviorType ?? class {};
+
+class LingeringRegionBehaviorType extends RegionBehaviorBase {
     static LOCALIZATION_PREFIXES = ["BEHAVIOR.TYPES.base"];
 
     static defineSchema() {
@@ -342,7 +346,7 @@ class LingeringRegionBehaviorType extends foundry.data.regionBehaviors.RegionBeh
         if (game.users?.activeGM?.id !== game.user?.id) return;
 
         const region = this.parent?.region ?? this.parent?.parent;
-        const payload = region?.flags?.[MODULE_ID]?.[FLAG];
+        const payload = region?.flags?.[LIB_ID]?.[FLAG];
         const damage = payload?.damage;
         const actor = event.data?.token?.actor;
         if (!actor || (!damage?.formula && !payload?.save)) return;
@@ -383,7 +387,7 @@ class LingeringRegionBehaviorType extends foundry.data.regionBehaviors.RegionBeh
         }
 
         const flags = {
-            [MODULE_ID]: {
+            [LIB_ID]: {
                 rider: { messageId: null, outcome: null, source: payload.itemUuid ?? null, note: payload.name ?? "" },
             },
         };
