@@ -4,7 +4,7 @@ Area targeting, the single-wrap pipelines (cast, `toMessage`, damage, check, rer
 preparation, detection modes) and the allowance fixes (a spell's frequency, the zero-uses guard, interval
 recharges) moved out of this module into **Isaac's PF2e Automation** (`zarex97/isaacs-pf2e-automation`),
 a module of its own that this one requires. What stayed here is everything that knows a class: the
-Techniques, the Sky, the riders, the rigs, and every stage and registration the classes make.
+Techniques, the Sky, the riders (until ADR 0006 moved their engine too), the rigs, and every stage and registration the classes make.
 
 ## Why
 

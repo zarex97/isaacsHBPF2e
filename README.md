@@ -144,6 +144,10 @@ a fifth at 14th and a sixth at 18th.
 
 ## Riders
 
+The rider engine is Isaac's PF2e Automation's (its [`Docs/riders.md`](https://github.com/zarex97/isaacs-pf2e-automation/blob/main/Docs/riders.md)
+is the generic reference). This section is the classes' view of it, including the apply types and DC words
+this module registers.
+
 A rider is what happens to a target *besides* damage. When a save is rolled, a Strike lands, damage is
 applied, or a turn ends, the conditions the Technique or the Cloth inflicts are applied to the right
 creature, on its own sheet, without anyone clicking a condition on. *Diamond Dust* slows what fails,
@@ -270,7 +274,7 @@ Rerolls are handled: changing the degree of success removes the riders applied f
 the new set, and only ever removes what this module created — including winding a counter badge back down.
 
 This needs a **GM online**, because a player cannot write to a monster's sheet. If none is, the caster is
-told what would have been applied. Turn the whole thing off with **Apply Technique riders automatically**.
+told what would have been applied. Turn the whole thing off with **Apply riders automatically**, a setting of Isaac's PF2e Automation.
 
 ### With pf2e-toolbelt
 
