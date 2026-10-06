@@ -15,6 +15,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import { ROOT } from "./lib/pack.mjs";
+import { lib, useAutomation } from "./lib/automation.mjs";
+
+// The classes run against Isaac's PF2e Automation's own sources — the sibling checkout, or AUTOMATION_PATH.
+await useAutomation();
 
 /* -------------------------------------------------------------------------------------------- */
 /*  Stubs                                                                                        */
@@ -51,7 +55,7 @@ function evaluate(statement, options) {
 
 globalThis.game = { pf2e: { Predicate: StubPredicate } };
 
-const { riderOptions } = await import("../scripts/automation/lib/roll-options.mjs");
+const { riderOptions } = await import(lib("lib/roll-options.mjs"));
 const { selectRiders } = await import("../scripts/riders/select.mjs");
 const { collectRiders, isAbilityUse, riderAt } = await import("../scripts/riders/data.mjs");
 const { basicLadder } = await import("../scripts/riders/apply.mjs");
@@ -60,14 +64,12 @@ const { auraCatches, effectForAura } = await import("../scripts/riders/sources.m
 const { mergeBypass, resistanceReduction, ignoresHardness, ignoredImmunities, selectEntries } = await import(
     "../scripts/riders/bypass.mjs"
 );
-const { degreeOf } = await import("../scripts/automation/lib/degree.mjs");
-const { applyHeightening, applyThresholds, stepsFor, thresholdsCrossed, valueAtLevel } = await import(
-    "../scripts/automation/targeting/heightening.mjs"
-);
-const { intervalSeconds } = await import("../scripts/automation/economy/recharge.mjs");
-const { aimAngle } = await import("../scripts/automation/targeting/place.mjs");
-const { canRotate } = await import("../scripts/automation/targeting/config.mjs");
-const { REAIM } = await import("../scripts/automation/targeting/review.mjs");
+const { degreeOf } = await import(lib("lib/degree.mjs"));
+const { applyHeightening, applyThresholds, stepsFor, thresholdsCrossed, valueAtLevel } = await import(lib("targeting/heightening.mjs"));
+const { intervalSeconds } = await import(lib("economy/recharge.mjs"));
+const { aimAngle } = await import(lib("targeting/place.mjs"));
+const { canRotate } = await import(lib("targeting/config.mjs"));
+const { REAIM } = await import(lib("targeting/review.mjs"));
 
 /* -------------------------------------------------------------------------------------------- */
 /*  A world small enough to reason about                                                         */
@@ -1177,124 +1179,33 @@ check("re-aim survives the dialog's nullish coalescing", (REAIM ?? null) === REA
 }
 
 /* -------------------------------------------------------------------------------------------- */
-/*  Wrapped methods                                                                              */
+/*  The automation's boundary                                                                    */
 /* -------------------------------------------------------------------------------------------- */
 
 /**
- * The one bug in this module that reached a release was two features registering a libWrapper wrapper for
- * the same method under the same package id. libWrapper refuses that by design, the throw was inside the
- * `setup` hook, and it took every feature registered after it down with it — a crash that read at the table
- * as most of the module doing nothing at all.
+ * Every wrap is Isaac's PF2e Automation's (its ADR 0001), and this module reaches it through one door.
  *
- * Nothing offline can load libWrapper, but the cause is visible in the source: every wrap in the module now
- * goes through `wrap()` with the target as a string literal, so the targets can simply be counted. Two
- * checks — no target claimed twice, and none of the expected wraps quietly missing, which is the other half
- * of the same incident: the activity wrap sat behind a `return` and was never reached, with no error at all.
- */
-const wrapCalls = [];
-for (const file of mjsUnder(path.join(ROOT, "scripts"))) {
-    const source = fs.readFileSync(file, "utf8");
-    for (const match of source.matchAll(/\bwrap\(\s*["']([^"']+)["']/g)) {
-        wrapCalls.push({ target: match[1], file: path.relative(ROOT, file) });
-    }
-}
-
-const claimedBy = new Map();
-const duplicates = [];
-for (const call of wrapCalls) {
-    const previous = claimedBy.get(call.target);
-    if (previous) duplicates.push(`${call.target}: ${previous} and ${call.file}`);
-    else claimedBy.set(call.target, call.file);
-}
-
-check("no method is wrapped twice", duplicates, []);
-check(
-    "every wrap belongs to the automation, the classes only register stages on it",
-    wrapCalls.filter((call) => !call.file.split(path.sep).join("/").startsWith("scripts/automation/")).map((call) => call.file),
-    [],
-);
-
-/**
- * The automation's boundary.
- *
- * `scripts/automation/` is on its way to being a module of its own, which only works if it already behaves
- * like one: it imports nothing from the classes, and the classes reach it through `scripts/automation.mjs`
- * alone. The entry point is the one other importer, and only of the automation's own start-up steps
- * (`main.mjs`), which it runs until the automation has an entry point of its own.
+ * The one bug that reached a release here was two wrappers on one method; the automation now owns every
+ * wrap and counts them in its own tests. What is left to check on this side is that the classes never
+ * wrap anything themselves — they register stages — and that nothing but `scripts/automation.mjs` reaches
+ * into the automation, by path or by module id.
  */
 {
-    const importsOf = (file) => [...fs.readFileSync(file, "utf8").matchAll(/(?:from|import\()\s*["']([^"']+\.mjs)["']/g)]
-        .map((match) => path.resolve(path.dirname(file), match[1]));
-    const automationDir = path.join(ROOT, "scripts", "automation") + path.sep;
-    const escapes = [];
+    const wrapCalls = [];
     const trespassers = [];
     for (const file of mjsUnder(path.join(ROOT, "scripts"))) {
+        const source = fs.readFileSync(file, "utf8");
         const rel = path.relative(ROOT, file).split(path.sep).join("/");
-        const inside = file.startsWith(automationDir);
-        for (const target of importsOf(file)) {
-            const intoAutomation = target.startsWith(automationDir);
-            if (inside && !intoAutomation) escapes.push(`${rel} → ${path.relative(ROOT, target)}`);
-            if (!inside && intoAutomation) {
-                const door = rel === "scripts/automation.mjs";
-                const entry = rel === "scripts/isaacs-hb.mjs" && target === path.join(automationDir, "main.mjs");
-                if (!door && !entry) trespassers.push(`${rel} → ${path.relative(ROOT, target)}`);
-            }
+        for (const match of source.matchAll(/\bwrap\(\s*["']([^"']+)["']/g)) wrapCalls.push(`${rel}: ${match[1]}`);
+        if (rel === "scripts/automation.mjs") continue;
+        for (const match of source.matchAll(/(?:from|import\()\s*["']([^"']+)["']/g)) {
+            if (/isaacs-pf2e-automation|(^|\/)automation\//.test(match[1])) trespassers.push(`${rel} → ${match[1]}`);
         }
+        if (/modules\.get\(\s*["'`]isaacs-pf2e-automation/.test(source)) trespassers.push(`${rel} reads the automation's module directly`);
     }
-    check("the automation imports nothing from the classes", escapes, []);
+    check("this module wraps nothing: the automation owns every wrap, the classes register stages", wrapCalls, []);
     check("the classes reach the automation only through scripts/automation.mjs", trespassers, []);
 }
-check("every wrap the module needs is still there", [...claimedBy.keys()].sort(), [
-    "CONFIG.PF2E.Actor.documentClasses.character.prototype.applyDamage",
-    // The Soulbound's pool is its ceiling, not the count of focus effects it knows. pf2e derives the
-    // latter and a Hollow knows exactly one costed kido forever, so the derivation had it sitting on a
-    // pool of 1 at 11th level where the guide says 3.
-    "CONFIG.PF2E.Actor.documentClasses.character.prototype.prepareDerivedData",
-    "CONFIG.PF2E.Item.documentClasses.action.prototype.toMessage",
-    "CONFIG.PF2E.Item.documentClasses.spellcastingEntry.prototype.cast",
-    // Tin Depth 3's see-invisibility is "within 30 feet"; pf2e hands Foundry an unlimited range for it (#88).
-    "CONFIG.Token.documentClass.prototype._prepareDetectionModes",
-    // The Herald's Sentence Passed: "cannot benefit from fortune effects", and a hero-point reroll is one.
-    "game.pf2e.Check.rerollFromMessage",
-    // The check pipeline (`lib/check-pipeline.mjs`): the last moment before a d20 falls. Its stages are the
-    // Soulbound's Strikes that ignore cover and the Stargazer's Portent guard.
-    "game.pf2e.Check.roll",
-]);
-
-/**
- * Where a `"prototype"` wrap actually lands.
- *
- * The strategy exists for one reason — `ActorPF2e#applyDamage` is declared on the shared base and
- * inherited by every actor type, so a wrapper defined on the one subclass the path names leaves NPCs
- * untouched — and for most of this module's life it did precisely that. The walk stopped at the **first**
- * prototype that owned the method, and pf2e's `CharacterPF2e` declares its own `applyDamage`, so the patch
- * went on the character class alone. **No damage rider in the module had ever fired against an NPC**,
- * which is almost everything a Technique is aimed at.
- *
- * Nothing here needs Foundry: the bug is a prototype-chain walk, and a three-class chain reproduces it
- * exactly. The second check is the other half — a subclass override must still run, reaching the patched
- * method through `super`.
- */
-class WrapBase {
-    hit() {
-        return "base";
-    }
-}
-class WrapSub extends WrapBase {
-    hit() {
-        return `sub(${super.hit()})`;
-    }
-}
-class WrapSibling extends WrapBase {}
-
-globalThis.__wrapProbe = { classes: { sub: WrapSub, sibling: WrapSibling } };
-const { wrap: wrapMethod } = await import("../scripts/automation/lib/wrap.mjs");
-wrapMethod("__wrapProbe.classes.sub.prototype.hit", function (wrapped, ...args) {
-    return `wrapped:${wrapped(...args)}`;
-}, { feature: "the prototype-walk test", strategy: "prototype" });
-
-check("a prototype wrap lands on the class that declares the method", new WrapSibling().hit(), "wrapped:base");
-check("a subclass override still runs, reaching the wrap through super", new WrapSub().hit(), "sub(wrapped:base)");
 
 /* -------------------------------------------------------------------------------------------- */
 /*  The second road a save travels                                                               */
@@ -1582,7 +1493,7 @@ check("a condition with no address at all resolves to null", conditionUuidOf({ n
  * `item:cast:actions:N`, confirmed against a running pf2e 8.3.0. A predicate naming an option nobody emits
  * fails silently — the boon simply never pays — so the shape is pinned here against the shipped content.
  */
-const { testPredicate } = await import("../scripts/automation/lib/roll-options.mjs");
+const { testPredicate } = await import(lib("lib/roll-options.mjs"));
 
 /** Every Technique, as the option set pf2e would build for it. */
 function techniqueCosts() {
@@ -1639,7 +1550,7 @@ globalThis.canvas = { ready: true };
 globalThis.game.settings = {
     get: (_module, key) => (key === "areaTargetingScope" ? "techniques" : true),
 };
-const { configFor: realConfigFor } = await import("../scripts/automation/targeting/config.mjs");
+const { configFor: realConfigFor } = await import(lib("targeting/config.mjs"));
 
 const aimed = [];
 (function walkContent(at) {
@@ -1675,7 +1586,7 @@ check("and there are enough of them for that to mean something", aimed.length > 
 // Range came only from the flag, and no area Technique in the module sets it there — so "a 60-foot burst
 // within 120 feet" placed the burst and never checked the 120 feet, on any Cloth. It now falls back to the
 // spell's own `system.range`, which every one of them does state.
-const { feetOf } = await import("../scripts/automation/targeting/config.mjs");
+const { feetOf } = await import(lib("targeting/config.mjs"));
 check("a stated range parses to a number", [feetOf("120 feet"), feetOf("60 feet")], [120, 60]);
 
 // `steps` is a fact about the cast, not about the flag. It used to be reported as zero whenever a

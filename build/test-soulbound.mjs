@@ -7,6 +7,10 @@
  */
 import { check, report } from "./lib/check.mjs";
 import { familyOf, validate } from "./lib/validate-lib.mjs";
+import { lib, useAutomation } from "./lib/automation.mjs";
+
+// The classes run against Isaac's PF2e Automation's own sources — the sibling checkout, or AUTOMATION_PATH.
+await useAutomation();
 
 /** A minimal, otherwise-valid spell document, so only the family-specific rules can fail. */
 function spellDoc({ traits, otherTags = [], rank = 1 }) {
@@ -131,7 +135,7 @@ check(
  * number would reorder them silently — this pins the order to the sequence it replaced.
  */
 {
-    const { CastPipeline } = await import("../scripts/automation/cast-pipeline.mjs");
+    const { CastPipeline } = await import(lib("cast-pipeline.mjs"));
     const { registerCastStages } = await import("../scripts/cast-stages.mjs");
     CastPipeline.registerDefaults();
     registerCastStages();
@@ -162,7 +166,7 @@ check(
     globalThis.foundry ??= { data: { regionBehaviors: { RegionBehaviorType: class {} } } };
     globalThis.Hooks ??= { on: () => {} };
     const { registerAreaExtensions } = await import("../scripts/area-extensions.mjs");
-    const { AreaTargeting } = await import("../scripts/automation/targeting/index.mjs");
+    const { AreaTargeting } = await import(lib("targeting/index.mjs"));
     registerAreaExtensions();
     const registered = AreaTargeting.registered();
     check(
@@ -181,6 +185,14 @@ check(
         [["astral projection"], ["astral projection"]],
     );
     check("the Techniques scope and the charge count are registered", [registered.scopes, registered.areaCount], [["techniques"], true]);
+    const { automation } = await import("../scripts/automation.mjs");
+    const api = automation();
+    check("this module's flags are a scope the automation reads authored config from", api.flags.flagScopes().includes("isaacs-hb-pf2e"), true);
+    check(
+        "the Stargazer's rewinds are exempt from the frequency guard, which would refuse them at their label's zero",
+        ["unmake-the-moment", "rewrite-the-ending"].map((slug) => api.economy.mayPost({ type: "feat", slug, frequency: { value: 0, max: 1, per: "PT10M" } })),
+        [true, true],
+    );
     if (!hadFoundry) delete globalThis.foundry;
     if (!hadHooks) delete globalThis.Hooks;
 }

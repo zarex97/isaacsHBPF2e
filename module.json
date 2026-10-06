@@ -30,6 +30,17 @@
                 }
             }
         ],
+        "requires": [
+            {
+                "id": "isaacs-pf2e-automation",
+                "type": "module",
+                "manifest": "https://github.com/zarex97/isaacs-pf2e-automation/releases/latest/download/module.json",
+                "compatibility": {
+                    "minimum": "1.0.0"
+                },
+                "reason": "Area targeting, the cast, damage, check, reroll and preparation pipelines, and the frequency fixes every class here builds on."
+            }
+        ],
         "recommends": [
             {
                 "id": "pf2e-toolbelt",
@@ -50,8 +61,7 @@
         }
     },
     "styles": [
-        "styles/sky.css",
-        "styles/targeting.css"
+        "styles/sky.css"
     ],
     "media": [
         {
