@@ -1,4 +1,4 @@
-import { MODULE_ID } from "../sky/signs.mjs";
+import { LIB_ID } from "../id.mjs";
 
 /**
  * One bonus handed to many people, spent by whoever uses it first.
@@ -29,7 +29,7 @@ export const SharedAllowance = {
         const actors = new Set((scene?.tokens ?? []).map((t) => t.actor).filter(Boolean));
         for (const actor of actors) {
             const copies = actor.itemTypes.effect.filter((effect) => {
-                if (!effect.flags?.[MODULE_ID]?.sharedAllowance) return false;
+                if (!effect.flags?.[LIB_ID]?.sharedAllowance) return false;
                 return (effect.system.rules ?? []).some((rule) =>
                     spent.some((m) => ruleSlug(rule) === m.slug && samePredicate(rule.predicate, m.predicate)));
             });

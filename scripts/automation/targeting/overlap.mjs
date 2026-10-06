@@ -1,6 +1,6 @@
 import { Relay } from "../riders/relay.mjs";
-import { MODULE_ID } from "../sky/signs.mjs";
-import { catchTokens } from "../automation.mjs";
+import { LIB_ID } from "../id.mjs";
+import { catchTokens } from "../../automation.mjs";
 
 export const FLAG = "overlap";
 
@@ -28,7 +28,7 @@ export const Overlap = {
     },
 
     async apply(config, regions, originToken) {
-        const spec = config.item?.flags?.[MODULE_ID]?.[FLAG];
+        const spec = config.item?.flags?.[LIB_ID]?.[FLAG];
         const placed = [regions].flat().filter((region) => region);
         if (!spec || placed.length < 2) return;
 
@@ -65,7 +65,7 @@ export const Overlap = {
  */
 export async function applyOverlap(payload) {
     const item = payload.itemUuid ? await fromUuid(payload.itemUuid) : null;
-    const spec = item?.flags?.[MODULE_ID]?.[FLAG];
+    const spec = item?.flags?.[LIB_ID]?.[FLAG];
     if (!spec) return;
 
     for (const { targetUuid, count } of payload.overlapped ?? []) {
@@ -75,7 +75,7 @@ export async function applyOverlap(payload) {
 
         // Replace rather than stack: re-aiming and re-casting in the same round should leave the creature
         // with the penalty it has now, not with two of them.
-        const stale = actor.itemTypes.effect.filter((effect) => effect.flags?.[MODULE_ID]?.[FLAG]);
+        const stale = actor.itemTypes.effect.filter((effect) => effect.flags?.[LIB_ID]?.[FLAG]);
         if (stale.length > 0) await actor.deleteEmbeddedDocuments("Item", stale.map((effect) => effect.id));
 
         await actor.createEmbeddedDocuments("Item", [
@@ -104,7 +104,7 @@ export async function applyOverlap(payload) {
                         },
                     ],
                 },
-                flags: { [MODULE_ID]: { [FLAG]: { count, source: item.uuid } } },
+                flags: { [LIB_ID]: { [FLAG]: { count, source: item.uuid } } },
             },
         ]);
     }

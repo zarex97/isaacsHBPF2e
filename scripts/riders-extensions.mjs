@@ -1,10 +1,9 @@
 import { classSlugOf, classStatisticOf } from "./lib/class-dc.mjs";
-import { RiderExtensions } from "./riders/extensions.mjs";
-import { WEAPON_TAG, crossingBleed, equipArm, libraDice, libraPotency } from "./riders/libra.mjs";
+import { RiderExtensions, registerOriginFlag } from "./automation.mjs";
+import { WEAPON_TAG, crossingBleed, equipArm, libraDice, libraPotency } from "./libra.mjs";
 import { MODULE_ID } from "./sky/signs.mjs";
 import { PROFILE_TAG as SPIRIT_PROFILE_TAG, SPIRIT_WEAPON_TAG } from "./soulbound/weapon.mjs";
 import { longNow } from "./stargazer/long-now.mjs";
-import { registerOriginFlag } from "./targeting/enemy-terrain.mjs";
 
 /**
  * Where this module's classes plug into the rider engine.

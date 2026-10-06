@@ -1,13 +1,11 @@
 import { Astral } from "./astral.mjs";
 import { Deaths } from "./deaths.mjs";
 import { Duplicate } from "./economy/duplicate.mjs";
-import { AreaTargeting, FrequencyGuard, Recharge, registerFlagScope, registerStepProvider } from "./automation.mjs";
+import { AreaTargeting, FrequencyGuard, Lingering, Overlap, Recharge, registerFlagScope, registerStepProvider } from "./automation.mjs";
 import { MODULE_ID } from "./sky/signs.mjs";
 import { skyStepsFromOptions } from "./sky/steps.mjs";
 import { Charges } from "./soulbound/charges.mjs";
-import { Lingering } from "./targeting/lingering.mjs";
 import { isTechnique } from "./techniques.mjs";
-import { Overlap } from "./targeting/overlap.mjs";
 import { CrystalWall } from "./targeting/wall.mjs";
 
 /**

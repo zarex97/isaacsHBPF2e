@@ -1,4 +1,4 @@
-import { MODULE_ID } from "../sky/signs.mjs";
+import { LIB_ID } from "../id.mjs";
 import { bindReactionButtons } from "./reactions.mjs";
 import { Relay } from "./relay.mjs";
 import { Sources } from "./sources.mjs";
@@ -23,7 +23,7 @@ import { Sources } from "./sources.mjs";
  */
 export const Riders = {
     registerSettings() {
-        game.settings.register(MODULE_ID, "riders", {
+        game.settings.register(LIB_ID, "riders", {
             name: "Apply Technique riders automatically",
             hint: "When a save is rolled, a Strike lands, or damage is applied, apply the conditions the "
                 + "Technique or Cloth inflicts. Requires a GM online; saves rolled from a chat card also "
@@ -34,7 +34,7 @@ export const Riders = {
             default: true,
         });
 
-        game.settings.register(MODULE_ID, "automateDeath", {
+        game.settings.register(LIB_ID, "automateDeath", {
             name: "Automate death effects",
             hint: "Antares, Royal Funeral and the Cancer Zenith say \"or die\". Choose who the module is "
                 + "allowed to do that to; anyone else gets a whisper to the GM instead.",
@@ -78,7 +78,7 @@ function bindCards(message, html) {
 
 /** The buttons on a "choose a sense" card. Clicking relays the pick; the GM applies it. */
 function bindChoiceButtons(message, html) {
-    const choice = message?.flags?.[MODULE_ID]?.choice;
+    const choice = message?.flags?.[LIB_ID]?.choice;
     if (!choice || !html?.querySelectorAll) return;
 
     for (const button of html.querySelectorAll(`[data-action="isaacs-hb-rider-choice"]`)) {
@@ -105,7 +105,7 @@ function bindChoiceButtons(message, html) {
  * — so the GM re-reads what the ability actually does.
  */
 function bindPickButtons(message, html) {
-    const pick = message?.flags?.[MODULE_ID]?.pick;
+    const pick = message?.flags?.[LIB_ID]?.pick;
     if (!pick || !html?.querySelectorAll) return;
 
     for (const button of html.querySelectorAll(`[data-action="isaacs-hb-rider-pick"]`)) {
@@ -131,7 +131,7 @@ function bindPickButtons(message, html) {
  * on the button rather than as an index into a rider.
  */
 function bindCounteractButtons(message, html) {
-    const counteract = message?.flags?.[MODULE_ID]?.counteract;
+    const counteract = message?.flags?.[LIB_ID]?.counteract;
     if (!counteract || !html?.querySelectorAll) return;
 
     for (const button of html.querySelectorAll(`[data-action="isaacs-hb-counteract"]`)) {

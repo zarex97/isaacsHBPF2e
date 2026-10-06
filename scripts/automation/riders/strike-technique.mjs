@@ -1,4 +1,4 @@
-import { MODULE_ID } from "../sky/signs.mjs";
+import { LIB_ID } from "../id.mjs";
 import { STRIKE_TECHNIQUE_FLAG, armedTechniqueId, ridersOn } from "./data.mjs";
 
 /**
@@ -62,12 +62,12 @@ export const StrikeTechnique = {
         const actor = spell?.actor;
         if (!actor || !StrikeTechnique.isOne(spell)) return;
         const itemId = spell.original?.id ?? spell.id;
-        await actor.setFlag(MODULE_ID, STRIKE_TECHNIQUE_FLAG, { itemId, name: spell.name });
+        await actor.setFlag(LIB_ID, STRIKE_TECHNIQUE_FLAG, { itemId, name: spell.name });
     },
 
     async disarm(actor) {
-        if (!actor?.getFlag?.(MODULE_ID, STRIKE_TECHNIQUE_FLAG)) return;
-        await actor.unsetFlag(MODULE_ID, STRIKE_TECHNIQUE_FLAG);
+        if (!actor?.getFlag?.(LIB_ID, STRIKE_TECHNIQUE_FLAG)) return;
+        await actor.unsetFlag(LIB_ID, STRIKE_TECHNIQUE_FLAG);
     },
 
     registerHooks() {
