@@ -231,9 +231,8 @@ build if this table and that switch disagree — the previous version of this se
 | `transfer` | Moves Hit Points from the caster to the creature, no more than it is missing (*Spirit Link*); carried by a linked effect, it reaches the linked creature. |
 | `temp-hp` | Temporary Hit Points as an effect holding pf2e's TempHP rule — the higher amount is kept and they end with the effect; the amount may be a share of the damage just dealt (*Vampiric Feast*). |
 | `dismiss` | The *Dismiss* action an area that can be dismissed gives its caster; using it removes the area (*Toxic Cloud*). |
-| `area-damage` | Damage rolled once for the whole cast and saved against once per creature; a part may reach only a named zone of the area (*Falling Stars*). |
+| `area-damage` | Damage rolled once for the whole cast and saved against once per creature; a part may reach only a named zone of the area (*Falling Stars*), or roll dice of a weapon the caster holds, with its critical specialization on a critical failure (*Weapon Storm*). |
 | `pull` | Every creature the cast reached saves, then each is pulled toward the area's centre by its result, nearest first, stopping at other creatures and the centre (*Gravity Well*). |
-| `area-damage` weapon dice | A part of `area-damage` may roll dice of a weapon the caster holds, and a critical failure can carry the weapon's critical specialization (*Weapon Storm*). |
 | `strikes` | Rolls a volley, dealt round-robin across the confirmed targets — more Strikes than creatures is normal. `mapIndex` picks the variant, so a rider can deliberately strike at current MAP. Follows through to damage. |
 | `charge` | Spends from a charge pool. Always the **origin's**, never the target's. |
 | `toggle` | Flips a roll option on the **target**, unless the rider is `self`. |
