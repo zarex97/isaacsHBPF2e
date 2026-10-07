@@ -1250,7 +1250,8 @@ Relay.request = async (payload) => void sent.push(payload);
 
 const message = saveMessage();
 await Sources.onSaveMessage(message, message.flags.pf2e.context);
-check("a save rolled by pf2e's own button reaches the relay", sent.length, 1);
+check("a save rolled by pf2e's own button reaches the relay — and the saver's own items, as `save-made`", sent.map((p) => p.event), ["save-rolled", "save-made"]);
+check("`save-made` is aimed back at whoever forced the save", [sent[1]?.originUuid, sent[1]?.targetUuid], [dummyToken.uuid, heatToken.uuid]);
 check("the origin is the token the roll's context named", sent[0]?.originUuid, heatToken.uuid);
 check("the creature that rolled is the target", sent[0]?.targetUuid, dummyToken.uuid);
 check("no itemUuid travels with it, so the GM side rebuilds the variant", "itemUuid" in (sent[0] ?? {}), false);
@@ -1259,7 +1260,7 @@ check("the event is the one every save rider listens for", sent[0]?.event, "save
 sent.length = 0;
 const ownSave = saveMessage({ options: ["isaacs-pf2e-automation:rider-save"] });
 await Sources.onSaveMessage(ownSave, ownSave.flags.pf2e.context);
-check("a save this module rolled itself is not dispatched again", sent.length, 0);
+check("a save this module rolled itself is not dispatched again — only the saver's own `save-made`", sent.map((p) => p.event), ["save-made"]);
 
 sent.length = 0;
 const sheetSave = saveMessage();

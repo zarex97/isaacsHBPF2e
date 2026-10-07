@@ -177,6 +177,7 @@ Riders are authored on whatever the rule belongs to — a Technique, a Cloth, a 
 | `strike-resolved` | This actor's Strike resolves | The attacker's items |
 | `strike-received` | A Strike resolves against this actor | The defender's items |
 | `action-used` | An action or spell is posted to chat | The item posted, against the targets you confirmed |
+| `save-made` | This actor rolls a save against someone else's effect (*Schadenfreude*) | This actor's items, aimed at whoever forced the save |
 | `damage-applied` | Damage from this actor's item lands | The origin's items |
 | `damage-received` | Damage from someone else's item lands on this actor | The defender's items |
 | `ally-damaged` | Damage lands on an **ally**, within the rider's own `range` in feet | The watching ally's items |
@@ -231,6 +232,7 @@ build if this table and that switch disagree — the previous version of this se
 | `transfer` | Moves Hit Points from the caster to the creature, no more than it is missing (*Spirit Link*); carried by a linked effect, it reaches the linked creature. |
 | `temp-hp` | Temporary Hit Points as an effect holding pf2e's TempHP rule — the higher amount is kept and they end with the effect; the amount may be a share of the damage just dealt (*Vampiric Feast*). |
 | `affliction` | An affliction on the creature — an effect whose badge is the stage and whose rules grant the stage's conditions — at the stage the result gives; each stage's damage is applied as it begins, and a save at the end of each of its turns moves the stage until it is cured or its maximum duration passes (*Spider Sting*). |
+| `cast` | Casts the rider's own spell at its creature — a reaction that is a spell (*Schadenfreude*). |
 | `aftermath` | A tally of the creatures a cast reached; once every one that must answer has its result, and nobody died, the backlash lands on them and on the caster (*Massacre*). |
 | `aftermath-mark` | One creature's result is in, for its cast's `aftermath`. |
 | `spend-charge` | The action an effect with `originAction` gives its caster spends one of the effect's counter; the last ends the effect and takes the action (*Blister*). |
