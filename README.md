@@ -178,6 +178,7 @@ Riders are authored on whatever the rule belongs to — a Technique, a Cloth, a 
 | `strike-received` | A Strike resolves against this actor | The defender's items |
 | `action-used` | An action or spell is posted to chat | The item posted, against the targets you confirmed |
 | `save-made` | This actor rolls a save against someone else's effect (*Schadenfreude*) | This actor's items, aimed at whoever forced the save |
+| `creature-dying` | A creature within the rider's `range` would die, of anything but a death effect (*Breath of Life*) | This actor's items |
 | `damage-applied` | Damage from this actor's item lands | The origin's items |
 | `damage-received` | Damage from someone else's item lands on this actor | The defender's items |
 | `ally-damaged` | Damage lands on an **ally**, within the rider's own `range` in feet | The watching ally's items |
