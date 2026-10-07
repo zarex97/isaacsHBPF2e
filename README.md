@@ -226,6 +226,7 @@ build if this table and that switch disagree — the previous version of this se
 | `expire` | Takes a named effect back off before its own timer would — what "the doll shatters" needs. |
 | `sustain` | The *Sustain* action an effect rider with `sustain: { step }` grants its holder — one more on the effect's badge, once per round and not in the round it was cast. Granted by the engine, not written by hand. |
 | `shorten` | Takes `rounds` off the effect that carries this rider, or ends it with `rounds: "all"` — *Paralyze*'s save at the end of each turn. |
+| `climb` | Moves a valued condition by `by` within `[0, max]`; reaching `max` runs `onMax`, reaching 0 runs `onZero` — *Petrify*'s slowed that turns to stone. |
 | `strikes` | Rolls a volley, dealt round-robin across the confirmed targets — more Strikes than creatures is normal. `mapIndex` picks the variant, so a rider can deliberately strike at current MAP. Follows through to damage. |
 | `charge` | Spends from a charge pool. Always the **origin's**, never the target's. |
 | `toggle` | Flips a roll option on the **target**, unless the rider is `self`. |
