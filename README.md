@@ -231,6 +231,8 @@ build if this table and that switch disagree — the previous version of this se
 | `transfer` | Moves Hit Points from the caster to the creature, no more than it is missing (*Spirit Link*); carried by a linked effect, it reaches the linked creature. |
 | `temp-hp` | Temporary Hit Points as an effect holding pf2e's TempHP rule — the higher amount is kept and they end with the effect; the amount may be a share of the damage just dealt (*Vampiric Feast*). |
 | `affliction` | An affliction on the creature — an effect whose badge is the stage and whose rules grant the stage's conditions — at the stage the result gives; each stage's damage is applied as it begins, and a save at the end of each of its turns moves the stage until it is cured or its maximum duration passes (*Spider Sting*). |
+| `aftermath` | A tally of the creatures a cast reached; once every one that must answer has its result, and nobody died, the backlash lands on them and on the caster (*Massacre*). |
+| `aftermath-mark` | One creature's result is in, for its cast's `aftermath`. |
 | `spend-charge` | The action an effect with `originAction` gives its caster spends one of the effect's counter; the last ends the effect and takes the action (*Blister*). |
 | `dismiss` | The *Dismiss* action an area that can be dismissed gives its caster; using it removes the area (*Toxic Cloud*). |
 | `area-damage` | Damage rolled once for the whole cast and saved against once per creature; a part may reach only a named zone of the area (*Falling Stars*), or roll dice of a weapon the caster holds, with its critical specialization on a critical failure (*Weapon Storm*). |
