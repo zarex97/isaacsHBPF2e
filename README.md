@@ -233,6 +233,8 @@ build if this table and that switch disagree — the previous version of this se
 | `dismiss` | The *Dismiss* action an area that can be dismissed gives its caster; using it removes the area (*Toxic Cloud*). |
 | `area-damage` | Damage rolled once for the whole cast and saved against once per creature; a part may reach only a named zone of the area (*Falling Stars*), or roll dice of a weapon the caster holds, with its critical specialization on a critical failure (*Weapon Storm*). |
 | `pull` | Every creature the cast reached saves, then each is pulled toward the area's centre by its result, nearest first, stopping at other creatures and the centre (*Gravity Well*). |
+| `contest` | The caster rolls a statistic — the spell attack, by default — against the target's named DC, and the riders inside are chosen by the caster's result; one marked `toOrigin` lands on the caster (*Telekinetic Maneuver*). |
+| `disarm` | The target's held weapon: pf2e's *Effect: Disarm (Success)* on it, or dropped. |
 | `strikes` | Rolls a volley, dealt round-robin across the confirmed targets — more Strikes than creatures is normal. `mapIndex` picks the variant, so a rider can deliberately strike at current MAP. Follows through to damage. |
 | `charge` | Spends from a charge pool. Always the **origin's**, never the target's. |
 | `toggle` | Flips a roll option on the **target**, unless the rider is `self`. |
