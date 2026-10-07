@@ -235,6 +235,7 @@ build if this table and that switch disagree — the previous version of this se
 | `pull` | Every creature the cast reached saves, then each is pulled toward the area's centre by its result, nearest first, stopping at other creatures and the centre (*Gravity Well*). |
 | `contest` | The caster rolls a statistic — the spell attack, by default — against the target's named DC, and the riders inside are chosen by the caster's result; one marked `toOrigin` lands on the caster (*Telekinetic Maneuver*). |
 | `disarm` | The target's held weapon: pf2e's *Effect: Disarm (Success)* on it, or dropped. |
+| `rays` | One spell attack at each creature targeted, every one at the penalty the cast chose; a hit deals the spell's own damage, doubled on a critical hit (*Blazing Bolt*). |
 | `strikes` | Rolls a volley, dealt round-robin across the confirmed targets — more Strikes than creatures is normal. `mapIndex` picks the variant, so a rider can deliberately strike at current MAP. Follows through to damage. |
 | `charge` | Spends from a charge pool. Always the **origin's**, never the target's. |
 | `toggle` | Flips a roll option on the **target**, unless the rider is `self`. |
