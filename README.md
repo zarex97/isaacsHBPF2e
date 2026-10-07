@@ -224,6 +224,7 @@ build if this table and that switch disagree — the previous version of this se
 | `encasement` | Traps a creature in a hazard with its own escape DC. |
 | `escape` | Offers an escape attempt against something holding the target. |
 | `expire` | Takes a named effect back off before its own timer would — what "the doll shatters" needs. |
+| `sustain` | The *Sustain* action an effect rider with `sustain: { step }` grants its holder — one more on the effect's badge, once per round and not in the round it was cast. Granted by the engine, not written by hand. |
 | `strikes` | Rolls a volley, dealt round-robin across the confirmed targets — more Strikes than creatures is normal. `mapIndex` picks the variant, so a rider can deliberately strike at current MAP. Follows through to damage. |
 | `charge` | Spends from a charge pool. Always the **origin's**, never the target's. |
 | `toggle` | Flips a roll option on the **target**, unless the rider is `self`. |
