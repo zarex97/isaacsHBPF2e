@@ -146,6 +146,7 @@ check(
         [
             "a sealed voice",
             "what a spell needs",
+            "a variant from the weapon in hand",
             "area targeting",
             "the release ladder",
             "Severance",
