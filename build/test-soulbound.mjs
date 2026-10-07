@@ -145,6 +145,7 @@ check(
         order.before.map((stage) => stage.name),
         [
             "a sealed voice",
+            "what a spell needs",
             "area targeting",
             "the release ladder",
             "Severance",
