@@ -241,7 +241,7 @@ build if this table and that switch disagree — the previous version of this se
 | `aftermath` | A tally of the creatures a cast reached; once every one that must answer has its result, and nobody died, the backlash lands on them and on the caster (*Massacre*). |
 | `aftermath-mark` | One creature's result is in, for its cast's `aftermath`. |
 | `spend-charge` | The action an effect with `originAction` gives its caster spends one of the effect's counter; the last ends the effect and takes the action (*Blister*). |
-| `dismiss` | The *Dismiss* action an area that can be dismissed gives its caster; using it removes the area (*Toxic Cloud*). |
+| `dismiss` | The *Dismiss* action an area or an effect that can be dismissed gives its caster (or its holder); using it removes the area or the effect (*Toxic Cloud*, *Animal Form*, *Vapor Form*). |
 | `area-damage` | Damage rolled once for the whole cast and saved against once per creature; a part may reach only a named zone of the area (*Falling Stars*), or roll dice of a weapon the caster holds, with its critical specialization on a critical failure (*Weapon Storm*). |
 | `pull` | Every creature the cast reached saves, then each is pulled toward the area's centre by its result, nearest first, stopping at other creatures and the centre (*Gravity Well*). |
 | `contest` | The caster rolls a statistic — the spell attack, by default — against the target's named DC, and the riders inside are chosen by the caster's result; one marked `toOrigin` lands on the caster (*Telekinetic Maneuver*). |
