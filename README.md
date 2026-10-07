@@ -228,6 +228,7 @@ build if this table and that switch disagree — the previous version of this se
 | `shorten` | Takes `rounds` off the effect that carries this rider, or ends it with `rounds: "all"` — *Paralyze*'s save at the end of each turn. |
 | `climb` | Moves a valued condition by `by` within `[0, max]`; reaching `max` runs `onMax`, reaching 0 runs `onZero` — *Petrify*'s slowed that turns to stone. |
 | `decoy` | A carried `strike-received` rider on an effect with images (*Mirror Image*): a failure destroys one; a hit rolls the spell's table for whether it lands on an image. |
+| `transfer` | Moves Hit Points from the caster to the creature, no more than it is missing (*Spirit Link*); carried by a linked effect, it reaches the linked creature. |
 | `strikes` | Rolls a volley, dealt round-robin across the confirmed targets — more Strikes than creatures is normal. `mapIndex` picks the variant, so a rider can deliberately strike at current MAP. Follows through to damage. |
 | `charge` | Spends from a charge pool. Always the **origin's**, never the target's. |
 | `toggle` | Flips a roll option on the **target**, unless the rider is `self`. |
