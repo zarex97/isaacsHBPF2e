@@ -230,6 +230,7 @@ build if this table and that switch disagree — the previous version of this se
 | `decoy` | A carried `strike-received` rider on an effect with images (*Mirror Image*): a failure destroys one; a hit rolls the spell's table for whether it lands on an image. |
 | `transfer` | Moves Hit Points from the caster to the creature, no more than it is missing (*Spirit Link*); carried by a linked effect, it reaches the linked creature. |
 | `temp-hp` | Temporary Hit Points as an effect holding pf2e's TempHP rule — the higher amount is kept and they end with the effect; the amount may be a share of the damage just dealt (*Vampiric Feast*). |
+| `spend-charge` | The action an effect with `originAction` gives its caster spends one of the effect's counter; the last ends the effect and takes the action (*Blister*). |
 | `dismiss` | The *Dismiss* action an area that can be dismissed gives its caster; using it removes the area (*Toxic Cloud*). |
 | `area-damage` | Damage rolled once for the whole cast and saved against once per creature; a part may reach only a named zone of the area (*Falling Stars*), or roll dice of a weapon the caster holds, with its critical specialization on a critical failure (*Weapon Storm*). |
 | `pull` | Every creature the cast reached saves, then each is pulled toward the area's centre by its result, nearest first, stopping at other creatures and the centre (*Gravity Well*). |
