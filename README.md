@@ -177,6 +177,8 @@ Riders are authored on whatever the rule belongs to — a Technique, a Cloth, a 
 | `strike-resolved` | This actor's Strike resolves | The attacker's items |
 | `strike-received` | A Strike resolves against this actor | The defender's items |
 | `action-used` | An action or spell is posted to chat | The item posted, against the targets you confirmed |
+| `save-made` | This actor rolls a save against someone else's effect (*Schadenfreude*) | This actor's items, aimed at whoever forced the save |
+| `creature-dying` | A creature within the rider's `range` would die, of anything but a death effect (*Breath of Life*) | This actor's items |
 | `damage-applied` | Damage from this actor's item lands | The origin's items |
 | `damage-received` | Damage from someone else's item lands on this actor | The defender's items |
 | `ally-damaged` | Damage lands on an **ally**, within the rider's own `range` in feet | The watching ally's items |
@@ -230,6 +232,22 @@ build if this table and that switch disagree — the previous version of this se
 | `decoy` | A carried `strike-received` rider on an effect with images (*Mirror Image*): a failure destroys one; a hit rolls the spell's table for whether it lands on an image. |
 | `transfer` | Moves Hit Points from the caster to the creature, no more than it is missing (*Spirit Link*); carried by a linked effect, it reaches the linked creature. |
 | `temp-hp` | Temporary Hit Points as an effect holding pf2e's TempHP rule — the higher amount is kept and they end with the effect; the amount may be a share of the damage just dealt (*Vampiric Feast*). |
+| `affliction` | An affliction on the creature — an effect whose badge is the stage and whose rules grant the stage's conditions — at the stage the result gives; each stage's damage is applied as it begins, and a save at the end of each of its turns moves the stage until it is cured or its maximum duration passes (*Spider Sting*). |
+| `elevation` | Sets or moves a token's elevation, never below the ground (*Levitate*). |
+| `fall` | The creature drops up to a distance, safely; landing, it may be kept on the ground for a while (*Earthbind*). |
+| `cleanse` | A card of the target's afflictions; the one chosen goes a stage down once per case, and is counteracted at the ranks that allow it (*Cleanse Affliction*). |
+| `unobserve` | One creature cannot observe another: its attacks on that creature need a DC 11 flat check first, and that creature's attacks find it off-guard (*Blinding Fury*). |
+| `detect-magic` | The magic within range of the caster, whispered to them: whether there is any, from 3rd rank how strong, from 4th where (*Detect Magic*). |
+| `cast` | Casts the rider's own spell at its creature — a reaction that is a spell (*Schadenfreude*). |
+| `aftermath` | A tally of the creatures a cast reached; once every one that must answer has its result, and nobody died, the backlash lands on them and on the caster (*Massacre*). |
+| `aftermath-mark` | One creature's result is in, for its cast's `aftermath`. |
+| `spend-charge` | The action an effect with `originAction` gives its caster spends one of the effect's counter; the last ends the effect and takes the action (*Blister*). |
+| `dismiss` | The *Dismiss* action an area or an effect that can be dismissed gives its caster (or its holder); using it removes the area or the effect (*Toxic Cloud*, *Animal Form*, *Vapor Form*). |
+| `area-damage` | Damage rolled once for the whole cast and saved against once per creature; a part may reach only a named zone of the area (*Falling Stars*), or roll dice of a weapon the caster holds, with its critical specialization on a critical failure (*Weapon Storm*). |
+| `pull` | Every creature the cast reached saves, then each is pulled toward the area's centre by its result, nearest first, stopping at other creatures and the centre (*Gravity Well*). |
+| `contest` | The caster rolls a statistic — the spell attack, by default — against the target's named DC, and the riders inside are chosen by the caster's result; one marked `toOrigin` lands on the caster (*Telekinetic Maneuver*). |
+| `disarm` | The target's held weapon: pf2e's *Effect: Disarm (Success)* on it, or dropped. |
+| `rays` | One spell attack at each creature targeted, every one at the penalty the cast chose; a hit deals the spell's own damage, doubled on a critical hit (*Blazing Bolt*); a miss may still deal some of its damage types, and each ray's result may do more to the creature it reached (*Live Wire*); a hit may instead call for a basic save, one degree worse after a critical hit, and destroy an object it hits (*Disintegrate*). |
 | `strikes` | Rolls a volley, dealt round-robin across the confirmed targets — more Strikes than creatures is normal. `mapIndex` picks the variant, so a rider can deliberately strike at current MAP. Follows through to damage. |
 | `charge` | Spends from a charge pool. Always the **origin's**, never the target's. |
 | `toggle` | Flips a roll option on the **target**, unless the rider is `self`. |
