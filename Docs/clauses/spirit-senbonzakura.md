@@ -32,7 +32,7 @@ it; **Evidence** names what proved it happened at the table.
 | S-01a | Shikai Form | Your Strikes gain **reach 15 feet** | effect:trait-gained | | ✅ | Live in released Shikai: the spirit weapon carries `reach-15`, and it is absent while sealed. **SB-6** closed this when the release ladder started running |
 | S-01b | Shikai Form | lose the two-hand and twin traits | effect:trait-gained | | ✅ | Live: the Blade profile carries `two-hand-d10` in content and the Shikai form removes it — traits read `versatile-p, versatile-spirit, reach-15`. The `twin` removal is authored but unreachable on a Blade spirit |
 | S-01c | Shikai Form | your hands are empty | reach:weapon | | ✅ | Live: sealed reads `handsHeld 1` / `handsFree 1`; Shikai reads `handsHeld 0` / `handsFree 2` with `carryType` still `held`, so the Strike survives. `ItemAlteration` has no property for this, so the form declares `freesHands` and `SpiritWeapon.reconcile` reads it |
-| S-01d | Shikai Form | Your Strikes are **not** affected by cover between you and the target | when:strike-made | | ✅ | **Coded.** pf2e puts cover on the defender and gives an attacker no way to suppress it, so the correction is made where both sides meet — `Check.roll` takes the target's cover bonus back out of the DC. Live vs. a target in greater cover: **DC 20 → 18**, stamped `soulbound:ignored-cover:2` |
+| S-01d | Shikai Form | Your Strikes are **not** affected by cover between you and the target | when:strike-made · effect:cover-reduced | | ✅ | **Coded.** pf2e puts cover on the defender and gives an attacker no way to suppress it, so the correction is made where both sides meet — `Check.roll` takes the target's cover bonus back out of the DC. Live vs. a target in greater cover: **DC 20 → 18**, stamped `soulbound:ignored-cover:2` |
 
 ## Release Technique — Senbonzakura (1st)
 
@@ -65,10 +65,10 @@ it; **Evidence** names what proved it happened at the table.
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
 | S-06a | Gokei | The second emanation shrinks to a **10-foot burst** centred on one enemy | area:from-target · reach:area/burst | | ✅ | Live: Gokei reshapes the second area rather than adding a third (ported from S-06) |
 | S-06b | Gokei | that enemy takes **double** the damage | effect:damage | | ✅ | Live: `5d6 × 2 = 36` and `× 2 = 26` on the two at the anchor, and nobody else (ported from S-06) |
-| S-06c | Gokei | cannot benefit from cover or concealment against it | effect:reveal | | ✅ | **Coded.** Cover also grants its bonus to **Reflex** against `area-effect`, so it was helping against the one thing the clause forbids. The same `Check.roll` seam raises the save DC by that bonus instead. Live: **DC 20 → 22** on a covered target's Reflex save. Concealment needs no code here: it is a flat check against *attack rolls*, and Gokei is a basic Reflex save, so there is nothing for it to cancel |
+| S-06c | Gokei | cannot benefit from cover or concealment against it | effect:reveal · effect:cover-reduced | | ✅ | **Coded.** Cover also grants its bonus to **Reflex** against `area-effect`, so it was helping against the one thing the clause forbids. The same `Check.roll` seam raises the save DC by that bonus instead. Live: **DC 20 → 22** on a covered target's Reflex save. Concealment needs no code here: it is a flat check against *attack rolls*, and Gokei is a basic Reflex save, so there is nothing for it to cancel |
 | S-07a | Senkei | The blades condense into a thousand swords forming a 20-foot cage around you and one enemy | area:aura/region · reach:area/emanation | | ✅ | Live: Senkei raises a Region named *Effect: Senkei — 20-foot cage* on the caster, and switching to Gokei takes it back down |
 | S-07b | Senkei | Neither of you can leave | | | — | Arrives as a turn-start prompt; not a number pf2e can enforce (ported from S-07) |
-| S-07c | Senkei | your Strikes against that enemy ignore all resistances | when:strike-made | | ✅ | A `bypass` makes your Strikes ignore all resistances (ported from S-07) |
+| S-07c | Senkei | your Strikes against that enemy ignore all resistances | when:strike-made · effect:ignore-resistance | | ✅ | A `bypass` makes your Strikes ignore all resistances (ported from S-07) |
 | S-07d | Senkei | you may make one extra Strike each round at your current multiple attack penalty | | | — | Offered as a prompt; pf2e cannot grant an extra Strike (ported from S-07) |
 | S-07e | Senkei | **You lose Senbonzakura's reach and cover-ignoring** | effect:trait-gained | | ✅ | Senkei takes `reach-15` back off the spirit weapon (ported from S-07) |
 | S-07f | Senkei | enemies outside the cage cannot be targeted by you | reach:filtered · area:aura/region | | ✅ | **Coded.** A `targetToken` hook drops a target that falls outside the cage Region and says why. Live with the cage up: targeting *D1* inside **held**, targeting *Piscis* outside was released with *“Piscis is outside Effect: Senkei — 20-foot cage”*. The cage must enclose its own bearer before a refusal is trusted, so a Region that cannot answer fails open |
@@ -78,10 +78,10 @@ it; **Evidence** names what proved it happened at the table.
 | ID | Guide | Clause | Patterns | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
 | R-11a | Shūkei: Hakuteiken | **One creature within reach.** | when:cast · reach:single | | ✅ | Shape and Strike were right when driven (ported from R-11) |
-| R-11b | Shūkei: Hakuteiken | Make a Strike; on a hit it takes the Waning dice as **slashing** | check:attack · effect:damage | | ✅ | Ported from R-11 |
-| R-11c | Shūkei: Hakuteiken | Ignores **all** resistances and immunities | effect:damage | | ✅ | The ignore-all bypass was right when driven (ported from R-11) |
-| R-11d | Shūkei: Hakuteiken | On a hit the target can't regain Hit Points | check:attack | | ✅ | Live on *Phantom Knight*: a clean heal gave back 10, and the same heal while wounded gave back **0** |
-| R-11e | Shūkei: Hakuteiken | its regeneration and fast healing are suppressed, for 1 minute | effect:suppress · ending:duration | | ✅ | Live on *ZZ Test — Arrogante*: the Regeneración `FastHealing` predicate reads true clean, **false** while wounded, true again once the wound is gone |
+| R-11b | Shūkei: Hakuteiken | Make a Strike; on a hit it takes the Waning dice as **slashing** | check:attack · effect:damage · effect:strikes-made | | ✅ | Ported from R-11 |
+| R-11c | Shūkei: Hakuteiken | Ignores **all** resistances and immunities | effect:ignore-resistance | | ✅ | The ignore-all bypass was right when driven (ported from R-11) |
+| R-11d | Shūkei: Hakuteiken | On a hit the target can't regain Hit Points | check:attack · effect:heal-blocked | | ✅ | Live on *Phantom Knight*: a clean heal gave back 10, and the same heal while wounded gave back **0** |
+| R-11e | Shūkei: Hakuteiken | its regeneration and fast healing are suppressed, for 1 minute | effect:suppress · ending:duration · effect:heal-blocked | | ✅ | Live on *ZZ Test — Arrogante*: the Regeneración `FastHealing` predicate reads true clean, **false** while wounded, true again once the wound is gone |
 
 ---
 

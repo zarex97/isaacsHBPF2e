@@ -37,14 +37,14 @@ Regeneración, and the spirit weapon's whole profile being *replaced* rather tha
 | ID | Guide | Clause | Patterns | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
 | S-43a | Resurrección Form | You gain a **fly Speed** equal to your Speed | effect:speed | | ✅ | Live: the form gives **fly 35** against a land Speed of **35**, and the control run with the Spirit sealed has no fly Speed at all. The rule reads `@actor.system.movement.speeds.land.value`, so it is the Speed rather than a number that happens to match it |
-| S-43b | Resurrección Form | a javelin of hardened green energy: **1d10 piercing**, versatile S, **reach** | effect:strikes-granted | | ✅ | Live on Releasing: the Blade is stowed and **Luz de la Luna** is in hand — **1d10 piercing**, **versatile-s**, **reach**. The spirit weapon is *replaced* rather than altered, which is the one Spirit in the class that does it that way |
+| S-43b | Resurrección Form | a javelin of hardened green energy: **1d10 piercing**, versatile S, **reach** | effect:strikes-granted · effect:weapon-profile | | ✅ | Live on Releasing: the Blade is stowed and **Luz de la Luna** is in hand — **1d10 piercing**, **versatile-s**, **reach**. The spirit weapon is *replaced* rather than altered, which is the one Spirit in the class that does it that way |
 | S-43c | Resurrección Form | it re-forms in your hand instantly if thrown or dropped | | | — | Foundry has no event for a weapon leaving a hand: nothing fires when an item is dropped, and Luz has no **thrown** trait to be thrown with — it is a reach javelin. What the clause removes is a cost the table was never going to pay, so it is printed on the item and the GM never has to rule on it |
 
 ## Release Technique — Cero Oscuras (1st)
 
 | ID | Guide | Clause | Patterns | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| S-44a | Cero Oscuras | Range 90 feet, one creature. Make a **ranged spell attack** using your Reiatsu DC's proficiency and key attribute | reach:single · check:attack | | ✅ | Live at 15th: the card reads **Range 90 feet; Targets 1 creature; Defense AC**, with the **Attack** trait, and the roll posted as *Soulbound Spell Attack* against the target's AC using the Reiatsu DC's statistic |
+| S-44a | Cero Oscuras | Range 90 feet, one creature. Make a **ranged spell attack** using your Reiatsu DC's proficiency and key attribute | reach:single · check:attack · check:class-dc | | ✅ | Live at 15th: the card reads **Range 90 feet; Targets 1 creature; Defense AC**, with the **Attack** trait, and the roll posted as *Soulbound Spell Attack* against the target's AC using the Reiatsu DC's statistic |
 | S-44b | Cero Oscuras | **3d6** spirit damage, doubled on a critical hit | check:attack · effect:damage | | ✅ | Live: the attack read **Critical Hit**, and the ×2 apply button took D1 from **120 → 52** on a 34-point roll — the doubling, exactly. pf2e never rolls a spell attack's critical damage itself: `spell/document.ts` sets `outcome: isAttack ? "success" : null` with a *we'll need to support other outcomes later* beside it, for every attack-roll spell in the system. The doubling is the damage card's own **×2**, which is where pf2e puts it |
 | S-44c | Cero Oscuras | **Release Technique — Cero Oscuras** [two-actions] | when:cast | | ✅ | Same card: **2** actions, Focus 8 |
 | S-44d | Cero Oscuras | **Heightened (+1)** +1d6 | scaling:dice-per-rank · effect:damage | | ✅ | Live at 15th, rank 8: the damage rolled **`3d6 + 7d6`** — 3d6 and seven heightening steps |
@@ -61,7 +61,7 @@ Regeneración, and the spirit weapon's whole profile being *replaced* rather tha
 | ID | Guide | Clause | Patterns | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
 | S-46a | Segunda Etapa | Your fly Speed increases by **20 feet** | effect:speed | | ✅ | Live entering Segunda: fly **35 → 55**, the modifier reading `Segunda Etapa status 20` |
-| S-46b | Segunda Etapa | You gain **resistance to all damage except spirit equal to half your level** | effect:resistance | | ✅ | Live at 15th: **resistance 7 to all damage except spirit** — `max(1, floor(@actor.level/2))` — and the control with Segunda stripped has none |
+| S-46b | Segunda Etapa | You gain **resistance to all damage except spirit equal to half your level** | effect:resistance · scaling:from-level | | ✅ | Live at 15th: **resistance 7 to all damage except spirit** — `max(1, floor(@actor.level/2))` — and the control with Segunda stripped has none |
 | S-46c | Segunda Etapa | Your Regeneración fast healing **doubles** | effect:fast-healing | | ✅ | Live, both ways: Regeneración healed **8** at Segunda against **4** without it. The doubling is a second `FastHealing` rule split on `soulbound:murcielago:high-speed-regeneration`, so the Lineage's own fast healing is what doubles rather than a number written twice |
 | S-46d | Segunda Etapa | it now restores lost limbs | | | — | pf2e has no lost limb to restore — the Saint's own severed-limb machinery is a *Capricorn* rider, and nothing in the Hollow lineage ever takes one. The clause is printed on the feature so the table can read it |
 
@@ -81,7 +81,7 @@ Regeneración, and the spirit weapon's whole profile being *replaced* rather tha
 | ID | Guide | Clause | Patterns | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
 | R-18a | Cero Oscuras: Ceniza | **120-foot line**, basic Reflex, **spirit** | when:cast · reach:area/line · check:basic-save · effect:damage | | ✅ | Cast live in Severance round 1 at 20th: the card reads **Range 120 feet; Area 120-foot line**, **Defense basic Reflex**, 2 actions, and the damage rolled **`20d6 spirit`**. *“Cero Oscuras: Ceniza ends Severance”* followed it. The line catches what stands in it and nothing beside it — aimed down the diagonal it took **D1 and D3**, and left **D2 and D4** one square off it alone |
-| R-18b | Cero Oscuras: Ceniza | A creature reduced to 0 Hit Points by this crumbles to ash; returning it to life requires a 10th-rank effect | | | — | The same answer as Ittō Kasō's R-14e, and for the same reason: pf2e has no notion of a body that cannot be raised, and the rank of the effect needed to undo it is a question for whoever casts it. The clause is printed on the card |
+| R-18b | Cero Oscuras: Ceniza | A creature reduced to 0 Hit Points by this crumbles to ash; returning it to life requires a 10th-rank effect | when:kill | | — | The same answer as Ittō Kasō's R-14e, and for the same reason: pf2e has no notion of a body that cannot be raised, and the rank of the effect needed to undo it is a question for whoever casts it. The clause is printed on the card |
 
 ---
 

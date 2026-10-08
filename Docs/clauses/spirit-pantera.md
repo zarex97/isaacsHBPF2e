@@ -35,7 +35,7 @@ pf2e collapses two bonuses of the same type, so the type is the clause.
 
 | ID | Guide | Clause | Patterns | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| S-38a | Resurrección Form | You gain two **claw** unarmed attacks: **1d8 slashing**, **agile**, **finesse**, in the brawling group | effect:strikes-granted | | ✅ | Live: `Pantera — Claws` is an **unarmed** weapon in the **brawling** group, **1d8 slashing**, **agile**, **finesse** — the d8 read off the control with Refined Release stripped. pf2e models a matched pair as one Strike entry used twice, which `agile` is what prices; two identical entries would add nothing |
+| S-38a | Resurrección Form | You gain two **claw** unarmed attacks: **1d8 slashing**, **agile**, **finesse**, in the brawling group | effect:strikes-granted · effect:weapon-profile | | ✅ | Live: `Pantera — Claws` is an **unarmed** weapon in the **brawling** group, **1d8 slashing**, **agile**, **finesse** — the d8 read off the control with Refined Release stripped. pf2e models a matched pair as one Strike entry used twice, which `agile` is what prices; two identical entries would add nothing |
 | S-38b | Resurrección Form | Your Speed increases by **10 feet** (this stacks with Sonido) | effect:speed | | ✅ | Live: Speed **40** with the form, **30** without. The modifiers read `Sonido untyped 5` and `Pantera untyped 10` and **both** count — *“this stacks with Sonido”* holds because neither is typed, which is the whole of the clause |
 
 ## Release Technique — Garra de la Pantera (1st)
@@ -51,7 +51,7 @@ pf2e collapses two bonuses of the same type, so the type is the clause.
 
 | ID | Guide | Clause | Patterns | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| S-40a | Refined | Your claws' damage die increases to **1d10** | reach:weapon | | ✅ | Live, both ways: the claws are **d10** while Refined Release is held and **d8** with the feat stripped. **SB-40** recorded this as never landing; it lands |
+| S-40a | Refined | Your claws' damage die increases to **1d10** | reach:weapon · effect:die-step | | ✅ | Live, both ways: the claws are **d10** while Refined Release is held and **d8** with the feat stripped. **SB-40** recorded this as never landing; it lands |
 | S-40b | Refined | after using Garra de la Pantera you may **Step** as a free action | economy:granted-action | | ✅ | Live: casting Garra posted *“Refined Release: you may Step as a free action.”* SB-40's second half |
 
 ## Segunda Etapa (13th)
@@ -60,7 +60,7 @@ pf2e collapses two bonuses of the same type, so the type is the clause.
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
 | S-41a | Segunda Etapa | Your Speed increases by another **10 feet** | effect:speed | | ✅ | Live at 13th entering Segunda: Speed **45 → 55**, with `Segunda Etapa untyped 10` added beside `Sonido untyped 10` and `Pantera untyped 10`. All three untyped, so all three count |
 | S-41b | Segunda Etapa | your claws gain **deadly d10** | effect:trait-gained | | ✅ | Live: the claws' traits go `agile, finesse, unarmed` → **`…, deadly-d10`** the moment Segunda arrives |
-| S-41c | Segunda Etapa | Once per round when you critically hit with a claw, you may immediately make an additional claw Strike against the same target at your current multiple attack penalty | when:strike-made · economy:once-per-round · economy:granted-action · economy:attack-penalty | `test-riders` asserts the gate | ✅ | **Fixed.** The prompt had no per-round gate, so it fired on every critical hit. It takes `oncePerRound` now, the same gate Tensa Zangetsu's free Step uses. Live: **4 critical hits in round 1 → 1 prompt**, then **3 in round 2 → 1 prompt**, with the ledger stamp advancing `:1` → `:2` |
+| S-41c | Segunda Etapa | Once per round when you critically hit with a claw, you may immediately make an additional claw Strike against the same target at your current multiple attack penalty | when:strike-made · economy:once-per-round · economy:granted-action · economy:attack-penalty · effect:strikes-made | `test-riders` asserts the gate | ✅ | **Fixed.** The prompt had no per-round gate, so it fired on every critical hit. It takes `oncePerRound` now, the same gate Tensa Zangetsu's free Step uses. Live: **4 critical hits in round 1 → 1 prompt**, then **3 in round 2 → 1 prompt**, with the ledger stamp advancing `:1` → `:2` |
 | S-42a | Segunda Etapa | **Garra de la Pantera**'s cone increases to **60 feet** | reach:area/cone | | ✅ | Live: Garra's area **30 → 60** on entering Segunda, and the card read **Area 60-foot cone** when cast |
 | S-42b | Segunda Etapa | creatures that critically fail against it take **2d6 persistent bleed** damage from embedded shards | check:save · effect:persistent | | ✅ | Live on a forced critical failure at Segunda: the target came away with **Persistent Damage (2d6 bleed)**. The rider is predicated on `self:effect:pantera-segunda-etapa`, so it is Segunda's and not Garra's |
 

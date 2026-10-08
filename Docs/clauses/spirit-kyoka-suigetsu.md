@@ -37,7 +37,7 @@ are about what a creature *perceives*, which is the furthest thing from a number
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
 | S-32a | Kanzen Saimin | the target must have seen your Shikai release | reach:filtered | | ✅ | Live: Releasing fired the sweep by itself — six Will saves posted against the Reiatsu DC, and the blind dummy was never asked. Seeing you release is what the sweep tests, and `hypnosis.mjs` keeps the register because no rule element can hold a memory |
 | S-32b | Kanzen Saimin | A creature that **cannot see** is unaffected entirely | reach:filtered | `test-soulbound` asserts `shouldRoll` | ✅ | Live: the blinded dummy came back **`blind`** from every sweep — no roll, no entry in the register, nothing remembered |
-| S-32c | Kanzen Saimin | that creature must succeed at a **Will save** against your Reiatsu DC or be **hypnotized** for 1 minute | check:save · effect:condition · ending:duration | | ✅ | Live on Release: a Will save against **DC 27**, and the dummy that failed came away with **`Effect: Hypnotized`, 1 minute** |
+| S-32c | Kanzen Saimin | that creature must succeed at a **Will save** against your Reiatsu DC or be **hypnotized** for 1 minute | check:save · effect:condition · ending:duration · check:class-dc | | ✅ | Live on Release: a Will save against **DC 27**, and the dummy that failed came away with **`Effect: Hypnotized`, 1 minute** |
 
 ## Shikai — the lie
 

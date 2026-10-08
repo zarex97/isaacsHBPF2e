@@ -276,12 +276,16 @@ for (const { name, file, allowed, guide } of trackers) {
 }
 
 // The tags: every one from the automation's list, and — once required — on every row that automates something.
-const homebrewRows = Patterns.readTrackers(CLAUSE_DIR, ROOT);
+// Patterns this module's clauses brought into the vocabulary cite them as `isaacsHBPF2e:<ID>`; the automation
+// cannot see these rows, so this is where those citations are held to the rule.
+const REPO = "isaacsHBPF2e";
+const homebrewRows = Patterns.readTrackers(CLAUSE_DIR, ROOT, REPO);
 const homebrewIds = new Set(homebrewRows.map((r) => r.id));
-for (const problem of Patterns.problems(Patterns.readVocabulary(), [...Patterns.readTrackers(), ...homebrewRows], { requireTags: REQUIRE_TAGS, root: AUTOMATION_ROOT })) {
-    // The automation answers for its own rows and its vocabulary; this module for its rows.
+const options = { requireTags: REQUIRE_TAGS, root: AUTOMATION_ROOT, repos: { [REPO]: ROOT } };
+for (const problem of Patterns.problems(Patterns.readVocabulary(), [...Patterns.readTrackers(), ...homebrewRows], options)) {
+    // The automation answers for its own rows and citations; this module for its rows and the ones citing it.
     const id = /^([A-Z]{1,2}-\d+[a-z]?)\b/.exec(problem)?.[1];
-    if (id && homebrewIds.has(id)) fail("patterns", null, problem);
+    if ((id && homebrewIds.has(id)) || problem.includes(`${REPO}:`)) fail("patterns", null, problem);
 }
 
 if (failures.length > 0) {
