@@ -41,12 +41,12 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Patterns | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| HE-1a | Hematite D1 | +1 item bonus to Athletics. | | | ✅ | Live: Athletics carries **Hematite +1** |
-| HE-1b | Hematite D1 | You are immune to **persistent bleed**. | | | ✅ | Live: immune to **bleed** |
-| HE-2a | Hematite D2 | Gain **temporary Hit Points equal to your level** at the start of each encounter. | | | ✅ | Live: starting an encounter gave **17** temporary Hit Points at 17th |
-| HE-3a | Hematite D3 | +2 status bonus to Fortitude saves. | | | ✅ | Live: Fortitude **+2 (status)** at Depth 3 |
-| HE-3b | Hematite D3 | You cannot be **drained**. | | | ✅ | Live: immune to **drained** |
-| HE-4a | Hematite D4 | Once per day, when you are reduced to 0 Hit Points, immediately stand with **Hit Points equal to your level**. | | `rig` | ✅ | Rig, live: 500 damage at 30 Hit Points — the Assimilator stood at **17** |
+| HE-1a | Hematite D1 | +1 item bonus to Athletics. | effect:bonus | | ✅ | Live: Athletics carries **Hematite +1** |
+| HE-1b | Hematite D1 | You are immune to **persistent bleed**. | effect:resistance | | ✅ | Live: immune to **bleed** |
+| HE-2a | Hematite D2 | Gain **temporary Hit Points equal to your level** at the start of each encounter. | reach:self · effect:temp-hp | | ✅ | Live: starting an encounter gave **17** temporary Hit Points at 17th |
+| HE-3a | Hematite D3 | +2 status bonus to Fortitude saves. | effect:bonus | | ✅ | Live: Fortitude **+2 (status)** at Depth 3 |
+| HE-3b | Hematite D3 | You cannot be **drained**. | effect:resistance | | ✅ | Live: immune to **drained** |
+| HE-4a | Hematite D4 | Once per day, when you are reduced to 0 Hit Points, immediately stand with **Hit Points equal to your level**. | when:dying · effect:stabilize · economy:charges | `rig` | ✅ | Rig, live: 500 damage at 30 Hit Points — the Assimilator stood at **17** |
 
 ## 💎 Moonstone — *Reactive Evolution* (lexicon §13)
 
@@ -54,11 +54,11 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Patterns | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| MO-1a | Moonstone D1 | Once per encounter, as a reaction after taking damage of a type, gain **resistance 2** to that type for 1 minute. | | `rig` | ✅ | Rig, live (#93): 10 fire taken offered a *Reactive Evolution* card to the owners; the click gave **fire 2**. Outside an encounter uses are not counted, so 10 cold offered it again; in an encounter the first use (acid) spent it and 10 sonic offered **nothing**. Control, no Moonstone: no card. The sheet action stays for damage the module never sees |
-| MO-2a | Moonstone D2 | **Resistance 5**, twice per encounter. | | | ✅ | Live: with **fire** chosen, **fire 5** at Depth 2 |
-| MO-3a | Moonstone D3 | **Resistance 8**, it lasts until the encounter ends, and you may hold **two** types at once. | | `rig` | ✅ | Rig, live: **fire 8** at Depth 3; it lasts until the encounter ends and two can be held |
-| MO-4a | Moonstone D4 | **Resistance 12**, unlimited uses, **three** types at once. | | `rig` | ✅ | Rig, live: **fire 12** at Depth 4 |
-| MO-4b | Moonstone D4 | The first time each encounter you would take damage of a type you already resist, you take **none**. | | `rig` | ✅ | Rig, live: the first 30 fire with fire resisted took **0**; the second took **18** (resistance 12) |
+| MO-1a | Moonstone D1 | Once per encounter, as a reaction after taking damage of a type, gain **resistance 2** to that type for 1 minute. | when:damage-taken · economy:reaction · effect:resistance · ending:duration · economy:charges | `rig` | ✅ | Rig, live (#93): 10 fire taken offered a *Reactive Evolution* card to the owners; the click gave **fire 2**. Outside an encounter uses are not counted, so 10 cold offered it again; in an encounter the first use (acid) spent it and 10 sonic offered **nothing**. Control, no Moonstone: no card. The sheet action stays for damage the module never sees |
+| MO-2a | Moonstone D2 | **Resistance 5**, twice per encounter. | scaling:from-rank · effect:resistance · economy:charges | | ✅ | Live: with **fire** chosen, **fire 5** at Depth 2 |
+| MO-3a | Moonstone D3 | **Resistance 8**, it lasts until the encounter ends, and you may hold **two** types at once. | scaling:from-rank · effect:resistance · ending:duration · ending:replaces-previous | `rig` | ✅ | Rig, live: **fire 8** at Depth 3; it lasts until the encounter ends and two can be held |
+| MO-4a | Moonstone D4 | **Resistance 12**, unlimited uses, **three** types at once. | scaling:from-rank · effect:resistance · ending:replaces-previous | `rig` | ✅ | Rig, live: **fire 12** at Depth 4 |
+| MO-4b | Moonstone D4 | The first time each encounter you would take damage of a type you already resist, you take **none**. | when:damage-taken · effect:resistance · economy:charges | `rig` | ✅ | Rig, live: the first 30 fire with fire resisted took **0**; the second took **18** (resistance 12) |
 
 ## ⚙️ Steel — *True Plate* (lexicon §13)
 
@@ -66,13 +66,13 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Patterns | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| ST-1a | Steel D1 | Carapace **Hardness +2**. | | | ✅ | Live: Hardness **2 → 4** with Steel alone at Depth 1 — pinned by the highest-bonus rule |
-| ST-1b | Steel D1 | Your unarmed Strikes' damage die increases one step. | | | ✅ | Live: the Carapace Strike's die **d8 → d10** |
-| ST-2a | Steel D2 | **Hardness +5.** | | `rig` | ✅ | Rig, live: Hardness **7** |
-| ST-3a | Steel D3 | **Hardness +8.** | | `rig` | ✅ | Rig, live: Hardness **10** |
-| ST-3b | Steel D3 | Your unarmed Strikes gain the **versatile P** and **versatile S** traits. | | | ✅ | Live: **versatile-p** and **versatile-s** at Depth 3+ |
-| ST-4a | Steel D4 | **Hardness +12.** | | | ✅ | Live: Hardness **14** at Depth 4 |
-| ST-4b | Steel D4 | **+1 damage die** on your unarmed Strikes. | | | ✅ | Live: **2d10** — one more die |
+| ST-1a | Steel D1 | Carapace **Hardness +2**. | effect:bonus · effect:shield | | ✅ | Live: Hardness **2 → 4** with Steel alone at Depth 1 — pinned by the highest-bonus rule |
+| ST-1b | Steel D1 | Your unarmed Strikes' damage die increases one step. | effect:strike-damage | | ✅ | Live: the Carapace Strike's die **d8 → d10** |
+| ST-2a | Steel D2 | **Hardness +5.** | scaling:from-rank · effect:bonus · effect:shield | `rig` | ✅ | Rig, live: Hardness **7** |
+| ST-3a | Steel D3 | **Hardness +8.** | scaling:from-rank · effect:bonus · effect:shield | `rig` | ✅ | Rig, live: Hardness **10** |
+| ST-3b | Steel D3 | Your unarmed Strikes gain the **versatile P** and **versatile S** traits. | effect:trait-gained | | ✅ | Live: **versatile-p** and **versatile-s** at Depth 3+ |
+| ST-4a | Steel D4 | **Hardness +12.** | scaling:from-rank · effect:bonus · effect:shield | | ✅ | Live: Hardness **14** at Depth 4 |
+| ST-4b | Steel D4 | **+1 damage die** on your unarmed Strikes. | effect:strike-damage | | ✅ | Live: **2d10** — one more die |
 
 ## ⚙️ Silver — *Argent Edge* (lexicon §13)
 
@@ -81,11 +81,11 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | ID | Guide | Clause | Patterns | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
 | AG-1a | Silver D1 | Your Strikes count as **silver**. | | | ✅ | Live: the Strike's material reads **silver** |
-| AG-2a | Silver D2 | **+1d4** damage against aberrations, fiends, undead and spirits. | | `rig` | ✅ | Rig, live: **+1d4** against an undead target; **none** against a humanoid. **Fixed while driving:** the rig read damage with `getFormula`, which builds the roll without the target |
-| AG-3a | Silver D3 | **+1d6** instead. | | `rig` | ✅ | Rig, live: **1d6** against a fiend, no d4 |
-| AG-3b | Silver D3 | Your Strikes affect incorporeal creatures as though they had the **ghost touch** rune. | | | ✅ | Live: the Strike carries the **ghostTouch** property rune at Depth 3 |
-| AG-4a | Silver D4 | **+1d6.** | | `rig` | ✅ | Rig, live: **1d6** against a spirit |
-| AG-4b | Silver D4 | A supernatural creature you critically hit cannot use **reactions or innate spells** until the end of its next turn. | | `rig` | ✅ | Rig, live (#93): a critical Carapace Strike at Silver 4 on an **undead** gave it *Argent-Bound* (until the end of its next turn); its reaction's card and its innate spell's card were **refused**, and a prepared spell still posted. The module's own reaction offers hold back too. Controls: a **humanoid** critically hit, and Silver 3, bound nothing. Supernatural is Depth 2's list: aberration, fiend, undead, spirit |
+| AG-2a | Silver D2 | **+1d4** damage against aberrations, fiends, undead and spirits. | effect:strike-damage · reach:filtered | `rig` | ✅ | Rig, live: **+1d4** against an undead target; **none** against a humanoid. **Fixed while driving:** the rig read damage with `getFormula`, which builds the roll without the target |
+| AG-3a | Silver D3 | **+1d6** instead. | scaling:from-rank · effect:strike-damage · reach:filtered | `rig` | ✅ | Rig, live: **1d6** against a fiend, no d4 |
+| AG-3b | Silver D3 | Your Strikes affect incorporeal creatures as though they had the **ghost touch** rune. | effect:weapon-runes | | ✅ | Live: the Strike carries the **ghostTouch** property rune at Depth 3 |
+| AG-4a | Silver D4 | **+1d6.** | scaling:from-rank · effect:strike-damage · reach:filtered | `rig` | ✅ | Rig, live: **1d6** against a spirit |
+| AG-4b | Silver D4 | A supernatural creature you critically hit cannot use **reactions or innate spells** until the end of its next turn. | when:strike-made · check:attack · reach:filtered · effect:forbid · ending:next-turn | `rig` | ✅ | Rig, live (#93): a critical Carapace Strike at Silver 4 on an **undead** gave it *Argent-Bound* (until the end of its next turn); its reaction's card and its innate spell's card were **refused**, and a prepared spell still posted. The module's own reaction offers hold back too. Controls: a **humanoid** critically hit, and Silver 3, bound nothing. Supernatural is Depth 2's list: aberration, fiend, undead, spirit |
 
 ---
 
