@@ -31,8 +31,8 @@ import { ROOT } from "./lib/pack.mjs";
  */
 const Patterns = await import(url.pathToFileURL(path.join(AUTOMATION_ROOT, "build", "lib", "patterns.mjs")).href);
 
-/** On once every class's rows are tagged (zarex97/isaacs-pf2e-automation#69): then an empty cell fails. */
-const REQUIRE_TAGS = false;
+/** Every row is tagged (zarex97/isaacs-pf2e-automation#69): an empty cell fails. `—` says the clause makes no move. */
+const REQUIRE_TAGS = true;
 
 const CLAUSE_DIR = path.join(ROOT, "Docs", "clauses");
 const GUIDE = path.join(ROOT, "Docs", "soulbound-guide-v1.md");
