@@ -52,7 +52,7 @@ and have no row.
 
 | ID | Guide | Clause | Patterns | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| OM-00a | §5.1 | All Auguries: `prediction`, `focus`, occult | | `test-stargazer` pins it | ✅ | Live: every Augury filed itself into the occult **Star Chart** entry; traits `focus`, `prediction` and the class trait are pinned and validated |
+| OM-00a | §5.1 | All Auguries: `prediction`, `focus`, occult | — | `test-stargazer` pins it | ✅ | Live: every Augury filed itself into the occult **Star Chart** entry; traits `focus`, `prediction` and the class trait are pinned and validated |
 | OM-00b | §5.1 | rank = **half your level rounded up** | scaling:from-level | `test-stargazer` pins it | ✅ | Live: all nine known Auguries read **rank 10** on a 19th-level Stargazer |
 | OM-00c | §5.1 | DC = Stargazer DC. | check:class-dc | | ✅ | Live (#105 SG-08/SG-23b): the Star Chart's DC is the Stargazer DC at every level, and every Augury is cast from it |
 

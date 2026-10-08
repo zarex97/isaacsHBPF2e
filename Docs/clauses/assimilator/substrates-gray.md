@@ -80,7 +80,7 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Patterns | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| AG-1a | Silver D1 | Your Strikes count as **silver**. | | | ✅ | Live: the Strike's material reads **silver** |
+| AG-1a | Silver D1 | Your Strikes count as **silver**. | effect:strike-property | | ✅ | Live: the Strike's material reads **silver** |
 | AG-2a | Silver D2 | **+1d4** damage against aberrations, fiends, undead and spirits. | effect:strike-damage · reach:filtered | `rig` | ✅ | Rig, live: **+1d4** against an undead target; **none** against a humanoid. **Fixed while driving:** the rig read damage with `getFormula`, which builds the roll without the target |
 | AG-3a | Silver D3 | **+1d6** instead. | scaling:from-rank · effect:strike-damage · reach:filtered | `rig` | ✅ | Rig, live: **1d6** against a fiend, no d4 |
 | AG-3b | Silver D3 | Your Strikes affect incorporeal creatures as though they had the **ghost touch** rune. | effect:weapon-runes | | ✅ | Live: the Strike carries the **ghostTouch** property rune at Depth 3 |
