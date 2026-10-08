@@ -21,8 +21,10 @@ AGENTS.md
 # GitNexus skill files, reinstalled by `gitnexus setup` (which also puts twelve of
 # them in ~/.claude/skills/, making these a redundant subset). Scoped to skills/
 # rather than all of .claude/ on purpose: settings.json, commands/ and agents/
-# live there too, and those are worth sharing if we ever add them.
-.claude/skills/
+# live there too, and those are worth sharing if we ever add them. The precedent skill is a copy of
+# the automation's, synced at each automation release.
+.claude/skills/*
+!.claude/skills/precedent/
 
 # Isaac's PF2e Automation, checked out by CI at the version module.json requires.
 .automation/

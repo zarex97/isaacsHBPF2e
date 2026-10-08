@@ -19,7 +19,8 @@
     "test:assimilator": "node build/test-assimilator.mjs",
     "test:stargazer": "node build/test-stargazer.mjs",
     "icons": "node build/make-icons.mjs",
-    "check:clauses": "node build/check-clauses.mjs"
+    "check:clauses": "node build/check-clauses.mjs",
+    "precedent": "node build/precedent.mjs"
   },
   "author": "Isaac",
   "license": "MIT",
