@@ -145,6 +145,12 @@ check(
         order.before.map((stage) => stage.name),
         [
             "a sealed voice",
+            "what a form forbids",
+            "what a spell needs",
+            "a minion sacrificed",
+            "a variant from the weapon in hand",
+            "the actions spent",
+            "a choice made as it is cast",
             "area targeting",
             "the release ladder",
             "Severance",
