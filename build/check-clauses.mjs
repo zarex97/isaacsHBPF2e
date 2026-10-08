@@ -20,7 +20,19 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import url from "node:url";
+import { AUTOMATION_ROOT } from "./lib/automation.mjs";
 import { ROOT } from "./lib/pack.mjs";
+
+/**
+ * Patterns are the automation's closed vocabulary (its `Docs/adr/0004`): every row here is tagged from the
+ * list in the version this module requires, and a homebrew word never enters it — a clause no pattern fits
+ * is an issue against the automation. The rows are read by header with the automation's own parser.
+ */
+const Patterns = await import(url.pathToFileURL(path.join(AUTOMATION_ROOT, "build", "lib", "patterns.mjs")).href);
+
+/** On once every class's rows are tagged (zarex97/isaacs-pf2e-automation#69): then an empty cell fails. */
+const REQUIRE_TAGS = false;
 
 const CLAUSE_DIR = path.join(ROOT, "Docs", "clauses");
 const GUIDE = path.join(ROOT, "Docs", "soulbound-guide-v1.md");
@@ -172,13 +184,13 @@ for (const { name, file, allowed, guide } of trackers) {
     const counted = { "☐": 0, "✅": 0, "⚠️": 0, "❌": 0, "🔧": 0, "—": 0 };
     const text = fs.readFileSync(file, "utf8");
 
-    for (const line of text.split("\n")) {
-        // A clause row, as opposed to the legend or the counts table: six cells, and the first is an ID.
-        if (!line.startsWith("|")) continue;
-        const cells = line.split("|").slice(1, -1).map((c) => c.trim());
-        if (cells.length !== 6) continue;
-        const [id, , clause, , status, evidence] = cells;
-        if (!/^[A-Z]{1,2}-\d+[a-z]?$/.test(id)) continue;
+    // A clause row, as opposed to the legend or the counts table: a row of a table headed `ID`, read by its
+    // header, so a column added (Patterns was) shifts nothing.
+    for (const row of Patterns.trackerRows(text, name)) {
+        const id = row.id;
+        if (!/^[A-Z]{1,2}-\d+[a-z]?$/.test(id) || !("Clause" in row.cells)) continue;
+        const { Clause: clause, Status: status = "", Evidence: evidence = "" } = row.cells;
+        if (!row.tagged) fail(name, id, "its table has no Patterns column");
 
         clauses += 1;
 
@@ -229,6 +241,15 @@ for (const { name, file, allowed, guide } of trackers) {
     if (total && Number(total[1]) !== rows) {
         fail(name, null, `counts table says ${total[1]} clauses, the rows say ${rows}`);
     }
+}
+
+// The tags: every one from the automation's list, and — once required — on every row that automates something.
+const homebrewRows = Patterns.readTrackers(CLAUSE_DIR, ROOT);
+const homebrewIds = new Set(homebrewRows.map((r) => r.id));
+for (const problem of Patterns.problems(Patterns.readVocabulary(), [...Patterns.readTrackers(), ...homebrewRows], { requireTags: REQUIRE_TAGS, root: AUTOMATION_ROOT })) {
+    // The automation answers for its own rows and its vocabulary; this module for its rows.
+    const id = /^([A-Z]{1,2}-\d+[a-z]?)\b/.exec(problem)?.[1];
+    if (id && homebrewIds.has(id)) fail("patterns", null, problem);
 }
 
 if (failures.length > 0) {

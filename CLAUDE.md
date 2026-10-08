@@ -27,6 +27,12 @@ it looks like one.
 Then the generated rules below: `impact` before editing, `detect_changes` before committing. Use them
 to say what a change reaches, and to say plainly whether anything that worked has stopped working.
 
+### Automating a rule
+
+Start from its precedents: the `precedent` skill tags each clause from the automation's
+`Docs/patterns.md` and names the clauses and modules, in either repo, that already do the same thing,
+before any code is read.
+
 ### Verifying a clause
 
 Driven live, in world `pf`, through the **Claude-in-Chrome extension** on the profile signed in as
