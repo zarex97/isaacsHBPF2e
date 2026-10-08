@@ -17,6 +17,7 @@
  *
  *   node build/live-session.mjs              # start Foundry, and stop
  *   node build/live-session.mjs --devtools   # …and the debug Chrome for the fallback driver
+ *   node build/live-session.mjs --headless   # …the same Chrome with no window, as on a server
  *   node build/live-session.mjs --status     # report only, start nothing
  *   node build/live-session.mjs --world pf   # also print the launch/join snippet for that world
  *
@@ -43,7 +44,10 @@ const CDP_URL = "http://127.0.0.1:9222";
 const args = process.argv.slice(2);
 const statusOnly = args.includes("--status");
 // Opt-in, because the browser this starts is the one the primary driver cannot use.
-const wantDevtools = args.includes("--devtools");
+// --headless is the debug Chrome with no window, rendering WebGL in software — what a VPS without a GPU
+// has. Aiming there goes through `build/aim.mjs`, since there is no pointer to borrow.
+const headless = args.includes("--headless");
+const wantDevtools = headless || args.includes("--devtools");
 const world = args[args.indexOf("--world") + 1] ?? null;
 
 /* -------------------------------------------------------------------------------------------- */
@@ -105,9 +109,10 @@ async function main() {
     }
 
     if (wantDevtools && !chromeUp) {
-        console.log("\nStarting the debug Chrome…");
+        console.log(`\nStarting the debug Chrome${headless ? ", headless" : ""}…`);
         // --window-size is not cosmetic: see the header.
         launch(CHROME_EXE, [
+            ...(headless ? ["--headless=new", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"] : []),
             "--remote-debugging-port=9222",
             `--user-data-dir=${PROFILE_DIR}`,
             "--window-size=1600,1000",
