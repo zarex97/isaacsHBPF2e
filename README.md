@@ -237,6 +237,7 @@ build if this table and that switch disagree — the previous version of this se
 | `fall` | The creature drops up to a distance, safely; landing, it may be kept on the ground for a while (*Earthbind*). |
 | `cleanse` | A card of the target's afflictions; the one chosen goes a stage down once per case, and is counteracted at the ranks that allow it (*Cleanse Affliction*). |
 | `unobserve` | One creature cannot observe another: its attacks on that creature need a DC 11 flat check first, and that creature's attacks find it off-guard (*Blinding Fury*). |
+| `detect-magic` | The magic within range of the caster, whispered to them: whether there is any, from 3rd rank how strong, from 4th where (*Detect Magic*). |
 | `cast` | Casts the rider's own spell at its creature — a reaction that is a spell (*Schadenfreude*). |
 | `aftermath` | A tally of the creatures a cast reached; once every one that must answer has its result, and nobody died, the backlash lands on them and on the caster (*Massacre*). |
 | `aftermath-mark` | One creature's result is in, for its cast's `aftermath`. |
