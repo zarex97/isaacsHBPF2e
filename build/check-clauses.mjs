@@ -2,7 +2,7 @@
  * Hold the clause trackers to the guide.
  *
  * A clause is one independently-failable declaration a class guide makes, tracked as a row in
- * `Docs/clauses/*.md` (the Soulbound), `Docs/clauses/assimilator/*.md` (the Assimilator) or `Docs/clauses/stargazer/*.md` (the Stargazer). The rows are the spec restated as a checklist, and a checklist restating a
+ * `Docs/clauses/*.md` (the Soulbound), `Docs/clauses/assimilator/*.md` (the Assimilator), `Docs/clauses/stargazer/*.md` (the Stargazer) or `Docs/clauses/saint/*.md` (the Saint). The rows are the spec restated as a checklist, and a checklist restating a
  * document is a second copy of it — which drifts. `Docs/soulbound-verification-checklist.md` was
  * written that way, by hand, from the guide, and nothing has ever checked that its 269 rows still say
  * what the guide says.
@@ -104,6 +104,27 @@ const STARGAZER = {
     "sky.md": { prefixes: ["SK"], source: STARGAZER_GUIDE },
 };
 
+const SAINT_DIR = path.join(CLAUSE_DIR, "saint");
+const SAINT_GUIDE = path.join(ROOT, "Docs", "saint-gold-cloth-guide-v4.md");
+/** Guide v4 has no feats chapter; the class feats are written out in the compendium at the repository root. */
+const SAINT_FEATS = path.join(ROOT, "saint-feat-compendium.md");
+
+/**
+ * The Saint's trackers. The chassis, the Cloths, the Techniques and Libra quote guide v4; the feats quote the
+ * feat compendium, the way the Assimilator's Substrates quote the lexicon.
+ *
+ * Libra has a file of its own because its Cloth is a chapter of its own — six Arms, their Arts and the Arms
+ * Advance — while its four Techniques stay with the other forty-four. `SC` is the Saint's chassis, `CL` a
+ * Cloth's passive and boons, `TQ` a Technique, `LB` Libra's arsenal, `FT` a feat; none reuses a prefix above.
+ */
+const SAINT = {
+    "class.md": { prefixes: ["SC"], source: SAINT_GUIDE },
+    "cloths.md": { prefixes: ["CL"], source: SAINT_GUIDE },
+    "techniques.md": { prefixes: ["TQ"], source: SAINT_GUIDE },
+    "libra.md": { prefixes: ["LB"], source: SAINT_GUIDE },
+    "feats.md": { prefixes: ["FT"], source: SAINT_FEATS },
+};
+
 const failures = [];
 let clauses = 0;
 
@@ -178,6 +199,17 @@ if (fs.existsSync(STARGAZER_DIR)) {
         trackers.push({ name: label, file: path.join(STARGAZER_DIR, name), allowed: tier.prefixes, guide: source(tier.source) });
     }
 }
+if (fs.existsSync(SAINT_DIR)) {
+    for (const name of fs.readdirSync(SAINT_DIR).filter((n) => n.endsWith(".md")).sort()) {
+        const tier = SAINT[name];
+        const label = `saint/${name}`;
+        if (!tier) {
+            fail(label, null, `not a known tracker file — expected one of ${Object.keys(SAINT).join(", ")}`);
+            continue;
+        }
+        trackers.push({ name: label, file: path.join(SAINT_DIR, name), allowed: tier.prefixes, guide: source(tier.source) });
+    }
+}
 
 for (const { name, file, allowed, guide } of trackers) {
 
@@ -244,12 +276,16 @@ for (const { name, file, allowed, guide } of trackers) {
 }
 
 // The tags: every one from the automation's list, and — once required — on every row that automates something.
-const homebrewRows = Patterns.readTrackers(CLAUSE_DIR, ROOT);
+// Patterns this module's clauses brought into the vocabulary cite them as `isaacsHBPF2e:<ID>`; the automation
+// cannot see these rows, so this is where those citations are held to the rule.
+const REPO = "isaacsHBPF2e";
+const homebrewRows = Patterns.readTrackers(CLAUSE_DIR, ROOT, REPO);
 const homebrewIds = new Set(homebrewRows.map((r) => r.id));
-for (const problem of Patterns.problems(Patterns.readVocabulary(), [...Patterns.readTrackers(), ...homebrewRows], { requireTags: REQUIRE_TAGS, root: AUTOMATION_ROOT })) {
-    // The automation answers for its own rows and its vocabulary; this module for its rows.
+const options = { requireTags: REQUIRE_TAGS, root: AUTOMATION_ROOT, repos: { [REPO]: ROOT } };
+for (const problem of Patterns.problems(Patterns.readVocabulary(), [...Patterns.readTrackers(), ...homebrewRows], options)) {
+    // The automation answers for its own rows and citations; this module for its rows and the ones citing it.
     const id = /^([A-Z]{1,2}-\d+[a-z]?)\b/.exec(problem)?.[1];
-    if (id && homebrewIds.has(id)) fail("patterns", null, problem);
+    if ((id && homebrewIds.has(id)) || problem.includes(`${REPO}:`)) fail("patterns", null, problem);
 }
 
 if (failures.length > 0) {

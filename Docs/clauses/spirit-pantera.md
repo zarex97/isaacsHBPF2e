@@ -35,41 +35,41 @@ pf2e collapses two bonuses of the same type, so the type is the clause.
 
 | ID | Guide | Clause | Patterns | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| S-38a | Resurrección Form | You gain two **claw** unarmed attacks: **1d8 slashing**, **agile**, **finesse**, in the brawling group | | | ✅ | Live: `Pantera — Claws` is an **unarmed** weapon in the **brawling** group, **1d8 slashing**, **agile**, **finesse** — the d8 read off the control with Refined Release stripped. pf2e models a matched pair as one Strike entry used twice, which `agile` is what prices; two identical entries would add nothing |
-| S-38b | Resurrección Form | Your Speed increases by **10 feet** (this stacks with Sonido) | | | ✅ | Live: Speed **40** with the form, **30** without. The modifiers read `Sonido untyped 5` and `Pantera untyped 10` and **both** count — *“this stacks with Sonido”* holds because neither is typed, which is the whole of the clause |
+| S-38a | Resurrección Form | You gain two **claw** unarmed attacks: **1d8 slashing**, **agile**, **finesse**, in the brawling group | effect:strikes-granted · effect:weapon-profile | | ✅ | Live: `Pantera — Claws` is an **unarmed** weapon in the **brawling** group, **1d8 slashing**, **agile**, **finesse** — the d8 read off the control with Refined Release stripped. pf2e models a matched pair as one Strike entry used twice, which `agile` is what prices; two identical entries would add nothing |
+| S-38b | Resurrección Form | Your Speed increases by **10 feet** (this stacks with Sonido) | effect:speed | | ✅ | Live: Speed **40** with the form, **30** without. The modifiers read `Sonido untyped 5` and `Pantera untyped 10` and **both** count — *“this stacks with Sonido”* holds because neither is typed, which is the whole of the clause |
 
 ## Release Technique — Garra de la Pantera (1st)
 
 | ID | Guide | Clause | Patterns | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| S-39a | Garra de la Pantera | **30-foot cone**, basic Reflex, **2d6** piercing damage | | | ✅ | Cast live at 9th: the card reads **Range 30 feet; Area 30-foot cone**, **basic Reflex**, **2d6 piercing** |
-| S-39b | Garra de la Pantera | the area is littered with shards and becomes **difficult terrain** for enemies until the start of your next turn | | `test-riders` pins which terrains are enemies-only | ✅ | **Fixed.** The lingering declared `difficultTerrain` and no `affects`, so the shards slowed the caster's own party — the same finding as Senbonzakura's S-02b, whose machinery already existed. Live after the fix: the Region carries `isaacs-hb-pf2e.enemyMovementCost`, and it answers **`difficulty`** for the enemy, **`[]`** for a party ally and **`[]`** for the caster |
-| S-39c | Garra de la Pantera | **Release Technique — Garra de la Pantera** [two-actions] | | | ✅ | Same card: **2** actions, one Reiatsu Point spent (pool 2 → 1) |
-| S-39d | Garra de la Pantera | **Heightened (+1)** +1d6 | | | ✅ | Live at 9th, rank 5: the damage rolled **`6d6 piercing`** — 2d6 and four heightening steps |
+| S-39a | Garra de la Pantera | **30-foot cone**, basic Reflex, **2d6** piercing damage | reach:area/cone · check:basic-save · effect:damage | | ✅ | Cast live at 9th: the card reads **Range 30 feet; Area 30-foot cone**, **basic Reflex**, **2d6 piercing** |
+| S-39b | Garra de la Pantera | the area is littered with shards and becomes **difficult terrain** for enemies until the start of your next turn | effect:terrain · reach:enemies · ending:next-turn | `test-riders` pins which terrains are enemies-only | ✅ | **Fixed.** The lingering declared `difficultTerrain` and no `affects`, so the shards slowed the caster's own party — the same finding as Senbonzakura's S-02b, whose machinery already existed. Live after the fix: the Region carries `isaacs-hb-pf2e.enemyMovementCost`, and it answers **`difficulty`** for the enemy, **`[]`** for a party ally and **`[]`** for the caster |
+| S-39c | Garra de la Pantera | **Release Technique — Garra de la Pantera** [two-actions] | when:cast | | ✅ | Same card: **2** actions, one Reiatsu Point spent (pool 2 → 1) |
+| S-39d | Garra de la Pantera | **Heightened (+1)** +1d6 | scaling:dice-per-rank · effect:damage | | ✅ | Live at 9th, rank 5: the damage rolled **`6d6 piercing`** — 2d6 and four heightening steps |
 
 ## Refined (9th)
 
 | ID | Guide | Clause | Patterns | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| S-40a | Refined | Your claws' damage die increases to **1d10** | | | ✅ | Live, both ways: the claws are **d10** while Refined Release is held and **d8** with the feat stripped. **SB-40** recorded this as never landing; it lands |
-| S-40b | Refined | after using Garra de la Pantera you may **Step** as a free action | | | ✅ | Live: casting Garra posted *“Refined Release: you may Step as a free action.”* SB-40's second half |
+| S-40a | Refined | Your claws' damage die increases to **1d10** | reach:weapon · effect:die-step | | ✅ | Live, both ways: the claws are **d10** while Refined Release is held and **d8** with the feat stripped. **SB-40** recorded this as never landing; it lands |
+| S-40b | Refined | after using Garra de la Pantera you may **Step** as a free action | economy:granted-action | | ✅ | Live: casting Garra posted *“Refined Release: you may Step as a free action.”* SB-40's second half |
 
 ## Segunda Etapa (13th)
 
 | ID | Guide | Clause | Patterns | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| S-41a | Segunda Etapa | Your Speed increases by another **10 feet** | | | ✅ | Live at 13th entering Segunda: Speed **45 → 55**, with `Segunda Etapa untyped 10` added beside `Sonido untyped 10` and `Pantera untyped 10`. All three untyped, so all three count |
-| S-41b | Segunda Etapa | your claws gain **deadly d10** | | | ✅ | Live: the claws' traits go `agile, finesse, unarmed` → **`…, deadly-d10`** the moment Segunda arrives |
-| S-41c | Segunda Etapa | Once per round when you critically hit with a claw, you may immediately make an additional claw Strike against the same target at your current multiple attack penalty | | `test-riders` asserts the gate | ✅ | **Fixed.** The prompt had no per-round gate, so it fired on every critical hit. It takes `oncePerRound` now, the same gate Tensa Zangetsu's free Step uses. Live: **4 critical hits in round 1 → 1 prompt**, then **3 in round 2 → 1 prompt**, with the ledger stamp advancing `:1` → `:2` |
-| S-42a | Segunda Etapa | **Garra de la Pantera**'s cone increases to **60 feet** | | | ✅ | Live: Garra's area **30 → 60** on entering Segunda, and the card read **Area 60-foot cone** when cast |
-| S-42b | Segunda Etapa | creatures that critically fail against it take **2d6 persistent bleed** damage from embedded shards | | | ✅ | Live on a forced critical failure at Segunda: the target came away with **Persistent Damage (2d6 bleed)**. The rider is predicated on `self:effect:pantera-segunda-etapa`, so it is Segunda's and not Garra's |
+| S-41a | Segunda Etapa | Your Speed increases by another **10 feet** | effect:speed | | ✅ | Live at 13th entering Segunda: Speed **45 → 55**, with `Segunda Etapa untyped 10` added beside `Sonido untyped 10` and `Pantera untyped 10`. All three untyped, so all three count |
+| S-41b | Segunda Etapa | your claws gain **deadly d10** | effect:trait-gained | | ✅ | Live: the claws' traits go `agile, finesse, unarmed` → **`…, deadly-d10`** the moment Segunda arrives |
+| S-41c | Segunda Etapa | Once per round when you critically hit with a claw, you may immediately make an additional claw Strike against the same target at your current multiple attack penalty | when:strike-made · economy:once-per-round · economy:granted-action · economy:attack-penalty · effect:strikes-made | `test-riders` asserts the gate | ✅ | **Fixed.** The prompt had no per-round gate, so it fired on every critical hit. It takes `oncePerRound` now, the same gate Tensa Zangetsu's free Step uses. Live: **4 critical hits in round 1 → 1 prompt**, then **3 in round 2 → 1 prompt**, with the ledger stamp advancing `:1` → `:2` |
+| S-42a | Segunda Etapa | **Garra de la Pantera**'s cone increases to **60 feet** | reach:area/cone | | ✅ | Live: Garra's area **30 → 60** on entering Segunda, and the card read **Area 60-foot cone** when cast |
+| S-42b | Segunda Etapa | creatures that critically fail against it take **2d6 persistent bleed** damage from embedded shards | check:save · effect:persistent | | ✅ | Live on a forced critical failure at Segunda: the target came away with **Persistent Damage (2d6 bleed)**. The rider is predicated on `self:effect:pantera-segunda-etapa`, so it is Segunda's and not Garra's |
 
 ## Severing Art — Desgarrón (guide §9.2)
 
 | ID | Guide | Clause | Patterns | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| R-17a | Desgarrón | **60-foot cone**, basic Reflex, **slashing** | | | ✅ | Cast live in Severance round 1 at 20th: the card reads **Range 60 feet; Area 60-foot cone**, **basic Reflex**, 2 actions, **20d6 slashing**, and *“Desgarrón ends Severance”* followed it |
-| R-17b | Desgarrón | Creatures that fail take **4d6 persistent bleed** | | | ✅ | Live: both targets failed and came away with **Persistent Damage (4d6 bleed)** |
+| R-17a | Desgarrón | **60-foot cone**, basic Reflex, **slashing** | when:cast · reach:area/cone · check:basic-save · effect:damage | | ✅ | Cast live in Severance round 1 at 20th: the card reads **Range 60 feet; Area 60-foot cone**, **basic Reflex**, 2 actions, **20d6 slashing**, and *“Desgarrón ends Severance”* followed it |
+| R-17b | Desgarrón | Creatures that fail take **4d6 persistent bleed** | check:save · effect:persistent | | ✅ | Live: both targets failed and came away with **Persistent Damage (4d6 bleed)** |
 
 ---
 
