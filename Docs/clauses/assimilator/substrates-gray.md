@@ -43,10 +43,10 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
 | HE-1a | Hematite D1 | +1 item bonus to Athletics. | effect:bonus | | ✅ | Live: Athletics carries **Hematite +1** |
 | HE-1b | Hematite D1 | You are immune to **persistent bleed**. | effect:resistance | | ✅ | Live: immune to **bleed** |
-| HE-2a | Hematite D2 | Gain **temporary Hit Points equal to your level** at the start of each encounter. | reach:self · effect:temp-hp | | ✅ | Live: starting an encounter gave **17** temporary Hit Points at 17th |
+| HE-2a | Hematite D2 | Gain **temporary Hit Points equal to your level** at the start of each encounter. | reach:self · effect:temp-hp · scaling:from-level · when:encounter-start | | ✅ | Live: starting an encounter gave **17** temporary Hit Points at 17th |
 | HE-3a | Hematite D3 | +2 status bonus to Fortitude saves. | effect:bonus | | ✅ | Live: Fortitude **+2 (status)** at Depth 3 |
 | HE-3b | Hematite D3 | You cannot be **drained**. | effect:resistance | | ✅ | Live: immune to **drained** |
-| HE-4a | Hematite D4 | Once per day, when you are reduced to 0 Hit Points, immediately stand with **Hit Points equal to your level**. | when:dying · effect:stabilize · economy:charges | `rig` | ✅ | Rig, live: 500 damage at 30 Hit Points — the Assimilator stood at **17** |
+| HE-4a | Hematite D4 | Once per day, when you are reduced to 0 Hit Points, immediately stand with **Hit Points equal to your level**. | when:dying · effect:stabilize · economy:frequency · scaling:from-level | `rig` | ✅ | Rig, live: 500 damage at 30 Hit Points — the Assimilator stood at **17** |
 
 ## 💎 Moonstone — *Reactive Evolution* (lexicon §13)
 
@@ -54,11 +54,11 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Patterns | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| MO-1a | Moonstone D1 | Once per encounter, as a reaction after taking damage of a type, gain **resistance 2** to that type for 1 minute. | when:damage-taken · economy:reaction · effect:resistance · ending:duration · economy:charges | `rig` | ✅ | Rig, live (#93): 10 fire taken offered a *Reactive Evolution* card to the owners; the click gave **fire 2**. Outside an encounter uses are not counted, so 10 cold offered it again; in an encounter the first use (acid) spent it and 10 sonic offered **nothing**. Control, no Moonstone: no card. The sheet action stays for damage the module never sees |
-| MO-2a | Moonstone D2 | **Resistance 5**, twice per encounter. | scaling:from-rank · effect:resistance · economy:charges | | ✅ | Live: with **fire** chosen, **fire 5** at Depth 2 |
-| MO-3a | Moonstone D3 | **Resistance 8**, it lasts until the encounter ends, and you may hold **two** types at once. | scaling:from-rank · effect:resistance · ending:duration · ending:replaces-previous | `rig` | ✅ | Rig, live: **fire 8** at Depth 3; it lasts until the encounter ends and two can be held |
-| MO-4a | Moonstone D4 | **Resistance 12**, unlimited uses, **three** types at once. | scaling:from-rank · effect:resistance · ending:replaces-previous | `rig` | ✅ | Rig, live: **fire 12** at Depth 4 |
-| MO-4b | Moonstone D4 | The first time each encounter you would take damage of a type you already resist, you take **none**. | when:damage-taken · effect:resistance · economy:charges | `rig` | ✅ | Rig, live: the first 30 fire with fire resisted took **0**; the second took **18** (resistance 12) |
+| MO-1a | Moonstone D1 | Once per encounter, as a reaction after taking damage of a type, gain **resistance 2** to that type for 1 minute. | when:damage-taken · economy:reaction · effect:resistance · ending:duration · economy:frequency | `rig` | ✅ | Rig, live (#93): 10 fire taken offered a *Reactive Evolution* card to the owners; the click gave **fire 2**. Outside an encounter uses are not counted, so 10 cold offered it again; in an encounter the first use (acid) spent it and 10 sonic offered **nothing**. Control, no Moonstone: no card. The sheet action stays for damage the module never sees |
+| MO-2a | Moonstone D2 | **Resistance 5**, twice per encounter. | scaling:from-rank · effect:resistance · economy:frequency | | ✅ | Live: with **fire** chosen, **fire 5** at Depth 2 |
+| MO-3a | Moonstone D3 | **Resistance 8**, it lasts until the encounter ends, and you may hold **two** types at once. | scaling:from-rank · effect:resistance · ending:replaces-previous · ending:encounter | `rig` | ✅ | Rig, live: **fire 8** at Depth 3; it lasts until the encounter ends and two can be held |
+| MO-4a | Moonstone D4 | **Resistance 12**, unlimited uses, **three** types at once. | scaling:from-rank · effect:resistance · ending:replaces-previous · economy:frequency | `rig` | ✅ | Rig, live: **fire 12** at Depth 4 |
+| MO-4b | Moonstone D4 | The first time each encounter you would take damage of a type you already resist, you take **none**. | when:damage-taken · economy:frequency · effect:damage-reduced | `rig` | ✅ | Rig, live: the first 30 fire with fire resisted took **0**; the second took **18** (resistance 12) |
 
 ## ⚙️ Steel — *True Plate* (lexicon §13)
 
@@ -66,12 +66,12 @@ stops while the Carapace is broken and comes back when it is repaired (class tra
 
 | ID | Guide | Clause | Patterns | Static check | Status | Evidence |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| ST-1a | Steel D1 | Carapace **Hardness +2**. | effect:bonus · effect:shield | | ✅ | Live: Hardness **2 → 4** with Steel alone at Depth 1 — pinned by the highest-bonus rule |
-| ST-1b | Steel D1 | Your unarmed Strikes' damage die increases one step. | effect:strike-damage | | ✅ | Live: the Carapace Strike's die **d8 → d10** |
-| ST-2a | Steel D2 | **Hardness +5.** | scaling:from-rank · effect:bonus · effect:shield | `rig` | ✅ | Rig, live: Hardness **7** |
-| ST-3a | Steel D3 | **Hardness +8.** | scaling:from-rank · effect:bonus · effect:shield | `rig` | ✅ | Rig, live: Hardness **10** |
+| ST-1a | Steel D1 | Carapace **Hardness +2**. | effect:shield · effect:hardness | | ✅ | Live: Hardness **2 → 4** with Steel alone at Depth 1 — pinned by the highest-bonus rule |
+| ST-1b | Steel D1 | Your unarmed Strikes' damage die increases one step. | effect:strike-damage · effect:die-step | | ✅ | Live: the Carapace Strike's die **d8 → d10** |
+| ST-2a | Steel D2 | **Hardness +5.** | scaling:from-rank · effect:shield · effect:hardness | `rig` | ✅ | Rig, live: Hardness **7** |
+| ST-3a | Steel D3 | **Hardness +8.** | scaling:from-rank · effect:shield · effect:hardness | `rig` | ✅ | Rig, live: Hardness **10** |
 | ST-3b | Steel D3 | Your unarmed Strikes gain the **versatile P** and **versatile S** traits. | effect:trait-gained | | ✅ | Live: **versatile-p** and **versatile-s** at Depth 3+ |
-| ST-4a | Steel D4 | **Hardness +12.** | scaling:from-rank · effect:bonus · effect:shield | | ✅ | Live: Hardness **14** at Depth 4 |
+| ST-4a | Steel D4 | **Hardness +12.** | scaling:from-rank · effect:shield · effect:hardness | | ✅ | Live: Hardness **14** at Depth 4 |
 | ST-4b | Steel D4 | **+1 damage die** on your unarmed Strikes. | effect:strike-damage | | ✅ | Live: **2d10** — one more die |
 
 ## ⚙️ Silver — *Argent Edge* (lexicon §13)
