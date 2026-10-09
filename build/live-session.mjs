@@ -33,11 +33,15 @@
 
 import { spawn } from "node:child_process";
 import { existsSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import process from "node:process";
 
-const FOUNDRY_EXE = "C:\\Program Files\\Foundry Virtual Tabletop\\Foundry Virtual Tabletop.exe";
-const CHROME_EXE = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
-const PROFILE_DIR = `${process.env.TEMP ?? "C:\\Temp"}\\chrome-foundry-debug`;
+// On Linux this is the VPS: Foundry is the Node build under systemd, not a desktop app this script can start.
+const LINUX = process.platform === "linux";
+const FOUNDRY_EXE = LINUX ? null : "C:\\Program Files\\Foundry Virtual Tabletop\\Foundry Virtual Tabletop.exe";
+const CHROME_EXE = LINUX ? "/usr/bin/google-chrome" : "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+const PROFILE_DIR = join(tmpdir(), "chrome-foundry-debug");
 const FOUNDRY_URL = "http://localhost:30000";
 const CDP_URL = "http://127.0.0.1:9222";
 
@@ -97,6 +101,10 @@ async function main() {
         return foundryUp && (chromeUp || !wantDevtools) ? 0 : 1;
     }
 
+    if (!foundryUp && !FOUNDRY_EXE) {
+        console.error("Foundry is down. On the server it is a service: sudo systemctl start foundry");
+        return 1;
+    }
     if (!foundryUp) {
         console.log("\nStarting Foundry…");
         launch(FOUNDRY_EXE, []);
