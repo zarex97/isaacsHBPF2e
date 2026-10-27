@@ -1,6 +1,6 @@
 # Icon catalog — Isaac's Homebrew (PF2e)
 
-Every document in this module that carries an icon: its name, its current icon, and its description. Entries for **The Saint** (Saint Seiya) and **The Soulbound** (Bleach) also carry an *Icon brief* — what the technique, power or effect itself looks like (from Saint Seiya / Bleach where the entry is based on them), written as an icon subject.
+Every document in this module that carries an icon: its name, its current icon, and its description. Every entry also carries an *Icon brief* — what the technique, power, item or effect itself looks like, written as an icon subject. For **The Saint** (Saint Seiya) and **The Soulbound** (Bleach) it follows the source series where the entry is based on one; for **The Assimilator** and **The Stargazer** it follows what the entry does and its in-game description.
 
 - 923 compendium entries with an icon (+ 18 documents the scripts create at runtime, listed at the end).
 - Descriptions are trimmed to ~400 characters here; `icon-catalog.csv` has them in full, one row per entry, for batch prompting.
@@ -1804,897 +1804,1292 @@ Every document in this module that carries an icon: its name, its current icon, 
 ### assimilator-bonds (30)
 
 - **Adamant Shell** · _effect_ · `icons/magic/defensive/armor-green-hex.webp`  
-  Diamond + Steel. Your Hardness bonuses stack fully rather than taking the higher, and you cannot be off-guard from flanking. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Diamond + Steel. Your Hardness bonuses stack fully rather than taking the higher, and you cannot be off-guard from flanking. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): A carapace plate of clear diamond facets fused over grey steel scales, the two layers interlocking like a vault door; faint white sparkle where they bond, a blade glancing off.
 - **Ascension** · _effect_ · `icons/magic/air/weather-wind-gust.webp`  
-  Platinum + Aluminium. Your fly Speed increases by 20 feet and you may hover. Falling is something that happens to other people. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Platinum + Aluminium. Your fly Speed increases by 20 feet and you may hover. Falling is something that happens to other people. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): A pale platinum-and-silver membrane wing unfurling from a ridged chitin back, hovering weightless above a drop, tiny motes drifting downward beneath while the wing stays still.
 - **Blackfire** · _effect_ · `icons/magic/unholy/projectile-flame-white-purple.webp`  
-  Ruby + Onyx. Your fire damage becomes void and fire , and sheds darkness rather than light. When it kills a creature, you regain Hit Points equal to your level. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Ruby + Onyx. Your fire damage becomes void and fire , and sheds darkness rather than light. When it kills a creature, you regain Hit Points equal to your level. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): A clawed carapace hand wreathed in black flame that drinks light instead of shedding it, a ruby glowing red at its core inside an onyx shell, dark smoke curling.
 - **Blind Hunter** · _effect_ · `icons/magic/perception/eye-ringed-glow-angry-large-red.webp`  
-  Tin + Onyx. Inside your own magical darkness, your tremorsense becomes precise and enemies within it are off-guard to you. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Tin + Onyx. Inside your own magical darkness, your tremorsense becomes precise and enemies within it are off-guard to you. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): A pool of inky darkness with ripples spreading across the ground like tremors, a tin-grey chitin limb pressed to the floor, a faint outline of hidden prey picked out in pale lines.
 - **Chimera** · _effect_ · `icons/creatures/magical/construct-face-stone-pink.webp`  
-  Electrum + Nickel. You hold one additional Aberration, and it may be drawn from the Depth-4 rider list of either of your Instincts. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Electrum + Nickel. You hold one additional Aberration, and it may be drawn from the Depth-4 rider list of either of your Instincts. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): A lump of mismatched growths — a claw, an eye, a fin — budding from one electrum-and-nickel streaked chitin mass, iridescent and unsettling.
 - **Chitin Bloom** · _effect_ · `icons/magic/nature/leaf-armor-scale-green.webp`  
-  Emerald + Chromium. Your fast healing also repairs your Carapace, and your Hardness increases by your fast healing value. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Emerald + Chromium. Your fast healing also repairs your Carapace, and your Hardness increases by your fast healing value. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): Cracked chitin plates knitting themselves shut as green emerald tissue blooms through the seams like flowers, chrome-bright edges hardening behind the growth.
 - **Cleansing Light** · _effect_ · `icons/magic/holy/prayer-hands-glowing-yellow-green.webp`  
-  Pearl + Magnesium. Your Flare Core also ends one condition of value 1 on every ally inside the emanation. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Pearl + Magnesium. Your Flare Core also ends one condition of value 1 on every ally inside the emanation. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): A pearl-white sphere of light bursting from a ribbed organ, its soft glow washing over several figures and lifting dark wisps of affliction off them.
 - **Cold Reading** · _effect_ · `icons/magic/water/snowflake-ice-blue-white.webp`  
-  Sapphire + Lapis Lazuli. Your Studied creature is also slowed 1 the first time you damage it each round, with no save. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Sapphire + Lapis Lazuli. Your Studied creature is also slowed 1 the first time you damage it each round, with no save. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): A deep-blue sapphire eye set in chitin, lapis veins radiating from it, frost spreading across a targeted silhouette whose motion has slowed into blurred afterimages.
 - **Conduction** · _effect_ · `icons/magic/lightning/bolt-beam-strike-blue.webp`  
-  Ruby + Copper. Your fire damage counts as fire and electricity , using whichever resistance is lower. Creatures in metal armour take +2 per damage die from it. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Ruby + Copper. Your fire damage counts as fire and electricity , using whichever resistance is lower. Creatures in metal armour take +2 per damage die from it. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): A copper-veined fist striking a breastplate, fire and electricity braided around the knuckles, sparks crawling over the metal armour.
 - **Crowned Fortune** · _effect_ · `icons/commodities/currency/coin-embossed-crown-gold.webp`  
-  Topaz + Citrine. Once per encounter, declare a Strike imperial before rolling. On a success it counts as a critical success. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Topaz + Citrine. Once per encounter, declare a Strike imperial before rolling. On a success it counts as a critical success. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): A carapace fist topped with a small crown of topaz and citrine spikes, a golden coin-flash bursting at the moment of impact.
 - **Exsanguinary** · _effect_ · `icons/skills/wounds/blood-cells-disease-green.webp`  
-  Garnet + Jet. Persistent bleed you inflict also heals you for the same amount each time it ticks. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Garnet + Jet. Persistent bleed you inflict also heals you for the same amount each time it ticks. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): Ribbons of blood flowing from a bleeding wound back along a jet-black tendril into a garnet-red pulsing gland.
 - **Hammerform** · _effect_ · `icons/weapons/hammers/hammer-double-engraved-gold.webp`  
-  Bronze + Iron. Your unarmed Strikes gain the fatal d10 trait when you have Stridden at least 10 feet this turn. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Bronze + Iron. Your unarmed Strikes gain the fatal d10 trait when you have Stridden at least 10 feet this turn. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): A carapace arm swelling into a massive bronze-and-iron hammerhead, motion streaks trailing behind it as it charges forward to strike.
 - **Immune System** · _effect_ · `icons/magic/life/cross-area-circle-green-white.webp`  
-  Jade + Zinc. Shifting Tissue may name poison, disease or a single spell school as well as an energy type. Ruled (#95): disease is a +2 circumstance bonus to saves against disease ; a spell school is one tradition — arcane, divine, occult or primal. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Jade + Zinc. Shifting Tissue may name poison, disease or a single spell school as well as an energy type. Ruled (#95): disease is a +2 circumstance bonus to saves against disease ; a spell school is one tradition — arcane, divine, occult or primal. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): A jade-green chitin cell wall with zinc-grey antibody-like spines, engulfing and dissolving floating green spores and a faint spell glyph.
 - **Impossible Body** · _effect_ · `icons/magic/water/projectile-ice-teardrop.webp`  
-  Diamond + Mercury. You are simultaneously rigid and fluid: keep your Hardness while amorphous, and Liquid Form's reaction has no per-round limit. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Diamond + Mercury. You are simultaneously rigid and fluid: keep your Hardness while amorphous, and Liquid Form's reaction has no per-round limit. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): A diamond-faceted plate that ripples like liquid mercury, half rigid crystal and half flowing silver in one shape.
 - **Lightning Lash** · _effect_ · `icons/magic/lightning/bolt-forked-blue-yellow.webp`  
-  Copper + Cobalt. Your ranged Arcane Channel Strike conducts: it chains to a second creature within 15 feet of the first for half damage. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Copper + Cobalt. Your ranged Arcane Channel Strike conducts: it chains to a second creature within 15 feet of the first for half damage. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): A blue cobalt bolt fired from a copper-veined palm, striking one target and arcing on to a second, the jump drawn as a forked branch of lightning.
 - **Living Armour** · _effect_ · `icons/magic/defensive/armor-shield-barrier-steel.webp`  
-  Hematite + Moonstone. Reactive Evolution triggers off damage taken by an ally within 15 feet as well as yourself. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Hematite + Moonstone. Reactive Evolution triggers off damage taken by an ally within 15 feet as well as yourself. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): Hematite-red plates sprouting from a carapace and reaching outward to shield an ally standing nearby, moonstone sheen rippling across them as they adapt.
 - **Living Flame** · _effect_ · `icons/magic/life/heart-area-circle-red-green.webp`  
-  Ruby + Emerald. While you are taking persistent fire damage, or dealing it to anyone, your fast healing increases by 5. You burn what you are, and it grows back. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Ruby + Emerald. While you are taking persistent fire damage, or dealing it to anyone, your fast healing increases by 5. You burn what you are, and it grows back. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): A burning chitin limb whose charred tissue is regrowing red-and-green at the same rate it chars, flames and new buds side by side.
 - **Mindstorm** · _effect_ · `icons/magic/control/hypnosis-mesmerism-eye-tan.webp`  
-  Amethyst + Quartz. A creature that fails a save against one of your Mutations is stupefied 1 and its next spell requires a DC 5 flat check. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Amethyst + Quartz. A creature that fails a save against one of your Mutations is stupefied 1 and its next spell requires a DC 5 flat check. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): A purple amethyst nodule cracking open into a whirl of quartz shards circling a skull-like silhouette, sparks of broken spell-light scattering.
 - **Molten Carapace** · _effect_ · `icons/magic/fire/barrier-shield-explosion-yellow.webp`  
-  Ruby + Iron. Your Carapace's Hardness increases by 5, and a creature that hits you with a melee unarmed or reach attack takes fire damage equal to half your level. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Ruby + Iron. Your Carapace's Hardness increases by 5, and a creature that hits you with a melee unarmed or reach attack takes fire damage equal to half your level. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): A thick iron-black carapace with lines of glowing molten ruby-red running through its cracks, a striking fist recoiling in a burst of embers.
 - **Null Shroud** · _effect_ · `icons/magic/unholy/barrier-shield-glowing-pink.webp`  
-  Onyx + Lead. Your magical darkness suppresses magical effects inside it (counteract rank = half your level) and cannot itself be counteracted below 6th rank. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Onyx + Lead. Your magical darkness suppresses magical effects inside it (counteract rank = half your level) and cannot itself be counteracted below 6th rank. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): A dense dome of lead-grey darkness swallowing floating spell glyphs, the runes dimming and breaking apart as they cross into it.
 - **Quicksilver Gait** · _effect_ · `icons/magic/movement/trail-streak-impact-blue.webp`  
-  Carnelian + Mercury. You may Stride through creatures' spaces as though they were difficult terrain, and cannot be caught flat-footed by movement-triggered reactions. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Carnelian + Mercury. You may Stride through creatures' spaces as though they were difficult terrain, and cannot be caught flat-footed by movement-triggered reactions. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): A silvery liquid leg flowing between two silhouettes as though they were water, carnelian-orange streaks marking the path.
 - **Reaper's Edge** · _effect_ · `icons/magic/death/weapon-scythe-rune-green.webp`  
-  Silver + Jet. Your void damage ignores the resistances and immunities of incorporeal undead entirely. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Silver + Jet. Your void damage ignores the resistances and immunities of incorporeal undead entirely. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): A silver-and-jet chitin blade cutting cleanly through a translucent ghost, the spectre splitting where it should have passed through.
 - **Rime Flow** · _effect_ · `icons/magic/water/barrier-ice-crystal-wall-faceted-blue.webp`  
-  Sapphire + Mercury. Your Liquid Form damage reduction also freezes the attacker: it takes cold damage equal to the amount reduced. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Sapphire + Mercury. Your Liquid Form damage reduction also freezes the attacker: it takes cold damage equal to the amount reduced. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): A blow sinking into liquid-mercury flesh that turns to sapphire ice around the attacker's fist, frost climbing up the striking arm.
 - **Rot** · _effect_ · `icons/magic/acid/dissolve-arm-flesh.webp`  
-  Jet + Manganese. Persistent acid you inflict also reduces the target's resistances by an additional 5 while it lasts. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Jet + Manganese. Persistent acid you inflict also reduces the target's resistances by an additional 5 while it lasts. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): Dark acid seeping from jet-black claws into a creature's hide, the surface pitting and flaking, manganese-purple corrosion spreading outward.
 - **Runaway Growth** · _effect_ · `icons/magic/nature/root-vine-barrier-wall-brown.webp`  
-  Nickel + Emerald. Your Aberrations re-roll automatically whenever you drop below half Hit Points, and doing so restores Hit Points equal to twice your level. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Nickel + Emerald. Your Aberrations re-roll automatically whenever you drop below half Hit Points, and doing so restores Hit Points equal to twice your level. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): Chaotic tumour-like growths erupting across a wounded carapace, nickel-grey and emerald-green, a heart-red glow of healing at the centre.
 - **Second Heart** · _effect_ · `icons/magic/life/heart-broken-red.webp`  
-  Garnet + Emerald. Once per day, when you would die, you don't — you drop to 1 Hit Point and are stunned 1 as the second heart takes over. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Garnet + Emerald. Once per day, when you would die, you don't — you drop to 1 Hit Point and are stunned 1 as the second heart takes over. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): Two hearts side by side inside a translucent ribcage of chitin, one stopped and grey, the other garnet-red and just starting to beat.
 - **Siege Frame** · _effect_ · `icons/weapons/hammers/hammer-double-bronze.webp`  
-  Iron + Steel. You ignore an object's Hardness up to 10, and forced movement you cause increases by an additional 10 feet. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Iron + Steel. You ignore an object's Hardness up to 10, and forced movement you cause increases by an additional 10 feet. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): An oversized iron-and-steel chitin ram punching through a stone wall, bricks flying back far further than a normal blow would throw them.
 - **Solar Core** · _effect_ · `icons/magic/light/beam-explosion-orange.webp`  
-  Ruby + Gold. Once per encounter as a two-action activity, ignite: for 1 minute your fire damage increases by one die size and you shed bright light 60 feet. You take 1d6 fire at the start of each of your turns. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Ruby + Gold. Once per encounter as a two-action activity, ignite: for 1 minute your fire damage increases by one die size and you shed bright light 60 feet. You take 1d6 fire at the start of each of your turns. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): A ruby sphere ringed in gold set into a chitin chest, igniting into a small blazing sun with a corona of flame.
 - **Storm Battery** · _effect_ · `icons/magic/lightning/barrier-shield-crackling-orb-pink.webp`  
-  Amber + Cobalt. Your Reservoir stores charges from your own ranged Strikes, and spending 3 charges lets Arcane Channel target every creature in a 15-foot cone. Suppressed while either Substrate is below Depth 2; it is not lost.
+  Amber + Cobalt. Your Reservoir stores charges from your own ranged Strikes, and spending 3 charges lets Arcane Channel target every creature in a 15-foot cone. Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): An amber cell-sac filled with crackling cobalt lightning, three charge-sparks orbiting it, ready to discharge.
 - **Transmutation** · _effect_ · `icons/magic/symbols/chevron-elipse-circle-blue.webp`  
-  Gold + Electrum. Gilded Core may name a Substrate of your second Instinct, and Alloyed Instinct's half-value clause becomes three-quarters (round up). Suppressed while either Substrate is below Depth 2; it is not lost.
+  Gold + Electrum. Gilded Core may name a Substrate of your second Instinct, and Alloyed Instinct's half-value clause becomes three-quarters (round up). Suppressed while either Substrate is below Depth 2; it is not lost.  
+  **Icon brief** (Assimilator — Bond): A gold nugget flowing into a pale electrum ingot on a living organic lattice, the metals blending where they touch, alchemical swirl of yellow-white light.
 
 ### assimilator-class (1)
 
 - **Assimilator** · _class_ · `icons/creatures/claws/claw-talons-glowing-orange.webp`  
-  Something alive is wearing you, and it grows by eating. Not by levelling — by eating . Feed it a ruby and it learns to burn. Feed it iron and the limbs get heavier and longer. Feed it nickel and you do not know what you will have on Tuesday, and neither does it. Your build is not a list of choices made at character creation. It is a stomach , and its contents are visible on you. Key attribute…
+  Something alive is wearing you, and it grows by eating. Not by levelling — by eating . Feed it a ruby and it learns to burn. Feed it iron and the limbs get heavier and longer. Feed it nickel and you do not know what you will have on Tuesday, and neither does it. Your build is not a list of choices made at character creation. It is a stomach , and its contents are visible on you. Key attribute…  
+  **Icon brief** (Assimilator — Class): A human arm overgrown by a living black-green carapace: ridged chitin plates, fine tendrils, glowing veins, a cut ruby and an iron shard being drawn into the flesh at the wrist.
 
 ### assimilator-class-features (59)
 
 #### Actions
 
 - **Carapace Block** · _feat_ · `icons/equipment/shield/buckler-wooden-boss-glowing-blue.webp`  
-  Trigger You take physical damage. Reduce the damage by your Carapace's Hardness. The Carapace takes that much damage. Use it when the damage is rolled, before it is applied: it arms the plate for the next physical damage you take this round, and the block is taken off that damage as it lands.
+  Trigger You take physical damage. Reduce the damage by your Carapace's Hardness. The Carapace takes that much damage. Use it when the damage is rolled, before it is applied: it arms the plate for the next physical damage you take this round, and the block is taken off that damage as it lands.  
+  **Icon brief** (Assimilator — Action): A raised chitin forearm-plate taking a sword blow head-on, cracks spidering across the plate while the arm behind stays whole.
 - **Feed** · _feat_ · `icons/consumables/food/dried-meat-jerky-fish-red.webp`  
-  Activity (10 minutes) Consume one Substrate you are holding. If you already hold it, its Depth increases by 1 ; otherwise it enters your Lattice at Depth 1 . Either way it costs Mass equal to its new Depth, and the physical Substrate is destroyed. Using it opens the Gullet, where the Substrate and the specimen are chosen and the Mass is checked.
+  Activity (10 minutes) Consume one Substrate you are holding. If you already hold it, its Depth increases by 1 ; otherwise it enters your Lattice at Depth 1 . Either way it costs Mass equal to its new Depth, and the physical Substrate is destroyed. Using it opens the Gullet, where the Substrate and the specimen are chosen and the Mass is checked.  
+  **Icon brief** (Assimilator — Action): A gaping toothed maw opening in a carapace palm, swallowing a glittering gemstone, veins lighting up as it is absorbed.
 - **Manifest the Apotheosis** · _feat_ · `icons/magic/light/explosion-star-large-orange.webp`  
-  Frequency once per day Every bound Substrate manifests at your Depth cap for 1 minute, regardless of the Mass you actually paid.
+  Frequency once per day Every bound Substrate manifests at your Depth cap for 1 minute, regardless of the Mass you actually paid.  
+  **Icon brief** (Assimilator — Action): Every gem and metal fused into the carapace blazing at once, a crown of crystal and metal spikes erupting outward in a single brilliant flare.
 - **Purify** · _action_ · `icons/magic/holy/prayer-hands-glowing-yellow-white.webp`  
-  White Instinct. End one condition on yourself or an ally. A number of times per day equal to your highest Depth. Target the ally first; with no target it is you.
+  White Instinct. End one condition on yourself or an ally. A number of times per day equal to your highest Depth. Target the ally first; with no target it is you.  
+  **Icon brief** (Assimilator — Action): A white-glowing chitin hand drawing black tendrils of a condition out of an ally's chest, the dark strands burning away to light.
 - **Shed** · _feat_ · `icons/consumables/food/shank-meat-bone-glazed-red.webp`  
-  During your daily preparations only. Remove any Substrate, or reduce any Substrate's Depth, freeing that Mass. What you shed is destroyed, not recovered. Using it opens the Gullet, where the Substrate and the specimen are chosen and the Mass is checked.
+  During your daily preparations only. Remove any Substrate, or reduce any Substrate's Depth, freeing that Mass. What you shed is destroyed, not recovered. Using it opens the Gullet, where the Substrate and the specimen are chosen and the Mass is checked.  
+  **Icon brief** (Assimilator — Action): A husk of old chitin peeling away from a limb like a snake's moulted skin, a crumbling gem falling from it as dust.
 - **Study** · _action_ · `icons/magic/perception/eye-ringed-glow-angry-small-teal.webp`  
-  Blue Instinct. You Study a creature. Until the encounter ends, your Mutations treat its resistances as lower by twice your highest Depth, and you gain a +1 circumstance bonus to AC against it. One creature at a time: Studying another ends the first.
+  Blue Instinct. You Study a creature. Until the encounter ends, your Mutations treat its resistances as lower by twice your highest Depth, and you gain a +1 circumstance bonus to AC against it. One creature at a time: Studying another ends the first.  
+  **Icon brief** (Assimilator — Action): A blue compound eye opening in carapace, scanning lines tracing a creature's outline and highlighting its weak points.
 #### Bonds
 
 - **Ignite the Solar Core** · _action_ · `icons/magic/fire/explosion-fireball-large-orange.webp`  
-  Solar Core (Ruby + Gold). Once per encounter, ignite: for 1 minute your fire damage increases by one die size and you shed bright light 60 feet. You take 1d6 fire at the start of each of your turns.
+  Solar Core (Ruby + Gold). Once per encounter, ignite: for 1 minute your fire damage increases by one die size and you shed bright light 60 feet. You take 1d6 fire at the start of each of your turns.  
+  **Icon brief** (Assimilator — Action): The moment of ignition: a ruby-and-gold chest core bursting into white-hot light, flames licking back over the carapace that holds it.
 - **Imperial Strike** · _action_ · `icons/commodities/currency/coin-embossed-crown-gold.webp`  
-  Crowned Fortune (Topaz + Citrine). Once per encounter, declare your next Strike imperial before rolling. On a success it counts as a critical success.
+  Crowned Fortune (Topaz + Citrine). Once per encounter, declare your next Strike imperial before rolling. On a success it counts as a critical success.  
+  **Icon brief** (Assimilator — Action): A carapace fist striking with a golden crown-shaped flare at the point of impact, the hit landing as a starburst of topaz light.
 - **Storm Channel** · _action_ · `icons/magic/lightning/bolt-forked-large-orange.webp`  
-  Storm Battery (Amber + Cobalt). Spend 3 charges from your Reservoir: make your Arcane Channel Strike against every creature in a 15-foot cone.
+  Storm Battery (Amber + Cobalt). Spend 3 charges from your Reservoir: make your Arcane Channel Strike against every creature in a 15-foot cone.  
+  **Icon brief** (Assimilator — Action): A cone of cobalt lightning fanning out from an outstretched chitin palm, three spent charge-sparks fading at the wrist.
 #### Core
 
 - **Alien Physiology** · _feat_ · `icons/creatures/abilities/tail-swipe-green.webp`  
-  You are no longer entirely a person. You need neither food, drink nor air, and you are immune to disease . You are immune to the drained condition , and to any effect that would alter your physical form against your will (petrification, polymorph, and the like) — the symbiont is already using that space. To accept a polymorph willingly, switch on Accept a transformation before it lands; switching…
+  You are no longer entirely a person. You need neither food, drink nor air, and you are immune to disease . You are immune to the drained condition , and to any effect that would alter your physical form against your will (petrification, polymorph, and the like) — the symbiont is already using that space. To accept a polymorph willingly, switch on Accept a transformation before it lands; switching…  
+  **Icon brief** (Assimilator — Class feature): A closed chitin chrysalis-like body with no mouth or nostrils, gills sealed shut, indifferent veins glowing faintly — a thing that needs nothing.
 - **Apotheosis** · _feat_ · `icons/magic/light/explosion-star-large-orange.webp`  
-  The host and the thing stop being two things. Your Mass increases by 3 in each track. Once per day, as a free action , every bound Substrate manifests at your Depth cap for 1 minute, regardless of the Mass you actually paid. Your Carapace can no longer be broken by physical damage alone; only an effect that would destroy an object outright can do it.
+  The host and the thing stop being two things. Your Mass increases by 3 in each track. Once per day, as a free action , every bound Substrate manifests at your Depth cap for 1 minute, regardless of the Mass you actually paid. Your Carapace can no longer be broken by physical damage alone; only an effect that would destroy an object outright can do it.  
+  **Icon brief** (Assimilator — Class feature): Host and symbiont merged into one shape: a carapace silhouette with no seam left between flesh and plate, gems and metals studded across it glowing in unison.
 - **Assimilation** · _feat_ · `icons/magic/life/heart-cross-strong-flame-green.webp`  
-  You gain Mass in two separate pools — 1 Gem Mass and 1 Metal Mass at 1st level — and the two activities that manage them, Feed and Shed . A Substrate at Depth N costs N Mass , and your Depth cap is 1. Depth 1–2 takes an ordinary specimen — a looted ruby, a copper ingot, a pearl off a necklace. Depth 3–4 takes a quickened specimen , one that grew somewhere the mundane world doesn't reach; those…
+  You gain Mass in two separate pools — 1 Gem Mass and 1 Metal Mass at 1st level — and the two activities that manage them, Feed and Shed . A Substrate at Depth N costs N Mass , and your Depth cap is 1. Depth 1–2 takes an ordinary specimen — a looted ruby, a copper ingot, a pearl off a necklace. Depth 3–4 takes a quickened specimen , one that grew somewhere the mundane world doesn't reach; those…  
+  **Icon brief** (Assimilator — Class feature): Two glowing reservoirs inside a carapace — one faceted red-violet for gems, one ridged grey for metals — with a small gem and a metal shard dropping into each.
 - **Assimilation Expertise** · _feat_ · `icons/magic/life/heart-cross-strong-flame-green.webp`  
-  Your proficiency rank for your Assimilator DC increases to expert.
+  Your proficiency rank for your Assimilator DC increases to expert.  
+  **Icon brief** (Assimilator — Class feature): A gem half-sunk into living chitin, three tendrils wrapping it with practised precision, a single bronze-coloured ring of light around it.
 - **Assimilation Mastery** · _feat_ · `icons/magic/life/heart-cross-strong-flame-green.webp`  
-  Your proficiency rank for your Assimilator DC increases to master.
+  Your proficiency rank for your Assimilator DC increases to master.  
+  **Icon brief** (Assimilator — Class feature): A gem almost fully absorbed into living chitin, intricate tendrils threaded through every facet, a silver-gold double ring of light around it.
 - **Carapace Expertise** · _feat_ · `icons/creatures/claws/claw-talons-glowing-orange.webp`  
-  The plate has learned where to hit. Your proficiency rank for unarmed attacks increases to expert.
+  The plate has learned where to hit. Your proficiency rank for unarmed attacks increases to expert.  
+  **Icon brief** (Assimilator — Class feature): A chitin fist striking a precise point on a target, a crosshair of veins on the knuckle, one ring of bronze light.
 - **Carapace Mastery** · _feat_ · `icons/creatures/claws/claw-talons-glowing-orange.webp`  
-  Your proficiency rank for unarmed attacks increases to master.
+  Your proficiency rank for unarmed attacks increases to master.  
+  **Icon brief** (Assimilator — Class feature): A chitin fist with blade-like ridges, its blow landing in a perfect radial crack, a double ring of gold light around it.
 - **Fifth Bond** · _feat_ · `icons/magic/symbols/chevron-elipse-circle-blue.webp`  
-  You gain a fifth Bond slot, and your Gem Mass and Metal Mass each increase by 2.
+  You gain a fifth Bond slot, and your Gem Mass and Metal Mass each increase by 2.  
+  **Icon brief** (Assimilator — Class feature): Five interlocking rings of fused gem and metal set in a pentagon on a carapace back, all five glowing.
 - **First Bond** · _feat_ · `icons/magic/symbols/chevron-elipse-circle-blue.webp`  
-  You gain your first Bond slot . A Bond requires both its Substrates at Depth 2 or higher; you choose it when you gain the slot and may change it at daily preparations.
+  You gain your first Bond slot . A Bond requires both its Substrates at Depth 2 or higher; you choose it when you gain the slot and may change it at daily preparations.  
+  **Icon brief** (Assimilator — Class feature): One gem and one metal shard joined by a living tendril knot into a single glowing ring on chitin.
 - **Fourth Bond** · _feat_ · `icons/magic/symbols/chevron-elipse-circle-blue.webp`  
-  You gain a fourth Bond slot.
+  You gain a fourth Bond slot.  
+  **Icon brief** (Assimilator — Class feature): Four interlocking gem-and-metal rings set in a square on chitin, the fourth newly formed and brightest.
 - **Fourth Skin** · _feat_ · `icons/creatures/abilities/fang-tooth-blood-red.webp`  
-  Your Depth cap becomes 4. Your Gem Mass increases by 2 and your Metal Mass by 1.
+  Your Depth cap becomes 4. Your Gem Mass increases by 2 and your Metal Mass by 1.  
+  **Icon brief** (Assimilator — Class feature): Four nested layers of chitin peeled back in a cross-section like tree rings, the deepest layer glowing hottest.
 - **Growth (14th)** · _feat_ · `icons/creatures/abilities/fang-tooth-blood-red.webp`  
-  Your Gem Mass and Metal Mass each increase by 2.
+  Your Gem Mass and Metal Mass each increase by 2.  
+  **Icon brief** (Assimilator — Class feature): Both Mass reservoirs, gem and metal, swelling and overflowing with new crystal and ore, veins bulging around them.
 - **Growth (3rd)** · _feat_ · `icons/creatures/abilities/fang-tooth-blood-red.webp`  
-  Your Gem Mass increases by 1.
+  Your Gem Mass increases by 1.  
+  **Icon brief** (Assimilator — Class feature): A single faceted gem reservoir inside the carapace swelling larger, a new crystal budding off its side.
 - **Instinct** · _feat_ · `icons/magic/perception/eye-ringed-glow-angry-red.webp`  
-  Your Instinct is the colour you have invested the most total Mass in, counting both tracks. It grants that colour's Instinct clause , which applies to every Mutation you have , including Mutations of other colours. Ties are broken by you, freely, at daily preparations. Instinct is recalculated at daily preparations and costs nothing to change. It also sets your Instinct's damage type : Red fire,…
+  Your Instinct is the colour you have invested the most total Mass in, counting both tracks. It grants that colour's Instinct clause , which applies to every Mutation you have , including Mutations of other colours. Ties are broken by you, freely, at daily preparations. Instinct is recalculated at daily preparations and costs nothing to change. It also sets your Instinct's damage type : Red fire,…  
+  **Icon brief** (Assimilator — Class feature): A colour wheel of gem hues set into chitin, one wedge glowing brightest and its colour spreading out through the veins.
 - **Living Weapon** · _feat_ · `icons/creatures/claws/claw-talons-glowing-orange.webp`  
-  You gain the critical specialization effect of the brawling group for your unarmed attacks.
+  You gain the critical specialization effect of the brawling group for your unarmed attacks.  
+  **Icon brief** (Assimilator — Class feature): A carapace fist whose knuckles sprout thorns, a target knocked prone and dazed by the blow, stars of impact around it.
 - **Second Bond** · _feat_ · `icons/magic/symbols/chevron-elipse-circle-blue.webp`  
-  You gain a second Bond slot, and your Gem Mass and Metal Mass each increase by 2.
+  You gain a second Bond slot, and your Gem Mass and Metal Mass each increase by 2.  
+  **Icon brief** (Assimilator — Class feature): Two interlocking gem-and-metal rings bound together on a chitin plate, a living tendril weaving between them.
 - **Second Skin** · _feat_ · `icons/creatures/abilities/fang-tooth-blood-red.webp`  
-  Your Depth cap becomes 2, and your Gem Mass and Metal Mass each increase by 1.
+  Your Depth cap becomes 2, and your Gem Mass and Metal Mass each increase by 1.  
+  **Icon brief** (Assimilator — Class feature): Two nested layers of chitin shown in cross-section, the inner one glowing, a new harder shell forming over the old.
 - **Shell Mastery** · _feat_ · `icons/equipment/chest/breastplate-layered-leather-brown.webp`  
-  Your proficiency rank for unarmored defense increases to master.
+  Your proficiency rank for unarmored defense increases to master.  
+  **Icon brief** (Assimilator — Class feature): A domed chitin shell curling around a body like an armadillo, arrows and blades bouncing off its overlapping plates.
 - **Symbiotic Reflex** · _feat_ · `icons/magic/defensive/shield-barrier-flaming-diamond-red.webp`  
-  Frequency once per round; Trigger A creature you can see damages you. Choose one — (a) gain resistance equal to twice your highest Depth against that damage, or (b) if the triggering creature is within your reach, make a Carapace Strike against it. It does not stack with Carapace Block against the same damage. Target the creature that damaged you and use it as the damage is rolled. It asks which:…
+  Frequency once per round; Trigger A creature you can see damages you. Choose one — (a) gain resistance equal to twice your highest Depth against that damage, or (b) if the triggering creature is within your reach, make a Carapace Strike against it. It does not stack with Carapace Block against the same damage. Target the creature that damaged you and use it as the damage is rolled. It asks which:…  
+  **Icon brief** (Assimilator — Class feature): A carapace that reacts on its own: a tendril-tipped spike lashing out from the shoulder to strike back at an attacker, or plates flaring to absorb the hit.
 - **The Carapace** · _feat_ · `icons/creatures/claws/claw-talons-glowing-orange.webp`  
-  Something alive is wearing you. It is your weapon, your armour, and the thing that breaks. Carapace Strike. Your unarmed attack is the class. It deals 1d8 bludgeoning damage, is in the brawling group, and has only the unarmed trait — it is not agile and it is not finesse. Handwraps of mighty blows work normally; the class grants no free fundamental runes. Living Plate. The symbiont is your armour…
+  Something alive is wearing you. It is your weapon, your armour, and the thing that breaks. Carapace Strike. Your unarmed attack is the class. It deals 1d8 bludgeoning damage, is in the brawling group, and has only the unarmed trait — it is not agile and it is not finesse. Handwraps of mighty blows work normally; the class grants no free fundamental runes. Living Plate. The symbiont is your armour…  
+  **Icon brief** (Assimilator — Class feature): A heavy, living chitin gauntlet-arm: ridged black-green plates, glowing veins, a cracked edge — weapon, armour and the thing that breaks.
 - **Third Bond** · _feat_ · `icons/magic/symbols/chevron-elipse-circle-blue.webp`  
-  You gain a third Bond slot.
+  You gain a third Bond slot.  
+  **Icon brief** (Assimilator — Class feature): Three interlocking gem-and-metal rings in a triangle on a chitin plate, the third newly fused and glowing.
 - **Third Skin** · _feat_ · `icons/creatures/abilities/fang-tooth-blood-red.webp`  
-  Your Depth cap becomes 3. Your Gem Mass increases by 2 and your Metal Mass by 1.
+  Your Depth cap becomes 3. Your Gem Mass increases by 2 and your Metal Mass by 1.  
+  **Icon brief** (Assimilator — Class feature): Three nested chitin layers in cross-section, rings like geological strata, the innermest layer pulsing with gem-light.
 #### Mutations
 
 - **Aberrant Gland** · _action_ · `icons/magic/unholy/strike-body-explode-disintegrate.webp`  
-  Frequency once per encounter A 15-foot cone dealing 2d6 damage of your Instinct's type, basic Reflex save against your class DC.
+  Frequency once per encounter A 15-foot cone dealing 2d6 damage of your Instinct's type, basic Reflex save against your class DC.  
+  **Icon brief** (Assimilator — Mutation): A bulbous gland swelling on a chitin shoulder, spraying a wide cone of glowing energy in the Instinct's colour.
 - **Amorphous** · _action_ · `icons/consumables/potions/vial-ornet-silver-black.webp`  
-  You become amorphous for 1 minute: immune to precision damage, and critical hits against you deal normal damage.
+  You become amorphous for 1 minute: immune to precision damage, and critical hits against you deal normal damage.  
+  **Icon brief** (Assimilator — Mutation): A body slumping into a shapeless, rubbery chitin mass, a dagger point sinking in harmlessly with no vital spot to find.
 - **Ascendant Flight** · _action_ · `icons/commodities/metal/ingot-silver.webp`  
-  Gain a fly Speed equal to half your land Speed for 1 minute.
+  Gain a fly Speed equal to half your land Speed for 1 minute.  
+  **Icon brief** (Assimilator — Mutation): A pair of translucent insect-like wings bursting from a chitin back mid-beat, lifting the body off the ground.
 - **Carrion Harvest** · _action_ · `icons/commodities/gems/gem-faceted-cushion-teal-black.webp`  
-  A creature within 30 feet at or below half its Hit Points must succeed at a Fortitude save against your class DC or take void damage equal to twice your level .
+  A creature within 30 feet at or below half its Hit Points must succeed at a Fortitude save against your class DC or take void damage equal to twice your level .  
+  **Icon brief** (Assimilator — Mutation): Black tendrils reaching from a carapace hand across the ground to a wounded, half-bloodied creature, drawing a dark void-mist out of it.
 - **Cleansing Tide** · _action_ · `icons/commodities/gems/pearl-white-oval.webp`  
-  Frequency once per encounter (twice at Pearl Depth 4) End one condition of value 1 on yourself or an adjacent ally. At Depth 3 the range is 30 feet and it may instead reduce one affliction's stage by 1; at Depth 4 it may instead counteract one spell effect of 4th rank or lower.
+  Frequency once per encounter (twice at Pearl Depth 4) End one condition of value 1 on yourself or an adjacent ally. At Depth 3 the range is 30 feet and it may instead reduce one affliction's stage by 1; at Depth 4 it may instead counteract one spell effect of 4th rank or lower.  
+  **Icon brief** (Assimilator — Mutation): A gentle wave of pearl-white water rolling off a chitin palm over an ally, washing a grey affliction-stain from their skin.
 - **Clear Tide** · _action_ · `icons/commodities/gems/pearl-white-oval.webp`  
-  Reduce the value of one of your conditions by 1.
+  Reduce the value of one of your conditions by 1.  
+  **Icon brief** (Assimilator — Mutation): A small clear ripple spreading across one's own carapace, a dark condition-mark fading by a notch.
 - **Discharge** · _action_ · `icons/commodities/gems/gem-rough-square-yellow.webp`  
-  Cost 3 Reservoir charges A 30-foot line of 6d6 damage of the stored type, basic Reflex save against your class DC.
+  Cost 3 Reservoir charges A 30-foot line of 6d6 damage of the stored type, basic Reflex save against your class DC.  
+  **Icon brief** (Assimilator — Mutation): A straight 30-foot line of stored energy blasting from a chitin palm, three charge-sparks emptying into the beam.
 - **Draw on the Reservoir** · _action_ · `icons/commodities/gems/gem-rough-square-yellow.webp`  
-  Spend 1 Reservoir charge: your next Strike deals +1d4 of the stored type. At Amber Depth 2, if you have 2 charges, spend 2 instead for +1d6 + 2 .
+  Spend 1 Reservoir charge: your next Strike deals +1d4 of the stored type. At Amber Depth 2, if you have 2 charges, spend 2 instead for +1d6 + 2 .  
+  **Icon brief** (Assimilator — Mutation): A single charge-spark flowing from an amber sac down the arm into a chitin fist, crackling around the knuckles before the punch.
 - **Exsanguinate** · _action_ · `icons/commodities/gems/gem-rough-cushion-red.webp`  
-  Drain a dying creature within 30 feet: it dies, and you regain Hit Points equal to your level.
+  Drain a dying creature within 30 feet: it dies, and you regain Hit Points equal to your level.  
+  **Icon brief** (Assimilator — Mutation): A dying creature's last red life-thread pulled across the air into an open chitin maw in the palm.
 - **Flare** · _action_ · `icons/magic/light/explosion-star-glow-silhouette.webp`  
-  Frequency once per encounter Creatures in a 15-foot emanation must succeed at a Fortitude save against your class DC or be dazzled for 1 round. At Magnesium Depth 3 a failure is blinded instead, and the flare deals fire damage equal to your level to creatures with light sensitivity or light blindness. At Depth 4 the emanation is 30 feet and counteracts magical darkness; once per day it may…
+  Frequency once per encounter Creatures in a 15-foot emanation must succeed at a Fortitude save against your class DC or be dazzled for 1 round. At Magnesium Depth 3 a failure is blinded instead, and the flare deals fire damage equal to your level to creatures with light sensitivity or light blindness. At Depth 4 the emanation is 30 feet and counteracts magical darkness; once per day it may…  
+  **Icon brief** (Assimilator — Mutation): A burst of blinding white-magnesium light erupting from a ribbed chest organ, rays spreading in a ring.
 - **Forked Channel** · _action_ · `icons/magic/lightning/bolt-forked-blue.webp`  
-  Cobalt, Depth 4. Arcane Channel targets two creatures within 120 feet: one Strike at each. Choose up to two targets and use it; the Channel is rolled at each, at the same multiple attack penalty.
+  Cobalt, Depth 4. Arcane Channel targets two creatures within 120 feet: one Strike at each. Choose up to two targets and use it; the Channel is rolled at each, at the same multiple attack penalty.  
+  **Icon brief** (Assimilator — Mutation): A blue cobalt bolt splitting in two mid-flight from a chitin palm, each fork reaching a different distant target.
 - **Frame Rush** · _action_ · `icons/skills/melee/unarmed-punch-fist.webp`  
-  Bronze, Depth 3. Make a Strike and then a Shove, Trip or Grapple, as a single action. Target a creature and use it: the Carapace Strike is rolled against it, then a card asks which of the three follows, at the next step of your multiple attack penalty.
+  Bronze, Depth 3. Make a Strike and then a Shove, Trip or Grapple, as a single action. Target a creature and use it: the Carapace Strike is rolled against it, then a card asks which of the three follows, at the next step of your multiple attack penalty.  
+  **Icon brief** (Assimilator — Mutation): A bronze-heavy chitin arm landing a punch and then hooking the target in the same motion, two motion arcs flowing into one.
 - **Gilded Apotheosis** · _action_ · `icons/commodities/metal/ingot-gold.webp`  
-  One Substrate chosen for your Gilded Core manifests at Depth 4 for 1 minute, regardless of its real Depth.
+  One Substrate chosen for your Gilded Core manifests at Depth 4 for 1 minute, regardless of its real Depth.  
+  **Icon brief** (Assimilator — Mutation): One embedded gem in a carapace blazing gold, ringed by four concentric depth-circles all lit at once.
 - **Gilded Chance** · _action_ · `icons/commodities/gems/gem-faceted-rough-yellow.webp`  
-  Trigger You fail a check. Reroll the check and take the second result. At Citrine Depth 2 you may do this twice per day, and the reroll gains a +2 circumstance bonus . Using it rerolls your most recent failed check for you, keeping the new result, with the +2 added at Depth 2.
+  Trigger You fail a check. Reroll the check and take the second result. At Citrine Depth 2 you may do this twice per day, and the reroll gains a +2 circumstance bonus . Using it rerolls your most recent failed check for you, keeping the new result, with the +2 added at Depth 2.  
+  **Icon brief** (Assimilator — Mutation): A golden d20 tumbling back up into the air for a second roll, citrine sparkles trailing behind it.
 - **Healing Flare** · _action_ · `icons/magic/light/explosion-star-glow-yellow.webp`  
-  Magnesium Depth 4. Once per day your Flare instead heals each ally in a 30-foot emanation for Hit Points equal to your level.
+  Magnesium Depth 4. Once per day your Flare instead heals each ally in a 30-foot emanation for Hit Points equal to your level.  
+  **Icon brief** (Assimilator — Mutation): A warm white-and-green flare bursting from a chest organ, petals of light falling onto allies' wounds and closing them.
 - **Hollow Flight** · _action_ · `icons/commodities/metal/ingot-silver.webp`  
-  Fly 30 feet.
+  Fly 30 feet.  
+  **Icon brief** (Assimilator — Mutation): A light, hollow-boned chitin frame leaping into the air on short stubby wings, a quick flight arc behind it.
 - **Lay Bare** · _action_ · `icons/magic/perception/eye-slit-orange.webp`  
-  Lapis Lazuli, Depth 4. Once per encounter, name a creature's strongest save ; for 1 minute your Mutations target its weakest instead. Target the creature and use it: its saves are read off its sheet, and your Mutations' saves that call for the strongest roll the weakest.
+  Lapis Lazuli, Depth 4. Once per encounter, name a creature's strongest save ; for 1 minute your Mutations target its weakest instead. Target the creature and use it: its saves are read off its sheet, and your Mutations' saves that call for the strongest roll the weakest.  
+  **Icon brief** (Assimilator — Mutation): A deep-blue lapis eye peeling back a creature's armoured shell to reveal a soft glowing weak spot beneath.
 - **Null Field** · _action_ · `icons/commodities/metal/ingot-worn-steel.webp`  
-  Frequency once per encounter Suppress magical effects in a 15-foot emanation for 1 round: attempt to counteract each, counteract rank equal to half your level.
+  Frequency once per encounter Suppress magical effects in a 15-foot emanation for 1 round: attempt to counteract each, counteract rank equal to half your level.  
+  **Icon brief** (Assimilator — Mutation): A ring of dull grey energy spreading out from a carapace, spell glyphs inside it flickering and going dark.
 - **Pass Through** · _action_ · `icons/consumables/potions/vial-ornet-silver-black.webp`  
-  Trigger You are hit. Reduce the damage by your level as the blow passes through you. Use it as the damage is rolled; it is taken off that damage as it lands. With Carapace Block or Symbiotic Reflex also armed, only the largest applies.
+  Trigger You are hit. Reduce the damage by your level as the blow passes through you. Use it as the damage is rolled; it is taken off that damage as it lands. With Carapace Block or Symbiotic Reflex also armed, only the largest applies.  
+  **Icon brief** (Assimilator — Mutation): A sword blade passing through a body that ripples like water, the edge emerging on the other side with only a trace of harm.
 - **Prism Counteract** · _action_ · `icons/commodities/gems/gem-faceted-diamond-pink.webp`  
-  Counteract one magical effect: counteract rank equal to half your level, counteract modifier equal to your class DC − 10. Twice per day at Quartz Depth 4.
+  Counteract one magical effect: counteract rank equal to half your level, counteract modifier equal to your class DC − 10. Twice per day at Quartz Depth 4.  
+  **Icon brief** (Assimilator — Mutation): A crystal prism grown from a chitin palm splitting an incoming spell beam into harmless rainbow strands.
 - **Prism Reflection** · _action_ · `icons/magic/defensive/shield-barrier-glowing-triangle-magenta.webp`  
-  Quartz, Depth 4. Trigger A spell targets only you. Reflect it back at its caster; a Will save against your class DC negates. Target the caster and use it: the caster rolls Will against your class DC and the card says reflected or negated. Carrying the spell to the caster — its damage card, its conditions — is the table's.
+  Quartz, Depth 4. Trigger A spell targets only you. Reflect it back at its caster; a Will save against your class DC negates. Target the caster and use it: the caster rolls Will against your class DC and the card says reflected or negated. Carrying the spell to the caster — its damage card, its conditions — is the table's.  
+  **Icon brief** (Assimilator — Mutation): A faceted quartz shield on a carapace bouncing a spell bolt straight back the way it came, the reflected beam tinted rainbow.
 - **Reactive Evolution** · _action_ · `icons/commodities/gems/gem-faceted-round-white.webp`  
-  Trigger You take damage of a type. Gain resistance to that type — 2 for 1 minute at Moonstone Depth 1 (once per encounter), 5 at Depth 2 (twice per encounter), 8 until the encounter ends at Depth 3 (two types at once), 12 at Depth 4 (unlimited, three types at once).
+  Trigger You take damage of a type. Gain resistance to that type — 2 for 1 minute at Moonstone Depth 1 (once per encounter), 5 at Depth 2 (twice per encounter), 8 until the encounter ends at Depth 3 (two types at once), 12 at Depth 4 (unlimited, three types at once).  
+  **Icon brief** (Assimilator — Mutation): Moonstone-sheened plates rapidly reshaping where a fire burst struck them, new heat-resistant scales growing in that blast's colour.
 - **Reading Eye** · _action_ · `icons/commodities/gems/gem-rough-cushion-blue.webp`  
-  Recall Knowledge about a creature you can see.
+  Recall Knowledge about a creature you can see.  
+  **Icon brief** (Assimilator — Mutation): A single slit-pupilled eye opening in the back of a chitin hand, studying a creature's outline with faint knowledge-runes around it.
 - **Shadow Mantle** · _action_ · `icons/commodities/gems/gem-faceted-round-black.webp`  
-  Create a 20-foot emanation of magical darkness for 1 minute. You see through it normally.
+  Create a 20-foot emanation of magical darkness for 1 minute. You see through it normally.  
+  **Icon brief** (Assimilator — Mutation): A cloak of living darkness pouring off a carapace and spreading in a circle, a pair of faint glowing eyes visible within.
 - **Shadow Step** · _action_ · `icons/commodities/gems/gem-faceted-round-black.webp`  
-  Teleport from an area of darkness to another area of darkness within 60 feet. Use it, then click the destination: both squares must be in darkness — a dark scene, or inside a darkness such as Shadow Mantle's — and within 60 feet.
+  Teleport from an area of darkness to another area of darkness within 60 feet. Use it, then click the destination: both squares must be in darkness — a dark scene, or inside a darkness such as Shadow Mantle's — and within 60 feet.  
+  **Icon brief** (Assimilator — Mutation): A body sinking into one pool of shadow and rising from another across the ground, a dark trail linking the two.
 - **Shift Tissue** · _action_ · `icons/commodities/metal/ingot-steel.webp`  
-  Change the energy type Shifting Tissue resists. Using this opens the Gullet with the change allowed.
+  Change the energy type Shifting Tissue resists. Using this opens the Gullet with the change allowed.  
+  **Icon brief** (Assimilator — Mutation): A patch of chitin flowing from red to blue to green like a chameleon, swapping which energy it resists.
 - **Turn of Fortune** · _action_ · `icons/commodities/gems/gem-faceted-rough-yellow.webp`  
-  Trigger A d20 roll is made within 30 feet, and you see the result. Change that roll by 5 in either direction — yours, an ally's, or an enemy's.
+  Trigger A d20 roll is made within 30 feet, and you see the result. Change that roll by 5 in either direction — yours, an ally's, or an enemy's.  
+  **Icon brief** (Assimilator — Mutation): A tumbling d20 nudged mid-roll by a thin chitin tendril, its face turning to show a different number.
 #### The Carapace
 
 - **Living Plate** · _armor_ · `icons/equipment/chest/breastplate-layered-leather-brown.webp`  
-  The symbiont is your armour and cannot be removed. It functions as explorer's clothing that is alive : AC item bonus +0, Dex cap +5, no check penalty, no Speed penalty, no Bulk. It accepts armour potency, resilient and property runes, etched by feeding rather than by a smith. You cannot wear other armour. Attempting it suppresses Living Plate, every Mutation, and your Instinct until you take it…
+  The symbiont is your armour and cannot be removed. It functions as explorer's clothing that is alive : AC item bonus +0, Dex cap +5, no check penalty, no Speed penalty, no Bulk. It accepts armour potency, resilient and property runes, etched by feeding rather than by a smith. You cannot wear other armour. Attempting it suppresses Living Plate, every Mutation, and your Instinct until you take it…  
+  **Icon brief** (Assimilator — Class feature): A suit of thin, supple living chitin hugging the body like clothes, plates breathing slightly, rune-etchings grown into the surface rather than carved.
 
 ### assimilator-effects (58)
 
 - **Aberration: A Gland** · _effect_ · `icons/magic/unholy/strike-body-explode-disintegrate.webp`  
-  Once per encounter, a 15-foot cone dealing 2d6 of your Instinct's type, basic Reflex.
+  Once per encounter, a 15-foot cone dealing 2d6 of your Instinct's type, basic Reflex.  
+  **Icon brief** (Assimilator — Effect): A swollen, throbbing gland bulging on the neck or shoulder, glowing faintly in the Instinct's colour, ready to spray.
 - **Aberration: A Limb** · _effect_ · `icons/magic/unholy/strike-body-explode-disintegrate.webp`  
-  An additional unarmed Strike, agile, 1d6 of a physical type.
+  An additional unarmed Strike, agile, 1d6 of a physical type.  
+  **Icon brief** (Assimilator — Effect): An extra thin chitin arm sprouting from the ribs, quick and clawed, poised to strike.
 - **Aberration: A Maw** · _effect_ · `icons/magic/unholy/strike-body-explode-disintegrate.webp`  
-  Your jaws gain the deadly d8 trait.
+  Your jaws gain the deadly d8 trait.  
+  **Icon brief** (Assimilator — Effect): A wide jaw lined with long hooked teeth grown into a carapace, gums glistening.
 - **Aberration: A Mode** · _effect_ · `icons/magic/unholy/strike-body-explode-disintegrate.webp`  
-  A climb Speed equal to half your land Speed.
+  A climb Speed equal to half your land Speed.  
+  **Icon brief** (Assimilator — Effect): Hooked climbing claws and suction pads growing from chitin hands and feet, clinging to a sheer wall.
 - **Aberration: A Plate** · _effect_ · `icons/magic/unholy/strike-body-explode-disintegrate.webp`  
-  Hardness +3 and a −5-foot Speed penalty.
+  Hardness +3 and a −5-foot Speed penalty.  
+  **Icon brief** (Assimilator — Effect): A heavy, thick slab of chitin plate grown over a shoulder, dragging the body down with its weight.
 - **Aberration: An Organ** · _effect_ · `icons/magic/unholy/strike-body-explode-disintegrate.webp`  
-  One sense: darkvision.
+  One sense: darkvision.  
+  **Icon brief** (Assimilator — Effect): A glowing extra eye with a dark-adapted pupil growing on a carapace brow, seeing clearly through gloom.
 - **Effect: Amorphous** · _effect_ · `icons/consumables/potions/vial-ornet-silver-black.webp`  
-  Immune to precision damage; critical hits against you deal normal damage.
+  Immune to precision damage; critical hits against you deal normal damage.  
+  **Icon brief** (Assimilator — Effect): A soft, blobby outline with no clear joints or vital spots, a pointed weapon slipping off harmlessly.
 - **Effect: Apotheosis** · _effect_ · `icons/magic/light/explosion-star-large-orange.webp`  
-  Every bound Substrate manifests at your Depth cap, regardless of the Mass you actually paid.
+  Every bound Substrate manifests at your Depth cap, regardless of the Mass you actually paid.  
+  **Icon brief** (Assimilator — Effect): A carapace studded with every gem and metal, all blazing at full intensity, a crown of crystal spikes radiating light.
 - **Effect: Argent-Bound** · _effect_ · `icons/magic/control/debuff-chains-ropes-purple.webp`  
-  Silver, Depth 4. Critically hit by an Assimilator's Argent Edge: this creature cannot use reactions or innate spells until the end of its next turn.
+  Silver, Depth 4. Critically hit by an Assimilator's Argent Edge: this creature cannot use reactions or innate spells until the end of its next turn.  
+  **Icon brief** (Assimilator — Effect): A creature's limbs bound in shimmering silver threads, frozen mid-reaction, its innate magic sputtering out.
 - **Effect: Ascendant Flight** · _effect_ · `icons/commodities/metal/ingot-silver.webp`  
-  A fly Speed equal to half your land Speed.
+  A fly Speed equal to half your land Speed.  
+  **Icon brief** (Assimilator — Effect): Translucent insect wings buzzing on a carapace back, the body hovering a little above the ground.
 - **Effect: Carapace Block** · _effect_ · `icons/equipment/shield/buckler-wooden-boss-glowing-blue.webp`  
-  The plate is set. The next physical damage you take is reduced by your Carapace's Hardness, and the Carapace takes that much damage. Spent when it lands.
+  The plate is set. The next physical damage you take is reduced by your Carapace's Hardness, and the Carapace takes that much damage. Spent when it lands.  
+  **Icon brief** (Assimilator — Effect): A chitin plate set forward and braced, a faint shield-glow on its surface, waiting for the next blow.
 - **Effect: Carapace Broken** · _effect_ · `icons/equipment/chest/breastplate-layered-leather-brown.webp`  
-  The Carapace is broken. You lose Living Plate's rune benefits, and every Mutation at Depth 3 or higher is switched off until the Carapace is repaired — with the Repair activity against its own Hardness, or one hour of Feeding it any Substrate you don't bind. Put on and taken off by the module as the plate's Hit Points cross its Broken Threshold.
+  The Carapace is broken. You lose Living Plate's rune benefits, and every Mutation at Depth 3 or higher is switched off until the Carapace is repaired — with the Repair activity against its own Hardness, or one hour of Feeding it any Substrate you don't bind. Put on and taken off by the module as the plate's Hit Points cross its Broken Threshold.  
+  **Icon brief** (Assimilator — Effect): A shattered chitin plate split down the middle, fragments falling away, dim veins underneath with their glow switched off.
 - **Effect: Carrion-Marked** · _effect_ · `icons/magic/death/skull-horned-worn-fire-blue.webp`  
-  Jet, Depth 3. Killed by an Assimilator's Carrion Bloom: this creature cannot be returned to life by magic below 6th rank .
+  Jet, Depth 3. Killed by an Assimilator's Carrion Bloom: this creature cannot be returned to life by magic below 6th rank .  
+  **Icon brief** (Assimilator — Effect): A corpse marked with a black fungal bloom, jet tendrils rooting it to the ground, a broken halo above refusing resurrection.
 - **Effect: Cold Reading** · _effect_ · `icons/magic/water/snowflake-ice-blue.webp`  
-  Slowed 1 by Cold Reading until the end of its next turn.
+  Slowed 1 by Cold Reading until the end of its next turn.  
+  **Icon brief** (Assimilator — Effect): A creature dusted in blue frost, its movements leaving slow, smeared afterimages.
 - **Effect: Conductive Charge (Electricity)** · _effect_ · `icons/commodities/metal/ingot-copper.webp`  
-  Your next Strike before the end of your next turn deals +1d4 electricity .
+  Your next Strike before the end of your next turn deals +1d4 electricity .  
+  **Icon brief** (Assimilator — Effect): A carapace fist crackling with blue-white sparks, an electric charge coiled around the knuckles.
 - **Effect: Conductive Charge (Fire)** · _effect_ · `icons/commodities/metal/ingot-copper.webp`  
-  Your next Strike before the end of your next turn deals +1d4 fire .
+  Your next Strike before the end of your next turn deals +1d4 fire .  
+  **Icon brief** (Assimilator — Effect): A carapace fist with small orange flames licking around the knuckles, ready to land a burning punch.
 - **Effect: Corroded** · _effect_ · `icons/magic/acid/dissolve-bone-white.webp`  
-  Rot Touch has pitted this creature: all its resistances are lower by the amount named, against anyone's damage, until the end of its next turn.
+  Rot Touch has pitted this creature: all its resistances are lower by the amount named, against anyone's damage, until the end of its next turn.  
+  **Icon brief** (Assimilator — Effect): A creature's hide pitted and bubbling with acid, armour flaking off in green-brown patches.
 - **Effect: Depth 4 for This Strike** · _effect_ · `icons/magic/light/explosion-star-glow-yellow.webp`  
-  A critical hit. The Substrates named here count as Depth 4 for this Strike — its damage and whatever answers it landing — whether or not they are at Depth 4. Gold's Instinct, Topaz at Depth 4 and Apex Predator make it. It ends when your next attack is rolled, or at the end of your turn. Not while the Carapace is broken, which switches every Mutation at Depth 3 or higher off.
+  A critical hit. The Substrates named here count as Depth 4 for this Strike — its damage and whatever answers it landing — whether or not they are at Depth 4. Gold's Instinct, Topaz at Depth 4 and Apex Predator make it. It ends when your next attack is rolled, or at the end of your turn. Not while the Carapace is broken, which switches every Mutation at Depth 3 or higher off.  
+  **Icon brief** (Assimilator — Effect): A critical-hit starburst where a carapace fist lands, four concentric depth-rings flashing around the impact.
 - **Effect: Devour** · _effect_ · `icons/magic/symbols/chevron-elipse-circle-blue.webp`  
-  Temporary Hit Points from what you ate, for 1 minute.
+  Temporary Hit Points from what you ate, for 1 minute.  
+  **Icon brief** (Assimilator — Effect): A full, swollen gut-sac glowing in a carapace belly, a translucent shimmer of borrowed temporary life around the body.
 - **Effect: Gilded Apotheosis** · _effect_ · `icons/commodities/metal/ingot-gold.webp`  
-  The first Substrate chosen for your Gilded Core manifests at Depth 4.
+  The first Substrate chosen for your Gilded Core manifests at Depth 4.  
+  **Icon brief** (Assimilator — Effect): A single gem in the carapace shining like molten gold, its glow far brighter than its size.
 - **Effect: Glacial Chill** · _effect_ · `icons/commodities/gems/gem-faceted-radiant-blue.webp`  
-  This creature's Speeds are reduced by 5 feet until the end of its next turn.
+  This creature's Speeds are reduced by 5 feet until the end of its next turn.  
+  **Icon brief** (Assimilator — Effect): Frost creeping over a creature's legs and feet, ice crystals clinging to them, its stride shortened.
 - **Effect: Hunted in Darkness** · _effect_ · `icons/magic/unholy/orb-glowing-purple.webp`  
-  Inside a Blind Hunter's magical darkness: off-guard to that Assimilator.
+  Inside a Blind Hunter's magical darkness: off-guard to that Assimilator.  
+  **Icon brief** (Assimilator — Effect): A creature lost in pitch darkness looking the wrong way, a faint shape of a hunter's claw looming behind it.
 - **Effect: Imperial** · _effect_ · `icons/commodities/currency/coin-embossed-crown-gold.webp`  
-  Your next Strike is imperial: on a success it counts as a critical success.
+  Your next Strike is imperial: on a success it counts as a critical success.  
+  **Icon brief** (Assimilator — Effect): A small golden crown hovering over a carapace fist, a glint of guaranteed triumph on the knuckles.
 - **Effect: Instinctive Surge** · _effect_ · `icons/magic/symbols/chevron-elipse-circle-blue.webp`  
-  Until the end of your turn, your Instinct clause treats every Substrate as one Depth higher.
+  Until the end of your turn, your Instinct clause treats every Substrate as one Depth higher.  
+  **Icon brief** (Assimilator — Effect): Every gem set in the carapace flaring one step brighter at once, the dominant colour surging through the veins.
 - **Effect: Integrated Plating** · _effect_ · `icons/magic/defensive/shield-barrier-blue.webp`  
-  Gray Instinct. You used a Mutation: resistance equal to its Depth to all physical damage until the start of your next turn.
+  Gray Instinct. You used a Mutation: resistance equal to its Depth to all physical damage until the start of your next turn.  
+  **Icon brief** (Assimilator — Effect): Grey interlocking plates sliding together over a carapace after a Mutation fires, a dull iron sheen of resistance.
 - **Effect: Kinetic Surge** · _effect_ · `icons/magic/lightning/bolt-forked-orange.webp`  
-  Orange Instinct. You moved or reacted: your next Mutation this round deals +1d4 of its own damage type.
+  Orange Instinct. You moved or reacted: your next Mutation this round deals +1d4 of its own damage type.  
+  **Icon brief** (Assimilator — Effect): Orange motion-streaks trailing off a moving carapace, kinetic energy pooling as a bright ember in the palm.
 - **Effect: Knitting Surge** · _effect_ · `icons/commodities/gems/gem-cut-square-green.webp`  
-  Knitting Flesh refused to let you fall: fast healing 15 for 1 minute.
+  Knitting Flesh refused to let you fall: fast healing 15 for 1 minute.  
+  **Icon brief** (Assimilator — Effect): Torn flesh pulling itself shut in a rush: pale green seams zipping closed across a wound, glowing green threads stitching faster than the eye can follow, droplets of light rising.
 - **Effect: Laid Bare** · _effect_ · `icons/magic/perception/eye-slit-orange.webp`  
-  Lapis Lazuli, Depth 4. An Assimilator named this creature's strongest save: for 1 minute, that Assimilator's Mutations target its weakest instead.
+  Lapis Lazuli, Depth 4. An Assimilator named this creature's strongest save: for 1 minute, that Assimilator's Mutations target its weakest instead.  
+  **Icon brief** (Assimilator — Effect): A creature's silhouette with a deep-blue lapis lens over it; its brightest shield-sigil cracked and dimmed, while a small weak point glows exposed, targeted by thin blue lines.
 - **Effect: Lapis Insight** · _effect_ · `icons/magic/perception/eye-ringed-glow-angry-small-teal.webp`  
-  Lapis Lazuli, Depth 2. An allied Assimilator has read this creature: +1 circumstance to attacks against it, for 1 round.
+  Lapis Lazuli, Depth 2. An allied Assimilator has read this creature: +1 circumstance to attacks against it, for 1 round.  
+  **Icon brief** (Assimilator — Effect): A ring of small dark lenses all focused on one target, a blue crosshair of light settling over it, lapis-blue sparks marking where to strike.
 - **Effect: Mindstorm** · _effect_ · `icons/magic/control/hypnosis-mesmerism-swirl.webp`  
-  Stupefied 1 by Mindstorm until the end of its next turn. Its next spell requires a DC 5 flat check.
+  Stupefied 1 by Mindstorm until the end of its next turn. Its next spell requires a DC 5 flat check.  
+  **Icon brief** (Assimilator — Effect): A head-shaped silhouette wrapped in a swirling violet thundercloud, little psychic lightning forks crackling inside, a spell glyph fizzling and breaking apart at the edge.
 - **Effect: Null Weight** · _effect_ · `icons/commodities/metal/ingot-worn-steel.webp`  
-  A −1 status penalty to this creature's next save.
+  A −1 status penalty to this creature's next save.  
+  **Icon brief** (Assimilator — Effect): A single heavy grey lead weight hanging from a creature's shoulders, a protective rune beneath it pressed flat and dim.
 - **Effect: Null Weight Aura** · _effect_ · `icons/magic/control/silhouette-hold-change-blue.webp`  
-  Lead, Depth 3. Within 10 feet of an Assimilator's Null Weight: −1 status to spell attack rolls and spell DCs .
+  Lead, Depth 3. Within 10 feet of an Assimilator's Null Weight: −1 status to spell attack rolls and spell DCs .  
+  **Icon brief** (Assimilator — Effect): A dull lead-grey ring spreading on the ground around a carapaced figure, floating spell runes inside it sagging and dimming as if pulled down by weight.
 - **Effect: Pass Through** · _effect_ · `icons/consumables/potions/vial-ornet-silver-black.webp`  
-  The next damage from a creature is reduced by your level. Spent when it lands.
+  The next damage from a creature is reduced by your level. Spent when it lands.  
+  **Icon brief** (Assimilator — Effect): A blade passing through a section of translucent, jelly-like carapace that parts around it and closes behind, the blow's force fading into ripples.
 - **Effect: Plated Guard** · _effect_ · `icons/magic/symbols/chevron-elipse-circle-blue.webp`  
-  +2 circumstance bonus to AC until the start of your next turn. You cannot use Carapace Block.
+  +2 circumstance bonus to AC until the start of your next turn. You cannot use Carapace Block.  
+  **Icon brief** (Assimilator — Effect): Chitin plates swelling and overlapping into a thick bulging shield over a forearm, ridged and dark, a blow sparking off the surface.
 - **Effect: Quartz Charge** · _effect_ · `icons/magic/light/beam-rays-magenta.webp`  
-  Quartz, Depth 3. You counteracted an effect, or a spell failed against you: your next Strike deals +2d6 force .
+  Quartz, Depth 3. You counteracted an effect, or a spell failed against you: your next Strike deals +2d6 force .  
+  **Icon brief** (Assimilator — Effect): A clear quartz prism growing from a knuckle, crackling with stored white-violet force, light refracting into a sharp beam ready to discharge.
 - **Effect: Reach of the Thing** · _effect_ · `icons/magic/symbols/chevron-elipse-circle-blue.webp`  
-  Your next Carapace Strike this turn has reach 10 feet (the reach trait).
+  Your next Carapace Strike this turn has reach 10 feet (the reach trait).  
+  **Icon brief** (Assimilator — Effect): A carapaced arm with a sudden extra length of jointed chitin unfolding from the elbow, the fist now reaching twice as far, segments still sliding into place.
 - **Effect: Reactive Evolution** · _effect_ · `icons/commodities/gems/gem-faceted-round-white.webp`  
-  Resistance to the damage type you chose, by your Moonstone's Depth.
+  Resistance to the damage type you chose, by your Moonstone's Depth.  
+  **Icon brief** (Assimilator — Effect): A pale moonstone sheen sliding across armoured plates to the side just struck, the plating there hardening in that element's colour.
 - **Effect: Reservoir Primed** · _effect_ · `icons/commodities/gems/gem-rough-square-yellow.webp`  
-  Your next Strike carries the Reservoir's stored energy.
+  Your next Strike carries the Reservoir's stored energy.  
+  **Icon brief** (Assimilator — Effect): A translucent amber sac at the sternum full to bursting, the stored energy pouring down a vein into a clenched fist that glows orange.
 - **Effect: Second Hunger** · _effect_ · `icons/magic/symbols/chevron-elipse-circle-blue.webp`  
-  Two borrowed Mass deepen a bound Substrate for 1 minute; then it returns to its real Depth.
+  Two borrowed Mass deepen a bound Substrate for 1 minute; then it returns to its real Depth.  
+  **Icon brief** (Assimilator — Effect): A glowing gem embedded in flesh swelling larger, borrowed light flowing into it from two small floating orbs, an hourglass faint behind it.
 - **Effect: Shadow Mantle** · _effect_ · `icons/magic/unholy/orb-glowing-purple.webp`  
-  A 20-foot emanation of magical darkness surrounds you for 1 minute. You see through it normally.
+  A 20-foot emanation of magical darkness surrounds you for 1 minute. You see through it normally.  
+  **Icon brief** (Assimilator — Effect): An expanding sphere of inky black darkness with a carapaced silhouette at its core, edges impossible to locate, one pair of faint eyes seeing through.
 - **Effect: Siphoned** · _effect_ · `icons/magic/unholy/orb-hands-pink.webp`  
-  A Black Instinct Mutation drank from this creature: a status penalty to one check or DC until the end of its next turn.
+  A Black Instinct Mutation drank from this creature: a status penalty to one check or DC until the end of its next turn.  
+  **Icon brief** (Assimilator — Effect): A creature's glowing aura being drawn out in a thin black stream toward a dark mouth-like orifice, its colour fading where the stream leaves.
 - **Effect: Siphoning** · _effect_ · `icons/magic/unholy/orb-hands-pink.webp`  
-  You took what the Black Instinct drank: a status bonus to the same check or DC.
+  You took what the Black Instinct drank: a status bonus to the same check or DC.  
+  **Icon brief** (Assimilator — Effect): A dark onyx-black carapace node swollen with stolen light, a thin stream flowing in, the plate glowing faintly with the borrowed strength.
 - **Effect: Solar Core** · _effect_ · `icons/magic/fire/explosion-fireball-large-orange.webp`  
-  Your fire damage increases by one die size and you shed bright light 60 feet. You take 1d6 fire at the start of each of your turns.
+  Your fire damage increases by one die size and you shed bright light 60 feet. You take 1d6 fire at the start of each of your turns.  
+  **Icon brief** (Assimilator — Effect): A blazing miniature sun burning in the chest of a carapace, cracks of white-orange fire spreading outward, light pouring off in rays and scorching the plates.
 - **Effect: Studied** · _effect_ · `icons/magic/perception/eye-ringed-glow-angry-small-teal.webp`  
-  An Assimilator has Studied this creature: its Mutations treat this creature's resistances as lower, and it has a circumstance bonus to AC against this creature, until the encounter ends.
+  An Assimilator has Studied this creature: its Mutations treat this creature's resistances as lower, and it has a circumstance bonus to AC against this creature, until the encounter ends.  
+  **Icon brief** (Assimilator — Effect): A creature marked by a blue lens and annotated with faint glowing lines over its armour seams, its resistance-shield sigil thinning.
 - **Effect: Studied Guard** · _effect_ · `icons/magic/perception/eye-ringed-glow-angry-small-teal.webp`  
-  +1 circumstance bonus to AC against the creature you Studied (Blue Instinct).
+  +1 circumstance bonus to AC against the creature you Studied (Blue Instinct).  
+  **Icon brief** (Assimilator — Effect): A blue lens-eye over a raised chitin forearm guard, the guard angled exactly into the path of one enemy's strike.
 - **Effect: Symbiotic Reflex** · _effect_ · `icons/magic/defensive/shield-barrier-flaming-diamond-red.webp`  
-  The thing that is wearing you has opinions about being hit. The next damage you take is reduced by twice your highest Depth. Spent when it lands.
+  The thing that is wearing you has opinions about being hit. The next damage you take is reduced by twice your highest Depth. Spent when it lands.  
+  **Icon brief** (Assimilator — Effect): Carapace plates snapping shut over a body on their own as a blow arrives, small reflexive spikes bristling, a hit absorbed into the plating.
 - **Effect: Taste for It** · _effect_ · `icons/magic/symbols/chevron-elipse-circle-blue.webp`  
-  Your next Recall Knowledge about the creature you damaged is a free action with a +2 circumstance bonus.
+  Your next Recall Knowledge about the creature you damaged is a free action with a +2 circumstance bonus.  
+  **Icon brief** (Assimilator — Effect): A forked tendril-tongue tasting a drop of an enemy's blood, a glowing question-mark glyph of knowledge rising from the taste.
 - **Effect: Wall of Me** · _effect_ · `icons/magic/symbols/chevron-elipse-circle-blue.webp`  
-  Your wall of Carapace stands for 1 minute or until destroyed; your own Carapace's Hardness is 2 lower while it does.
+  Your wall of Carapace stands for 1 minute or until destroyed; your own Carapace's Hardness is 2 lower while it does.  
+  **Icon brief** (Assimilator — Effect): A ridged wall of living chitin standing in a line, veined and breathing, a trail of carapace still connecting it to a thinned-out armoured figure.
 - **Effect: Worn No Longer** · _effect_ · `icons/creatures/abilities/mouth-teeth-long-red.webp`  
-  The Carapace is away for 1 minute. You are unarmoured, unmutated, and a person again.
+  The Carapace is away for 1 minute. You are unarmoured, unmutated, and a person again.  
+  **Icon brief** (Assimilator — Effect): An empty carapace shell standing apart and walking away, a pale unarmoured human silhouette left behind, a severed tendril between them.
 - **Instinct: Black** · _effect_ · `icons/magic/unholy/orb-hands-pink.webp`  
-  Consume / Corrupt. When a Mutation damages a creature, it takes a −1 status penalty to one check or DC of your choice until the end of its next turn, and you gain +1 status to the same thing . At Depth 3+ the penalty and bonus become −2 / +2 . Your Instinct's damage type is void. Under Electrum Depth 3 this clause may be a second one, at half value.
+  Consume / Corrupt. When a Mutation damages a creature, it takes a −1 status penalty to one check or DC of your choice until the end of its next turn, and you gain +1 status to the same thing . At Depth 3+ the penalty and bonus become −2 / +2 . Your Instinct's damage type is void. Under Electrum Depth 3 this clause may be a second one, at half value.  
+  **Icon brief** (Assimilator — Instinct): A black symbiont maw draining a ribbon of colour from one target into itself, a downward and upward arrow pair, void-black and dull violet.
 - **Instinct: Blue** · _effect_ · `icons/magic/perception/eye-ringed-glow-angry-small-teal.webp`  
-  Adapt / Understand. Study a creature (one action). Until the encounter ends, your Mutations treat its resistances as lower by twice your highest Depth , and you gain +1 circumstance to AC against it. One creature at a time. Your Instinct's damage type is cold. Under Electrum Depth 3 this clause may be a second one, at half value.
+  Adapt / Understand. Study a creature (one action). Until the encounter ends, your Mutations treat its resistances as lower by twice your highest Depth , and you gain +1 circumstance to AC against it. One creature at a time. Your Instinct's damage type is cold. Under Electrum Depth 3 this clause may be a second one, at half value.  
+  **Icon brief** (Assimilator — Instinct): A single huge blue compound eye set in chitin, scanning a target through concentric rings of light, cold-blue and thoughtful.
 - **Instinct: Gold** · _effect_ · `icons/magic/light/explosion-star-glow-yellow.webp`  
-  Amplify / Dominate. At daily preparations choose one bound Substrate; it counts as one Depth higher , never above your Depth cap. When you critically hit, that Substrate counts as Depth 4 for that Strike even if it isn't at Depth 4. Your Instinct's damage type is force. Under Electrum Depth 3 this clause may be a second one, at half value.
+  Amplify / Dominate. At daily preparations choose one bound Substrate; it counts as one Depth higher , never above your Depth cap. When you critically hit, that Substrate counts as Depth 4 for that Strike even if it isn't at Depth 4. Your Instinct's damage type is force. Under Electrum Depth 3 this clause may be a second one, at half value.  
+  **Icon brief** (Assimilator — Instinct): A carapace crowned with a glowing golden gem, smaller gems around it brightening one step at a time, gilded light.
 - **Instinct: Gray** · _effect_ · `icons/magic/defensive/shield-barrier-blue.webp`  
-  Harden / Integrate. Your Carapace's Hardness increases by the total Depth of your bound metals . When you use a Mutation, gain resistance equal to its Depth to all physical damage until the start of your next turn. Your Instinct's damage type is bludgeoning. Under Electrum Depth 3 this clause may be a second one, at half value.
+  Harden / Integrate. Your Carapace's Hardness increases by the total Depth of your bound metals . When you use a Mutation, gain resistance equal to its Depth to all physical damage until the start of your next turn. Your Instinct's damage type is bludgeoning. Under Electrum Depth 3 this clause may be a second one, at half value.  
+  **Icon brief** (Assimilator — Instinct): Iron-grey carapace plates bolting themselves together in heavy layers, metal veins merging into the shell, rivet-like nodes.
 - **Instinct: Green** · _effect_ · `icons/magic/nature/leaf-glow-green.webp`  
-  Grow / Reproduce. When a Mutation deals damage, gain temporary Hit Points equal to its Depth . Fast healing equal to the number of bound Green Substrates. Your Instinct's damage type is poison. Under Electrum Depth 3 this clause may be a second one, at half value.
+  Grow / Reproduce. When a Mutation deals damage, gain temporary Hit Points equal to its Depth . Fast healing equal to the number of bound Green Substrates. Your Instinct's damage type is poison. Under Electrum Depth 3 this clause may be a second one, at half value.  
+  **Icon brief** (Assimilator — Instinct): Green chitin sprouting new buds of living tissue, poison-green droplets on the tips, a spiral of growth unfolding outward.
 - **Instinct: Orange** · _effect_ · `icons/magic/lightning/bolt-forked-orange.webp`  
-  Move / React. The first time each round you Stride, Step or use a reaction, your next Mutation this round deals +1d4 of its own damage type. +5 feet Speed per bound Orange Substrate. Your Instinct's damage type is electricity. Under Electrum Depth 3 this clause may be a second one, at half value.
+  Move / React. The first time each round you Stride, Step or use a reaction, your next Mutation this round deals +1d4 of its own damage type. +5 feet Speed per bound Orange Substrate. Your Instinct's damage type is electricity. Under Electrum Depth 3 this clause may be a second one, at half value.  
+  **Icon brief** (Assimilator — Instinct): A carapaced leg mid-stride trailing orange sparks of electricity, the motion charging a crackling node in the next limb.
 - **Instinct: Purple** · _effect_ · `icons/magic/symbols/runes-star-magenta.webp`  
-  Mutate / Transcend. Your Mutations count as magical . At daily preparations one Substrate of your choice manifests one Depth higher , and one other, randomly determined, manifests one Depth lower . Your Instinct's damage type is mental. Under Electrum Depth 3 this clause may be a second one, at half value.
+  Mutate / Transcend. Your Mutations count as magical . At daily preparations one Substrate of your choice manifests one Depth higher , and one other, randomly determined, manifests one Depth lower . Your Instinct's damage type is mental. Under Electrum Depth 3 this clause may be a second one, at half value.  
+  **Icon brief** (Assimilator — Instinct): Violet carapace mutating mid-change: spines, eyes and fins shimmering in and out, iridescent purple-magenta light.
 - **Instinct: Red** · _effect_ · `icons/magic/fire/flame-burning-hand-orange.webp`  
-  Consume / Destroy. When a Mutation deals damage, it deals +1 damage per Depth of its Substrate. Against a creature that has already lost Hit Points this encounter, double that bonus. Your Instinct's damage type is fire. Under Electrum Depth 3 this clause may be a second one, at half value.
+  Consume / Destroy. When a Mutation deals damage, it deals +1 damage per Depth of its Substrate. Against a creature that has already lost Hit Points this encounter, double that bonus. Your Instinct's damage type is fire. Under Electrum Depth 3 this clause may be a second one, at half value.  
+  **Icon brief** (Assimilator — Instinct): A red chitin claw tearing into a wound, flames bursting from the cut, a hungry red glow pulsing from the veins.
 - **Instinct: White** · _effect_ · `icons/magic/holy/prayer-hands-glowing-yellow-white.webp`  
-  Preserve / Purify. When a Mutation deals damage, one ally within 30 feet gains temporary Hit Points equal to its Depth . A number of times per day equal to your highest Depth , end one condition on yourself or an ally as a free action. Your Instinct's damage type is vitality. Under Electrum Depth 3 this clause may be a second one, at half value.
+  Preserve / Purify. When a Mutation deals damage, one ally within 30 feet gains temporary Hit Points equal to its Depth . A number of times per day equal to your highest Depth , end one condition on yourself or an ally as a free action. Your Instinct's damage type is vitality. Under Electrum Depth 3 this clause may be a second one, at half value.  
+  **Icon brief** (Assimilator — Instinct): A pale white carapace hand radiating clean light to a nearby ally, small chains of a condition snapping apart in the glow.
 
 ### assimilator-feats (45)
 
 - **Additional Bond** · _feat_ · `icons/magic/symbols/arrowhead-green.webp`  
-  Prerequisite: at least one Bond. You gain one additional Bond slot .
+  Prerequisite: at least one Bond. You gain one additional Bond slot .  
+  **Icon brief** (Assimilator — Feat): Three Substrate gems linked by glowing veins in a triangle, a fourth socket opening in the flesh beside them.
 - **Apex Growth** · _feat_ · `icons/creatures/claws/claw-talons-glowing-orange.webp`  
-  Your Carapace Strike and Talons each gain one additional damage die .
+  Your Carapace Strike and Talons each gain one additional damage die .  
+  **Icon brief** (Assimilator — Feat): A carapace fist and a talon hand both growing an extra row of serrated ridges, damage glyphs doubling on each.
 - **Apex Predator** · _feat_ · `icons/creatures/abilities/fang-tooth-blood-red.webp`  
-  When you critically hit with a Mutation, that Substrate counts as Depth 4 for that Strike , whether or not it is at Depth 4. Does not stack with Gold's Instinct clause — take the better.
+  When you critically hit with a Mutation, that Substrate counts as Depth 4 for that Strike , whether or not it is at Depth 4. Does not stack with Gold's Instinct clause — take the better.  
+  **Icon brief** (Assimilator — Feat): A predatory chitin jaw closing on prey at the moment of a critical hit, a gem in its brow flaring to maximum brightness.
 - **Assimilate** · _feat_ · `icons/magic/life/cross-worn-green.webp`  
-  Once per day, ◆◆◆ (10 minutes, over the remains of a creature of your level or lower) : gain one of its resistances, senses, or movement modes until your next daily preparations. Not its spells and not its Strikes.
+  Once per day, ◆◆◆ (10 minutes, over the remains of a creature of your level or lower) : gain one of its resistances, senses, or movement modes until your next daily preparations. Not its spells and not its Strikes.  
+  **Icon brief** (Assimilator — Feat): A carapaced hand pressed onto the remains of a slain creature, a ribbon of the creature's essence — scales, eyes or wings — drawn up the arm into the plating.
 - **Barbed Growth** · _feat_ · `icons/magic/nature/root-vine-entwined-thorns.webp`  
-  A creature that critically fails a melee Strike against you takes damage equal to twice your highest Depth , of your Instinct's damage type.
+  A creature that critically fails a melee Strike against you takes damage equal to twice your highest Depth , of your Instinct's damage type.  
+  **Icon brief** (Assimilator — Feat): Chitin covered in backward-pointing barbs, an enemy's sword shattering on them, the barbs dripping the Instinct's coloured energy.
 - **Bonded Deep** · _feat_ · `icons/magic/symbols/runes-carved-stone-green.webp`  
-  One Bond you know functions with its Substrates at Depth 1 instead of Depth 2.
+  One Bond you know functions with its Substrates at Depth 1 instead of Depth 2.  
+  **Icon brief** (Assimilator — Feat): Two Substrate gems joined by a short, thick glowing vein that runs deep under the flesh, small but already bonded.
 - **Burrower** · _feat_ · `icons/magic/earth/barrier-lava-stone-orange.webp`  
-  Prerequisite: a metal Substrate at Depth 2 or higher. You gain a burrow Speed of 15 feet through earth, sand and loose stone.
+  Prerequisite: a metal Substrate at Depth 2 or higher. You gain a burrow Speed of 15 feet through earth, sand and loose stone.  
+  **Icon brief** (Assimilator — Feat): Carapace-plated claws boring into earth, soil and stone flying, a tunnel spiral behind them, metallic grey sheen on the digging edges.
 - **Chimeric Frame** · _feat_ · `icons/creatures/magical/construct-gargoyle-stone-gray.webp`  
-  You gain two of Nickel's Aberrations without binding Nickel, re-rolled or re-chosen at each daily preparations.
+  You gain two of Nickel's Aberrations without binding Nickel, re-rolled or re-chosen at each daily preparations.  
+  **Icon brief** (Assimilator — Feat): A carapace sprouting two mismatched aberrant parts at once — an extra eye and a fin, or a second arm — each flickering with nickel-silver light.
 - **Consume the Fallen** · _feat_ · `icons/magic/death/projectile-skull-animal-green.webp`  
-  ◆◆◆ (1 minute, over a corpse) : gain temporary Hit Points equal to twice your level , and until your next daily preparations one bound Substrate counts as one Depth higher (never above your cap). Once per day.
+  ◆◆◆ (1 minute, over a corpse) : gain temporary Hit Points equal to twice your level , and until your next daily preparations one bound Substrate counts as one Depth higher (never above your cap). Once per day.  
+  **Icon brief** (Assimilator — Feat): A dark maw of chitin opening over a corpse, the body dissolving into motes drawn in, a gem in the plate brightening as it feeds.
 - **Deep Feeding** · _feat_ · `icons/consumables/food/shank-meat-bone-glazed-red.webp`  
-  Once per day you may Feed as a 1-minute activity instead of 10 minutes. Useful exactly once per dungeon, and that once matters.
+  Once per day you may Feed as a 1-minute activity instead of 10 minutes. Useful exactly once per dungeon, and that once matters.  
+  **Icon brief** (Assimilator — Feat): A symbiont mouth gulping a gem in one swallow, a tiny clock-face showing a single minute beside it.
 - **Deep Vein** · _feat_ · `icons/commodities/gems/gem-faceted-rough-blue.webp`  
-  Prerequisite: a Substrate at your Depth cap. One Substrate of your choice may exceed your Depth cap by 1 , to a maximum of Depth 4. You still pay its Mass.
+  Prerequisite: a Substrate at your Depth cap. One Substrate of your choice may exceed your Depth cap by 1 , to a maximum of Depth 4. You still pay its Mass.  
+  **Icon brief** (Assimilator — Feat): A single gem burning past its socket's rim, its vein plunging far deeper into the flesh than the others, overflowing light.
 - **Devour** · _feat_ · `icons/consumables/food/bowl-ribs-meat-rice-mash-brown-white.webp`  
-  ◆ (Interact) Consume an object of light Bulk or less that you are holding. Gain temporary Hit Points equal to your level , lasting 1 minute. Once per 10 minutes. The object is gone; be careful whose it was.
+  ◆ (Interact) Consume an object of light Bulk or less that you are holding. Gain temporary Hit Points equal to your level , lasting 1 minute. Once per 10 minutes. The object is gone; be careful whose it was.  
+  **Icon brief** (Assimilator — Feat): A small object — a dagger or trinket — being swallowed whole by a mouth opening in a palm, a faint shield of temporary vitality rising.
 - **Devouring Plate** · _feat_ · `icons/creatures/abilities/fangs-teeth-bite.webp`  
-  When you reduce a creature to 0 Hit Points with a Carapace Strike, you may Feed on it as a free action: gain a temporary Substrate of any kind at Depth 2 until your next daily preparations, costing no Mass.
+  When you reduce a creature to 0 Hit Points with a Carapace Strike, you may Feed on it as a free action: gain a temporary Substrate of any kind at Depth 2 until your next daily preparations, costing no Mass.  
+  **Icon brief** (Assimilator — Feat): A carapace strike felling an enemy, the plate itself opening into a mouth that drinks the falling creature in, a new temporary gem forming.
 - **Digest** · _feat_ · `icons/consumables/potions/bottle-bulb-corked-glowing-red.webp`  
-  Once per day, ◆◆◆ (1 minute) : reduce the stage of one affliction affecting you by 2 . The symbiont did not consult you about this.
+  Once per day, ◆◆◆ (1 minute) : reduce the stage of one affliction affecting you by 2 . The symbiont did not consult you about this.  
+  **Icon brief** (Assimilator — Feat): A disease-coloured green-grey sickness swirling inside a translucent stomach-sac, being dissolved into harmless bubbles by the symbiont.
 - **Eat the World** · _feat_ · `icons/magic/unholy/orb-hands-pink.webp`  
-  Once per day, ◆◆◆ (1 minute) : consume a magic item of level equal to or lower than your own. Until your next daily preparations you gain one of its abilities and 4 temporary Mass in either track. The item is destroyed and nobody is getting it back.
+  Once per day, ◆◆◆ (1 minute) : consume a magic item of level equal to or lower than your own. Until your next daily preparations you gain one of its abilities and 4 temporary Mass in either track. The item is destroyed and nobody is getting it back.  
+  **Icon brief** (Assimilator — Feat): A glowing magic item — a wand or ring — cracking as a chitin maw devours it, its enchantment light streaming into the carapace.
 - **Fifth Depth** · _feat_ · `icons/commodities/gems/gem-faceted-radiant-blue.webp`  
-  One Substrate may reach Depth 5 , costing 5 Mass. Its Depth 4 rider applies twice where that is meaningful, and all of its numeric values increase by half again .
+  One Substrate may reach Depth 5 , costing 5 Mass. Its Depth 4 rider applies twice where that is meaningful, and all of its numeric values increase by half again .  
+  **Icon brief** (Assimilator — Feat): A gem embedded so deep that five concentric glowing rings surround it in the flesh, the outermost ring searing bright.
 - **Grasping Plates** · _feat_ · `icons/creatures/claws/claw-bear-paw-swipe-brown.webp`  
-  You grow a second Strike form. Talons — unarmed, 1d6 slashing , brawling group, traits agile, finesse, unarmed. You may use either it or your Carapace Strike freely.
+  You grow a second Strike form. Talons — unarmed, 1d6 slashing , brawling group, traits agile, finesse, unarmed. You may use either it or your Carapace Strike freely.  
+  **Icon brief** (Assimilator — Feat): A hand whose fingers have grown into long hooked chitin talons, sharp and agile, a fresh slash mark trailing behind.
 - **Greater Bond** · _feat_ · `icons/magic/symbols/runes-star-blue.webp`  
-  Choose one Bond you know. Its numeric values increase by half again , rounded up.
+  Choose one Bond you know. Its numeric values increase by half again , rounded up.  
+  **Icon brief** (Assimilator — Feat): A Bond of linked gems whose connecting veins thicken and blaze half again as bright, the pattern enlarged.
 - **Greater Mass Growth** · _feat_ · `icons/commodities/gems/gem-rough-cushion-blue.webp`  
-  Your Gem Mass and Metal Mass each increase by 2 .
+  Your Gem Mass and Metal Mass each increase by 2 .  
+  **Icon brief** (Assimilator — Feat): Two inner reservoirs — one of gem-light, one of molten metal — both swelling larger inside a carapaced torso.
 - **Instinct Fusion** · _feat_ · `icons/magic/symbols/circle-ouroboros.webp`  
-  Prerequisite: Two Instincts, or Electrum at Depth 3. Both of your Instinct clauses operate at full value . You are two organisms sharing a host and they do not always agree.
+  Prerequisite: Two Instincts, or Electrum at Depth 3. Both of your Instinct clauses operate at full value . You are two organisms sharing a host and they do not always agree.  
+  **Icon brief** (Assimilator — Feat): Two coloured symbiont instincts twisting together like a double helix inside one host, both at full brightness, faintly arguing in clashing colours.
 - **Instinctive Surge** · _feat_ · `icons/magic/control/debuff-energy-hold-blue-yellow.webp`  
-  Free action , once per encounter: until the end of your turn, your Instinct clause treats every Substrate as one Depth higher .
+  Free action , once per encounter: until the end of your turn, your Instinct clause treats every Substrate as one Depth higher .  
+  **Icon brief** (Assimilator — Feat): Every gem on a carapace flaring one step brighter at once, a shockwave of instinct-coloured light rippling over the plates.
 - **Iron Gullet** · _feat_ · `icons/commodities/metal/ingot-iron.webp`  
-  Your Metal Mass increases by 1 .
+  Your Metal Mass increases by 1 .  
+  **Icon brief** (Assimilator — Feat): A heavy iron-lined gullet glowing dull red, metal shards sliding down it, space for one more.
 - **Legendary Mass** · _feat_ · `icons/commodities/gems/gem-faceted-diamond-blue.webp`  
-  Your Gem Mass and Metal Mass each increase by 3 .
+  Your Gem Mass and Metal Mass each increase by 3 .  
+  **Icon brief** (Assimilator — Feat): A colossal inner reservoir of gems and metal spilling over, the carapace distended and radiant with stored material.
 - **Living Fortress** · _feat_ · `icons/environment/settlement/tower-stone-blue.webp`  
-  If you did not move on your last turn, your Carapace's Hardness doubles until you do.
+  If you did not move on your last turn, your Carapace's Hardness doubles until you do.  
+  **Icon brief** (Assimilator — Feat): A carapace rooted into the ground with chitin anchors, its plates doubled and fused into a fortress-like shell, blows ringing off it.
 - **Mass Growth** · _feat_ · `icons/commodities/gems/gem-amber-insect-orange.webp`  
-  Your Gem Mass and Metal Mass each increase by 1 .
+  Your Gem Mass and Metal Mass each increase by 1 .  
+  **Icon brief** (Assimilator — Feat): A small gem pouch and a small metal pouch inside living tissue each swelling slightly, a pair of plus signs.
 - **Omnivore** · _feat_ · `icons/consumables/food/berries-cream-bowl-mint-red.webp`  
-  You have two Instincts at full value , and your Gem Mass and Metal Mass merge into a single pool of their combined size. Gems and metals no longer compete for separate space — the distinction stops meaning anything to you.
+  You have two Instincts at full value , and your Gem Mass and Metal Mass merge into a single pool of their combined size. Gems and metals no longer compete for separate space — the distinction stops meaning anything to you.  
+  **Icon brief** (Assimilator — Feat): Gems and metals pouring together into one shared glowing maw, their separate colours mixing into a single swirl.
 - **Perfect Adaptation** · _feat_ · `icons/magic/defensive/shield-barrier-glowing-blue.webp`  
-  You gain Moonstone's Reactive Evolution at Depth 2 without binding Moonstone. If you already hold Moonstone, treat it as one Depth higher for this Mutation only.
+  You gain Moonstone's Reactive Evolution at Depth 2 without binding Moonstone. If you already hold Moonstone, treat it as one Depth higher for this Mutation only.  
+  **Icon brief** (Assimilator — Feat): A moonstone-white carapace that changes colour wherever it is struck, every element washing off it harmlessly.
 - **Perfect Organism** · _feat_ · `icons/magic/nature/tree-animated-smile.webp`  
-  Every bound Substrate counts as being at your Depth cap , regardless of the Mass you actually paid for it. Mass now buys only breadth ; depth is free.
+  Every bound Substrate counts as being at your Depth cap , regardless of the Mass you actually paid for it. Mass now buys only breadth ; depth is free.  
+  **Icon brief** (Assimilator — Feat): A complete carapace with every gem socket blazing at full depth, perfect symmetrical veining, an apex organism glow.
 - **Plated Guard** · _feat_ · `icons/equipment/shield/heater-crystal-blue.webp`  
-  ◆ You thicken. Gain a +2 circumstance bonus to AC until the start of your next turn. You cannot use Carapace Block while it lasts — the plate is busy.
+  ◆ You thicken. Gain a +2 circumstance bonus to AC until the start of your next turn. You cannot use Carapace Block while it lasts — the plate is busy.  
+  **Icon brief** (Assimilator — Feat): Overlapping carapace plates thickening into a bulwark on the forearm, raised as a guard, the plates visibly layering.
 - **Rampart** · _feat_ · `icons/equipment/shield/Scutum-steel-worn.webp`  
-  Once per round, when an adjacent ally takes physical damage, they gain resistance equal to half your Carapace's Hardness (maximum 5) against it.
+  Once per round, when an adjacent ally takes physical damage, they gain resistance equal to half your Carapace's Hardness (maximum 5) against it.  
+  **Icon brief** (Assimilator — Feat): A carapace arm extending a shell over an adjacent ally, the blow meant for them glancing off the shared plate.
 - **Reach of the Thing** · _feat_ · `icons/creatures/tentacles/tentacle-earth-green.webp`  
-  Free action , once per round, before a Strike: that Carapace Strike gains reach 10 feet . Something extends that was not there a moment ago.
+  Free action , once per round, before a Strike: that Carapace Strike gains reach 10 feet . Something extends that was not there a moment ago.  
+  **Icon brief** (Assimilator — Feat): An arm of jointed chitin unfolding an extra segment mid-strike, the fist suddenly reaching across the gap.
 - **Regurgitate** · _feat_ · `icons/magic/acid/dissolve-bone-ribs-skull.webp`  
-  Free action , once per day: Shed one Substrate and immediately Feed a Substrate you are carrying, at Depth 1. The whole thing takes no time and is extremely unpleasant to watch.
+  Free action , once per day: Shed one Substrate and immediately Feed a Substrate you are carrying, at Depth 1. The whole thing takes no time and is extremely unpleasant to watch.  
+  **Icon brief** (Assimilator — Feat): A gem being spat out of a gaping maw while another gem slides in to replace it, in one grotesque motion.
 - **Second Hunger** · _feat_ · `icons/creatures/abilities/mouth-teeth-crooked-blue.webp`  
-  Free action , once per encounter: gain 2 Mass in one track for 1 minute, which you must spend immediately to deepen a bound Substrate. When it ends, that Substrate returns to its real Depth.
+  Free action , once per encounter: gain 2 Mass in one track for 1 minute, which you must spend immediately to deepen a bound Substrate. When it ends, that Substrate returns to its real Depth.  
+  **Icon brief** (Assimilator — Feat): A ravenous second mouth opening on the carapace, gulping borrowed glowing mass, a gem swelling briefly.
 - **Second Stomach** · _feat_ · `icons/consumables/food/berries-ration-round-red.webp`  
-  Your Gem Mass increases by 1 .
+  Your Gem Mass increases by 1 .  
+  **Icon brief** (Assimilator — Feat): A second translucent sac forming beside the first in a carapaced belly, small gems glittering inside.
 - **Shared Symbiosis** · _feat_ · `icons/magic/life/heart-glowing-red.webp`  
-  Once per day, ◆◆ (touch) : a willing ally gains one of your Mutations at Depth 1 for 10 minutes. They also gain a small piece of the thing's opinions.
+  Once per day, ◆◆ (touch) : a willing ally gains one of your Mutations at Depth 1 for 10 minutes. They also gain a small piece of the thing's opinions.  
+  **Icon brief** (Assimilator — Feat): A carapaced hand on an ally's shoulder, a small tendril of chitin creeping onto them and blooming into a tiny mutation.
 - **Shed Skin** · _feat_ · `icons/commodities/leather/scale-chitin-grey.webp`  
-  🜲 Reaction — Trigger: you gain a condition of value 2 or lower. Effect: end it. Your Carapace takes damage equal to five times the condition's value .
+  🜲 Reaction — Trigger: you gain a condition of value 2 or lower. Effect: end it. Your Carapace takes damage equal to five times the condition's value .  
+  **Icon brief** (Assimilator — Feat): A sloughing layer of cracked carapace peeling away like a snakeskin, a condition's chains falling off with it.
 - **Spit** · _feat_ · `icons/magic/acid/projectile-beams-salvo-green.webp`  
-  ◆ A ranged unarmed Strike , range 20 feet, 1d6 damage of your Instinct's type. It uses your Carapace Strike's attack bonus and counts toward your multiple attack penalty.
+  ◆ A ranged unarmed Strike , range 20 feet, 1d6 damage of your Instinct's type. It uses your Carapace Strike's attack bonus and counts toward your multiple attack penalty.  
+  **Icon brief** (Assimilator — Feat): A symbiont mouth spitting a glob of instinct-coloured fluid in an arc, splattering and sizzling on impact.
 - **Sympathetic Growth** · _feat_ · `icons/magic/life/ankh-gold-blue.webp`  
-  Once per day, ◆ (touch) : an ally gains one resistance you have, at half value , for 10 minutes. A piece of the thing goes with them, and it comes back.
+  Once per day, ◆ (touch) : an ally gains one resistance you have, at half value , for 10 minutes. A piece of the thing goes with them, and it comes back.  
+  **Icon brief** (Assimilator — Feat): A sprig of carapace growing from a fingertip onto an ally's arm, forming a small protective plate that pulses with the same colour.
 - **Taste for It** · _feat_ · `icons/creatures/abilities/mouth-teeth-human.webp`  
-  You can identify any Substrate by touch. When you deal damage to a creature, you may Recall Knowledge about it as a free action once per encounter, with a +2 circumstance bonus .
+  You can identify any Substrate by touch. When you deal damage to a creature, you may Recall Knowledge about it as a free action once per encounter, with a +2 circumstance bonus .  
+  **Icon brief** (Assimilator — Feat): A tendril-tongue licking a gem, a faint label of identification glowing above it, a drop of an enemy's blood on the tip.
 - **The Thing That Wears You** · _feat_ · `icons/creatures/abilities/mouth-teeth-long-red.webp`  
-  Once per day, ◆◆◆: the Carapace separates for 1 minute. It acts on your initiative − 5 with your Strikes, your Mutations and your Assimilator DC, and it has your Hit Points as its own. While it is away you are unarmoured, unmutated, and a person again. You had forgotten.
+  Once per day, ◆◆◆: the Carapace separates for 1 minute. It acts on your initiative − 5 with your Strikes, your Mutations and your Assimilator DC, and it has your Hit Points as its own. While it is away you are unarmoured, unmutated, and a person again. You had forgotten.  
+  **Icon brief** (Assimilator — Feat): An empty human shape stepping away from a hulking living carapace that now stands on its own, eyes lit, tendrils still linking them.
 - **Total Assimilation** · _feat_ · `icons/magic/life/ankh-shadow-green.webp`  
-  Prerequisite: Assimilate. One ability taken with Assimilate becomes permanent . You may replace it by using Assimilate on something better.
+  Prerequisite: Assimilate. One ability taken with Assimilate becomes permanent . You may replace it by using Assimilate on something better.  
+  **Icon brief** (Assimilator — Feat): A trait taken from a fallen creature — a scale, eye or wing — fusing permanently into carapace plating, the seam sealing in glowing scar.
 - **Twin Maw** · _feat_ · `icons/creatures/abilities/mouth-teeth-fire-orange.webp`  
-  ◆◆ Make two Carapace Strikes against the same creature. Both count toward your multiple attack penalty as normal, and if both hit, combine their damage before applying resistance .
+  ◆◆ Make two Carapace Strikes against the same creature. Both count toward your multiple attack penalty as normal, and if both hit, combine their damage before applying resistance .  
+  **Icon brief** (Assimilator — Feat): Two carapace fists striking one target together, their two impacts merging into a single combined burst.
 - **Two Instincts** · _feat_ · `icons/magic/symbols/elements-air-earth-fire-water.webp`  
-  You gain a second Instinct clause of your choice. Both operate at half value (round down, minimum 1). This does not stack with Electrum's Alloyed Instinct — take the better.
+  You gain a second Instinct clause of your choice. Both operate at half value (round down, minimum 1). This does not stack with Electrum's Alloyed Instinct — take the better.  
+  **Icon brief** (Assimilator — Feat): Two smaller coloured symbiont cores side by side in a carapace, each glowing at half strength.
 - **Unbreakable Shell** · _feat_ · `icons/equipment/shield/heater-steel-engraved-lance-rest.webp`  
-  Once per day, when your Carapace would be reduced below its Broken Threshold , it is instead reduced to exactly that threshold.
+  Once per day, when your Carapace would be reduced below its Broken Threshold , it is instead reduced to exactly that threshold.  
+  **Icon brief** (Assimilator — Feat): A carapace cracked right to the edge of shattering, a glowing line holding the fracture exactly at its limit.
 - **Wall of Me** · _feat_ · `icons/environment/settlement/city-wall.webp`  
-  ◆◆, once per encounter. Extrude a 10-foot line of Carapace in your space or adjacent to it. It provides standard cover , has Hardness equal to your level and Hit Points equal to five times your level , and lasts 1 minute or until destroyed. While it stands, your own Carapace's Hardness is reduced by 2.
+  ◆◆, once per encounter. Extrude a 10-foot line of Carapace in your space or adjacent to it. It provides standard cover , has Hardness equal to your level and Hit Points equal to five times your level , and lasts 1 minute or until destroyed. While it stands, your own Carapace's Hardness is reduced by 2.  
+  **Icon brief** (Assimilator — Feat): A line of living chitin wall erupting from the ground beside a carapaced figure, ridged and veined, blocking an incoming arrow.
 
 ### assimilator-journals (1)
 
 - **The Assimilator: Handbook** · _journal_ · `icons/sundries/books/book-embossed-roots-green.webp`  
-  Something alive is wearing you, and it grows by eating . Feed it a ruby and it learns to burn; feed it iron and the limbs get heavier; feed it nickel and neither of you knows what you will have on Tuesday. Your build is not a list of choices made at creation. It is a stomach, and its contents are visible on you. Mechanically: 10 Hit Points per level, expert in all three saves, unarmoured expert,…
+  Something alive is wearing you, and it grows by eating . Feed it a ruby and it learns to burn; feed it iron and the limbs get heavier; feed it nickel and neither of you knows what you will have on Tuesday. Your build is not a list of choices made at creation. It is a stomach, and its contents are visible on you. Mechanically: 10 Hit Points per level, expert in all three saves, unarmoured expert,…  
+  **Icon brief** (Assimilator — Handbook): A leather book whose cover is overgrown with living chitin and small embedded gems, a tendril curling out from between the pages.
 
 ### assimilator-macros (1)
 
 - **Assimilator: Open the Gullet** · _script_ · `icons/consumables/food/dried-meat-jerky-fish-red.webp`  
-  Macro:
+  Macro:  
+  **Icon brief** (Assimilator — Macro): A carapaced gullet opening like a flower, gems and metal ingots arranged around it ready to be fed in.
 
 ### assimilator-substrates (36)
 
 #### Black
 
 - **Substrate: Jet** · _effect_ · `icons/commodities/gems/gem-faceted-cushion-teal-black.webp`  
-  Essence: Death &middot; Mutation: Carrion Bloom Fossilised organic matter — which is what the symbiont is doing to you, slowly. Depth 1 Your Strikes may deal void . +1 item bonus to saves against death effects. 2 +1d4 void. Gain 2 temporary Hit Points when you reduce a creature to 0 Hit Points. 3 +1d6 void. A creature you kill cannot be returned to life by magic below 6th rank. 4 +1d6 void. Once…
+  Essence: Death &middot; Mutation: Carrion Bloom Fossilised organic matter — which is what the symbiont is doing to you, slowly. Depth 1 Your Strikes may deal void . +1 item bonus to saves against death effects. 2 +1d4 void. Gain 2 temporary Hit Points when you reduce a creature to 0 Hit Points. 3 +1d6 void. A creature you kill cannot be returned to life by magic below 6th rank. 4 +1d6 void. Once…  
+  **Icon brief** (Assimilator — Substrate): A piece of black fossilised jet, with faint leaf-imprints of ancient organic life in it; a tendril creeping over it as death-grey void mist rises.
 - **Substrate: Lead** · _effect_ · `icons/commodities/metal/ingot-worn-steel.webp`  
-  Essence: Suppression &middot; Mutation: Null Weight Heavy, dull, and magic stops working properly in the room. This is the anti-magic Substrate. Depth 1 +1 circumstance bonus to saves against magic. Divinations of 3rd rank or lower cannot locate you. 2 Once per round, when a Mutation damages a creature, it takes −1 status to its next save . 3 Creatures within 10 feet take −1 status to spell…
+  Essence: Suppression &middot; Mutation: Null Weight Heavy, dull, and magic stops working properly in the room. This is the anti-magic Substrate. Depth 1 +1 circumstance bonus to saves against magic. Divinations of 3rd rank or lower cannot locate you. 2 Once per round, when a Mutation damages a creature, it takes −1 status to its next save . 3 Creatures within 10 feet take −1 status to spell…  
+  **Icon brief** (Assimilator — Substrate): A dull grey lead ingot, heavy and matte; floating spell runes around it dimming and sinking toward it.
 - **Substrate: Manganese** · _effect_ · `icons/commodities/metal/ingot-worn-steel.webp`  
-  Essence: Corrosion &middot; Mutation: Rot Touch A dark violet-black bloom that leaves pitting on everything it has touched. Depth 1 Your Strikes deal 1 persistent acid on a critical hit. 2 A creature you damage has all its resistances reduced by 2 until the end of its next turn. 3 Reduced by 5 . Objects you Strike take a cumulative −1 item penalty (to a maximum of −3) until Repaired. 4 Reduced by…
+  Essence: Corrosion &middot; Mutation: Rot Touch A dark violet-black bloom that leaves pitting on everything it has touched. Depth 1 Your Strikes deal 1 persistent acid on a critical hit. 2 A creature you damage has all its resistances reduced by 2 until the end of its next turn. 3 Reduced by 5 . Objects you Strike take a cumulative −1 item penalty (to a maximum of −3) until Repaired. 4 Reduced by…  
+  **Icon brief** (Assimilator — Substrate): A dark violet-black manganese crystal bloom, its surface pitted and corroded, acid droplets etching the stone it rests on.
 - **Substrate: Onyx** · _effect_ · `icons/commodities/gems/gem-faceted-round-black.webp`  
-  Essence: Darkness &middot; Mutation: Shadow Mantle The plate stops returning light. Edges become genuinely hard to locate. Depth 1 Darkvision. +1 item bonus to Stealth in dim light or darkness. 2 Once per day, create a 20-foot emanation of magical darkness for 1 minute. You see through it normally. 3 In dim light or darkness you may Hide and Sneak without cover or concealment , and gain +1…
+  Essence: Darkness &middot; Mutation: Shadow Mantle The plate stops returning light. Edges become genuinely hard to locate. Depth 1 Darkvision. +1 item bonus to Stealth in dim light or darkness. 2 Once per day, create a 20-foot emanation of magical darkness for 1 minute. You see through it normally. 3 In dim light or darkness you may Hide and Sneak without cover or concealment , and gain +1…  
+  **Icon brief** (Assimilator — Substrate): A polished black onyx stone that seems to swallow light; a carapace plate beside it turning edge-less and lightless.
 #### Blue
 
 - **Substrate: Cobalt** · _effect_ · `icons/commodities/metal/ingot-teal.webp`  
-  Essence: Energy / Conductivity &middot; Mutation: Arcane Channel A lash of blue-white energy that is not attached to anything and comes back anyway. Depth 1 You gain a 30-foot ranged unarmed Strike dealing 1d6 damage of your Instinct's type. 2 Range 60 feet ; damage 2d6 . 3 Your Mutations' energy damage counts as magical ; +1 circumstance bonus to counteract checks. 4 Range 120 feet ; damage 4d6…
+  Essence: Energy / Conductivity &middot; Mutation: Arcane Channel A lash of blue-white energy that is not attached to anything and comes back anyway. Depth 1 You gain a 30-foot ranged unarmed Strike dealing 1d6 damage of your Instinct's type. 2 Range 60 feet ; damage 2d6 . 3 Your Mutations' energy damage counts as magical ; +1 circumstance bonus to counteract checks. 4 Range 120 feet ; damage 4d6…  
+  **Icon brief** (Assimilator — Substrate): A deep-blue cobalt nugget crackling with a lash of blue-white energy that arcs away and loops back to it.
 - **Substrate: Lapis Lazuli** · _effect_ · `icons/commodities/gems/gem-rough-cushion-blue.webp`  
-  Essence: Knowledge &middot; Mutation: Reading Eye A ring of small dark lenses around the skull, which track independently. Depth 1 Once per round, Recall Knowledge about a creature you can see as a free action. 2 When you succeed at Recall Knowledge about a creature, allies gain +1 circumstance to attacks against it for 1 round. 3 You automatically learn one resistance, weakness or immunity of…
+  Essence: Knowledge &middot; Mutation: Reading Eye A ring of small dark lenses around the skull, which track independently. Depth 1 Once per round, Recall Knowledge about a creature you can see as a free action. 2 When you succeed at Recall Knowledge about a creature, allies gain +1 circumstance to attacks against it for 1 round. 3 You automatically learn one resistance, weakness or immunity of…  
+  **Icon brief** (Assimilator — Substrate): A lapis lazuli stone flecked with gold, set in a ring of small dark lenses that each watch a different direction.
 - **Substrate: Sapphire** · _effect_ · `icons/commodities/gems/gem-faceted-radiant-blue.webp`  
-  Essence: Ice / Focus &middot; Mutation: Glacial Lattice Faceted blue growth along the spine and jaw; the breath fogs indoors. Depth 1 Your Strikes may deal cold . +1 item bonus to saves against effects that would break your concentration. 2 +1d4 cold. Critical hits reduce the target's Speeds by 5 feet until the end of its next turn. 3 +1d6 cold. Critical hits make the target slowed 1 until the…
+  Essence: Ice / Focus &middot; Mutation: Glacial Lattice Faceted blue growth along the spine and jaw; the breath fogs indoors. Depth 1 Your Strikes may deal cold . +1 item bonus to saves against effects that would break your concentration. 2 +1d4 cold. Critical hits reduce the target's Speeds by 5 feet until the end of its next turn. 3 +1d6 cold. Critical hits make the target slowed 1 until the…  
+  **Icon brief** (Assimilator — Substrate): A faceted blue sapphire, frost forming on its edges, faint icy breath-fog curling around it.
 - **Substrate: Tin** · _effect_ · `icons/commodities/metal/ingot-silver.webp`  
-  Essence: Sensitivity &middot; Mutation: Sensory Bloom Fine hairs, pits and antennae across the plate. It is deeply unsettling to watch them move. Depth 1 Imprecise tremorsense 30 feet. 2 You detect the presence of magic within 30 feet as an imprecise sense . 3 Tremorsense 60 feet . Invisible creatures within 30 feet are concealed to you rather than undetected. 4 Precise tremorsense 30 feet. You…
+  Essence: Sensitivity &middot; Mutation: Sensory Bloom Fine hairs, pits and antennae across the plate. It is deeply unsettling to watch them move. Depth 1 Imprecise tremorsense 30 feet. 2 You detect the presence of magic within 30 feet as an imprecise sense . 3 Tremorsense 60 feet . Invisible creatures within 30 feet are concealed to you rather than undetected. 4 Precise tremorsense 30 feet. You…  
+  **Icon brief** (Assimilator — Substrate): A tin ingot sprouting fine sensitive hairs and antennae that twitch and quiver, ripples of sensing spreading out.
 #### Gold
 
 - **Substrate: Citrine** · _effect_ · `icons/commodities/gems/gem-faceted-rough-yellow.webp`  
-  Essence: Fortune &middot; Mutation: Gilded Chance A faint gold shimmer that arrives half a second before anything good happens. Depth 1 Once per day, reroll one failed check and take the second result. 2 Twice per day. The reroll gains a +2 circumstance bonus . 3 Once per encounter, when an enemy within 30 feet critically succeeds at a save against you, it gets a success instead. 4 Once per day,…
+  Essence: Fortune &middot; Mutation: Gilded Chance A faint gold shimmer that arrives half a second before anything good happens. Depth 1 Once per day, reroll one failed check and take the second result. 2 Twice per day. The reroll gains a +2 circumstance bonus . 3 Once per encounter, when an enemy within 30 feet critically succeeds at a save against you, it gets a success instead. 4 Once per day,…  
+  **Icon brief** (Assimilator — Substrate): A bright yellow citrine crystal with a gold shimmer flashing around it just before a falling coin lands lucky side up.
 - **Substrate: Electrum** · _effect_ · `icons/commodities/metal/ingot-silver.webp`  
-  Essence: Resonance &middot; Mutation: Alloyed Instinct Two metals that never fully mixed, and a symbiont that never fully decided. Depth 1 Choose a second colour. Electrum also counts as a Substrate of that colour for any effect that counts your bound Substrates of a colour; its Mass still counts toward Gold. 2 Electrum may stand in for either Substrate of any one Bond you know. 3 You gain your…
+  Essence: Resonance &middot; Mutation: Alloyed Instinct Two metals that never fully mixed, and a symbiont that never fully decided. Depth 1 Choose a second colour. Electrum also counts as a Substrate of that colour for any effect that counts your bound Substrates of a colour; its Mass still counts toward Gold. 2 Electrum may stand in for either Substrate of any one Bond you know. 3 You gain your…  
+  **Icon brief** (Assimilator — Substrate): An electrum nugget of two metals swirling but not fully mixed — pale gold and silver — two instinct colours flickering in it.
 - **Substrate: Gold** · _effect_ · `icons/commodities/metal/ingot-gold.webp`  
-  Essence: Amplification &middot; Mutation: Gilded Core Everything already there gets brighter and slower and more certain of itself. Depth 1 At daily preparations, choose one other bound Substrate. It counts as one Depth higher . This can never exceed your level's Depth cap. 2 You may choose the Substrate again at the start of each encounter, instead of only at daily preparations. 3 Choose two…
+  Essence: Amplification &middot; Mutation: Gilded Core Everything already there gets brighter and slower and more certain of itself. Depth 1 At daily preparations, choose one other bound Substrate. It counts as one Depth higher . This can never exceed your level's Depth cap. 2 You may choose the Substrate again at the start of each encounter, instead of only at daily preparations. 3 Choose two…  
+  **Icon brief** (Assimilator — Substrate): A gold nugget glowing warm, every other gem placed near it brightening and swelling.
 - **Substrate: Topaz** · _effect_ · `icons/commodities/gems/gem-rough-cushion-orange.webp`  
-  Essence: Power &middot; Mutation: Regal Aspect The plate thickens into something ceremonial. It looks worn rather than grown. Depth 1 +1 item bonus to Intimidation. Your critical hits deal +2 damage . 2 Your unarmed Strikes gain the critical specialization effect of the brawling group. 3 A creature you critically hit is frightened 1 . 4 When you critically hit, one other bound Substrate counts as…
+  Essence: Power &middot; Mutation: Regal Aspect The plate thickens into something ceremonial. It looks worn rather than grown. Depth 1 +1 item bonus to Intimidation. Your critical hits deal +2 damage . 2 Your unarmed Strikes gain the critical specialization effect of the brawling group. 3 A creature you critically hit is frightened 1 . 4 When you critically hit, one other bound Substrate counts as…  
+  **Icon brief** (Assimilator — Substrate): A deep amber-orange topaz set like a royal jewel in ceremonial carapace plating, regal and heavy.
 #### Gray
 
 - **Substrate: Hematite** · _effect_ · `icons/commodities/gems/gem-fragments-rough-grey.webp`  
-  Essence: Blood / Iron &middot; Mutation: Ferrous Blood Iron-grey, blood-red when scratched. The bridge between Red, Green and Gray. Depth 1 +1 item bonus to Athletics. You are immune to persistent bleed . 2 Gain temporary Hit Points equal to your level at the start of each encounter. 3 +2 status bonus to Fortitude saves. You cannot be drained . 4 Once per day, when you are reduced to 0 Hit…
+  Essence: Blood / Iron &middot; Mutation: Ferrous Blood Iron-grey, blood-red when scratched. The bridge between Red, Green and Gray. Depth 1 +1 item bonus to Athletics. You are immune to persistent bleed . 2 Gain temporary Hit Points equal to your level at the start of each encounter. 3 +2 status bonus to Fortitude saves. You cannot be drained . 4 Once per day, when you are reduced to 0 Hit…  
+  **Icon brief** (Assimilator — Substrate): A metallic iron-grey hematite stone, a scratch across it bleeding blood-red streak.
 - **Substrate: Moonstone** · _effect_ · `icons/commodities/gems/gem-faceted-round-white.webp`  
-  Essence: Adaptation &middot; Mutation: Reactive Evolution Pale, and the sheen inside moves to whichever side was last struck. Depth 1 Once per encounter, as a reaction after taking damage of a type, gain resistance 2 to that type for 1 minute. 2 Resistance 5 , twice per encounter. 3 Resistance 8 , it lasts until the encounter ends, and you may hold two types at once. 4 Resistance 12 , unlimited…
+  Essence: Adaptation &middot; Mutation: Reactive Evolution Pale, and the sheen inside moves to whichever side was last struck. Depth 1 Once per encounter, as a reaction after taking damage of a type, gain resistance 2 to that type for 1 minute. 2 Resistance 5 , twice per encounter. 3 Resistance 8 , it lasts until the encounter ends, and you may hold two types at once. 4 Resistance 12 , unlimited…  
+  **Icon brief** (Assimilator — Substrate): A pale moonstone with an inner blue sheen sliding to one side, as if toward where it was just struck.
 - **Substrate: Silver** · _effect_ · `icons/commodities/metal/ingot-silver.webp`  
-  Essence: Suppression / Supernatural Integration &middot; Mutation: Argent Edge White is purity. Gray is the thing you actually use on a werewolf. Depth 1 Your Strikes count as silver . 2 +1d4 damage against aberrations, fiends, undead and spirits. 3 +1d6 instead. Your Strikes affect incorporeal creatures as though they had the ghost touch rune. 4 +1d6. A supernatural creature you critically hit…
+  Essence: Suppression / Supernatural Integration &middot; Mutation: Argent Edge White is purity. Gray is the thing you actually use on a werewolf. Depth 1 Your Strikes count as silver . 2 +1d4 damage against aberrations, fiends, undead and spirits. 3 +1d6 instead. Your Strikes affect incorporeal creatures as though they had the ghost touch rune. 4 +1d6. A supernatural creature you critically hit…  
+  **Icon brief** (Assimilator — Substrate): A gleaming silver ingot with a crescent-moon glint, a faint wolf's claw mark repelled from it.
 - **Substrate: Steel** · _effect_ · `icons/commodities/metal/ingot-steel.webp`  
-  Essence: Structure &middot; Mutation: True Plate Straightforward. Nothing about this is strange and that is its whole appeal. Depth 1 Carapace Hardness +2 . Your unarmed Strikes' damage die increases one step. 2 Hardness +5. 3 Hardness +8. Your unarmed Strikes gain the versatile P and versatile S traits. 4 Hardness +12. +1 damage die on your unarmed Strikes. Depth is this effect's badge. The…
+  Essence: Structure &middot; Mutation: True Plate Straightforward. Nothing about this is strange and that is its whole appeal. Depth 1 Carapace Hardness +2 . Your unarmed Strikes' damage die increases one step. 2 Hardness +5. 3 Hardness +8. Your unarmed Strikes gain the versatile P and versatile S traits. 4 Hardness +12. +1 damage die on your unarmed Strikes. Depth is this effect's badge. The…  
+  **Icon brief** (Assimilator — Substrate): A plain, solid steel bar, perfectly straight and polished; carapace plates beside it hardened and riveted.
 #### Green
 
 - **Substrate: Chromium** · _effect_ · `icons/commodities/metal/ingot-steel.webp`  
-  Essence: Armour / Regeneration &middot; Mutation: Lacquer Shell A hard, bright, corrosion-proof lacquer over everything. It buffs out. Depth 1 Carapace Hardness +2 . Resistance 2 to acid. 2 Hardness +5 , resistance 5 to acid. Your Carapace repairs 1 Hit Point per hour on its own. 3 Hardness +8 , resistance 8 to acid. You are immune to rust, corrosion and effects that damage your items with acid.…
+  Essence: Armour / Regeneration &middot; Mutation: Lacquer Shell A hard, bright, corrosion-proof lacquer over everything. It buffs out. Depth 1 Carapace Hardness +2 . Resistance 2 to acid. 2 Hardness +5 , resistance 5 to acid. Your Carapace repairs 1 Hit Point per hour on its own. 3 Hardness +8 , resistance 8 to acid. You are immune to rust, corrosion and effects that damage your items with acid.…  
+  **Icon brief** (Assimilator — Substrate): A brilliant chrome nugget with a mirror-bright lacquer finish, acid droplets beading and rolling off it.
 - **Substrate: Emerald** · _effect_ · `icons/commodities/gems/gem-cut-square-green.webp`  
-  Essence: Regeneration &middot; Mutation: Knitting Flesh Open seams that close while you watch, leaving pale green scar tissue that also closes. Depth 1 Fast healing 1 while you have at least 1 Hit Point and are below your maximum. 2 Fast healing 2. Once per day, regrow a severed part over 1 hour. 3 Fast healing 5. You stabilize automatically when dying. 4 Fast healing 10. Once per day, when…
+  Essence: Regeneration &middot; Mutation: Knitting Flesh Open seams that close while you watch, leaving pale green scar tissue that also closes. Depth 1 Fast healing 1 while you have at least 1 Hit Point and are below your maximum. 2 Fast healing 2. Once per day, regrow a severed part over 1 hour. 3 Fast healing 5. You stabilize automatically when dying. 4 Fast healing 10. Once per day, when…  
+  **Icon brief** (Assimilator — Substrate): A green emerald with a fleshy seam across it closing while you watch, pale green scar tissue knitting over.
 - **Substrate: Jade** · _effect_ · `icons/commodities/gems/gem-raw-rough-green.webp`  
-  Essence: Vitality &middot; Mutation: Deep Root Dense, cool, and very slightly translucent. It is thicker over the organs. Depth 1 +1 item bonus to Fortitude saves. 2 Resistance 5 to poison. You are immune to disease. 3 Once per day, when you roll a success on a Fortitude save, get a critical success instead. 4 Once per round instead of once per day. You cannot be drained or enfeebled . Depth is…
+  Essence: Vitality &middot; Mutation: Deep Root Dense, cool, and very slightly translucent. It is thicker over the organs. Depth 1 +1 item bonus to Fortitude saves. 2 Resistance 5 to poison. You are immune to disease. 3 Once per day, when you roll a success on a Fortitude save, get a critical success instead. 4 Once per round instead of once per day. You cannot be drained or enfeebled . Depth is…  
+  **Icon brief** (Assimilator — Substrate): A dense, cool, slightly translucent green jade piece shaped like a protective plate over a heart.
 - **Substrate: Zinc** · _effect_ · `icons/commodities/metal/ingot-steel.webp`  
-  Essence: Biological Adaptation &middot; Mutation: Shifting Tissue The surface changes texture depending on what last hurt it, and does not change back. Depth 1 At daily preparations, choose one energy damage type. Gain resistance 2 to it. 2 Resistance 5. Change the chosen type as a single action, once per day. 3 Resistance 8. Once per round, as a reaction when you take energy damage, change the…
+  Essence: Biological Adaptation &middot; Mutation: Shifting Tissue The surface changes texture depending on what last hurt it, and does not change back. Depth 1 At daily preparations, choose one energy damage type. Gain resistance 2 to it. 2 Resistance 5. Change the chosen type as a single action, once per day. 3 Resistance 8. Once per round, as a reaction when you take energy damage, change the…  
+  **Icon brief** (Assimilator — Substrate): A dull zinc ingot whose surface has changed texture in patches — scorched, frosted, sparking — each mark of what hit it.
 #### Orange
 
 - **Substrate: Amber** · _effect_ · `icons/commodities/gems/gem-rough-square-yellow.webp`  
-  Essence: Stored Energy &middot; Mutation: Reservoir A translucent sac at the sternum that fills visibly and drains visibly. Depth 1 When you take energy damage, store 1 charge (max 3). Spend 1 as a free action to add 1d4 of that type to a Strike. 2 Max 5 charges . Spending 2 adds 1d6 + 2 instead. 3 You also store a charge whenever you deal energy damage, once per round. 4 Spend 3 charges as a…
+  Essence: Stored Energy &middot; Mutation: Reservoir A translucent sac at the sternum that fills visibly and drains visibly. Depth 1 When you take energy damage, store 1 charge (max 3). Spend 1 as a free action to add 1d4 of that type to a Strike. 2 Max 5 charges . Spending 2 adds 1d6 + 2 instead. 3 You also store a charge whenever you deal energy damage, once per round. 4 Spend 3 charges as a…  
+  **Icon brief** (Assimilator — Substrate): A translucent honey-amber sac-like gem, energy visibly filling it from the bottom like a gauge.
 - **Substrate: Bronze** · _effect_ · `icons/commodities/metal/ingot-stamped-bronze.webp`  
-  Essence: Momentum / Combat &middot; Mutation: Battle Frame Utilitarian, scarred, and it keeps re-forming the parts that break. Depth 1 You are trained in improvised weapons as martial weapons, and take no penalty for using them. 2 If you Stride at least 10 feet, your next Strike this turn gains a +1 circumstance bonus to hit . 3 Once per round, make a Strike and then a Shove, Trip or Grapple as a…
+  Essence: Momentum / Combat &middot; Mutation: Battle Frame Utilitarian, scarred, and it keeps re-forming the parts that break. Depth 1 You are trained in improvised weapons as martial weapons, and take no penalty for using them. 2 If you Stride at least 10 feet, your next Strike this turn gains a +1 circumstance bonus to hit . 3 Once per round, make a Strike and then a Shove, Trip or Grapple as a…  
+  **Icon brief** (Assimilator — Substrate): A battered bronze ingot with scars and nicks, a broken piece re-forming itself, an improvised weapon beside it.
 - **Substrate: Carnelian** · _effect_ · `icons/commodities/gems/gem-rough-oval-orange.webp`  
-  Essence: Momentum &middot; Mutation: Kinetic Spurs Spurs and vanes that unfold backward when you run and fold flat when you stop. Depth 1 +5 feet Speed. 2 If you moved at least 10 feet this turn before attacking, your Strike deals +1d4 . 3 +10 feet Speed , and the bonus becomes +1d6 . 4 Once per round, after a Strike, Stride up to half your Speed as a free action. Depth is this effect's badge.…
+  Essence: Momentum &middot; Mutation: Kinetic Spurs Spurs and vanes that unfold backward when you run and fold flat when you stop. Depth 1 +5 feet Speed. 2 If you moved at least 10 feet this turn before attacking, your Strike deals +1d4 . 3 +10 feet Speed , and the bonus becomes +1d6 . 4 Once per round, after a Strike, Stride up to half your Speed as a free action. Depth is this effect's badge.…  
+  **Icon brief** (Assimilator — Substrate): A red-orange carnelian stone with spurs and vanes fanning backward from it as if in a strong wind.
 - **Substrate: Mercury** · _effect_ · `icons/consumables/potions/vial-ornet-silver-black.webp`  
-  Essence: Fluidity &middot; Mutation: Liquid Form Silver liquid moving constantly beneath translucent skin. The limbs are not fixed in number. Depth 1 You Squeeze at full Speed and are not off-guard while squeezing. 2 Resistance 5 to bludgeoning, piercing and slashing. 3 Once per round, as a reaction when you are hit, reduce the damage by your level as the blow passes through you. 4 You move…
+  Essence: Fluidity &middot; Mutation: Liquid Form Silver liquid moving constantly beneath translucent skin. The limbs are not fixed in number. Depth 1 You Squeeze at full Speed and are not off-guard while squeezing. 2 Resistance 5 to bludgeoning, piercing and slashing. 3 Once per round, as a reaction when you are hit, reduce the damage by your level as the blow passes through you. 4 You move…  
+  **Icon brief** (Assimilator — Substrate): A pool of quicksilver shifting and splitting into several moving limbs, beneath a translucent membrane.
 #### Purple
 
 - **Substrate: Amethyst** · _effect_ · `icons/commodities/gems/gem-faceted-rough-purple.webp`  
-  Essence: Psychic &middot; Mutation: Thought-Spines Violet spines across the crown, and other people's dreams start including you. Depth 1 Telepathy 30 feet with willing creatures with whom you share a language. 2 Your Strikes may deal mental ; +1d4 mental . 3 +1d6 mental. On a critical hit the target is stupefied 1 until the end of its next turn. 4 +1d6 mental. Once per round, a creature you…
+  Essence: Psychic &middot; Mutation: Thought-Spines Violet spines across the crown, and other people's dreams start including you. Depth 1 Telepathy 30 feet with willing creatures with whom you share a language. 2 Your Strikes may deal mental ; +1d4 mental . 3 +1d6 mental. On a critical hit the target is stupefied 1 until the end of its next turn. 4 +1d6 mental. Once per round, a creature you…  
+  **Icon brief** (Assimilator — Substrate): A violet amethyst geode bristling with crystal spines, faint dream-wisps drifting out of it.
 - **Substrate: Nickel** · _effect_ · `icons/commodities/metal/ingot-silver.webp`  
-  Essence: Mutation &middot; Mutation: Unstable Growth You do not know what it will be tomorrow. Neither does it. Depth 1 At daily preparations, gain one Aberration — roll or choose: (1) A limb , (2) An organ , (3) A mode , (4) A plate , (5) A gland , (6) A maw . One Aberration. 2 Two Aberrations. 3 Once per encounter, as a single action, re-roll all your Aberrations . 4 Three Aberrations, and one…
+  Essence: Mutation &middot; Mutation: Unstable Growth You do not know what it will be tomorrow. Neither does it. Depth 1 At daily preparations, gain one Aberration — roll or choose: (1) A limb , (2) An organ , (3) A mode , (4) A plate , (5) A gland , (6) A maw . One Aberration. 2 Two Aberrations. 3 Once per encounter, as a single action, re-roll all your Aberrations . 4 Three Aberrations, and one…  
+  **Icon brief** (Assimilator — Substrate): A nickel nugget sprouting an unpredictable growth — a tiny eye, limb or fin — with a question mark of light.
 - **Substrate: Platinum** · _effect_ · `icons/commodities/metal/ingot-silver.webp`  
-  Essence: Transcendence &middot; Mutation: Ascendant Plate It stops being a colour and starts being a quality of light. Extremely rare. Depth 1 +1 circumstance bonus to saves against magic. 2 Resistance 5 to your Instinct's damage type. You no longer need to breathe. 3 Once per day, gain a fly Speed equal to half your land Speed for 1 minute. 4 Permanent fly Speed equal to your land Speed . You…
+  Essence: Transcendence &middot; Mutation: Ascendant Plate It stops being a colour and starts being a quality of light. Extremely rare. Depth 1 +1 circumstance bonus to saves against magic. 2 Resistance 5 to your Instinct's damage type. You no longer need to breathe. 3 Once per day, gain a fly Speed equal to half your land Speed for 1 minute. 4 Permanent fly Speed equal to your land Speed . You…  
+  **Icon brief** (Assimilator — Substrate): A platinum ingot dissolving into a quality of pure white-silver light rather than a colour, a halo rising off it.
 - **Substrate: Quartz** · _effect_ · `icons/commodities/gems/gem-faceted-diamond-pink.webp`  
-  Essence: Arcane Resonance &middot; Mutation: Prism Node Clear prisms growing through the plate at angles that don't match the body underneath. Depth 1 +1 circumstance bonus to saves against magic, and you know when a spell is cast within 30 feet. 2 Once per day, counteract one magical effect (counteract rank = half your level; modifier = your class DC − 10). 3 When you counteract an effect, or a…
+  Essence: Arcane Resonance &middot; Mutation: Prism Node Clear prisms growing through the plate at angles that don't match the body underneath. Depth 1 +1 circumstance bonus to saves against magic, and you know when a spell is cast within 30 feet. 2 Once per day, counteract one magical effect (counteract rank = half your level; modifier = your class DC − 10). 3 When you counteract an effect, or a…  
+  **Icon brief** (Assimilator — Substrate): A cluster of clear quartz prisms jutting at odd angles, splitting a beam of magic into a rainbow.
 #### Red
 
 - **Substrate: Copper** · _effect_ · `icons/commodities/metal/ingot-copper.webp`  
-  Essence: Heat / Conduction &middot; Mutation: Conductive Filament Copper filaments running everywhere under the plate, visibly glowing when it works. Depth 1 When a Mutation of yours deals energy damage, the target takes 1 more of that type at the start of its next turn. 2 When you take fire or electricity damage, your next Strike before the end of your next turn deals +1d4 of that type. 3 Energy…
+  Essence: Heat / Conduction &middot; Mutation: Conductive Filament Copper filaments running everywhere under the plate, visibly glowing when it works. Depth 1 When a Mutation of yours deals energy damage, the target takes 1 more of that type at the start of its next turn. 2 When you take fire or electricity damage, your next Strike before the end of your next turn deals +1d4 of that type. 3 Energy…  
+  **Icon brief** (Assimilator — Substrate): A coil of copper filament glowing orange-red with conducted heat, energy running along the wire.
 - **Substrate: Garnet** · _effect_ · `icons/commodities/gems/gem-rough-cushion-red.webp`  
-  Essence: Blood &middot; Mutation: Crimson Tendrils Pulsating crimson flesh; blood-like tendrils that reach toward open wounds. Depth 1 Your Strikes deal 1 persistent bleed on a critical hit. You may Treat Wounds on yourself. 2 +1d4 damage against any creature that has already lost Hit Points this encounter. Critical hits deal 1d6 persistent bleed . 3 At the start of your turn, gain temporary Hit…
+  Essence: Blood &middot; Mutation: Crimson Tendrils Pulsating crimson flesh; blood-like tendrils that reach toward open wounds. Depth 1 Your Strikes deal 1 persistent bleed on a critical hit. You may Treat Wounds on yourself. 2 +1d4 damage against any creature that has already lost Hit Points this encounter. Critical hits deal 1d6 persistent bleed . 3 At the start of your turn, gain temporary Hit…  
+  **Icon brief** (Assimilator — Substrate): A deep red garnet pulsing like a heart, crimson tendrils reaching from it toward a fresh wound.
 - **Substrate: Iron** · _effect_ · `icons/commodities/metal/ingot-iron.webp`  
-  Essence: Brutality &middot; Mutation: Dense Frame Black-red plates growing up through the skin; the limbs get heavier and longer. Depth 1 +1 item bonus to Athletics. Your unarmed Strikes deal +1 bludgeoning . 2 +2 circumstance bonus to Athletics checks to Shove, Trip or Grapple a creature you have already damaged this encounter. 3 Your unarmed Strikes gain the shove trait, and forced movement you…
+  Essence: Brutality &middot; Mutation: Dense Frame Black-red plates growing up through the skin; the limbs get heavier and longer. Depth 1 +1 item bonus to Athletics. Your unarmed Strikes deal +1 bludgeoning . 2 +2 circumstance bonus to Athletics checks to Shove, Trip or Grapple a creature you have already damaged this encounter. 3 Your unarmed Strikes gain the shove trait, and forced movement you…  
+  **Icon brief** (Assimilator — Substrate): A heavy black-red iron chunk with blocky plates growing out of it, long and brutal.
 - **Substrate: Ruby** · _effect_ · `icons/commodities/gems/gem-faceted-rough-red.webp`  
-  Essence: Flame &middot; Mutation: Furnace Veins Glowing red veins; cracks of internal fire that open wider as the fight goes on. Depth 1 Your Carapace Strikes may deal fire instead of their normal damage type. You shed dim light in a 10-foot radius and cannot suppress it. 2 +1d4 fire. On a critical hit, 1d4 persistent fire . 3 +1d6 fire. Fire damage you deal treats fire resistance as 5 lower . 4…
+  Essence: Flame &middot; Mutation: Furnace Veins Glowing red veins; cracks of internal fire that open wider as the fight goes on. Depth 1 Your Carapace Strikes may deal fire instead of their normal damage type. You shed dim light in a 10-foot radius and cannot suppress it. 2 +1d4 fire. On a critical hit, 1d4 persistent fire . 3 +1d6 fire. Fire damage you deal treats fire resistance as 5 lower . 4…  
+  **Icon brief** (Assimilator — Substrate): A blood-red ruby cracked with glowing internal fire, flames licking from the fissures.
 #### White
 
 - **Substrate: Aluminium** · _effect_ · `icons/commodities/metal/ingot-silver.webp`  
-  Essence: Lightness &middot; Mutation: Hollow Frame Almost nothing. The plate is there and it weighs less than the clothes underneath. Depth 1 Your Carapace has no Bulk and imposes no penalties. +5 feet Speed . 2 +10 feet Speed. You take no damage from falls of less than 30 feet. 3 You Leap twice as far. Once per day, Fly 30 feet as a single action. 4 Permanent fly Speed 20 feet . You may end your…
+  Essence: Lightness &middot; Mutation: Hollow Frame Almost nothing. The plate is there and it weighs less than the clothes underneath. Depth 1 Your Carapace has no Bulk and imposes no penalties. +5 feet Speed . 2 +10 feet Speed. You take no damage from falls of less than 30 feet. 3 You Leap twice as far. Once per day, Fly 30 feet as a single action. 4 Permanent fly Speed 20 feet . You may end your…  
+  **Icon brief** (Assimilator — Substrate): A feather-light aluminium shard floating above an open palm, weightless, airy blue-white.
 - **Substrate: Diamond** · _effect_ · `icons/commodities/gems/gem-faceted-diamond-silver-.webp`  
-  Essence: Hardness &middot; Mutation: Adamant Skin Colourless, flawless, and it does not deform. Neither do you, now. Depth 1 Carapace Hardness +2 . 2 Hardness +5. Reduce persistent damage you take by 2. 3 Hardness +8. Once per encounter, a critical hit against you deals normal damage instead. 4 Hardness +12. Once per round instead of once per encounter. Depth is this effect's badge. The whole…
+  Essence: Hardness &middot; Mutation: Adamant Skin Colourless, flawless, and it does not deform. Neither do you, now. Depth 1 Carapace Hardness +2 . 2 Hardness +5. Reduce persistent damage you take by 2. 3 Hardness +8. Once per encounter, a critical hit against you deals normal damage instead. 4 Hardness +12. Once per round instead of once per encounter. Depth is this effect's badge. The whole…  
+  **Icon brief** (Assimilator — Substrate): A colourless, flawless diamond, a hammer cracking on it instead, unchanged.
 - **Substrate: Magnesium** · _effect_ · `icons/magic/light/explosion-star-glow-silhouette.webp`  
-  Essence: Radiance &middot; Mutation: Flare Core It burns white and it does not care what it is burning. Depth 1 You shed bright light in a 20-foot radius at will. +1 item bonus to saves against blindness and dazzle. 2 Once per encounter, as a single action: creatures in a 15-foot emanation must succeed at a Fortitude save against your class DC or be dazzled for 1 round. 3 On a failed save they…
+  Essence: Radiance &middot; Mutation: Flare Core It burns white and it does not care what it is burning. Depth 1 You shed bright light in a 20-foot radius at will. +1 item bonus to saves against blindness and dazzle. 2 Once per encounter, as a single action: creatures in a 15-foot emanation must succeed at a Fortitude save against your class DC or be dazzled for 1 round. 3 On a failed save they…  
+  **Icon brief** (Assimilator — Substrate): A strip of magnesium burning with blinding white flame, sparks and harsh light.
 - **Substrate: Pearl** · _effect_ · `icons/commodities/gems/pearl-white-oval.webp`  
-  Essence: Purification &middot; Mutation: Clear Tide Layers, laid down over an irritant. You are the irritant. Depth 1 +1 item bonus to saves against poison and disease. Once per day, reduce one condition's value by 1. 2 Once per encounter, as a single action, end one condition of value 1 on yourself or an adjacent ally. 3 Range 30 feet , and it may instead reduce one affliction's stage by 1. 4…
+  Essence: Purification &middot; Mutation: Clear Tide Layers, laid down over an irritant. You are the irritant. Depth 1 +1 item bonus to saves against poison and disease. Once per day, reduce one condition's value by 1. 2 Once per encounter, as a single action, end one condition of value 1 on yourself or an adjacent ally. 3 Range 30 feet , and it may instead reduce one affliction's stage by 1. 4…  
+  **Icon brief** (Assimilator — Substrate): A pearl in cross-section showing nacre layers around a dark irritant grain, a faint cleansing glow.
 
 ## The Stargazer
 
 ### stargazer-auguries (16)
 
 - **Alms of Fate** · _spell_ · `icons/commodities/currency/coins-assorted-mix-copper-silver-gold.webp`  
-  On each target's next damaging effect before the end of your next turn, they reroll all 1s and 2s on the damage dice and must keep the new results. Heightened (5th) 3 allies. (9th) Each target also maximises one damage die of their choice. The next damage roll each target makes is rewritten as it lands; at 9th the die with the most to gain is maximised.
+  On each target's next damaging effect before the end of your next turn, they reroll all 1s and 2s on the damage dice and must keep the new results. Heightened (5th) 3 allies. (9th) Each target also maximises one damage die of their choice. The next damage roll each target makes is rewritten as it lands; at 9th the die with the most to gain is maximised.  
+  **Icon brief** (Stargazer — Augury): A pair of silver dice tumbling from a starlit hand, their 1 and 2 faces dissolving into stardust and reforming as higher numbers mid-air; indigo sky behind.
 - **Borrowed Second** · _spell_ · `icons/magic/time/clock-analog-gray.webp`  
-  Each target immediately Steps or Strides up to its Speed as a free action and gains a +1 circumstance bonus to AC until the start of your next turn. Heightened (5th) 3 targets. (9th) 5 targets.
+  Each target immediately Steps or Strides up to its Speed as a free action and gains a +1 circumstance bonus to AC until the start of your next turn. Heightened (5th) 3 targets. (9th) 5 targets.  
+  **Icon brief** (Stargazer — Augury): A pocket watch with its second hand torn free and glowing, a silver footprint stepping out of the dial, a faint ghostly shield shimmering beside it.
 - **Coiling Doubt** · _spell_ · `icons/magic/death/skeleton-snake-skull-pink.webp`  
-  Critical Success Unaffected. Success The next attack roll or skill check the target attempts is rolled twice, taking the lower. Failure As success, but the first attack roll or skill check each round for 3 rounds . Critical Failure As failure for 1 minute , and the target is stupefied 2 for the same minute.
+  Critical Success Unaffected. Success The next attack roll or skill check the target attempts is rolled twice, taking the lower. Failure As success, but the first attack roll or skill check each round for 3 rounds . Critical Failure As failure for 1 minute , and the target is stupefied 2 for the same minute.  
+  **Icon brief** (Stargazer — Augury): A dark violet thread coiling like a serpent around a falling d20, two dim die faces shown side by side with the lower one lit, a sour green-purple haze.
 - **Crown of Fire** · _spell_ · `icons/magic/control/control-influence-crown-gold.webp`  
-  +2 status bonus to Intimidation and Performance. Each target can Demoralize at 60 feet with no auditory or visual requirement and no penalty for a shared-language failure. Once per round, when a target critically succeeds at any check, one ally within 30 feet of it gains a +1 status bonus to their next roll. Heightened (+2) +1 ally.
+  +2 status bonus to Intimidation and Performance. Each target can Demoralize at 60 feet with no auditory or visual requirement and no penalty for a shared-language failure. Once per round, when a target critically succeeds at any check, one ally within 30 feet of it gains a +1 status bonus to their next roll. Heightened (+2) +1 ally.  
+  **Icon brief** (Stargazer — Augury): A crown of burning stars hovering over an empty space, its flames shaped like shouting mouths, rays of orange-gold light thrown outward across a midnight sky.
 - **Death Foretold** · _spell_ · `icons/magic/acid/dissolve-bone-skull.webp`  
-  You show each of them the hour of its own death, in detail, with the date. Critical Success Unaffected. Success Frightened 1. Failure Frightened 2. Critical Failure Frightened 3, stunned 1 , and fleeing for 1 round. Heightened (4th) A creature that fails also takes 2d6 mental damage , doubled on a critical failure. (+2) +2d6.
+  You show each of them the hour of its own death, in detail, with the date. Critical Success Unaffected. Success Frightened 1. Failure Frightened 2. Critical Failure Frightened 3, stunned 1 , and fleeing for 1 round. Heightened (4th) A creature that fails also takes 2d6 mental damage , doubled on a critical failure. (+2) +2d6.  
+  **Icon brief** (Stargazer — Augury): A tarnished calendar page torn from the sky, a single date circled in blood-red light, a black hourglass with its last grain falling behind it.
 - **Deep Dream** · _spell_ · `icons/magic/control/sleep-bubble-purple.webp`  
-  +2 status bonus to Will saves and to Perception checks to disbelieve illusions. Once during the duration, a critical failure on a Will save becomes a failure. While the Augury lasts, a target is never off-guard merely for being unaware of a creature at the start of an encounter. Heightened (+2) +1 ally.
+  +2 status bonus to Will saves and to Perception checks to disbelieve illusions. Once during the duration, a critical failure on a Will save becomes a failure. While the Augury lasts, a target is never off-guard merely for being unaware of a creature at the start of an encounter. Heightened (+2) +1 ally.  
+  **Icon brief** (Stargazer — Augury): A closed eye drifting in a deep indigo nebula, a crescent moon cradling it, ripples of pale dream-light peeling away a thin illusory veil.
 - **First Blood** · _spell_ · `icons/skills/melee/blood-slash-foam-red.webp`  
-  Cast during exploration. The next time each rolls initiative within the hour, it gains a +2 status bonus to that roll, is not off-guard during the first round, and its first Strike of the encounter that hits deals an extra 1d6 spirit damage . Heightened (+2) +1d6.
+  Cast during exploration. The next time each rolls initiative within the hour, it gains a +2 status bonus to that roll, is not off-guard during the first round, and its first Strike of the encounter that hits deals an extra 1d6 spirit damage . Heightened (+2) +1d6.  
+  **Icon brief** (Stargazer — Augury): A red star rising over a dawn horizon, a single drop of glowing blood falling from it, a racing silver arrow marking the first move of a fight.
 - **Fixed Point** · _spell_ · `icons/skills/ranged/target-bullseye-archer-orange.webp`  
-  Name attack rolls, saving throws, or skill checks. Until the end of your next turn, the first roll of that type made by each chosen creature is treated as a 10 on the die, before modifiers. Heightened (6th) Name two roll types. After you cast it, you are asked which roll types to name.
+  Name attack rolls, saving throws, or skill checks. Until the end of your next turn, the first roll of that type made by each chosen creature is treated as a 10 on the die, before modifiers. Heightened (6th) Name two roll types. After you cast it, you are asked which roll types to name.  
+  **Icon brief** (Stargazer — Augury): A d20 pinned in place by a silver nail of starlight, frozen showing a glowing 10, hourglass sand stopped mid-fall around it.
 - **Guiding Star** · _spell_ · `icons/magic/light/explosion-star-teal-purple.webp`  
-  Each target gains a +1 status bonus to attack rolls, damage rolls, Perception checks and skill checks . Heightened (4th) 3 allies. (7th) 4 allies. (10th) 5 allies, and the bonus is +2 .
+  Each target gains a +1 status bonus to attack rolls, damage rolls, Perception checks and skill checks . Heightened (4th) 3 allies. (7th) 4 allies. (10th) 5 allies, and the bonus is +2 .  
+  **Icon brief** (Stargazer — Augury): A single bright five-pointed star above a dark landscape, its long silver ray pointing down a path like a compass needle, small stars aligning along the beam.
 - **Hunted by the Sky** · _spell_ · `icons/magic/fire/projectile-arrow-fire-gem-yellow.webp`  
-  The target cannot be concealed or hidden from you. You and your allies gain a +1 circumstance bonus to Seek and to Perception checks to find it, and the first attack made against it each round gains a +1 circumstance bonus. Your Snarl against it is −3 , or −4 once you have Surer Thread . Heightened (6th) 2 creatures.
+  The target cannot be concealed or hidden from you. You and your allies gain a +1 circumstance bonus to Seek and to Perception checks to find it, and the first attack made against it each round gains a +1 circumstance bonus. Your Snarl against it is −3 , or −4 once you have Surer Thread . Heightened (6th) 2 creatures.  
+  **Icon brief** (Stargazer — Augury): A constellation shaped like an open eye locked onto a lone fleeing silhouette, cold starbeams spotlighting it so no shadow can hide it.
 - **Iron Auspice** · _spell_ · `icons/magic/air/air-pressure-shield-blue.webp`  
-  +2 status bonus to Fortitude saves, to Athletics checks to Shove, Trip and Grapple, and to checks to resist forced movement. Each target gains temporary Hit Points equal to three times your level , and once during the duration treats a critical failure on a Fortitude save as a failure. Heightened (+2) +1 ally.
+  +2 status bonus to Fortitude saves, to Athletics checks to Shove, Trip and Grapple, and to checks to resist forced movement. Each target gains temporary Hit Points equal to three times your level , and once during the duration treats a critical failure on a Fortitude save as a failure. Heightened (+2) +1 ally.  
+  **Icon brief** (Stargazer — Augury): An iron-grey astrological sigil forged like an anvil-shaped shield, stars hammered into its surface as rivets, sparks flying off it.
 - **Perfect Ledger** · _spell_ · `icons/sundries/books/book-clasp-spiral-green.webp`  
-  Each target's next Recall Knowledge before the end of your next turn is a free action , gains a +2 circumstance bonus, and on a success reveals one additional piece of information. On a critical success it also reveals the creature's lowest saving throw and all of its weaknesses . Heightened (5th) Every Recall Knowledge each target makes until the end of your next turn is a free action.
+  Each target's next Recall Knowledge before the end of your next turn is a free action , gains a +2 circumstance bonus, and on a success reveals one additional piece of information. On a critical success it also reveals the creature's lowest saving throw and all of its weaknesses . Heightened (5th) Every Recall Knowledge each target makes until the end of your next turn is a free action.  
+  **Icon brief** (Stargazer — Augury): An open ledger book on which a creature's silhouette is written out in glowing silver ink, its weak points marked with small red stars.
 - **Poured Knowing** · _spell_ · `icons/magic/acid/pouring-gas-smoke-liquid.webp`  
-  +2 status bonus to Arcana, Nature, Occultism, Religion and Society. Each target's counteract checks during the duration use your Stargazer DC and proficiency rank if higher than their own, and count their counteract rank as 1 higher . Heightened (+2) +1 ally.
+  +2 status bonus to Arcana, Nature, Occultism, Religion and Society. Each target's counteract checks during the duration use your Stargazer DC and proficiency rank if higher than their own, and count their counteract rank as 1 higher . Heightened (+2) +1 ally.  
+  **Icon brief** (Stargazer — Augury): A crystal ewer tipped from the sky, pouring a stream of liquid starlight full of tiny glyphs and runes into an open waiting cup.
 - **Shell of Hours** · _spell_ · `icons/equipment/finger/ring-shell-white-blue.webp`  
-  Each regains 2d8 Hit Points immediately and gains a +2 status bonus to saves against disease and poison and to recovery checks. Once during the duration, the first time a target would be reduced to 0 Hit Points it is reduced to 1 Hit Point instead and the Augury ends for that target. Heightened (+2) +2d8 and +1 ally.
+  Each regains 2d8 Hit Points immediately and gains a +2 status bonus to saves against disease and poison and to recovery checks. Once during the duration, the first time a target would be reduced to 0 Hit Points it is reduced to 1 Hit Point instead and the Augury ends for that target. Heightened (+2) +2d8 and +1 ally.  
+  **Icon brief** (Stargazer — Augury): A translucent eggshell made of interlocking clock faces enclosing a glowing heart, a crack in one face sealing itself with golden light.
 - **The Hour Is Not Come** · _spell_ · `icons/magic/life/heart-cross-purple-orange.webp`  
-  Trigger You or an ally within 30 feet is reduced to 0 Hit Points. Effect It was not going to happen today. The target is reduced to 1 Hit Point instead, gains temporary Hit Points equal to your level , and does not gain the wounded condition from this instance. A creature cannot benefit from this Augury again for 10 minutes. Heightened (5th) The target also regains 2d8 Hit Points. (+2) +2d8. When…
+  Trigger You or an ally within 30 feet is reduced to 0 Hit Points. Effect It was not going to happen today. The target is reduced to 1 Hit Point instead, gains temporary Hit Points equal to your level , and does not gain the wounded condition from this instance. A creature cannot benefit from this Augury again for 10 minutes. Heightened (5th) The target also regains 2d8 Hit Points. (+2) +2d8. When…  
+  **Icon brief** (Stargazer — Augury): A clock hand stopped a hair before midnight, held back by a silver thread pulled taut; a falling figure's shadow caught mid-drop beneath it.
 - **Two Roads** · _spell_ · `icons/magic/lightning/bolt-forked-green.webp`  
-  Before the end of your next turn, the first skill check each attempts is rolled twice ; each takes the higher result. Heightened (5th) 3 allies, and it applies to saving throws as well. (9th) 4 allies.
+  Before the end of your next turn, the first skill check each attempts is rolled twice ; each takes the higher result. Heightened (5th) 3 allies, and it applies to saving throws as well. (9th) 4 allies.  
+  **Icon brief** (Stargazer — Augury): A path forking into two starlit roads under a night sky, a d20 hovering at the fork showing two results, the brighter road glowing.
 
 ### stargazer-class (1)
 
 - **Stargazer** · _class_ · `icons/environment/cosmos/astronomy-planetary-orbits.webp`  
-  You have already seen how this ends. Every morning you read the sky — which of thirteen signs is up, and whether it is kind — and every round you bend somebody else's luck by a little: a Guide for an ally's roll, a Snarl for an enemy's. You cannot fight, and you do not need to. Key attribute Wisdom &middot; Hit Points 8 + Constitution modifier per level &middot; Stargazer DC your focus spells and…
+  You have already seen how this ends. Every morning you read the sky — which of thirteen signs is up, and whether it is kind — and every round you bend somebody else's luck by a little: a Guide for an ally's roll, a Snarl for an enemy's. You cannot fight, and you do not need to. Key attribute Wisdom &middot; Hit Points 8 + Constitution modifier per level &middot; Stargazer DC your focus spells and…  
+  **Icon brief** (Stargazer — Class): A brass astrolabe framed against a deep indigo night sky, a single silver thread spooling from its center to a distant star, thirteen faint sigils circling the rim.
 
 ### stargazer-class-features (59)
 
 #### Actions
 
 - **Chart the Course** · _feat_ · `icons/tools/navigation/compass-brass-blue-red.webp`  
-  Name one creature within 60 feet that you can see — two creatures from 11th level . Until the start of your next turn, the first time a named creature rolls a d20, you may use Fortune's Thread on that roll without spending your reaction . If you named two creatures you may do this once for each of them. You can have only one Chart the Course active at a time. Target the creatures and use this:…
+  Name one creature within 60 feet that you can see — two creatures from 11th level . Until the start of your next turn, the first time a named creature rolls a d20, you may use Fortune's Thread on that roll without spending your reaction . If you named two creatures you may do this once for each of them. You can have only one Chart the Course active at a time. Target the creatures and use this:…  
+  **Icon brief** (Stargazer — Class feature): A star chart unrolled with a glowing dotted line drawn between two marked stars, a silver compass pinning one point, a target ring around the other.
 - **Fortune's Thread** · _feat_ · `icons/tools/hand/needle-thread-spool.webp`  
-  Trigger A creature within 30 feet that you can see is about to roll an attack roll, a saving throw, a skill check, or a Perception check. Effect Choose one: Guide — the triggering creature gains a +1 circumstance bonus to the roll. Snarl — the triggering creature takes a −1 circumstance penalty to the roll. Snarl can only be applied to an attack roll, skill check, or Perception check, never a…
+  Trigger A creature within 30 feet that you can see is about to roll an attack roll, a saving throw, a skill check, or a Perception check. Effect Choose one: Guide — the triggering creature gains a +1 circumstance bonus to the roll. Snarl — the triggering creature takes a −1 circumstance penalty to the roll. Snarl can only be applied to an attack roll, skill check, or Perception check, never a…  
+  **Icon brief** (Stargazer — Class feature): Two threads crossing between a pair of fingers: a gold thread pulled upward bright, a violet thread snagged downward, a d20 hanging where they cross.
 - **Portent** · _feat_ · `icons/magic/perception/orb-crystal-ball-scrying.webp`  
-  When you complete a Night Vigil, roll a d20 and record the result. This is your Portent , and you know its value. Speak the Portent [free-action] (prediction) Frequency once per day Trigger A creature within 60 feet that you can see is about to roll a d20 for an attack roll, a saving throw, or a skill check. Effect The creature does not roll. Its d20 result is your recorded Portent, and the roll…
+  When you complete a Night Vigil, roll a d20 and record the result. This is your Portent , and you know its value. Speak the Portent [free-action] (prediction) Frequency once per day Trigger A creature within 60 feet that you can see is about to roll a d20 for an attack roll, a saving throw, or a skill check. Effect The creature does not roll. Its d20 result is your recorded Portent, and the roll…  
+  **Icon brief** (Stargazer — Class feature): A d20 sealed inside a crystal orb at dawn, its rolled number glowing faintly through the glass, a night-vigil candle burned low beside it.
 - **Rewrite the Ending** · _feat_ · `icons/magic/time/hourglass-brown-orange.webp`  
-  Frequency once per week Trigger You or an ally within 60 feet dies, or the party is defeated or captured. Effect Time unwinds to the moment initiative was rolled for this encounter. All damage, conditions, deaths, expended spells, expended items and expended resources since that moment are restored, for every creature. The encounter has not happened. You alone remember it. As part of this free…
+  Frequency once per week Trigger You or an ally within 60 feet dies, or the party is defeated or captured. Effect Time unwinds to the moment initiative was rolled for this encounter. All damage, conditions, deaths, expended spells, expended items and expended resources since that moment are restored, for every creature. The encounter has not happened. You alone remember it. As part of this free…  
+  **Icon brief** (Stargazer — Class feature): A great hourglass shattered and reassembling itself in reverse, sand flowing upward, fallen swords and a broken shield rising back into place around it.
 - **The Last Thing You See** · _feat_ · `icons/magic/perception/eye-slit-pink.webp`  
-  Trigger A creature within 30 feet that you can see deals damage to you. Effect You show it the hour of its own death — not a threat, a date . It attempts a Will save against your Stargazer DC. Critical Success It is unaffected and is temporarily immune for 10 minutes. Success Frightened 1. Failure Frightened 2. Critical Failure Frightened 3 and stunned 1 . When something within 30 feet hurts you,…
+  Trigger A creature within 30 feet that you can see deals damage to you. Effect You show it the hour of its own death — not a threat, a date . It attempts a Will save against your Stargazer DC. Critical Success It is unaffected and is temporarily immune for 10 minutes. Success Frightened 1. Failure Frightened 2. Critical Failure Frightened 3 and stunned 1 . When something within 30 feet hurts you,…  
+  **Icon brief** (Stargazer — Class feature): A staring teal eye whose pupil holds a tiny skull and a written date; a crack of cold light shooting back toward an attacking claw.
 - **Unmake the Moment** · _feat_ · `icons/magic/light/circle-window-clock-blue.webp`  
-  Frequency once per day (recharges on your next Night Vigil) Trigger Your turn begins. Effect Time rewinds to the start of your last turn . Everything done since then by every creature is undone: damage dealt, conditions applied, spells cast, movement made, resources spent, reactions used. Creatures reduced to 0 Hit Points return to the Hit Points they had. Everyone except you loses all memory of…
+  Frequency once per day (recharges on your next Night Vigil) Trigger Your turn begins. Effect Time rewinds to the start of your last turn . Everything done since then by every creature is undone: damage dealt, conditions applied, spells cast, movement made, resources spent, reactions used. Creatures reduced to 0 Hit Points return to the Hit Points they had. Everyone except you loses all memory of…  
+  **Icon brief** (Stargazer — Class feature): A clock face with its hands spinning backward, a faint afterimage of the last few seconds peeling off it like a ghost layer, silver motion trails.
 #### Core
 
 - **Armor Expertise** · _feat_ · `icons/equipment/chest/breastplate-banded-blue.webp`  
-  Your proficiency ranks for unarmored defense and light armor increase to expert.
+  Your proficiency ranks for unarmored defense and light armor increase to expert.  
+  **Icon brief** (Stargazer — Core proficiency): A padded leather jerkin embroidered with silver constellations, a star-shaped clasp at the collar, glints of reinforcement.
 - **Astronomy Lore** · _lore_ · `icons/tools/navigation/spyglass-telescope-waves-blue.webp`  
-  Celestial events, calendars, navigation by star, prophecy, and — at the GM's discretion — Recall Knowledge about anything that has been foretold .
+  Celestial events, calendars, navigation by star, prophecy, and — at the GM's discretion — Recall Knowledge about anything that has been foretold .  
+  **Icon brief** (Stargazer — Core proficiency): An open almanac with a moon-phase calendar, a quill resting across it, small stars lifting off the page like dust.
 - **Astronomy Lore (15th)** · _feat_ · `icons/tools/navigation/spyglass-telescope-blue.webp`  
-  Your proficiency rank in Astronomy Lore increases to legendary , and you gain an extra skill feat, which must apply to Astronomy Lore or Occultism.
+  Your proficiency rank in Astronomy Lore increases to legendary , and you gain an extra skill feat, which must apply to Astronomy Lore or Occultism.  
+  **Icon brief** (Stargazer — Core proficiency): A complete orrery of every planet, spinning in perfect harmony, a laurel wreath of stars encircling it — mastery of all skies.
 - **Astronomy Lore (3rd)** · _feat_ · `icons/tools/navigation/spyglass-telescope-brass-blue.webp`  
-  Astronomy Lore is your core skill. Your proficiency rank in it increases to expert , and you gain an extra skill feat, which must apply to Astronomy Lore or Occultism.
+  Astronomy Lore is your core skill. Your proficiency rank in it increases to expert , and you gain an extra skill feat, which must apply to Astronomy Lore or Occultism.  
+  **Icon brief** (Stargazer — Core proficiency): A single brass telescope pointed at a cluster of stars, one star circled in chalk, a small notebook of notes beneath.
 - **Astronomy Lore (7th)** · _feat_ · `icons/tools/navigation/spyglass-telescope-brass.webp`  
-  Your proficiency rank in Astronomy Lore increases to master , and you gain an extra skill feat, which must apply to Astronomy Lore or Occultism.
+  Your proficiency rank in Astronomy Lore increases to master , and you gain an extra skill feat, which must apply to Astronomy Lore or Occultism.  
+  **Icon brief** (Stargazer — Core proficiency): Three nested celestial rings of an armillary sphere, brass and silver, aligned around a glowing center, notes fluttering around.
 - **Augury (11th)** · _feat_ · `icons/magic/light/explosion-star-blue-large.webp`  
-  You learn one Augury of your choice. You know nine permanently by 19th level — at 1st, 5th, 7th, 9th, 11th, 13th, 15th, 17th and 19th.
+  You learn one Augury of your choice. You know nine permanently by 19th level — at 1st, 5th, 7th, 9th, 11th, 13th, 15th, 17th and 19th.  
+  **Icon brief** (Stargazer — Class feature): A star-chart card with eleven pinholes of light, the eleventh newly kindled, a silver hand placing it in a fanned deck of sky cards.
 - **Augury (13th)** · _feat_ · `icons/magic/light/explosion-star-blue-small.webp`  
-  You learn one Augury of your choice. You know nine permanently by 19th level — at 1st, 5th, 7th, 9th, 11th, 13th, 15th, 17th and 19th.
+  You learn one Augury of your choice. You know nine permanently by 19th level — at 1st, 5th, 7th, 9th, 11th, 13th, 15th, 17th and 19th.  
+  **Icon brief** (Stargazer — Class feature): A ring of thirteen candles in an occult circle, the thirteenth just lit with indigo flame, an augury sigil forming in its smoke.
 - **Augury (15th)** · _feat_ · `icons/magic/light/explosion-star-blue-yellow.webp`  
-  You learn one Augury of your choice. You know nine permanently by 19th level — at 1st, 5th, 7th, 9th, 11th, 13th, 15th, 17th and 19th.
+  You learn one Augury of your choice. You know nine permanently by 19th level — at 1st, 5th, 7th, 9th, 11th, 13th, 15th, 17th and 19th.  
+  **Icon brief** (Stargazer — Class feature): A tarot-like card bearing a new constellation drawn in fresh silver ink, fifteen faint stars along its border, glowing at the edges.
 - **Augury (17th)** · _feat_ · `icons/magic/light/explosion-star-blue.webp`  
-  You learn one Augury of your choice. You know nine permanently by 19th level — at 1st, 5th, 7th, 9th, 11th, 13th, 15th, 17th and 19th.
+  You learn one Augury of your choice. You know nine permanently by 19th level — at 1st, 5th, 7th, 9th, 11th, 13th, 15th, 17th and 19th.  
+  **Icon brief** (Stargazer — Class feature): An open scroll unrolling into the night sky, a new glyph written in starlight at its end, seventeen small marks along its margin.
 - **Augury (19th)** · _feat_ · `icons/magic/light/explosion-star-glow-blue-purple.webp`  
-  You learn one Augury of your choice. You know nine permanently by 19th level — at 1st, 5th, 7th, 9th, 11th, 13th, 15th, 17th and 19th.
+  You learn one Augury of your choice. You know nine permanently by 19th level — at 1st, 5th, 7th, 9th, 11th, 13th, 15th, 17th and 19th.  
+  **Icon brief** (Stargazer — Class feature): A full circle of nine augury sigils around a central eye, every one glowing, the last one at the top blazing white.
 - **Augury (1st)** · _feat_ · `icons/magic/light/explosion-star-large-blue-yellow.webp`  
-  You learn one Augury of your choice. You know nine permanently by 19th level — at 1st, 5th, 7th, 9th, 11th, 13th, 15th, 17th and 19th.
+  You learn one Augury of your choice. You know nine permanently by 19th level — at 1st, 5th, 7th, 9th, 11th, 13th, 15th, 17th and 19th.  
+  **Icon brief** (Stargazer — Class feature): A single glowing sigil drawn on a blank star map, a hand's fingertip still trailing silver light from the stroke.
 - **Augury (5th)** · _feat_ · `icons/magic/light/explosion-star-large-pink.webp`  
-  You learn one Augury of your choice. You know nine permanently by 19th level — at 1st, 5th, 7th, 9th, 11th, 13th, 15th, 17th and 19th.
+  You learn one Augury of your choice. You know nine permanently by 19th level — at 1st, 5th, 7th, 9th, 11th, 13th, 15th, 17th and 19th.  
+  **Icon brief** (Stargazer — Class feature): Two augury sigils on a star map linked by a fine thread, the second just ignited, small sparks scattering.
 - **Augury (7th)** · _feat_ · `icons/magic/light/explosion-star-large-teal-purple.webp`  
-  You learn one Augury of your choice. You know nine permanently by 19th level — at 1st, 5th, 7th, 9th, 11th, 13th, 15th, 17th and 19th.
+  You learn one Augury of your choice. You know nine permanently by 19th level — at 1st, 5th, 7th, 9th, 11th, 13th, 15th, 17th and 19th.  
+  **Icon brief** (Stargazer — Class feature): Three augury sigils in a triangle on dark parchment, connected by silver lines, the newest pulsing indigo.
 - **Augury (9th)** · _feat_ · `icons/magic/light/explosion-star-large-teal.webp`  
-  You learn one Augury of your choice. You know nine permanently by 19th level — at 1st, 5th, 7th, 9th, 11th, 13th, 15th, 17th and 19th.
+  You learn one Augury of your choice. You know nine permanently by 19th level — at 1st, 5th, 7th, 9th, 11th, 13th, 15th, 17th and 19th.  
+  **Icon brief** (Stargazer — Class feature): Four augury sigils arranged like compass points around a small astrolabe, the fourth catching light.
 - **Constellation Mastery** · _feat_ · `icons/magic/light/explosion-star-orange-purple.webp`  
-  You no longer read the sky. You argue with it. Trade the Day. During your Night Vigil you may swap today’s aspect with the aspect of any of the next three days in your forecast. The two days exchange aspects; the signs do not move. The day you traded away is still coming. A scheduled Zenith cannot move. Forewarned becomes Foreordained. You and the allies you brief treat a negative aspect as…
+  You no longer read the sky. You argue with it. Trade the Day. During your Night Vigil you may swap today’s aspect with the aspect of any of the next three days in your forecast. The two days exchange aspects; the signs do not move. The day you traded away is still coming. A scheduled Zenith cannot move. Forewarned becomes Foreordained. You and the allies you brief treat a negative aspect as…  
+  **Icon brief** (Stargazer — Class feature): Two calendar tiles being swapped by a hand in the sky, each bearing a different sign's aspect glyph, a forecast row of days stretching away.
 - **Expert Stargazer** · _feat_ · `icons/magic/light/explosion-star-orange.webp`  
-  Your proficiency rank for your Stargazer DC increases to expert.
+  Your proficiency rank for your Stargazer DC increases to expert.  
+  **Icon brief** (Stargazer — Core proficiency): A silver star with a single banded ring around it, tiny compass marks along the ring, glowing over an indigo field.
 - **Great Fortitude** · _feat_ · `icons/magic/life/heart-cross-blue.webp`  
-  Your proficiency rank for Fortitude saves increases to expert.
+  Your proficiency rank for Fortitude saves increases to expert.  
+  **Icon brief** (Stargazer — Core proficiency): A solid granite pillar with a star carved into its face, unbroken under falling meteors that shatter against it.
 - **Greater Resolve** · _feat_ · `icons/skills/wounds/anatomy-organ-brain-pink-red.webp`  
-  Your proficiency rank for Will saves increases to legendary.
+  Your proficiency rank for Will saves increases to legendary.  
+  **Icon brief** (Stargazer — Core proficiency): An unblinking eye inside a triple-banded gold-and-silver ring, storms of violet mental energy breaking around it.
 - **Incredible Senses** · _feat_ · `icons/magic/perception/eye-ringed-glow-angry-large-teal.webp`  
-  Your proficiency rank for Perception increases to legendary.
+  Your proficiency rank for Perception increases to legendary.  
+  **Icon brief** (Stargazer — Core proficiency): A wide-open eye whose iris is a full star chart, rays of perception reaching every corner of a dark sky.
 - **Legendary Stargazer** · _feat_ · `icons/magic/light/explosion-star-pink.webp`  
-  Your proficiency rank for your Stargazer DC increases to legendary.
+  Your proficiency rank for your Stargazer DC increases to legendary.  
+  **Icon brief** (Stargazer — Core proficiency): A silver star crowned with three gold rings and a laurel of tiny stars, blazing at the center of a spiral galaxy.
 - **Lightning Reflexes** · _feat_ · `icons/magic/fire/explosion-flame-lightning-strike.webp`  
-  Your proficiency rank for Reflex saves increases to expert.
+  Your proficiency rank for Reflex saves increases to expert.  
+  **Icon brief** (Stargazer — Core proficiency): A shooting star streaking past, a hand snapping aside just in time, motion blur in silver and blue.
 - **Master Stargazer** · _feat_ · `icons/magic/light/explosion-star-small-blue-yellow.webp`  
-  Your proficiency rank for your Stargazer DC increases to master.
+  Your proficiency rank for your Stargazer DC increases to master.  
+  **Icon brief** (Stargazer — Core proficiency): A silver star circled by two concentric rings with engraved zodiac ticks, brighter than the stars around it.
 - **Night Vigil** · _feat_ · `icons/magic/time/day-night-sun-moon.webp`  
-  The Sky turns without you. One of thirteen skies is up each day, its aspect is Quiet, Benefic, Retrograde, Malefic or Exalted, rolled at the weights in &sect;8.2. Almost nobody can tell which. During your daily preparations, spend 10 minutes observing the sky. (Indoors, underground or under cloud there is no sky to observe, and your chart is not a substitute — see Clouded Sky .) You gain three…
+  The Sky turns without you. One of thirteen skies is up each day, its aspect is Quiet, Benefic, Retrograde, Malefic or Exalted, rolled at the weights in &sect;8.2. Almost nobody can tell which. During your daily preparations, spend 10 minutes observing the sky. (Indoors, underground or under cloud there is no sky to observe, and your chart is not a substitute — see Clouded Sky .) You gain three…  
+  **Icon brief** (Stargazer — Class feature): A lone telescope on a hilltop at night, a lantern beside it, thirteen faint signs arcing across the sky above with one lit brightly.
 - **Resolve** · _feat_ · `icons/commodities/biological/organ-brain-pink-purple.webp`  
-  Your proficiency rank for Will saves increases to master.
+  Your proficiency rank for Will saves increases to master.  
+  **Icon brief** (Stargazer — Core proficiency): A calm eye within two concentric silver rings, a wave of violet fear-mist parting harmlessly around it.
 - **Second Star** · _feat_ · `icons/magic/light/explosion-star-small-orange-purple.webp`  
-  Your focus pool increases to 2 Focus Points . (The third, as for every published class, comes from a class feat — Conjunction , 8th.)
+  Your focus pool increases to 2 Focus Points . (The third, as for every published class, comes from a class feat — Conjunction , 8th.)  
+  **Icon brief** (Stargazer — Class feature): Two stars twinned on a dark sky, the second newly kindling beside the first, a faint focus-ring of light around both.
 - **Star Chart** · _feat_ · `icons/sundries/gaming/card-astronomy-pink.webp`  
-  You carry an astrolabe, a star-map, a tattoo, or a memorised sky. You gain a focus pool of 1 Focus Point and the Auguries you learn. Auguries are focus spells with the prediction trait; their rank is always half your level rounded up, and they use your Stargazer DC and your Wisdom modifier for spell attack rolls and DCs. You Refocus by reading the sky, or your chart, for 10 minutes. You also know…
+  You carry an astrolabe, a star-map, a tattoo, or a memorised sky. You gain a focus pool of 1 Focus Point and the Auguries you learn. Auguries are focus spells with the prediction trait; their rank is always half your level rounded up, and they use your Stargazer DC and your Wisdom modifier for spell attack rolls and DCs. You Refocus by reading the sky, or your chart, for 10 minutes. You also know…  
+  **Icon brief** (Stargazer — Class feature): A brass astrolabe set on an unrolled star map, its rete pointing to a glowing sigil, a focus point of light pooled at its center.
 - **Stargazer's Path** · _feat_ · `icons/magic/light/beam-deflect-path-yellow.webp`  
-  Four Paths. Each grants an ability at 1st , 5th , 13th and 17th level.
+  Four Paths. Each grants an ability at 1st , 5th , 13th and 17th level.  
+  **Icon brief** (Stargazer — Path): A crossroads of four starlit roads seen from above, each ending at a different emblem: a loom, an open book, a herald's horn, a broken thread.
 - **Surer Thread** · _feat_ · `icons/magic/light/explosion-star-small-orange.webp`  
-  Fortune's Thread's bonus and penalty increase to &plusmn;2 .
+  Fortune's Thread's bonus and penalty increase to &plusmn;2 .  
+  **Icon brief** (Stargazer — Class feature): A thread of fate doubled and twisted tight, gold and violet strands braided, glowing with a stronger sheen than a single strand.
 - **Threefold Thread** · _feat_ · `icons/magic/light/explosion-star-small-pink.webp`  
-  Fortune's Thread affects three creatures with a single reaction, in any combination of Guide and Snarl. Twin Fates still affects two.
+  Fortune's Thread affects three creatures with a single reaction, in any combination of Guide and Snarl. Twin Fates still affects two.  
+  **Icon brief** (Stargazer — Class feature): Three threads of fate fanning from one fingertip to three distant points, gold and violet mixed, all pulled taut at once.
 - **Twin Fates** · _feat_ · `icons/magic/light/explosion-star-small-teal-purple.webp`  
-  Once per 10 minutes, when you use Fortune's Thread, you may instead make it a true fortune or misfortune effect for up to two of its targets : each rolls twice and takes the higher result (Guide) or the lower result (Snarl). This replaces the bonus or penalty for those targets, and Snarl's restriction to attack rolls, skill checks and Perception still applies. If a fortune effect and a misfortune…
+  Once per 10 minutes, when you use Fortune's Thread, you may instead make it a true fortune or misfortune effect for up to two of its targets : each rolls twice and takes the higher result (Guide) or the lower result (Snarl). This replaces the bonus or penalty for those targets, and Snarl's restriction to attack rolls, skill checks and Perception still applies. If a fortune effect and a misfortune…  
+  **Icon brief** (Stargazer — Class feature): Two d20s hanging from a single forked thread, one gold glowing with the higher roll, one violet showing the lower.
 - **Vigilant Senses** · _feat_ · `icons/magic/perception/eye-ringed-glow-angry-small-red.webp`  
-  Your proficiency rank for Perception increases to master.
+  Your proficiency rank for Perception increases to master.  
+  **Icon brief** (Stargazer — Core proficiency): An eye open in the dark with two bands of silver around it, faint shapes in the shadows outlined by thin starlight.
 - **Weapon Expertise** · _feat_ · `icons/magic/light/swords-light-glowing-white.webp`  
-  Your proficiency ranks for unarmed attacks and simple weapons increase to expert.
+  Your proficiency ranks for unarmed attacks and simple weapons increase to expert.  
+  **Icon brief** (Stargazer — Core proficiency): A simple wooden staff and a bare fist crossed, both etched with small silver stars, a banded ring of expertise behind.
 - **Widen the Sky** · _feat_ · `icons/magic/light/explosion-star-small-teal.webp`  
-  Fortune's Thread's range increases to 60 feet , and when you use it you may affect two creatures with the same reaction, in any combination — two Guides, two Snarls, or one of each. Both must be within range and you must be able to see both. It is still a single reaction, and Snarl's restriction to attack rolls, skill checks and Perception still applies.
+  Fortune's Thread's range increases to 60 feet , and when you use it you may affect two creatures with the same reaction, in any combination — two Guides, two Snarls, or one of each. Both must be within range and you must be able to see both. It is still a single reaction, and Snarl's restriction to attack rolls, skill checks and Perception still applies.  
+  **Icon brief** (Stargazer — Class feature): A thread of fate splitting into two from one hand, reaching across a wider arc of night sky, its range drawn as a wide silver circle.
 #### Paths
 
 - **Deja Vu** · _feat_ · `icons/magic/time/arrows-circling-green.webp`  
-  Frequency once per 10 minutes Trigger You fail, but do not critically fail, a check. Effect Reroll it. This is a fortune effect. Offered as a button when it triggers.
+  Frequency once per 10 minutes Trigger You fail, but do not critically fail, a check. Effect Reroll it. This is a fortune effect. Offered as a button when it triggers.  
+  **Icon brief** (Stargazer — Path): A d20 with a translucent afterimage of itself offset behind it, a curved arrow looping the failed roll back for another throw.
 - **Doubled Strand** · _feat_ · `icons/tools/hand/sewing-needle-thread.webp`  
-  Chart the Course names two creatures instead of one, and three from 11th level. You may use its free Fortune's Thread once for each of them.
+  Chart the Course names two creatures instead of one, and three from 11th level. You may use its free Fortune's Thread once for each of them.  
+  **Icon brief** (Stargazer — Path): A star chart with two separate dotted courses plotted at once, two compasses pinning two marked stars, threads running to both.
 - **Every Sky Ever Read** · _feat_ · `icons/sundries/books/book-backed-blue-gold.webp`  
-  Once per hour, ask the GM one yes-or-no question about the next hour. The answer is true . (If the GM genuinely has not decided, the answer is “not yet written,” and the use is not spent.)
+  Once per hour, ask the GM one yes-or-no question about the next hour. The answer is true . (If the GM genuinely has not decided, the answer is “not yet written,” and the use is not spent.)  
+  **Icon brief** (Stargazer — Path): A towering stack of star charts and almanacs whose top page glows with a single question mark answered by a bright star.
 - **Foregone Conclusion** · _feat_ · `icons/sundries/documents/letter-modern-seal.webp`  
-  Once per round, when you Snarl an attack roll and the attack misses, the attacker is off-guard until the end of its turn.
+  Once per round, when you Snarl an attack roll and the attack misses, the attacker is off-guard until the end of its turn.  
+  **Icon brief** (Stargazer — Path): An arrow bending away from its target as a violet thread snags it, the attacker's silhouette left open and exposed, a small cracked shield icon.
 - **Herald's Omen** · _feat_ · `icons/sundries/survival/horn-drinking-corked.webp`  
-  You learn Coiling Doubt , and it does not count against your Auguries known. In addition, once per round, when a creature critically fails a roll you affected with Snarl , it takes persistent mental damage equal to your Wisdom modifier .
+  You learn Coiling Doubt , and it does not count against your Auguries known. In addition, once per round, when a creature critically fails a roll you affected with Snarl , it takes persistent mental damage equal to your Wisdom modifier .  
+  **Icon brief** (Stargazer — Path): A herald's horn blowing violet smoke shaped like a coiled serpent, a falling d20 cracking where the smoke touches it.
 - **Knotted Thread** · _feat_ · `icons/commodities/cloth/thread-and-needle.webp`  
-  When you Guide an ally with Fortune's Thread, they also gain a +1 circumstance bonus to AC against the next attack made against them before the start of your next turn.
+  When you Guide an ally with Fortune's Thread, they also gain a +1 circumstance bonus to AC against the next attack made against them before the start of your next turn.  
+  **Icon brief** (Stargazer — Path): A gold thread tied in a protective knot that flares into a small shield of light, warding off an incoming blade.
 - **Perfect Recall** · _feat_ · `icons/sundries/books/book-backed-silver-gold.webp`  
-  You can Recall Knowledge using Astronomy Lore in place of any other Knowledge skill, at a −2 circumstance penalty; the penalty goes away at 7th level when Astronomy Lore reaches Master. Your first Recall Knowledge against any creature each combat is a free action . Toggle In place of another skill on the check to take the penalty.
+  You can Recall Knowledge using Astronomy Lore in place of any other Knowledge skill, at a −2 circumstance penalty; the penalty goes away at 7th level when Astronomy Lore reaches Master. Your first Recall Knowledge against any creature each combat is a free action . Toggle In place of another skill on the check to take the penalty.  
+  **Icon brief** (Stargazer — Path): A memory palace of stars — a glowing constellation map inside a silhouetted head's outline, one star flaring as a fact is recalled.
 - **Second Sight** · _feat_ · `icons/magic/time/arrows-circling-pink.webp`  
-  Deja Vu can instead trigger on a failed check by an ally within 30 feet that you can see.
+  Deja Vu can instead trigger on a failed check by an ally within 30 feet that you can see.  
+  **Icon brief** (Stargazer — Path): A second faint eye opening beside the first, its gaze reaching an ally's falling d20 and looping it back for a reroll.
 - **Sentence Passed** · _feat_ · `icons/tools/instruments/horn-flared-wood.webp`  
-  Once per 10 minutes, 1 creature within 60 feet, Will save against your Stargazer DC. Failure For 1 minute the target treats every natural 20 as a natural 10 and cannot benefit from fortune effects. Critical Failure As failure, and it is doomed 1 .
+  Once per 10 minutes, 1 creature within 60 feet, Will save against your Stargazer DC. Failure For 1 minute the target treats every natural 20 as a natural 10 and cannot benefit from fortune effects. Critical Failure As failure, and it is doomed 1 .  
+  **Icon brief** (Stargazer — Path): A judge's gavel made of starlight striking a d20, its 20 face cracking into a dull 10, dark chains of doom around it.
 - **Skein of Fates** · _feat_ · `icons/commodities/cloth/thread-spindle-black.webp`  
-  Fortune's Thread affects one additional creature with a single reaction — three from 13th, and four once Threefold Thread arrives at 17th. The extra target does not extend Twin Fates or Tapestry .
+  Fortune's Thread affects one additional creature with a single reaction — three from 13th, and four once Threefold Thread arrives at 17th. The extra target does not extend Twin Fates or Tapestry .  
+  **Icon brief** (Stargazer — Path): A loose skein of many threads of fate wound in a ball, strands unspooling toward several points at once, gold and violet.
 - **Tapestry** · _feat_ · `icons/commodities/cloth/thread-spindle-green.webp`  
-  Once per 10 minutes, Fortune's Thread affects every ally within 60 feet (Guide) or every enemy within 60 feet (Snarl). One reaction, one choice, everyone. Offered in Fortune's Thread's picker when it is ready.
+  Once per 10 minutes, Fortune's Thread affects every ally within 60 feet (Guide) or every enemy within 60 feet (Snarl). One reaction, one choice, everyone. Offered in Fortune's Thread's picker when it is ready.  
+  **Icon brief** (Stargazer — Path): A vast woven tapestry of the battlefield in gold and violet threads, every figure stitched to the weaver's loom at once.
 - **The Almanac** · _feat_ · `icons/sundries/books/book-backed-silver-red.webp`  
-  Night Vigil's forecast reaches seven days instead of three, and you may determine what the sky was on any past day you were alive for. The Vigil card offers a button to read a past day.
+  Night Vigil's forecast reaches seven days instead of three, and you may determine what the sky was on any past day you were alive for. The Vigil card offers a button to read a past day.  
+  **Icon brief** (Stargazer — Path): A thick leather almanac open to a seven-day spread of sky forecasts, back pages flipping to past dates, a bookmark ribbon of starlight.
 - **The Announcement** · _feat_ · `icons/tools/instruments/horn-industrial-steel.webp`  
-  You can Demoralize using Astronomy Lore instead of Intimidation, at a range of 60 feet, with no auditory or visual requirement — you are not shouting, you are reading out a date. Use this to Demoralize your target with Astronomy Lore.
+  You can Demoralize using Astronomy Lore instead of Intimidation, at a range of 60 feet, with no auditory or visual requirement — you are not shouting, you are reading out a date. Use this to Demoralize your target with Astronomy Lore.  
+  **Icon brief** (Stargazer — Path): An open scroll held out, a date read aloud in glowing letters that ripple outward like a shockwave of dread.
 - **The Broken Thread** · _feat_ · `icons/sundries/survival/mirror-plain.webp`  
-  I have already lost you once. Your Path grants an ability at 1st, 5th, 13th and 17th level.
+  I have already lost you once. Your Path grants an ability at 1st, 5th, 13th and 17th level.  
+  **Icon brief** (Stargazer — Path): A single thread of fate snapped in two, the frayed ends glowing, a clock with its hands reversing behind the break.
 - **The Ephemeris** · _feat_ · `icons/sundries/books/book-backed-wood-tan.webp`  
-  I have read every sky. Ask me anything. Your Path grants an ability at 1st, 5th, 13th and 17th level.
+  I have read every sky. Ask me anything. Your Path grants an ability at 1st, 5th, 13th and 17th level.  
+  **Icon brief** (Stargazer — Path): An ephemeris table — columns of star positions in silver ink — with an eye at its center that has read every line.
 - **The Herald** · _feat_ · `icons/tools/instruments/horn-megaphone-loudspeaker.webp`  
-  I do not curse them. I announce what is coming. Your Path grants an ability at 1st, 5th, 13th and 17th level.
+  I do not curse them. I announce what is coming. Your Path grants an ability at 1st, 5th, 13th and 17th level.  
+  **Icon brief** (Stargazer — Path): A herald's long horn against the night sky, a banner hanging from it embroidered with an omen sigil, dark stars falling behind.
 - **The Long Way Round** · _feat_ · `icons/magic/nature/root-vine-sword-broken.webp`  
-  Unmake the Moment may rewind to the start of any creature’s last turn, not only your own — declare which as you use it. In addition, once per week, you may use Unmake the Moment while dead , if you died during the round it would undo.
+  Unmake the Moment may rewind to the start of any creature’s last turn, not only your own — declare which as you use it. In addition, once per week, you may use Unmake the Moment while dead , if you died during the round it would undo.  
+  **Icon brief** (Stargazer — Path): A long silver thread winding back on itself in a loop through several clock faces, one of them belonging to someone else, rewinding.
 - **The Weaver** · _feat_ · `icons/commodities/cloth/thread-spindle-grey-green.webp`  
-  Fate is a fabric, and I have hands. Your Path grants an ability at 1st, 5th, 13th and 17th level.
+  Fate is a fabric, and I have hands. Your Path grants an ability at 1st, 5th, 13th and 17th level.  
+  **Icon brief** (Stargazer — Path): A loom strung with gold and violet threads, its weave forming a constellation, a shuttle of starlight passing through.
 - **Unmade Again** · _feat_ · `icons/skills/melee/shield-damaged-broken-blue.webp`  
-  Unmake the Moment can be used twice per day , and you are no longer drained 1 when it resolves. You are still stunned 1.
+  Unmake the Moment can be used twice per day , and you are no longer drained 1 when it resolves. You are still stunned 1.  
+  **Icon brief** (Stargazer — Path): Two clock faces spinning backward one after the other, a double rewind arrow wrapping both, silver sparks flying off.
 - **Written Down** · _feat_ · `icons/sundries/books/book-black-grey.webp`  
-  When you critically succeed at a Recall Knowledge check, you and all allies who can hear you gain a +1 circumstance bonus to all d20 rolls against that creature type for 1 minute. You may also use Fortune's Thread on a Recall Knowledge check after the roll but before the GM answers .
+  When you critically succeed at a Recall Knowledge check, you and all allies who can hear you gain a +1 circumstance bonus to all d20 rolls against that creature type for 1 minute. You may also use Fortune's Thread on a Recall Knowledge check after the roll but before the GM answers .  
+  **Icon brief** (Stargazer — Path): A quill writing a creature's true name in glowing ink, the letters lifting off the page and drifting to allies as small stars.
 
 ### stargazer-effects (28)
 
 - **Effect: Alms of Fate** · _effect_ · `icons/commodities/currency/coins-assorted-mix-copper-silver-gold.webp`  
-  Your next damaging effect before the end of the Stargazer's next turn rerolls every 1 and 2 on its damage dice, and keeps the new results.
+  Your next damaging effect before the end of the Stargazer's next turn rerolls every 1 and 2 on its damage dice, and keeps the new results.  
+  **Icon brief** (Stargazer — Effect): Damage dice hovering over a weapon, the low faces flickering and flipping to higher numbers, a faint coin of starlight above.
 - **Effect: Borrowed Second** · _effect_ · `icons/magic/time/clock-stopwatch-white-blue.webp`  
-  +1 circumstance bonus to AC until the start of the Stargazer's next turn.
+  +1 circumstance bonus to AC until the start of the Stargazer's next turn.  
+  **Icon brief** (Stargazer — Effect): A faint silver second hand circling a creature like a halo, a thin translucent barrier shimmering in front of it.
 - **Effect: Coiling Doubt** · _effect_ · `icons/magic/unholy/orb-glowing-purple.webp`  
-  The next attack roll or skill check is rolled twice, taking the lower.
+  The next attack roll or skill check is rolled twice, taking the lower.  
+  **Icon brief** (Stargazer — Effect): A single coil of violet thread tightening around a creature's hand just before a roll, a cracked d20 at its fingertips.
 - **Effect: Coiling Doubt (Lingering)** · _effect_ · `icons/magic/unholy/orb-glowing-purple.webp`  
-  The first attack roll or skill check each round is rolled twice, taking the lower.
+  The first attack roll or skill check each round is rolled twice, taking the lower.  
+  **Icon brief** (Stargazer — Effect): A violet serpent-thread wound loosely around a creature's wrist, a pulse of doubt flaring each round, two dice shown, the lower lit.
 - **Effect: Crown of Fire** · _effect_ · `icons/magic/fire/flame-burning-hand-orange.webp`  
-  +2 status bonus to Intimidation and Performance. You can Demoralize at 60 feet with no auditory or visual requirement and no penalty for a shared-language failure.
+  +2 status bonus to Intimidation and Performance. You can Demoralize at 60 feet with no auditory or visual requirement and no penalty for a shared-language failure.  
+  **Icon brief** (Stargazer — Effect): A small crown of burning stars floating over the creature's head, flame-rays pulsing out like a roar.
 - **Effect: Crown's Blessing** · _effect_ · `icons/magic/control/control-influence-crown-gold.webp`  
-  Crown of Fire: +1 status bonus to your next roll.
+  Crown of Fire: +1 status bonus to your next roll.  
+  **Icon brief** (Stargazer — Effect): A single ember falling from a crown of fire onto an ally's open palm, glowing gold, a tiny +1 spark rising from it.
 - **Effect: Deep Dream** · _effect_ · `icons/magic/perception/eye-ringed-glow-angry-small-teal.webp`  
-  +2 status bonus to Will saves and to Perception checks to disbelieve illusions.
+  +2 status bonus to Will saves and to Perception checks to disbelieve illusions.  
+  **Icon brief** (Stargazer — Deep Dream): A closed eye wrapped in drifting indigo dream-mist, silver constellations reflected on its lid, an illusory mask dissolving into stardust in front of it.
 - **Effect: Deep Dream (Reprieve)** · _effect_ · `icons/magic/perception/eye-ringed-glow-angry-small-teal.webp`  
-  Once during Deep Dream: a critical failure on a Will save is a failure. Spent when it happens.
+  Once during Deep Dream: a critical failure on a Will save is a failure. Spent when it happens.  
+  **Icon brief** (Stargazer — Deep Dream reprieve): A sleeping mind drawn as a crescent moon over indigo water, one bright silver star catching a falling shard of a broken mirror just before it hits the surface.
 - **Effect: Fate's Favourite** · _effect_ · `icons/sundries/gaming/dice-runed-brown.webp`  
-  Your next d20 roll is a natural 20.
+  Your next d20 roll is a natural 20.  
+  **Icon brief** (Stargazer — Fate's Favourite): A d20 frozen mid-tumble, its 20 face blazing gold, a single shooting star streaking down to land on that face against a deep indigo sky.
 - **Effect: First Blood (Initiative)** · _effect_ · `icons/skills/melee/strike-sword-blood-red.webp`  
-  +2 status bonus to the next initiative roll within the hour.
+  +2 status bonus to the next initiative roll within the hour.  
+  **Icon brief** (Stargazer — First Blood (initiative)): A dawn star rising ahead of a row of dim stars, a silver arrowhead of light pointing forward, the first of a line to move.
 - **Effect: First Blood (Strike)** · _effect_ · `icons/skills/melee/strike-sword-blood-red.webp`  
-  The first Strike of the encounter that hits deals extra spirit damage. Spent when it lands.
+  The first Strike of the encounter that hits deals extra spirit damage. Spent when it lands.  
+  **Icon brief** (Stargazer — First Blood (strike)): A blade edge touched by a single falling star, a pale spectral spark bursting at the point of first contact, faint blue spirit light trailing.
 - **Effect: Guiding Star** · _effect_ · `icons/magic/light/explosion-star-glow-yellow.webp`  
-  +1 status bonus to attack rolls, damage rolls, Perception checks and skill checks (+2 from the 10th-rank Augury), until the start of the Stargazer's next turn.
+  +1 status bonus to attack rolls, damage rolls, Perception checks and skill checks (+2 from the 10th-rank Augury), until the start of the Stargazer's next turn.  
+  **Icon brief** (Stargazer — Guiding Star): A single brilliant eight-pointed star shining down a beam of soft gold light, a silver path of smaller stars leading toward it across the night.
 - **Effect: Hunted by the Sky** · _effect_ · `icons/magic/perception/eye-slit-orange.webp`  
-  Hunted: it cannot be concealed or hidden from the Stargazer; the Stargazer and allies gain +1 circumstance to Seek it; the first attack against it each round gains +1 circumstance; the Stargazer's Snarl against it is −3, or −4 with Surer Thread.
+  Hunted: it cannot be concealed or hidden from the Stargazer; the Stargazer and allies gain +1 circumstance to Seek it; the first attack against it each round gains +1 circumstance; the Stargazer's Snarl against it is −3, or −4 with Surer Thread.  
+  **Icon brief** (Stargazer — Hunted by the Sky): A dark silhouette pinned in a cone of cold starlight from above, a ring of constellation lines closing around it like a net, nowhere to hide.
 - **Effect: Iron Auspice** · _effect_ · `icons/magic/defensive/shield-barrier-glowing-blue.webp`  
-  +2 status bonus to Fortitude saves and to Athletics checks to Shove, Trip and Grapple; temporary Hit Points equal to three times the Stargazer's level.
+  +2 status bonus to Fortitude saves and to Athletics checks to Shove, Trip and Grapple; temporary Hit Points equal to three times the Stargazer's level.  
+  **Icon brief** (Stargazer — Iron Auspice): A body outline plated in dark iron starmetal, a glowing red-gold planet (Mars-like) above it, a layer of shimmering temporary armour around the edges.
 - **Effect: Iron Auspice (Reprieve)** · _effect_ · `icons/magic/defensive/shield-barrier-glowing-blue.webp`  
-  Once during Iron Auspice: a critical failure on a Fortitude save is a failure. Spent when it happens.
+  Once during Iron Auspice: a critical failure on a Fortitude save is a failure. Spent when it happens.  
+  **Icon brief** (Stargazer — Iron Auspice reprieve): An iron shield-plate stamped with a star, cracked down the middle but held together by a single silver thread pulled tight across the crack.
 - **Effect: Knotted Thread** · _effect_ · `icons/magic/control/silhouette-hold-change-blue.webp`  
-  +1 circumstance bonus to AC against the next attack before the start of the Stargazer's next turn.
+  +1 circumstance bonus to AC against the next attack before the start of the Stargazer's next turn.  
+  **Icon brief** (Stargazer — Knotted Thread): A silver fate-thread tied into a tight knot that a sword-point strikes and glances off, a small shield of light flaring at the knot.
 - **Effect: Perfect Ledger** · _effect_ · `icons/sundries/books/book-open-turquoise.webp`  
-  +2 circumstance bonus to the next Recall Knowledge before the end of the Stargazer's next turn, which is a free action. A critical success also reveals the creature's lowest saving throw and all its weaknesses.
+  +2 circumstance bonus to the next Recall Knowledge before the end of the Stargazer's next turn, which is a free action. A critical success also reveals the creature's lowest saving throw and all its weaknesses.  
+  **Icon brief** (Stargazer — Perfect Ledger): An open ledger of star charts with one entry glowing gold, a quill of light underlining a creature's sketched outline and its weak points circled.
 - **Effect: Poured Knowing** · _effect_ · `icons/sundries/books/book-embossed-blue.webp`  
-  +2 status bonus to Arcana, Nature, Occultism, Religion and Society.
+  +2 status bonus to Arcana, Nature, Occultism, Religion and Society.  
+  **Icon brief** (Stargazer — Poured Knowing): A silver ewer tipped over a head-shaped outline, a stream of tiny glowing glyphs and runes pouring in, five symbols (arcane rune, leaf, eye, sun, scroll) orbiting.
 - **Effect: Remembered Ending** · _effect_ · `icons/magic/time/hourglass-tilted-glowing-gold.webp`  
-  You were in the erased timeline: +2 circumstance bonus to your first d20 roll of the re-run encounter.
+  You were in the erased timeline: +2 circumstance bonus to your first d20 roll of the re-run encounter.  
+  **Icon brief** (Stargazer — Remembered Ending): A torn page of a battle map, the erased half ghosted in faint silver, a single gold star kept in a hand as the scene redraws.
 - **Effect: Remembered Initiative** · _effect_ · `icons/magic/time/hourglass-tilted-glowing-gold.webp`  
-  You were in the erased timeline: +2 circumstance bonus to your initiative roll.
+  You were in the erased timeline: +2 circumstance bonus to your initiative roll.  
+  **Icon brief** (Stargazer — Remembered Initiative): A broken hourglass whose sand flows back up, one grain glowing gold and leaping ahead of the rest like a starting signal.
 - **Effect: Sentence Passed** · _effect_ · `icons/magic/unholy/orb-glowing-purple.webp`  
-  For 1 minute this creature treats every natural 20 as a natural 10 and cannot benefit from fortune effects.
+  For 1 minute this creature treats every natural 20 as a natural 10 and cannot benefit from fortune effects.  
+  **Icon brief** (Stargazer — Sentence Passed): A d20 with its 20 face crossed out and overwritten as a dull 10, a black gavel-shaped star above, the die's glow snuffed to grey.
 - **Effect: Shell of Hours** · _effect_ · `icons/magic/life/heart-cross-strong-flame-green.webp`  
-  +2 status bonus to saves against disease and poison. Once : the first time this creature would be reduced to 0 Hit Points it is reduced to 1 Hit Point instead, and the Augury ends for it.
+  +2 status bonus to saves against disease and poison. Once : the first time this creature would be reduced to 0 Hit Points it is reduced to 1 Hit Point instead, and the Augury ends for it.  
+  **Icon brief** (Stargazer — Shell of Hours): A translucent egg-like shell made of clock faces wrapped around a small figure, green poison droplets beading off it, one hand of the clock stopped at the brink.
 - **Effect: Shouted Warning** · _effect_ · `icons/magic/time/clock-stopwatch-white-blue.webp`  
-  A Stargazer who has seen this round already shouted a warning: +2 circumstance bonus to your next roll this round.
+  A Stargazer who has seen this round already shouted a warning: +2 circumstance bonus to your next roll this round.  
+  **Icon brief** (Stargazer — Shouted Warning): An open mouth-shape of starlight sending out concentric silver sound rings, a raised exclamation-star in the middle, an incoming blade dimly visible.
 - **Effect: Star Chart Dark** · _effect_ · `icons/magic/time/hourglass-tilted-glowing-gold.webp`  
-  Your Star Chart is dark: no Night Vigil, Fortune's Thread, Chart the Course, Portent, Auguries or Focus Points until a full 8-hour Night Vigil under open sky. Your drained and doomed cannot be reduced before then.
+  Your Star Chart is dark: no Night Vigil, Fortune's Thread, Chart the Course, Portent, Auguries or Focus Points until a full 8-hour Night Vigil under open sky. Your drained and doomed cannot be reduced before then.  
+  **Icon brief** (Stargazer — Star Chart dark): A star chart scroll gone black, its constellations faded to ash-grey dots, a covered moon behind heavy clouds, a single candle snuffed beside it.
 - **Effect: Star-Marked** · _effect_ · `icons/magic/unholy/orb-glowing-purple.webp`  
-  Marked by a Stargazer's Star-Marked Enemy: Coiling Doubt and Snarl reach it wherever it is known to be, until their next daily preparations.
+  Marked by a Stargazer's Star-Marked Enemy: Coiling Doubt and Snarl reach it wherever it is known to be, until their next daily preparations.  
+  **Icon brief** (Stargazer — Star-Marked): A creature's shadow branded with a glowing silver star sigil, a thin line of light linking it to a distant watching star far overhead.
 - **Effect: The Hour Is Not Come (Immune)** · _effect_ · `icons/magic/life/heart-glowing-red.webp`  
-  Cannot benefit from The Hour Is Not Come again for 10 minutes.
+  Cannot benefit from The Hour Is Not Come again for 10 minutes.  
+  **Icon brief** (Stargazer — The Hour Is Not Come — spent): A pocket watch closed and chained shut, its face greyed out, a small ten-minute arc of dim silver light marking when it can open again.
 - **Effect: Two Roads** · _effect_ · `icons/magic/control/silhouette-hold-change-blue.webp`  
-  The first skill check before the end of the Stargazer's next turn is rolled twice, keeping the higher — saving throws too, from the 5th-rank Augury.
+  The first skill check before the end of the Stargazer's next turn is rolled twice, keeping the higher — saving throws too, from the 5th-rank Augury.  
+  **Icon brief** (Stargazer — Two Roads): A starlit path forking in two, two d20s rolling down each branch, the brighter one's road lit gold while the other fades.
 - **Effect: Written in Advance** · _effect_ · `icons/sundries/books/book-embossed-blue.webp`  
-  Your next skill check within the hour is an automatic success, not a critical success.
+  Your next skill check within the hour is an automatic success, not a critical success.  
+  **Icon brief** (Stargazer — Written in Advance): A page on which a check mark is already inked before the hand reaches it, a quill of starlight hovering, the ink glowing silver.
 
 ### stargazer-feats (40)
 
 #### 10th
 
 - **Fate's Favourite** · _feat_ · `icons/sundries/gaming/dice-runed-brown.webp`  
-  Once per day, treat one d20 roll you make as a natural 20 . You saw this. Post this to chat before the roll: your next d20 is a natural 20.
+  Once per day, treat one d20 roll you make as a natural 20 . You saw this. Post this to chat before the roll: your next d20 is a natural 20.  
+  **Icon brief** (Stargazer — Fate's Favourite): A hand releasing a d20 that already shows a golden 20 before it lands, a halo of stars around it and a chat-scroll banner reading the prophecy.
 - **Two Warnings** · _feat_ · `icons/commodities/cloth/thread-spindle-red.webp`  
-  You gain a second reaction each round, usable only for Fortune's Thread , The Last Thing You See , or The Hour Is Not Come .
+  You gain a second reaction each round, usable only for Fortune's Thread , The Last Thing You See , or The Hour Is Not Come .  
+  **Icon brief** (Stargazer — Two Warnings): Two silver warning bells ringing together under a star, each sending out its own wave of light.
 - **Unspent Thread** · _feat_ · `icons/commodities/cloth/thread-spindle-violet.webp`  
-  If you have not used your reaction by the start of your turn, your first Chart the Course that turn is a free action .
+  If you have not used your reaction by the start of your turn, your first Chart the Course that turn is a free action .  
+  **Icon brief** (Stargazer — Unspent Thread): A spool of fate-thread still full and glowing, a silver compass needle springing off it to chart a course on a star map.
 - **Wide Vigil** · _feat_ · `icons/equipment/neck/necklace-astrology-moon-gold.webp`  
-  Forewarned has no limit on the number of allies you may brief, and briefing takes 1 minute.
+  Forewarned has no limit on the number of allies you may brief, and briefing takes 1 minute.  
+  **Icon brief** (Stargazer — Wide Vigil): A lantern of starlight held high, its warm circle widening outward to cover many small shield-emblems of allies.
 #### 12th
 
 - **Cascade** · _feat_ · `icons/commodities/cloth/thread-spindle-grey.webp`  
-  You gain Twin Fates (§4.13) now, affecting one of its targets. From 15th level, when the class feature arrives, Twin Fates affects up to three of its targets instead of two.
+  You gain Twin Fates (§4.13) now, affecting one of its targets. From 15th level, when the class feature arrives, Twin Fates affects up to three of its targets instead of two.  
+  **Icon brief** (Stargazer — Cascade): A single silver fate-thread splitting into a branching waterfall of threads, gold and purple strands cascading down onto several small target marks at once.
 - **Long Now** · _feat_ · `icons/magic/time/clock-spinning-gold-pink.webp`  
-  Your Auguries whose Duration line reads 1 minute last 10 minutes . A duration inside a degree of success, such as Coiling Doubt 's critical failure, does not change.
+  Your Auguries whose Duration line reads 1 minute last 10 minutes . A duration inside a degree of success, such as Coiling Doubt 's critical failure, does not change.  
+  **Icon brief** (Stargazer — Long Now): An hourglass stretched tall and thin, its sand falling very slowly, a single minute-mark on its side multiplied into ten silver lines.
 - **Prophesied Ally** · _feat_ · `icons/commodities/cloth/thread-spindle-pink.webp`  
-  Choose one ally during your Night Vigil. Fortune's Thread used on that ally does not consume your reaction, once per round. Your Night Vigil card offers the choice.
+  Choose one ally during your Night Vigil. Fortune's Thread used on that ally does not consume your reaction, once per round. Your Night Vigil card offers the choice.  
+  **Icon brief** (Stargazer — Prophesied Ally): A silver fate-thread tied between a star and a shield-shaped ally emblem, a loop of thread looping freely without breaking.
 #### 14th
 
 - **Echo of the Unmade** · _feat_ · `icons/magic/defensive/illusion-evasion-echo-purple.webp`  
-  When you use Unmake the Moment , you may also grant one ally the memory of the erased round. They keep it; everyone else does not.
+  When you use Unmake the Moment , you may also grant one ally the memory of the erased round. They keep it; everyone else does not.  
+  **Icon brief** (Stargazer — Echo of the Unmade): A shattered moment of glass reassembling, one shard kept glowing in a second hand, a faint ghost-echo of the erased round inside it.
 - **Inevitable** · _feat_ · `icons/magic/defensive/shield-barrier-blades-teal.webp`  
-  Once per day, when a creature critically succeeds at a check against you, it gets a success instead. This is a misfortune effect. Offered as a button when it triggers.
+  Once per day, when a creature critically succeeds at a check against you, it gets a success instead. This is a misfortune effect. Offered as a button when it triggers.  
+  **Icon brief** (Stargazer — Inevitable): A rising golden spark of triumph pressed down by a heavy dark star, the critical burst flattened into an ordinary flicker.
 - **Star-Marked Enemy** · _feat_ · `icons/magic/water/strike-ice-blades.webp`  
-  Choose one creature you can see. Until your next daily preparations, Coiling Doubt and Snarl against it do not require line of sight, only knowledge of its location. For Snarl, this replaces Fortune's Thread's requirement that you can see the creature. Target the creature and post this to chat to mark it.
+  Choose one creature you can see. Until your next daily preparations, Coiling Doubt and Snarl against it do not require line of sight, only knowledge of its location. For Snarl, this replaces Fortune's Thread's requirement that you can see the creature. Target the creature and post this to chat to mark it.  
+  **Icon brief** (Stargazer — Star-Marked Enemy): A silver star brand burned onto a red target emblem, a thread of light linking it across a wall to a far-off watching eye.
 #### 16th
 
 - **Foretold Escape** · _feat_ · `icons/sundries/gaming/gaming-set-dice.webp`  
-  Once per day, when an attack roll against you would deal damage that reduces you to 0 Hit Points, you may Speak the Portent on that attack roll even though it has already been rolled, even if your Portent is spent, and even if a fortune or misfortune effect altered it — using a value of 1. It cannot be used on your own saving throw, or on damage no attack roll dealt.
+  Once per day, when an attack roll against you would deal damage that reduces you to 0 Hit Points, you may Speak the Portent on that attack roll even though it has already been rolled, even if your Portent is spent, and even if a fortune or misfortune effect altered it — using a value of 1. It cannot be used on your own saving throw, or on damage no attack roll dealt.  
+  **Icon brief** (Stargazer — Foretold Escape): An attacking blade stopping a hair's breadth short as a silver fate-thread loops around it, the target's outline stepping aside under a protective star.
 - **Private Sign** · _feat_ · `icons/magic/nature/symbol-moon-stars-white.webp`  
-  Add a fourteenth sign to the wheel: your own. Choose one Augury from §5.2 for it to grant and one existing sign's domain for it to govern; it should be an Augury you would not otherwise take. It rises only over you, on days the sky is Starless, and uses the standard aspect scaling. Its aspect is rolled in advance with the day, as part of the seven-day queue. Your two choices are asked when you…
+  Add a fourteenth sign to the wheel: your own. Choose one Augury from §5.2 for it to grant and one existing sign's domain for it to govern; it should be an Augury you would not otherwise take. It rises only over you, on days the sky is Starless, and uses the standard aspect scaling. Its aspect is rolled in advance with the day, as part of the seven-day queue. Your two choices are asked when you…  
+  **Icon brief** (Stargazer — Private Sign): A thirteen-sign zodiac wheel with a fourteenth, unique glyph added in personal violet ink, its star shining only over a single small point.
 - **Written in Advance** · _feat_ · `icons/tools/scribal/ink-quill-pink.webp`  
-  Spend 10 minutes. The next skill check you attempt within the hour is an automatic success (not a critical success). You already did this. Post this to chat after the 10 minutes.
+  Spend 10 minutes. The next skill check you attempt within the hour is an automatic success (not a critical success). You already did this. Post this to chat after the 10 minutes.  
+  **Icon brief** (Stargazer — Written in Advance): A book open to a page whose ink is already dry, the quill resting beside it and a sand-timer showing ten minutes already spent.
 #### 18th
 
 - **The Long Vigil** · _feat_ · `icons/sundries/lights/candle-lit-angelic.webp`  
-  Rewrite the Ending 's cooldown drops to 3 days if you have not used it at all during the current adventure.
+  Rewrite the Ending 's cooldown drops to 3 days if you have not used it at all during the current adventure.  
+  **Icon brief** (Stargazer — The Long Vigil): A lantern burning through many nights, its flame shaped like a star, a calendar of moons with only three crossed off before it can be lit again.
 - **Two Skies** · _feat_ · `icons/equipment/neck/necklace-astrology-moon-blue.webp`  
-  During your Night Vigil, read the sky twice . Both signs are ascendant for you and the allies you brief: you gain both Auguries of the Day. The second sign and its aspect are rolled in advance with the day, as part of the seven-day queue.
+  During your Night Vigil, read the sky twice . Both signs are ascendant for you and the allies you brief: you gain both Auguries of the Day. The second sign and its aspect are rolled in advance with the day, as part of the seven-day queue.  
+  **Icon brief** (Stargazer — Two Skies): Two zodiac signs rising at once over the same horizon, one silver and one gold, their light overlapping in the middle.
 - **Unbroken Chain** · _feat_ · `icons/magic/fire/flame-burning-chain.webp`  
-  Unmake the Moment recharges on a 10-minute rest rather than on your Night Vigil, but no more than once per hour.
+  Unmake the Moment recharges on a 10-minute rest rather than on your Night Vigil, but no more than once per hour.  
+  **Icon brief** (Stargazer — Unbroken Chain): A chain of silver links each shaped like a tiny clock face, unbroken, looping back on itself in a ring around a cracked moment of glass.
 #### 1st
 
 - **Astrological Sign** · _feat_ · `icons/sundries/gaming/dice-pair-white-green.webp`  
-  Once per day, when you record your Portent, you may treat its value as any number within 3 of what you rolled. Your Night Vigil card offers the values when you have this feat.
+  Once per day, when you record your Portent, you may treat its value as any number within 3 of what you rolled. Your Night Vigil card offers the values when you have this feat.  
+  **Icon brief** (Stargazer — Astrological Sign): A zodiac wheel with a d20 at its centre, a small silver dial nudging the die's number up or down by a few notches.
 - **Cold Read** · _feat_ · `icons/magic/control/fear-fright-mask-orange.webp`  
-  You can attempt a Deception check to invent a prophecy convincingly. The GM rolls a secret Astronomy Lore check for you at the same time; on a critical success, you were accidentally right , and the GM should treat what you said as true. Post this to chat: it rolls your Deception, and a secret Astronomy Lore check for the GM.
+  You can attempt a Deception check to invent a prophecy convincingly. The GM rolls a secret Astronomy Lore check for you at the same time; on a critical success, you were accidentally right , and the GM should treat what you said as true. Post this to chat: it rolls your Deception, and a secret Astronomy Lore check for the GM.  
+  **Icon brief** (Stargazer — Cold Read): A theatrical mask half smiling, its hand gesturing at a crystal ball, behind which a real constellation accidentally lights up and matches the gesture.
 - **Companion of the Watch** · _feat_ · `icons/creatures/birds/raptor-owl-flying-moon.webp`  
-  You gain a familiar. It has the celestial trait and you gain one extra familiar ability, which must be an ability that gathers or carries information. Your familiar is made for you when you take this feat, with the celestial trait. The extra ability is counted on your sheet; pick one that gathers or carries information.
+  You gain a familiar. It has the celestial trait and you gain one extra familiar ability, which must be an ability that gathers or carries information. Your familiar is made for you when you take this feat, with the celestial trait. The extra ability is counted on your sheet; pick one that gathers or carries information.  
+  **Icon brief** (Stargazer — Companion of the Watch): A small celestial owl with star-speckled feathers perched on a brass telescope, a tiny scroll of notes tied to its leg.
 - **Sky Reader** · _feat_ · `icons/sundries/flags/banner-standard-moon.webp`  
-  Your Night Vigil takes 1 minute instead of 10, and Forewarned takes 1 minute instead of 10.
+  Your Night Vigil takes 1 minute instead of 10, and Forewarned takes 1 minute instead of 10.  
+  **Icon brief** (Stargazer — Sky Reader): A brass sextant swung quickly across the night sky, motion streaks and a tiny sand-timer showing the reading done in a moment.
 - **Star-Touched Cantrip** · _feat_ · `icons/magic/nature/leaf-elm-sparkle-glow-green.webp`  
-  You learn one additional occult cantrip, and may swap it during daily preparations. Your Night Vigil card offers the swap.
+  You learn one additional occult cantrip, and may swap it during daily preparations. Your Night Vigil card offers the swap.  
+  **Icon brief** (Stargazer — Star-Touched Cantrip): A small spark-spell cupped in a palm, sprinkled with stardust and gaining a single tiny silver star at its heart.
 #### 20th
 
 - **Cartographer of Endings** · _feat_ · `icons/tools/navigation/map-chart-tan.webp`  
-  Once per day, ask the GM one yes-or-no question about the next 24 hours . The answer is true.
+  Once per day, ask the GM one yes-or-no question about the next 24 hours . The answer is true.  
+  **Icon brief** (Stargazer — Cartographer of Endings): A map drawn on a night sky with a single road ending at a glowing gold point, a question mark of stars above answered by one bright yes/no star.
 - **Fixed Sky** · _feat_ · `icons/sundries/gaming/dice-runed-tan.webp`  
-  One of your Portents is always a 20 , and you may speak that one only once per week . Any other Portents you record, from Twin Portent or Second Portent , are still rolled and spoken daily.
+  One of your Portents is always a 20 , and you may speak that one only once per week . Any other Portents you record, from Twin Portent or Second Portent , are still rolled and spoken daily.  
+  **Icon brief** (Stargazer — Fixed Sky): A single star nailed in place with a silver pin at the centre of a rotating sky, the d20 beneath it locked on 20 while the other stars wheel.
 - **The Sky Answers** · _feat_ · `icons/magic/fire/orb-lightning-sun.webp`  
-  Once per day, when you would use Rewrite the Ending , you may instead use Unmake the Moment without spending its frequency, and Rewrite the Ending is not expended.
+  Once per day, when you would use Rewrite the Ending , you may instead use Unmake the Moment without spending its frequency, and Rewrite the Ending is not expended.  
+  **Icon brief** (Stargazer — The Sky Answers): A night sky opening like a curtain to drop a single bright star into a waiting hand, a quill and a broken hourglass side by side below.
 #### 2nd
 
 - **Augury Adept** · _feat_ · `icons/magic/light/projectile-stars-blue.webp`  
-  You learn one additional Augury.
+  You learn one additional Augury.  
+  **Icon brief** (Stargazer — Augury Adept): An augury scroll with one new sign-glyph blooming into light among the older ones, a silver star pinning it to the chart.
 - **Patient Watcher** · _feat_ · `icons/magic/time/hourglass-tilted-glowing-gold.webp`  
-  When you Refocus, you may also change one of your known Auguries. Post this to chat, or Refocus, to swap an Augury.
+  When you Refocus, you may also change one of your known Auguries. Post this to chat, or Refocus, to swap an Augury.  
+  **Icon brief** (Stargazer — Patient Watcher): A meditating hand turning one card of a ring of augury cards face-down and another face-up, a quiet moon overhead.
 - **Reckoning of Days** · _feat_ · `icons/environment/cosmos/planet-moon-blue.webp`  
-  You can attempt an Astronomy Lore check to determine the sky of yesterday or of a day more than three days out, as far as the end of the seven-day queue, at the DCs in §8.4. Post this to chat to choose the day and roll.
+  You can attempt an Astronomy Lore check to determine the sky of yesterday or of a day more than three days out, as far as the end of the seven-day queue, at the DCs in §8.4. Post this to chat to choose the day and roll.  
+  **Icon brief** (Stargazer — Reckoning of Days): A row of seven small sky-discs like a calendar strip, one past day and one far-future day lit, an astrolabe sighting along them.
 - **Thread of Warning** · _feat_ · `icons/commodities/cloth/thread-spindle-red-pink.webp`  
-  Fortune's Thread can trigger on an initiative roll , even though positions are not yet set and you may not be able to see the roller. Fortune's Thread offers its next initiative roll , at any range.
+  Fortune's Thread can trigger on an initiative roll , even though positions are not yet set and you may not be able to see the roller. Fortune's Thread offers its next initiative roll , at any range.  
+  **Icon brief** (Stargazer — Thread of Warning): A taut silver tripwire of fate thread across the start of a battle line, plucked and ringing with light before anyone moves.
 - **Twin Portent** · _feat_ · `icons/commodities/currency/coin-embossed-cobra-gold.webp`  
-  Roll two d20s at your Night Vigil and record both as separate Portents. You must spend both before your next Vigil or lose them, and Speak the Portent 's frequency becomes twice per day.
+  Roll two d20s at your Night Vigil and record both as separate Portents. You must spend both before your next Vigil or lose them, and Speak the Portent 's frequency becomes twice per day.  
+  **Icon brief** (Stargazer — Twin Portent): Two d20s glowing side by side in a starry bowl, each with a different number, joined by a forked silver ribbon.
 #### 4th
 
 - **Borrowed Eyes** · _feat_ · `icons/magic/nature/moon-crescent.webp`  
-  You can perform a Night Vigil through the senses of your familiar or a willing ally under an open sky, as long as you are within 1 mile of them. On a clouded night, your Vigil card asks the GM to let you read through them.
+  You can perform a Night Vigil through the senses of your familiar or a willing ally under an open sky, as long as you are within 1 mile of them. On a clouded night, your Vigil card asks the GM to let you read through them.  
+  **Icon brief** (Stargazer — Borrowed Eyes): An owl's eye reflecting a starry sky, a silver thread of sight running from it to a distant closed human eye, constellations travelling along the thread.
 - **Omen of Blades** · _feat_ · `icons/magic/holy/projectiles-blades-salvo-yellow.webp`  
-  When you Snarl an attack roll and the attack still hits, you may spend 1 Focus Point to reduce the damage by 2 plus 2 per your Stargazer DC proficiency rank (so 4 at Trained, 6 at Expert, 8 at Master, 10 at Legendary). Offered as a button when a Snarled attack hits.
+  When you Snarl an attack roll and the attack still hits, you may spend 1 Focus Point to reduce the damage by 2 plus 2 per your Stargazer DC proficiency rank (so 4 at Trained, 6 at Expert, 8 at Master, 10 at Legendary). Offered as a button when a Snarled attack hits.  
+  **Icon brief** (Stargazer — Omen of Blades): A sword striking through a purple omen-orb, its edge dulled and slowed as the purple glow absorbs part of the blow, notches counting the damage saved.
 - **Read the Room** · _feat_ · `icons/magic/perception/mask-stone-eyes-orange.webp`  
-  Once per encounter, Sense Motive as a free action . Post this to chat to Sense Motive; once per encounter.
+  Once per encounter, Sense Motive as a free action . Post this to chat to Sense Motive; once per encounter.  
+  **Icon brief** (Stargazer — Read the Room): A single watching eye whose iris is a tiny constellation, faint coloured auras of intent rising from shadowy figures around it.
 - **Widened Chart** · _feat_ · `icons/commodities/cloth/thread-spindle-white-grey.webp`  
-  Chart the Course has a range of 120 feet and no longer requires you to see the creature, only to know where it is.
+  Chart the Course has a range of 120 feet and no longer requires you to see the creature, only to know where it is.  
+  **Icon brief** (Stargazer — Widened Chart): A star chart unrolled very wide, a dotted line of course drawn from one edge to a target mark hidden behind a cloud.
 #### 6th
 
 - **Long Thread** · _feat_ · `icons/commodities/cloth/thread-spindle-light-green.webp`  
-  Fortune's Thread's range increases by 30 feet.
+  Fortune's Thread's range increases by 30 feet.  
+  **Icon brief** (Stargazer — Long Thread): A silver fate-thread uncoiling far across a starry field from a spindle, a ruler-like measure of extra distance glowing along its length.
 - **Prophecy's Weight** · _feat_ · `icons/magic/control/fear-fright-mask-yellow.webp`  
-  You can Demoralize using Astronomy Lore, at 60 feet, with no auditory or visual requirement. (The Herald gets this at 5th; this feat exists for everyone else.) Use this to Demoralize your target with Astronomy Lore.
+  You can Demoralize using Astronomy Lore, at 60 feet, with no auditory or visual requirement. (The Herald gets this at 5th; this feat exists for everyone else.) Use this to Demoralize your target with Astronomy Lore.  
+  **Icon brief** (Stargazer — Prophecy's Weight): A pointing hand of starlight casting a long shadow of a doom-glyph over a cowering foe, ominous constellation lines pressing down.
 - **Second Chance at Fate** · _feat_ · `icons/skills/trades/gaming-gambling-dice-gray.webp`  
-  Once per day, when a creature within 30 feet critically fails a check, you may have it reroll and use the new result. This is a fortune effect. You might want it to succeed. Offered as a button when it triggers.
+  Once per day, when a creature within 30 feet critically fails a check, you may have it reroll and use the new result. This is a fortune effect. You might want it to succeed. Offered as a button when it triggers.  
+  **Icon brief** (Stargazer — Second Chance at Fate): A d20 showing a cracked 1 being rerolled by a silver hand, a second die mid-air glowing with a new chance.
 - **Sky Anchor** · _feat_ · `icons/sundries/books/book-turquoise-moon.webp`  
-  You can perform a Night Vigil with no sky at all. Clouded Sky never applies to you.
+  You can perform a Night Vigil with no sky at all. Clouded Sky never applies to you.  
+  **Icon brief** (Stargazer — Sky Anchor): An anchor cast from silver starlight sinking through thick grey clouds, its chain fastened to an unseen star beyond them.
 #### 8th
 
 - **Conjunction** · _feat_ · `icons/magic/light/projectiles-star-purple.webp`  
-  Your focus pool increases to 3 Focus Points , the game's maximum.
+  Your focus pool increases to 3 Focus Points , the game's maximum.  
+  **Icon brief** (Stargazer — Conjunction): Three planets aligning in a straight line across a dark sky, their light merging into one brilliant point, three focus pips glowing beneath.
 - **Doubled Reading** · _feat_ · `icons/magic/nature/root-vine-beanstalk-moon.webp`  
-  Once per day you may take the better of two Auguries of the Day by reading both today's sign and tomorrow's. Your Night Vigil card offers tomorrow's Augury.
+  Once per day you may take the better of two Auguries of the Day by reading both today's sign and tomorrow's. Your Night Vigil card offers tomorrow's Augury.  
+  **Icon brief** (Stargazer — Doubled Reading): Two zodiac wheels overlapping like a Venn diagram — today's silver, tomorrow's pale gold — the brighter overlap chosen.
 - **Second Portent** · _feat_ · `icons/equipment/neck/necklace-simple-bead-dice.webp`  
-  You may Speak the Portent twice per day. If you also have Twin Portent , you may speak three times, and you record three Portents.
+  You may Speak the Portent twice per day. If you also have Twin Portent , you may speak three times, and you record three Portents.  
+  **Icon brief** (Stargazer — Second Portent): Two prophecy scrolls unrolling side by side, each sealed with a star-wax seal showing a different number.
 
 ### stargazer-journals (1)
 
 - **The Stargazer: Handbook** · _journal_ · `icons/environment/cosmos/astronomy-planetary-orbits.webp`  
-  You read the sky, and the sky is not kind. Every dawn one of thirteen signs rises with an aspect — Quiet, Benefic, Retrograde, Malefic or Exalted — and it tilts one narrow domain for everyone under it, the ogre in the cave included. Nobody else at the table knows what today is. You do. Mechanically: 8 Hit Points per level, expert Perception, expert Will, trained Fortitude and Reflex, simple…
+  You read the sky, and the sky is not kind. Every dawn one of thirteen signs rises with an aspect — Quiet, Benefic, Retrograde, Malefic or Exalted — and it tilts one narrow domain for everyone under it, the ogre in the cave included. Nobody else at the table knows what today is. You do. Mechanically: 8 Hit Points per level, expert Perception, expert Will, trained Fortitude and Reflex, simple…  
+  **Icon brief** (Stargazer — Handbook): A heavy blue tome embossed with a thirteen-sign zodiac wheel in silver, a ribbon bookmark of fate-thread, faint stars glowing through its cover.
 
 ### stargazer-macros (1)
 
 - **Read the Sky** · _script_ · `icons/tools/navigation/sextant-steel-blue.webp`  
-  Macro:
+  Macro:  
+  **Icon brief** (Stargazer — Read the Sky (macro)): A brass sextant aimed at a single rising zodiac sign on the horizon, the sign's glyph lit and its aspect colour glowing around it.
 
 ## Created at runtime by scripts
 
 These have no compendium entry; their icon is hard-coded in the script.
 
 - **Sympathetic Growth (effect)** · The Assimilator · `icons/magic/life/heart-area-circle-red-green.webp` · `scripts/assimilator/feats.mjs`  
-  Effect an Assimilator lends an ally: half of one of its resistances, for 10 minutes.
+  Effect an Assimilator lends an ally: half of one of its resistances, for 10 minutes.  
+  **Icon brief** (Assimilator — Sympathetic Growth): A living membrane of red-and-green tissue grafting from one hand onto another, a shared resistance glyph pulsing in both.
 - **Wall of Me (hazard actor)** · The Assimilator · `icons/environment/settlement/city-wall.webp` · `scripts/assimilator/feats.mjs`  
-  A wall of the Assimilator's own flesh placed on the map (HP 5×level, Hardness = level).
+  A wall of the Assimilator's own flesh placed on the map (HP 5×level, Hardness = level).  
+  **Icon brief** (Assimilator — Wall of Me): A wall built of fleshy chitin plates and sinew instead of bricks, veins pulsing across its surface, an eye or two blinking in the mortar.
 - **Assimilated: … (effect)** · The Assimilator · `icons/magic/life/cross-worn-green.webp` · `scripts/assimilator/feats.mjs`  
-  A trait/resistance taken from a creature, held for the day or permanently.
+  A trait/resistance taken from a creature, held for the day or permanently.  
+  **Icon brief** (Assimilator — Assimilated): A stolen trait drawn as a glowing glyph being absorbed into green-veined skin, tendrils wrapping it, a faint outline of the creature it came from.
 - **The Thing That Wears … (NPC actor)** · The Assimilator · `icons/creatures/abilities/mouth-teeth-long-red.webp` · `scripts/assimilator/feats.mjs`  
-  The symbiont split off as its own creature, using the Carapace Strike.
+  The symbiont split off as its own creature, using the Carapace Strike.  
+  **Icon brief** (Assimilator — The Thing That Wears): A mass of glistening carapace and long red teeth peeling away from an empty humanoid outline, standing on its own.
 - **Eat the World: … (effect)** · The Assimilator · `icons/magic/unholy/orb-hands-pink.webp` · `scripts/assimilator/feats.mjs`  
-  An eaten item turned into a temporary Mass grant and ability.
+  An eaten item turned into a temporary Mass grant and ability.  
+  **Icon brief** (Assimilator — Eat the World): A pink-purple orb clutched in clawed hands, the shape of an eaten object dissolving inside it into raw growth-energy.
 - **Cosmo (spellcasting entry)** · The Saint · `icons/magic/light/explosion-star-glow-orange.webp` · `scripts/cosmo.mjs`  
-  The Saint's Technique spellcasting entry, created on the sheet.
+  The Saint's Technique spellcasting entry, created on the sheet.  
+  **Icon brief** (Saint — Cosmo): A burning orange-gold star of cosmo exploding outward from a clenched fist, a faint constellation of lines behind it.
 - **Sky tracker blank icon** · The Saint · `icons/magic/light/explosion-star-glow-silhouette.webp` · `scripts/sky/tracker.mjs`  
-  Fallback icon for the sky tracker when no sign is set (Starless sky).
+  Fallback icon for the sky tracker when no sign is set (Starless sky).  
+  **Icon brief** (Saint — Starless sky): An empty dark sky with only the faint outline of a star — no constellation, a hollow silhouette waiting to be filled.
 - **Reiatsu (spellcasting entry)** · The Soulbound · `icons/magic/light/explosion-star-glow-blue.webp` · `scripts/soulbound/reiatsu.mjs`  
-  The Soulbound's Release Technique / Kidō spellcasting entry.
+  The Soulbound's Release Technique / Kidō spellcasting entry.  
+  **Icon brief** (Soulbound — Reiatsu): A towering pillar of blue spiritual pressure flaring upward from a sword's guard, the air distorting around it.
 - **Star Chart (spellcasting entry)** · The Stargazer · `icons/magic/light/explosion-star-glow-blue.webp` · `scripts/stargazer/star-chart.mjs`  
-  The Stargazer's Augury spellcasting entry.
+  The Stargazer's Augury spellcasting entry.  
+  **Icon brief** (Stargazer — Star Chart): An unrolled star chart of indigo vellum, constellations linked by silver lines, a blue star blazing where today's Augury is marked.
 - **Fixed Point (…) (effect)** · The Stargazer · `icons/magic/time/hourglass-tilted-gray.webp` · `scripts/stargazer/auguries.mjs`  
-  A fixed-point effect pinning one roll type in place.
+  A fixed-point effect pinning one roll type in place.  
+  **Icon brief** (Stargazer — Fixed Point): A tilted grey hourglass pinned in place by a silver nail of starlight, its sand frozen mid-fall.
 - **Omen of Blades (effect)** · The Stargazer · `icons/magic/unholy/orb-glowing-purple.webp` · `scripts/stargazer/feats.mjs`  
-  An omen placed on a target by spending Focus.
+  An omen placed on a target by spending Focus.  
+  **Icon brief** (Stargazer — Omen of Blades): A purple omen-orb hovering before a creature, a sword's edge slowed and dulled as it passes through the glow.
 - **…'s Watcher (familiar actor)** · The Stargazer · `icons/creatures/birds/owl-flying-white.webp` · `scripts/stargazer/feats.mjs`  
-  The Stargazer's watching familiar (an owl).
+  The Stargazer's watching familiar (an owl).  
+  **Icon brief** (Stargazer — Watcher familiar): A white owl in flight with star-speckled wings, its eyes reflecting two tiny constellations.
 - **Foregone Conclusion (effect)** · The Stargazer · `icons/magic/unholy/orb-glowing-purple.webp` · `scripts/stargazer/paths.mjs`  
-  Effect marking an attacker whose outcome was foreseen.
+  Effect marking an attacker whose outcome was foreseen.  
+  **Icon brief** (Stargazer — Foregone Conclusion): An attacker's outline caught in a purple orb, its swing already drawn as a faded afterimage of the outcome.
 - **Written Down: … (effect)** · The Stargazer · `icons/sundries/books/book-embossed-blue.webp` · `scripts/stargazer/paths.mjs`  
-  A briefing written down and shared with allies in earshot.
+  A briefing written down and shared with allies in earshot.  
+  **Icon brief** (Stargazer — Written Down): A small blue notebook open on a page of prophecy notes, copies of the page fluttering out to allies.
 - **Fortune's Thread: Guide / Twin Fates (fortune)** · The Stargazer · `icons/magic/light/explosion-star-glow-yellow.webp` · `scripts/stargazer/threads.mjs`  
-  A fortune thread woven onto an ally.
+  A fortune thread woven onto an ally.  
+  **Icon brief** (Stargazer — Fortune's Thread (guide)): A golden fate-thread looped gently around an ally's wrist, a bright yellow star at the knot pulling the roll upward.
 - **Fortune's Thread: Snarl / Twin Fates (misfortune)** · The Stargazer · `icons/magic/unholy/orb-glowing-purple.webp` · `scripts/stargazer/threads.mjs`  
-  A misfortune thread woven onto an enemy.
+  A misfortune thread woven onto an enemy.  
+  **Icon brief** (Stargazer — Fortune's Thread (snarl)): A purple-black thread snarled into a tangle around an enemy's hand, a dim purple orb weighing the roll down.
 - **Portent: … (effect)** · The Stargazer · `icons/magic/perception/eye-ringed-glow-angry-small-teal.webp` · `scripts/stargazer/threads.mjs`  
-  A stored portent value to be swapped in for a roll.
+  A stored portent value to be swapped in for a roll.  
+  **Icon brief** (Stargazer — Portent): A teal-ringed eye with a number glowing in its pupil, the stored portent waiting to replace a roll.
 - **Immune: The Last Thing You See (effect)** · The Stargazer · `icons/magic/perception/eye-ringed-glow-angry-small-teal.webp` · `scripts/stargazer/threads.mjs`  
-  Temporary immunity after resisting The Last Thing You See.
+  Temporary immunity after resisting The Last Thing You See.  
+  **Icon brief** (Stargazer — immune to The Last Thing You See): A teal eye closed behind a raised hand, a cracked vision-shard falling away harmlessly.
