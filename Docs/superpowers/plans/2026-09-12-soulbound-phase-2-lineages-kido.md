@@ -391,7 +391,7 @@ git commit -m "The Bakudo and the Kaido: binding and mending
 
 Guide §6.2-§6.3. Conditions are outcome-keyed riders; escapes are against
 the Reiatsu DC through the `reiatsu` spelling the engine gained in
-d2758cd.
+8785831.
 
 Danku ships inert: it is a reaction, and reactions have no machinery
 until Task 6. Its own text says so rather than implying it works.
@@ -646,7 +646,7 @@ Claude-Session: https://claude.ai/code/session_011NjZYLNhpEZ4sBik3pwcxe"
 - Modify: `content/soulbound-class-features/lineages/sealing.json`, `sklaverei.json`, `build/test-soulbound.mjs`
 
 **Interfaces:**
-- Consumes: the `counteract` rider apply type that already exists (`apply.mjs:853`), which since d2758cd defaults its statistic to the origin's own class.
+- Consumes: the `counteract` rider apply type that already exists (`apply.mjs:853`), which since 8785831 defaults its statistic to the origin's own class.
 
 - [ ] **Step 1: Write the failing test**
 

@@ -35,7 +35,7 @@ is the table's to apply, and the row says so. And **a Strike a Technique makes**
 `strikes` rider: it rolls the Saint's real Strike at a chosen penalty, and nothing writes *"counts as three
 attacks for your MAP afterward"* back.
 
-*One Technique was driven live*: *Sekishiki Kisōen*'s soul consumed (#71, `5a06920`). Everything else is ☐.
+*One Technique was driven live*: *Sekishiki Kisōen*'s soul consumed (#71, `a8fe631`). Everything else is ☐.
 
 **IDs are `TQ-<nn><letter>`**, one number per Technique in §6's order — Aries `TQ-01`–`04`, Taurus `05`–`08`,
 Gemini `09`–`12`, Cancer `13`–`16`, Leo `17`–`20`, Virgo `21`–`24`, Libra `25`–`28`, Scorpio `29`–`32`,
@@ -125,7 +125,7 @@ The italic line of fiction under a Technique's name is not a clause.
 | TQ-13d | Sekishiki Meikai Ha | Heightening (+2) \+1d8. | scaling:dice-per-rank · effect:damage | `heightening` 1d8 | ☐ | |
 | TQ-14a | Sekishiki Kisōen | 15-ft burst within 60 ft of cold blue flame. 3d8 void, basic Will. | when:cast · reach:area/burst · check:basic-save · effect:damage | `slot-2/sekishiki-kisoen.json` | ☐ | |
 | TQ-14b | Sekishiki Kisōen | The flames feed: for each creature that fails its save, you regain 3 Hit Points (maximum equal to your level per casting). | effect:heal · reach:self · scaling:from-level | A `heal` rider on the Saint for each failure, `value: 3`, `maxPerCast: origin.level` | ☐ | |
-| TQ-14c | Sekishiki Kisōen | A creature reduced to 0 Hit Points by this Technique has its soul consumed | when:damage-dealt · reach:filtered · ending:permanent · when:kill | A `damage-applied` rider predicated `rider:target:hp-zero` places `Effect: Soul Consumed` (unlimited) | ✅ | Live (#71, `5a06920`): `Effect: Soul Consumed` on the creature the blue flames took to 0. No control was recorded beside it |
+| TQ-14c | Sekishiki Kisōen | A creature reduced to 0 Hit Points by this Technique has its soul consumed | when:damage-dealt · reach:filtered · ending:permanent · when:kill | A `damage-applied` rider predicated `rider:target:hp-zero` places `Effect: Soul Consumed` (unlimited) | ✅ | Live (#71, `a8fe631`): `Effect: Soul Consumed` on the creature the blue flames took to 0. No control was recorded beside it |
 | TQ-14d | Sekishiki Kisōen | and cannot be raised by any effect below resurrect. | | Nothing | — | Raising the dead is the table's; the marker is there for the GM to read |
 | TQ-14e | Sekishiki Kisōen | Heightening (+2) \+1d8, and healing per failure \+2. | scaling:dice-per-rank · effect:heal | `heightening` 1d8; the heal's `perStep: 2` | ☐ | |
 | TQ-15a | Sekishiki Konsō Ha | 30-ft burst within 60 ft. 6d8 void, basic Fortitude. | when:cast · reach:area/burst · check:basic-save · effect:damage | `slot-3-cloth-ability/sekishiki-konso-ha.json` | ☐ | |
