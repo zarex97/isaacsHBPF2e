@@ -20,7 +20,7 @@
 - **Every document carries** `system.publication` with `{"license": "ORC", "remaster": true, "title": "Isaac's Homebrew: The Soulbound"}`.
 - **Every Soulbound document carries the `otherTag` `soulbound-<family>`** so slugs never collide with the Saint's. The Saint already ships a Technique named *The Balance*; Haschwalth's Spirit is also *The Balance*.
 - **Naming:** no new script file may be called `balance.mjs` — `scripts/outcomes/balance.mjs` is Libra's.
-- **Commit after every task.** Branch is `claude/soulbound`, already created, spec already committed at `fbd26af`.
+- **Commit after every task.** Branch is `claude/soulbound`, already created, spec already committed at `7a39953`.
 - **Windows/PowerShell session**, but all commands below are given for the Bash tool (Git Bash).
 
 ---

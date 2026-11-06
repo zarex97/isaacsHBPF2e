@@ -385,7 +385,7 @@
     <span><b>29</b> cerrados</span>
     <span><b>7</b> esperando datos</span>
     <span><b>19</b> deliberadamente sin tocar</span>
-    <span>base <b>aacdda2</b></span>
+    <span>base <b>e1a798b</b></span>
   </div>
 </div>
 
@@ -435,11 +435,11 @@
 
   <h3>El repositorio local estaba mirando otra cosa</h3>
 
-  <p>El <em>working tree</em> apuntaba a <code>be99a55</code>, del 31 de julio. Tus pruebas son del 11 al 15 de agosto. Entre una fecha y otra hay <strong>34 commits</strong> en <code>origin/main</code>, que terminan en <code>aacdda2</code> del 10 de agosto: 214 archivos tocados, 15 001 líneas añadidas y 2 110 borradas.</p>
+  <p>El <em>working tree</em> apuntaba a <code>5e3e53d</code>, del 31 de julio. Tus pruebas son del 11 al 15 de agosto. Entre una fecha y otra hay <strong>34 commits</strong> en <code>origin/main</code>, que terminan en <code>e1a798b</code> del 10 de agosto: 214 archivos tocados, 15 001 líneas añadidas y 2 110 borradas.</p>
 
-  <p>No es una diferencia cosmética. En <code>be99a55</code> el módulo tiene cinco scripts y unas seiscientas líneas: el rastreador del cielo, la entrada de lanzamiento de Cosmo, y poco más. Las Técnicas son documentos JSON con <code>rules: []</code> y una descripción en prosa. No existen <code>scripts/riders/</code>, ni <code>scripts/targeting/</code>, ni <code>scripts/economy/</code>. Tampoco existen la mitad de las Técnicas: había 28 hechizos donde el diseño pide 48.</p>
+  <p>No es una diferencia cosmética. En <code>5e3e53d</code> el módulo tiene cinco scripts y unas seiscientas líneas: el rastreador del cielo, la entrada de lanzamiento de Cosmo, y poco más. Las Técnicas son documentos JSON con <code>rules: []</code> y una descripción en prosa. No existen <code>scripts/riders/</code>, ni <code>scripts/targeting/</code>, ni <code>scripts/economy/</code>. Tampoco existen la mitad de las Técnicas: había 28 hechizos donde el diseño pide 48.</p>
 
-  <p>Es decir: si hubiera analizado el árbol tal como estaba, habría concluido que la mitad de tus bugs son «esta Técnica no existe» y la otra mitad «esto nunca se automatizó», y ninguna de las dos conclusiones habría sido cierta. El primer indicio de que algo no cuadraba fue tu propio comentario en <code>aries-t1</code>: decías que la Técnica <em>coloca el muro</em>, pero que el documento de muro mide cuatro celdas. En <code>be99a55</code> no hay ni una línea de código que cree un <code>Wall</code>. Eso sólo puede venir de <code>scripts/targeting/wall.mjs</code>, que aparece 34 commits más tarde.</p>
+  <p>Es decir: si hubiera analizado el árbol tal como estaba, habría concluido que la mitad de tus bugs son «esta Técnica no existe» y la otra mitad «esto nunca se automatizó», y ninguna de las dos conclusiones habría sido cierta. El primer indicio de que algo no cuadraba fue tu propio comentario en <code>aries-t1</code>: decías que la Técnica <em>coloca el muro</em>, pero que el documento de muro mide cuatro celdas. En <code>5e3e53d</code> no hay ni una línea de código que cree un <code>Wall</code>. Eso sólo puede venir de <code>scripts/targeting/wall.mjs</code>, que aparece 34 commits más tarde.</p>
 
   <p>Hice <code>git merge --ff-only origin/main</code>. Comprobé antes que fuera avance rápido puro — <code>git merge-base --is-ancestor</code> confirmó que tu <code>main</code> local era ancestro directo del remoto, con 0 commits por delante y 34 por detrás — así que no había nada tuyo que pudiera perderse. Los archivos sin seguimiento en <code>Docs/</code> quedaron intactos.</p>
 
@@ -1452,7 +1452,7 @@ Round-trip check passed: 190 document(s) survive compilation unchanged.</code></
 </section>
 
 <footer>
-  Base <b>aacdda2</b> · módulo v0.4.1 · 21 archivos modificados, 2 creados · 185 documentos de contenido · 3 906 líneas de scripts.<br>
+  Base <b>e1a798b</b> · módulo v0.4.1 · 21 archivos modificados, 2 creados · 185 documentos de contenido · 3 906 líneas de scripts.<br>
   Comentarios recuperados de <code>saint-checklist-2026-08-15 (1).json</code>, exportado el 15 de agosto a las 15:42 con 55 de 108 items comentados.<br>
   Nada está commiteado: el árbol de trabajo queda limpio para tu revisión.
 </footer>
